@@ -1026,7 +1026,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
 
     private void showExternalBank() {
         try {
-            extBankDialog = new Dialog(SelectPaymentMethodActivity.this);
+            extBankDialog = new Dialog(SelectPaymentMethodActivity.this,R.style.DialogTheme);
             extBankDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             extBankDialog.setContentView(R.layout.activity_add_external_bank_acc);
             extBankDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -1042,6 +1042,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            extBankDialog.setCanceledOnTouchOutside(false);
             extBankDialog.show();
             tvLearn.setOnClickListener(new View.OnClickListener() {
                 @Override

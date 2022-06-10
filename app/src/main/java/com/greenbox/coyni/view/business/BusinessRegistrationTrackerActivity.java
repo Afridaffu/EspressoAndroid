@@ -694,6 +694,20 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 if (!addDBA) {
                     dbaIncompleteLL.setClickable(false);
                 }
+                if(addDBA) {
+                    dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
+                    businessTrackerCloseIV.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, BusinessAddNewBusinessAccountActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+                    });
+                }else{
+                    dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
+                }
+
                 addBankIncompleteLL.setClickable(false);
                 boIncompleteLL.setClickable(false);
                 aggrementsIncompleteLL.setClickable(false);

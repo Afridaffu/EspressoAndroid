@@ -1602,8 +1602,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
 //            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 //            window.setAttributes(wlp);
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            extBankDialog.setCancelable(false);
-
+            extBankDialog.setCanceledOnTouchOutside(false);
             extBankDialog.show();
             tvLearn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1705,7 +1704,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
 //            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 //            window.setAttributes(wlp);
             addPayDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            addPayDialog.setCancelable(false);
+            addPayDialog.setCanceledOnTouchOutside(false);
             addPayDialog.show();
             lyClose.setOnClickListener(new View.OnClickListener() {
                 @Override

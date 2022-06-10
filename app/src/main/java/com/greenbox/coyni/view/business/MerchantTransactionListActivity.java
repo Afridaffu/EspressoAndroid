@@ -96,10 +96,11 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                         noMoreTransactionTV.setVisibility(View.GONE);
                         globalPending.clear();
                         globalPosted.clear();
+                        searchET.clearFocus();
                         currentPage = 0;
                         filterTransactionList = null;
                         filterIV.setImageResource(R.drawable.ic_filtericon);
-                        loadData();
+//                        loadData();
 //                        TransactionListRequest transactionListRequest = new TransactionListRequest();
 //                        transactionListRequest.setMerchantTransactions(true);
 ////                        transactionListRequest.setTransactionType(getDefaultTransactionTypes());
@@ -111,7 +112,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-//                    searchET.setText("");
+                    searchET.setText("");
                 }
             });
 

@@ -126,7 +126,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     private DatabaseHandler dbHandler;
     DashboardViewModel dashboardViewModel;
     TextView tvWalletAddress, tvName;
-    boolean isTorchOn = true, isQRScan = false;
+    boolean isTorchOn = true, isQRScan = false,isOnResumeCamera = false;
     ImageView toglebtn1;
     String strWallet = "", strScanWallet = "", strQRAmount = "", strLimit = "";
     Dialog dialog;
@@ -157,6 +157,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     TransactionLimitResponse objResponse;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private String businessTypeValue = "";
+    private boolean slideActionEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1090,7 +1091,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 flashLL.setVisibility(View.VISIBLE);
                 Utils.isSettingsBtnClicked = false;
             }
-            if (!isAlbumClicked) {
+            if (!isAlbumClicked && !isOnResumeCamera) {
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_GRANTED) {
@@ -1546,9 +1547,9 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                 Manifest.permission.CAMERA)
                                 == PackageManager.PERMISSION_GRANTED) {
                             mcodeScanner.startPreview();
+                            scannerLayout.setVisibility(View.VISIBLE);
+                            slideActionEnabled = false;
                         }
-
-                        scannerLayout.setVisibility(View.VISIBLE);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1577,6 +1578,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 }
                 scannerLayout.setVisibility(View.VISIBLE);
                 errorDialog = null;
+                slideActionEnabled = false;
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -1634,6 +1636,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 
     private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, Double balance, String btypeValue) {
         isQRScan = false;
+        isOnResumeCamera = true;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             mcodeScanner.stopPreview();
         }
@@ -1644,8 +1647,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 LogUtils.v("Scan", "onDialog Clicked " + action);
                 if (action.equalsIgnoreCase("payTransaction")) {
                     if (!isAuthenticationCalled) {
+                        isAuthenticationCalled = true;
                         if (payValidation()) {
-                            isAuthenticationCalled = true;
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
                                 if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
                                     Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
@@ -1666,6 +1669,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                         .putExtra(Utils.wallet, strScanWallet)
                                         .putExtra(Utils.amount, strQRAmount.replace(",", "").trim()));
                             }
+                            slideActionEnabled = false;
+
                         }
                     }
                     LogUtils.v("Scan", "onDialog Clicked " + action);
@@ -1679,9 +1684,14 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 isAuthenticationCalled = false;
-                if (ContextCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                isOnResumeCamera = false;
+                if (!slideActionEnabled && ContextCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     mcodeScanner.startPreview();
                     scannerLayout.setVisibility(View.VISIBLE);
+                }
+                else {
+                    mcodeScanner.stopPreview();
+                    scannerLayout.setVisibility(View.GONE);
                 }
 
             }
@@ -1775,17 +1785,22 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         try {
             String strPay = strQRAmount.toString().trim().replace("\"", "");
             if (cynValue > avaBal) {
+                slideActionEnabled = true;
                 displayAlertNew("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
             }
             else if (cynValue < Double.parseDouble(objResponse.getData().getMinimumLimit())){
-                Utils.displayAlert("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getMinimumLimit()))+ " CYN", ScanActivity.this, "Oops!", "");
+                slideActionEnabled = true;
+                displayAlert("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getMinimumLimit()))+ " CYN", "Oops!");
+                value  = false;
 
             } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
-                Utils.displayAlert("Amount entered exceeds transaction limit.", ScanActivity.this, "Oops!", "");
+                slideActionEnabled = true;
+                displayAlert("Amount entered exceeds transaction limit.","Oops!");
                 value = false;
             }
             else {
+                slideActionEnabled = false;
                 value = true;
             }
         } catch (Exception ex) {
@@ -1797,7 +1812,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     private void setDailyWeekLimit(LimitResponseData objLimit) {
         try {
                 if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().equalsIgnoreCase("NA") && !objLimit.getTransactionLimit().equalsIgnoreCase("unlimited")) {
-                    maxValue = Double.parseDouble(objLimit.getWeeklyAccountLimit());
+                    maxValue = Double.parseDouble(objLimit.getTransactionLimit());
                 }
 //                if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getDailyAccountLimit().equalsIgnoreCase("unlimited")) {
 //                    daily = Double.parseDouble(objLimit.getDailyAccountLimit());
