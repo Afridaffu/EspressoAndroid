@@ -1,49 +1,23 @@
 package com.greenbox.coyni.view.business;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.Agreements;
-import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
-import com.greenbox.coyni.model.profile.DownloadDocumentData;
-import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
-import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
-import com.greenbox.coyni.utils.DisplayImageUtility;
-import com.greenbox.coyni.utils.LogUtils;
-import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
-import com.greenbox.coyni.viewmodel.DashboardViewModel;
-
-import java.io.File;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 public class PDFWebViewActivity extends BaseActivity {
-    ImageView  canceledIV;
-    TextView agreNameTV;
+    ImageView canceledIV;
+    TextView agreNameTV, enableText;
     private WebView webView;
 
     @SuppressLint("WrongViewCast")
@@ -57,21 +31,45 @@ public class PDFWebViewActivity extends BaseActivity {
 
         canceledIV = findViewById(R.id.canceledIV);
         agreNameTV = findViewById(R.id.agreNameTV);
+        enableText = findViewById(R.id.enableText);
 
         webView = (WebView) findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();
-        webView.invalidate();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setUseWideViewPort(true);
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
+        webSettings.setSupportZoom(true);
+        webSettings.setDefaultTextEncodingName("utf-8");
+        webView.invalidate();
+        webView.setWebChromeClient(new WebChromeClient());
         webView.setVerticalScrollBarEnabled(true);
         showProgressDialog();
+
+//        webView.setWebChromeClient(new WebChromeClient() {
+//            @Override
+//            public boolean onJsAlert(WebView view, final String url, String message, JsResult result) {
+//                enableText.setText("Enabled");
+//                enableText.setVisibility(View.VISIBLE);
+//                result.cancel();
+//                return true;
+//            }
+//        });
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
+//                dismissDialog();
+//                String myUrl = getIntent().getStringExtra("URL").replace("&", "%26");
+//                showProgressDialog();
+//                webView.loadUrl("javascript:showPDF('" + myUrl + "')");
+
                 try {
                     if (view.getTitle().equals("")) {
                         view.reload();
-                    } else {
+                    } else{
                         dismissDialog();
                     }
                 } catch (Exception ex) {
@@ -79,10 +77,13 @@ public class PDFWebViewActivity extends BaseActivity {
                 }
             }
         });
+
+//        webView.loadUrl("file:///android_asset/pdfViewerScript.html");
+
         canceledIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                finish();
             }
         });
         agreNameTV.setText(getIntent().getStringExtra("NAME"));
@@ -91,9 +92,8 @@ public class PDFWebViewActivity extends BaseActivity {
     }
 
     private void launchDocumentUrl(String url) {
-
         webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + url);
-
     }
+
 }
 

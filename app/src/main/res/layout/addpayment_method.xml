@@ -247,7 +247,7 @@
                 android:paddingBottom="@dimen/_13sdp">
 
                 <ImageView
-                    android:id="@+id/imgDCardLogo"
+                    android:id="@+id/imgBDCardLogo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -258,8 +258,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_14sdp"
-                    android:layout_toLeftOf="@+id/imgDCardArrow"
-                    android:layout_toRightOf="@+id/imgDCardLogo"
+                    android:layout_toLeftOf="@+id/imgBDCardArrow"
+                    android:layout_toRightOf="@+id/imgBDCardLogo"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -268,7 +268,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tvDCHead"
+                            android:id="@+id/tvBDCHead"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_2sdp"
@@ -289,7 +289,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/tvDCardMsg"
+                        android:id="@+id/tvBDCardMsg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_regular"
@@ -298,7 +298,7 @@
                         android:textSize="@dimen/_9sdp" />
 
                     <TextView
-                        android:id="@+id/tvDCardError"
+                        android:id="@+id/tvBDCardError"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -310,7 +310,7 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/imgDCardArrow"
+                    android:id="@+id/imgBDCardArrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

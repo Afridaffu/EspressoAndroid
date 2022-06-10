@@ -9,8 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingTop="@dimen/_30sdp"
         android:paddingBottom="@dimen/_10sdp">
 
@@ -33,19 +33,23 @@
             android:textSize="@dimen/_14ssp" />
     </LinearLayout>
 
-    <LinearLayout
+    <WebView
+        android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:background="@color/white"
+        android:nestedScrollingEnabled="true"
+        android:visibility="visible" />
 
-        <WebView
-            android:id="@+id/webView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:visibility="visible" />
+    <TextView
+        android:id="@+id/enableText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Disabled"
+        android:textSize="@dimen/_20sdp"
+        android:visibility="gone">
 
-    </LinearLayout>
-
+    </TextView>
 </LinearLayout>
