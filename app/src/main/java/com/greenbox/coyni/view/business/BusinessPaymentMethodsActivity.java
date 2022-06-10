@@ -363,7 +363,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
             lyBPayClose = findViewById(R.id.lyBPayClose);
             tvBankError = findViewById(R.id.tvBBankError);
             tvSignetError = findViewById(R.id.tvSignetError);
-            tvDCardError = findViewById(R.id.tvDCardError);
+            tvDCardError = findViewById(R.id.tvBDCardError);
             tvBankCount = findViewById(R.id.tvBankCount);
             tvSignetCount = findViewById(R.id.tvSignetCount);
             tvDCardCount = findViewById(R.id.tvDCardCount);
@@ -371,14 +371,14 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
             tvBankMsg = findViewById(R.id.tvBankMsg);
             tvSignetHead = findViewById(R.id.tvSignetHead);
             tvSignetMsg = findViewById(R.id.tvSignetMsg);
-            tvDCHead = findViewById(R.id.tvDCHead);
-            tvDCardMsg = findViewById(R.id.tvDCardMsg);
+            tvDCHead = findViewById(R.id.tvBDCHead);
+            tvDCardMsg = findViewById(R.id.tvBDCardMsg);
             imgBankIcon = findViewById(R.id.imgBBankIcon);
             imgBankArrow = findViewById(R.id.imgBBankArrow);
             imgSignetLogo = findViewById(R.id.imgSignetLogo);
             imgSignetArrow = findViewById(R.id.imgSignetArrow);
-            imgDCardLogo = findViewById(R.id.imgDCardLogo);
-            imgDCardArrow = findViewById(R.id.imgDCardArrow);
+            imgDCardLogo = findViewById(R.id.imgBDCardLogo);
+            imgDCardArrow = findViewById(R.id.imgBDCardArrow);
             lyAddBank = findViewById(R.id.lyAddBank);
             lyExternalClose = findViewById(R.id.lyExternalClose);
             layoutSignet = findViewById(R.id.layoutSignet);

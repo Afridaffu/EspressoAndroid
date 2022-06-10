@@ -425,7 +425,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
         try {
             lyBPayClose = findViewById(R.id.lyBPayClose);
             tvBankError = findViewById(R.id.tvBBankError);
-            tvDCardError = findViewById(R.id.tvDCardError);
+            tvDCardError = findViewById(R.id.tvBDCardError);
             tvSignetError = findViewById(R.id.tvSignetError);
             lyExternal = findViewById(R.id.lyAddBank);
             lyExternalClose = findViewById(R.id.lyExternalClose);
@@ -434,11 +434,11 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             tvExtBankMsg = findViewById(R.id.tvBankMsg);
             imgBankArrow = findViewById(R.id.imgBBankArrow);
             imgBankIcon = findViewById(R.id.imgBBankIcon);
-            imgDCardLogo = findViewById(R.id.imgDCardLogo);
-            tvDCHead = findViewById(R.id.tvDCHead);
+            imgDCardLogo = findViewById(R.id.imgBDCardLogo);
+            tvDCHead = findViewById(R.id.tvBDCHead);
             tvDCardHead = findViewById(R.id.tvDCardCount);
-            tvDCardMsg = findViewById(R.id.tvDCardMsg);
-            imgDCardArrow = findViewById(R.id.imgDCardArrow);
+            tvDCardMsg = findViewById(R.id.tvBDCardMsg);
+            imgDCardArrow = findViewById(R.id.imgBDCardArrow);
             imgSignetLogo = findViewById(R.id.imgSignetLogo);
             imgSignetArrow = findViewById(R.id.imgSignetArrow);
             tvSignetHead = findViewById(R.id.tvSignetHead);
@@ -736,7 +736,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 public void onClick(View v) {
 //                    ControlMethod("externalBank");
 //                    strCurrent = "externalBank";
-                   showExternalBank();
+                    showExternalBank();
 
                 }
             });

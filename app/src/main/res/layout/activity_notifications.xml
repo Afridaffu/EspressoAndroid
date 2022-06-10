@@ -14,22 +14,39 @@
         android:background="@drawable/card_bottomradius"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/notifBackbtn"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_45sdp"
-            android:layout_marginBottom="@dimen/_20sdp"
-            android:orientation="horizontal">
+            android:layout_marginBottom="@dimen/_20sdp">
 
-            <ImageView
+            <LinearLayout
+                android:id="@+id/notifBackbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/_10sdp"
-                android:src="@drawable/ic_back" />
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:src="@drawable/ic_back" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/headerTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_bold"
+                android:textAlignment="center"
+                android:text="Notifications"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14ssp"
+                android:visibility="gone"/>
+        </RelativeLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/viewSideBarCV"
