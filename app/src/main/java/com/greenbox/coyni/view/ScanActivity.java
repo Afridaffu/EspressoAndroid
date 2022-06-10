@@ -937,6 +937,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                         strQRAmount = jsonObject.get("cynAmount").toString();
                                     } else {
                                         strScanWallet = result.toString();
+                                        LogUtils.v(TAG,result.toString());
                                     }
                                     String requestToken = "";
                                     Uri uri = null;
@@ -944,29 +945,40 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                         uri = Uri.parse(strScanWallet);
                                     }
                                     if (uri != null && uri.isAbsolute()) {
-                                        Set<String> queryParams = uri.getQueryParameterNames();
-                                        CheckOutModel checkOutModel = new CheckOutModel();
-                                        for (String s : queryParams) {
-                                            if (s.equalsIgnoreCase(CheckOutConstants.REQUEST_TOKEN)) {
-                                                 requestToken= uri.getQueryParameter(s);
+                                        try {
+                                            Set<String> queryParams = uri.getQueryParameterNames();
+                                            CheckOutModel checkOutModel = new CheckOutModel();
+                                            for (String s : queryParams) {
+                                                if (s.equalsIgnoreCase(CheckOutConstants.REQUEST_TOKEN)) {
+                                                     requestToken= uri.getQueryParameter(s);
+                                                }
+                                                checkOutModel.setCheckOutFlag(true);
+                                                checkOutModel.setEncryptedToken(requestToken);
+                                                objMyApplication.setCheckOutModel(checkOutModel);
                                             }
-                                            checkOutModel.setCheckOutFlag(true);
-                                            checkOutModel.setEncryptedToken(requestToken);
-                                            objMyApplication.setCheckOutModel(checkOutModel);
-                                        }
-                                        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                                                && objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
-                                            if (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                                                launchCheckoutFlow(checkOutModel);
-                                            } else {
-                                                objMyApplication.setCheckOutModel(new CheckOutModel());
-                                                Utils.displayAlertNew(getString(R.string.please_use_active_account), ScanActivity.this, "coyni");
+                                            if (requestToken !=null && requestToken.length()>0) {
+                                                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                                                        && objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
+                                                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                                                        launchCheckoutFlow(checkOutModel);
+                                                    } else {
+                                                        objMyApplication.setCheckOutModel(new CheckOutModel());
+                                                        Utils.displayAlertNew(getString(R.string.please_use_active_account), ScanActivity.this, "coyni");
+                                                    }
+                                                } else if (objMyApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                                                    launchCheckoutFlow(checkOutModel);
+                                                } else {
+                                                    objMyApplication.setCheckOutModel(new CheckOutModel());
+                                                    Utils.displayAlertNew(getString(R.string.please_use_active_account), ScanActivity.this, "coyni");
+                                                }
                                             }
-                                        } else if (objMyApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                                            launchCheckoutFlow(checkOutModel);
-                                        } else {
-                                            objMyApplication.setCheckOutModel(new CheckOutModel());
-                                            Utils.displayAlertNew(getString(R.string.please_use_active_account), ScanActivity.this, "coyni");
+                                            else {
+                                                displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+
                                         }
 
 //
@@ -1631,6 +1643,16 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
         dialog.setCanceledOnTouchOutside(true);
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                if (mcodeScanner!= null){
+                    mcodeScanner.startPreview();
+                    scannerLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         dialog.show();
     }
 
@@ -1678,7 +1700,6 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 
             }
         });
-        payToMerchantWithAmountDialog.show();
 
         payToMerchantWithAmountDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -1696,6 +1717,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 
             }
         });
+
+        payToMerchantWithAmountDialog.show();
 
     }
 

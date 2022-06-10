@@ -76,9 +76,9 @@
                         android:id="@+id/merchant_profile_iv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@color/primary_green"
                         android:contentDescription="@string/businessProfileAccountItemChildImage"
                         android:scaleType="fitXY"
-                        android:background="@color/primary_green"
                         android:src="@drawable/ic_case"
                         android:visibility="visible" />
 
@@ -204,9 +204,11 @@
                                 <TextView
                                     android:id="@+id/tvCYN"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text=" CYN"
+                                    android:layout_marginTop="@dimen/_25sdp"
+                                    android:gravity="center"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_12ssp"
                                     android:visibility="visible" />
@@ -221,6 +223,7 @@
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="@dimen/_7sdp"
                                 android:layout_marginTop="@dimen/_8sdp"
+                                android:visibility="invisible"
                                 android:src="@drawable/ic_download" />
                         </RelativeLayout>
 
