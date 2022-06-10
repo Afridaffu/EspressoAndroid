@@ -1084,7 +1084,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                     if (!isAuthenticationCalled) {
                         isAuthenticationCalled = true;
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayToMerchantActivity.this)) {
-                            if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(PayToMerchantActivity.this)) || (isFaceLock))) {
+                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayToMerchantActivity.this)) || (isFaceLock))) {
                                 Utils.checkAuthentication(PayToMerchantActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                             } else {
 //                                payTransaction();

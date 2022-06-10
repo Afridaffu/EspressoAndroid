@@ -1394,7 +1394,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                             tv_lable.setText("Verifying");
                             isAuthenticationCalled = true;
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayRequestActivity.this)) {
-                                if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(PayRequestActivity.this)) || (isFaceLock))) {
+                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayRequestActivity.this)) || (isFaceLock))) {
                                     Utils.checkAuthentication(PayRequestActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                                 } else {
                                     startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
