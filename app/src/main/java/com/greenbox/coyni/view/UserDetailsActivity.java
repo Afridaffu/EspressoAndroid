@@ -525,6 +525,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         }
                     });
 
+
                     doneButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

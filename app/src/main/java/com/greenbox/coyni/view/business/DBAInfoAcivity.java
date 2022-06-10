@@ -1651,7 +1651,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     }
 
                     enableOrDisableNext();
-                    enableOrDisableAddressNext();
+//                    enableOrDisableAddressNext();
                 }
             }
         } catch (Exception ex) {

@@ -72,7 +72,11 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
         holder.detailsLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(position, listItems.get(position));
+                try {
+                    listener.onItemClick(position, listItems.get(position));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 //        if (listItems.get().getStatus().equalsIgnoreCase("closed")) {
