@@ -53,7 +53,8 @@ public class VerificationFailedFragment extends BaseFragment {
     }
 
     private void setData() {
-        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
+//        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
+        ((BusinessDashboardActivity) getActivity()).showUserData();
         Profile profile = myApplication.getMyProfile();
         String accountStatus = profile.getData().getAccountStatus();
         if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {

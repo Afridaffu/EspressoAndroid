@@ -14,12 +14,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -39,6 +41,8 @@ import com.greenbox.coyni.fragments.VerificationFailedFragment;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.notification.Notifications;
+import com.greenbox.coyni.model.notification.NotificationsDataItems;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DisplayImageUtility;
@@ -48,21 +52,28 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.DashboardActivity;
+import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.NotificationsViewModel;
+
+import java.util.List;
 
 //Business dashboard activity created
 public class BusinessDashboardActivity extends BaseActivity {
     private BusinessDashboardViewModel businessDashboardViewModel;
     private CustomerProfileViewModel customerProfileViewModel;
+    private NotificationsViewModel notificationsViewModel;
     private MyApplication objMyApplication;
     private Tabs selectedTab = Tabs.DASHBOARD;
-    private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile, mIvMenu;
-    private TextView mTvDashboard, mTvAccount, mTvTransactions, mTvProfile;
+    private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile, mIvMenu, mIvUserIcon;
+    private TextView mTvDashboard, mTvAccount, mTvTransactions, mTvProfile, countTV, mTvUserName, mTvUserIconText;
     private String userName = "", firstName = "", lastName = "";
+    private CardView countCV;
+    private RelativeLayout notificationsRL, mUserIconRelativeLayout;
 
     private enum Tabs {DASHBOARD, ACCOUNT, TRANSACTIONS, PROFILE}
 
@@ -70,6 +81,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     private BaseFragment mCurrentFragment;
     Long mLastClickTimeQA = 0L;
     private boolean isTabsEnabled = false;
+    int notificationCount = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -333,6 +345,30 @@ public class BusinessDashboardActivity extends BaseActivity {
             businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+
+            mUserIconRelativeLayout = findViewById(R.id.rl_user_icon_layout);
+            mIvUserIcon = findViewById(R.id.iv_user_icon);
+            mTvUserName = findViewById(R.id.tv_user_name);
+            mTvUserIconText = findViewById(R.id.tv_user_icon_text);
+            notificationsRL = findViewById(R.id.notificationsRL);
+            countTV = findViewById(R.id.countTV);
+            countCV = findViewById(R.id.countCV);
+
+            notificationsRL.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
+                startActivity(new Intent(BusinessDashboardActivity.this, NotificationsActivity.class));
+            });
+
+            mUserIconRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    launchSwitchAccountPage();
+                }
+            });
 
             new FetchData(BusinessDashboardActivity.this).execute();
         } catch (Exception ex) {
@@ -372,7 +408,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         if (dbaOwnerId != 0) {
             inTracker.putExtra(Utils.ADD_BUSINESS, true);
             inTracker.putExtra(Utils.ADD_DBA, true);
-            inTracker.putExtra(Utils.IS_TRACKER,true);
+            inTracker.putExtra(Utils.IS_TRACKER, true);
         }
         startActivity(inTracker);
     }
@@ -454,6 +490,72 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
+
+        try {
+            notificationsViewModel.getNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+                @Override
+                public void onChanged(Notifications notifications) {
+//
+                    if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
+                        notificationCount = 0;
+                        for (int i = 0; i < notifications.getData().getItems().size(); i++) {
+                            if (!notifications.getData().getItems().get(i).isRead()) {
+                                notificationCount++;
+                            }
+                        }
+                        notificationsViewModel.getReceivedNotifications();
+                        Log.e("count notif", notificationCount + "");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            notificationsViewModel.getReceivedNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+                @Override
+                public void onChanged(Notifications notifications) {
+
+                    try {
+                        if (notifications != null) {
+                            if (notifications.getStatus().equalsIgnoreCase("success")) {
+                                List<NotificationsDataItems> localData = notifications.getData().getItems();
+                                for (int i = 0; i < localData.size(); i++) {
+                                    if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
+                                            localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
+                                        notificationCount++;
+                                    }
+                                }
+
+                                if (notificationCount > 0) {
+                                    countCV.setVisibility(View.VISIBLE);
+                                    countTV.setText(notificationCount + "");
+                                } else {
+                                    countCV.setVisibility(View.GONE);
+                                }
+
+                                Log.e("count total", notificationCount + "");
+                            } else {
+                                if (notificationCount > 0) {
+                                    countCV.setVisibility(View.VISIBLE);
+                                    countTV.setText(notificationCount + "");
+                                } else {
+                                    countCV.setVisibility(View.GONE);
+                                }
+                            }
+                        } else {
+//                            Utils.displayAlert(getString(R.string.something_went_wrong), getViewLifecycleOwner(), "", "");
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void checkLoadFragment(Profile profile) {
@@ -479,7 +581,7 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     }
 
-    public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
+    public void showUserData() {
         String iconText = "";
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                 && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
@@ -549,7 +651,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
-
+        notificationsViewModel.getNotifications();
     }
 
     public class FetchData extends AsyncTask<Void, Void, Boolean> {

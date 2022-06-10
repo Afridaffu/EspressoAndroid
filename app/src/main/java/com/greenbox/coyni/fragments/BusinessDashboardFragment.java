@@ -58,6 +58,8 @@ import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
+import com.greenbox.coyni.model.notification.Notifications;
+import com.greenbox.coyni.model.notification.NotificationsDataItems;
 import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
@@ -70,6 +72,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.SeekBarWithFloatingText;
 import com.greenbox.coyni.utils.UserData;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.ValidatePinActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutIdDetailsActivity;
@@ -81,6 +84,7 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -113,6 +117,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private BusinessDashboardViewModel businessDashboardViewModel;
+    private NotificationsViewModel notificationsViewModel;
     private RelativeLayout mUserIconRelativeLayout, notificationsRL;
     private TextView mTvOfficiallyVerified, mTvMerchantTransactions;
     private TextView lastPayoutDate, mTvReserveBalance, merchantBalanceTV, mTvMonthlyVolume, mTvHighTickets, reserveRuleTV, rulePeriodTV;
@@ -169,6 +174,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private void initViewModels() {
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+        notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
         businessDashboardViewModel.getRollingRuleDetails();
     }
 
@@ -245,6 +251,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
         coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+
 
         TransactionListRequest transactionListRequest = new TransactionListRequest();
         transactionListRequest.setTransactionType(getDefaultTransactionTypes());
@@ -643,7 +650,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setBusinessData() {
-        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
+//        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
+        ((BusinessDashboardActivity) getActivity()).showUserData();
         getWalletData();
         cvReserveView.setVisibility(myApplication.isReserveEnabled() ? View.VISIBLE : View.GONE);
         batchReq();
