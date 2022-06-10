@@ -74,7 +74,8 @@ public class UnderReviewFragment extends BaseFragment {
     }
 
     private void showData() {
-        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
+//        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
+        ((BusinessDashboardActivity) getActivity()).showUserData();
 
         String message = getString(R.string.identity_review_cancel_message);
         message += " ";

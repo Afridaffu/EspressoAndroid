@@ -42,7 +42,8 @@ public class GetStartedFragment extends BaseFragment {
     }
 
     private void setData() {
-        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
+//        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
+        ((BusinessDashboardActivity) getActivity()).showUserData();
         mCvGetStarted.setOnClickListener(v -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                 return;

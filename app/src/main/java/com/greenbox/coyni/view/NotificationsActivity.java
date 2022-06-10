@@ -72,7 +72,7 @@ public class NotificationsActivity extends BaseActivity {
     public RecyclerView notificationsRV;
     LinearLayout notifBackbtn;
     DatabaseHandler dbHandler;
-    public TextView notificationsTV, requestsTV, noDataTV;
+    public TextView notificationsTV, requestsTV, noDataTV, headerTV;
     public static NotificationsActivity notificationsActivity;
     MyApplication objMyApplication;
     String selectedTab = "NOTIFICATIONS";
@@ -114,12 +114,16 @@ public class NotificationsActivity extends BaseActivity {
         requestsTV = findViewById(R.id.requestsTV);
         noDataTV = findViewById(R.id.noDataTV);
         viewSideBarCV = findViewById(R.id.viewSideBarCV);
+        headerTV = findViewById(R.id.headerTV);
 
         try {
-            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
+            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 viewSideBarCV.setVisibility(View.GONE);
-            else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
+                headerTV.setVisibility(View.VISIBLE);
+            } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 viewSideBarCV.setVisibility(View.VISIBLE);
+                headerTV.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

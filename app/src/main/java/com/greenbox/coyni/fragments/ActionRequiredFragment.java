@@ -46,7 +46,8 @@ public class ActionRequiredFragment extends BaseFragment {
     }
 
     private void setData() {
-        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
+//        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
+        ((BusinessDashboardActivity) getActivity()).showUserData();
     }
 
     private void initFields() {
