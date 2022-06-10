@@ -143,7 +143,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
 
                         } else {
                             listCompany.get(i).setSelected(false);
-                            // listener.selectedItem(null);
+//                             listener.selectedItem(null);
                         }
                     }
                     notifyDataSetChanged();

@@ -7,7 +7,6 @@ import static android.content.Context.MODE_PRIVATE;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.KeyguardManager;
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -79,7 +78,6 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
-import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.OnboardActivity;
@@ -889,6 +887,7 @@ public class Utils {
 
 
     }
+
     public static void showDialogCheckOut(final Context context, String header, String description) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
@@ -957,9 +956,9 @@ public class Utils {
         }
         String strDate = "";
         try {
-            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat spf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
             Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             strDate = spf.format(newDate);
 
         } catch (Exception ex) {
@@ -2190,6 +2189,23 @@ public class Utils {
                 spf.setTimeZone(TimeZone.getTimeZone(zoneId));
                 strDate = spf.format(newDate);
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
+    public static String convertPreferenceZoneToUtcDateTime(String date, String format, String requiredFormat, String zoneId) {
+        String strDate = "";
+        try {
+            DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern(format)
+                    .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                    .toFormatter()
+                    .withZone(ZoneId.of(zoneId, ZoneId.SHORT_IDS));
+            ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
+            DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(requiredFormat);
+            zonedTime = zonedTime.withZoneSameInstant(ZoneOffset.UTC);
+            strDate = zonedTime.format(DATE_TIME_FORMATTER);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
