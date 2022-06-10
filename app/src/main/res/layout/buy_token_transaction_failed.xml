@@ -55,6 +55,7 @@
         app:cardCornerRadius="@dimen/_21sdp">
 
         <TextView
+            android:id="@+id/try_button_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
