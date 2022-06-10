@@ -231,12 +231,12 @@ public class ValidatePinActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void setErrorPIN() {
-        circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle);
-        circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle);
+        circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle_error);
+        circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle_error);
+        circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle_error);
+        circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle_error);
+        circleFiveLL.setBackgroundResource(R.drawable.ic_outline_circle_error);
+        circleSixLL.setBackgroundResource(R.drawable.ic_outline_circle_error);
 
         chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_error);

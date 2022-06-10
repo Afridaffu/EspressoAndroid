@@ -326,6 +326,9 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             otpValidationCloseIV.setOnClickListener(view -> {
                 if (isBackEnabled)
                     finish();
+                if (Utils.isKeyboardVisible){
+                    Utils.hideKeypad(OTPValidation.this);
+                }
             });
 
             otpPV.addTextChangedListener(new TextWatcher() {

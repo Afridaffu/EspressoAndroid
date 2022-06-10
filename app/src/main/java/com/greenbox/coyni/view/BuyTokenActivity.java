@@ -794,7 +794,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             prevSelectedCard = objMyApplication.getSelectedCard();
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                    paymentMethodsResponse = objMyApplication.businessPaymentMethods(paymentMethodsResponse);
+                    paymentMethodsResponse = objMyApplication.businessPaymentMethods(paymentMethodsResponse,"buy");
                 }
                 selectedPaymentMethodsAdapter = new SelectedPaymentMethodsAdapter(paymentMethodsResponse.getData().getData(), BuyTokenActivity.this, "buytoken");
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(BuyTokenActivity.this);
