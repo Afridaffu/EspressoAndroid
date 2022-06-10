@@ -1012,7 +1012,8 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-                    pDialog = Utils.showProgressDialog(BuyTokenPaymentMethodsActivity.this);
+//                    pDialog = Utils.showProgressDialog(BuyTokenPaymentMethodsActivity.this);
+                    showProgressDialog();
                     if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
                     } else {
