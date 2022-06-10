@@ -1,7 +1,5 @@
 package com.greenbox.coyni.view;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -13,13 +11,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -46,7 +42,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -55,7 +50,6 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 
 import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
-import com.greenbox.coyni.dialogs.BaseDialog;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.AccountsData;
@@ -63,7 +57,6 @@ import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
-import com.greenbox.coyni.model.profile.BusinessAccountDbaInfo;
 import com.greenbox.coyni.model.profile.BusinessAccountsListInfo;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
@@ -73,9 +66,6 @@ import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.AddBeneficialOwnerActivity;
-import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
-import com.greenbox.coyni.view.business.BusinessProfileActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -92,7 +82,6 @@ import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.internal.Util;
 
 public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisibilityListener {
 
@@ -136,9 +125,9 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     private LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
     private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
     private CustomerProfileViewModel customerProfileViewModel;
-    private int accountTypeId, selectedId = 0;
+    private int accountTypeId, preferredId = 0;
     //private int childid;
-    private String SelectedDBAName;
+    private String selectedName;
     private BusinessProfileRecyclerAdapter profilesListAdapter;
     private ImageView businessPersonalProfileTickIcon;
     private String preferenceName;
@@ -238,28 +227,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-//                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-//                            .putExtra("TYPE", "ENTER")
-//                            .putExtra("screen", "EditEmail"));
-//                    try {
-//                        authenticateType = "EMAIL";
-//
-//                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
-//                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
-//                                Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-//                            } else {
-//                                startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-//                                        .putExtra("TYPE", "ENTER")
-//                                        .putExtra("screen", "EditEmail"));
-//                            }
-//                        } else {
-//                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-//                                    .putExtra("TYPE", "ENTER")
-//                                    .putExtra("screen", "EditEmail"));
-//                        }
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
                     //New wireframe changes
                     try {
                         authenticateType = "EMAIL";
@@ -281,9 +248,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-//                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-//                            .putExtra("TYPE", "ENTER")
-//                            .putExtra("screen", "EditAddress"));
 
                     try {
                         authenticateType = "ADDRESS";
@@ -315,33 +279,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-//                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-//                            .putExtra("TYPE", "ENTER")
-//                            .putExtra("OLD_PHONE", phoneFormat)
-//                            .putExtra("screen", "EditPhone"));
-
-//                    try {
-//                        authenticateType = "PHONE";
-//
-//                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
-//                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
-//                                Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-//                            } else {
-//                                startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-//                                        .putExtra("TYPE", "ENTER")
-//                                        .putExtra("OLD_PHONE", phoneFormat)
-//                                        .putExtra("screen", "EditPhone"));
-//                            }
-//                        } else {
-//                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-//                                    .putExtra("TYPE", "ENTER")
-//                                    .putExtra("OLD_PHONE", phoneFormat)
-//                                    .putExtra("screen", "EditPhone"));
-//                        }
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-
                     try {
                         authenticateType = "PHONE";
                         String face = String.valueOf(isFaceLock);
@@ -354,7 +291,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
                 }
             });
-            //Business setOnClick's
             business_emailLL.setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
@@ -616,17 +552,17 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         boolean showDBA = false;
         AccountsData accountsData = new AccountsData(filterList);
         profilesListView.setVisibility(View.VISIBLE);
-        profilesListAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, accountsData, selectedId, showDBA);
+        profilesListAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, accountsData, preferredId, showDBA);
 
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onGroupClicked(int position, String accountType, Integer id, String fullname) {
                 LogUtils.v("PreferencesActivity", "account type: " + accountType + "  id: " + id + " fullname " + fullname);
-                if (accountTypeId != id) {
+                if (preferredId != id) {
                     doneButton.setEnabled(true);
                     doneButton.setCardBackgroundColor(getColor(R.color.primary_color));
                     accountTypeId = id;
-                    SelectedDBAName = fullname;
+                    selectedName = fullname;
                 } else {
                     doneButton.setEnabled(false);
                     doneButton.setCardBackgroundColor(getColor(R.color.light_primary_color));
@@ -638,11 +574,11 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 LogUtils.v("PreferencesActivity", "account type " + detailInfo + "    id: " + detailInfo.getId() + "detailInfo" + detailInfo.getDbaName());
                 //childid = detailInfo.getId();
 
-                if (accountTypeId != detailInfo.getId()) {
+                if (preferredId != detailInfo.getId()) {
                     doneButton.setEnabled(true);
                     doneButton.setCardBackgroundColor(getColor(R.color.primary_color));
                     accountTypeId = detailInfo.getId();
-                    SelectedDBAName = detailInfo.getDbaName();
+                    selectedName = detailInfo.getDbaName();
                 } else {
                     doneButton.setEnabled(false);
                     doneButton.setCardBackgroundColor(getColor(R.color.light_primary_color));
@@ -653,7 +589,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             @Override
             public void onAddDbaClicked(String accountType, Integer id) {
                 LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
-                accountTypeId = id;
+                //accountTypeId = id;
 
             }
         });
@@ -739,7 +675,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     dashboardViewModel.getProfiles();
                     if (preferences.getData().getPreferredAccount() != null && !preferences.getData().getPreferredAccount().trim().equals("")) {
                         accountTypeId = Integer.parseInt(preferences.getData().getPreferredAccount());
-                        selectedId = accountTypeId;
+                        preferredId = accountTypeId;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -813,14 +749,14 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         Utils.displayAlert(userPreference.getError().getErrorDescription(), UserDetailsActivity.this, "", userPreference.getError().getFieldErrors().get(0));
                     } else {
                         LogUtils.d(TAG, "userPreference" + userPreference);
-                        if (SelectedDBAName == null || SelectedDBAName.equals(""))
+                        if (selectedName == null || selectedName.equals(""))
                             business_defaultaccountET.setText("[DBA Name]");
-                        else if (SelectedDBAName.length() > 20)
-                            business_defaultaccountET.setText((SelectedDBAName).substring(0, 20));
+                        else if (selectedName.length() > 20)
+                            business_defaultaccountET.setText((selectedName).substring(0, 20));
                         else
-                            business_defaultaccountET.setText(SelectedDBAName);
+                            business_defaultaccountET.setText(selectedName);
 
-                        selectedId = accountTypeId;
+                        preferredId = accountTypeId;
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         if (myApplicationObj.getTempTimezoneID() == 0) {
@@ -854,9 +790,12 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     globalProfileResp = profilesResponse;
                     for (ProfilesResponse.Profiles c : filterList) {
                         if (c.getId() == accountTypeId) {
-                            SelectedDBAName = c.getDbaName();
-
-                            business_defaultaccountET.setText(c.getDbaName());
+                            if(c.getAccountType().equals(Utils.PERSONAL)) {
+                                selectedName = c.getFullName();
+                            } else {
+                                selectedName = c.getDbaName();
+                            }
+                            business_defaultaccountET.setText(selectedName);
                         }
                     }
 
