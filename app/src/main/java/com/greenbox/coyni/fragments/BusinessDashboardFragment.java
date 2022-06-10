@@ -25,8 +25,15 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.adapters.MerchantTransactionListPostedNewAdapter;
+import com.greenbox.coyni.adapters.OnItemClickListener;
+import com.greenbox.coyni.adapters.PayoutDetailsTransactionsAdapter;
+import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
+import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
 import com.greenbox.coyni.dialogs.BatchNowDialog;
 import com.greenbox.coyni.dialogs.DateRangePickerDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
@@ -52,6 +59,10 @@ import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
+import com.greenbox.coyni.model.transaction.TransactionList;
+import com.greenbox.coyni.model.transaction.TransactionListPending;
+import com.greenbox.coyni.model.transaction.TransactionListPosted;
+import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.CustomTypefaceSpan;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
@@ -61,6 +72,7 @@ import com.greenbox.coyni.utils.UserData;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.ValidatePinActivity;
+import com.greenbox.coyni.view.business.BusinessBatchPayoutIdDetailsActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.MerchantTransactionListActivity;
@@ -68,6 +80,7 @@ import com.greenbox.coyni.view.business.ReserveReleasesActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -91,6 +104,13 @@ public class BusinessDashboardFragment extends BaseFragment {
             nextPayoutAmountTV, lastPayoutAmountTV, nxtPayoutDatenTimeTV;
     private LinearLayout mLlBuyTokensFirstTimeView, mLlProcessingVolume, monthlyVolumeViewLl;
     private TextView mTvProcessingVolume;
+    private TransactionListPendingAdapter transactionListPendingAdapter;
+    private MerchantTransactionListPostedNewAdapter transactionListPostedAdapter;
+
+    private DashboardViewModel dashboardViewModel;
+    private List<TransactionListPending> globalPending = new ArrayList<>();
+    private List<TransactionListPosted> globalPosted = new ArrayList<>();
+
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private BusinessDashboardViewModel businessDashboardViewModel;
     private RelativeLayout mUserIconRelativeLayout, notificationsRL;
@@ -224,6 +244,12 @@ public class BusinessDashboardFragment extends BaseFragment {
         mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
 
         coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+
+        TransactionListRequest transactionListRequest = new TransactionListRequest();
+        transactionListRequest.setTransactionType(getDefaultTransactionTypes());
+        transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+        transactionsAPI(transactionListRequest);
 
         isBiometric = Utils.getIsBiometric();
         setFaceLock();
@@ -274,6 +300,20 @@ public class BusinessDashboardFragment extends BaseFragment {
             initiateBatchNow();
         });
 
+    }
+
+    private ArrayList<Integer> getDefaultTransactionTypes() {
+        ArrayList<Integer> transactionType = new ArrayList<>();
+        transactionType.add(Utils.saleOrder);
+        transactionType.add(Utils.refund);
+        transactionType.add(Utils.merchantPayout);
+        transactionType.add(Utils.monthlyServiceFee);
+        return transactionType;
+    }
+
+    private void transactionsAPI(TransactionListRequest transactionListRequest) {
+//        showProgressDialog();
+        dashboardViewModel.meTransactionList(transactionListRequest);
     }
 
     private void initObservers() {
@@ -543,6 +583,23 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
+        dashboardViewModel.getTransactionListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<TransactionList>() {
+            @Override
+            public void onChanged(TransactionList transactionList) {
+                if (transactionList.getData().getItems().getPostedTransactions().size()>0) {
+                    if (transactionList.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        LogUtils.d(TAG, "list" + transactionList.getData().getItems().getPostedTransactions());
+                        mTvMerchantTransactions.setTextColor(getResources().getColor(R.color.primary_color));
+                        mTvMerchantTransactions.setClickable(true);
+                        monthlyVolumeViewLl.setVisibility(View.GONE);
+                    }
+                }else{
+                    mTvMerchantTransactions.setTextColor(getResources().getColor(R.color.inactive_color));
+                    mTvMerchantTransactions.setClickable(false);
+                    monthlyVolumeViewLl.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void updateUIAfterWalletBalance() {
@@ -875,7 +932,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     String Amount = listItems.get(i).getTotalAmount();
                     lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
 
-                    String date1 = listItems.get(i).getCreatedAt();
+                    String date1 = listItems.get(i).getUpdatedAt();
                     if (date1.contains(".")) {
                         String res = date1.substring(0, date1.lastIndexOf("."));
                         lastPayoutDate.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
@@ -900,7 +957,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 if (listItems.get(j).getStatus().equalsIgnoreCase(Utils.PAID)) {
                     TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
                     TextView payoutManualTV = xmlView.findViewById(R.id.payoutManualTV);
-                    String listDate = listItems.get(j).getCreatedAt();
+                    String listDate = listItems.get(j).getUpdatedAt();
                     if (listDate.contains(".")) {
                         String listD = listDate.substring(0, listDate.lastIndexOf("."));
                         payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
