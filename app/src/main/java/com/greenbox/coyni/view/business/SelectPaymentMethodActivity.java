@@ -736,8 +736,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 public void onClick(View v) {
 //                    ControlMethod("externalBank");
 //                    strCurrent = "externalBank";
-                    ControlMethod("externalBank");
-                    strScreen = "externalBank";
+                   showExternalBank();
 
                 }
             });
