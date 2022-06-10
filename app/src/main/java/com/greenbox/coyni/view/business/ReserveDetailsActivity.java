@@ -376,7 +376,7 @@ public class ReserveDetailsActivity extends BaseActivity {
             releaseDate = myApplication.convertZoneDateTime(releaseDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a").toLowerCase();
             releasedDateTime.setText(releaseDate);
         }
-        tvDBAName.setText(myApplication.getStrUserName());
+        tvDBAName.setText(myApplication.getMyProfile().getData().getDbaName());
 
     }
 

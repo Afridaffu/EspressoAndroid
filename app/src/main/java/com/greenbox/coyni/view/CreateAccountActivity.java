@@ -65,6 +65,7 @@ import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
@@ -135,6 +136,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_create_account);
+            MatomoUtility.getInstance().trackScreen("Create Account Screen");
             if (getIntent() != null) {
                 accountType = getIntent().getIntExtra(Utils.ACCOUNT_TYPE, Utils.PERSONAL_ACCOUNT);
             }
@@ -269,6 +271,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
             nextCV.setOnClickListener(view -> {
                 if (isNextEnabled) {
+                    MatomoUtility.getInstance().trackEvent("SignUp","SignUp Clicked");
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }

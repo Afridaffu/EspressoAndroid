@@ -38,6 +38,7 @@ import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
+import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
@@ -95,6 +96,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_transaction_list);
+        MatomoUtility.getInstance().trackScreen("Token Transactions Screen");
         try {
             transactionListActivity = this;
             closeBtn = findViewById(R.id.closeBtnIV);
@@ -1267,6 +1269,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MatomoUtility.getInstance().trackEvent("Token Transactions Filters","Applied");
                 if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
                     return;
                 }

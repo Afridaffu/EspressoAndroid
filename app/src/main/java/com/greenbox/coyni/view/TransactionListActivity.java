@@ -41,6 +41,7 @@ import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
+import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -102,6 +103,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_transaction_list);
+        MatomoUtility.getInstance().trackScreen("Customer Transactions Screen");
         try {
             transactionListActivity = this;
             closeBtn = findViewById(R.id.closeBtnIV);
@@ -1255,6 +1257,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MatomoUtility.getInstance().trackEvent("Customer Filters", "Applied");
                 if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
                     return;
                 }

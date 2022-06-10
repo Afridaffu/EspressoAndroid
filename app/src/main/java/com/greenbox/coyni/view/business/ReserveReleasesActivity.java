@@ -38,6 +38,7 @@ import com.greenbox.coyni.model.reservemanual.ManualListResponse;
 import com.greenbox.coyni.model.reservemanual.ReserveFilter;
 import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
+import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
@@ -78,6 +79,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve_releases);
+        MatomoUtility.getInstance().trackScreen("ReserveRelease Transactions Screen");
 
         initFields();
         initObserver();
@@ -313,7 +315,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
 
                                 });
                                 if (rollingList.size() > 0) {
-                                    noTransactions.setVisibility(View.GONE);
+                                    noTransactions.setVisibility(View.VISIBLE);
                                     reserveRecyclerView.setVisibility(View.VISIBLE);
                                 } else {
                                     noTransactions.setVisibility(View.VISIBLE);
@@ -408,6 +410,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                 searchET.setText("");
 //                LogUtils.d(TAG, "onclickkk" + action + value);
                 if (action.equalsIgnoreCase(applyFilter)) {
+                    MatomoUtility.getInstance().trackEvent("ReserveRelease Filters", "Applied");
                     reserveFilter = (ReserveFilter) value;
                     ivFilterIcon.setImageResource(R.drawable.ic_filter_enabled);
                     getReserveRollingData();
