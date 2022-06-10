@@ -217,7 +217,6 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                 @Override
                 public void onChanged(BatchPayoutListResponse batchPayoutList) {
                     dismissDialog();
-                    refreshpageSL.setRefreshing(false);
                     if (batchPayoutList != null) {
                         if (batchPayoutList.getStatus().equalsIgnoreCase("SUCCESS")) {
                             payoutProgressBarLoadMore.setVisibility(View.GONE);
@@ -250,7 +249,10 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                             Utils.displayAlert(getString(R.string.something_went_wrong), BusinessBatchPayoutSearchActivity.this, "", batchPayoutList.getError().getFieldErrors().get(0));
 
                         }
+                    } else {
+                        Utils.displayAlert(getString(R.string.something_went_wrong), BusinessBatchPayoutSearchActivity.this, "", batchPayoutList.getError().getFieldErrors().get(0));
                     }
+                    refreshpageSL.setRefreshing(false);
                 }
             });
         } catch (Exception e) {

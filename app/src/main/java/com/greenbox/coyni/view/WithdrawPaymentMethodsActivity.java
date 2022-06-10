@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
@@ -25,6 +26,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -79,7 +81,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
     Dialog dialog, pDialog, cvvDialog;
     LinearLayout lyAPayClose, lyExternalClose, lyBPayClose;
     RelativeLayout layoutDCard, lyAddExternal, layoutCCard, lyAddBank, layoutSignet, layoutBDCard;
-    TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
+    TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg,tvDCardCount;
     TextView tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
     CardView cvNext, cvTryAgain, cvDone;
@@ -663,7 +665,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             imgBBankIcon = findViewById(R.id.imgBBankIcon);
             imgDCardLogo = findViewById(R.id.imgDCardLogo);
             tvDCHead = findViewById(R.id.tvDCHead);
-            tvDCardHead = findViewById(R.id.tvDCardHead);
+            tvDCardCount = findViewById(R.id.tvDCardCount);
             tvDCardMsg = findViewById(R.id.tvDCardMsg);
             imgDCardArrow = findViewById(R.id.imgDCardArrow);
             imgSignetLogo = findViewById(R.id.imgSignetLogo);
@@ -789,12 +791,12 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
         try {
             if (paymentMethodsResponse.getData() != null) {
                 tvBankCount.setText("(" + paymentMethodsResponse.getData().getBankCount() + "/" + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + ")");
-                tvDCardHead.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
+                tvDCardCount.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
                 tvSignetCount.setText("(" + paymentMethodsResponse.getData().getSignetCount() + "/" + paymentMethodsResponse.getData().getMaxSignetAccountsAllowed() + ")");
 
                 tvBBankError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + " banks");
                 tvDCardError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + " cards");
-                tvSignetError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxCreditCardsAllowed() + " cards");
+                tvSignetError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxSignetAccountsAllowed() + " cards");
             }
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
@@ -816,20 +818,20 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
                     tvDCardError.setVisibility(View.VISIBLE);
                     tvDCHead.setTextColor(getColor(R.color.light_gray));
-                    tvDCardHead.setTextColor(getColor(R.color.light_gray));
+                    tvDCardCount.setTextColor(getColor(R.color.light_gray));
                     tvDCardMsg.setTextColor(getColor(R.color.light_gray));
                     imgDCardArrow.setColorFilter(getColor(R.color.light_gray));
                     imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
                 } else {
                     tvDCardError.setVisibility(View.GONE);
                     tvDCHead.setTextColor(getColor(R.color.primary_black));
-                    tvDCardHead.setTextColor(getColor(R.color.dark_grey));
+                    tvDCardCount.setTextColor(getColor(R.color.dark_grey));
                     tvDCardMsg.setTextColor(getColor(R.color.dark_grey));
 //                    imgDCardArrow.clearColorFilter();
                     imgDCardArrow.setColorFilter(getColor(R.color.primary_black));
                     imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
                 }
-                if (paymentMethodsResponse.getData().getCreditCardCount() >= paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
+                if (paymentMethodsResponse.getData().getSignetCount() >= paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
                     tvSignetError.setVisibility(View.VISIBLE);
                     tvSignetHead.setTextColor(getColor(R.color.light_gray));
                     tvSignetCount.setTextColor(getColor(R.color.light_gray));
@@ -1581,7 +1583,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
 
     private void showExternalBank() {
         try {
-            extBankDialog = new Dialog(WithdrawPaymentMethodsActivity.this,R.style.DialogTheme);
+            extBankDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
             extBankDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             extBankDialog.setContentView(R.layout.activity_add_external_bank_acc);
             extBankDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -1594,7 +1596,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             LinearLayout lyClose = extBankDialog.findViewById(R.id.lyExternalClose);
 
             Window window = extBankDialog.getWindow();
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
 //            WindowManager.LayoutParams wlp = window.getAttributes();
 //
@@ -1620,8 +1622,27 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     try {
                         extBankDialog.dismiss();
                         if (strCurrent.equals("firstError")) {
-                            ControlMethod("addpayment");
-                            strCurrent = "addpayment";
+//                            ControlMethod("addpayment");
+//                            strCurrent = "addpayment";
+                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                                if (paymentMethodsResponse.getData().getBankCount() > 0) {
+                                    ControlMethod("addpayment");
+                                    addPayment();
+                                    strCurrent = "addpayment";
+                                }else{
+                                    showAddPayment("bank");
+                                }
+                            } else {
+
+                                if (paymentMethodsResponse.getData().getBankCount() > 0) {
+                                    ControlMethod("addbpayment");
+                                    addMerchantPayment();
+                                    strCurrent = "addbpayment";
+
+                                }else {
+                                    showAddPayment("bank");
+                                }
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1647,6 +1668,38 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+            extBankDialog.setOnKeyListener(new Dialog.OnKeyListener() {
+
+                @Override
+                public boolean onKey(DialogInterface arg0, int keyCode,
+                                     KeyEvent event) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        extBankDialog.dismiss();
+                        if (strCurrent.equals("firstError")) {
+//                            ControlMethod("addpayment");
+//                            strCurrent = "addpayment";
+                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                                if (paymentMethodsResponse.getData().getBankCount() > 0) {
+                                    ControlMethod("addpayment");
+                                    addPayment();
+                                    strCurrent = "addpayment";
+                                } else {
+                                    showAddPayment("bank");
+                                }
+                            } else {
+                                if (paymentMethodsResponse.getData().getBankCount() > 0) {
+                                    ControlMethod("addbpayment");
+                                    addMerchantPayment();
+                                    strCurrent = "addbpayment";
+                                } else {
+                                    showAddPayment("bank");
+                                }
+                            }
+                        }
+                    }
+                    return true;
                 }
             });
         } catch (Exception ex) {
@@ -1710,6 +1763,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     addPayDialog.dismiss();
+                    ControlMethod("withdrawmethod");
+                    selectWithdrawMethod();
+                    strScreen = "withdrawmethod";
+                    strCurrent = "";
                 }
             });
 
@@ -1736,6 +1793,21 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+            addPayDialog.setOnKeyListener(new Dialog.OnKeyListener() {
+
+                @Override
+                public boolean onKey(DialogInterface arg0, int keyCode,
+                                     KeyEvent event) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        addPayDialog.dismiss();
+                        ControlMethod("withdrawmethod");
+                        selectWithdrawMethod();
+                        strScreen = "withdrawmethod";
+                        strCurrent = "";
+                    }
+                    return true;
                 }
             });
 

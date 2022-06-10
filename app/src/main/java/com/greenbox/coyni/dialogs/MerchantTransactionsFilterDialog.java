@@ -2,7 +2,6 @@ package com.greenbox.coyni.dialogs;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -25,7 +24,6 @@ import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -151,7 +149,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 transAmountEndET.setText(strEndAmount);
             }
 
-            if (filterTransactionListRequest.getUpdatedFromDate() != null && !filterTransactionListRequest.getUpdatedFromDate().equals("")){
+            if (filterTransactionListRequest.getUpdatedFromDate() != null && !filterTransactionListRequest.getUpdatedFromDate().equals("")) {
                 strF = filterTransactionListRequest.getUpdatedFromDate();
                 if (strF.contains(".")) {
                     strF = strF.substring(0, strF.lastIndexOf("."));
@@ -159,7 +157,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 strF = objMyApplication.convertZoneDateTime(strF, "yyyy-MM-dd HH:mm:ss", "MM-dd-yyyy");
             }
 
-            if (filterTransactionListRequest.getUpdatedToDate() != null && !filterTransactionListRequest.getUpdatedToDate().equals("")){
+            if (filterTransactionListRequest.getUpdatedToDate() != null && !filterTransactionListRequest.getUpdatedToDate().equals("")) {
                 strT = filterTransactionListRequest.getUpdatedToDate();
                 if (strT.contains(".")) {
                     strT = strT.substring(0, strT.lastIndexOf("."));
@@ -196,11 +194,13 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
 
 
             try {
-                if (startDateD != null && !startDateD.equals("")  && endDateD != null && !endDateD.equals("")) {
+                if (startDateD != null && !startDateD.equals("") && endDateD != null && !endDateD.equals("")) {
                     SimpleDateFormat rangeFormat = new SimpleDateFormat(DateRangePickerDialog.displayFormat);
                     rangeDates = new RangeDates();
-                    rangeDates.setUpdatedFromDate(rangeFormat.format(startDateD));
-                    rangeDates.setUpdatedToDate(rangeFormat.format(endDateD));
+                    strFromDate = rangeFormat.format(startDateD);
+                    rangeDates.setUpdatedFromDate(strFromDate);
+                    strToDate = rangeFormat.format(endDateD);
+                    rangeDates.setUpdatedToDate(strToDate);
                     rangeDates.setFullDate(strSelectedDate);
                 }
             } catch (Exception e) {
@@ -576,13 +576,13 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 if (!strFromDate.equals("")) {
                     isFilters = true;
 //                    filterTransactionListRequest.setUpdatedFromDate((objMyApplication.exportDate(strFromDate + " 00:00:00.000")).split("\\ ")[0] + " 00:00:00");
-                    filterTransactionListRequest.setUpdatedFromDate(Utils.payoutDate(strFromDate));
+                    filterTransactionListRequest.setUpdatedFromDate(Utils.convertPreferenceZoneToUtcDateTime(strFromDate + " 00:00:00", "MM-dd-yyyy HH:mm:ss", "yyyy-MM-dd HH:mm:ss", objMyApplication.getStrPreference()));
                     filterTransactionListRequest.setUpdatedFromDateOperator(">=");
                 }
                 if (!strToDate.equals("")) {
                     isFilters = true;
 //                    filterTransactionListRequest.setUpdatedToDate((objMyApplication.exportDate(strToDate + "00:00:00.000")).split("\\ ")[0] + " 23:59:59");
-                    filterTransactionListRequest.setUpdatedToDate(Utils.payoutDate(strToDate));
+                    filterTransactionListRequest.setUpdatedToDate(Utils.convertPreferenceZoneToUtcDateTime(strToDate + " 23:59:59", "MM-dd-yyyy HH:mm:ss", "yyyy-MM-dd HH:mm:ss", objMyApplication.getStrPreference()));
                     filterTransactionListRequest.setUpdatedToDateOperator("<=");
                 }
 
