@@ -2058,7 +2058,7 @@ public class Utils {
         return dtExpiry;
     }
 
-    public static PaymentMethodsResponse businessPaymentMethods(int accountType, PaymentMethodsResponse objResponse) {
+    public static PaymentMethodsResponse businessPaymentMethods(int accountType, PaymentMethodsResponse objResponse,String strScreen) {
         try {
             if (accountType == Utils.BUSINESS_ACCOUNT) {
                 PaymentMethodsResponse objData = objResponse;
@@ -2068,8 +2068,16 @@ public class Utils {
                     for (int i = 0; i < listPayments.size(); i++) {
 //                        if (listPayments.get(i).getPaymentMethod() != null
 //                                && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
-                        if (listPayments.get(i).getPaymentMethod() != null && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank"))) {
-                            listBusPayments.add(listPayments.get(i));
+//                        if (listPayments.get(i).getPaymentMethod() != null && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank"))) {
+                        if(strScreen.equals("")) {
+                            if (listPayments.get(i).getPaymentMethod() != null && (!listPayments.get(i).getPaymentMethod().toLowerCase().equals("credit"))) {
+                                listBusPayments.add(listPayments.get(i));
+                            }
+                        }else{
+                            if (listPayments.get(i).getPaymentMethod() != null
+                                && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
+                                listBusPayments.add(listPayments.get(i));
+                            }
                         }
                     }
                 }
