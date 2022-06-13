@@ -153,7 +153,7 @@ public class Utils {
 
     public enum ROLLING_LIST_STATUS {
 
-        OPEN(1, "Open"),
+        OPEN(6, "Open"),
         ON_HOLD(7, "On Hold"),
         RELEASED(8, "Released"),
         CANCELED(10, "Canceled");

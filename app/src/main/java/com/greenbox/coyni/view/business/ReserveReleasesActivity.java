@@ -37,7 +37,6 @@ import com.greenbox.coyni.model.reservemanual.ManualItem;
 import com.greenbox.coyni.model.reservemanual.ManualListResponse;
 import com.greenbox.coyni.model.reservemanual.ReserveFilter;
 import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
-import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -171,17 +170,25 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
         ArrayList<Integer> status = new ArrayList<>();
 
         if (reserveFilter != null && reserveFilter.isFilterApplied) {
-            if (reserveFilter.isOpen()) {
+            if (!reserveFilter.isOpen() && !reserveFilter.isOnHold()
+                    && !reserveFilter.isReleased() && !reserveFilter.isCancelled()) {
                 status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
-            }
-            if (reserveFilter.isOnHold()) {
                 status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
-            }
-            if (reserveFilter.isReleased()) {
                 status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
-            }
-            if (reserveFilter.isCancelled()) {
                 status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
+            } else {
+                if (reserveFilter.isOpen()) {
+                    status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
+                }
+                if (reserveFilter.isOnHold()) {
+                    status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
+                }
+                if (reserveFilter.isReleased()) {
+                    status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
+                }
+                if (reserveFilter.isCancelled()) {
+                    status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
+                }
             }
             if (reserveFilter.getUpdatedToDate() != null && reserveFilter.getUpdatedFromDate() != null) {
                 if (!reserveFilter.getUpdatedToDate().isEmpty() && !reserveFilter.getUpdatedFromDate().isEmpty()) {
@@ -191,8 +198,13 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                     listRequest.setToDate(strToDate);
                 }
             }
-            listRequest.setStatus(status);
+        } else {
+            status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
+            status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
+            status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
+            status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
         }
+        listRequest.setStatus(status);
         businessDashboardViewModel.getRollingListData(listRequest);
     }
 
@@ -297,7 +309,8 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
 
                                 });
                                 if (rollingList.size() > 0) {
-                                    noTransactions.setVisibility(View.VISIBLE);
+                                    noTransactions.setVisibility(View.GONE);
+                                    noMoreTransactions.setVisibility(View.VISIBLE);
                                     reserveRecyclerView.setVisibility(View.VISIBLE);
                                 } else {
                                     noTransactions.setVisibility(View.VISIBLE);
@@ -328,7 +341,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
 
                                 if (manualItems.size() > 0) {
                                     noTransactions.setVisibility(View.GONE);
-                                    noMoreTransactions.setVisibility(View.GONE);
+                                    noMoreTransactions.setVisibility(View.VISIBLE);
                                     reserveRecyclerView.setVisibility(View.VISIBLE);
                                     reserveRecyclerView.setAdapter(reserveReleaseManualListAdapter);
                                     reserveRecyclerView.setLayoutManager(new LinearLayoutManager(ReserveReleasesActivity.this));
@@ -361,7 +374,9 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
             public int compare(BatchPayoutListItems o1, BatchPayoutListItems o2) {
                 int o1Index = statusList.indexOf(o1.getStatus());
                 int o2Index = statusList.indexOf(o2.getStatus());
-                if (o1Index > o2Index) {
+                if (o1Index == -1 || o2Index == -1) {
+                    return 0;
+                } else if (o1Index > o2Index) {
                     return 1;
                 } else if (o1Index < o2Index) {
                     return -1;

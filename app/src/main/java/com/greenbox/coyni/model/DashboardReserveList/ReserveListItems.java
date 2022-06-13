@@ -94,10 +94,9 @@ public class ReserveListItems implements Serializable, Comparable<ReserveListIte
         this.sentTo = sentTo;
     }
 
-    public Object getScheduledRelease() {
+    public String getScheduledRelease() {
         return scheduledRelease;
     }
-
 
     public String getReserveAmount() {
         return reserveAmount;
