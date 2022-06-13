@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,7 +104,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private MyApplication myApplication;
     private CardView cvReserveView;
     private ImageView mIvUserIcon;
-    private TextView mTvUserName, mTvUserIconText;
+    private TextView mTvUserName, mTvUserIconText,spannableTextView;
     private TextView mTvReserveList, mPayoutHistory,
             nextPayoutAmountTV, lastPayoutAmountTV, nxtPayoutDatenTimeTV;
     private LinearLayout mLlBuyTokensFirstTimeView, mLlProcessingVolume, monthlyVolumeViewLl;
@@ -225,6 +226,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         tv_PayoutNoHistory = mCurrentView.findViewById(R.id.tv_PayoutNoHistory);
         batchView = mCurrentView.findViewById(R.id.batchView);
         batchNoTransaction = mCurrentView.findViewById(R.id.batchNoTransaction);
+        spannableTextView = mCurrentView.findViewById(R.id.spannableTextView);
 
         releaseView = mCurrentView.findViewById(R.id.releaseView);
         nextReleaseNATV = mCurrentView.findViewById(R.id.nextReleaseNATV);
@@ -253,6 +255,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
 
+
+
         TransactionListRequest transactionListRequest = new TransactionListRequest();
         transactionListRequest.setTransactionType(getDefaultTransactionTypes());
         transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
@@ -261,6 +265,11 @@ public class BusinessDashboardFragment extends BaseFragment {
         isBiometric = Utils.getIsBiometric();
         setFaceLock();
         setTouchId();
+        SpannableString ss = new SpannableString("All Payouts are deposited into Business Token Account. Your active batch is set to automatically pay out at 11:59:59 pm PST ");
+        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
+        ss.setSpan(new CustomTypefaceSpan("", font), 31, 53, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        ss.setSpan(new CustomTypefaceSpan("", font), 108, 123, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        spannableTextView.setText(ss);
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
