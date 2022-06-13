@@ -171,47 +171,29 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
         ArrayList<Integer> status = new ArrayList<>();
 
         if (reserveFilter != null && reserveFilter.isFilterApplied) {
-            if(!reserveFilter.isOpen() && !reserveFilter.isOnHold()
-                    && !reserveFilter.isReleased() && !reserveFilter.isCancelled()) {
+            if (reserveFilter.isOpen()) {
                 status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
-                status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
-                status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
-                status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
-            } else {
-                if (reserveFilter.isOpen()) {
-                    status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
-                }
-                if (reserveFilter.isOnHold()) {
-                    status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
-                }
-                if (reserveFilter.isReleased()) {
-                    status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
-                }
-                if (reserveFilter.isCancelled()) {
-                    status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
-                }
             }
-            if(reserveFilter.getUpdatedToDate() != null && reserveFilter.getUpdatedFromDate() != null) {
+            if (reserveFilter.isOnHold()) {
+                status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
+            }
+            if (reserveFilter.isReleased()) {
+                status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
+            }
+            if (reserveFilter.isCancelled()) {
+                status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
+            }
+            if (reserveFilter.getUpdatedToDate() != null && reserveFilter.getUpdatedFromDate() != null) {
                 if (!reserveFilter.getUpdatedToDate().isEmpty() && !reserveFilter.getUpdatedFromDate().isEmpty()) {
                     String strFromDate = Utils.payoutDate(reserveFilter.getUpdatedFromDate());
                     listRequest.setFromDate(strFromDate);
                     String strToDate = Utils.payoutDate(reserveFilter.getUpdatedToDate());
-                   listRequest.setToDate(strToDate);
+                    listRequest.setToDate(strToDate);
                 }
             }
-
-        } else {
-
-            status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
-            status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
-            status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
-
-            status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
+            listRequest.setStatus(status);
         }
-
-        listRequest.setStatus(status);
         businessDashboardViewModel.getRollingListData(listRequest);
-
     }
 
     private void clearAdapterData() {
@@ -229,7 +211,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
         reserveRecyclerView = findViewById(R.id.rvRollingList);
         refreshLayout = findViewById(R.id.refreshLayoutRL);
         reserveNestedScroll = findViewById(R.id.reserveNestedSV);
-        progressBarLoadMore  = findViewById(R.id.progressBarLoadMoreTV);
+        progressBarLoadMore = findViewById(R.id.progressBarLoadMoreTV);
         noTransactions = findViewById(R.id.noTransactionsTV);
         noMoreTransactions = findViewById(R.id.noMoreTransactionsTV);
         loadMore = findViewById(R.id.loadMoreTV);
@@ -279,7 +261,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                             }
                         }
 
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -326,7 +308,6 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.something_went_wrong), ReserveReleasesActivity.this, "", rollingListData.getError().getFieldErrors().get(0));
-
                         }
                     }
                 }
@@ -380,9 +361,9 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
             public int compare(BatchPayoutListItems o1, BatchPayoutListItems o2) {
                 int o1Index = statusList.indexOf(o1.getStatus());
                 int o2Index = statusList.indexOf(o2.getStatus());
-                if(o1Index > o2Index) {
+                if (o1Index > o2Index) {
                     return 1;
-                } else if(o1Index < o2Index) {
+                } else if (o1Index < o2Index) {
                     return -1;
                 } else {
                     return 0;
@@ -426,6 +407,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
         showReserveReleaseDialog.show();
         showReserveReleaseDialog.setCanceledOnTouchOutside(true);
     }
+
     private void manualAPI(String search) {
         SearchKeyRequest request = new SearchKeyRequest();
         request.setSearchKey(search);
@@ -448,8 +430,8 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
     @Override
     public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
         int id_length = charSequence.toString().trim().length();
-        if(isRolling) {
-            if (id_length > 10 ) {
+        if (isRolling) {
+            if (id_length > 10) {
                 rollingList.clear();
                 RollingAPI(charSequence.toString());
                 noTransactions.setVisibility(View.GONE);
@@ -469,7 +451,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
             }
 
         } else {
-            if (id_length > 10 ) {
+            if (id_length > 10) {
                 manualItems.clear();
                 manualAPI(charSequence.toString());
                 noMoreTransactions.setVisibility(View.GONE);
