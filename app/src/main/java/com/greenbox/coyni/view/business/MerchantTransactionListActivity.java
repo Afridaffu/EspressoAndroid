@@ -33,6 +33,7 @@ import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
@@ -70,6 +71,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_merchant_transactions_list);
+        MatomoUtility.getInstance().trackScreen("Merchant Transactions Screen");
 
         try {
             initFields();
@@ -366,6 +368,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             @Override
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(Utils.applyFilter)) {
+                    MatomoUtility.getInstance().trackEvent("Transaction Filters", "Applied");
                     dismissDialog();
                     globalPending.clear();
                     globalPosted.clear();

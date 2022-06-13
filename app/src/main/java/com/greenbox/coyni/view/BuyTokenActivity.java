@@ -74,6 +74,7 @@ import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -133,6 +134,11 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             buyTokenActivity = this;
             initialization();
             initObserver();
+            if(objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                MatomoUtility.getInstance().trackScreen("Customer BuyToken Screen");
+            } else {
+                MatomoUtility.getInstance().trackScreen("Business BuyToken Screen");
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1013,6 +1019,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             tvTotal.setText(Utils.USNumberFormat(total) + " USD");
             prepareBuyRequest();
             if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
+                MatomoUtility.getInstance().trackEvent("BuyToken Bank", "Clicked");
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
                 tvBankName.setText(selectedCard.getBankName());
@@ -1022,6 +1029,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     tvAccount.setText(selectedCard.getAccountNumber());
                 }
             } else {
+                MatomoUtility.getInstance().trackEvent("BuyToken Card", "Clicked");
                 layoutBank.setVisibility(View.GONE);
                 layoutCard.setVisibility(View.VISIBLE);
                 tvPayMethod.setText("****" + selectedCard.getLastFour());

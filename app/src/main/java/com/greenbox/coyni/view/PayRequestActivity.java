@@ -61,6 +61,7 @@ import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.PayRequestCustomKeyboard;
@@ -108,6 +109,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_pay_request);
+            MatomoUtility.getInstance().trackScreen("Customer PayRequest Screen");
             initialization();
             initObservers();
         } catch (Exception ex) {
@@ -340,6 +342,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
+                            MatomoUtility.getInstance().trackEvent("Customer Pay", "Clicked");
                             convertDecimal();
                             if (payValidation()) {
                                 isPayClick = true;
@@ -364,10 +367,13 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                 mLastClickTime = SystemClock.elapsedRealtime();
                                 convertDecimal();
                                 if (requestValidation()) {
-                                    if (Double.parseDouble(payRequestET.getText().toString().replace(",", "")) > 0)
+                                    if (Double.parseDouble(payRequestET.getText().toString().replace(",", "")) > 0) {
+                                        MatomoUtility.getInstance().trackEvent("Customer Request", "Clicked");
                                         requestPreview();
-                                    else
+                                    }
+                                    else {
                                         disableButtons(true);
+                                    }
 
                                 }
                             }

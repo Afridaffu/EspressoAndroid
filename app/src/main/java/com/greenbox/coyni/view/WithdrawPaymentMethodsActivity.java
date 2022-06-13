@@ -50,6 +50,7 @@ import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
+import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -103,6 +104,13 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             withdrawPaymentMethodsActivity = this;
             initialization();
             initObserver();
+
+            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT){
+                MatomoUtility.getInstance().trackScreen("Customer WithdrawToken Screen");
+            }
+            else {
+                MatomoUtility.getInstance().trackScreen("Business WithdrawToken Screen");
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -989,6 +997,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        MatomoUtility.getInstance().trackEvent("External Bank", "Clicked");
                         if (bankList != null && bankList.size() > 0) {
                             selectPayMethod(bankList);
                         } else {
@@ -1007,6 +1016,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        MatomoUtility.getInstance().trackEvent("Instant Pay", "Clicked");
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
                         }
@@ -1029,6 +1039,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        MatomoUtility.getInstance().trackEvent("GiftCard", "Clicked");
                         strCurrent = "";
                         strScreen = "";
                         startActivity(new Intent(WithdrawPaymentMethodsActivity.this, GiftCardActivity.class));
@@ -1042,6 +1053,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        MatomoUtility.getInstance().trackEvent("Signet Account", "Clicked");
                         if (signetList != null && signetList.size() > 0) {
                             selectPayMethod(signetList);
                         } else {

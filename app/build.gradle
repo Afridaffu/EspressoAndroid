@@ -39,6 +39,7 @@ android {
     buildTypes {
         release {
             buildConfigField 'boolean', 'LOGGING_ENABLED', 'true'
+            buildConfigField 'boolean', 'ANALYTICS_ENABLED', 'true'
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 //            signingConfig signingConfigs.releaseSigningConfig
@@ -46,6 +47,7 @@ android {
         }
         debug {
             buildConfigField 'boolean', 'LOGGING_ENABLED', 'true'
+            buildConfigField 'boolean', 'ANALYTICS_ENABLED', 'true'
             testCoverageEnabled true
         }
     }
@@ -56,6 +58,7 @@ android {
             buildConfigField 'String', 'URL_PRODUCTION', '\"https://api.coyni.com/\"'
             buildConfigField 'String', 'Referer', '\"https://members.coyni.com\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
+            buildConfigField 'String', 'MATOMO_SERVER', '\"https://qa-analytics.coyni.com\"'
             buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'true'
         }
         sat {
@@ -64,6 +67,7 @@ android {
 //            buildConfigField 'String', 'Referer', '\"https://members.coyni.com\"'
             buildConfigField 'String', 'Referer', '\"https://members-sat2.coyni.com/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
+            buildConfigField 'String', 'MATOMO_SERVER', '\"https://qa-analytics.coyni.com\"'
             buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
         }
         qa {
@@ -74,6 +78,7 @@ android {
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://3.94.123.86:9001/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
+            buildConfigField 'String', 'MATOMO_SERVER', '\"https://qa-analytics.coyni.com\"'
             buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
         }
         dev {
@@ -82,6 +87,7 @@ android {
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://18.234.239.29:9001/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
+            buildConfigField 'String', 'MATOMO_SERVER', '\"https://qa-analytics.coyni.com\"'
             buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
 
         }
@@ -156,6 +162,8 @@ dependencies {
 
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
     implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
+
+    implementation 'com.github.matomo-org:matomo-sdk-android:4.1.4'
 
     implementation('com.microblink:blinkcard:2.5.0@aar') {
         transitive = true
