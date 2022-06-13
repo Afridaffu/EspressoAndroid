@@ -1,12 +1,9 @@
 package com.greenbox.coyni.view;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
@@ -41,7 +36,6 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.UserData;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
@@ -71,20 +65,19 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
-    private int childid = 0;
-    private String SelectedDBAName = "";
+    private String selectedName = "";
     private BusinessProfileRecyclerAdapter profilesListAdapter;
     private ImageView businessPersonalProfileTickIcon;
     LinearLayout emailLL, phoneLL, addressLL, userDetailsCloseLL, businessPersonalProfileAccount;
     Long mLastClickTime = 0L;
     private LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
     private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
-    private String accountTypeId = "";
+    private int accountTypeId, preferredId = 0;
     private String personalAccountExist;
     ProfilesResponse globalProfileResp;
     private String childName;
     private int userId;
-
+    private CardView doneButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +150,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                     DisplayMetrics mertics = getApplicationContext().getResources().getDisplayMetrics();
 //                    int width = mertics.widthPixels;
 
-                    CardView doneButton = dialog.findViewById(R.id.default_DoneBtn);
+                    doneButton = dialog.findViewById(R.id.default_DoneBtn);
                     profilesListView = dialog.findViewById(R.id.business_profile_accounts_expandable_list);
                     mIvUserIcon = dialog.findViewById(R.id.profile_img);
                     mTvUserIconText = dialog.findViewById(R.id.b_imageTextTV);
@@ -185,11 +178,11 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                         @Override
                         public void onClick(View view) {
 
-                            LogUtils.d("profilesss", "childid" + childid);
+                            LogUtils.d("profilesss", "childid" + accountTypeId);
                             UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
                             userPreferenceModel.setLocalCurrency(0);
                             userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
-                            userPreferenceModel.setPreferredAccount(childid);
+                            userPreferenceModel.setPreferredAccount(accountTypeId);
                             customerProfileViewModel.updatePreferences(userPreferenceModel);
                             dialog.dismiss();
 
@@ -294,10 +287,12 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                             myApplicationObj.setTempTimezoneID(5);
                             myApplicationObj.setStrPreference("AST");
                         }
-
-                        accountTypeId = preferences.getData().getPreferredAccount();
-
                         dashboardViewModel.getProfiles();
+                        if (preferences.getData().getPreferredAccount() != null && !preferences.getData().getPreferredAccount().trim().equals("")) {
+                            accountTypeId = Integer.parseInt(preferences.getData().getPreferredAccount());
+                            preferredId = accountTypeId;
+                        }
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -314,13 +309,14 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                         Utils.displayAlert(userPreference.getError().getErrorDescription(), PreferencesActivity.this, "", userPreference.getError().getFieldErrors().get(0));
                     } else {
                         try {
-                            if (SelectedDBAName.equals(""))
+                            if (selectedName.equals(""))
                                 accountET.setText(Utils.capitalize(globalProfileResp.getData().get(0).getFullName()));
                             else
-                                accountET.setText(SelectedDBAName);
+                                accountET.setText(selectedName);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        preferredId = accountTypeId;
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         if (myApplicationObj.getTempTimezoneID() == 0) {
@@ -349,17 +345,20 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
             public void onChanged(ProfilesResponse profilesResponse) {
                 dialog.dismiss();
                 if (profilesResponse != null) {
-//                    if(profilesResponse.getData().get(0).getEntityName() != null) {
-//                        accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
-//                    }
-////                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
                     accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getFullName()));
                     globalProfileResp = profilesResponse;
-
                     if (profilesResponse.getStatus().equals("SUCCESS")) {
-
                         filterList = profilesResponse.getData();
-
+                        for (ProfilesResponse.Profiles c : filterList) {
+                            if (c.getId() == accountTypeId) {
+                                if(c.getAccountType().equals(Utils.PERSONAL)) {
+                                    selectedName = c.getFullName();
+                                } else {
+                                    selectedName = c.getDbaName();
+                                }
+                                accountET.setText(selectedName);
+                            }
+                        }
                     }
                 }
             }
@@ -379,74 +378,65 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
         boolean showDBA = false;
         AccountsData accountsData = new AccountsData(filterList);
         profilesListView.setVisibility(View.VISIBLE);
-        profilesListAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, accountsData, userId, showDBA);
+        profilesListAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, accountsData, preferredId, showDBA);
 
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onGroupClicked(int position, String accountType, Integer id, String fullname) {
                 LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
-                childid = id;
-                SelectedDBAName = fullname;
-
+//                childid = id;
+//                selectedName = fullname;
+                if (preferredId != id) {
+                    doneButton.setEnabled(true);
+                    doneButton.setCardBackgroundColor(getColor(R.color.primary_color));
+                    accountTypeId = id;
+                    selectedName = fullname;
+                } else {
+                    doneButton.setEnabled(false);
+                    doneButton.setCardBackgroundColor(getColor(R.color.light_primary_color));
+                }
             }
 
             @Override
             public void onChildClicked(ProfilesResponse.Profiles detailInfo) {
                 LogUtils.v("PreferencesActivity", "account type " + detailInfo + "    id: " + detailInfo.getId());
-                childid = detailInfo.getId();
-                SelectedDBAName = detailInfo.getDbaName();
+//                childid = detailInfo.getId();
+//                selectedName = detailInfo.getDbaName();
+                if (preferredId != detailInfo.getId()) {
+                    doneButton.setEnabled(true);
+                    doneButton.setCardBackgroundColor(getColor(R.color.primary_color));
+                    accountTypeId = detailInfo.getId();
+                    selectedName = detailInfo.getDbaName();
+                } else {
+                    doneButton.setEnabled(false);
+                    doneButton.setCardBackgroundColor(getColor(R.color.light_primary_color));
+                }
             }
 
             @Override
             public void onAddDbaClicked(String accountType, Integer id) {
                 LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
-                childid = id;
+                //childid = id;
 
             }
         });
 
         profilesListView.setAdapter(profilesListAdapter);
         setInitialListViewHeight(profilesListView);
-
+        profilesListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                ImageView arrowImg = v.findViewById(R.id.arrowImg);
+                if (parent != null && parent.isGroupExpanded(groupPosition)) {
+                    arrowImg.setImageResource(R.drawable.ic_chevron_down);
+                } else {
+                    arrowImg.setImageResource(R.drawable.ic_chevron_up);
+                }
+                setListViewHeight(parent, groupPosition);
+                return false;
+            }
+        });
     }
-
-    private int addDetails(String mainSet, String subSet, String image, int id) {
-
-        LogUtils.d("ADDDETAILS", "adddetails" + mainSet + subSet + id + accountTypeId);
-        int groupPosition = 0;
-        BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
-
-        if (headerInfo == null) {
-            headerInfo = new BusinessAccountsListInfo();
-            headerInfo.setName(mainSet);
-            headerInfo.setMainImage(image);
-            this.mainSet.put(mainSet, headerInfo);
-            this.subSet.add(headerInfo);
-        }
-
-        ArrayList<BusinessAccountDbaInfo> subList = headerInfo.getSubsetName();
-        int listSize = subList.size();
-        listSize++;
-
-        BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
-        detailInfo.setName(subSet);
-        detailInfo.setDbaImage(image);
-        detailInfo.setId(id);
-
-        if (detailInfo.getId() == Integer.parseInt(accountTypeId)) {
-            detailInfo.setIsSelected(true);
-        } else {
-            detailInfo.setIsSelected(false);
-        }
-
-        subList.add(detailInfo);
-
-        headerInfo.setSubsetName(subList);
-        groupPosition = this.subSet.indexOf(headerInfo);
-
-        return groupPosition;
-    }
-
 
     @Override
     public void selectedItem(int id) {
