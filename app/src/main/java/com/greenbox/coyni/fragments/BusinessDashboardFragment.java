@@ -148,6 +148,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private static final String customDate = "Custom Date Range";
     private static final String dateAndTime = "yyyy-MM-dd HH:mm:ss";
     private static final String date = "yyyy-MM-dd";
+    private static final String dateResult = "MM/dd/yyyy";
     private static final String startTime = " 00:00:00";
     private static final String endTime = " 23:59:59";
     private static final String midTime = " 12:00:00";
@@ -469,7 +470,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             mHighestTicket.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
 
                                         if (data.get(position).getCreatedAt() != null) {
-                                            mDateHighestTicket.setText(myApplication.convertZoneDateTime(data.get(position).getCreatedAt(), dateAndTime, date));
+                                            mDateHighestTicket.setText(myApplication.convertZoneDateTime(data.get(position).getCreatedAt(), dateAndTime, dateResult));
                                         } else {
                                             mDateHighestTicket.setVisibility(View.GONE);
                                         }
@@ -807,7 +808,6 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void getProcessingVolume(String action) {
-        mTvProcessingVolume.setText(action);
         switch (action) {
             case todayValue: {
                 mTvProcessingVolume.setText(action + "  ");
@@ -821,6 +821,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
             break;
             case yesterdayValue: {
+                mTvProcessingVolume.setText(action);
                 mTicketsLayout.setVisibility(View.GONE);
                 mSbTodayVolume.setVisibility(View.VISIBLE);
                 saleOrdersText.setVisibility(View.VISIBLE);
@@ -831,7 +832,8 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
             break;
             case monthDate: {
-                mTicketsLayout.setVisibility(View.GONE);
+                mTvProcessingVolume.setText(action);
+                mTicketsLayout.setVisibility(View.VISIBLE);
                 mSbTodayVolume.setVisibility(View.GONE);
                 saleOrdersText.setVisibility(View.GONE);
                 strFromDate = myApplication.convertZoneDateTime(getFirstDayOfMonthString(), dateAndTime, date) + startTime;
@@ -840,6 +842,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
             break;
             case lastMonthDate: {
+                mTvProcessingVolume.setText(action);
                 mTicketsLayout.setVisibility(View.VISIBLE);
                 mSbTodayVolume.setVisibility(View.GONE);
                 saleOrdersText.setVisibility(View.GONE);
@@ -868,7 +871,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                 String toDate = rangeDates.getUpdatedToDate().trim() + midTime;
                                 strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + startTime;
                                 strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + endTime;
-
+                                mTvProcessingVolume.setText(R.string.custom_date_range);
                                 businessActivityAPICall(strFromDate, strToDate);
 //                                Toast.makeText(getActivity(), strFromDate + strToDate, Toast.LENGTH_LONG).show();
                             }
