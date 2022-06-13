@@ -178,7 +178,8 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                             isAuthenticationCalled = true;
                             if (payValidation()) {
                                 if ((isFaceLock || isTouchId) && Utils.checkAuthentication(CheckOutPaymentActivity.this)) {
-                                    if (myApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(CheckOutPaymentActivity.this)) || (isFaceLock))) {
+//                                    if (myApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(CheckOutPaymentActivity.this)) || (isFaceLock))) {
+                                    if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(CheckOutPaymentActivity.this)) || (isFaceLock))) {
                                         Utils.checkAuthentication(CheckOutPaymentActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                                     } else {
                                         launchPinActivity();
@@ -494,7 +495,10 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                 myApplication.setLocalBiometric(true);
             } else {
                 isTouchId = false;
-                myApplication.setLocalBiometric(false);
+//                myApplication.setLocalBiometric(false);
+                if (!isFaceLock) {
+                    myApplication.setLocalBiometric(false);
+                }
             }
 
         } catch (Exception ex) {

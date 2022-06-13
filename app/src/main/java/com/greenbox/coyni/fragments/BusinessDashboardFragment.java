@@ -775,7 +775,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 myApplication.setLocalBiometric(true);
             } else {
                 isTouchId = false;
-                myApplication.setLocalBiometric(false);
+//                myApplication.setLocalBiometric(false);
+                if (!isFaceLock) {
+                    myApplication.setLocalBiometric(false);
+                }
             }
 
         } catch (Exception ex) {

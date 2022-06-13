@@ -591,7 +591,8 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                 }
             });
 
-            if (!objMyApplication.getBiometric() || !objMyApplication.getLocalBiometric()) {
+//            if (!objMyApplication.getBiometric() || !objMyApplication.getLocalBiometric()) {
+            if (!Utils.getIsBiometric() || !objMyApplication.getLocalBiometric()) {
                 if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
                     if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
                         enableType = "TOUCH";
@@ -661,7 +662,8 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             }
         });
 
-        if (!objMyApplication.getBiometric() || !objMyApplication.getLocalBiometric()) {
+//        if (!objMyApplication.getBiometric() || !objMyApplication.getLocalBiometric()) {
+        if (!Utils.getIsBiometric() || !objMyApplication.getLocalBiometric()) {
             if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
                 if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
                     enableType = "TOUCH";
@@ -728,7 +730,8 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             }
         });
 
-        if (!objMyApplication.getBiometric()) {
+//        if (!objMyApplication.getBiometric()) {
+        if (!Utils.getIsBiometric()) {
             if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
                 if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
                     enableType = "TOUCH";
