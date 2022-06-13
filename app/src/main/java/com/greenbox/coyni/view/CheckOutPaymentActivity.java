@@ -2,6 +2,8 @@ package com.greenbox.coyni.view;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -57,14 +59,14 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private BuyTokenViewModel buyTokenViewModel;
     private CheckOutViewModel checkOutViewModel;
     private MyApplication myApplication;
-    private TextView mTokenBalance, mUserName, errorText,tvCurrency;
-    private LinearLayout lyBalance;
-    private EditText mAmount;
+    private TextView mTokenBalance, mUserName, errorText,
+            tvCurrency, tv_lable_verify, tv_lable;
+    //    private LinearLayout lyBalance;
+    private TextView mAmount;
     private double availableBalance;
     private MotionLayout slideToConfirm;
     private CoyniViewModel coyniViewModel;
     private DatabaseHandler dbHandler;
-    private TextView tv_lable;
     private CardView im_lock_;
     private Dialog pDialog;
     private boolean isAuthenticationCalled = false, isFaceLock = false, isTouchId = false;
@@ -75,7 +77,8 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private String actionTypeYes = "YES";
     private String actionTypeNo = "No";
     private double transactionLimit = 0.0, minimumLimit = 0.0, userAmount = 0.0;
-    private float fontSize,dollarFont;
+    private float fontSize, dollarFont;
+    private static Dialog displayAlertDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,11 +98,12 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         myApplication = (MyApplication) getApplicationContext();
         dbHandler = DatabaseHandler.getInstance(CheckOutPaymentActivity.this);
         coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
-        mTokenBalance = findViewById(R.id.available_token_balance_tv);
-        lyBalance = findViewById(R.id.available_balance_tv);
+        mTokenBalance = findViewById(R.id.tvBalance);
+//        lyBalance = findViewById(R.id.available_balance_tv);
         mUserName = findViewById(R.id.checkout_user_name_tv);
         tvCurrency = findViewById(R.id.tvCurrency);
         mAmount = findViewById(R.id.checkout_amount);
+        tv_lable_verify = findViewById(R.id.tv_lable_verify);
         fontSize = mAmount.getTextSize();
         dollarFont = tvCurrency.getTextSize();
         errorText = findViewById(R.id.error_tv);
@@ -114,7 +118,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                 orderInfoAPICall(requestToken);
             }
         }
-        slideToConfirm.setInteractionEnabled(false);
+//        slideToConfirm.setInteractionEnabled(false);
         setFaceLock();
         setTouchId();
     }
@@ -165,7 +169,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                         im_lock_.setAlpha(1.0f);
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
-                        slideToConfirm.setInteractionEnabled(false);
+//                        slideToConfirm.setInteractionEnabled(false);
 //                        if (myApplication.getCheckOutModel().isCheckOutFlag()){
 //                            myApplication.setCheckOutModel(null);
 //                        }
@@ -218,26 +222,25 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                    try {
-                        if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
-                            mAmount.setHint("");
+                try {
+                    if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
+                        mAmount.setHint("");
 //                            convertUSDValue();
-                            if (editable.length() > 8) {
-                                mAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                            } else if (editable.length() > 5) {
-                                mAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-                                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                            } else {
-                                mAmount.setTextSize(Utils.pixelsToSp(CheckOutPaymentActivity.this, fontSize));
-                                tvCurrency.setTextSize(Utils.pixelsToSp(CheckOutPaymentActivity.this, dollarFont));
-                            }
+                        if (editable.length() > 8) {
+                            mAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                            tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                        } else if (editable.length() > 5) {
+                            mAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+                            tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                        } else {
+                            mAmount.setTextSize(Utils.pixelsToSp(CheckOutPaymentActivity.this, fontSize));
+                            tvCurrency.setTextSize(Utils.pixelsToSp(CheckOutPaymentActivity.this, dollarFont));
                         }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-
+            }
 
 
         });
@@ -253,7 +256,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                     if (businessWalletResponse.getStatus() != null && businessWalletResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null) {
                             availableBalance = businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse();
-                            mTokenBalance.setText(Utils.convertTwoDecimal(String.valueOf(availableBalance)));
+                            mTokenBalance.setText("Available: " + Utils.convertTwoDecimal(String.valueOf(availableBalance)) + "CYN");
                         }
                     }
                 }
@@ -265,10 +268,8 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                 if (orderInfoResponse != null) {
                     if (orderInfoResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         if (orderInfoResponse.getData() != null && orderInfoResponse.getData().isCheckoutUser()) {
-                            if (orderInfoResponse.getData().getMerchantLogo() != null) {
-                                initUserData(orderInfoResponse);
-                                TransactionLimitAPICall();
-                            }
+                            initUserData(orderInfoResponse);
+                            TransactionLimitAPICall();
 
                         }
                     } else {
@@ -288,7 +289,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                                 transactionLimit = Double.parseDouble(transactionLimitResponse.getData().getTransactionLimit());
                                 minimumLimit = Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit());
                             }
-                            validation(transactionLimitResponse);
+//                            validation(transactionLimitResponse);
                         }
                     } else {
                         slideToConfirm.setInteractionEnabled(false);
@@ -316,7 +317,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         checkOutViewModel.getOrderPayResponseMutableLiveData().observe(this, new Observer<OrderPayResponse>() {
             @Override
             public void onChanged(OrderPayResponse orderPayResponse) {
-                if(pDialog != null && pDialog.isShowing()) {
+                if (pDialog != null && pDialog.isShowing()) {
                     pDialog.dismiss();
                 }
                 if (orderPayResponse != null) {
@@ -342,7 +343,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     }
 
     private void checkOutPayAPICall(String requestToken) {
-        if(pDialog == null || !pDialog.isShowing()) {
+        if (pDialog == null || !pDialog.isShowing()) {
             pDialog = Utils.showProgressDialog(CheckOutPaymentActivity.this);
         }
         if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
@@ -363,31 +364,32 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             if (transactionLimitResponse != null) {
                 String strPay = mAmount.getText().toString().trim().replace("\"", "");
                 if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
-                    //Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
-                    errorText.setText("Amount should be greater than zero.");
-                    errorText.setVisibility(View.VISIBLE);
-                    slideToConfirm.setInteractionEnabled(false);
-                    lyBalance.setVisibility(View.GONE);
+                    Utils.displayAlert("Amount should be greater than zero.", CheckOutPaymentActivity.this, "Oops!", "");
+//                    errorText.setText("Amount should be greater than zero.");
+//                    errorText.setVisibility(View.VISIBLE);
+//                    slideToConfirm.setInteractionEnabled(false);
+//                    lyBalance.setVisibility(View.GONE);
                 } else if ((Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit()))) {
-                    errorText.setText("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit())) + " CYN");
-                    errorText.setVisibility(View.VISIBLE);
-                    lyBalance.setVisibility(View.GONE);
-                    slideToConfirm.setInteractionEnabled(false);
-    //            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+                    Utils.displayAlertNew("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit())) + " CYN", CheckOutPaymentActivity.this, "Oops!");
+//                    errorText.setVisibility(View.VISIBLE);
+//                    lyBalance.setVisibility(View.GONE);
+//                    slideToConfirm.setInteractionEnabled(false);
+                    //            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
                 } else if (Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(transactionLimitResponse.getData().getTransactionLimit())) {
-                    errorText.setText("Amount entered exceeds transaction limit.");
-                    errorText.setVisibility(View.VISIBLE);
-                    lyBalance.setVisibility(View.GONE);
-                    slideToConfirm.setInteractionEnabled(false);
-                } else {
-                    errorText.setVisibility(View.GONE);
-                    lyBalance.setVisibility(View.VISIBLE);
-                    slideToConfirm.setInteractionEnabled(true);
-                    slideToConfirm.setBackground(getDrawable(R.drawable.shape_round_rectable_green));
-                    tv_lable.setTextColor(getColor(R.color.white));
+//                    errorText.setText("Amount entered exceeds transaction limit.");
+//                    errorText.setVisibility(View.VISIBLE);
+//                    lyBalance.setVisibility(View.GONE);
+                    Utils.displayAlertNew("Amount entered exceeds transaction limit.", CheckOutPaymentActivity.this, "Oops!");
+//                    slideToConfirm.setInteractionEnabled(false);
                 }
-            }
-            else {
+//                else {
+//                    errorText.setVisibility(View.GONE);
+//                    lyBalance.setVisibility(View.VISIBLE);
+//                    slideToConfirm.setInteractionEnabled(true);
+//                    slideToConfirm.setBackground(getDrawable(R.drawable.shape_round_rectable_green));
+//                    tv_lable.setTextColor(getColor(R.color.white));
+//                }
+            } else {
                 slideToConfirm.setInteractionEnabled(false);
             }
         } catch (Exception ex) {
@@ -407,13 +409,6 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     }
 
     private void initUserData(OrderInfoResponse orderInfoResponse) {
-        if (orderInfoResponse.getData().getMerchantLogo()!= null) {
-            DisplayImageUtility utility = DisplayImageUtility.getInstance(CheckOutPaymentActivity.this);
-            utility.addImage(orderInfoResponse.getData().getMerchantLogo(), merchantImage, R.drawable.ic_case);
-        }
-        else {
-            merchantImage.setImageResource(R.drawable.ic_case);
-        }
         if (orderInfoResponse.getData().getMerchantName() != null) {
             mUserName.setText(orderInfoResponse.getData().getMerchantName());
         } else {
@@ -423,6 +418,12 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             mAmount.setText(Utils.convertTwoDecimal(orderInfoResponse.getData().getAmount()));
             userAmount = Double.parseDouble(orderInfoResponse.getData().getAmount());
         }
+
+        if (orderInfoResponse.getData().getMerchantLogo() != null) {
+            DisplayImageUtility utility = DisplayImageUtility.getInstance(CheckOutPaymentActivity.this);
+            utility.addImage(orderInfoResponse.getData().getMerchantLogo(), merchantImage, R.drawable.ic_case);
+        }
+
     }
 
     private void walletAPICall() {
@@ -525,18 +526,24 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             }
         }
     }
-    private boolean payValidation() {
-            String strPay = mAmount.getText().toString().trim().replace("\"", "");
-            boolean value;
 
-            if (userAmount > availableBalance) {
-                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
-                value = false;
-            } else {
-                value = true;
-            }
-            return  value;
+    private boolean payValidation() {
+        String strPay = mAmount.getText().toString().trim().replace("\"", "");
+        boolean value = false;
+
+        if (userAmount > availableBalance) {
+            displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
+        } else if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
+            displayAlertNew("Amount should be greater than zero.", CheckOutPaymentActivity.this, "Oops!");
+        } else if ((Double.parseDouble(strPay.replace(",", "")) < minimumLimit)) {
+            displayAlertNew("Minimum Amount is " + Utils.USNumberFormat(minimumLimit) + " CYN", CheckOutPaymentActivity.this, "Oops!");
+        } else if (Double.parseDouble(strPay.replace(",", "")) > transactionLimit) {
+            displayAlertNew("Amount exceeds transaction limit.", CheckOutPaymentActivity.this, "Oops!");
+        } else {
+            value = true;
         }
+        return value;
+    }
 
     private void displayAlert(String msg, String headerText) {
         // custom dialog
@@ -583,12 +590,90 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
 
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        if (myApplication.getCheckOutModel()!= null && myApplication.getCheckOutModel().isCheckOutFlag()) {
-            dialog.setCanceledOnTouchOutside(false);
-        } else {
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                changeSlideState();
+            }
+        });
             dialog.setCanceledOnTouchOutside(true);
-        }
         dialog.show();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (slideToConfirm.isInteractionEnabled()) {
+            isAuthenticationCalled = false;
+            changeSlideState();
+        }
+    }
+
+    private void changeSlideState() {
+        try {
+            slideToConfirm.setInteractionEnabled(true);
+            slideToConfirm.setTransition(R.id.start, R.id.start);
+            tv_lable.setText("Slide to Confirm");
+            tv_lable.setVisibility(View.VISIBLE);
+            tv_lable_verify.setVisibility(View.GONE);
+            slideToConfirm.setProgress(0);
+            im_lock_.setAlpha(1.0f);
+            isAuthenticationCalled = false;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void displayAlertNew(String msg, final Context context, String headerText) {
+        // custom dialog
+        displayAlertDialog = new Dialog(context);
+        displayAlertDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        displayAlertDialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+        displayAlertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView header = displayAlertDialog.findViewById(R.id.tvHead);
+        TextView message = displayAlertDialog.findViewById(R.id.tvMessage);
+        CardView actionCV = displayAlertDialog.findViewById(R.id.cvAction);
+        TextView actionText = displayAlertDialog.findViewById(R.id.tvAction);
+
+        if (!headerText.equals("")) {
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
+        actionCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayAlertDialog.dismiss();
+//                changeSlideState();
+            }
+        });
+
+        displayAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                changeSlideState();
+            }
+        });
+
+        message.setText(msg);
+        Window window = displayAlertDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        displayAlertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        displayAlertDialog.setCanceledOnTouchOutside(true);
+        displayAlertDialog.show();
+    }
+
 
 }

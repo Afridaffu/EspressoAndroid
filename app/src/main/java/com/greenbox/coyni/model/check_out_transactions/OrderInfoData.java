@@ -8,6 +8,7 @@ public class OrderInfoData {
     private boolean checkoutUser;
     private String merchantLogo;
     private String orderId;
+    private String checkoutCallbackUrl;
 
     public String getCheckoutOrderId() {
         return checkoutOrderId;
@@ -55,5 +56,13 @@ public class OrderInfoData {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public String getCheckoutCallbackUrl() {
+        return checkoutCallbackUrl;
+    }
+
+    public void setCheckoutCallbackUrl(String checkoutCallbackUrl) {
+        this.checkoutCallbackUrl = checkoutCallbackUrl;
     }
 }

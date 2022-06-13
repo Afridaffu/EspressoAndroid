@@ -54,7 +54,7 @@ import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     String strScreen = "", enableType = "";
-    TextView giftCardTypeTV, giftCardAmountTV, giftCardDescTV, refIDTV, gcProcessingTV, learnMoreTV, tvMessage;
+    TextView giftCardTypeTV, giftCardAmountTV, giftCardDescTV, refIDTV, gcProcessingTV, learnMoreTV, tvMessage, mTryButtonTV;
     LinearLayout refIDLL;
     CardView doneCV, cvTryAgain;
     MyApplication objMyApplication;
@@ -128,6 +128,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             learnMoreTV = findViewById(R.id.learnMoreTV);
             refIDLL = findViewById(R.id.refIDLL);
             doneCV = findViewById(R.id.doneCV);
+            mTryButtonTV = findViewById(R.id.try_button_tv);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             tvMessage = findViewById(R.id.tvMessage);
             cvTryAgain = findViewById(R.id.cvTryAgain);
@@ -233,10 +234,9 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                     findViewById(R.id.inProgressContainer).setVisibility(View.VISIBLE);
                     findViewById(R.id.failedContainer).setVisibility(View.GONE);
                     findViewById(R.id.wdInProgressContainer).setVisibility(View.GONE);
-                    if (type.equals(CheckOutConstants.CheckOut)){
+                    if (type.equals(CheckOutConstants.CheckOut)) {
                         orderTransactionSuccess();
-                    }
-                    else {
+                    } else {
                         paidTransactionSuccess();
                     }
                 }
@@ -245,10 +245,9 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                     findViewById(R.id.inProgressContainer).setVisibility(View.GONE);
                     findViewById(R.id.failedContainer).setVisibility(View.VISIBLE);
                     findViewById(R.id.wdInProgressContainer).setVisibility(View.GONE);
-                    if (type.equals(CheckOutConstants.CheckOut)){
+                    if (type.equals(CheckOutConstants.CheckOut)) {
                         failedOrderPayTransaction();
-                    }
-                    else {
+                    } else {
                         failedPaidTransaction();
                     }
                 }
@@ -282,7 +281,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
 
     }
 
-  private void failedOrderPayTransaction() {
+    private void failedOrderPayTransaction() {
         if (objMyApplication.getOrderPayResponse() != null) {
             tvMessage.setText(
                     "The transaction failed due to error code:\n" +
@@ -290,12 +289,15 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                             objMyApplication.getOrderPayResponse().getError().getErrorDescription() + ". Please try again.");
         }
 
-
+        if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
+            objMyApplication.setCheckOutModel(null);
+        }
+        mTryButtonTV.setText(R.string.done);
         cvTryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    finish();
+                    dashboardNavigation();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -673,7 +675,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         }
     }
 
-     private void orderTransactionSuccess() {
+    private void orderTransactionSuccess() {
 
         ImageView imgLogo = findViewById(R.id.imgLogo);
         TextView giftCardTypeTV = findViewById(R.id.giftCardTypeTV);
@@ -744,12 +746,11 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     private void failedTransaction(String type) {
         try {
             if (!type.equals("pay") && !type.equals("request")) {
-                if (objMyApplication.getWithdrawResponse() != null)  {
+                if (objMyApplication.getWithdrawResponse() != null) {
                     tvMessage.setText("The transaction failed due to error code:\n" +
                             objMyApplication.getWithdrawResponse().getError().getErrorCode() + " - " +
                             objMyApplication.getWithdrawResponse().getError().getErrorDescription() + ". Please try again.");
-                }
-                else if (objMyApplication.getBuyTokenResponse() != null && type.equals("buy")){
+                } else if (objMyApplication.getBuyTokenResponse() != null && type.equals("buy")) {
                     tvMessage.setText("The transaction failed due to error code:\n" +
                             objMyApplication.getBuyTokenResponse().getError().getErrorCode() + " - " +
                             objMyApplication.getBuyTokenResponse().getError().getErrorDescription() + ". Please try again.");

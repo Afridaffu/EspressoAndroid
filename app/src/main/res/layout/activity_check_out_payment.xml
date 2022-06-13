@@ -27,8 +27,8 @@
                 android:id="@+id/payToMerchantClose"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
-                android:gravity="center"
                 android:layout_marginStart="@dimen/_9sdp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -41,8 +41,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginStart="@dimen/_21sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="@string/pay_to_merchant"
                 android:textColor="@color/black"
@@ -76,9 +76,9 @@
                         android:id="@+id/merchant_profile_iv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@color/primary_green"
                         android:contentDescription="@string/businessProfileAccountItemChildImage"
                         android:scaleType="fitXY"
-                        android:background="@color/primary_green"
                         android:src="@drawable/ic_case"
                         android:visibility="visible" />
 
@@ -135,93 +135,381 @@
 
                 </LinearLayout>
 
+                <!--                <androidx.cardview.widget.CardView-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginLeft="@dimen/_10sdp"-->
+                <!--                    android:layout_marginTop="@dimen/_18sdp"-->
+                <!--                    android:layout_marginRight="@dimen/_10sdp"-->
+                <!--                    android:layout_marginBottom="@dimen/_1sdp"-->
+                <!--                    android:visibility="gone"-->
+                <!--                    android:background="@color/white"-->
+                <!--                    app:cardCornerRadius="@dimen/_10sdp">-->
+
+                <!--                    <LinearLayout-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:orientation="vertical">-->
+
+                <!--                        <RelativeLayout-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:layout_marginTop="@dimen/_12sdp"-->
+                <!--                            android:background="@color/white"-->
+                <!--                            android:paddingStart="@dimen/_20sdp"-->
+                <!--                            android:paddingEnd="@dimen/_30sdp">-->
+
+                <!--                            <TextView-->
+                <!--                                android:id="@+id/tvCurrency"-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:layout_centerVertical="true"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                android:layout_toLeftOf="@+id/lyAmount"-->
+                <!--                                android:fontFamily="@font/opensans_bold"-->
+                <!--                                android:paddingTop="@dimen/_9sdp"-->
+                <!--                                android:paddingBottom="@dimen/_7sdp"-->
+                <!--                                android:text="$"-->
+                <!--                                android:textColor="@color/primary_black"-->
+                <!--                                android:textSize="@dimen/_40ssp"-->
+                <!--                                android:visibility="gone" />-->
+
+                <!--                            <LinearLayout-->
+                <!--                                android:id="@+id/lyAmount"-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:layout_centerVertical="true"-->
+                <!--                                android:layout_marginLeft="@dimen/_5sdp"-->
+                <!--                                android:layout_toLeftOf="@+id/imageConvertIV"-->
+                <!--                                android:orientation="horizontal">-->
+
+                <!--                                <EditText-->
+                <!--                                    android:id="@+id/checkout_amount"-->
+                <!--                                    android:layout_width="wrap_content"-->
+                <!--                                    android:layout_height="@dimen/_72sdp"-->
+                <!--                                    android:background="@color/white"-->
+                <!--                                    android:editable="false"-->
+                <!--                                    android:enabled="false"-->
+                <!--                                    android:fontFamily="@font/opensans_bold"-->
+                <!--                                    android:gravity="center_vertical|end"-->
+                <!--                                    android:hint="0.00"-->
+                <!--                                    android:inputType="numberDecimal"-->
+                <!--                                    android:maxLength="13"-->
+                <!--                                    android:textColor="@color/primary_black"-->
+                <!--                                    android:textColorHint="@color/light_gray"-->
+                <!--                                    android:textCursorDrawable="@drawable/cursorcolor"-->
+                <!--                                    android:textSize="@dimen/_53ssp"-->
+                <!--                                    tools:ignore="Deprecated" />-->
+
+
+                <!--                                <TextView-->
+                <!--                                    android:id="@+id/tvCYN"-->
+                <!--                                    android:layout_width="wrap_content"-->
+                <!--                                    android:layout_height="match_parent"-->
+                <!--                                    android:fontFamily="@font/opensans_bold"-->
+                <!--                                    android:text=" CYN"-->
+                <!--                                    android:layout_marginTop="@dimen/_25sdp"-->
+                <!--                                    android:gravity="center"-->
+                <!--                                    android:textColor="@color/primary_black"-->
+                <!--                                    android:textSize="@dimen/_12ssp"-->
+                <!--                                    android:visibility="visible" />-->
+                <!--                            </LinearLayout>-->
+
+
+                <!--                            <ImageView-->
+                <!--                                android:id="@+id/imageConvertIV"-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:layout_alignParentRight="true"-->
+                <!--                                android:layout_centerVertical="true"-->
+                <!--                                android:layout_marginLeft="@dimen/_7sdp"-->
+                <!--                                android:layout_marginTop="@dimen/_8sdp"-->
+                <!--                                android:visibility="invisible"-->
+                <!--                                android:src="@drawable/ic_download" />-->
+                <!--                        </RelativeLayout>-->
+
+                <!--                        <TextView-->
+                <!--                            android:id="@+id/error_tv"-->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:layout_gravity="center_horizontal"-->
+                <!--                            android:layout_marginLeft="@dimen/_10sdp"-->
+                <!--                            android:layout_marginTop="@dimen/_10sdp"-->
+                <!--                            android:layout_marginRight="@dimen/_10sdp"-->
+                <!--                            android:text="Amount entered exceeds your daily limit"-->
+                <!--                            android:textColor="@color/error"-->
+                <!--                            android:textSize="@dimen/_10ssp"-->
+                <!--                            android:visibility="gone" />-->
+
+                <!--                        <LinearLayout-->
+                <!--                            android:id="@+id/available_balance_tv"-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:gravity="center_horizontal"-->
+                <!--                            android:orientation="horizontal"-->
+                <!--                            android:visibility="visible">-->
+
+                <!--                            <TextView-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:fontFamily="@font/opensans_regular"-->
+                <!--                                android:text="Available Balance: "-->
+                <!--                                android:textColor="@color/balance"-->
+                <!--                                android:textSize="@dimen/_9ssp" />-->
+
+                <!--                            <TextView-->
+                <!--                                android:id="@+id/available_token_balance_tv"-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:fontFamily="@font/opensans_bold"-->
+                <!--                                android:textColor="@color/balance"-->
+                <!--                                android:textSize="@dimen/_12ssp" />-->
+
+                <!--                            <TextView-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:fontFamily="@font/opensans_bold"-->
+                <!--                                android:text=" CYN"-->
+                <!--                                android:textColor="@color/balance"-->
+                <!--                                android:textSize="@dimen/_9ssp" />-->
+
+                <!--                        </LinearLayout>-->
+
+                <!--                        <View-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="@dimen/_1sdp"-->
+                <!--                            android:layout_gravity="center"-->
+                <!--                            android:layout_marginLeft="@dimen/_15sdp"-->
+                <!--                            android:layout_marginTop="@dimen/_14sdp"-->
+                <!--                            android:layout_marginRight="@dimen/_15sdp"-->
+                <!--                            android:layout_marginBottom="@dimen/_20sdp"-->
+                <!--                            android:background="#d8e2f0" />-->
+
+
+                <!--                    </LinearLayout>-->
+
+                <!--                </androidx.cardview.widget.CardView>-->
+
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/lyUserInfo"
                     android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_18sdp"
                     android:layout_marginRight="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
+                    android:layout_marginBottom="@dimen/_2sdp"
                     android:background="@color/white"
                     app:cardCornerRadius="@dimen/_10sdp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/_17sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Paying"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp"/>
+
+                        <RelativeLayout
+                            android:id="@+id/payLL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/lyamountview1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvCurrency"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="top"
+                                    android:layout_marginTop="@dimen/_6sdp"
+                                    android:fontFamily="@font/opensans_bold"
+                                    android:text="$ "
+                                    android:textColor="@color/primary_green"
+                                    android:textSize="@dimen/_30ssp"
+                                    android:visibility="gone" />
+
+                                <LinearLayout
+                                    android:id="@+id/lyAmount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/checkout_amount"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@color/white"
+                                        android:cursorVisible="true"
+                                        android:fontFamily="@font/opensans_bold"
+                                        android:gravity="center_vertical|right"
+                                        android:hint="0.00"
+                                        android:inputType="numberDecimal"
+                                        android:maxLength="13"
+                                        android:textColor="@color/primary_green"
+                                        android:textColorHint="@color/light_gray"
+                                        android:textCursorDrawable="@drawable/cursor_green"
+                                        android:textSize="@dimen/_53ssp" />
+
+                                    <TextView
+                                        android:id="@+id/tvCYN"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/opensans_bold"
+                                        android:text=" CYN"
+                                        android:textColor="@color/primary_green"
+                                        android:textSize="@dimen/_12ssp"
+                                        android:visibility="visible"/>
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:id="@+id/imgConvert"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="bottom"
+                                    android:layout_marginStart="@dimen/_10ssp"
+                                    android:layout_marginBottom="@dimen/_14ssp"
+                                    android:src="@drawable/ic_download"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
+
+                        <!--                    <LinearLayout-->
+                        <!--                        android:id="@+id/linearLayoutnew"-->
+                        <!--                        android:layout_width="match_parent"-->
+                        <!--                        android:layout_height="@dimen/_60sdp"-->
+                        <!--                        android:layout_margin="@dimen/_10ssp"-->
+                        <!--                        android:gravity="center"-->
+                        <!--                        android:layout_gravity="center_vertical"-->
+                        <!--                        android:orientation="vertical">-->
+
+                        <!--                        <LinearLayout-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:id="@+id/ll_values"-->
+                        <!--                            android:gravity="center_horizontal"-->
+                        <!--                            android:layout_gravity="center_vertical"-->
+                        <!--                            android:orientation="horizontal">-->
+
+                        <!--                            <TextView-->
+                        <!--                                android:id="@+id/tvCurrency"-->
+                        <!--                                android:layout_width="wrap_content"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:layout_gravity="top"-->
+                        <!--                                android:layout_marginEnd="@dimen/_5sdp"-->
+                        <!--                                android:fontFamily="@font/opensans_bold"-->
+                        <!--                                android:text="$"-->
+                        <!--                                android:textColor="@color/primary_black"-->
+                        <!--                                android:textSize="@dimen/_15ssp"-->
+                        <!--                                android:visibility="gone" />-->
+
+                        <!--                            <TextView-->
+                        <!--                                android:id="@+id/tvAmount"-->
+                        <!--                                android:layout_width="wrap_content"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:layout_gravity="center_vertical"-->
+                        <!--                                android:layout_marginStart="@dimen/_10ssp"-->
+                        <!--                                android:background="@color/white"-->
+                        <!--                                android:fontFamily="@font/opensans_bold"-->
+                        <!--                                android:gravity="center_vertical"-->
+                        <!--                                android:hint="0.00"-->
+                        <!--                                android:inputType="numberDecimal"-->
+                        <!--                                android:maxLength="@string/maxlengthamount"-->
+                        <!--                                android:textColor="@color/primary_black"-->
+                        <!--                                android:textColorHint="@color/light_gray"-->
+                        <!--                                android:textCursorDrawable="@drawable/cursorcolor"-->
+                        <!--                                android:textSize="@dimen/_53sdp" />-->
+
+                        <!--                            <TextView-->
+                        <!--                                android:id="@+id/tvCYN"-->
+                        <!--                                android:layout_width="wrap_content"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:layout_gravity="bottom"-->
+                        <!--                                android:fontFamily="@font/opensans_bold"-->
+                        <!--                                android:text=" CYN"-->
+                        <!--                                android:textColor="@color/primary_black"-->
+                        <!--                                android:textSize="@dimen/_12ssp"-->
+                        <!--                                android:visibility="visible">-->
+
+                        <!--                            </TextView>-->
+
+                        <!--                            <ImageView-->
+                        <!--                                android:id="@+id/imgConvert"-->
+                        <!--                                android:layout_width="wrap_content"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:layout_gravity="bottom"-->
+                        <!--                                android:layout_marginStart="@dimen/_5sdp"-->
+                        <!--                                android:layout_marginBottom="@dimen/_5sdp"-->
+                        <!--                                android:src="@drawable/ic_download" />-->
+                        <!--                        </LinearLayout>-->
+
+                        <!--                    </LinearLayout>-->
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_15sdp"
+                            android:layout_marginTop="@dimen/_15ssp"
+                            android:layout_marginRight="@dimen/_15sdp"
+                            android:background="#d8e2f0" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_12sdp"
-                            android:background="@color/white"
-                            android:paddingStart="@dimen/_20sdp"
-                            android:paddingEnd="@dimen/_30sdp">
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:paddingLeft="@dimen/_10sdp"
+                            android:paddingRight="@dimen/_10sdp">
 
                             <TextView
-                                android:id="@+id/tvCurrency"
+                                android:id="@+id/tvPayHead"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                android:layout_gravity="center"
-                                android:layout_toLeftOf="@+id/lyAmount"
-                                android:fontFamily="@font/opensans_bold"
-                                android:paddingTop="@dimen/_9sdp"
-                                android:paddingBottom="@dimen/_7sdp"
-                                android:text="$"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_40ssp"
-                                android:visibility="gone" />
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="Paying Method"
+                                android:textColor="@color/xdark_gray"
+                                android:textSize="@dimen/_11ssp"/>
 
-                            <LinearLayout
-                                android:id="@+id/lyAmount"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="@dimen/_5sdp"
-                                android:layout_toLeftOf="@+id/imageConvertIV"
-                                android:orientation="horizontal">
-
-                                <EditText
-                                    android:id="@+id/checkout_amount"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="@dimen/_72sdp"
-                                    android:background="@color/white"
-                                    android:editable="false"
-                                    android:enabled="false"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:gravity="center_vertical|end"
-                                    android:hint="0.00"
-                                    android:inputType="numberDecimal"
-                                    android:maxLength="13"
-                                    android:textColor="@color/primary_black"
-                                    android:textColorHint="@color/light_gray"
-                                    android:textCursorDrawable="@drawable/cursorcolor"
-                                    android:textSize="@dimen/_53ssp"
-                                    tools:ignore="Deprecated" />
-
-
-                                <TextView
-                                    android:id="@+id/tvCYN"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:text=" CYN"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp"
-                                    android:visibility="visible" />
-                            </LinearLayout>
-
-
-                            <ImageView
-                                android:id="@+id/imageConvertIV"
+                            <TextView
+                                android:id="@+id/tvBalHead"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="@dimen/_7sdp"
-                                android:layout_marginTop="@dimen/_8sdp"
-                                android:src="@drawable/ic_download" />
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="coyni Balance"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp"/>
+
+                            <TextView
+                                android:id="@+id/tvBalance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tvBalHead"
+                                android:layout_alignParentRight="true"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="Available: 9,999,00CYN"
+                                android:textColor="@color/xdark_gray"
+                                android:textSize="@dimen/_9ssp"/>
                         </RelativeLayout>
 
                         <TextView
@@ -230,61 +518,16 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginLeft="@dimen/_10sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
                             android:layout_marginRight="@dimen/_10sdp"
-                            android:text="Amount entered exceeds your daily limit"
+                            android:layout_marginBottom="@dimen/_10sdp"
                             android:textColor="@color/error"
                             android:textSize="@dimen/_10ssp"
-                            android:visibility="gone" />
-
-                        <LinearLayout
-                            android:id="@+id/available_balance_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:orientation="horizontal"
-                            android:visibility="visible">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="Available Balance: "
-                                android:textColor="@color/balance"
-                                android:textSize="@dimen/_9ssp" />
-
-                            <TextView
-                                android:id="@+id/available_token_balance_tv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_bold"
-                                android:textColor="@color/balance"
-                                android:textSize="@dimen/_12ssp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_bold"
-                                android:text=" CYN"
-                                android:textColor="@color/balance"
-                                android:textSize="@dimen/_9ssp" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_1sdp"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/_15sdp"
-                            android:layout_marginTop="@dimen/_14sdp"
-                            android:layout_marginRight="@dimen/_15sdp"
-                            android:layout_marginBottom="@dimen/_20sdp"
-                            android:background="#d8e2f0" />
-
+                            android:visibility="visible" />
 
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
+
             </LinearLayout>
 
             <androidx.constraintlayout.motion.widget.MotionLayout
@@ -293,7 +536,6 @@
                 android:layout_height="@dimen/_48sdp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_37sdp"
                 android:layout_marginEnd="@dimen/_20sdp"
                 android:layout_marginBottom="@dimen/_21sdp"
                 android:background="@drawable/shape_round_rectable"
@@ -402,6 +644,7 @@
                 </androidx.cardview.widget.CardView>
 
             </androidx.constraintlayout.motion.widget.MotionLayout>
+
 
         </RelativeLayout>
     </LinearLayout>
