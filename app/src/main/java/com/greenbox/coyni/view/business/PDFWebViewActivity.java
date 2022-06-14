@@ -1,7 +1,9 @@
 package com.greenbox.coyni.view.business;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -14,6 +16,9 @@ import android.widget.TextView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.view.BaseActivity;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public class PDFWebViewActivity extends BaseActivity {
     ImageView canceledIV;
@@ -36,13 +41,13 @@ public class PDFWebViewActivity extends BaseActivity {
         webView = (WebView) findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setLoadWithOverviewMode(true);
-        webSettings.setUseWideViewPort(true);
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);
-        webSettings.setSupportZoom(true);
-        webSettings.setDefaultTextEncodingName("utf-8");
+//        webSettings.setDomStorageEnabled(true);
+//        webSettings.setLoadWithOverviewMode(true);
+//        webSettings.setUseWideViewPort(true);
+//        webSettings.setBuiltInZoomControls(true);
+//        webSettings.setDisplayZoomControls(false);
+//        webSettings.setSupportZoom(true);
+//        webSettings.setDefaultTextEncodingName("utf-8");
         webView.invalidate();
         webView.setWebChromeClient(new WebChromeClient());
         webView.setVerticalScrollBarEnabled(true);
@@ -69,7 +74,7 @@ public class PDFWebViewActivity extends BaseActivity {
                 try {
                     if (view.getTitle().equals("")) {
                         view.reload();
-                    } else{
+                    } else {
                         dismissDialog();
                     }
                 } catch (Exception ex) {
@@ -87,12 +92,14 @@ public class PDFWebViewActivity extends BaseActivity {
             }
         });
         agreNameTV.setText(getIntent().getStringExtra("NAME"));
-        launchDocumentUrl(getIntent().getStringExtra("URL").replace("&","%26"));
+        launchDocumentUrl(getIntent().getStringExtra("URL"));
 
     }
 
     private void launchDocumentUrl(String url) {
-        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + url);
+        String urlNew = Uri.encode(url);
+        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + urlNew);
+        Log.e("URL", "https://docs.google.com/gview?embedded=true&url=" + urlNew);
     }
 
 }
