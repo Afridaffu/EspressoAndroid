@@ -142,8 +142,9 @@ public class BuyTokenViewModel extends AndroidViewModel {
 
     public void buyTokens(BuyTokenRequest request, String token) {
         try {
+            request.setRequestToken(token);
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BuyTokenResponse> mCall = apiService.buyTokens(request, token);
+            Call<BuyTokenResponse> mCall = apiService.buyTokens(request);
             mCall.enqueue(new Callback<BuyTokenResponse>() {
                 @Override
                 public void onResponse(Call<BuyTokenResponse> call, Response<BuyTokenResponse> response) {
@@ -196,8 +197,9 @@ public class BuyTokenViewModel extends AndroidViewModel {
 
     public void withdrawTokens(WithdrawRequest request, String token) {
         try {
+            request.setRequestToken(token);
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<WithdrawResponse> mCall = apiService.withdrawTokens(request, token);
+            Call<WithdrawResponse> mCall = apiService.withdrawTokens(request);
             mCall.enqueue(new Callback<WithdrawResponse>() {
                 @Override
                 public void onResponse(Call<WithdrawResponse> call, Response<WithdrawResponse> response) {

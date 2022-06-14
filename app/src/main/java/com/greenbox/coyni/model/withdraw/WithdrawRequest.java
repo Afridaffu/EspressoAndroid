@@ -8,6 +8,7 @@ public class WithdrawRequest {
     private String signetWalletId = "";
     private Double tokens;
     private String withdrawType;
+    private String requestToken;
 
     public Long getBankId() {
         return bankId;
@@ -63,5 +64,13 @@ public class WithdrawRequest {
 
     public void setSignetWalletId(String signetWalletId) {
         this.signetWalletId = signetWalletId;
+    }
+
+    public String getRequestToken() {
+        return requestToken;
+    }
+
+    public void setRequestToken(String requestToken) {
+        this.requestToken = requestToken;
     }
 }
