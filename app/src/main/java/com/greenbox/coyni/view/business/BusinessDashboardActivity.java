@@ -96,36 +96,10 @@ public class BusinessDashboardActivity extends BaseActivity {
             removeFragment();
             showProgressDialog();
             mDashboardViewModel.meProfile();
-            //pushFragment(new BusinessDashboardFragment());
             firebaseToken();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        try {
-//            removeFragment();
-//            showProgressDialog();
-//            mDashboardViewModel.meProfile();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    private void getWalletData() {
-        WalletRequest walletRequest = new WalletRequest();
-        walletRequest.setWalletType(Utils.MERCHANT);
-//        walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-        walletRequest.setWalletType(Utils.TOKEN);
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-        walletRequest.setWalletType(Utils.RESERVE);
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
     }
 
     public void onDashboardTabSelected(View view) {
@@ -138,7 +112,6 @@ public class BusinessDashboardActivity extends BaseActivity {
                 selectedTab = Tabs.DASHBOARD;
                 setSelectedTab(true, false, false, false);
                 LogUtils.d(TAG, "onDashboardTabSelected");
-                //pushFragment(new BusinessDashboardFragment());
                 checkLoadFragment(objMyApplication.getMyProfile());
             }
         } catch (Exception ex) {
@@ -544,8 +517,6 @@ public class BusinessDashboardActivity extends BaseActivity {
                                     countCV.setVisibility(View.GONE);
                                 }
                             }
-                        } else {
-//                            Utils.displayAlert(getString(R.string.something_went_wrong), getViewLifecycleOwner(), "", "");
                         }
 
                     } catch (Exception e) {
@@ -563,20 +534,24 @@ public class BusinessDashboardActivity extends BaseActivity {
             return;
         }
         String accountStatus = profile.getData().getAccountStatus();
-        if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-            pushFragment(new GetStartedFragment());
-        } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
-            pushFragment(new UnderReviewFragment());
-        } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())
-                || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ADDITIONAL_INFO_REQUIRED.getStatus())) {
-            pushFragment(new ActionRequiredFragment());
-        } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
-                || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
-            pushFragment(new VerificationFailedFragment());
-        } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
-            pushFragment(new VerificationFailedFragment());
-        } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-            pushFragment(new BusinessDashboardFragment());
+        if(isTabsEnabled && selectedTab == Tabs.ACCOUNT) {
+            pushFragment(new BusinessAccountFragment());
+        } else {
+            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                pushFragment(new GetStartedFragment());
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
+                pushFragment(new UnderReviewFragment());
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())
+                    || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ADDITIONAL_INFO_REQUIRED.getStatus())) {
+                pushFragment(new ActionRequiredFragment());
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                    || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
+                pushFragment(new VerificationFailedFragment());
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                pushFragment(new VerificationFailedFragment());
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                pushFragment(new BusinessDashboardFragment());
+            }
         }
 
     }

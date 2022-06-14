@@ -409,7 +409,8 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
             }
 
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT
+                    || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
                 findViewById(R.id.businessUserDetailsLL).setVisibility(View.VISIBLE);
                 findViewById(R.id.personalUserDetailsCV).setVisibility(View.GONE);
             } else if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
@@ -554,6 +555,9 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         boolean showDBA = false;
         AccountsData accountsData = new AccountsData(filterList);
         profilesListView.setVisibility(View.VISIBLE);
+
+        accountsData.removeSharedAccounts();
+
         profilesListAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, accountsData, preferredId, showDBA);
 
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {

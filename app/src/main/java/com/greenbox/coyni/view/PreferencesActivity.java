@@ -377,6 +377,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
     private void setProfilesAdapter() {
         boolean showDBA = false;
         AccountsData accountsData = new AccountsData(filterList);
+        accountsData.removeSharedAccounts();
         profilesListView.setVisibility(View.VISIBLE);
         profilesListAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, accountsData, preferredId, showDBA);
 
@@ -481,9 +482,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                     View listItem = listAdapter.getChildView(i, j, false, null,
                             listView);
                     listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-
                     totalHeight += listItem.getMeasuredHeight();
-
                 }
             }
         }
