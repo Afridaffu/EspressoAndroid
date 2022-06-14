@@ -415,20 +415,20 @@ public interface ApiService {
     @POST("api/v2/corda/fee")
     Call<TransferFeeResponse> transferFee(@Body TransferFeeRequest request);
 
-//    @POST("api/v2/node/buyTokens")
-//    Call<BuyTokenResponse> buyTokens(@Body BuyTokenRequest request);
+    @POST("api/v2/node/buyTokens")
+    Call<BuyTokenResponse> buyTokens(@Body BuyTokenRequest request);
 
-    @POST("api/v2/node/buyTokens/{requestToken}")
-    Call<BuyTokenResponse> buyTokens(@Body BuyTokenRequest request, @Path("requestToken") String requestToken);
+//    @POST("api/v2/node/buyTokens/{requestToken}")
+//    Call<BuyTokenResponse> buyTokens(@Body BuyTokenRequest request, @Path("requestToken") String requestToken);
 
     @GET("api/v2/giftcard/giftCardBrands")
     Call<BrandsResponse> getGiftCards();
 
-//    @POST("api/v2/node/withdrawTokens")
-//    Call<WithdrawResponse> withdrawTokens(@Body WithdrawRequest request);
+    @POST("api/v2/node/withdrawTokens")
+    Call<WithdrawResponse> withdrawTokens(@Body WithdrawRequest request);
 
-    @POST("api/v2/node/withdrawTokens/{requestToken}")
-    Call<WithdrawResponse> withdrawTokens(@Body WithdrawRequest request, @Path("requestToken") String requestToken);
+//    @POST("api/v2/node/withdrawTokens/{requestToken}")
+//    Call<WithdrawResponse> withdrawTokens(@Body WithdrawRequest request, @Path("requestToken") String requestToken);
 
     @GET("api/v2/giftcard/giftCardBrandItems")
     Call<BrandsResponse> getGiftCardItems(@Query("brandKey") String brandKey);
@@ -454,11 +454,11 @@ public interface ApiService {
     @POST("api/v2/comm-temp/invite/{templateId}/view")
     Call<TemplateResponse> getTemplate(@Path("templateId") int templateId, @Body TemplateRequest request);
 
-//    @POST("api/v2/node/sendTokens")
-//    Call<PayRequestResponse> sendTokens(@Body TransferPayRequest request);
+    @POST("api/v2/node/sendTokens")
+    Call<PayRequestResponse> sendTokens(@Body TransferPayRequest request);
 
-    @POST("api/v2/node/sendTokens/{requestToken}")
-    Call<PayRequestResponse> sendTokens(@Body TransferPayRequest request, @Path("requestToken") String requestToken);
+//    @POST("api/v2/node/sendTokens/{requestToken}")
+//    Call<PayRequestResponse> sendTokens(@Body TransferPayRequest request, @Path("requestToken") String requestToken);
 
     @POST("api/v2/notifications/me/mark-read")
     Call<UnReadDelResponse> notificationsMarkRead(@Body List<Integer> list);
