@@ -37,6 +37,7 @@ import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.CompanyInfo.ContactInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
+import com.greenbox.coyni.model.EmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
@@ -309,7 +310,10 @@ public class EditEmailActivity extends BaseActivity {
                             b_newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(EditEmailActivity.this));
                             Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.primary_black));
                             b_newEmailErrorLL.setVisibility(GONE);
-                            loginViewModel.validateEmail(b_newEmailET.getText().toString().trim());
+                            EmailRequest emailRequest = new EmailRequest();
+                            emailRequest.setEmail(b_newEmailET.getText().toString().trim());
+//                            loginViewModel.validateEmail(b_newEmailET.getText().toString().trim());
+                            loginViewModel.validateEmail(emailRequest);
                         } else {
                             b_newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(EditEmailActivity.this));
                             Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.error_red));
