@@ -284,7 +284,7 @@
     <string name="batchpayouts">Batch Payouts</string>
     <string name="all_p_deposit">All Payouts are deposited into</string>
     <string name="businesstoken">Business Token</string>
-    <string name="ac">Account. </string>
+    <string name="ac">Account.\u0020</string>
     <string name="outAt">out at</string>
     <string name="nextpayout"> Next Payout</string>
     <string name="lastpayout"> Last Payout</string>

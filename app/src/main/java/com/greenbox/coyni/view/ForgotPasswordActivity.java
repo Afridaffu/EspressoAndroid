@@ -33,6 +33,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
+import com.greenbox.coyni.model.EmailRequest;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -216,7 +217,10 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
                                 layoutEmailError.setVisibility(GONE);
                                 etEmail.clearFocus();
                                 dialog = Utils.showProgressDialog(ForgotPasswordActivity.this);
-                                loginViewModel.emailotpresend(etEmail.getText().toString().trim());
+                                EmailRequest emailRequest = new EmailRequest();
+                                emailRequest.setEmail(etEmail.getText().toString().trim());
+//                                loginViewModel.emailotpresend(etEmail.getText().toString().trim());
+                                loginViewModel.emailotpresend(emailRequest);
                             } else if (etEmail.getText().toString().trim().length() > 0 && etEmail.getText().toString().trim().length() <= 5) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));

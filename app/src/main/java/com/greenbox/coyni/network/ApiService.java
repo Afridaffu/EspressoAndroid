@@ -26,6 +26,7 @@ import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
+import com.greenbox.coyni.model.EmailRequest;
 import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
@@ -194,7 +195,7 @@ import retrofit2.http.Url;
 public interface ApiService {
 
     @POST("api/v2/user/email-otp/resend")
-    Call<EmailResendResponse> emailotpresend(@Query("email") String email);
+    Call<EmailResendResponse> emailotpresend(@Body EmailRequest emailRequest);
 
     @POST("api/v2/user/register/email-otp/validate")
     Call<EmailResponse> emailotp(@Body SmsRequest smsRequest);
@@ -274,8 +275,8 @@ public interface ApiService {
     @PATCH("api/v2/user/set-password")
     Call<ManagePasswordResponse> setExpiryPassword(@Body ManagePasswordRequest request);
 
-    @GET("api/v2/user/validate-email")
-    Call<EmailExistsResponse> validateEmail(@Query("email") String email);
+    @POST("api/v2/user/validate-email")
+    Call<EmailExistsResponse> validateEmail(@Body EmailRequest emailRequest);
 
     @GET("api/v2/profile/payment-methods")
     Call<PaymentMethodsResponse> mePaymentMethods();

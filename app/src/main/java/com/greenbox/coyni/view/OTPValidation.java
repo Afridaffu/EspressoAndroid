@@ -52,6 +52,7 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.EmailRequest;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
@@ -275,7 +276,10 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                 loginViewModel.updateOtpResend(updateResendRequest);
                             }
                         } else {
-                            loginViewModel.emailotpresend(EMAIL.trim());
+                            EmailRequest emailRequest = new EmailRequest();
+                            emailRequest.setEmail(EMAIL.trim());
+                            loginViewModel.emailotpresend(emailRequest);
+//                            loginViewModel.emailotpresend(EMAIL.trim());
                         }
 
                     } else if (OTP_TYPE.equals("MOBILE")) {
