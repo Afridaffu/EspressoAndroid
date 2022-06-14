@@ -143,8 +143,16 @@ public class NotificationsActivity extends BaseActivity {
 
 //        SetFaceLock();
 //        SetTouchId();
-        setFaceLock();
-        setTouchId();
+//        setFaceLock();
+//        setTouchId();
+        objMyApplication.initializeDBHandler(NotificationsActivity.this);
+        isFaceLock = objMyApplication.setFaceLock();
+        isTouchId = objMyApplication.setTouchId();
+        if (isFaceLock || isTouchId) {
+            objMyApplication.setLocalBiometric(true);
+        } else {
+            objMyApplication.setLocalBiometric(false);
+        }
 
         notifBackbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -916,42 +924,42 @@ public class NotificationsActivity extends BaseActivity {
 //    }
 
 
-    public void setFaceLock() {
-        try {
-            isFaceLock = false;
-            String value = dbHandler.getFacePinLock();
-            if (value != null && value.equals("true")) {
-                isFaceLock = true;
-                objMyApplication.setLocalBiometric(true);
-            } else {
-                isFaceLock = false;
-                objMyApplication.setLocalBiometric(false);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void setTouchId() {
-        try {
-            isTouchId = false;
-            String value = dbHandler.getThumbPinLock();
-            if (value != null && value.equals("true")) {
-                isTouchId = true;
-                objMyApplication.setLocalBiometric(true);
-            } else {
-                isTouchId = false;
+//    public void setFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            String value = dbHandler.getFacePinLock();
+//            if (value != null && value.equals("true")) {
+//                isFaceLock = true;
+//                objMyApplication.setLocalBiometric(true);
+//            } else {
+//                isFaceLock = false;
 //                objMyApplication.setLocalBiometric(false);
-                if (!isFaceLock) {
-                    objMyApplication.setLocalBiometric(false);
-                }
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    public void setTouchId() {
+//        try {
+//            isTouchId = false;
+//            String value = dbHandler.getThumbPinLock();
+//            if (value != null && value.equals("true")) {
+//                isTouchId = true;
+//                objMyApplication.setLocalBiometric(true);
+//            } else {
+//                isTouchId = false;
+////                objMyApplication.setLocalBiometric(false);
+//                if (!isFaceLock) {
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public int getIsToday(long now, long past) {
         int value = 0;
