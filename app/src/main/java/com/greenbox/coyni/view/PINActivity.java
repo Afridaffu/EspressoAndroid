@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.EmailRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
@@ -783,7 +784,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 mLastClickTime = SystemClock.elapsedRealtime();
 //                showProgressDialog();
 //                loginViewModel.emailotpresend(Utils.getUserEmail(PINActivity.this));
-                loginViewModel.emailotpresend(objMyApplication.getStrEmail());
+                EmailRequest emailRequest = new EmailRequest();
+                emailRequest.setEmail(objMyApplication.getStrEmail());
+                loginViewModel.emailotpresend(emailRequest);
+//                loginViewModel.emailotpresend(objMyApplication.getStrEmail());
 //                Intent i = new Intent(PINActivity.this, ForgotPasswordActivity.class);
 //                i.putExtra("screen", "ForgotPin");
 //                startActivity(i);
