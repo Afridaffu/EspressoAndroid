@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,7 +95,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private MyApplication myApplication;
     private CardView cvReserveView;
     private ImageView mIvUserIcon;
-    private TextView mTvUserName, mTvUserIconText;
+    private TextView mTvUserName, mTvUserIconText,spannableTextView;
     private TextView mTvReserveList, mPayoutHistory,
             nextPayoutAmountTV, lastPayoutAmountTV, nxtPayoutDatenTimeTV;
     private LinearLayout mLlBuyTokensFirstTimeView, mLlProcessingVolume, monthlyVolumeViewLl;
@@ -138,6 +139,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private static final String customDate = "Custom Date Range";
     private static final String dateAndTime = "yyyy-MM-dd HH:mm:ss";
     private static final String date = "yyyy-MM-dd";
+    private static final String dateResult = "MM/dd/yyyy";
     private static final String startTime = " 00:00:00";
     private static final String endTime = " 23:59:59";
     private static final String midTime = " 12:00:00";
@@ -224,6 +226,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         tv_PayoutNoHistory = mCurrentView.findViewById(R.id.tv_PayoutNoHistory);
         batchView = mCurrentView.findViewById(R.id.batchView);
         batchNoTransaction = mCurrentView.findViewById(R.id.batchNoTransaction);
+        spannableTextView = mCurrentView.findViewById(R.id.spannableTextView);
 
         releaseView = mCurrentView.findViewById(R.id.releaseView);
         nextReleaseNATV = mCurrentView.findViewById(R.id.nextReleaseNATV);
@@ -256,6 +259,11 @@ public class BusinessDashboardFragment extends BaseFragment {
         isBiometric = Utils.getIsBiometric();
         setFaceLock();
         setTouchId();
+        SpannableString ss = new SpannableString("All Payouts are deposited into Business Token Account. Your active batch is set to automatically pay out at 11:59:59 pm PST ");
+        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
+        ss.setSpan(new CustomTypefaceSpan("", font), 31, 53, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        ss.setSpan(new CustomTypefaceSpan("", font), 108, 123, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        spannableTextView.setText(ss);
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -456,7 +464,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             mHighestTicket.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
 
                                         if (data.get(position).getCreatedAt() != null) {
-                                            mDateHighestTicket.setText(myApplication.convertZoneDateTime(data.get(position).getCreatedAt(), dateAndTime, date));
+                                            mDateHighestTicket.setText(myApplication.convertZoneDateTime(data.get(position).getCreatedAt(), dateAndTime, dateResult));
                                         } else {
                                             mDateHighestTicket.setVisibility(View.GONE);
                                         }
@@ -773,7 +781,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 myApplication.setLocalBiometric(true);
             } else {
                 isTouchId = false;
-                myApplication.setLocalBiometric(false);
+//                myApplication.setLocalBiometric(false);
+                if (!isFaceLock) {
+                    myApplication.setLocalBiometric(false);
+                }
             }
 
         } catch (Exception ex) {
@@ -796,7 +807,6 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void getProcessingVolume(String action) {
-        mTvProcessingVolume.setText(action);
         switch (action) {
             case todayValue: {
                 mTvProcessingVolume.setText(action + "  ");
@@ -810,6 +820,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
             break;
             case yesterdayValue: {
+                mTvProcessingVolume.setText(action);
                 mTicketsLayout.setVisibility(View.GONE);
                 mSbTodayVolume.setVisibility(View.VISIBLE);
                 saleOrdersText.setVisibility(View.VISIBLE);
@@ -820,7 +831,8 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
             break;
             case monthDate: {
-                mTicketsLayout.setVisibility(View.GONE);
+                mTvProcessingVolume.setText(action);
+                mTicketsLayout.setVisibility(View.VISIBLE);
                 mSbTodayVolume.setVisibility(View.GONE);
                 saleOrdersText.setVisibility(View.GONE);
                 strFromDate = myApplication.convertZoneDateTime(getFirstDayOfMonthString(), dateAndTime, date) + startTime;
@@ -829,6 +841,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
             break;
             case lastMonthDate: {
+                mTvProcessingVolume.setText(action);
                 mTicketsLayout.setVisibility(View.VISIBLE);
                 mSbTodayVolume.setVisibility(View.GONE);
                 saleOrdersText.setVisibility(View.GONE);
@@ -857,7 +870,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                 String toDate = rangeDates.getUpdatedToDate().trim() + midTime;
                                 strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + startTime;
                                 strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + endTime;
-
+                                mTvProcessingVolume.setText(R.string.custom_date_range);
                                 businessActivityAPICall(strFromDate, strToDate);
 //                                Toast.makeText(getActivity(), strFromDate + strToDate, Toast.LENGTH_LONG).show();
                             }

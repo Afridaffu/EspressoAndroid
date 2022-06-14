@@ -15,6 +15,7 @@ import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.IdentityVerificationBindingLayoutActivity;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
+import com.greenbox.coyni.view.PayRequestActivity;
 import com.greenbox.coyni.view.business.VerificationFailedActivity;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
@@ -71,6 +72,7 @@ public class MyApplication extends Application {
     private CheckOutModel checkOutModel;
     private List<States> listStates = new ArrayList<>();
     private String strMobileToken = "";
+    private DatabaseHandler dbHandler;
 
     @Override
     public void onCreate() {
@@ -791,8 +793,8 @@ public class MyApplication extends Application {
         return Utils.getDate(date);
     }
 
-    public PaymentMethodsResponse businessPaymentMethods(PaymentMethodsResponse objResponse,String strScreen) {
-        return Utils.businessPaymentMethods(getAccountType(), objResponse,strScreen);
+    public PaymentMethodsResponse businessPaymentMethods(PaymentMethodsResponse objResponse, String strScreen) {
+        return Utils.businessPaymentMethods(getAccountType(), objResponse, strScreen);
     }
 
     public String setNameHead(String strName) {
@@ -861,5 +863,40 @@ public class MyApplication extends Application {
 
     public boolean isLoggedIn() {
         return mCurrentUserData.isLoggedIn();
+    }
+
+    public void initializeDBHandler(Context context) {
+        dbHandler = DatabaseHandler.getInstance(context);
+    }
+
+    public Boolean setTouchId() {
+        Boolean isTouchId = false;
+        try {
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+            } else {
+                isTouchId = false;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return isTouchId;
+    }
+
+    public Boolean setFaceLock() {
+        Boolean isFaceLock = false;
+        try {
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+            } else {
+                isFaceLock = false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return isFaceLock;
     }
 }

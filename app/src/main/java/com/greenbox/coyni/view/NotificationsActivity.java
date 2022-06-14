@@ -942,7 +942,10 @@ public class NotificationsActivity extends BaseActivity {
                 objMyApplication.setLocalBiometric(true);
             } else {
                 isTouchId = false;
-                objMyApplication.setLocalBiometric(false);
+//                objMyApplication.setLocalBiometric(false);
+                if (!isFaceLock) {
+                    objMyApplication.setLocalBiometric(false);
+                }
             }
 
         } catch (Exception ex) {

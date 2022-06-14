@@ -306,9 +306,12 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             if (selectedID == headerInfo.getId()) {
                 arrowImg.setVisibility(View.GONE);
                 tickIcon.setVisibility(View.VISIBLE);
+                heading.setTextColor(context.getColor(R.color.primary_color));
             } else {
                 arrowImg.setVisibility(View.GONE);
                 tickIcon.setVisibility(View.GONE);
+                heading.setTextColor(context.getColor(R.color.primary_black));
+
             }
             if (headerInfo.getFullName() != null) {
                 if (headerInfo.getFullName().length() > 21) {

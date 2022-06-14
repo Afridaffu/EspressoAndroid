@@ -370,8 +370,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                     if (Double.parseDouble(payRequestET.getText().toString().replace(",", "")) > 0) {
                                         MatomoUtility.getInstance().trackEvent("Customer Request", "Clicked");
                                         requestPreview();
-                                    }
-                                    else {
+                                    } else {
                                         disableButtons(true);
                                     }
 
@@ -415,7 +414,10 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 objMyApplication.setLocalBiometric(true);
             } else {
                 isTouchId = false;
-                objMyApplication.setLocalBiometric(false);
+//                objMyApplication.setLocalBiometric(false);
+                if (!isFaceLock) {
+                    objMyApplication.setLocalBiometric(false);
+                }
             }
 
         } catch (Exception ex) {
@@ -567,8 +569,17 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             });
 //            SetFaceLock();
 //            SetTouchId();
-            setFaceLock();
-            setTouchId();
+//            setFaceLock();
+//            setTouchId();
+            objMyApplication.initializeDBHandler(PayRequestActivity.this);
+            isFaceLock = objMyApplication.setFaceLock();
+            isTouchId = objMyApplication.setTouchId();
+            if (isFaceLock || isTouchId) {
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                objMyApplication.setLocalBiometric(false);
+            }
+
             calculateFee("10");
             if (Utils.checkInternet(PayRequestActivity.this)) {
                 TransactionLimitRequest obj = new TransactionLimitRequest();

@@ -163,8 +163,15 @@ public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<Re
 
     private void setItemViewData(TransactionListPosted objData, PayoutDetailsTransactionsAdapter.ItemViewHolder holder) {
 
-        holder.createdDate.setText(Utils.convertPayoutDate(objData.getCreatedAt()).toLowerCase());
-        //type transaction
+        if (objData.getCreatedAt() != null && !objData.getCreatedAt().equals("")){
+            String date = objData.getCreatedAt();
+            if (date.contains(".")) {
+                date = date.substring(0, date.lastIndexOf("."));
+            }
+            date = objMyApplication.convertZoneDateTime(date, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy hh:mma");
+            holder.createdDate.setText(date.toLowerCase());
+
+        }        //type transaction
         if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.SaleOrder)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
             holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
