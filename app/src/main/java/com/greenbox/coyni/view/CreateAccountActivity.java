@@ -57,6 +57,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
+import com.greenbox.coyni.model.EmailRequest;
 import com.greenbox.coyni.model.profile.DownloadDocumentData;
 import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
 import com.greenbox.coyni.model.profile.DownloadImageData;
@@ -1058,7 +1059,10 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
                             emailErrorLL.setVisibility(GONE);
-                            loginViewModel.validateEmail(emailET.getText().toString().trim());
+                            EmailRequest emailRequest = new EmailRequest();
+                            emailRequest.setEmail(emailET.getText().toString().trim());
+//                            loginViewModel.validateEmail(emailET.getText().toString().trim());
+                            loginViewModel.validateEmail(emailRequest);
                         } else if (emailET.getText().toString().trim().length() > 0 && emailET.getText().toString().trim().length() <= 5) {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));

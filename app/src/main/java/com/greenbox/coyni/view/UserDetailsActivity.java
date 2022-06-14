@@ -198,9 +198,18 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
             try {
                 setToken();
-                setFaceLock();
-                setTouchId();
 //                setFaceLock();
+//                setTouchId();
+//                setFaceLock();
+
+                myApplicationObj.initializeDBHandler(UserDetailsActivity.this);
+                isFaceLock = myApplicationObj.setFaceLock();
+                isTouchId = myApplicationObj.setTouchId();
+                if (isFaceLock || isTouchId) {
+                    myApplicationObj.setLocalBiometric(true);
+                } else {
+                    myApplicationObj.setLocalBiometric(false);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1181,42 +1190,42 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         strToken = dbHandler.getPermanentToken();
     }
 
-    public void setFaceLock() {
-        try {
-            isFaceLock = false;
-            String value = dbHandler.getFacePinLock();
-            if (value != null && value.equals("true")) {
-                isFaceLock = true;
-                myApplicationObj.setLocalBiometric(true);
-            } else {
-                isFaceLock = false;
-                myApplicationObj.setLocalBiometric(false);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void setTouchId() {
-        try {
-            isTouchId = false;
-            String value = dbHandler.getThumbPinLock();
-            if (value != null && value.equals("true")) {
-                isTouchId = true;
-                myApplicationObj.setLocalBiometric(true);
-            } else {
-                isTouchId = false;
+//    public void setFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            String value = dbHandler.getFacePinLock();
+//            if (value != null && value.equals("true")) {
+//                isFaceLock = true;
+//                myApplicationObj.setLocalBiometric(true);
+//            } else {
+//                isFaceLock = false;
 //                myApplicationObj.setLocalBiometric(false);
-                if (!isFaceLock) {
-                    myApplicationObj.setLocalBiometric(false);
-                }
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    public void setTouchId() {
+//        try {
+//            isTouchId = false;
+//            String value = dbHandler.getThumbPinLock();
+//            if (value != null && value.equals("true")) {
+//                isTouchId = true;
+//                myApplicationObj.setLocalBiometric(true);
+//            } else {
+//                isTouchId = false;
+////                myApplicationObj.setLocalBiometric(false);
+//                if (!isFaceLock) {
+//                    myApplicationObj.setLocalBiometric(false);
+//                }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
         final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);

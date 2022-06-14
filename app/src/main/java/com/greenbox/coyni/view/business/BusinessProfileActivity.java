@@ -48,6 +48,7 @@ import com.greenbox.coyni.view.AccountLimitsActivity;
 import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
+import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
 import com.greenbox.coyni.view.CustomerProfileActivity;
 import com.greenbox.coyni.view.LoginActivity;
@@ -147,8 +148,16 @@ public class BusinessProfileActivity extends BaseActivity {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             isBiometric = Utils.getIsBiometric();
             setToken();
-            setFaceLock();
-            setTouchId();
+//            setFaceLock();
+//            setTouchId();
+            myApplication.initializeDBHandler(BusinessProfileActivity.this);
+            isFaceLock = myApplication.setFaceLock();
+            isTouchId = myApplication.setTouchId();
+            if (isFaceLock || isTouchId) {
+                myApplication.setLocalBiometric(true);
+            } else {
+                myApplication.setLocalBiometric(false);
+            }
             enableDisableMerchantSettings();
 
             preferencesLL.setOnClickListener(new View.OnClickListener() {
@@ -552,42 +561,42 @@ public class BusinessProfileActivity extends BaseActivity {
         strToken = dbHandler.getPermanentToken();
     }
 
-    public void setFaceLock() {
-        try {
-            isFaceLock = false;
-            String value = dbHandler.getFacePinLock();
-            if (value != null && value.equals("true")) {
-                isFaceLock = true;
-                myApplication.setLocalBiometric(true);
-            } else {
-                isFaceLock = false;
-                myApplication.setLocalBiometric(false);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void setTouchId() {
-        try {
-            isTouchId = false;
-            String value = dbHandler.getThumbPinLock();
-            if (value != null && value.equals("true")) {
-                isTouchId = true;
-                myApplication.setLocalBiometric(true);
-            } else {
-                isTouchId = false;
+//    public void setFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            String value = dbHandler.getFacePinLock();
+//            if (value != null && value.equals("true")) {
+//                isFaceLock = true;
+//                myApplication.setLocalBiometric(true);
+//            } else {
+//                isFaceLock = false;
 //                myApplication.setLocalBiometric(false);
-                if (!isFaceLock) {
-                    myApplication.setLocalBiometric(false);
-                }
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    public void setTouchId() {
+//        try {
+//            isTouchId = false;
+//            String value = dbHandler.getThumbPinLock();
+//            if (value != null && value.equals("true")) {
+//                isTouchId = true;
+//                myApplication.setLocalBiometric(true);
+//            } else {
+//                isTouchId = false;
+////                myApplication.setLocalBiometric(false);
+//                if (!isFaceLock) {
+//                    myApplication.setLocalBiometric(false);
+//                }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     private void initObservers() {
         coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
@@ -645,8 +654,16 @@ public class BusinessProfileActivity extends BaseActivity {
                         }
 
                         setToken();
-                        setFaceLock();
-                        setTouchId();
+//                        setFaceLock();
+//                        setTouchId();
+                        myApplication.initializeDBHandler(BusinessProfileActivity.this);
+                        isFaceLock = myApplication.setFaceLock();
+                        isTouchId = myApplication.setTouchId();
+                        if (isFaceLock || isTouchId) {
+                            myApplication.setLocalBiometric(true);
+                        } else {
+                            myApplication.setLocalBiometric(false);
+                        }
 
                     }
                 } catch (
