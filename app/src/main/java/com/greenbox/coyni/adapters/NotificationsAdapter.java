@@ -250,6 +250,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                                     request.setTokens(Utils.convertTwoDecimal(notifications.get(position).getAmount().toString()));
                                     request.setRemarks(notifications.get(position).getRemarks());
                                     request.setRecipientWalletId(notifications.get(position).getRequesterWalletId());
+                                    request.setRequestToken(objMyApplication.getStrToken());
 
                                     ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
                                 } else {

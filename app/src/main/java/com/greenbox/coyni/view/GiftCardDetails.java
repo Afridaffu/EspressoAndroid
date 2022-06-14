@@ -1208,7 +1208,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
     private void withdrawGiftCard() {
         try {
             if (Utils.checkInternet(GiftCardDetails.this)) {
-                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest(), objMyApplication.getStrToken());
+                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1347,6 +1347,8 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
         request.setTokens(Double.parseDouble(Utils.convertBigDecimalUSDC(amountET.getText().toString())));
         request.setRemarks("");
         request.setWithdrawType(Utils.giftcardType);
+        request.setWithdrawType(Utils.giftcardType);
+        request.setRequestToken(objMyApplication.getStrToken());
 
         objMyApplication.setWithdrawRequest(request);
         return request;

@@ -866,7 +866,7 @@ public class NotificationsActivity extends BaseActivity {
     private void notificationPayCall() {
         try {
             if (Utils.checkInternet(NotificationsActivity.this)) {
-                payViewModel.sendTokens(userPayRequest, objMyApplication.getStrToken());
+                payViewModel.sendTokens(userPayRequest);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
