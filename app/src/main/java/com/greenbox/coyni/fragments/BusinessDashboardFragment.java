@@ -1077,11 +1077,13 @@ public class BusinessDashboardFragment extends BaseFragment {
                     TextView releaseDate = xmlView.findViewById(R.id.reserveListDateTV);
                     TextView payoutManualTV = xmlView.findViewById(R.id.reserveListManualTV);
                     String listDate = items.get(j).getScheduledRelease();
-                    if (listDate.contains(".")) {
-                        String listD = listDate.substring(0, listDate.lastIndexOf("."));
-                        releaseDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
-                    } else {
-                        Log.d("listDate", listDate);
+                    if (listDate != null) {
+                        if (listDate.contains(".")) {
+                            String listD = listDate.substring(0, listDate.lastIndexOf("."));
+                            releaseDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
+                        } else {
+                            Log.d("listDate", listDate);
+                        }
                     }
                     try {
                         String type = items.get(j).getProcessType();

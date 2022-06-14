@@ -138,6 +138,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                 getTransactions(transactionListRequest);
                                 dismissDialog();
                                 noMoreTransactionTV.setVisibility(View.GONE);
+                                noTransactionTV.setVisibility(View.GONE);
                             } else {
                                 noTransactionTV.setVisibility(View.GONE);
                                 noMoreTransactionTV.setVisibility(View.VISIBLE);

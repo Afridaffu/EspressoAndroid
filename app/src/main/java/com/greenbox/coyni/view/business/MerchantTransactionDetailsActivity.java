@@ -197,22 +197,28 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             if (objData.getData().getStatus() != null) {
                 refundStatustv.setText(objData.getData().getStatus());
                 switch (objData.getData().getStatus().toLowerCase()) {
-                    case Utils.transCompleted:
+                    case Utils.transCompleted: {
                         refundStatustv.setTextColor(getResources().getColor(R.color.completed_status));
                         refundStatustv.setBackgroundResource(R.drawable.txn_completed_bg);
                         break;
+                    }
                     case Utils.transinprogress:
                         refundStatustv.setTextColor(getResources().getColor(R.color.inprogress_status));
                         refundStatustv.setBackgroundResource(R.drawable.txn_inprogress_bg);
                         break;
-                    case Utils.transPending:
+                    case Utils.refundd:
+                    case Utils.partialrefund:
+                    case Utils.transPending: {
                         refundStatustv.setTextColor(getResources().getColor(R.color.pending_status));
                         refundStatustv.setBackgroundResource(R.drawable.txn_pending_bg);
                         break;
-                    case Utils.transFailed:
+                    }
+                    case Utils.transCancelled:
+                    case Utils.transFailed: {
                         refundStatustv.setTextColor(getResources().getColor(R.color.failed_status));
                         refundStatustv.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
+                    }
                 }
             }
             if (objData.getData().getRefundAmount() != null) {
@@ -339,22 +345,28 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             if (objData.getData().getStatus() != null) {
                 salesStatusTV.setText(objData.getData().getStatus());
                 switch (objData.getData().getStatus().toLowerCase()) {
-                    case Utils.transCompleted:
-                        salesStatusTV.setTextColor(getResources().getColor(R.color.completed_status));
-                        salesStatusTV.setBackgroundResource(R.drawable.txn_completed_bg);
-                        break;
                     case Utils.transinprogress:
                         salesStatusTV.setTextColor(getResources().getColor(R.color.inprogress_status));
                         salesStatusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
                         break;
-                    case Utils.transPending:
+                    case Utils.transCompleted: {
+                        salesStatusTV.setTextColor(getResources().getColor(R.color.completed_status));
+                        salesStatusTV.setBackgroundResource(R.drawable.txn_completed_bg);
+                        break;
+                    }
+                    case Utils.refundd:
+                    case Utils.partialrefund:
+                    case Utils.transPending: {
                         salesStatusTV.setTextColor(getResources().getColor(R.color.pending_status));
                         salesStatusTV.setBackgroundResource(R.drawable.txn_pending_bg);
                         break;
-                    case Utils.transFailed:
+                    }
+                    case Utils.transCancelled:
+                    case Utils.transFailed: {
                         salesStatusTV.setTextColor(getResources().getColor(R.color.failed_status));
                         salesStatusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
+                    }
                 }
             }
             if (objData.getData().getReferenceId() != null) {
@@ -452,10 +464,12 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                         MSFstatustv.setTextColor(getResources().getColor(R.color.pending_status));
                         MSFstatustv.setBackgroundResource(R.drawable.txn_pending_bg);
                         break;
-                    case Utils.transFailed:
+                    case Utils.transCancelled:
+                    case Utils.transFailed: {
                         MSFstatustv.setTextColor(getResources().getColor(R.color.failed_status));
                         MSFstatustv.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
+                    }
                 }
             }
             if (objData.getData().getGrossAmount() != null) {
@@ -531,10 +545,12 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                         merchantstatustv.setTextColor(getResources().getColor(R.color.pending_status));
                         merchantstatustv.setBackgroundResource(R.drawable.txn_pending_bg);
                         break;
-                    case Utils.transFailed:
+                    case Utils.transCancelled:
+                    case Utils.transFailed: {
                         merchantstatustv.setTextColor(getResources().getColor(R.color.failed_status));
                         merchantstatustv.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
+                    }
                 }
             }
             if (objData.getData().getReferenceId() != null) {
@@ -560,11 +576,20 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                 }
             }
             if (objData.getData().getCreatedDate() != null) {
+//                String datee = objData.getData().getCreatedDate();
+//                merchantdatetv.setText(objMyApplication.convertZoneDateTime(datee, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy HH:mm:ss"));
                 merchantdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
             }
-            if (objData.getData().getPayoutUpdatedDate() != null) {
-                merchantPIdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getPayoutUpdatedDate()));
+
+            if (objData.getData().getPayoutCreatedDate() != null && objData.getData().getPayoutUpdatedDate() != null) {
+                String startDate = objMyApplication.convertZoneLatestTxndate(objData.getData().getPayoutCreatedDate()).toUpperCase();
+                String endDate = objMyApplication.convertZoneLatestTxndate(objData.getData().getPayoutUpdatedDate()).toUpperCase();
+
+                merchantPIdatetv.setText(startDate + " to " + endDate);
             }
+//            if (objData.getData().getPayoutUpdatedDate() != null) {
+//                merchantPIdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getPayoutUpdatedDate()));
+//            }
 
             if (objData.getData().getAmountSent() != null) {
                 merchantamounttv.setText(Utils.convertTwoDecimal(objData.getData().getAmountSent().replace("CYN", "").trim()));
