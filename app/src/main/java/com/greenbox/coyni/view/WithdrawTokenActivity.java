@@ -1438,7 +1438,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
         try {
             pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
             if (Utils.checkInternet(WithdrawTokenActivity.this)) {
-                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest(), objMyApplication.getStrToken());
+                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1790,6 +1790,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
         request.setTokens(cynValue);
         request.setRemarks(etRemarks.getText().toString().trim());
         request.setWithdrawType(strSubType);
+        request.setRequestToken(objMyApplication.getStrToken());
         objMyApplication.setWithdrawRequest(request);
         objMyApplication.setWithdrawAmount(cynValue);
 

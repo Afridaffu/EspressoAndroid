@@ -586,6 +586,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             request.setTokens(tvAmount.getText().toString().trim().replace(",", ""));
             request.setRemarks("");
             request.setRecipientWalletId(strAddress);
+            request.setRequestToken(objMyApplication.getStrToken());
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
         } catch (Exception ex) {
@@ -737,11 +738,12 @@ public class PayToPersonalActivity extends AppCompatActivity {
             request.setTokens(tvAmount.getText().toString().trim().replace(",", ""));
             request.setRemarks("");
             request.setRecipientWalletId(strAddress);
+            request.setRequestToken(objMyApplication.getStrToken());
             request.setSourceWalletId(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId());
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayToPersonalActivity.this)) {
-                payViewModel.sendTokens(request, objMyApplication.getStrToken());
+                payViewModel.sendTokens(request);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
