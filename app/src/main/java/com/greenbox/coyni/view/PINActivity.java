@@ -1129,7 +1129,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         try {
             WithdrawRequest request = objMyApplication.getWithdrawRequest();
             if (Utils.checkInternet(PINActivity.this)) {
-                buyTokenViewModel.withdrawTokens(request);
+                buyTokenViewModel.withdrawTokens(request, objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1139,7 +1139,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     private void payTransaction() {
         try {
             if (Utils.checkInternet(PINActivity.this)) {
-                payViewModel.sendTokens(objMyApplication.getTransferPayRequest());
+                payViewModel.sendTokens(objMyApplication.getTransferPayRequest(), objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1168,7 +1168,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     private void buyToken() {
         try {
             if (Utils.checkInternet(PINActivity.this)) {
-                buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest());
+                buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest(), objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
