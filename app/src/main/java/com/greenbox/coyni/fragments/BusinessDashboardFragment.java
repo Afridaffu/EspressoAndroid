@@ -624,7 +624,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                         monthlyVolumeViewLl.setVisibility(View.GONE);
                     }
                 } else {
-                    mTvMerchantTransactions.setTextColor(getResources().getColor(R.color.inactive_color));
+                    mTvMerchantTransactions.setTextColor(getResources().getColor(R.color.dark_gray));
                     mTvMerchantTransactions.setClickable(false);
                     monthlyVolumeViewLl.setVisibility(View.VISIBLE);
                 }
