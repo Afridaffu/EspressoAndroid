@@ -102,7 +102,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
     private TextView noBanksTv, noBoTV, ssnEinTV;
-    private LinearLayout banksLL, boLL, CloseLL,companyEditLL;
+    private LinearLayout banksLL, boLL, CloseLL,companyEditLL,websiteLL;
     private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL, llDBADocuments;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
     private BusinessApplicationSummaryViewModel summaryViewModel;
@@ -189,6 +189,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         spannableTV = findViewById(R.id.spannableTV);
         httpHeader = findViewById(R.id.httpHeader);
         companyEditLL = findViewById(R.id.companyEditLL);
+        websiteLL = findViewById(R.id.websiteLL);
 
         setSpannableText();
 
@@ -595,13 +596,20 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             }
                             if (dbaInfo.getIdentificationType() == 8) {
                                 mWebsiteHeadTX.setText("Website (Optional)");
-                                httpHeader.setVisibility(GONE);
+                                if(dbaInfo.getWebsite() == null || dbaInfo.getWebsite().equals("")){
+                                    websiteLL.setVisibility(GONE);
+                                }else {
+                                    websiteLL.setVisibility(VISIBLE);
+                                }
                             } else if (dbaInfo.getIdentificationType() == 9) {
                                 mWebsiteHeadTX.setText("Website");
                                 httpHeader.setVisibility(View.VISIBLE);
+                                websiteLL.setVisibility(VISIBLE);
                             }
-                            if (dbaInfo.getWebsite() != null) {
+                            if (dbaInfo.getWebsite() != null ) {
                                 mWebsiteTx.setText(dbaInfo.getWebsite());
+                            }else{
+                                websiteLL.setVisibility(GONE);
                             }
 
                             if (dbaInfo.getMonthlyProcessingVolume() != null) {
