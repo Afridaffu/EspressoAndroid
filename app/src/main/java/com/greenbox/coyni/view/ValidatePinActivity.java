@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.EmailRequest;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
@@ -137,7 +138,10 @@ public class ValidatePinActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void showForgotPinFlow() {
-        loginViewModel.emailotpresend(objMyApplication.getStrEmail());
+        EmailRequest emailRequest = new EmailRequest();
+        emailRequest.setEmail(objMyApplication.getStrEmail());
+        loginViewModel.emailotpresend(emailRequest);
+//        loginViewModel.emailotpresend(objMyApplication.getStrEmail());
     }
 
     private void passNumberClear(String number_list) {

@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.EmailRequest;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
@@ -222,10 +223,10 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
-    public void emailotpresend(String email) {
+    public void emailotpresend(EmailRequest request) {
         try {
             ApiService apiService = ApiClient.getInstance().create(ApiService.class);
-            Call<EmailResendResponse> mCall = apiService.emailotpresend(email);
+            Call<EmailResendResponse> mCall = apiService.emailotpresend(request);
             mCall.enqueue(new Callback<EmailResendResponse>() {
                 @Override
                 public void onResponse(Call<EmailResendResponse> call, Response<EmailResendResponse> response) {
@@ -782,10 +783,10 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
-    public void validateEmail(String strEmail) {
+    public void validateEmail(EmailRequest request) {
         try {
             ApiService apiService = ApiClient.getInstance().create(ApiService.class);
-            Call<EmailExistsResponse> mCall = apiService.validateEmail(strEmail);
+            Call<EmailExistsResponse> mCall = apiService.validateEmail(request);
             mCall.enqueue(new Callback<EmailExistsResponse>() {
                 @Override
                 public void onResponse(Call<EmailExistsResponse> call, Response<EmailExistsResponse> response) {
