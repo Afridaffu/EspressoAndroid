@@ -824,6 +824,9 @@ public class MyApplication extends Application {
     public String convertZoneLatestTxn(String date) {
         return Utils.convertZoneLatestTxn(date, getStrPreference());
     }
+    public String convertZoneLatestTxndate(String date) {
+        return Utils.convertZoneLatestTxndate(date, getStrPreference());
+    }
 
     public String convertZoneReservedOn(String date) {
         return Utils.convertZoneReservedOn(date, getStrPreference());
