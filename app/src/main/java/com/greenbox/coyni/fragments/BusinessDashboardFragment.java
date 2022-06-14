@@ -95,7 +95,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private MyApplication myApplication;
     private CardView cvReserveView;
     private ImageView mIvUserIcon;
-    private TextView mTvUserName, mTvUserIconText,spannableTextView;
+    private TextView mTvUserName, mTvUserIconText, spannableTextView;
     private TextView mTvReserveList, mPayoutHistory,
             nextPayoutAmountTV, lastPayoutAmountTV, nxtPayoutDatenTimeTV;
     private LinearLayout mLlBuyTokensFirstTimeView, mLlProcessingVolume, monthlyVolumeViewLl;
@@ -149,17 +149,11 @@ public class BusinessDashboardFragment extends BaseFragment {
     int walletCount = 0;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        LogUtils.v(TAG, "BNR onCreate");
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        LogUtils.v(TAG, "onCreateView");
+        mCurrentView = inflater.inflate(R.layout.fragment_business_dashboard, container, false);
         initViewModels();
         initObservers();
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        LogUtils.v(TAG, "BNR onCreateView");
-        mCurrentView = inflater.inflate(R.layout.fragment_business_dashboard, container, false);
         initFields();
         return mCurrentView;
     }
@@ -167,8 +161,15 @@ public class BusinessDashboardFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        LogUtils.v(TAG, "BNR onViewCreated");
+        LogUtils.v(TAG, "onViewCreated");
         setBusinessData();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        removeObservers();
+        LogUtils.v(TAG, "onDestroyView");
     }
 
     private void initViewModels() {
@@ -251,11 +252,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         rulePeriodTV = mCurrentView.findViewById(R.id.rulePeriodTV);
         mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
 
-        TransactionListRequest transactionListRequest = new TransactionListRequest();
-        transactionListRequest.setTransactionType(getDefaultTransactionTypes());
-        transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-        transactionsAPI(transactionListRequest);
-
         isBiometric = Utils.getIsBiometric();
         setFaceLock();
         setTouchId();
@@ -326,11 +322,25 @@ public class BusinessDashboardFragment extends BaseFragment {
         dashboardViewModel.meTransactionList(transactionListRequest);
     }
 
+    private void removeObservers() {
+        businessDashboardViewModel.getRollingListResponseMutableLiveData().removeObservers(getViewLifecycleOwner());
+        businessDashboardViewModel.getReserveListResponseMutableLiveData().removeObservers(getViewLifecycleOwner());
+        businessDashboardViewModel.getBatchNowResponseMutableLiveData().removeObservers(getViewLifecycleOwner());
+        businessDashboardViewModel.getBatchNowSlideResponseMutableLiveData().removeObservers(getViewLifecycleOwner());
+        businessIdentityVerificationViewModel.getGetDBAInfoResponse().removeObservers(getViewLifecycleOwner());
+        businessDashboardViewModel.getBusinessActivityRespMutableLiveData().removeObservers(getViewLifecycleOwner());
+        businessDashboardViewModel.getMerchantActivityRespMutableLiveData().removeObservers(getViewLifecycleOwner());
+        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().removeObservers(getViewLifecycleOwner());
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().removeObservers(getViewLifecycleOwner());
+        dashboardViewModel.getTransactionListMutableLiveData().removeObservers(getViewLifecycleOwner());
+    }
+
     private void initObservers() {
 
-        businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(getActivity(), new Observer<BatchPayoutListResponse>() {
+        businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
             @Override
             public void onChanged(BatchPayoutListResponse batchPayoutListResponse) {
+                Log.d(TAG, "BatchPayoutListResponse success");
                 if (batchPayoutListResponse != null) {
                     if (batchPayoutListResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
                         if (batchPayoutListResponse.getData() != null && batchPayoutListResponse.getData().getItems() != null) {
@@ -347,7 +357,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getReserveListResponseMutableLiveData().observe(getActivity(), new Observer<ReserveListResponse>() {
+        businessDashboardViewModel.getReserveListResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<ReserveListResponse>() {
             @Override
             public void onChanged(ReserveListResponse reserveListResponse) {
                 if (reserveListResponse != null) {
@@ -360,7 +370,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getBatchNowResponseMutableLiveData().observe(getActivity(), new Observer<BatchPayoutListResponse>() {
+        businessDashboardViewModel.getBatchNowResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
             @Override
             public void onChanged(BatchPayoutListResponse batchPayoutListResponse) {
                 ((BusinessDashboardActivity) getActivity()).dismissDialog();
@@ -376,17 +386,17 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getBatchNowSlideResponseMutableLiveData().observe(getActivity(), new Observer<BatchNowResponse>() {
+        businessDashboardViewModel.getBatchNowSlideResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchNowResponse>() {
             @Override
             public void onChanged(BatchNowResponse batchNowResponse) {
-                Log.d(TAG, "BNR BatchNowResponse success");
+                Log.d(TAG, "BatchNowResponse success");
                 if (batchNowResponse != null) {
                     if (batchNowResponse.getStatus() != null && batchNowResponse.getData() != null) {
                         Log.d(TAG, "Batched successfully");
-                        Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
                         batchReq();
+                        Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
                     } else {
-                        Log.d(TAG, "BNR No items found");
+                        Log.d(TAG, "No items found");
                         String msg = getString(R.string.something_went_wrong);
                         if (batchNowResponse.getError() != null
                                 && batchNowResponse.getError().getErrorDescription() != null
@@ -400,7 +410,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(getActivity(), new Observer<DBAInfoResp>() {
+        businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(getViewLifecycleOwner(), new Observer<DBAInfoResp>() {
             @Override
             public void onChanged(DBAInfoResp dbaInfoResp) {
                 if (dbaInfoResp != null && dbaInfoResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
@@ -410,7 +420,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getBusinessActivityRespMutableLiveData().observe(getActivity(), new Observer<BusinessActivityResp>() {
+        businessDashboardViewModel.getBusinessActivityRespMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessActivityResp>() {
             @Override
             public void onChanged(BusinessActivityResp businessActivityResp) {
                 try {
@@ -509,7 +519,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getMerchantActivityRespMutableLiveData().observe(getActivity(), new Observer<MerchantActivityResp>() {
+        businessDashboardViewModel.getMerchantActivityRespMutableLiveData().observe(getViewLifecycleOwner(), new Observer<MerchantActivityResp>() {
             @Override
             public void onChanged(MerchantActivityResp merchantActivityResp) {
                 try {
@@ -532,7 +542,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getRollingRuleResponseMutableLiveData().observe(getActivity(), new Observer<RollingRuleResponse>() {
+        businessDashboardViewModel.getRollingRuleResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<RollingRuleResponse>() {
             @Override
             public void onChanged(RollingRuleResponse ruleResponse) {
                 if (ruleResponse != null) {
@@ -557,7 +567,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getActivity(), new Observer<BusinessWalletResponse>() {
+        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
                 walletCount++;
@@ -580,7 +590,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(getActivity(), new Observer<BiometricTokenResponse>() {
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BiometricTokenResponse>() {
             @Override
             public void onChanged(BiometricTokenResponse biometricTokenResponse) {
                 if (biometricTokenResponse != null) {
@@ -594,7 +604,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        dashboardViewModel.getTransactionListMutableLiveData().observe(getActivity(), new Observer<TransactionList>() {
+        dashboardViewModel.getTransactionListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<TransactionList>() {
             @Override
             public void onChanged(TransactionList transactionList) {
                 if (transactionList.getData().getItems().getPostedTransactions().size() > 0) {
@@ -655,6 +665,11 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setBusinessData() {
+        batchReq();
+        TransactionListRequest transactionListRequest = new TransactionListRequest();
+        transactionListRequest.setTransactionType(getDefaultTransactionTypes());
+        transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+        transactionsAPI(transactionListRequest);
 //        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
         ((BusinessDashboardActivity) getActivity()).showUserData();
         getWalletData();
@@ -662,7 +677,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         if (myApplication.isReserveEnabled()) {
             businessDashboardViewModel.getRollingRuleDetails();
         }
-        batchReq();
         getProcessingVolume(todayValue);
         if (myApplication.isReserveEnabled()) {
             reserveReq();
