@@ -7,7 +7,6 @@ public class BuyTokenRequest {
     private String tokens;
     private String cvc;
     private String txnSubType;
-    private String requestToken;
 
     public String getBankId() {
         return bankId;
@@ -55,14 +54,6 @@ public class BuyTokenRequest {
 
     public void setTxnSubType(String txnSubType) {
         this.txnSubType = txnSubType;
-    }
-
-    public String getRequestToken() {
-        return requestToken;
-    }
-
-    public void setRequestToken(String requestToken) {
-        this.requestToken = requestToken;
     }
 }
 

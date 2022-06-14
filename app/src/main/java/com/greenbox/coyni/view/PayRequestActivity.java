@@ -1075,12 +1075,11 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             request.setTokens(payRequestET.getText().toString().trim().replace(",", ""));
             request.setRemarks(addNoteTV.getText().toString().trim());
             request.setRecipientWalletId(recipientAddress);
-            request.setRequestToken(objMyApplication.getStrToken());
             request.setSourceWalletId(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId());
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayRequestActivity.this)) {
-                payViewModel.sendTokens(request);
+                payViewModel.sendTokens(request, objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1093,7 +1092,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             request.setTokens(payRequestET.getText().toString().trim().replace(",", ""));
             request.setRemarks(addNoteTV.getText().toString().trim());
             request.setRecipientWalletId(recipientAddress);
-            request.setRequestToken(objMyApplication.getStrToken());
             request.setSourceWalletId(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId());
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);

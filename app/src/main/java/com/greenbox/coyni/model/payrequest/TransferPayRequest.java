@@ -5,7 +5,6 @@ public class TransferPayRequest {
     private String recipientWalletId;
     private String tokens;
     private String sourceWalletId;
-    private String requestToken;
 
     public String getRemarks() {
         return remarks;
@@ -37,14 +36,6 @@ public class TransferPayRequest {
 
     public void setSourceWalletId(String sourceWalletId) {
         this.sourceWalletId = sourceWalletId;
-    }
-
-    public String getRequestToken() {
-        return requestToken;
-    }
-
-    public void setRequestToken(String requestToken) {
-        this.requestToken = requestToken;
     }
 }
 

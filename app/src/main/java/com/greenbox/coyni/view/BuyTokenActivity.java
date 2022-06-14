@@ -1224,7 +1224,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             request.setCvc(strCvv);
             request.setTokens(Utils.convertBigDecimalUSDC(String.valueOf(total)));
             request.setTxnSubType(strSubType);
-            request.setRequestToken(objMyApplication.getStrToken());
             objMyApplication.setBuyRequest(request);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1241,7 +1240,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //            request.setTokens(Utils.convertBigDecimalUSDC(String.valueOf(total)));
 //            request.setTxnSubType(strSubType);
             if (Utils.checkInternet(BuyTokenActivity.this)) {
-                buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest());
+                buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest(), objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

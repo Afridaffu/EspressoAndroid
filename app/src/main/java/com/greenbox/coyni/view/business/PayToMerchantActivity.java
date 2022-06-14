@@ -815,7 +815,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             request.setTokens(payET.getText().toString().trim().replace(",", ""));
             request.setRemarks(addNoteTV.getText().toString().trim());
             request.setRecipientWalletId(recipientAddress);
-            request.setRequestToken(objMyApplication.getStrToken());
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
         } catch (Exception ex) {

@@ -219,10 +219,10 @@ public class PayViewModel extends AndroidViewModel {
         }
     }
 
-    public void sendTokens(TransferPayRequest request) {
+    public void sendTokens(TransferPayRequest request, String token) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<PayRequestResponse> mCall = apiService.sendTokens(request);
+            Call<PayRequestResponse> mCall = apiService.sendTokens(request, token);
             mCall.enqueue(new Callback<PayRequestResponse>() {
                 @Override
                 public void onResponse(Call<PayRequestResponse> call, Response<PayRequestResponse> response) {
