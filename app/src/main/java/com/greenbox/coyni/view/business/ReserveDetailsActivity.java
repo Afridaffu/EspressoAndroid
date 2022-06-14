@@ -50,6 +50,7 @@ public class ReserveDetailsActivity extends BaseActivity {
     private LinearLayout backButton, lycopy, releasedIDcopy;
     private TextView reserveID, amount, statusTV, releaseDateTime, reserveRegular, cancel, reserveIDTV;
     private TextView releasedAMT, releasedDateTime, transID, tvDBAName, onHoldAmt;
+    private TextView noTransactions, noMoreTransactions;
     private RecyclerView recyclerViewRv;
     private CardView details, onHoldCv;
     private CardView released;
@@ -96,6 +97,9 @@ public class ReserveDetailsActivity extends BaseActivity {
         transID = findViewById(R.id.tvtransID);
         releasedIDcopy = findViewById(R.id.releasedIDcopyLL);
         tvDBAName = findViewById(R.id.tvDBAName);
+
+        noTransactions = findViewById(R.id.noTransactionsTV);
+        noTransactions = findViewById(R.id.noMoreTransactionsTV);
 
         details = findViewById(R.id.detailsCV);
         onHoldCv = findViewById(R.id.onHoldCV);
@@ -208,12 +212,15 @@ public class ReserveDetailsActivity extends BaseActivity {
                                         recyclerViewRv.setLayoutManager(nLayoutManager);
                                         recyclerViewRv.setItemAnimator(new DefaultItemAnimator());
                                         recyclerViewRv.setAdapter(reserveDetailsListAdapter);
+                                        noMoreTransactions.setVisibility(View.VISIBLE);
                                         if (currentPage > 0) {
                                             int myPos = globalPosted.size() - transactionList.getData().getItems().getPostedTransactions().size();
                                             recyclerViewRv.scrollToPosition(myPos);
                                         } else {
                                             recyclerViewRv.scrollToPosition(0);
                                         }
+                                    } else {
+                                        noMoreTransactions.setVisibility(View.GONE);
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
