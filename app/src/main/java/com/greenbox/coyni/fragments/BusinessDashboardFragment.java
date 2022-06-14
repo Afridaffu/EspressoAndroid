@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,15 +26,10 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.MerchantTransactionListPostedNewAdapter;
-import com.greenbox.coyni.adapters.OnItemClickListener;
-import com.greenbox.coyni.adapters.PayoutDetailsTransactionsAdapter;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
-import com.greenbox.coyni.adapters.TransactionListPostedAdapter;
 import com.greenbox.coyni.dialogs.BatchNowDialog;
 import com.greenbox.coyni.dialogs.DateRangePickerDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
@@ -58,8 +54,6 @@ import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
-import com.greenbox.coyni.model.notification.Notifications;
-import com.greenbox.coyni.model.notification.NotificationsDataItems;
 import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
@@ -72,10 +66,8 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.SeekBarWithFloatingText;
 import com.greenbox.coyni.utils.UserData;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.ValidatePinActivity;
-import com.greenbox.coyni.view.business.BusinessBatchPayoutIdDetailsActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.MerchantTransactionListActivity;
@@ -103,7 +95,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private MyApplication myApplication;
     private CardView cvReserveView;
     private ImageView mIvUserIcon;
-    private TextView mTvUserName, mTvUserIconText;
+    private TextView mTvUserName, mTvUserIconText,spannableTextView;
     private TextView mTvReserveList, mPayoutHistory,
             nextPayoutAmountTV, lastPayoutAmountTV, nxtPayoutDatenTimeTV;
     private LinearLayout mLlBuyTokensFirstTimeView, mLlProcessingVolume, monthlyVolumeViewLl;
@@ -138,7 +130,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private LinearLayout mTicketsLayout;
     private UserData userData;
     private String reserveRules = "";
-    CoyniViewModel coyniViewModel;
+    private CoyniViewModel coyniViewModel;
     //Processing Volume Types
     private static final String todayValue = "Today";
     private static final String yesterdayValue = "Yesterday";
@@ -147,6 +139,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private static final String customDate = "Custom Date Range";
     private static final String dateAndTime = "yyyy-MM-dd HH:mm:ss";
     private static final String date = "yyyy-MM-dd";
+    private static final String dateResult = "MM/dd/yyyy";
     private static final String startTime = " 00:00:00";
     private static final String endTime = " 23:59:59";
     private static final String midTime = " 12:00:00";
@@ -156,7 +149,16 @@ public class BusinessDashboardFragment extends BaseFragment {
     int walletCount = 0;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LogUtils.v(TAG, "BNR onCreate");
+        initViewModels();
+        initObservers();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        LogUtils.v(TAG, "BNR onCreateView");
         mCurrentView = inflater.inflate(R.layout.fragment_business_dashboard, container, false);
         initFields();
         return mCurrentView;
@@ -165,9 +167,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        LogUtils.v(TAG, "onViewCreated");
-        initViewModels();
-        initObservers();
+        LogUtils.v(TAG, "BNR onViewCreated");
         setBusinessData();
     }
 
@@ -175,7 +175,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
         notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
-        businessDashboardViewModel.getRollingRuleDetails();
+        coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
     }
 
     private Double getMerchantBalance() {
@@ -225,6 +226,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         tv_PayoutNoHistory = mCurrentView.findViewById(R.id.tv_PayoutNoHistory);
         batchView = mCurrentView.findViewById(R.id.batchView);
         batchNoTransaction = mCurrentView.findViewById(R.id.batchNoTransaction);
+        spannableTextView = mCurrentView.findViewById(R.id.spannableTextView);
 
         releaseView = mCurrentView.findViewById(R.id.releaseView);
         nextReleaseNATV = mCurrentView.findViewById(R.id.nextReleaseNATV);
@@ -249,10 +251,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         rulePeriodTV = mCurrentView.findViewById(R.id.rulePeriodTV);
         mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
 
-        coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
-        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-
-
         TransactionListRequest transactionListRequest = new TransactionListRequest();
         transactionListRequest.setTransactionType(getDefaultTransactionTypes());
         transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
@@ -261,6 +259,11 @@ public class BusinessDashboardFragment extends BaseFragment {
         isBiometric = Utils.getIsBiometric();
         setFaceLock();
         setTouchId();
+        SpannableString ss = new SpannableString("All Payouts are deposited into Business Token Account. Your active batch is set to automatically pay out at 11:59:59 pm PST ");
+        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
+        ss.setSpan(new CustomTypefaceSpan("", font), 31, 53, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        ss.setSpan(new CustomTypefaceSpan("", font), 108, 123, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        spannableTextView.setText(ss);
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -325,7 +328,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void initObservers() {
 
-        businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
+        businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(getActivity(), new Observer<BatchPayoutListResponse>() {
             @Override
             public void onChanged(BatchPayoutListResponse batchPayoutListResponse) {
                 if (batchPayoutListResponse != null) {
@@ -344,7 +347,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getReserveListResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<ReserveListResponse>() {
+        businessDashboardViewModel.getReserveListResponseMutableLiveData().observe(getActivity(), new Observer<ReserveListResponse>() {
             @Override
             public void onChanged(ReserveListResponse reserveListResponse) {
                 if (reserveListResponse != null) {
@@ -357,7 +360,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getBatchNowResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
+        businessDashboardViewModel.getBatchNowResponseMutableLiveData().observe(getActivity(), new Observer<BatchPayoutListResponse>() {
             @Override
             public void onChanged(BatchPayoutListResponse batchPayoutListResponse) {
                 ((BusinessDashboardActivity) getActivity()).dismissDialog();
@@ -373,16 +376,17 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getBatchNowSlideResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchNowResponse>() {
+        businessDashboardViewModel.getBatchNowSlideResponseMutableLiveData().observe(getActivity(), new Observer<BatchNowResponse>() {
             @Override
             public void onChanged(BatchNowResponse batchNowResponse) {
+                Log.d(TAG, "BNR BatchNowResponse success");
                 if (batchNowResponse != null) {
                     if (batchNowResponse.getStatus() != null && batchNowResponse.getData() != null) {
                         Log.d(TAG, "Batched successfully");
                         Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
                         batchReq();
                     } else {
-                        Log.d(TAG, "No items found");
+                        Log.d(TAG, "BNR No items found");
                         String msg = getString(R.string.something_went_wrong);
                         if (batchNowResponse.getError() != null
                                 && batchNowResponse.getError().getErrorDescription() != null
@@ -396,7 +400,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(getViewLifecycleOwner(), new Observer<DBAInfoResp>() {
+        businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(getActivity(), new Observer<DBAInfoResp>() {
             @Override
             public void onChanged(DBAInfoResp dbaInfoResp) {
                 if (dbaInfoResp != null && dbaInfoResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
@@ -406,7 +410,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getBusinessActivityRespMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessActivityResp>() {
+        businessDashboardViewModel.getBusinessActivityRespMutableLiveData().observe(getActivity(), new Observer<BusinessActivityResp>() {
             @Override
             public void onChanged(BusinessActivityResp businessActivityResp) {
                 try {
@@ -460,7 +464,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             mHighestTicket.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
 
                                         if (data.get(position).getCreatedAt() != null) {
-                                            mDateHighestTicket.setText(myApplication.convertZoneDateTime(data.get(position).getCreatedAt(), dateAndTime, date));
+                                            mDateHighestTicket.setText(myApplication.convertZoneDateTime(data.get(position).getCreatedAt(), dateAndTime, dateResult));
                                         } else {
                                             mDateHighestTicket.setVisibility(View.GONE);
                                         }
@@ -505,7 +509,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getMerchantActivityRespMutableLiveData().observe(getViewLifecycleOwner(), new Observer<MerchantActivityResp>() {
+        businessDashboardViewModel.getMerchantActivityRespMutableLiveData().observe(getActivity(), new Observer<MerchantActivityResp>() {
             @Override
             public void onChanged(MerchantActivityResp merchantActivityResp) {
                 try {
@@ -528,7 +532,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getRollingRuleResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<RollingRuleResponse>() {
+        businessDashboardViewModel.getRollingRuleResponseMutableLiveData().observe(getActivity(), new Observer<RollingRuleResponse>() {
             @Override
             public void onChanged(RollingRuleResponse ruleResponse) {
                 if (ruleResponse != null) {
@@ -553,7 +557,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessWalletResponse>() {
+        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getActivity(), new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
                 walletCount++;
@@ -569,14 +573,14 @@ public class BusinessDashboardFragment extends BaseFragment {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                if(walletCount == 3) {
+                if (walletCount == 3) {
                     walletCount = 0;
                     updateUIAfterWalletBalance();
                 }
             }
         });
 
-        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BiometricTokenResponse>() {
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(getActivity(), new Observer<BiometricTokenResponse>() {
             @Override
             public void onChanged(BiometricTokenResponse biometricTokenResponse) {
                 if (biometricTokenResponse != null) {
@@ -590,17 +594,17 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        dashboardViewModel.getTransactionListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<TransactionList>() {
+        dashboardViewModel.getTransactionListMutableLiveData().observe(getActivity(), new Observer<TransactionList>() {
             @Override
             public void onChanged(TransactionList transactionList) {
-                if (transactionList.getData().getItems().getPostedTransactions().size()>0) {
+                if (transactionList.getData().getItems().getPostedTransactions().size() > 0) {
                     if (transactionList.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         LogUtils.d(TAG, "list" + transactionList.getData().getItems().getPostedTransactions());
                         mTvMerchantTransactions.setTextColor(getResources().getColor(R.color.primary_color));
                         mTvMerchantTransactions.setClickable(true);
                         monthlyVolumeViewLl.setVisibility(View.GONE);
                     }
-                }else{
+                } else {
                     mTvMerchantTransactions.setTextColor(getResources().getColor(R.color.inactive_color));
                     mTvMerchantTransactions.setClickable(false);
                     monthlyVolumeViewLl.setVisibility(View.VISIBLE);
@@ -619,6 +623,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
         showReserveReleaseBalance();
     }
+
     private void showData(List<BatchPayoutListItems> items) {
         showBatchPayouts(items);
     }
@@ -654,6 +659,9 @@ public class BusinessDashboardFragment extends BaseFragment {
         ((BusinessDashboardActivity) getActivity()).showUserData();
         getWalletData();
         cvReserveView.setVisibility(myApplication.isReserveEnabled() ? View.VISIBLE : View.GONE);
+        if (myApplication.isReserveEnabled()) {
+            businessDashboardViewModel.getRollingRuleDetails();
+        }
         batchReq();
         getProcessingVolume(todayValue);
         if (myApplication.isReserveEnabled()) {
@@ -683,13 +691,11 @@ public class BusinessDashboardFragment extends BaseFragment {
             @Override
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(Utils.Swiped)) {
-
                     batchId = (String) value;
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-//                    businessDashboardViewModel.batchNowSlideData((String) value);
                     if ((isFaceLock || isTouchId) && Utils.checkAuthentication(getActivity())) {
                         if (isBiometric && ((isTouchId && Utils.isFingerPrint(getActivity())) || (isFaceLock))) {
                             Utils.checkAuthentication(BusinessDashboardFragment.this, CODE_AUTHENTICATION_VERIFICATION);
@@ -775,7 +781,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 myApplication.setLocalBiometric(true);
             } else {
                 isTouchId = false;
-                myApplication.setLocalBiometric(false);
+//                myApplication.setLocalBiometric(false);
+                if (!isFaceLock) {
+                    myApplication.setLocalBiometric(false);
+                }
             }
 
         } catch (Exception ex) {
@@ -798,7 +807,6 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void getProcessingVolume(String action) {
-        mTvProcessingVolume.setText(action);
         switch (action) {
             case todayValue: {
                 mTvProcessingVolume.setText(action + "  ");
@@ -812,6 +820,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
             break;
             case yesterdayValue: {
+                mTvProcessingVolume.setText(action);
                 mTicketsLayout.setVisibility(View.GONE);
                 mSbTodayVolume.setVisibility(View.VISIBLE);
                 saleOrdersText.setVisibility(View.VISIBLE);
@@ -822,7 +831,8 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
             break;
             case monthDate: {
-                mTicketsLayout.setVisibility(View.GONE);
+                mTvProcessingVolume.setText(action);
+                mTicketsLayout.setVisibility(View.VISIBLE);
                 mSbTodayVolume.setVisibility(View.GONE);
                 saleOrdersText.setVisibility(View.GONE);
                 strFromDate = myApplication.convertZoneDateTime(getFirstDayOfMonthString(), dateAndTime, date) + startTime;
@@ -831,6 +841,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
             break;
             case lastMonthDate: {
+                mTvProcessingVolume.setText(action);
                 mTicketsLayout.setVisibility(View.VISIBLE);
                 mSbTodayVolume.setVisibility(View.GONE);
                 saleOrdersText.setVisibility(View.GONE);
@@ -859,7 +870,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                 String toDate = rangeDates.getUpdatedToDate().trim() + midTime;
                                 strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + startTime;
                                 strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + endTime;
-
+                                mTvProcessingVolume.setText(R.string.custom_date_range);
                                 businessActivityAPICall(strFromDate, strToDate);
 //                                Toast.makeText(getActivity(), strFromDate + strToDate, Toast.LENGTH_LONG).show();
                             }
@@ -869,8 +880,6 @@ public class BusinessDashboardFragment extends BaseFragment {
 
             }
             break;
-
-
         }
     }
 
@@ -879,8 +888,9 @@ public class BusinessDashboardFragment extends BaseFragment {
         request.setStartDate(strFromDate);
         request.setEndDate(strToDate);
 
-        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null)
+        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
             request.setUserId("" + myApplication.getMyProfile().getData().getId());
+        }
         businessDashboardViewModel.merchantActivity(request);
 
     }
@@ -928,13 +938,18 @@ public class BusinessDashboardFragment extends BaseFragment {
                         mCvBatchNow.setClickable(true);
                         nextPayoutAmountTV.setText(amt);
                     }
-                    String date = listItems.get(i).getCreatedAt();
-                    if (date.contains(".")) {
-                        String res = date.substring(0, date.lastIndexOf("."));
-                        nxtPayoutDatenTimeTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
-                    } else {
-                        Log.d("date format", date);
-                    }
+                    Date d = new Date();
+                    d.setHours(23);
+                    d.setMinutes(59);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
+                    nxtPayoutDatenTimeTV.setText(dateFormat.format(d));
+//                    String date = listItems.get(i).getCreatedAt();
+//                    if (date.contains(".")) {
+//                        String res = date.substring(0, date.lastIndexOf("."));
+//                        nxtPayoutDatenTimeTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
+//                    } else {
+//                        Log.d("date format", date);
+//                    }
                     isOpen = true;
                 } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
                     String Amount = listItems.get(i).getTotalAmount();
@@ -1047,7 +1062,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 ReserveListItems latest = items.get(0);
                 String amount = latest.getTotalAmount();
                 lastReleaseAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
-                String datee = latest.getCreatedAt();
+                String datee = latest.getScheduledRelease();
                 if (datee != null && !datee.equals("")) {
                     if (datee.contains(".")) {
                         datee = datee.substring(0, datee.lastIndexOf("."));
@@ -1061,7 +1076,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     View xmlView = getLayoutInflater().inflate(R.layout.dashboard_reserve_release_list, null);
                     TextView releaseDate = xmlView.findViewById(R.id.reserveListDateTV);
                     TextView payoutManualTV = xmlView.findViewById(R.id.reserveListManualTV);
-                    String listDate = items.get(j).getCreatedAt();
+                    String listDate = items.get(j).getScheduledRelease();
                     if (listDate.contains(".")) {
                         String listD = listDate.substring(0, listDate.lastIndexOf("."));
                         releaseDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));

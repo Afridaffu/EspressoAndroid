@@ -198,8 +198,9 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
             try {
                 setToken();
-                setTouchId();
                 setFaceLock();
+                setTouchId();
+//                setFaceLock();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1206,7 +1207,10 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 myApplicationObj.setLocalBiometric(true);
             } else {
                 isTouchId = false;
-                myApplicationObj.setLocalBiometric(false);
+//                myApplicationObj.setLocalBiometric(false);
+                if (!isFaceLock) {
+                    myApplicationObj.setLocalBiometric(false);
+                }
             }
 
         } catch (Exception ex) {
