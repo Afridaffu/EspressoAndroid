@@ -119,8 +119,16 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             }
         }
 //        slideToConfirm.setInteractionEnabled(false);
-        setFaceLock();
-        setTouchId();
+//        setFaceLock();
+//        setTouchId();
+        myApplication.initializeDBHandler(CheckOutPaymentActivity.this);
+        isFaceLock = myApplication.setFaceLock();
+        isTouchId = myApplication.setTouchId();
+        if (isFaceLock || isTouchId) {
+            myApplication.setLocalBiometric(true);
+        } else {
+            myApplication.setLocalBiometric(false);
+        }
     }
 
     private void orderInfoAPICall(String requestToken) {
@@ -469,42 +477,42 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     }
 
 
-    private void setFaceLock() {
-        try {
-            isFaceLock = false;
-            String value = dbHandler.getFacePinLock();
-            if (value != null && value.equals("true")) {
-                isFaceLock = true;
-                myApplication.setLocalBiometric(true);
-            } else {
-                isFaceLock = false;
-                myApplication.setLocalBiometric(false);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void setTouchId() {
-        try {
-            isTouchId = false;
-            String value = dbHandler.getThumbPinLock();
-            if (value != null && value.equals("true")) {
-                isTouchId = true;
-                myApplication.setLocalBiometric(true);
-            } else {
-                isTouchId = false;
+//    private void setFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            String value = dbHandler.getFacePinLock();
+//            if (value != null && value.equals("true")) {
+//                isFaceLock = true;
+//                myApplication.setLocalBiometric(true);
+//            } else {
+//                isFaceLock = false;
 //                myApplication.setLocalBiometric(false);
-                if (!isFaceLock) {
-                    myApplication.setLocalBiometric(false);
-                }
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    private void setTouchId() {
+//        try {
+//            isTouchId = false;
+//            String value = dbHandler.getThumbPinLock();
+//            if (value != null && value.equals("true")) {
+//                isTouchId = true;
+//                myApplication.setLocalBiometric(true);
+//            } else {
+//                isTouchId = false;
+////                myApplication.setLocalBiometric(false);
+//                if (!isFaceLock) {
+//                    myApplication.setLocalBiometric(false);
+//                }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

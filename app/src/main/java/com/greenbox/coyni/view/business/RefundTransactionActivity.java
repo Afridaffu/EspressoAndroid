@@ -139,9 +139,16 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         fullamounttv = findViewById(R.id.FullamountTV);
         halfamounttv = findViewById(R.id.halfamountTV);
         refundTransactionActivity = this;
-        setFaceLock();
-        setTouchId();
-
+//        setFaceLock();
+//        setTouchId();
+        objMyApplication.initializeDBHandler(RefundTransactionActivity.this);
+        isFaceLock = objMyApplication.setFaceLock();
+        isTouchId = objMyApplication.setTouchId();
+        if (isFaceLock || isTouchId) {
+            objMyApplication.setLocalBiometric(true);
+        } else {
+            objMyApplication.setLocalBiometric(false);
+        }
         objMyApplication = (MyApplication) getApplicationContext();
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
@@ -962,40 +969,40 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         strToken = dbHandler.getPermanentToken();
     }
 
-    private void setFaceLock() {
-        try {
-            isFaceLock = false;
-            String value = dbHandler.getFacePinLock();
-            if (value != null && value.equals("true")) {
-                isFaceLock = true;
-                objMyApplication.setLocalBiometric(true);
-            } else {
-                isFaceLock = false;
-                objMyApplication.setLocalBiometric(false);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void setTouchId() {
-        try {
-            isTouchId = false;
-            String value = dbHandler.getThumbPinLock();
-            if (value != null && value.equals("true")) {
-                isTouchId = true;
-                objMyApplication.setLocalBiometric(true);
-            } else {
-                isTouchId = false;
+//    private void setFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            String value = dbHandler.getFacePinLock();
+//            if (value != null && value.equals("true")) {
+//                isFaceLock = true;
+//                objMyApplication.setLocalBiometric(true);
+//            } else {
+//                isFaceLock = false;
 //                objMyApplication.setLocalBiometric(false);
-                if (!isFaceLock) {
-                    objMyApplication.setLocalBiometric(false);
-                }
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    private void setTouchId() {
+//        try {
+//            isTouchId = false;
+//            String value = dbHandler.getThumbPinLock();
+//            if (value != null && value.equals("true")) {
+//                isTouchId = true;
+//                objMyApplication.setLocalBiometric(true);
+//            } else {
+//                isTouchId = false;
+////                objMyApplication.setLocalBiometric(false);
+//                if (!isFaceLock) {
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 }

@@ -30,6 +30,7 @@ public class SeekBarWithFloatingText extends RelativeLayout {
     private String floatingText;
     private List<Earning> userData;
     String defaultValue = " 0.00 CYN";
+    private double totalAmountCumulate = 0.0;
 
 
     public SeekBarWithFloatingText(Context context) {
@@ -148,15 +149,27 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         }
         tvFloatingText.setText(text + defaultValue);
         if (earningList != null) {
+//            for (int position = 0; position < earningList.size(); position++) {
+//                if (progress == earningList.get(position).getKey()) {
+//                    tvFloatingText.setText(text + " " + Utils.convertTwoDecimal(String.valueOf(earningList.get(position).getAmount())) + " CYN");
+//                    break;
+//                } else {
+//                    tvFloatingText.setText(text + defaultValue);
+//                }
+//
+//            }
+
             for (int position = 0; position < earningList.size(); position++) {
+               totalAmountCumulate = totalAmountCumulate + earningList.get(progress).getAmount();
                 if (progress == earningList.get(position).getKey()) {
-                    tvFloatingText.setText(text + " " + Utils.convertTwoDecimal(String.valueOf(earningList.get(position).getAmount())) + " CYN");
-                    break;
+
+                    tvFloatingText.setText(text + " " + Utils.convertTwoDecimal(String.valueOf(totalAmountCumulate)) + " CYN");
                 } else {
                     tvFloatingText.setText(text + defaultValue);
                 }
 
             }
+
         }
 
 

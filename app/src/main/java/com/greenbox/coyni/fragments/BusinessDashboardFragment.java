@@ -67,6 +67,7 @@ import com.greenbox.coyni.utils.SeekBarWithFloatingText;
 import com.greenbox.coyni.utils.UserData;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
+import com.greenbox.coyni.view.PayRequestActivity;
 import com.greenbox.coyni.view.ValidatePinActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
@@ -257,8 +258,16 @@ public class BusinessDashboardFragment extends BaseFragment {
         transactionsAPI(transactionListRequest);
 
         isBiometric = Utils.getIsBiometric();
-        setFaceLock();
-        setTouchId();
+//        setFaceLock();
+//        setTouchId();
+        myApplication.initializeDBHandler(getContext());
+        isFaceLock = myApplication.setFaceLock();
+        isTouchId = myApplication.setTouchId();
+        if (isFaceLock || isTouchId) {
+            myApplication.setLocalBiometric(true);
+        } else {
+            myApplication.setLocalBiometric(false);
+        }
         SpannableString ss = new SpannableString("All Payouts are deposited into Business Token Account. Your active batch is set to automatically pay out at 11:59:59 pm PST ");
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
         ss.setSpan(new CustomTypefaceSpan("", font), 31, 53, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
@@ -755,42 +764,42 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
     }
 
-    public void setFaceLock() {
-        try {
-            isFaceLock = false;
-            String value = dbHandler.getFacePinLock();
-            if (value != null && value.equals("true")) {
-                isFaceLock = true;
-                myApplication.setLocalBiometric(true);
-            } else {
-                isFaceLock = false;
-                myApplication.setLocalBiometric(false);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void setTouchId() {
-        try {
-            isTouchId = false;
-            String value = dbHandler.getThumbPinLock();
-            if (value != null && value.equals("true")) {
-                isTouchId = true;
-                myApplication.setLocalBiometric(true);
-            } else {
-                isTouchId = false;
+//    public void setFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            String value = dbHandler.getFacePinLock();
+//            if (value != null && value.equals("true")) {
+//                isFaceLock = true;
+//                myApplication.setLocalBiometric(true);
+//            } else {
+//                isFaceLock = false;
 //                myApplication.setLocalBiometric(false);
-                if (!isFaceLock) {
-                    myApplication.setLocalBiometric(false);
-                }
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    public void setTouchId() {
+//        try {
+//            isTouchId = false;
+//            String value = dbHandler.getThumbPinLock();
+//            if (value != null && value.equals("true")) {
+//                isTouchId = true;
+//                myApplication.setLocalBiometric(true);
+//            } else {
+//                isTouchId = false;
+////                myApplication.setLocalBiometric(false);
+//                if (!isFaceLock) {
+//                    myApplication.setLocalBiometric(false);
+//                }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public void showProcessingVolumeDialog() {
         ProcessingVolumeDialog processingVolumeDialog = new ProcessingVolumeDialog(getActivity());
