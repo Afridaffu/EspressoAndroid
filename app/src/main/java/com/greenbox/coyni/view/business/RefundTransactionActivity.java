@@ -141,6 +141,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         refundTransactionActivity = this;
 //        setFaceLock();
 //        setTouchId();
+        objMyApplication = (MyApplication) getApplicationContext();
         objMyApplication.initializeDBHandler(RefundTransactionActivity.this);
         isFaceLock = objMyApplication.setFaceLock();
         isTouchId = objMyApplication.setTouchId();
@@ -149,7 +150,6 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         } else {
             objMyApplication.setLocalBiometric(false);
         }
-        objMyApplication = (MyApplication) getApplicationContext();
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
         refundET.requestFocus();

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.merchant_activity.Earning;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -31,6 +32,7 @@ public class SeekBarWithFloatingText extends RelativeLayout {
     private List<Earning> userData;
     String defaultValue = " 0.00 CYN";
     private double totalAmountCumulate = 0.0;
+    private ArrayList<Integer> keys = new ArrayList<>();
 
 
     public SeekBarWithFloatingText(Context context) {
@@ -64,7 +66,7 @@ public class SeekBarWithFloatingText extends RelativeLayout {
             @Override
             public void run() {
 
-
+                totalAmountCumulate = 0.0;
                 seekBar.setProgress(progress);
                 setTextPos(progress);
             }
@@ -129,7 +131,7 @@ public class SeekBarWithFloatingText extends RelativeLayout {
             calculatedWidth = calculatedWidth + valueInPixels10 * progress;
         } else {
 //            if (progress > 12 && progress < 20) {
-                calculatedWidth = calculatedWidth + valueInPixels10 * progress;
+            calculatedWidth = calculatedWidth + valueInPixels10 * progress;
 //            }
 //            else {
 //                calculatedWidth = calculatedWidth + valueInPixels10 * progress;
@@ -137,8 +139,7 @@ public class SeekBarWithFloatingText extends RelativeLayout {
 //            }
             if (progress != 24) {
                 text = (progress - 12) + ":00pm";
-            }
-            else {
+            } else {
                 text = "11:59pm";
             }
 //            text = totalAmount.toLowerCase();
@@ -158,20 +159,23 @@ public class SeekBarWithFloatingText extends RelativeLayout {
 //                }
 //
 //            }
-
-            for (int position = 0; position < earningList.size(); position++) {
-               totalAmountCumulate = totalAmountCumulate + earningList.get(progress).getAmount();
-                if (progress == earningList.get(position).getKey()) {
-
-                    tvFloatingText.setText(text + " " + Utils.convertTwoDecimal(String.valueOf(totalAmountCumulate)) + " CYN");
-                } else {
-                    tvFloatingText.setText(text + defaultValue);
+            keys = new ArrayList<>();
+            totalAmountCumulate = 0.0;
+            for (int i = 0; i < earningList.size(); i++) {
+                keys.add(earningList.get(i).getKey());
+            }
+            for (int i = 0; i < keys.size(); i++) {
+                if (keys.get(i) <= progress) {
+                    totalAmountCumulate = totalAmountCumulate + earningList.get(i).getAmount();
                 }
-
             }
 
         }
-
+        if (totalAmountCumulate != 0) {
+            tvFloatingText.setText(text + " " + Utils.convertTwoDecimal(String.valueOf(totalAmountCumulate)) + " CYN");
+        } else {
+            tvFloatingText.setText(text + defaultValue);
+        }
 
     }
 
