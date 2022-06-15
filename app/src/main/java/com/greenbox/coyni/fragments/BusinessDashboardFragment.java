@@ -541,7 +541,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                             if (merchantActivityResp.getData().getEarnings() != null && merchantActivityResp.getData().getEarnings().size() > 0)
                                 mSbTodayVolume.setProgressWithText(merchantActivityResp.getData().getEarnings().get(merchantActivityResp.getData().getEarnings().size()-1).getKey(), userData.getEarningList());
                             else
-                                mSbTodayVolume.setProgressWithText(12, userData.getEarningList());
+                                mSbTodayVolume.setProgressWithText(0, userData.getEarningList());
                         }
 
                     }
@@ -875,8 +875,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
             break;
             case customDate: {
-                mTicketsLayout.setVisibility(View.GONE);
-                mSbTodayVolume.setVisibility(View.GONE);
                 saleOrdersText.setVisibility(View.GONE);
                 DateRangePickerDialog dateRangePickerDialog = new DateRangePickerDialog(getActivity());
                 dateRangePickerDialog.show();
@@ -889,13 +887,14 @@ public class BusinessDashboardFragment extends BaseFragment {
 
                             rangeDates = (RangeDates) value;
                             if (rangeDates != null) {
+                                mTicketsLayout.setVisibility(View.GONE);
+                                mSbTodayVolume.setVisibility(View.GONE);
                                 String fromDate = rangeDates.getUpdatedFromDate() + midTime;
                                 String toDate = rangeDates.getUpdatedToDate().trim() + midTime;
                                 strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + startTime;
                                 strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + endTime;
                                 mTvProcessingVolume.setText(R.string.custom_date_range);
                                 businessActivityAPICall(strFromDate, strToDate);
-//                                Toast.makeText(getActivity(), strFromDate + strToDate, Toast.LENGTH_LONG).show();
                             }
                         }
                     }
