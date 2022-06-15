@@ -256,8 +256,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             setUserBalance(myApplication.getCurrentUserData().getTokenWalletResponse());
         else
             setUserBalance(myApplication.getCurrentUserData().getMerchantWalletResponse());
-
-
     }
 
     private void setUserBalance(WalletResponseData walletResponse) {

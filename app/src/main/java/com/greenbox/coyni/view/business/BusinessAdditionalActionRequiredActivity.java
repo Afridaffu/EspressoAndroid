@@ -508,8 +508,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                     if (fileUpload.containsKey(verificationKey1.trim().hashCode())) {
                                         fileUpload.replace(verificationKey1.trim().hashCode(), "true");
                                     }
-                                    proposalsMap.get(verificationKey1).setUserAccepted(true);
-                                    proposalsMap.get(verificationKey1).setUserMessage("Accepted");
+                                    if(proposalsMap.get(verificationKey1) != null){
+                                        proposalsMap.get(verificationKey1).setUserAccepted(true);
+                                        proposalsMap.get(verificationKey1).setUserMessage("Accepted");
+                                    }
                                     enableOrDisableNext();
 
                                 }
@@ -571,14 +573,16 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     llDecline.setVisibility(View.GONE);
 
                     String verificationKey = displayNameTV.getText().toString() + "" + tv.getText().toString();
-                    proposalsMap.get(verificationKey).setUserAccepted(false);
-                    proposalsMap.get(verificationKey).setUserMessage(comm);
-                    if (fileUpload.containsKey(verificationKey.trim().hashCode())) {
-                        fileUpload.replace(verificationKey.trim().hashCode(), "false");
-                    }
+                    if(proposalsMap.get(verificationKey) != null) {
+                        proposalsMap.get(verificationKey).setUserAccepted(false);
+                        proposalsMap.get(verificationKey).setUserMessage(comm);
+                        if (fileUpload.containsKey(verificationKey.trim().hashCode())) {
+                            fileUpload.replace(verificationKey.trim().hashCode(), "false");
+                        }
 //                    if (Utils.isKeyboardVisible) {
 //                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
 //                    }
+                    }
                     enableOrDisableNext();
                 }
             }
