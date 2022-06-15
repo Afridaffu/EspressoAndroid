@@ -539,7 +539,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
                             mSbTodayVolume.setEnabled(true);
                             if (merchantActivityResp.getData().getEarnings() != null && merchantActivityResp.getData().getEarnings().size() > 0)
-                                mSbTodayVolume.setProgressWithText(merchantActivityResp.getData().getEarnings().get(merchantActivityResp.getData().getEarnings().size()-1).getKey(), userData.getEarningList());
+                                mSbTodayVolume.setProgressWithText(merchantActivityResp.getData().getEarnings().get(merchantActivityResp.getData().getEarnings().size() - 1).getKey(), userData.getEarningList());
                             else
                                 mSbTodayVolume.setProgressWithText(0, userData.getEarningList());
                         }
