@@ -134,7 +134,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             buyTokenActivity = this;
             initialization();
             initObserver();
-            if(objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 MatomoUtility.getInstance().trackScreen("Customer BuyToken Screen");
             } else {
                 MatomoUtility.getInstance().trackScreen("Business BuyToken Screen");
@@ -445,36 +445,38 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 tvCurrency.setVisibility(View.INVISIBLE);
                                 etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
                                 convertUSDtoCYN();
-                                if (tvError.getVisibility() == View.VISIBLE) {
-                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-//                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
-                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", BuyTokenActivity.this, tvError, 17);
-                                    } else {
-                                        if (strLimit.equals("daily")) {
-                                            tvError.setText("Amount entered exceeds your daily limit");
-                                        } else if (strLimit.equals("week")) {
-                                            tvError.setText("Amount entered exceeds your weekly limit");
-                                        }
-                                    }
-                                }
+                                validation();
+//                                if (tvError.getVisibility() == View.VISIBLE) {
+//                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+////                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+//                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", BuyTokenActivity.this, tvError, 17);
+//                                    } else {
+//                                        if (strLimit.equals("daily")) {
+//                                            tvError.setText("Amount entered exceeds your daily limit");
+//                                        } else if (strLimit.equals("week")) {
+//                                            tvError.setText("Amount entered exceeds your weekly limit");
+//                                        }
+//                                    }
+//                                }
                             } else {
                                 tvCYN.setVisibility(View.GONE);
                                 tvCurrency.setVisibility(View.VISIBLE);
                                 convertCYNtoUSD();
                                 etAmount.setGravity(Gravity.CENTER_VERTICAL);
-                                if (tvError.getVisibility() == View.VISIBLE) {
-                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-//                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
-                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD", BuyTokenActivity.this, tvError, 17);
-
-                                    } else {
-                                        if (strLimit.equals("daily")) {
-                                            tvError.setText("Amount entered exceeds your daily limit");
-                                        } else if (strLimit.equals("week")) {
-                                            tvError.setText("Amount entered exceeds your weekly limit");
-                                        }
-                                    }
-                                }
+                                validation();
+//                                if (tvError.getVisibility() == View.VISIBLE) {
+//                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+////                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+//                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD", BuyTokenActivity.this, tvError, 17);
+//
+//                                    } else {
+//                                        if (strLimit.equals("daily")) {
+//                                            tvError.setText("Amount entered exceeds your daily limit");
+//                                        } else if (strLimit.equals("week")) {
+//                                            tvError.setText("Amount entered exceeds your weekly limit");
+//                                        }
+//                                    }
+//                                }
                             }
                         } else {
                             if (!etAmount.getText().toString().equals("")) {
@@ -739,6 +741,25 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 } else {
                     tvBAccNumber.setText(objData.getAccountNumber());
                 }
+            } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                strType = "signet";
+                strBankId = String.valueOf(objData.getId());
+                strSubType = Utils.signetType;
+                obj.setTransactionSubType(Integer.parseInt(Utils.signetType));
+                lyBDetails.setVisibility(View.VISIBLE);
+                lyCDetails.setVisibility(View.GONE);
+                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
+                imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                if (objData.getBankName().length() > 15) {
+                    tvBankName.setText(objData.getBankName().substring(0, 15) + "...");
+                } else {
+                    tvBankName.setText(objData.getBankName());
+                }
+                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
+                    tvBAccNumber.setText(objData.getAccountNumber().substring(0, 10) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                } else {
+                    tvBAccNumber.setText(objData.getAccountNumber());
+                }
             } else {
                 strCardId = String.valueOf(objData.getId());
                 if (objData.getCardType().toLowerCase().equals("debit")) {
@@ -808,7 +829,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             prevSelectedCard = objMyApplication.getSelectedCard();
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                    paymentMethodsResponse = objMyApplication.businessPaymentMethods(paymentMethodsResponse,"buy");
+                    paymentMethodsResponse = objMyApplication.businessPaymentMethods(paymentMethodsResponse, "buy");
                 }
                 selectedPaymentMethodsAdapter = new SelectedPaymentMethodsAdapter(paymentMethodsResponse.getData().getData(), BuyTokenActivity.this, "buytoken");
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(BuyTokenActivity.this);
@@ -842,6 +863,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         } else {
                             Intent i = new Intent(BuyTokenActivity.this, SelectPaymentMethodActivity.class);
                             i.putExtra("screen", "buytoken");
+                            i.putExtra("menuitem", "buy");
                             startActivityForResult(i, 3);
                         }
                     } catch (Exception ex) {
@@ -960,7 +982,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 isMinimumError = true;
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
-            } else if (!strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
+//            } else if (!strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
+            } else if (!strLimit.equals("unlimited") && cynValue > maxValue) {
 //                if (strLimit.equals("daily")) {
 //                    tvError.setText("Amount entered exceeds your daily limit");
 //                } else if (strLimit.equals("week")) {
@@ -1146,8 +1169,11 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         try {
             if (isUSD) {
                 isUSD = false;
-                usdValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-                cynValue = usdValue * (1 - (feeInPercentage / 100)) - feeInAmount;
+//                usdValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
+                usdValue = Double.parseDouble(Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", "")));
+//                cynValue = usdValue * (1 - (feeInPercentage / 100)) - feeInAmount;
+                Double calValue = usdValue * (1 - (feeInPercentage / 100)) - feeInAmount;
+                cynValue = Double.parseDouble(Utils.convertBigDecimalUSDC(String.valueOf(calValue)));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1158,8 +1184,11 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         try {
             if (isCYN) {
                 isCYN = false;
-                cynValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-                usdValue = (cynValue + feeInAmount) / (1 - (feeInPercentage / 100));
+//                cynValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
+                cynValue = Double.parseDouble(Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", "")));
+//                usdValue = (cynValue + feeInAmount) / (1 - (feeInPercentage / 100));
+                Double calValue = (cynValue + feeInAmount) / (1 - (feeInPercentage / 100));
+                usdValue = Double.parseDouble(Utils.convertBigDecimalUSDC(String.valueOf(calValue)));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1577,7 +1606,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         } else {
                             if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                                 isBank = true;
-                                objMyApplication.setResolveUrl(true);
+                                //objMyApplication.setResolveUrl(true);
                                 Intent i = new Intent(BuyTokenActivity.this, WebViewActivity.class);
                                 i.putExtra("signon", signOnData);
                                 startActivityForResult(i, 1);
@@ -1639,6 +1668,19 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         tvAccount.setText("**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
+                    }
+                } else if (objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
+                    if (payDialog != null && payDialog.isShowing()) {
+                        payDialog.dismiss();
+                    }
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
+                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                    tvAccount.setVisibility(View.GONE);
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvBankName.setText(objPayment.getAccountNumber());
                     }
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);

@@ -105,10 +105,9 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             initialization();
             initObserver();
 
-            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT){
+            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 MatomoUtility.getInstance().trackScreen("Customer WithdrawToken Screen");
-            }
-            else {
+            } else {
                 MatomoUtility.getInstance().trackScreen("Business WithdrawToken Screen");
             }
         } catch (Exception ex) {
@@ -1027,6 +1026,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
 //                            ControlMethod("withdrawpay");
 //                            withdrawPaymentMethod("card");
 //                            strScreen = "withdrawpay";
+                            mLastClickTime = 0L;
                             showAddPayment("card");
                         }
                     } catch (Exception ex) {
@@ -1355,7 +1355,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         } else {
                             if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                                 isBank = true;
-                                objMyApplication.setResolveUrl(true);
+                                //objMyApplication.setResolveUrl(true);
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
                                 i.putExtra("signon", signOnData);
                                 startActivityForResult(i, 1);

@@ -184,12 +184,15 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                                 ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
                             }
                         } else {
-                            if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
+//                            if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                            if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                 if (!objData.getRelink()) {
                                     ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
                                 } else {
                                     ((BusinessPaymentMethodsActivity) mContext).expiry(objData);
                                 }
+                            } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                                ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
                             } else if (!objData.getExpired()) {
                                 objMyApplication.setSelectedCard(objData);
                                 ((BusinessPaymentMethodsActivity) mContext).editCard();

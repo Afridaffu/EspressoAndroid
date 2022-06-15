@@ -131,6 +131,8 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                     ControlMethod("externalBank");
                     strCurrent = "externalBank";
                     strOnPauseScreen = "";
+                } else if (strCurrent.equals("firstError")) {
+                    displayError();
                 } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit") || strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
                     ControlMethod("addpayment");
                 } else if (strScreen != null && !strScreen.equals("addpay")) {
@@ -880,7 +882,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                         } else {
                             if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                                 isBank = true;
-                                objMyApplication.setResolveUrl(true);
+                                //objMyApplication.setResolveUrl(true);
                                 Intent i = new Intent(SelectPaymentMethodActivity.this, WebViewActivity.class);
                                 i.putExtra("signon", signOnData);
                                 startActivityForResult(i, 1);
@@ -941,6 +943,16 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                         tvAccount.setText("**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
+                    }
+                } else if (objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
+                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                    tvAccount.setVisibility(View.GONE);
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvBankName.setText(objPayment.getAccountNumber());
                     }
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);
