@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -55,8 +56,9 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
     private List<TransactionListPending> globalPending = new ArrayList<>();
     private List<TransactionListPosted> globalPosted = new ArrayList<>();
     private MyApplication objMyApplication;
-    private TextView bathPayoutIdTV, payoutIDAmountTV, payoutStatusTV, payoutIDdateTimeTV;
+    private TextView bathPayoutIdTV, payoutIDAmountTV, payoutStatusTV, payoutIDdateTimeTV,noTransactions,merchantNoMoreTransactions;
     private BatchPayoutListItems selectedItem;
+    private CardView cardViewList;
     BatchPayoutIdDetailsData objData;
 
     @Override
@@ -95,6 +97,10 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
             payoutTokenIdTV = findViewById(R.id.payoutTokenIdTV);
             ReserveIdTV = findViewById(R.id.ReserveIdTV);
 
+            merchantNoMoreTransactions = findViewById(R.id.merchantNoMoreTransactions);
+            noTransactions = findViewById(R.id.noTransactions);
+            cardViewList = findViewById(R.id.cardViewList);
+
             layoutTransactionspending = findViewById(R.id.layoutLLPending);
             layoutTransactionsposted = findViewById(R.id.layoutLLposted);
             rvTransactionsPending = findViewById(R.id.transactionListPendingRV);
@@ -130,7 +136,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
     }
 
     private void transactionsAPI(TransactionListRequest transactionListRequest) {
-//        showProgressDialog();
+        showProgressDialog();
         dashboardViewModel.meTransactionList(transactionListRequest);
     }
 
@@ -150,6 +156,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                                 if (transactionList.getData() != null) {
                                     if (transactionList.getData().getItems() != null) {
                                         if (transactionList.getData().getItems().getPendingTransactions() != null) {
+                                            noTransactions.setVisibility(View.GONE);
                                             globalPending.addAll(transactionList.getData().getItems().getPendingTransactions());
                                             LogUtils.v(TAG, " Get Pending Transactions");
                                         }
@@ -167,6 +174,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                                 getRvTransactionsPosted.setExpanded(true);
 
                                 if (globalPending.size() > 0) {
+                                    noTransactions.setVisibility(View.GONE);
                                     transactionListPendingAdapter = new TransactionListPendingAdapter(globalPending, BusinessBatchPayoutIdDetailsActivity.this);
 //                                    pendingTxt.setVisibility(View.VISIBLE);
                                     rvTransactionsPending.setLayoutManager(mLayoutManager);
@@ -204,6 +212,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                             Utils.displayAlert(transactionList.getError().getErrorDescription(), BusinessBatchPayoutIdDetailsActivity.this, "", transactionList.getError().getFieldErrors().get(0));
                         }
                     } else {
+                        merchantNoMoreTransactions.setVisibility(View.GONE);
                         Utils.displayAlert(getString(R.string.something_went_wrong), BusinessBatchPayoutIdDetailsActivity.this, "", transactionList.getError().getFieldErrors().get(0));
                     }
                 } catch (Exception e) {

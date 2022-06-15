@@ -824,6 +824,9 @@ public class MyApplication extends Application {
     public String convertZoneLatestTxn(String date) {
         return Utils.convertZoneLatestTxn(date, getStrPreference());
     }
+    public String convertZoneLatestTxndate(String date) {
+        return Utils.convertZoneLatestTxndate(date, getStrPreference());
+    }
 
     public String convertZoneReservedOn(String date) {
         return Utils.convertZoneReservedOn(date, getStrPreference());
@@ -869,15 +872,11 @@ public class MyApplication extends Application {
         dbHandler = DatabaseHandler.getInstance(context);
     }
 
-    public Boolean setTouchId() {
-        Boolean isTouchId = false;
+    public boolean setTouchId() {
+        boolean isTouchId = false;
         try {
             String value = dbHandler.getThumbPinLock();
-            if (value != null && value.equals("true")) {
-                isTouchId = true;
-            } else {
-                isTouchId = false;
-            }
+            isTouchId = value != null && value.equals("true");
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -885,15 +884,11 @@ public class MyApplication extends Application {
         return isTouchId;
     }
 
-    public Boolean setFaceLock() {
-        Boolean isFaceLock = false;
+    public boolean setFaceLock() {
+        boolean isFaceLock = false;
         try {
             String value = dbHandler.getFacePinLock();
-            if (value != null && value.equals("true")) {
-                isFaceLock = true;
-            } else {
-                isFaceLock = false;
-            }
+            isFaceLock = value != null && value.equals("true");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

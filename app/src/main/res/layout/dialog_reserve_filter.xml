@@ -133,6 +133,43 @@
                 app:chipBackgroundColor="@color/chipbackgroundcolor"
                 app:chipMinHeight="@dimen/_32sdp" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_9sdp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/failedC"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="@string/failed"
+                android:textAlignment="center"
+                android:textColor="@color/chip_text_color"
+                android:textSize="@dimen/_11ssp"
+                app:chipBackgroundColor="@color/chipbackgroundcolor"
+                app:chipMinHeight="@dimen/_32sdp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/canC"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="@string/canceled"
+                android:textAlignment="center"
+                android:textColor="@color/chip_text_color"
+                android:textSize="@dimen/_11ssp"
+                app:chipBackgroundColor="@color/chipbackgroundcolor"
+                app:chipMinHeight="@dimen/_32sdp"
+                android:visibility="invisible"/>
+        </LinearLayout>
+
 
         <TextView
             android:layout_width="wrap_content"

@@ -200,10 +200,13 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
                 holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.under_review_blue));
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 break;
-            case Utils.transPending:
+            case Utils.refundd:
+            case Utils.partialrefund:
+            case Utils.transPending: {
                 holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.orange));
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);
                 break;
+            }
             case Utils.transCompleted:
                 holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.active_green));
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_completed_bg);

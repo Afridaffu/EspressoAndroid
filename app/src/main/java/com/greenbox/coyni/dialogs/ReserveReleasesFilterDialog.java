@@ -26,7 +26,7 @@ import java.util.Date;
 public class ReserveReleasesFilterDialog extends BaseDialog {
 
     private Context context;
-    private Chip openC, releasedC, onHoldC, canceledC;
+    private Chip openC, releasedC, onHoldC, canceledC, failedC;
     private CardView applyFilter;
     private TextView resetFilter;
     private EditText dateRange;
@@ -67,6 +67,7 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
         releasedC = findViewById(R.id.releasedC);
         onHoldC = findViewById(R.id.onHoldC);
         canceledC = findViewById(R.id.canceledC);
+        failedC = findViewById(R.id.failedC);
         applyFilter = findViewById(R.id.applyFilterBtnCV);
         resetFilter = findViewById(R.id.resetFiltersTV);
         dateClick = findViewById(R.id.dateRangePickerLL);
@@ -120,6 +121,7 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
             onHoldC.setChecked(filter.isOnHold());
             releasedC.setChecked(filter.isReleased());
             canceledC.setChecked(filter.isCancelled());
+            failedC.setChecked(filter.isFailed());
         } else {
             rangeDates = new RangeDates();
             rangeDates.setUpdatedFromDate("");
@@ -156,7 +158,13 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                 filter.setCancelled(isChecked);
             }
         });
-
+        failedC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filter.isFilterApplied = true;
+                filter.setFailed(isChecked);
+            }
+        });
 
         dateClick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,6 +220,7 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                     onHoldC.setChecked(false);
                     canceledC.setChecked(false);
                     releasedC.setChecked(false);
+                    failedC.setChecked(false);
                     strSelectedDate = "";
                     filter.isFilterApplied = false;
                     strF = "";

@@ -156,7 +156,8 @@ public class Utils {
         OPEN(6, "Open"),
         ON_HOLD(7, "On Hold"),
         RELEASED(8, "Released"),
-        CANCELED(10, "Canceled");
+        CANCELED(10, "Canceled"),
+        FAILED(9, "Failed");
 
         private int statusType;
         private String status;
@@ -193,6 +194,8 @@ public class Utils {
     public static final String transCompleted = "completed";
     public static final String transOpen = "open";
     public static final String transFailed = "failed";
+    public static final String partialrefund = "partial refund";
+    public static final String refundd = "refunded";
     public static final String transCancelled = "cancelled";
     public static final String transinprogress = "in progress";
     public static final String walletCategory = "1";
@@ -309,6 +312,7 @@ public class Utils {
     public static final int open = 1;
     public static final int onHold = 7;
     public static final int released = 8;
+    public static final int reserve_failed = 9;
 
     //Merchant Transaction Filter Type values
 
@@ -2297,6 +2301,36 @@ public class Utils {
         }
         return strDate;
     }
+
+    public static String convertZoneLatestTxndate(String date, String zoneId) {
+        String strDate = "";
+        if (date != null && date.contains(".")) {
+            date = date.split("\\.")[0];
+        }
+        try {
+            if (Build.VERSION.SDK_INT >= 26) {
+                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
+                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                        .toFormatter()
+                        .withZone(ZoneOffset.UTC);
+                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
+                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm a");
+                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(zoneId, ZoneId.SHORT_IDS));
+                strDate = zonedTime.format(DATE_TIME_FORMATTER);
+            } else {
+                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date newDate = spf.parse(date);
+                spf = new SimpleDateFormat("MM/dd/yyyy HH:mm a");
+                spf.setTimeZone(TimeZone.getTimeZone(zoneId));
+                strDate = spf.format(newDate);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
 
     public static String convertZoneReservedOn(String date, String zoneId) {
         String strDate = "";

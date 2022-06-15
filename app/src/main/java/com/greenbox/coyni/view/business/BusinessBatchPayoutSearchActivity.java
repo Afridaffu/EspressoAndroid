@@ -136,11 +136,8 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                             batchPayoutListData.setCurrentPageNo(String.valueOf(currentPage));
                             batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
                             dismissDialog();
-                            noMorePayoutTransactions.setVisibility(View.GONE);
-
                         } else {
                             noMorePayoutTransactions.setVisibility(View.VISIBLE);
-                            noPayoutTransactions.setVisibility(View.GONE);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -156,9 +153,10 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
             @Override
             public void onRefresh() {
                 try {
+                    noMorePayoutTransactions.setVisibility(View.VISIBLE);
                     batchFilter = new ReserveFilter();
                     searchET.setText("");
-                    noMorePayoutTransactions.setVisibility(View.GONE);
+                    noMorePayoutTransactions.setVisibility(View.VISIBLE);
                     filterIconIV.setImageResource(R.drawable.ic_filtericon);
                     getBatchListData();
                     dismissDialog();
@@ -179,7 +177,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
             if (batchFilter != null) {
                 PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this, batchFilter);
             }
-                PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this, batchFilter);
+            PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this, batchFilter);
             dialog.setOnDialogClickListener(new OnDialogClickListener() {
                 @Override
                 public void onDialogClicked(String action, Object value) {
@@ -189,13 +187,13 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                         filterIconIV.setImageResource(R.drawable.ic_filter_enabled);
                         batchFilter = (ReserveFilter) value;
                         getBatchListData();
-    //                    rangeDates = (RangeDates) value;
-    //                    if (rangeDates == null) {
-    ////                        recyclerViewPayouts.setVisibility(View.GONE);
-    //                    } else {
-    //                        String fromDate = Utils.formatDate(rangeDates.getUpdatedFromDate());
-    //                        String toDate = Utils.formatDate(rangeDates.getUpdatedToDate());
-    //                    }
+                        //                    rangeDates = (RangeDates) value;
+                        //                    if (rangeDates == null) {
+                        ////                        recyclerViewPayouts.setVisibility(View.GONE);
+                        //                    } else {
+                        //                        String fromDate = Utils.formatDate(rangeDates.getUpdatedFromDate());
+                        //                        String toDate = Utils.formatDate(rangeDates.getUpdatedToDate());
+                        //                    }
                     } else if (action.equalsIgnoreCase(resetFilter)) {
                         batchFilter = (ReserveFilter) value;
                         searchET.setText("");
@@ -231,16 +229,14 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                                     @Override
                                     public void onItemClick(int position, Object obj) {
                                         LogUtils.d(TAG, "onitemclick" + position + obj.toString());
-
                                         BatchPayoutListItems batchPayoutListItem = (BatchPayoutListItems) obj;
                                         showBatchPayoutDetails(batchPayoutListItem);
-
                                     }
                                 });
                                 if (payoutList.size() > 0) {
                                     recyclerViewPayouts.setAdapter(batchPayoutListAdapter);
                                     recyclerViewPayouts.setVisibility(View.VISIBLE);
-                                    noMorePayoutTransactions.setVisibility(View.GONE);
+//                                    noMorePayoutTransactions.setVisibility(View.GONE);
                                     cynTV.setVisibility(View.VISIBLE);
                                 } else {
                                     recyclerViewPayouts.setVisibility(View.GONE);
@@ -284,15 +280,19 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
             payoutAPI(charSequence.toString());
             dismissDialog();
             noPayoutTransactions.setVisibility(View.GONE);
+            noMorePayoutTransactions.setVisibility(View.GONE);
         } else if (charSequence.length() > 0 && charSequence.length() < 10) {
             noPayoutTransactions.setVisibility(View.VISIBLE);
             cynTV.setVisibility(View.GONE);
             recyclerViewPayouts.setVisibility(View.GONE);
+            noMorePayoutTransactions.setVisibility(View.GONE);
         } else if (charSequence.toString().trim().length() == 0) {
             payoutList.clear();
             noPayoutTransactions.setVisibility(View.GONE);
             noMorePayoutTransactions.setVisibility(View.GONE);
             recyclerViewPayouts.setVisibility(View.VISIBLE);
+            noMorePayoutTransactions.setVisibility(View.GONE);
+
 //            businessDashboardViewModel.getPayoutListData(li);
             getBatchListData();
             dismissDialog();
@@ -340,8 +340,8 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                     String strFromDate = Utils.payoutDate(strF);
                     String strToDate = Utils.payoutDate(strL);
 
-                        listRequest.setFromDate(strFromDate);
-                        listRequest.setToDate(strToDate);
+                    listRequest.setFromDate(strFromDate);
+                    listRequest.setToDate(strToDate);
 
 
                 }
@@ -353,7 +353,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     public void loadData() {
         try {
             currentPage = 0;
-            noMorePayoutTransactions.setVisibility(View.GONE);
+//            noMorePayoutTransactions.setVisibility(View.GONE);
             BatchPayoutListData batchPayoutListData = new BatchPayoutListData();
             batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
         } catch (Exception ex) {
