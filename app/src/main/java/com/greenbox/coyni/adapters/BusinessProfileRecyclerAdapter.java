@@ -114,10 +114,19 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         }
 
         if (detailInfo.getAccountType().equals(Utils.SHARED)) {
-            if (detailInfo.getCompanyName() != null) {
-                childItem.setText(detailInfo.getCompanyName());
+//            if (detailInfo.getCompanyName() != null) {
+////                childItem.setText(detailInfo.getCompanyName());
+////            } else {
+////                childItem.setText("");
+////            }
+            if (detailInfo.getDbaName() != null) {
+                if (detailInfo.getDbaName().length() > 20) {
+                    childItem.setText(detailInfo.getDbaName().substring(0, 20));
+                } else {
+                    childItem.setText(detailInfo.getDbaName());
+                }
             } else {
-                childItem.setText("");
+                childItem.setText("[Dba Name]");
             }
             if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
@@ -125,12 +134,6 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 utility.addImage(detailInfo.getImage(), profileImage, R.drawable.ic_case);
             } else {
                 profileImage.setVisibility(View.VISIBLE);
-
-//                profileImageText.setVisibility(View.GONE);
-//                Glide.with(context)
-//                        .load(detailInfo.getImage())
-//                        .placeholder(R.drawable.ic_case)
-//                        .into(profileImage);
             }
         } else if (detailInfo.getAccountType().equals(Utils.PERSONAL)) {
             if (detailInfo.getFullName() != null) {
@@ -142,8 +145,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             if (detailInfo.getDbaName() != null) {
                 if (detailInfo.getDbaName().length() > 20) {
                     childItem.setText(detailInfo.getDbaName().substring(0, 20));
-                } else
+                } else {
                     childItem.setText(detailInfo.getDbaName());
+                }
             } else {
                 childItem.setText("[Dba Name]");
             }

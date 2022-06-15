@@ -42,12 +42,12 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
@@ -345,12 +345,14 @@
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_6sdp"
                 android:layout_marginBottom="@dimen/_2sdp"
-                app:cardCornerRadius="@dimen/_10sdp">
+                app:cardCornerRadius="@dimen/_10sdp"
+                android:visibility="visible">
 
                 <androidx.core.widget.NestedScrollView
                     android:id="@+id/nestedSV"
@@ -422,7 +424,6 @@
                                 android:overScrollMode="never"
                                 android:scrollbars="none" />
                         </LinearLayout>
-
                         <TextView
                             android:id="@+id/noTransactions"
                             android:layout_width="match_parent"
@@ -432,8 +433,8 @@
                             android:text="You have no transactions"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_10ssp"
-                            android:visibility="gone" />
-
+                            android:layout_margin="@dimen/_50sdp"
+                            android:visibility="visible" />
                         <ProgressBar
                             android:id="@+id/progressBarLoadMore"
                             android:layout_width="match_parent"
@@ -441,7 +442,22 @@
                             android:visibility="gone" />
                     </LinearLayout>
                 </androidx.core.widget.NestedScrollView>
+
             </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/merchantNoMoreTransactions"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginBottom="@dimen/_15sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="center"
+                android:text="You have no more transactions"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/_10ssp"
+                android:visibility="visible" />
+
         </LinearLayout>
     </ScrollView>
 

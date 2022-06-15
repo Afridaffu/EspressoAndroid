@@ -68,7 +68,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
     private MyApplication objMyApplication;
 
     private ReserveFilter reserveFilter = new ReserveFilter();
-    private int currentPage = 0, total = 0;
+    private int currentPage = 1, total = 0;
     private boolean isRolling = true;
     private Long mLastClickTime = 0L;
     private static String rolling = "Rolling", applyFilter = "ApplyFilter", resetFilter = "ResetFilter";
@@ -176,6 +176,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                 status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
                 status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
                 status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
+                status.add(Utils.ROLLING_LIST_STATUS.FAILED.getStatusType());
             } else {
                 if (reserveFilter.isOpen()) {
                     status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
@@ -188,6 +189,9 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                 }
                 if (reserveFilter.isCancelled()) {
                     status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
+                }
+                if (reserveFilter.isFailed()) {
+                    status.add(Utils.ROLLING_LIST_STATUS.FAILED.getStatusType());
                 }
             }
             if (reserveFilter.getUpdatedToDate() != null && reserveFilter.getUpdatedFromDate() != null) {
@@ -203,6 +207,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
             status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
             status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
             status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
+            status.add(Utils.ROLLING_LIST_STATUS.FAILED.getStatusType());
         }
         listRequest.setStatus(status);
         businessDashboardViewModel.getRollingListData(listRequest);
@@ -369,6 +374,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
         statusList.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatus());
         statusList.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatus());
         statusList.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatus());
+        statusList.add(Utils.ROLLING_LIST_STATUS.FAILED.getStatus());
         Collections.sort(rollingList, new Comparator<BatchPayoutListItems>() {
             @Override
             public int compare(BatchPayoutListItems o1, BatchPayoutListItems o2) {

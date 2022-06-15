@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -88,7 +89,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     public boolean isfullamount = false, ishalfamount = false, isrefundClickable = false;
     public static RefundTransactionActivity refundTransactionActivity;
     private TransactionData transactionData;
-    private String refundamount = "", etvalue = "", refundreason = "", gbxid = "", recipientAddress = "", strUserName = "", walletbalance = "", hamount = "";
+    private String refundamount = "", etvalue = "", refundreason = "", gbxid = "", recipientAddress = "", strUserName = "", walletbalance = "", hamount = "", saleorderID = "";
     private int wallettype;
     private boolean isRefundProcessCalled = false, insufficientTokenBalance = false, insufficientMerchantBalance = false;
     private double value, value1, Value, etValue, processingFee;
@@ -116,7 +117,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 @Override
                 public void onClick(View v) {
                     finish();
-                    if (Utils.isKeyboardVisible){
+                    if (Utils.isKeyboardVisible) {
                         Utils.hideKeypad(RefundTransactionActivity.this);
                     }
                 }
@@ -139,10 +140,17 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         fullamounttv = findViewById(R.id.FullamountTV);
         halfamounttv = findViewById(R.id.halfamountTV);
         refundTransactionActivity = this;
-        setFaceLock();
-        setTouchId();
-
+//        setFaceLock();
+//        setTouchId();
         objMyApplication = (MyApplication) getApplicationContext();
+        objMyApplication.initializeDBHandler(RefundTransactionActivity.this);
+        isFaceLock = objMyApplication.setFaceLock();
+        isTouchId = objMyApplication.setTouchId();
+        if (isFaceLock || isTouchId) {
+            objMyApplication.setLocalBiometric(true);
+        } else {
+            objMyApplication.setLocalBiometric(false);
+        }
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
         refundET.requestFocus();
@@ -206,7 +214,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         cKey.setKeyAction("Refund", RefundTransactionActivity.this);
         cKey.setScreenName("refundables");
 
-        remarksll.setOnClickListener(new View.OnClickListener() {
+        etremarksTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -533,19 +541,25 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
             total = cynValue + Double.parseDouble(strPFee);
             tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
-            recipaddreTV.setText(recipientAddress);
-            isRefundProcessCalled = false;
-            if (!etremarksTV.getText().toString().trim().equals("")) {
-                lyMessage.setVisibility(View.VISIBLE);
-                messageNoteTV.setText(etremarksTV.getText().toString());
-            } else {
-                lyMessage.setVisibility(View.INVISIBLE);
+            if (gbxid != null && !gbxid.equals("")) {
+                if (gbxid.length() > 10) {
+                    recipaddreTV.setText(gbxid.substring(0, 10) + "...");
+                } else {
+                    recipaddreTV.setText(gbxid);
+                }
             }
+            isRefundProcessCalled = false;
+//            if (!etremarksTV.getText().toString().trim().equals("")) {
+//                lyMessage.setVisibility(View.VISIBLE);
+//                messageNoteTV.setText(etremarksTV.getText().toString());
+//            } else {
+//                lyMessage.setVisibility(View.INVISIBLE);
+//            }
 
             copyRecipientLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utils.copyText(recipientAddress, RefundTransactionActivity.this);
+                    Utils.copyText(gbxid, RefundTransactionActivity.this);
                 }
             });
 
@@ -730,7 +744,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         try {
             etValue = Double.parseDouble(Utils.convertBigDecimal(refundET.getText().toString()));
 
-            if (etValue > 0 && etValue <= value && !etremarksTV.getText().toString().equals("")) {
+            if (etValue > 0 && etValue <= value
+//                    && !etremarksTV.getText().toString().equals("")
+            ) {
                 cKey.enableButton();
                 isrefundClickable = true;
             } else {
@@ -829,7 +845,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.length() == 0) {
                         addNoteTIL.setCounterEnabled(false);
-                        cKey.disableButton();
+//                        cKey.disableButton();
 //                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     } else {
                         addNoteTIL.setCounterEnabled(true);
@@ -901,7 +917,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 @Override
                 public void onDismiss(DialogInterface dialogInterface) {
                     if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(RefundTransactionActivity.this);
+                        Utils.hideKeypad(RefundTransactionActivity.this);
                     cvvDialog.dismiss();
                 }
             });
@@ -962,40 +978,40 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         strToken = dbHandler.getPermanentToken();
     }
 
-    private void setFaceLock() {
-        try {
-            isFaceLock = false;
-            String value = dbHandler.getFacePinLock();
-            if (value != null && value.equals("true")) {
-                isFaceLock = true;
-                objMyApplication.setLocalBiometric(true);
-            } else {
-                isFaceLock = false;
-                objMyApplication.setLocalBiometric(false);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void setTouchId() {
-        try {
-            isTouchId = false;
-            String value = dbHandler.getThumbPinLock();
-            if (value != null && value.equals("true")) {
-                isTouchId = true;
-                objMyApplication.setLocalBiometric(true);
-            } else {
-                isTouchId = false;
+//    private void setFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            String value = dbHandler.getFacePinLock();
+//            if (value != null && value.equals("true")) {
+//                isFaceLock = true;
+//                objMyApplication.setLocalBiometric(true);
+//            } else {
+//                isFaceLock = false;
 //                objMyApplication.setLocalBiometric(false);
-                if (!isFaceLock) {
-                    objMyApplication.setLocalBiometric(false);
-                }
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    private void setTouchId() {
+//        try {
+//            isTouchId = false;
+//            String value = dbHandler.getThumbPinLock();
+//            if (value != null && value.equals("true")) {
+//                isTouchId = true;
+//                objMyApplication.setLocalBiometric(true);
+//            } else {
+//                isTouchId = false;
+////                objMyApplication.setLocalBiometric(false);
+//                if (!isFaceLock) {
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 }

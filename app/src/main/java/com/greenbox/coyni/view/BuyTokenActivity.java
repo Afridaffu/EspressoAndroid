@@ -344,8 +344,16 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //            if (getIntent().getStringExtra("cvv") == null && getIntent().getStringExtra("notoken") != null && objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
 //                displayCVV(selectedCard);
 //            }
-            setFaceLock();
-            setTouchId();
+//            setFaceLock();
+//            setTouchId();
+            objMyApplication.initializeDBHandler(BuyTokenActivity.this);
+            isFaceLock = objMyApplication.setFaceLock();
+            isTouchId = objMyApplication.setTouchId();
+            if (isFaceLock || isTouchId) {
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                objMyApplication.setLocalBiometric(false);
+            }
             etAmount.addTextChangedListener(this);
 
             etAmount.setAccessibilityDelegate(new View.AccessibilityDelegate() {

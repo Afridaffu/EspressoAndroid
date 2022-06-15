@@ -152,14 +152,15 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                     if (strScreen.equals("addcard")) {
                         AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
                     }
+                    if (strScreen.equals("refundables")) {
+                        RefundTransactionActivity.refundTransactionActivity.clearAmountCards();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     if (strScreen.equals("addcard")) {
                         AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
                     }
-                    if (strScreen.equals("refundables")) {
-                        RefundTransactionActivity.refundTransactionActivity.clearAmountCards();
-                    }
+
                 }
             }
         });
