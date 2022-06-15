@@ -554,7 +554,7 @@ public class TransactionDetailsActivity extends BaseActivity {
             mCustomerServicePhone.setText(phone_number);
         }
 
-        String mVar = getString(R.string.description);
+        String mVar = getString(R.string.description)+" ";
         SpannableString spannableString = new SpannableString(mVar);
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
@@ -574,7 +574,7 @@ public class TransactionDetailsActivity extends BaseActivity {
             }
         };
 
-        spannableString.setSpan(clickableSpan, mVar.length() - 8, mVar.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(clickableSpan, mVar.length() - 9, mVar.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mDescription.setText(spannableString);
         mDescription.setMovementMethod(LinkMovementMethod.getInstance());
         mDescription.setHighlightColor(Color.TRANSPARENT);
