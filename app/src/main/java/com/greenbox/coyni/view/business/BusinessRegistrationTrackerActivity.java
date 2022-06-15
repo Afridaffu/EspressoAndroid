@@ -456,6 +456,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             LogUtils.d("btResp", "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
                             isAddBusinessCalled = false;
+                            isAddDbaCalled = false;
                             finish();
                         }
                     }
@@ -694,7 +695,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 if (!addDBA) {
                     dbaIncompleteLL.setClickable(false);
                 }
-                if(addDBA) {
+                if (addDBA) {
                     dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
                     businessTrackerCloseIV.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -704,7 +705,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             startActivity(intent);
                         }
                     });
-                }else{
+                } else {
                     dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
                 }
 
@@ -723,6 +724,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
         boIncompleteLL.setClickable(false);
         businessIdentityVerificationViewModel.getBeneficialOwners();
         LogUtils.d("BusinessTrackerResponse", "BusinessTrackerResponse" + new Gson().toJson(businessTrackerResponse));
+
+        addBankIncompleteLL.setClickable(true);
+        boIncompleteLL.setClickable(true);
+        aggrementsIncompleteLL.setClickable(true);
 
         if (businessTrackerResponse.getData().isCompanyInfo()) {
             dbaInProgressIV.setVisibility(GONE);
@@ -825,6 +830,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 bagIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_appl_inprogress));
             }
         }
+
+
     }
 
     @Override
