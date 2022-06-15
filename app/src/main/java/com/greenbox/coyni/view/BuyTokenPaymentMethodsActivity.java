@@ -915,7 +915,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                             if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                                 isBank = true;
                                 Log.e("setResolveUrl", "862 setResolveUrl");
-                                objMyApplication.setResolveUrl(true);
+                                //objMyApplication.setResolveUrl(true);
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, WebViewActivity.class);
                                 i.putExtra("signon", signOnData);
                                 startActivityForResult(i, 1);
