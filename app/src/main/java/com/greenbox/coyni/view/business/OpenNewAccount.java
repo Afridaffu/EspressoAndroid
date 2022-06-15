@@ -38,8 +38,7 @@ public class OpenNewAccount extends BaseActivity {
         closeback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(OpenNewAccount.this,BusinessOnboardingOpenNewAccount.class);
-                startActivity(i);
+                finish();
             }
         });
 
