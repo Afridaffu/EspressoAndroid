@@ -194,7 +194,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                             case "selectpay":
                                 objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                 objMyApplication.setSelectedCard(objData);
-                                if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
+//                                if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                                if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                     if (!objData.getRelink()) {
                                         if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                                             ((BuyTokenPaymentMethodsActivity) mContext).bindSelectedBank();
@@ -207,6 +208,12 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                         } else {
                                             ((SelectPaymentMethodActivity) mContext).expiry();
                                         }
+                                    }
+                                } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                                    if (!objData.getRelink()) {
+                                        ((SelectPaymentMethodActivity) mContext).bindSelectedBank();
+                                    } else {
+                                        ((SelectPaymentMethodActivity) mContext).deleteBank(objData);
                                     }
                                 } else if (!objData.getExpired()) {
                                     ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
@@ -240,6 +247,12 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                             ((BuyTokenActivity) mContext).bindSelectedBank(objData);
                                         } else {
                                             ((BuyTokenActivity) mContext).expiry();
+                                        }
+                                    } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                                        if (!objData.getRelink()) {
+                                            ((BuyTokenActivity) mContext).bindSelectedBank(objData);
+                                        } else {
+                                            ((BuyTokenActivity) mContext).deleteBank(objData);
                                         }
                                     } else {
                                         if (!objData.getExpired()) {
