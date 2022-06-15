@@ -748,7 +748,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
             });
 
-    public void tokenReq(String token) {
+    private void tokenReq(String token) {
         BatchNowPaymentRequest request = new BatchNowPaymentRequest();
         request.setRequestToken(token);
         request.setPayoutId(batchId);
