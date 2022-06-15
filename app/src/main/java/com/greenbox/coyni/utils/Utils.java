@@ -395,6 +395,9 @@ public class Utils {
     public static final String DeActivated = "DeActivated";
     public static final String teammemberpending = "Pending";
     public static final String resendInvitation = "Resend Invitation";
+    public static final String actionRequired = "Action Required";
+    public static final String underReview = "Under Review";
+    public static final String unVerified = "Unverified";
     public static final String canceled = "Canceled";
     public static final String expired = "Expired";
 
