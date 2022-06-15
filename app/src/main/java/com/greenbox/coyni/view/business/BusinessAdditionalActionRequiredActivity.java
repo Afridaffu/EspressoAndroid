@@ -508,8 +508,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                     if (fileUpload.containsKey(verificationKey1.trim().hashCode())) {
                                         fileUpload.replace(verificationKey1.trim().hashCode(), "true");
                                     }
-                                    proposalsMap.get(verificationKey1).setUserAccepted(true);
-                                    proposalsMap.get(verificationKey1).setUserMessage("Accepted");
+                                    if (proposalsMap.get(verificationKey1) != null) {
+                                        proposalsMap.get(verificationKey1).setUserAccepted(true);
+                                        proposalsMap.get(verificationKey1).setUserMessage("Accepted");
+                                    }
                                     enableOrDisableNext();
 
                                 }
@@ -569,19 +571,21 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     tvDeclinedMsg.setVisibility(View.VISIBLE);
                     tvDeclinedMsg.setText(getString(R.string.Decline) + " " + Utils.getCurrentDate() + " due to: ");
                     llDecline.setVisibility(View.GONE);
-
                     //String verificationKey = displayNameTV.getText().toString() + "" + tv.getText().toString();
                     String verificationKey = (String) tv.getTag();
-                    proposalsMap.get(verificationKey).setUserAccepted(false);
-                    proposalsMap.get(verificationKey).setUserMessage(comm);
-                    if (fileUpload.containsKey(verificationKey.trim().hashCode())) {
-                        fileUpload.replace(verificationKey.trim().hashCode(), "false");
+                    if (proposalsMap.get(verificationKey) != null) {
+                        proposalsMap.get(verificationKey).setUserAccepted(false);
+                        proposalsMap.get(verificationKey).setUserMessage(comm);
+                        if (fileUpload.containsKey(verificationKey.trim().hashCode())) {
+                            fileUpload.replace(verificationKey.trim().hashCode(), "false");
+                        }
                     }
 //                    if (Utils.isKeyboardVisible) {
 //                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
 //                    }
-                    enableOrDisableNext();
                 }
+                enableOrDisableNext();
+
             }
         });
         dialog.show();
@@ -614,10 +618,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         CardView cardAccept = reserveRule.findViewById(R.id.cardAccept);
         TextView tvcardDeclined = reserveRule.findViewById(R.id.cardDeclined);
 
-        if(actionRequiredResponse.getData().getNote()!=null){
+        if (actionRequiredResponse.getData().getNote() != null) {
             note.setText(actionRequiredResponse.getData().getNote());
-        }
-        else{
+        } else {
             note.setText(R.string.thank_you_for_your_interest_in_coyni_after_ncarefully_reviewing_the_coyni_team_made_ndecision_to_approve_your_application_with);
         }
         if (actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().contains("CYN")) {

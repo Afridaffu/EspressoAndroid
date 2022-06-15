@@ -93,16 +93,9 @@ public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
             successCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (objMyApplication.getAccountType() == 2) {
-                        Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, BusinessDashboardActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
-                    } else {
-                        Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, DashboardActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
-                    }
-
+                    Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, DashboardActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
                 }
             });
 

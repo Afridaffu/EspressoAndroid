@@ -392,9 +392,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                     LogUtils.d(TAG, "AddBusinessUserResponse " + identityImageResponse);
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
-                        startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra(Utils.ADD_BUSINESS, true)
-                                .putExtra(Utils.ADD_DBA, true));
+//                        startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
+//                                .putExtra(Utils.ADD_BUSINESS, true)
+//                                .putExtra(Utils.ADD_DBA, true));
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }

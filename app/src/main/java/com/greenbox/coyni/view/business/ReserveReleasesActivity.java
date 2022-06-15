@@ -171,12 +171,13 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
 
         if (reserveFilter != null && reserveFilter.isFilterApplied) {
             if (!reserveFilter.isOpen() && !reserveFilter.isOnHold()
-                    && !reserveFilter.isReleased() && !reserveFilter.isCancelled()) {
+                    && !reserveFilter.isReleased() && !reserveFilter.isCancelled() && !reserveFilter.isFailed()) {
                 status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
                 status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
                 status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
-                status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
                 status.add(Utils.ROLLING_LIST_STATUS.FAILED.getStatusType());
+                status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
+
             } else {
                 if (reserveFilter.isOpen()) {
                     status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
@@ -206,8 +207,9 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
             status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
             status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
             status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
-            status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
             status.add(Utils.ROLLING_LIST_STATUS.FAILED.getStatusType());
+            status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
+
         }
         listRequest.setStatus(status);
         businessDashboardViewModel.getRollingListData(listRequest);
@@ -414,7 +416,12 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                 if (action.equalsIgnoreCase(applyFilter)) {
                     MatomoUtility.getInstance().trackEvent("ReserveRelease Filters", "Applied");
                     reserveFilter = (ReserveFilter) value;
-                    ivFilterIcon.setImageResource(R.drawable.ic_filter_enabled);
+                    if (((ReserveFilter) value).isFilterApplied) {
+                        ivFilterIcon.setImageResource(R.drawable.ic_filter_enabled);
+                    }
+                    else {
+                        ivFilterIcon.setImageResource(R.drawable.ic_filtericon);
+                    }
                     getReserveRollingData();
 //                    dismissDialog();
                 } else if (action.equalsIgnoreCase(resetFilter)) {

@@ -79,12 +79,15 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
 
             if (objData.getStatus() != null && !objData.getStatus().equals("")) {
                 holder.txStatus.setText(objData.getStatus());
-                if (objData.getStatus().equalsIgnoreCase(Utils.teammemberpending)) {
+                if (objData.getStatus().equalsIgnoreCase(Utils.teammemberpending) || objData.getStatus().equalsIgnoreCase(Utils.actionRequired) || objData.getStatus().equalsIgnoreCase(Utils.unVerified)) {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.pending_color));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_pending_bg);
                 } else if (objData.getStatus().equalsIgnoreCase(Utils.active)) {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.active_green));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_active_bg);
+                } else if (objData.getStatus().equalsIgnoreCase(Utils.underReview)) {
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.inprogress_status));
+                    holder.txStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 } else if (objData.getStatus().equalsIgnoreCase(Utils.canceled)) {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.error_red));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_failed_bg);
@@ -101,8 +104,15 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
 //                    holder.txStatus.setBackgroundResource(R.drawable.txn_in_active_bg);
 //                }
             }
-
-
+            if (!objData.getStatus().equals(Utils.underReview) && !objData.getStatus().equals(Utils.actionRequired)
+                    && !objData.getStatus().equals(Utils.unVerified)) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        memberClickListener.click(view, pos);
+                    }
+                });
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -120,7 +130,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
         void click(View view, int position);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView txName, txRole, txStatus, txImageName;
 
@@ -131,12 +141,12 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
             txRole = itemView.findViewById(R.id.role);
             txStatus = itemView.findViewById(R.id.status);
             txImageName = itemView.findViewById(R.id.imageTextTV);
-            itemView.setOnClickListener(this);
+//            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-            memberClickListener.click(view, getAdapterPosition());
-        }
+//        @Override
+//        public void onClick(View view) {
+//            memberClickListener.click(view, getAdapterPosition());
+//        }
     }
 }

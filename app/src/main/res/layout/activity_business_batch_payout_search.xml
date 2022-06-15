@@ -214,11 +214,11 @@
                             android:id="@+id/payoutNoMoreTransactions"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
                             android:fontFamily="@font/opensans_regular"
                             android:gravity="center"
                             android:text="You have no more transactions"
                             android:textColor="@color/dark_grey"
+                            android:layout_marginBottom="@dimen/_6sdp"
                             android:textSize="@dimen/_10ssp"
                             android:visibility="visible" />
                     </LinearLayout>

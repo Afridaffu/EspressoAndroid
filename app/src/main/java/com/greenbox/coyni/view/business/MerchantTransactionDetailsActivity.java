@@ -321,12 +321,13 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
     private void saleOrderMerchant(TransactionDetails objData) {
         try {
             ImageView refundIV;
-            TextView salesheaderTV, salesAmount_TV, salesStatusTV, salesDatetimeTV, salesReferenceidTV, salesfeesTV, salesreserveTV, salesnetamountTV, salesMerchantBalanceTV, salessendernameTVTV, salessenderemailTV;
+            TextView salesheaderTV, salesAmount_TV, salesStatusTV, salesDatetimeTV, salesReferenceidTV, salesfeesTV,RefundTV, salesreserveTV, salesnetamountTV, salesMerchantBalanceTV, salessendernameTVTV, salessenderemailTV;
             LinearLayout saleorderclosell, SalesReferencecopyLL, salesreserveLL;
 
             SalesReferencecopyLL = findViewById(R.id.SalesReferenceCopyLL);
             saleorderclosell = findViewById(R.id.Saleorderclosell);
             refundIV = findViewById(R.id.RefundIV);
+            RefundTV = findViewById(R.id.RefundTV);
             salesheaderTV = findViewById(R.id.SalesheaderTV);
             salesAmount_TV = findViewById(R.id.SalesAmount_TV);
             salesStatusTV = findViewById(R.id.SalesStatusTV);
@@ -354,7 +355,14 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                         salesStatusTV.setBackgroundResource(R.drawable.txn_completed_bg);
                         break;
                     }
-                    case Utils.refundd:
+                    case Utils.refundd: {
+                        salesStatusTV.setTextColor(getResources().getColor(R.color.pending_status));
+                        salesStatusTV.setBackgroundResource(R.drawable.txn_pending_bg);
+                           refundIV.setEnabled(false);
+                           refundIV.setImageResource(R.drawable.refund_disable_icon);
+                        RefundTV.setTextColor(getColor(R.color.light_gray));
+                        break;
+                    }
                     case Utils.partialrefund:
                     case Utils.transPending: {
                         salesStatusTV.setTextColor(getResources().getColor(R.color.pending_status));
@@ -411,15 +419,16 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     finish();
                 }
             });
-            refundIV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MerchantTransactionDetailsActivity.this, RefundTransactionActivity.class);
-                    intent.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION, transactionData);
-                    intent.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, gbxID);
-                    startActivity(intent);
-                }
-            });
+                refundIV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MerchantTransactionDetailsActivity.this, RefundTransactionActivity.class);
+                        intent.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION, transactionData);
+                        intent.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, gbxID);
+                        startActivity(intent);
+                    }
+                });
+
             SalesReferencecopyLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -527,7 +536,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             referencecopyLL = findViewById(R.id.copuRefIDLL);
             payoutcopyll = findViewById(R.id.copyPayoutIDLL);
 
-            if (objData.getData().getTransactionType() != null ) {
+            if (objData.getData().getTransactionType() != null) {
                 mPayoutheadertv.setText(objData.getData().getTransactionType());
             }
             if (objData.getData().getStatus() != null) {
