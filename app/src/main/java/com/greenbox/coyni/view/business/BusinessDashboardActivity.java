@@ -305,6 +305,16 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     private void initialization() {
         try {
+
+            // fix for reloading dashboard on new DBA Creation
+            try {
+                BusinessRegistrationTrackerActivity.isAddBusinessCalled = false;
+                BusinessRegistrationTrackerActivity.isAddDbaCalled = false;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // fix for reloading dashboard on new DBA Creation
+
             mIvDashboard = findViewById(R.id.iv_dashboard_icon);
             mIvAccount = findViewById(R.id.iv_account_icon);
             mIvTransactions = findViewById(R.id.iv_transactions_icon);

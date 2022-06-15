@@ -1,6 +1,7 @@
 package com.greenbox.coyni.model.profile;
 
 import com.greenbox.coyni.model.Error;
+import com.greenbox.coyni.model.login.StateList;
 
 public class AddBusinessUserResponse {
 
@@ -41,7 +42,7 @@ public class AddBusinessUserResponse {
         this.error = error;
     }
 
-    public class TrackerData{
+    public class TrackerData {
 
 
         private boolean isProfileVerified;
@@ -54,6 +55,32 @@ public class AddBusinessUserResponse {
         private boolean paymentAdded;
         private boolean passwordExpired;
         private boolean coyniPin;
+        private boolean oldSessionExist;
+
+        private int accountType;
+        private int userId;
+        private int dbaOwnerId;
+        private String jwtToken;
+        private String accountStatus;
+        private int businessUserId;
+        private int updatedAgreementId;
+
+        private StateList stateList;
+        private String authorities;
+        private String dbaName;
+        private String requestToken;
+
+        private String email;
+        private String phoneNumber;
+        private int passwordFailedAttempts;
+        private String message;
+        private String kycStatus;
+        private boolean riskFlag;
+        private boolean biometricEnabled;
+        private String companyName;
+        private String firstName;
+        private String lastName;
+        private String agreementsSigned;
 
         public boolean isReserveEnabled() {
             return isReserveEnabled;
@@ -111,11 +138,11 @@ public class AddBusinessUserResponse {
             this.updatedAgreementId = updatedAgreementId;
         }
 
-        public String getStateList() {
+        public StateList getStateList() {
             return stateList;
         }
 
-        public void setStateList(String stateList) {
+        public void setStateList(StateList stateList) {
             this.stateList = stateList;
         }
 
@@ -143,32 +170,6 @@ public class AddBusinessUserResponse {
             this.requestToken = requestToken;
         }
 
-        private boolean oldSessionExist;
-
-        private int accountType;
-        private int userId;
-        private int dbaOwnerId;
-        private String jwtToken;
-        private String accountStatus;
-        private int businessUserId;
-        private int updatedAgreementId;
-
-        private String stateList;
-        private String authorities;
-        private String dbaName;
-        private String requestToken;
-
-        private String email;
-        private String phoneNumber;
-        private int passwordFailedAttempts;
-        private String message;
-        private String kycStatus;
-        private boolean riskFlag;
-        private boolean biometricEnabled;
-        private String companyName;
-        private String firstName;
-        private String lastName;
-        private String agreementsSigned;
 
         public String getEmail() {
             return email;
