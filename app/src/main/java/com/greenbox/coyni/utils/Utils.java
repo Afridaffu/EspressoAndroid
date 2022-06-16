@@ -76,6 +76,7 @@ import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
+import com.greenbox.coyni.model.tracker.TrackerItem;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.view.EnableAuthID;
@@ -2559,4 +2560,93 @@ public class Utils {
         }
         return captilizedString;
     }
+
+
+
+
+    //Dynamic Tracker - VT
+
+    public static List<TrackerItem> trackerList = new ArrayList<>();
+
+    public static void prepareDefaultTrackerData() {
+        trackerList = new ArrayList<>();
+        //Company Info
+        TrackerItem trackerItem1 = new TrackerItem();
+        trackerItem1.setFeatureIcon(R.drawable.ic_company_info_business);
+        trackerItem1.setFeatureName("Company Information");
+        trackerItem1.setFeatureSatus(BUSINESS_TRACKER_STATUS.INCOMPLETE.getStatus());
+        trackerList.add(trackerItem1);
+
+        //DBA Info
+        TrackerItem trackerItem2 = new TrackerItem();
+        trackerItem2.setFeatureIcon(R.drawable.ic_dba);
+        trackerItem2.setFeatureName("DBA Information");
+        trackerItem2.setFeatureSatus(BUSINESS_TRACKER_STATUS.INCOMPLETE.getStatus());
+        trackerList.add(trackerItem2);
+
+        //BO Info
+        TrackerItem trackerItem3 = new TrackerItem();
+        trackerItem3.setFeatureIcon(R.drawable.ic_bo);
+        trackerItem3.setFeatureName("Beneficial Owner");
+        trackerItem3.setFeatureSatus(BUSINESS_TRACKER_STATUS.INCOMPLETE.getStatus());
+        trackerList.add(trackerItem3);
+
+        //Add bank Info
+        TrackerItem trackerItem4 = new TrackerItem();
+        trackerItem4.setFeatureIcon(R.drawable.ic_add_payment_business);
+        trackerItem4.setFeatureName("Add Bank Account");
+        trackerItem4.setFeatureSatus(BUSINESS_TRACKER_STATUS.INCOMPLETE.getStatus());
+        trackerList.add(trackerItem4);
+
+        //Agreements Info
+        TrackerItem trackerItem5 = new TrackerItem();
+        trackerItem5.setFeatureIcon(R.drawable.ic_agreements);
+        trackerItem5.setFeatureName("Merchant's Agreement");
+        trackerItem5.setFeatureSatus(BUSINESS_TRACKER_STATUS.INCOMPLETE.getStatus());
+        trackerList.add(trackerItem5);
+    }
+
+    public static List<TrackerItem> getBusinessTrackerData() {
+        return trackerList;
+    }
+
+    public static void setBusinessTrackerData(List<TrackerItem> data) {
+        trackerList = data;
+    }
+
+    public static enum BUSINESS_TRACKER_FEATURE {
+        COMPANY_INFO(0),
+        DBA_INFO(1),
+        BENEFICIAL_OWNERS(2),
+        ADD_BANK(3),
+        AGREEMENTS(4);
+
+        private int feature;
+
+        BUSINESS_TRACKER_FEATURE(int feature) {
+            this.feature = feature;
+        }
+
+        public int getFeature() {
+            return feature;
+        }
+    }
+
+    public static enum BUSINESS_TRACKER_STATUS {
+        INCOMPLETE("Incomplete"),
+        IN_PROGRESS("In Progress"),
+        COMPLETED("Completed");
+
+        private String status;
+
+        BUSINESS_TRACKER_STATUS(String status) {
+            this.status = status;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+    }
+
+    //Dynamic Tracker - VT
 }
