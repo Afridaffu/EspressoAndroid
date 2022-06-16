@@ -89,9 +89,11 @@ public class ReserveReleasesRollingAdapter extends BaseRecyclerViewAdapter<Reser
             } else {
                 holder.dateTime.setText("Release: " + date.toLowerCase());
             }
+        } else if (objData.getStatus().equalsIgnoreCase(Utils.ROLLING_LIST_STATUS.OPEN.getStatus())){
+            holder.dateTime.setText("Release: - ");
         }
 
-        if (!objData.getStatus().equalsIgnoreCase(Utils.OPEN)) {
+        if (!objData.getStatus().equalsIgnoreCase(Utils.OPEN) || !objData.getStatus().equalsIgnoreCase(Utils.FAILED)) {
             holder.rlBase.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

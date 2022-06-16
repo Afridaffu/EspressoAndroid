@@ -133,64 +133,40 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
         openC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    filter.isFilterApplied = true;
-                }
-                else {
-                    filter.isFilterApplied = false;
-                }
+                filter.isFilterApplied = true;
                 filter.setOpen(isChecked);
             }
         });
         releasedC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    filter.isFilterApplied = true;
-                }
-                else {
-                    filter.isFilterApplied = false;
-                }
+                filter.isFilterApplied = true;
                 filter.setReleased(isChecked);
             }
         });
         onHoldC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    filter.isFilterApplied = true;
-                }
-                else {
-                    filter.isFilterApplied = false;
-                }
+                filter.isFilterApplied = true;
                 filter.setOnHold(isChecked);
             }
         });
         canceledC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    filter.isFilterApplied = true;
-                }
-                else {
-                    filter.isFilterApplied = false;
-                }
+                filter.isFilterApplied = true;
                 filter.setCancelled(isChecked);
             }
         });
+
         failedC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    filter.isFilterApplied = true;
-                }
-                else {
-                    filter.isFilterApplied = false;
-                }
+                filter.isFilterApplied = true;
                 filter.setFailed(isChecked);
             }
         });
+
 
         dateClick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,19 +200,17 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
             @Override
             public void onClick(View v) {
 
-                if (filter.isFilterApplied) {
+                if (!filter.isFilterApplied) {
+                    dismiss();
+                    dateRange.setText("");
+                    //Toast.makeText(context, "plese select fromdate and todate", Toast.LENGTH_SHORT).show();
+                } else {
                     if (getOnDialogClickListener() != null) {
                         getOnDialogClickListener().onDialogClicked("ApplyFilter", filter);
                         dismiss();
                     }
-                    //Toast.makeText(context, "plese select fromdate and todate", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (getOnDialogClickListener() != null) {
-                        getOnDialogClickListener().onDialogClicked("ApplyFilter", new ReserveFilter());
-                        dismiss();
-                    }
-                    dateRange.setText("");
                 }
+                dateRange.setText("");
             }
         });
 
@@ -247,8 +221,8 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                     //LogUtils.d("Dialogg", "resetFilter" + transactionStatus.size());
                     openC.setChecked(false);
                     onHoldC.setChecked(false);
-                    canceledC.setChecked(false);
                     releasedC.setChecked(false);
+                    canceledC.setChecked(false);
                     failedC.setChecked(false);
                     strSelectedDate = "";
                     filter.isFilterApplied = false;
