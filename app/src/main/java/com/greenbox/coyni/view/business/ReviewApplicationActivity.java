@@ -821,13 +821,13 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                         objMyApplication.setSubmitResponseModel(submissionViewModel);
                         LogUtils.d(TAG, "applicationSubmissionViewModel" + addDBA + ",,,,," + addBusiness);
-                        if (addBusiness) {
-                            loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
-                        } else {
+//                        if (addBusiness) {
+//                            loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
+//                        } else {
                             Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
-                        }
+//                        }
 
                     } else {
                         Utils.displayAlert(submissionViewModel.getError().getErrorDescription(), ReviewApplicationActivity.this, "", submissionViewModel.getError().getFieldErrors().get(0));

@@ -725,6 +725,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
         businessIdentityVerificationViewModel.getBeneficialOwners();
         LogUtils.d("BusinessTrackerResponse", "BusinessTrackerResponse" + new Gson().toJson(businessTrackerResponse));
 
+        dbaIncompleteLL.setClickable(true);
         addBankIncompleteLL.setClickable(true);
         boIncompleteLL.setClickable(true);
         aggrementsIncompleteLL.setClickable(true);
