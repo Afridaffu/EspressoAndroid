@@ -191,8 +191,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             refundOTIFeetv = findViewById(R.id.refundOTIFeeTV);
             refundOTINetamounttv = findViewById(R.id.refundOTINetamountTV);
             refundOTIrefrencetv = findViewById(R.id.refundOTIrefrenceTV);
-            if (objData.getData().getTransactionType() != null) {
-                refundheadertv.setText(objData.getData().getTransactionType());
+
+            if (objData.getData().getTransactionType() != null && objData.getData().getTransactionSubtype() != null) {
+                refundheadertv.setText(objData.getData().getTransactionType() + " - " + objData.getData().getTransactionSubtype());
             }
             if (objData.getData().getStatus() != null) {
                 refundStatustv.setText(objData.getData().getStatus());
@@ -279,7 +280,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                 refundOTIgrossamounttv.setText(Utils.convertTwoDecimal(objData.getData().getSaleOrderGrossAmount().replace("CYN", "").trim()));
             }
             if (objData.getData().getFees() != null) {
-                refundOTIFeetv.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
+                refundOTIFeetv.setText(Utils.convertTwoDecimal(objData.getData().getSaleOrderFees().replace("CYN", "").trim()));
             }
             if (objData.getData().getSaleOrderNetAmount() != null) {
                 refundOTINetamounttv.setText(Utils.convertTwoDecimal(objData.getData().getSaleOrderNetAmount().replace("CYN", "").trim()));

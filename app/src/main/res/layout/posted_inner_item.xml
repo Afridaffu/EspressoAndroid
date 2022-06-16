@@ -69,7 +69,6 @@
             android:layout_marginTop="@dimen/_8sdp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="center"
-            android:textColor="#FFA701"
             android:textSize="@dimen/_7ssp" />
 
         <TextView
