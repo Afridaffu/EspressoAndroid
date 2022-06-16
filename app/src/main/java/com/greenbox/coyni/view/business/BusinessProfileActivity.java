@@ -471,6 +471,9 @@ public class BusinessProfileActivity extends BaseActivity {
                     if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.active_green));
                         statusDot.setCardBackgroundColor(getResources().getColor(R.color.active_green));
+                    } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+                        account_status.setTextColor(getResources().getColor(R.color.xdark_gray));
+                        statusDot.setCardBackgroundColor(getResources().getColor(R.color.light_gray));
                     } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.orange));
                         statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
@@ -686,7 +689,10 @@ public class BusinessProfileActivity extends BaseActivity {
                                 if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.active_green));
                                     statusDot.setCardBackgroundColor(getResources().getColor(R.color.active_green));
-                                } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                                } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+                                    account_status.setTextColor(getResources().getColor(R.color.xdark_gray));
+                                    statusDot.setCardBackgroundColor(getResources().getColor(R.color.light_gray));
+                                }else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.orange));
                                     statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
                                 } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {

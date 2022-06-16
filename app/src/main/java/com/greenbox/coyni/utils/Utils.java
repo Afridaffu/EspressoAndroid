@@ -307,6 +307,7 @@ public class Utils {
     public static final int failed = 3;
     public static final int paid = 5;
     public static final int payoutInProgress = 4;
+    public static final int payoutFailed = 9;
 
     public static final int reserveRelease = 16;
     public static final int batchNow = 19;
