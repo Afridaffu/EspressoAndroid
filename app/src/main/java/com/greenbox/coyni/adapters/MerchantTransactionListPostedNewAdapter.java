@@ -217,20 +217,18 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
                 holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.error_red));
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                 break;
+            }
         }
-    }
 
-        holder.ll_merchant_transaction_item.setOnClickListener(new View.OnClickListener()
-
-    {
-        @Override
-        public void onClick (View view){
-        if (listener != null) {
-            listener.onItemClick(0, objData);
-        }
+        holder.ll_merchant_transaction_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.onItemClick(0, objData);
+                }
+            }
+        });
     }
-    });
-}
 
     private String convertTwoDecimal(String strAmount) {
         String strValue = "", strAmt = "";
