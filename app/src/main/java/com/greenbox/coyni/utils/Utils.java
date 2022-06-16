@@ -357,6 +357,7 @@ public class Utils {
     public static final String CLOSED = "closed";
     public static final String RELEASED = "released";
     public static final String ONHOLD = "on hold";
+    public static final String FAILED = "Failed";
     public static final String CANCELED = "canceled";
     public static String processType = "M";
 

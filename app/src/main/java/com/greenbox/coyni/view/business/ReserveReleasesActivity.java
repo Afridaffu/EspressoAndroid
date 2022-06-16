@@ -416,12 +416,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                 if (action.equalsIgnoreCase(applyFilter)) {
                     MatomoUtility.getInstance().trackEvent("ReserveRelease Filters", "Applied");
                     reserveFilter = (ReserveFilter) value;
-                    if (((ReserveFilter) value).isFilterApplied) {
-                        ivFilterIcon.setImageResource(R.drawable.ic_filter_enabled);
-                    }
-                    else {
-                        ivFilterIcon.setImageResource(R.drawable.ic_filtericon);
-                    }
+                    ivFilterIcon.setImageResource(R.drawable.ic_filter_enabled);
                     getReserveRollingData();
 //                    dismissDialog();
                 } else if (action.equalsIgnoreCase(resetFilter)) {
@@ -435,6 +430,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
         showReserveReleaseDialog.show();
         showReserveReleaseDialog.setCanceledOnTouchOutside(true);
     }
+
 
     private void manualAPI(String search) {
         SearchKeyRequest request = new SearchKeyRequest();

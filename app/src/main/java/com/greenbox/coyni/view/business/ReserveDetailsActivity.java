@@ -99,7 +99,7 @@ public class ReserveDetailsActivity extends BaseActivity {
         tvDBAName = findViewById(R.id.tvDBAName);
 
         noTransactions = findViewById(R.id.noTransactionsTV);
-        noTransactions = findViewById(R.id.noMoreTransactionsTV);
+        noMoreTransactions = findViewById(R.id.noMoreTransactionsTV);
 
         details = findViewById(R.id.detailsCV);
         onHoldCv = findViewById(R.id.onHoldCV);
@@ -213,6 +213,7 @@ public class ReserveDetailsActivity extends BaseActivity {
                                         recyclerViewRv.setItemAnimator(new DefaultItemAnimator());
                                         recyclerViewRv.setAdapter(reserveDetailsListAdapter);
                                         noMoreTransactions.setVisibility(View.VISIBLE);
+                                        noTransactions.setVisibility(View.GONE);
                                         if (currentPage > 0) {
                                             int myPos = globalPosted.size() - transactionList.getData().getItems().getPostedTransactions().size();
                                             recyclerViewRv.scrollToPosition(myPos);
@@ -221,6 +222,7 @@ public class ReserveDetailsActivity extends BaseActivity {
                                         }
                                     } else {
                                         noMoreTransactions.setVisibility(View.GONE);
+                                        noTransactions.setVisibility(View.VISIBLE);
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
