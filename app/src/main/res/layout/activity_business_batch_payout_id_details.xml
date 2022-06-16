@@ -144,7 +144,6 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center"
-                            android:background="@drawable/txn_completed_bg"
                             android:paddingTop="@dimen/_3sdp"
                             android:paddingBottom="@dimen/_3sdp"
                             android:text=""

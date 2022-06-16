@@ -255,10 +255,17 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                 case "in progress":
                     payoutStatusTV.setTextColor(getColor(R.color.inprogress_status));
                     payoutStatusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    payoutStatusTV.setTextColor(getColor(R.color.inprogress_status));
                     break;
                 case "paid":
                     payoutStatusTV.setTextColor(getColor(R.color.completed_status));
                     payoutStatusTV.setBackgroundResource(R.drawable.txn_completed_bg);
+                    payoutStatusTV.setTextColor(getColor(R.color.active_green));
+                    break;
+                case "failed":
+                    payoutStatusTV.setTextColor(getColor(R.color.failed_status));
+                    payoutStatusTV.setBackgroundResource(R.drawable.txn_failed_bg);
+                    payoutStatusTV.setTextColor(getColor(R.color.error_red));
                     break;
             }
         }

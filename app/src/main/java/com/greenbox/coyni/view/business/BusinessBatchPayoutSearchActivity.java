@@ -330,8 +330,9 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         ArrayList<Integer> status = new ArrayList<>();
         status.add(Utils.paid);
         status.add(Utils.payoutInProgress);
+        status.add(Utils.payoutFailed);
         //status.add(4);
-//        listRequest.setStatus(status);
+        listRequest.setStatus(status);
         if (batchFilter != null && batchFilter.isFilterApplied) {
             if (batchFilter.getUpdatedToDate() != null && batchFilter.getUpdatedFromDate() != null) {
                 if (!batchFilter.getUpdatedToDate().isEmpty() && !batchFilter.getUpdatedFromDate().isEmpty()) {

@@ -22,7 +22,7 @@
                     android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="Sent to business token account"
+                    android:text=""
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
 
@@ -34,7 +34,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/opensans_bold"
                     android:gravity="end"
-                    android:text="6,435.21"
+                    android:text=""
                     android:textColor="@color/active_green"
                     android:textSize="@dimen/_12ssp" />
             </LinearLayout>
@@ -67,7 +67,7 @@
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="end"
                     android:layout_gravity="center_horizontal"
-                    android:text="06/23/2021 @ 2:20am"
+                    android:text=""
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/_10ssp" />
             </LinearLayout>
