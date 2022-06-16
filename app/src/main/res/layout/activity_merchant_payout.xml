@@ -341,6 +341,7 @@
                             android:id="@+id/mPItotalamountTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_3sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />

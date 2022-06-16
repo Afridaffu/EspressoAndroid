@@ -519,7 +519,7 @@ public class EditTeamMember extends BaseActivity implements OnKeyboardVisibility
                 try {
                     if (teamInfoAddModel != null) {
                         if (teamInfoAddModel.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                            Utils.showCustomToast(EditTeamMember.this, getResources().getString(R.string.team_member_update_successful), R.drawable.ic_custom_tick, "Update");
+                            Utils.showCustomToast(EditTeamMember.this, getResources().getString(R.string.invitation_sent_with_exclamatory), R.drawable.ic_custom_tick, "Update");
                             new Handler().postDelayed(() -> {
                                 try {
                                     finish();
@@ -527,7 +527,7 @@ public class EditTeamMember extends BaseActivity implements OnKeyboardVisibility
                                     e.printStackTrace();
                                 }
 
-                            }, 2000);
+                            }, 3500);
                         } else {
                             Utils.displayAlert(teamInfoAddModel.getError().getErrorDescription(), EditTeamMember.this, "",
                                     teamInfoAddModel.getError().getFieldErrors().get(0));

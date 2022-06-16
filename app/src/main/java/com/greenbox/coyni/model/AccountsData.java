@@ -32,13 +32,29 @@ public class AccountsData {
         return groupData;
     }
 
-    public void removeSharedAccounts() {
-        if(groupData == null || groupData.size() == 0) {
+    public void removeDeclinedPersonalAccount() {
+        if (groupData == null || groupData.size() == 0) {
             return;
         }
-        for(int count = 0; count < groupData.size(); count++) {
+        for (int count = 0; count < groupData.size(); count++) {
             BaseProfile profile = groupData.get(count);
-            if(profile.getAccountType().equals(Utils.SHARED)) {
+            if (profile.getAccountType().equals(Utils.PERSONAL)) {
+                if (profile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())
+                        || profile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                    groupData.remove(count);
+                    count--;
+                }
+            }
+        }
+    }
+
+    public void removeSharedAccounts() {
+        if (groupData == null || groupData.size() == 0) {
+            return;
+        }
+        for (int count = 0; count < groupData.size(); count++) {
+            BaseProfile profile = groupData.get(count);
+            if (profile.getAccountType().equals(Utils.SHARED)) {
                 groupData.remove(count);
                 count--;
             }

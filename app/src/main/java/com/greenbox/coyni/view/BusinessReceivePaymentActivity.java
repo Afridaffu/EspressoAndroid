@@ -120,7 +120,12 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                     } else {
                         setAmount.setTextSize(Utils.pixelsToSp(BusinessReceivePaymentActivity.this, fontSize));
                     }
-                    ctKey.enableButton();
+//                    ctKey.enableButton();
+
+                    if (Double.parseDouble(editable.toString()) > 0.005)
+                        ctKey.enableButton();
+                    else
+                        ctKey.disableButton();
                 } else if (editable.toString().equals(".")) {
                     setAmount.setText("");
                     ctKey.disableButton();
@@ -473,7 +478,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
                 utility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
-            }else if (!objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+            } else if (!objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                 saveProfileIV.setVisibility(View.VISIBLE);
                 saveProfileTitle.setVisibility(View.GONE);
                 saveProfileIV.setImageResource(R.drawable.acct_profile);
@@ -490,7 +495,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
 //                else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
 //                    imageText = imageText + objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
 //                }
-                
+
                 saveProfileTitle.setText(imageText);
             }
 

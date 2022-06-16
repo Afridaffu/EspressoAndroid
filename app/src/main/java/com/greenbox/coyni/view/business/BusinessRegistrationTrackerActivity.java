@@ -208,10 +208,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             aggrementsInProgressIV = findViewById(R.id.aggrementsInProgressIV);
             mReviewCv = findViewById(R.id.reviewCv);
 
-//            if (businessTrackerResponse != null) {
-//                reloadTrackerDashboard(businessTrackerResponse);
-//            }
-
             if (addDBA) {
                 caIncompleteLL.setVisibility(GONE);
                 dbaStartTV.setVisibility(VISIBLE);
@@ -250,19 +246,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 }
             });
 
-//            caCompleteLL.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                        return;
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, CompanyInformationActivity.class);
-//                    startActivity(intent);
-//
-//                }
-//            });
-
             dbaIncompleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -296,26 +279,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     }
                 }
             });
-
-//            dbaCompleteLL.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                        return;
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
-//                        if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() == 0) {
-//                            dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
-//                        } else if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() != 0) {
-//                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
-//                            intent.putExtra("FROM", "TRACKER");
-//                            intent.putExtra("TYPE", "EXIST");
-//                            startActivity(intent);
-//                        }
-//                    }
-//                }
-//            });
 
             boIncompleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -381,20 +344,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     }
                 }
             });
-
-
-//            boCompleteLL.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                        return;
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    boAPICallFrom = "INCOMPLETE";
-//                    businessIdentityVerificationViewModel.getBeneficialOwners();
-//
-//                }
-//            });
 
             aggrementsIncompleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -700,9 +649,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     businessTrackerCloseIV.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, BusinessAddNewBusinessAccountActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            finish();
                         }
                     });
                 } else {

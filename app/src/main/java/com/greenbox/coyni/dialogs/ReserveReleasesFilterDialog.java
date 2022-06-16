@@ -158,6 +158,7 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                 filter.setCancelled(isChecked);
             }
         });
+
         failedC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -165,6 +166,7 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                 filter.setFailed(isChecked);
             }
         });
+
 
         dateClick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,6 +210,7 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                         dismiss();
                     }
                 }
+                dateRange.setText("");
             }
         });
 
@@ -218,8 +221,8 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                     //LogUtils.d("Dialogg", "resetFilter" + transactionStatus.size());
                     openC.setChecked(false);
                     onHoldC.setChecked(false);
-                    canceledC.setChecked(false);
                     releasedC.setChecked(false);
+                    canceledC.setChecked(false);
                     failedC.setChecked(false);
                     strSelectedDate = "";
                     filter.isFilterApplied = false;

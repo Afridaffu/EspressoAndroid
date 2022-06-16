@@ -196,6 +196,7 @@ public class Utils {
     public static final String transOpen = "open";
     public static final String transFailed = "failed";
     public static final String partialrefund = "partial refund";
+    public static final String partial_refund = "partialrefund";
     public static final String refundd = "refunded";
     public static final String transCancelled = "cancelled";
     public static final String transinprogress = "in progress";
@@ -307,6 +308,7 @@ public class Utils {
     public static final int failed = 3;
     public static final int paid = 5;
     public static final int payoutInProgress = 4;
+    public static final int payoutFailed = 9;
 
     public static final int reserveRelease = 16;
     public static final int batchNow = 19;
@@ -358,6 +360,7 @@ public class Utils {
     public static final String CLOSED = "closed";
     public static final String RELEASED = "released";
     public static final String ONHOLD = "on hold";
+    public static final String FAILED = "Failed";
     public static final String CANCELED = "canceled";
     public static String processType = "M";
 
@@ -396,6 +399,9 @@ public class Utils {
     public static final String DeActivated = "DeActivated";
     public static final String teammemberpending = "Pending";
     public static final String resendInvitation = "Resend Invitation";
+    public static final String actionRequired = "Action Required";
+    public static final String underReview = "Under Review";
+    public static final String unVerified = "Unverified";
     public static final String canceled = "Canceled";
     public static final String expired = "Expired";
 

@@ -164,7 +164,9 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
 //                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
 //                        onBackPressed();
 //                    } else
-                    if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                    if (strScreen.equals("withdraw")) {
+                        onBackPressed();
+                    } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                         if (!objMyApplication.getCardSave()) {
                             isDeCredit = true;
                             ControlMethod("addpayment");

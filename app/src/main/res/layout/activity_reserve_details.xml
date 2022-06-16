@@ -544,18 +544,17 @@
                             </androidx.recyclerview.widget.RecyclerView>
 
                         </LinearLayout>
+                        <TextView
+                            android:id="@+id/noTransactionsTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/opensans_regular"
+                            android:gravity="center"
+                            android:text="@string/you_have_no_transactions"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_10ssp"
+                            android:visibility="gone" />
                     </androidx.cardview.widget.CardView>
-                <TextView
-                    android:id="@+id/noTransactionsTV"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:gravity="center"
-                    android:text="@string/you_have_no_transactions"
-                    android:textColor="@color/dark_grey"
-                    android:textSize="@dimen/_10ssp"
-                    android:visibility="gone" />
                 <TextView
                     android:id="@+id/noMoreTransactionsTV"
                     android:layout_width="match_parent"

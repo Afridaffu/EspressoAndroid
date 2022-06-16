@@ -121,6 +121,7 @@ public class TransactionData implements Serializable {
     private String reserveRule;
     private String reservedOn;
     private String reserveId;
+    private String saleOrderFees;
 
 
     public String getWithdrawId() {
@@ -702,5 +703,12 @@ public class TransactionData implements Serializable {
         this.saleOrderReserve = saleOrderReserve;
     }
 
+    public String getSaleOrderFees() {
+        return saleOrderFees;
+    }
+
+    public void setSaleOrderFees(String saleOrderFees) {
+        this.saleOrderFees = saleOrderFees;
+    }
 
 }

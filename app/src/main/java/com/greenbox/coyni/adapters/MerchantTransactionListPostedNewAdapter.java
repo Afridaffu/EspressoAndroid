@@ -166,22 +166,22 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
 
         if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.SaleOrder)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
-            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN", " "));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
-        }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.Refund)){
+        } else if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.Refund)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " to " + objData.getReceiveName());
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN", " "));
             holder.amount.setTextColor(Color.parseColor("#000000"));
-        }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.MerchantPayout)){
+        } else if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.MerchantPayout)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " to " + objData.getReceiveName());
-            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN", " "));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
-        }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.MonthlyServiceFee)){
+        } else if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.MonthlyServiceFee)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn());
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN", " "));
             holder.amount.setTextColor(Color.parseColor("#000000"));
         }
-        if (objData.getCreatedAt() != null && !objData.getCreatedAt().equals("")){
+        if (objData.getCreatedAt() != null && !objData.getCreatedAt().equals("")) {
             String date = objData.getCreatedAt();
             if (date.contains(".")) {
                 date = date.substring(0, date.lastIndexOf("."));
@@ -201,9 +201,10 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 break;
             case Utils.refundd:
+            case Utils.partial_refund:
             case Utils.partialrefund:
             case Utils.transPending: {
-                holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.orange));
+                holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.pending_status));
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);
                 break;
             }

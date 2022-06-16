@@ -539,9 +539,9 @@ public class BusinessDashboardFragment extends BaseFragment {
 
                             mSbTodayVolume.setEnabled(true);
                             if (merchantActivityResp.getData().getEarnings() != null && merchantActivityResp.getData().getEarnings().size() > 0)
-                                mSbTodayVolume.setProgressWithText(merchantActivityResp.getData().getEarnings().get(merchantActivityResp.getData().getEarnings().size()-1).getKey(), userData.getEarningList());
+                                mSbTodayVolume.setProgressWithText(merchantActivityResp.getData().getEarnings().get(merchantActivityResp.getData().getEarnings().size() - 1).getKey(), userData.getEarningList());
                             else
-                                mSbTodayVolume.setProgressWithText(12, userData.getEarningList());
+                                mSbTodayVolume.setProgressWithText(0, userData.getEarningList());
                         }
 
                     }
@@ -748,7 +748,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
             });
 
-    public void tokenReq(String token) {
+    private void tokenReq(String token) {
         BatchNowPaymentRequest request = new BatchNowPaymentRequest();
         request.setRequestToken(token);
         request.setPayoutId(batchId);
@@ -875,8 +875,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
             break;
             case customDate: {
-                mTicketsLayout.setVisibility(View.GONE);
-                mSbTodayVolume.setVisibility(View.GONE);
                 saleOrdersText.setVisibility(View.GONE);
                 DateRangePickerDialog dateRangePickerDialog = new DateRangePickerDialog(getActivity());
                 dateRangePickerDialog.show();
@@ -889,13 +887,14 @@ public class BusinessDashboardFragment extends BaseFragment {
 
                             rangeDates = (RangeDates) value;
                             if (rangeDates != null) {
+                                mTicketsLayout.setVisibility(View.GONE);
+                                mSbTodayVolume.setVisibility(View.GONE);
                                 String fromDate = rangeDates.getUpdatedFromDate() + midTime;
                                 String toDate = rangeDates.getUpdatedToDate().trim() + midTime;
                                 strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + startTime;
                                 strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + endTime;
                                 mTvProcessingVolume.setText(R.string.custom_date_range);
                                 businessActivityAPICall(strFromDate, strToDate);
-//                                Toast.makeText(getActivity(), strFromDate + strToDate, Toast.LENGTH_LONG).show();
                             }
                         }
                     }
@@ -1000,7 +999,9 @@ public class BusinessDashboardFragment extends BaseFragment {
             while (j < listItems.size() && paidItems < 5) {
                 batchView.setVisibility(View.GONE);
                 View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
-                if (listItems.get(j).getStatus().equalsIgnoreCase(Utils.PAID)) {
+                if (listItems.get(j).getStatus().equalsIgnoreCase(Utils.PAID) ||
+                        listItems.get(j).getStatus().equalsIgnoreCase(Utils.INPROGRESS) ||
+                        listItems.get(j).getStatus().equalsIgnoreCase(Utils.MERCHANT_TRANSACTION_FAILED)) {
                     TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
                     TextView payoutManualTV = xmlView.findViewById(R.id.payoutManualTV);
                     String listDate = listItems.get(j).getUpdatedAt();
@@ -1083,7 +1084,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             Collections.sort(items, Collections.reverseOrder());
             if (items.size() > 0) {
                 ReserveListItems latest = items.get(0);
-                String amount = latest.getTotalAmount();
+                String amount = latest.getReserveAmount();
                 lastReleaseAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
                 String datee = latest.getScheduledRelease();
                 if (datee != null && !datee.equals("")) {
@@ -1119,7 +1120,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                         e.printStackTrace();
                     }
                     TextView totalAmount = xmlView.findViewById(R.id.reserveListAmountTV);
-                    totalAmount.setText(Utils.convertBigDecimalUSDC(items.get(j).getTotalAmount()));
+                    totalAmount.setText(Utils.convertBigDecimalUSDC(items.get(j).getReserveAmount()));
                     payoutsList.addView(xmlView);
                 }
             }

@@ -156,7 +156,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                     noMorePayoutTransactions.setVisibility(View.VISIBLE);
                     batchFilter = new ReserveFilter();
                     searchET.setText("");
-                    noMorePayoutTransactions.setVisibility(View.VISIBLE);
+//                    noMorePayoutTransactions.setVisibility(View.VISIBLE);
                     filterIconIV.setImageResource(R.drawable.ic_filtericon);
                     getBatchListData();
                     dismissDialog();
@@ -236,10 +236,11 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                                 if (payoutList.size() > 0) {
                                     recyclerViewPayouts.setAdapter(batchPayoutListAdapter);
                                     recyclerViewPayouts.setVisibility(View.VISIBLE);
-//                                    noMorePayoutTransactions.setVisibility(View.GONE);
+                                    noMorePayoutTransactions.setVisibility(View.VISIBLE);
                                     cynTV.setVisibility(View.VISIBLE);
                                 } else {
                                     recyclerViewPayouts.setVisibility(View.GONE);
+                                    noMorePayoutTransactions.setVisibility(View.GONE);
                                     noPayoutTransactions.setVisibility(View.VISIBLE);
                                     cynTV.setVisibility(View.GONE);
                                 }
@@ -329,6 +330,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         ArrayList<Integer> status = new ArrayList<>();
         status.add(Utils.paid);
         status.add(Utils.payoutInProgress);
+        status.add(Utils.payoutFailed);
         //status.add(4);
         listRequest.setStatus(status);
         if (batchFilter != null && batchFilter.isFilterApplied) {

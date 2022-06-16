@@ -301,7 +301,6 @@
             android:name=".view.TransactionDetailsActivity"
             android:configChanges="uiMode"
             android:exported="false"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -696,7 +695,8 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
             android:name=".view.business.TransactionDetailsFailedActivity"
             android:configChanges="uiMode"

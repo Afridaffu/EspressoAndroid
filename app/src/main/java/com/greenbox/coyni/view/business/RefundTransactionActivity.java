@@ -60,9 +60,12 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BuyTokenActivity;
+import com.greenbox.coyni.view.ForgotPasswordActivity;
+import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PayRequestActivity;
 import com.greenbox.coyni.view.ValidatePinActivity;
+import com.greenbox.coyni.view.WithdrawTokenActivity;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
@@ -72,7 +75,8 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     private TextView etremarksTV, fullamounttv, halfamounttv;
     public EditText refundET, addNoteET;
     private TextView refundcurrencyTV, tvcynTV;
-    private LinearLayout remarksll;
+    private LinearLayout remarksll,lyPRClose
+            ;
     private DatabaseHandler dbHandler;
     private CardView fullamount, halfamount;
     private CustomKeyboard cKey;
@@ -113,7 +117,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             dbHandler = DatabaseHandler.getInstance(RefundTransactionActivity.this);
             initialization();
             initobservers();
-            refundBackIV.setOnClickListener(new View.OnClickListener() {
+            lyPRClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();
@@ -127,10 +131,30 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         }
     }
 
+    @Override
+    protected void onResume() {
+        try {
+            if (cvvDialog != null && addNoteET.hasFocus()) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        addNoteET.requestFocus();
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(RefundTransactionActivity.this);
+                    }
+                }, 100);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        super.onResume();
+    }
+
     private void initialization() {
         setKeyboardVisibilityListener(this);
         etremarksTV = findViewById(R.id.eTremarks);
         refundBackIV = findViewById(R.id.RefundbackIV);
+        lyPRClose = findViewById(R.id.lyPRClose);
         refundET = findViewById(R.id.refundAmountET);
         refundcurrencyTV = findViewById(R.id.refundCurrencyTV);
         tvcynTV = findViewById(R.id.tvCYN);
@@ -176,7 +200,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         refundET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-
+                Utils.hideKeypad(RefundTransactionActivity.this);
                 if (!hasFocus) {
                     if (!refundET.getText().toString().equals("")) {
                         InputFilter[] FilterArray = new InputFilter[1];
@@ -221,8 +245,13 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                displayComments();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        displayComments();
+                    }
 
+                }, 700);
             }
         });
 
@@ -549,12 +578,12 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 }
             }
             isRefundProcessCalled = false;
-//            if (!etremarksTV.getText().toString().trim().equals("")) {
-//                lyMessage.setVisibility(View.VISIBLE);
-//                messageNoteTV.setText(etremarksTV.getText().toString());
-//            } else {
+            if (!etremarksTV.getText().toString().trim().equals("")) {
+                lyMessage.setVisibility(View.VISIBLE);
+                messageNoteTV.setText("\"" + etremarksTV.getText().toString() + "\"");
+            } else {
 //                lyMessage.setVisibility(View.INVISIBLE);
-//            }
+            }
 
             copyRecipientLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -892,9 +921,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(RefundTransactionActivity.this);
                     cvvDialog.dismiss();
+                    if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(RefundTransactionActivity.this);
                 }
             });
             doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -902,23 +931,42 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 public void onClick(View view) {
                     try {
                         etremarksTV.setText(addNoteET.getText().toString().trim());
-                        if (Utils.isKeyboardVisible)
-                            Utils.hideKeypad(RefundTransactionActivity.this);
                         cvvDialog.dismiss();
+                        if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(RefundTransactionActivity.this);
                         enableRefund();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+
                 }
             });
 
 
+//            cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                @Override
+//                public void onDismiss(DialogInterface dialogInterface) {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (Utils.isKeyboardVisible)
+//                                Utils.hideKeypad(RefundTransactionActivity.this);
+//                            cvvDialog.dismiss();
+//                        }
+//                    }, 600);
+//                }
+//            });
             cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialogInterface) {
+                    cvvDialog = null;
                     if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(RefundTransactionActivity.this);
-                    cvvDialog.dismiss();
+                    Utils.hideKeypad(RefundTransactionActivity.this);
+
                 }
             });
         } catch (Exception ex) {
@@ -978,7 +1026,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         strToken = dbHandler.getPermanentToken();
     }
 
-//    private void setFaceLock() {
+    //    private void setFaceLock() {
 //        try {
 //            isFaceLock = false;
 //            String value = dbHandler.getFacePinLock();

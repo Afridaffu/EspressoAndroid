@@ -3,7 +3,6 @@ package com.greenbox.coyni.adapters;
 import static android.service.controls.ControlsProviderService.TAG;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.AccountsData;
 import com.greenbox.coyni.model.preferences.BaseProfile;
@@ -21,11 +19,7 @@ import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.ScanActivity;
-import com.greenbox.coyni.view.business.BusinessAddNewAccountActivity;
-import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
@@ -198,6 +192,11 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_pending_bg));
                     statusTV.setTextColor(context.getColor(R.color.orange_status));
+                }else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+                    statusTV.setVisibility(View.VISIBLE);
+                    statusTV.setText(detailInfo.getAccountStatus());
+                    statusTV.setBackground(context.getDrawable(R.drawable.txn_deactive_bg));
+                    statusTV.setTextColor(context.getColor(R.color.xdark_gray));
                 }
             } else {
                 statusTV.setVisibility(View.GONE);
@@ -226,12 +225,37 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_pending_bg));
                     statusTV.setTextColor(context.getColor(R.color.orange_status));
+                }else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+                    statusTV.setVisibility(View.VISIBLE);
+                    statusTV.setText(detailInfo.getAccountStatus());
+                    statusTV.setBackground(context.getDrawable(R.drawable.txn_deactive_bg));
+                    statusTV.setTextColor(context.getColor(R.color.xdark_gray));
                 }
             } else {
                 statusTV.setVisibility(View.GONE);
             }
         }
 
+        if (detailInfo.getAccountType().equals(Utils.SHARED)) {
+            if(detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+                childView.setAlpha(0.5f);
+                childView.setEnabled(false);
+            }else {
+                childView.setAlpha(1.0f);
+                childView.setEnabled(true);
+                childView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (listener != null) {
+                            selectedID = detailInfo.getId();
+                            listener.onGroupClicked(groupPosition, detailInfo.getAccountType(), detailInfo.getId(), detailInfo.getFullName());
+                            notifyDataSetChanged();
+                        }
+                    }
+                });
+            }
+
+        }
 
         childView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -331,12 +355,13 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 profileImage.setVisibility(View.VISIBLE);
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
-                utility.addImage(headerInfo.getImage(), profileImage, R.drawable.ic_case);
+                utility.addImage(headerInfo.getImage(), profileImage, R.drawable.ic_profilelogo);
             } else {
-                personalText.setVisibility(View.VISIBLE);
-                profileImage.setVisibility(View.GONE);
-                String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
-                personalText.setText(userName);
+                personalText.setVisibility(View.GONE);
+                profileImage.setVisibility(View.VISIBLE);
+                profileImage.setImageResource(R.drawable.ic_profilelogo);
+//                String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
+//                personalText.setText(userName);
             }
         } else if (headerInfo.getAccountType().equals(Utils.BUSINESS)) {
             arrowImg.setVisibility(View.VISIBLE);
@@ -363,18 +388,26 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             }
 
         }
-
+        groupView.setEnabled(true);
         if (headerInfo.getAccountType().equals(Utils.PERSONAL)) {
-            groupView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        selectedID = headerInfo.getId();
-                        listener.onGroupClicked(groupPosition, headerInfo.getAccountType(), headerInfo.getId(), headerInfo.getFullName());
-                        notifyDataSetChanged();
+            if (headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())
+                    || headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                groupView.setAlpha(0.5f);
+                groupView.setEnabled(false);
+            } else {
+                groupView.setAlpha(1.0f);
+                groupView.setEnabled(true);
+                groupView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (listener != null) {
+                            selectedID = headerInfo.getId();
+                            listener.onGroupClicked(groupPosition, headerInfo.getAccountType(), headerInfo.getId(), headerInfo.getFullName());
+                            notifyDataSetChanged();
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         return view;
