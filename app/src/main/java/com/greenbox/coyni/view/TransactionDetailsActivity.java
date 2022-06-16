@@ -15,6 +15,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableString;
@@ -38,9 +39,11 @@ import com.greenbox.coyni.adapters.AddNewBusinessAccountDBAAdapter;
 import com.greenbox.coyni.model.activtity_log.ActivityLogResp;
 import com.greenbox.coyni.model.preferences.BaseProfile;
 import com.greenbox.coyni.model.transaction.TransactionData;
+import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.MerchantTransactionDetailsActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import org.w3c.dom.Text;
@@ -58,7 +61,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     CardView cancelTxnCV;
     TextView successadd, purchaseTime, activity_log_tv;
     RecyclerView recyclerView;
-
+    private String gbxID, txnTypeStr, txnSubTypeStr;
 
     // Control Method Types
     private static final String PAY_REQUEST = "PayRequest";
@@ -74,6 +77,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     private static final String FAILED_WITH = "failedWithdrawBank";
     private static final String PAID_ORDER_TOKEN = "PaidOrderToken";
     private static final String REFUND_RECEIVED = "RefundReceived";
+    private static final String REFUND_SENT = "RefundSent";
     private static final String RESERVE_RELEASE = "ReserveRelease";
 
     // Transaction Types
@@ -131,14 +135,18 @@ public class TransactionDetailsActivity extends BaseActivity {
                         txnType = Integer.parseInt(Utils.payType);
                         break;
                     case buy_token:
-                    case buy_tokens:
+                    case buy_tokens: {
                         txnType = Integer.parseInt(Utils.addType);
                         break;
+                    }
                     case withdraw:
                         txnType = Integer.parseInt(Utils.withdrawType);
                         break;
-                    case business_payout:
-                        txnType = Integer.parseInt(Utils.businessType);
+//                    case Utils.businessPayouttxntype:
+//                        txnType = Utils.businessPayout;
+//                        break;
+                    case Utils.merchantPayouttxntype:
+                        txnType = Utils.merchantPayout;
                         break;
                     case canceled_bank_withdraw:
                         txnType = Utils.cancelledWithdraw;
@@ -187,6 +195,9 @@ public class TransactionDetailsActivity extends BaseActivity {
                     case token:
                         txnSubType = Integer.parseInt(Utils.tokenType);
                         break;
+                    case Utils.transfersub:
+                        txnSubType = Utils.transfer;
+                        break;
                     default:
                         txnSubType = null;
                         break;
@@ -198,7 +209,8 @@ public class TransactionDetailsActivity extends BaseActivity {
             }
 
             if (Utils.checkInternet(TransactionDetailsActivity.this)) {
-                progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
+//                progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
+                showProgressDialog();
                 dashboardViewModel.getTransactionDetails(strGbxTxnIdType, txnType, txnSubType);
             } else {
                 Utils.displayAlert(getString(R.string.internet), TransactionDetailsActivity.this, "", "");
@@ -210,9 +222,10 @@ public class TransactionDetailsActivity extends BaseActivity {
 
     private void initObserver() {
         dashboardViewModel.getTransactionDetailsMutableLiveData().observe(this, transactionDetails -> {
-            if (progressDialog != null) {
-                progressDialog.dismiss();
-            }
+//            if (progressDialog != null) {
+//                progressDialog.dismiss();
+//            }
+            dismissDialog();
             if (transactionDetails != null && transactionDetails.getStatus().equalsIgnoreCase("Success")) {
                 switch (transactionDetails.getData().getTransactionType().toLowerCase()) {
                     case pay_request:
@@ -256,13 +269,6 @@ public class TransactionDetailsActivity extends BaseActivity {
                                 withdrawSignet(transactionDetails.getData());
                                 break;
                         }
-                        break;
-                    case business_payout: {
-
-                        ControlMethod(BUSINESS_PAYOUT);
-                        businessPayout(transactionDetails.getData());
-                    }
-                    break;
                     case canceled_bank_withdraw: {
                         ControlMethod(CANCELLED_WITH);
                         cancelledWithdraw(transactionDetails.getData());
@@ -280,8 +286,13 @@ public class TransactionDetailsActivity extends BaseActivity {
                         }
                         break;
                     case refund: {
-                        ControlMethod(REFUND_RECEIVED);
-                        paidOrderToken(transactionDetails.getData());
+                        if (received.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
+                            ControlMethod(REFUND_RECEIVED);
+                            paidOrderToken(transactionDetails.getData());
+                        } else if (sent.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
+                                ControlMethod(REFUND_SENT);
+                                refundtoken(transactionDetails.getData());
+                            }
                     }
                     break;
                     case reserve_release: {
@@ -289,14 +300,31 @@ public class TransactionDetailsActivity extends BaseActivity {
                         reserveRelease(transactionDetails.getData());
                     }
                     break;
+//                    case business_payout: {
+//                        ControlMethod(BUSINESS_PAYOUT);
+//                        businessPayout(transactionDetails.getData());
+//                    }
+//                    break;
+                    case Utils.merchantPayouttxntype: {
+                        ControlMethod(BUSINESS_PAYOUT);
+                        businessPayout(transactionDetails.getData());
+                    }
+                    break;
 
                 }
-            }
+            } else {
+                    if (transactionDetails.getError().getErrorDescription() != null && !transactionDetails.getError().getErrorDescription().equals("")) {
+                        Utils.displayAlert(transactionDetails.getError().getErrorDescription(), TransactionDetailsActivity.this, "", transactionDetails.getError().getFieldErrors().get(0));
+                    } else {
+                        Utils.displayAlert(transactionDetails.getError().getFieldErrors().get(0), TransactionDetailsActivity.this, "", "");
+                    }
+                }
         });
 
         dashboardViewModel.getCancelBuyTokenResponseMutableLiveData().observe(this, cancelBuyTokenResponse -> {
             try {
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
+                dismissDialog();
                 if (cancelBuyTokenResponse != null && cancelBuyTokenResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                     Utils.showCustomToast(TransactionDetailsActivity.this, "Transaction cancelled successfully.", R.drawable.ic_custom_tick, "");
                     //progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
@@ -498,10 +526,13 @@ public class TransactionDetailsActivity extends BaseActivity {
                     mPaidStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
                     mPaidStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
                     break;
+                case Utils.refundd:
+                case Utils.partialrefund:
                 case Utils.transPending:
                     mPaidStatus.setTextColor(getResources().getColor(R.color.pending_status));
                     mPaidStatus.setBackgroundResource(R.drawable.txn_pending_bg);
                     break;
+                case Utils.transCancelled:
                 case Utils.transFailed:
                     mPaidStatus.setTextColor(getResources().getColor(R.color.failed_status));
                     mPaidStatus.setBackgroundResource(R.drawable.txn_failed_bg);
@@ -554,6 +585,172 @@ public class TransactionDetailsActivity extends BaseActivity {
             mCustomerServicePhone.setText(phone_number);
         }
 
+        String mVar = getString(R.string.description)+" ";
+        SpannableString spannableString = new SpannableString(mVar);
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                try {
+                    startActivity(new Intent(TransactionDetailsActivity.this, GetHelpWebViewActivity.class));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+                ds.setColor(getColor(R.color.primary_color));
+            }
+        };
+
+        spannableString.setSpan(clickableSpan, mVar.length() - 9, mVar.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mDescription.setText(spannableString);
+        mDescription.setMovementMethod(LinkMovementMethod.getInstance());
+        mDescription.setHighlightColor(Color.TRANSPARENT);
+
+        if (paidOrderData.getSaleOrderPaidAmount() != null) {
+            mAmountPaid.setText(Utils.convertTwoDecimal(paidOrderData.getSaleOrderPaidAmount().replace("CYN", "").trim()) + " CYN");
+        }
+        if (paidOrderData.getSaleOrderDateAndTime() != null) {
+            mDateAndTime.setText(objMyApplication.convertZoneLatestTxn(paidOrderData.getSaleOrderDateAndTime()));
+        }
+
+        if (paidOrderData.getSaleOrderReferenceId() != null) {
+            if (paidOrderData.getSaleOrderReferenceId().length() > 10) {
+                String refId = paidOrderData.getSaleOrderReferenceId().substring(0, 10) + "...";
+                mPaidReferenceID.setText(Html.fromHtml("<u>" + refId + "</u>"));
+            } else
+                mPaidReferenceID.setText(Html.fromHtml("<u>" + paidOrderData.getSaleOrderReferenceId() + "</u>"));
+        }
+        String paidOrderId = paidOrderData.getSaleOrderReferenceId();
+        mPaidReferenceID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(TransactionDetailsActivity.this, TransactionDetailsActivity.class)
+                        .putExtra(Utils.txnType, paid_order)
+                        .putExtra(Utils.txnSubType,token)
+                        .putExtra(Utils.gbxTxnIdType, paidOrderId));
+            }
+        });
+        mBackButton.setOnClickListener(view -> finish());
+
+
+    }
+    private void refundtoken(TransactionData refundsentdata) {
+        TextView mTransactionType, mPaidStatus, mPaidAmount, mPaidDateAndTime, mAccountBalance, mReferenceID, mMerchantAccountID, mDbaName, mCustomerServiceEmail, mCustomerServicePhone, mDescription;
+        LinearLayout mReferenceCopy, mMerchantAccountCopy, mBackButton;
+        TextView mAmountPaid, mDateAndTime, mSaleReferenceID;
+
+        mTransactionType = findViewById(R.id.transaction_types);
+        mPaidAmount = findViewById(R.id.paid_amount);
+        mPaidStatus = findViewById(R.id.paid_status);
+        mPaidDateAndTime = findViewById(R.id.paid_date_time);
+        mAccountBalance = findViewById(R.id.account_balance);
+        mReferenceID = findViewById(R.id.paid_reference_id);
+        mMerchantAccountID = findViewById(R.id.merchant_account_id);
+        mDbaName = findViewById(R.id.dba_name);
+        mCustomerServiceEmail = findViewById(R.id.customer_service_email);
+        mCustomerServicePhone = findViewById(R.id.customer_service_phone);
+        mReferenceCopy = findViewById(R.id.copy_ref_ll);
+        mMerchantAccountCopy = findViewById(R.id.copy_merchant_id);
+        mDescription = findViewById(R.id.description);
+        mBackButton = findViewById(R.id.back_button);
+
+        mAmountPaid = findViewById(R.id.amount_paid);
+        mDateAndTime = findViewById(R.id.date_and_time);
+        mSaleReferenceID = findViewById(R.id.reference_id);
+
+
+        if (refundsentdata.getTransactionType() != null && refundsentdata.getTransactionSubtype() != null) {
+            mTransactionType.setText(refundsentdata.getTransactionType() + " - " + refundsentdata.getTransactionSubtype());
+        }
+
+        if (refundsentdata.getPaidAmount() != null) {
+            mPaidAmount.setText(Utils.convertTwoDecimal(refundsentdata.getPaidAmount().replace("CYN", "").trim()));
+            findViewById(R.id.card_view_refund).setVisibility(View.GONE);
+            findViewById(R.id.original_transaction).setVisibility(View.GONE);
+            findViewById(R.id.description).setVisibility(View.VISIBLE);
+        }
+
+        if (refundsentdata.getRefundAmount() != null) {
+            mPaidAmount.setText(Utils.convertTwoDecimal(refundsentdata.getRefundAmount().replace("CYN", "").trim()));
+            findViewById(R.id.card_view_refund).setVisibility(View.VISIBLE);
+            findViewById(R.id.original_transaction).setVisibility(View.VISIBLE);
+            findViewById(R.id.description).setVisibility(View.GONE);
+        }
+
+        if (refundsentdata.getStatus() != null) {
+            mPaidStatus.setText(refundsentdata.getStatus());
+            switch (refundsentdata.getStatus().toLowerCase()) {
+                case Utils.transCompleted:
+                    mPaidStatus.setTextColor(getResources().getColor(R.color.completed_status));
+                    mPaidStatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case Utils.transinprogress:
+                    mPaidStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    mPaidStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    break;
+                case Utils.refundd:
+                case Utils.partialrefund:
+                case Utils.transPending:
+                    mPaidStatus.setTextColor(getResources().getColor(R.color.pending_status));
+                    mPaidStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                    break;
+                case Utils.transCancelled:
+                case Utils.transFailed:
+                    mPaidStatus.setTextColor(getResources().getColor(R.color.failed_status));
+                    mPaidStatus.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+            }
+        }
+
+        if (refundsentdata.getCreatedDate() != null) {
+            mPaidDateAndTime.setText(objMyApplication.convertZoneLatestTxn(refundsentdata.getCreatedDate()));
+        }
+
+        if (refundsentdata.getAccountBalance() != null) {
+            mAccountBalance.setText(Utils.convertTwoDecimal(refundsentdata.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+        }
+
+        if (refundsentdata.getReferenceId() != null) {
+            if (refundsentdata.getReferenceId().length() > 10)
+                mReferenceID.setText(refundsentdata.getReferenceId().substring(0, 10) + "...");
+            else
+                mReferenceID.setText(refundsentdata.getReferenceId());
+
+            mReferenceCopy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(refundsentdata.getReferenceId(), TransactionDetailsActivity.this);
+                }
+            });
+        }
+
+        if (refundsentdata.getMerchantId() != null) {
+            mMerchantAccountID.setText(refundsentdata.getMerchantId());
+        }
+
+        if (refundsentdata.getDbaName() != null) {
+            if (refundsentdata.getDbaName().length() > 20)
+                mDbaName.setText(refundsentdata.getDbaName().substring(0, 20) + "...");
+            else
+                mDbaName.setText(refundsentdata.getDbaName());
+        }
+
+        if (refundsentdata.getCustomerServiceMail() != null) {
+            if (refundsentdata.getCustomerServiceMail().length() > 20) {
+                mCustomerServiceEmail.setText(refundsentdata.getCustomerServiceMail().substring(0, 20) + "...");
+            } else {
+                mCustomerServiceEmail.setText(refundsentdata.getCustomerServiceMail());
+            }
+        }
+        if (refundsentdata.getCustomerServicePhoneNo() != null) {
+            String phone_number = "(" + refundsentdata.getCustomerServicePhoneNo().substring(0, 3) + ")" + " " + refundsentdata.getCustomerServicePhoneNo().substring(3, 6) + "-" + refundsentdata.getCustomerServicePhoneNo().substring(6, 10);
+            mCustomerServicePhone.setText(phone_number);
+        }
+
         String mVar = getString(R.string.description);
         SpannableString spannableString = new SpannableString(mVar);
         ClickableSpan clickableSpan = new ClickableSpan() {
@@ -579,26 +776,34 @@ public class TransactionDetailsActivity extends BaseActivity {
         mDescription.setMovementMethod(LinkMovementMethod.getInstance());
         mDescription.setHighlightColor(Color.TRANSPARENT);
 
-        if (paidOrderData.getSaleOrderPaidAmount() != null) {
-            mAmountPaid.setText(Utils.convertTwoDecimal(paidOrderData.getSaleOrderPaidAmount().replace("CYN", "").trim()) + " CYN");
+        if (refundsentdata.getSaleOrderNetAmount() != null) {
+            mAmountPaid.setText(Utils.convertTwoDecimal(refundsentdata.getSaleOrderNetAmount().replace("CYN", "").trim()) + " CYN");
         }
-        if (paidOrderData.getSaleOrderDateAndTime() != null) {
-            mDateAndTime.setText(objMyApplication.convertZoneReservedOn(paidOrderData.getSaleOrderDateAndTime()));
+        if (refundsentdata.getSaleOrderDateAndTime() != null) {
+            mDateAndTime.setText(objMyApplication.convertZoneLatestTxn(refundsentdata.getSaleOrderDateAndTime()));
         }
 
-        if (paidOrderData.getSaleOrderReferenceId() != null) {
-            if (paidOrderData.getSaleOrderReferenceId().length() > 10) {
-                String refId = paidOrderData.getSaleOrderReferenceId().substring(0, 10) + "...";
-                mPaidReferenceID.setText(Html.fromHtml("<u>" + refId + "</u>"));
+        if (refundsentdata.getSaleOrderReferenceId() != null) {
+            if (refundsentdata.getSaleOrderReferenceId().length() > 10) {
+                String refId = refundsentdata.getSaleOrderReferenceId().substring(0, 10) + "...";
+                mSaleReferenceID.setText(Html.fromHtml("<u>" + refId + "</u>"));
             } else
-                mPaidReferenceID.setText(Html.fromHtml("<u>" + paidOrderData.getSaleOrderReferenceId() + "</u>"));
+                mSaleReferenceID.setText(Html.fromHtml("<u>" + refundsentdata.getSaleOrderReferenceId() + "</u>"));
         }
-
+        String saleOrderId = refundsentdata.getSaleOrderReferenceId();
+        mSaleReferenceID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(TransactionDetailsActivity.this, MerchantTransactionDetailsActivity.class)
+                        .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE, Utils.saleOrdertxntype)
+                        .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE, Utils.tokensub)
+                        .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, saleOrderId));
+            }
+        });
         mBackButton.setOnClickListener(view -> finish());
 
 
     }
-
     private void payRequest(TransactionData objData) {
         try {
             TextView headerTV, amount, descrptn, completed, datetime, fee, total, balance;
@@ -1694,9 +1899,15 @@ public class TransactionDetailsActivity extends BaseActivity {
             }
 
 
+//            if (businessPayoutData.getPayoutCreatedDate() != null && businessPayoutData.getPayoutUpdatedDate() != null) {
+//                String startDate = objMyApplication.convertPayoutDateTimeZone(businessPayoutData.getPayoutCreatedDate());
+//                String endDate = objMyApplication.convertPayoutDateTimeZone(businessPayoutData.getPayoutUpdatedDate());
+//
+//                payoutDate.setText(startDate + " to " + endDate);
+//            }
             if (businessPayoutData.getPayoutCreatedDate() != null && businessPayoutData.getPayoutUpdatedDate() != null) {
-                String startDate = objMyApplication.convertPayoutDateTimeZone(businessPayoutData.getPayoutCreatedDate());
-                String endDate = objMyApplication.convertPayoutDateTimeZone(businessPayoutData.getPayoutUpdatedDate());
+                String startDate = objMyApplication.convertZoneLatestTxndate(businessPayoutData.getPayoutCreatedDate()).toUpperCase();
+                String endDate = objMyApplication.convertZoneLatestTxndate(businessPayoutData.getPayoutUpdatedDate()).toUpperCase();
 
                 payoutDate.setText(startDate + " to " + endDate);
             }
@@ -2029,7 +2240,6 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
-
                 }
                 break;
                 case WITH_GIFT: {
@@ -2073,7 +2283,6 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
-
                 }
                 break;
                 case BUSINESS_PAYOUT: {
@@ -2103,9 +2312,9 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.VISIBLE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
-
                 }
                 break;
+                case REFUND_SENT:
                 case PAID_ORDER_TOKEN:
                 case REFUND_RECEIVED: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
@@ -2135,6 +2344,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.reserve_release_details).setVisibility(View.VISIBLE);
                 }
                 break;
+
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -2158,7 +2368,8 @@ public class TransactionDetailsActivity extends BaseActivity {
             tvYes.setOnClickListener(v -> {
                 try {
                     dialog.dismiss();
-                    progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
+//                    progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
+                    showProgressDialog();
                     if (txnType == 2)
                         dashboardViewModel.cancelBuyToken(strGbxTxnIdType);
                     else

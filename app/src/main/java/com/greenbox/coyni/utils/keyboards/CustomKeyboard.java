@@ -196,11 +196,10 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                     inputConnection.commitText("", 1);
                 }
             } else {
-
                 if (strScreen.equals("refundables")) {
                     RefundTransactionActivity refundTransactionActivity = (RefundTransactionActivity) activityContext;
-
-                    if (refundTransactionActivity.isfullamount || refundTransactionActivity.ishalfamount) {
+                    String value = keyValues.get(view.getId());
+                    if ((refundTransactionActivity.isfullamount || refundTransactionActivity.ishalfamount) && !value.equals(".")) {
 
                         refundTransactionActivity.isfullamount = false;
                         refundTransactionActivity.ishalfamount = false;

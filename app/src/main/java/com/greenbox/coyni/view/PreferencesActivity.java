@@ -378,6 +378,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
         boolean showDBA = false;
         AccountsData accountsData = new AccountsData(filterList);
         accountsData.removeSharedAccounts();
+        accountsData.removeDeclinedPersonalAccount();
         profilesListView.setVisibility(View.VISIBLE);
         profilesListAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, accountsData, preferredId, showDBA);
 

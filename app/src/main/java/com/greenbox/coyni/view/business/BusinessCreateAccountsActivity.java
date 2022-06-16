@@ -238,26 +238,11 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             }
         });
 
-//        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-//                && myApplication.getMyProfile().getData().getImage() != null) {
-//            userShortInfoTV.setVisibility(View.GONE);
-//            imgProfile.setVisibility(View.VISIBLE);
-//
-//            DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-//            utility.addImage(myApplication.getMyProfile().getData().getImage(), imgProfile, R.drawable.ic_profile_male_user);
-//        } else {
-//            userShortInfoTV.setVisibility(View.VISIBLE);
-//            imgProfile.setVisibility(View.GONE);
-////            userShortInfoTV.setText(iconText);
-//        }
-
-//        setUserBalance(myApplication.getWalletResponseData());
-        if (myApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
+        if (myApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
             setUserBalance(myApplication.getCurrentUserData().getTokenWalletResponse());
-        else
-            setUserBalance(myApplication.getCurrentUserData().getMerchantWalletResponse());
-
-
+        } else {
+            setUserBalance(myApplication.getCurrentUserData().getTokenWalletResponse());
+        }
     }
 
     private void setUserBalance(WalletResponseData walletResponse) {
@@ -270,12 +255,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             LogUtils.d(TAG, "setUserBalance" + walletInfo.toString());
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
-//                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
-//                    myApplication.setGbtWallet(walletInfo.get(i));
                     strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getAvailabilityToUse()));
                     userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-//                    myApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
-//                    }
                 }
             } else {
                 userBalanceTV.setText("0.00");
@@ -411,9 +392,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                     LogUtils.d(TAG, "AddBusinessUserResponse " + identityImageResponse);
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
-                        startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra(Utils.ADD_BUSINESS, true)
-                                .putExtra(Utils.ADD_DBA, true));
+//                        startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
+//                                .putExtra(Utils.ADD_BUSINESS, true)
+//                                .putExtra(Utils.ADD_DBA, true));
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }

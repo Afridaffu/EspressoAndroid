@@ -3,7 +3,6 @@ package com.greenbox.coyni.adapters;
 import static android.service.controls.ControlsProviderService.TAG;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.AccountsData;
 import com.greenbox.coyni.model.preferences.BaseProfile;
@@ -21,11 +19,7 @@ import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.ScanActivity;
-import com.greenbox.coyni.view.business.BusinessAddNewAccountActivity;
-import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
@@ -363,18 +357,26 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             }
 
         }
-
+        groupView.setEnabled(true);
         if (headerInfo.getAccountType().equals(Utils.PERSONAL)) {
-            groupView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        selectedID = headerInfo.getId();
-                        listener.onGroupClicked(groupPosition, headerInfo.getAccountType(), headerInfo.getId(), headerInfo.getFullName());
-                        notifyDataSetChanged();
+            if (headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())
+                    && headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                groupView.setAlpha(0.5f);
+                groupView.setEnabled(false);
+            } else {
+                groupView.setAlpha(1.0f);
+                groupView.setEnabled(true);
+                groupView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (listener != null) {
+                            selectedID = headerInfo.getId();
+                            listener.onGroupClicked(groupPosition, headerInfo.getAccountType(), headerInfo.getId(), headerInfo.getFullName());
+                            notifyDataSetChanged();
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         return view;

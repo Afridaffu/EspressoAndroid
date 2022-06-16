@@ -57,7 +57,8 @@
             <ScrollView
                 android:id="@+id/scrlSV"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
                 android:layout_above="@id/ckbrefund"
                 android:layout_below="@id/topLL"
                 android:scrollbars="none">
@@ -71,7 +72,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_380sdp"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginRight="@dimen/_10sdp"
@@ -266,10 +267,9 @@
                                 <TextView
                                     android:id="@+id/eTremarks"
                                     android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_54sdp"
+                                    android:layout_height="@dimen/_120sdp"
                                     android:layout_marginLeft="@dimen/_15sdp"
                                     android:layout_marginRight="@dimen/_15sdp"
-                                    android:layout_marginBottom="@dimen/_150sdp"
                                     android:fontFamily="@font/opensans_regular"
                                     android:hint="Reason for Refund (Maximun 120 characters)"
                                     android:padding="@dimen/_6sdp"

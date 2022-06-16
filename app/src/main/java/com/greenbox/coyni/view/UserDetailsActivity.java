@@ -566,6 +566,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         profilesListView.setVisibility(View.VISIBLE);
 
         accountsData.removeSharedAccounts();
+        accountsData.removeDeclinedPersonalAccount();
 
         profilesListAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, accountsData, preferredId, showDBA);
 

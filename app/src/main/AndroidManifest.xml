@@ -301,7 +301,6 @@
             android:name=".view.TransactionDetailsActivity"
             android:configChanges="uiMode"
             android:exported="false"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
