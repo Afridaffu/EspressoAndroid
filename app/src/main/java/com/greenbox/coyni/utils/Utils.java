@@ -195,6 +195,7 @@ public class Utils {
     public static final String transOpen = "open";
     public static final String transFailed = "failed";
     public static final String partialrefund = "partial refund";
+    public static final String partial_refund = "partialrefund";
     public static final String refundd = "refunded";
     public static final String transCancelled = "cancelled";
     public static final String transinprogress = "in progress";

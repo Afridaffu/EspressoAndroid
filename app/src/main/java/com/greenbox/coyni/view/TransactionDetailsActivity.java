@@ -451,7 +451,7 @@ public class TransactionDetailsActivity extends BaseActivity {
         }
 
         if (reserveData.getReservedOn() != null) {
-            reservedOn.setText(objMyApplication.convertZoneReservedOn(reserveData.getReservedOn()));
+            reservedOn.setText(objMyApplication.convertZoneLatestTxn(reserveData.getReservedOn()));
         }
 
         String reserveID = "";
@@ -634,6 +634,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                         .putExtra(Utils.gbxTxnIdType, paidOrderId));
             }
         });
+
         mBackButton.setOnClickListener(view -> finish());
 
 
@@ -751,30 +752,30 @@ public class TransactionDetailsActivity extends BaseActivity {
             mCustomerServicePhone.setText(phone_number);
         }
 
-        String mVar = getString(R.string.description);
-        SpannableString spannableString = new SpannableString(mVar);
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(@NonNull View view) {
-                try {
-                    startActivity(new Intent(TransactionDetailsActivity.this, GetHelpWebViewActivity.class));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void updateDrawState(@NonNull TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(true);
-                ds.setColor(getColor(R.color.primary_color));
-            }
-        };
-
-        spannableString.setSpan(clickableSpan, mVar.length() - 8, mVar.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mDescription.setText(spannableString);
-        mDescription.setMovementMethod(LinkMovementMethod.getInstance());
-        mDescription.setHighlightColor(Color.TRANSPARENT);
+//        String mVar = getString(R.string.description);
+//        SpannableString spannableString = new SpannableString(mVar);
+//        ClickableSpan clickableSpan = new ClickableSpan() {
+//            @Override
+//            public void onClick(@NonNull View view) {
+//                try {
+//                    startActivity(new Intent(TransactionDetailsActivity.this, GetHelpWebViewActivity.class));
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void updateDrawState(@NonNull TextPaint ds) {
+//                super.updateDrawState(ds);
+//                ds.setUnderlineText(true);
+//                ds.setColor(getColor(R.color.primary_color));
+//            }
+//        };
+//
+//        spannableString.setSpan(clickableSpan, mVar.length() - 8, mVar.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        mDescription.setText(spannableString);
+//        mDescription.setMovementMethod(LinkMovementMethod.getInstance());
+//        mDescription.setHighlightColor(Color.TRANSPARENT);
 
         if (refundsentdata.getSaleOrderNetAmount() != null) {
             mAmountPaid.setText(Utils.convertTwoDecimal(refundsentdata.getSaleOrderNetAmount().replace("CYN", "").trim()) + " CYN");
@@ -800,7 +801,13 @@ public class TransactionDetailsActivity extends BaseActivity {
                         .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, saleOrderId));
             }
         });
-        mBackButton.setOnClickListener(view -> finish());
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+//        mBackButton.setOnClickListener(view -> finish());
 
 
     }
