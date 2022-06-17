@@ -291,10 +291,10 @@ public class ReserveDetailsActivity extends BaseActivity {
             getReserveDetails(selected.getBatchId());
         }
 
-        if (myApplication.getCurrentUserData().getReserveGBTBalance() != null) {
-            reserveAmount = Utils.convertTwoDecimal(String.valueOf(myApplication.getCurrentUserData().getReserveGBTBalance()));
-            amount.setText(reserveAmount + " CYN");
-        }
+//        if (myApplication.getCurrentUserData().getReserveGBTBalance() != null) {
+//            reserveAmount = Utils.convertTwoDecimal(String.valueOf(myApplication.getCurrentUserData().getReserveGBTBalance()));
+//            amount.setText(reserveAmount + " CYN");
+//        }
         if (selected != null && selected.getCreatedAt() != null) {
             timeDate = selected.getCreatedAt();
 
@@ -373,8 +373,10 @@ public class ReserveDetailsActivity extends BaseActivity {
         //Released Details
         if (selected != null && selected.getReserveAmount() != null) {
             releasedAMT.setText(selected.getReserveAmount() + " CYN");
+            amount.setText(selected.getReserveAmount() + " CYN");
         } else {
             releasedAMT.setText("0.00 CYN");
+            amount.setText("0.00 CYN");
         }
         if (selected.getScheduledRelease() != null && !selected.getScheduledRelease().equals("")) {
             releaseDate = selected.getScheduledRelease();
