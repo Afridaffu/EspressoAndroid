@@ -1058,7 +1058,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="@dimen/_14sdp"
                                         android:fontFamily="@font/opensans_regular"
-                                        android:text=""
+                                        android:text="N/A"
                                         android:textColor="@color/dark_grey"
                                         android:textSize="@dimen/_10ssp" />
 
@@ -1113,7 +1113,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="@dimen/_14sdp"
                                         android:fontFamily="@font/opensans_regular"
-                                        android:text=""
+                                        android:text="N/A"
                                         android:textColor="@color/dark_grey"
                                         android:textSize="@dimen/_10ssp" />
                                 </LinearLayout>
@@ -1156,7 +1156,7 @@
                                 android:layout_gravity="center"
                                 android:layout_marginBottom="@dimen/_7sdp"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="You have no transaction"
+                                android:text="You have no transactions"
                                 android:textColor="@color/dark_gray"
                                 android:textSize="@dimen/_10sdp" />
 

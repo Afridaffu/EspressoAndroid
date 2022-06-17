@@ -3,6 +3,7 @@ package com.greenbox.coyni.view.business;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -158,8 +159,6 @@ public class AddNewTeamMemberActivity extends BaseActivity implements OnKeyboard
                 }
             }
         });
-
-
     }
 
     public TeamRequest prepareRequest() {

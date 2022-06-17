@@ -618,8 +618,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         CardView cardAccept = reserveRule.findViewById(R.id.cardAccept);
         TextView tvcardDeclined = reserveRule.findViewById(R.id.cardDeclined);
 
-        if (actionRequiredResponse.getData().getNote() != null) {
-            note.setText(actionRequiredResponse.getData().getNote());
+        if (actionRequiredResponse.getData().getReserveRule().getReserveReason() != null && actionRequiredResponse.getData().getReserveRule().getReserveReason().equals("")) {
+            note.setText(actionRequiredResponse.getData().getReserveRule().getReserveReason());
         } else {
             note.setText(R.string.thank_you_for_your_interest_in_coyni_after_ncarefully_reviewing_the_coyni_team_made_ndecision_to_approve_your_application_with);
         }
