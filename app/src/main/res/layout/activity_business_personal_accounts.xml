@@ -47,11 +47,13 @@
 
                     <TextView
                         android:id="@+id/tvUserInfo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_centerInParent="true"
+                        android:background="@color/price"
                         android:fontFamily="@font/opensans_semibold"
-                        android:textColor="@color/primary_black"
+                        android:gravity="center"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/text_size_20sp" />
 
                     <ImageView
@@ -104,10 +106,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_bold"
+                            android:text="0.00"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp"
-                            tools:text="0.00"
-                            android:text="0.00"/>
+                            tools:text="0.00" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -127,11 +129,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_7sdp"
                 android:layout_marginEnd="@dimen/_6sdp"
+                android:layout_marginBottom="@dimen/_7sdp"
                 android:src="@drawable/ic_custom_tick"
-                app:tint="@color/primary_green"
-                />
+                app:tint="@color/primary_green" />
         </LinearLayout>
     </LinearLayout>
 

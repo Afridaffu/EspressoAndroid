@@ -62,11 +62,11 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
     Dialog dialog, pDialog;
     RecyclerView rvPaymentMethods;
     LinearLayout lyBPayClose, lyExternalClose, lyPayBack;
-    TextView tvBankError, tvSignetError, tvDCardError, tvLearnMore, tvBankCount, tvSignetCount, tvDCardCount;
+    TextView tvBankError, tvSignetError, tvDCardError, tvLearnMore, tvBankCount, tvSignetCount, tvDCardCount, tvMsg;
     TextView tvBankHead, tvBankMsg, tvSignetHead, tvSignetMsg, tvDCHead, tvDCardMsg, tvErrorHead, tvErrorMessage;
     RelativeLayout lyAddBank, layoutSignet, layoutDCard;
     CardView cvNext, cvAddPayment, cvTryAgain, cvDone;
-    ImageView imgBankIcon, imgBankArrow, imgSignetLogo, imgSignetArrow, imgDCardLogo, imgDCardArrow;
+    ImageView imgBankIcon, imgBankArrow, imgSignetLogo, imgSignetArrow, imgDCardLogo, imgDCardArrow, imgLogo;
     Long mLastClickTime = 0L;
     Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
 
@@ -385,6 +385,15 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
             layoutDCard = findViewById(R.id.layoutBDCard);
             cvNext = findViewById(R.id.cvNext);
             tvLearnMore = findViewById(R.id.tvLearnMore);
+            tvMsg = findViewById(R.id.tvMessage);
+            imgLogo = findViewById(R.id.imgLogo);
+            if (paymentMethodsResponse.getData() != null && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                tvMsg.setVisibility(View.GONE);
+                imgLogo.setImageResource(R.drawable.ic_addpayment_method);
+            } else {
+                imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
+                tvMsg.setVisibility(View.VISIBLE);
+            }
 
             lyBPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -522,6 +531,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                     numberOfAccounts();
                     ControlMethod("addpayment");
                     strCurrent = "addpay";
+                    addPayment();
                 }
             });
         } catch (Exception ex) {

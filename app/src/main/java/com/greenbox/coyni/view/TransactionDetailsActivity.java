@@ -269,6 +269,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                                 withdrawSignet(transactionDetails.getData());
                                 break;
                         }
+                        break;
                     case canceled_bank_withdraw: {
                         ControlMethod(CANCELLED_WITH);
                         cancelledWithdraw(transactionDetails.getData());
@@ -310,7 +311,6 @@ public class TransactionDetailsActivity extends BaseActivity {
                         businessPayout(transactionDetails.getData());
                     }
                     break;
-
                 }
             } else {
                 if (transactionDetails.getError().getErrorDescription() != null && !transactionDetails.getError().getErrorDescription().equals("")) {
