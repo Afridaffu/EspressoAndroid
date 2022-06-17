@@ -901,7 +901,8 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             } else if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
                 Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
                 return value = false;
-            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+//            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+            } else if (Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getTransactionLimit())) + " CYN", PayRequestActivity.this, "Oops!", "");
                 value = false;
             } else if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
