@@ -269,6 +269,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                                 withdrawSignet(transactionDetails.getData());
                                 break;
                         }
+                        break;
                     case canceled_bank_withdraw: {
                         ControlMethod(CANCELLED_WITH);
                         cancelledWithdraw(transactionDetails.getData());
@@ -290,9 +291,9 @@ public class TransactionDetailsActivity extends BaseActivity {
                             ControlMethod(REFUND_RECEIVED);
                             paidOrderToken(transactionDetails.getData());
                         } else if (sent.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
-                                ControlMethod(REFUND_SENT);
-                                refundtoken(transactionDetails.getData());
-                            }
+                            ControlMethod(REFUND_SENT);
+                            refundtoken(transactionDetails.getData());
+                        }
                     }
                     break;
                     case reserve_release: {
@@ -310,15 +311,14 @@ public class TransactionDetailsActivity extends BaseActivity {
                         businessPayout(transactionDetails.getData());
                     }
                     break;
-
                 }
             } else {
-                    if (transactionDetails.getError().getErrorDescription() != null && !transactionDetails.getError().getErrorDescription().equals("")) {
-                        Utils.displayAlert(transactionDetails.getError().getErrorDescription(), TransactionDetailsActivity.this, "", transactionDetails.getError().getFieldErrors().get(0));
-                    } else {
-                        Utils.displayAlert(transactionDetails.getError().getFieldErrors().get(0), TransactionDetailsActivity.this, "", "");
-                    }
+                if (transactionDetails.getError().getErrorDescription() != null && !transactionDetails.getError().getErrorDescription().equals("")) {
+                    Utils.displayAlert(transactionDetails.getError().getErrorDescription(), TransactionDetailsActivity.this, "", transactionDetails.getError().getFieldErrors().get(0));
+                } else {
+                    Utils.displayAlert(transactionDetails.getError().getFieldErrors().get(0), TransactionDetailsActivity.this, "", "");
                 }
+            }
         });
 
         dashboardViewModel.getCancelBuyTokenResponseMutableLiveData().observe(this, cancelBuyTokenResponse -> {
@@ -340,7 +340,7 @@ public class TransactionDetailsActivity extends BaseActivity {
             public void onChanged(ActivityLogResp activityLogResp) {
                 if (activityLogResp != null) {
                     if (activityLogResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        if (activityLogResp.getData().size()>0) {
+                        if (activityLogResp.getData().size() > 0) {
                             ActivityLogAdapter activityListAdater = new ActivityLogAdapter(activityLogResp, TransactionDetailsActivity.this);
                             LinearLayoutManager mLayoutManager = new LinearLayoutManager(TransactionDetailsActivity.this);
                             recyclerView.setLayoutManager(mLayoutManager);
@@ -585,7 +585,7 @@ public class TransactionDetailsActivity extends BaseActivity {
             mCustomerServicePhone.setText(phone_number);
         }
 
-        String mVar = getString(R.string.description)+" ";
+        String mVar = getString(R.string.description) + " ";
         SpannableString spannableString = new SpannableString(mVar);
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
@@ -605,7 +605,7 @@ public class TransactionDetailsActivity extends BaseActivity {
             }
         };
 
-        spannableString.setSpan(clickableSpan, mVar.length() - 9, mVar.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(clickableSpan, mVar.length() - 9, mVar.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mDescription.setText(spannableString);
         mDescription.setMovementMethod(LinkMovementMethod.getInstance());
         mDescription.setHighlightColor(Color.TRANSPARENT);
@@ -630,7 +630,7 @@ public class TransactionDetailsActivity extends BaseActivity {
             public void onClick(View v) {
                 startActivity(new Intent(TransactionDetailsActivity.this, TransactionDetailsActivity.class)
                         .putExtra(Utils.txnType, paid_order)
-                        .putExtra(Utils.txnSubType,token)
+                        .putExtra(Utils.txnSubType, token)
                         .putExtra(Utils.gbxTxnIdType, paidOrderId));
             }
         });
@@ -639,6 +639,7 @@ public class TransactionDetailsActivity extends BaseActivity {
 
 
     }
+
     private void refundtoken(TransactionData refundsentdata) {
         TextView mTransactionType, mPaidStatus, mPaidAmount, mPaidDateAndTime, mAccountBalance, mReferenceID, mMerchantAccountID, mDbaName, mCustomerServiceEmail, mCustomerServicePhone, mDescription;
         LinearLayout mReferenceCopy, mMerchantAccountCopy, mBackButton;
@@ -811,6 +812,7 @@ public class TransactionDetailsActivity extends BaseActivity {
 
 
     }
+
     private void payRequest(TransactionData objData) {
         try {
             TextView headerTV, amount, descrptn, completed, datetime, fee, total, balance;
@@ -2403,7 +2405,7 @@ public class TransactionDetailsActivity extends BaseActivity {
         }
     }
 
-    private void getActivityLogAPICall(){
+    private void getActivityLogAPICall() {
 
         if (Utils.checkInternet(TransactionDetailsActivity.this)) {
             if (txnId != null && !txnId.equals("")) {
