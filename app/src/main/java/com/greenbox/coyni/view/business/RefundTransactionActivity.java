@@ -746,7 +746,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                     }
                 } else if (editable.toString().equals(".")) {
                     refundET.setText("");
-                } else if (editable.length() == 0) {
+                } else if (editable.length() <= 0) {
                     refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65);
                     refundET.setHint("0.00");
                     tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
@@ -773,7 +773,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         try {
             etValue = Double.parseDouble(Utils.convertBigDecimal(refundET.getText().toString()));
 
-            if (etValue > 0 && etValue <= value
+            if (etValue >= 0.006 && etValue <= value
 //                    && !etremarksTV.getText().toString().equals("")
             ) {
                 cKey.enableButton();
@@ -963,10 +963,14 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialogInterface) {
-                    cvvDialog = null;
-                    if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(RefundTransactionActivity.this);
-
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            cvvDialog = null;
+                            if (Utils.isKeyboardVisible)
+                                Utils.hideKeypad(RefundTransactionActivity.this);
+                        }
+                    }, 500);
                 }
             });
         } catch (Exception ex) {
