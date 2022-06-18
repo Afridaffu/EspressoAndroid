@@ -42,7 +42,7 @@ public class VerificationFailedActivity extends BaseActivity {
                 && loginResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
             LoginData data = loginResponse.getData();
             if (data != null) {
-                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                     if (data.getCompanyName() != null && !data.getCompanyName().equals("")) {
 
                         String name = getString(R.string.dear_name, data.getCompanyName());
@@ -107,7 +107,7 @@ public class VerificationFailedActivity extends BaseActivity {
         descTV = findViewById(R.id.descTV);
         if (myApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
             descTV.setText(getString(R.string.interest_in_coyni_customer_application));
-        } else if (myApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+        } else if (myApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
             descTV.setText(getString(R.string.interest_in_coyni_merchant_application));
         }
     }

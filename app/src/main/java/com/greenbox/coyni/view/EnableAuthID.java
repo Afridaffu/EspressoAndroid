@@ -529,7 +529,7 @@ public class EnableAuthID extends BaseActivity {
         if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
             successRL.setVisibility(View.VISIBLE);
             businessSuccessRL.setVisibility(View.GONE);
-        } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+        } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
             successRL.setVisibility(View.GONE);
             businessSuccessRL.setVisibility(View.VISIBLE);
         }

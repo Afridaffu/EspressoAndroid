@@ -325,7 +325,7 @@ public class BusinessUserDetailsPreviewActivity extends BaseActivity implements 
 
         });
 
-        if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+        if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
             businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
                 @Override
                 public void onChanged(DBAInfoResp dbaInfoResp) {
@@ -424,7 +424,7 @@ public class BusinessUserDetailsPreviewActivity extends BaseActivity implements 
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         try {
             dashboardViewModel.meProfile();
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
                 businessIdentityVerificationViewModel.getDBAInfo();
                 businessIdentityVerificationViewModel.getCompanyInfo();
             }
