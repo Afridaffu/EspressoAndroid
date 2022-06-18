@@ -164,7 +164,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_11sdp"
                             android:layout_marginTop="@dimen/_20sdp"
-                            android:fontFamily="@font/opensans_bold"
+                            android:fontFamily="@font/opensans_semibold"
                             android:text="@string/total_available_funds"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_12ssp"
