@@ -75,7 +75,7 @@ public class ReserveDetailsListAdapter extends BaseRecyclerViewAdapter<ReserveDe
             if (timeDate.contains(".")) {
                 timeDate = timeDate.substring(0, timeDate.lastIndexOf("."));
             }
-            timeDate = objMyApplication.convertZoneDateTime(timeDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy hh:mma");
+            timeDate = objMyApplication.convertZoneDateTime(timeDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy hh:mma").toLowerCase();
 //            holder.dateTime.setText(Utils.convertPayoutDate(timeDate));
             holder.dateTime.setText(timeDate);
         }

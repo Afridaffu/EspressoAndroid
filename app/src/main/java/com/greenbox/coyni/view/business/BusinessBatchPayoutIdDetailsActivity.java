@@ -240,7 +240,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
             bathPayoutIdTV.setText(objData.getBatchId());
         }
         if (objData.getAmount() != null && !objData.getAmount().equals("")) {
-            payoutIDAmountTV.setText((objData.getAmount()));
+            payoutIDAmountTV.setText(Utils.convertTwoDecimal(objData.getAmount()));
         }
 //        if (objData.getStatus() != null && !objData.getStatus().equals("")) {
 //            payoutStatusTV.setText(objData.getStatus());
