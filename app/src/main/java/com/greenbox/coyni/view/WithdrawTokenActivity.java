@@ -155,7 +155,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     @Override
                     public void run() {
                         addNoteET.requestFocus();
-                        if(!Utils.isKeyboardVisible)
+                        if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(WithdrawTokenActivity.this);
                     }
                 }, 100);
@@ -404,6 +404,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        rollbackSelectedCard();
                         selectPayMethod();
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -613,8 +614,9 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         paymentMethodsResponse = payMethodsResponse;
                     }
                     if (objMyApplication.getSelectedCard() != null) {
-                        selectedCard = objMyApplication.getSelectedCard();
-                        bindPayMethod(selectedCard);
+//                        selectedCard = objMyApplication.getSelectedCard();
+//                        bindPayMethod(selectedCard);
+                        bindPayMethod(rollbackSelectedCard());
                     }
                 }
             }
@@ -1471,7 +1473,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if(!Utils.isKeyboardVisible)
+                    if (!Utils.isKeyboardVisible)
                         Utils.shwForcedKeypad(WithdrawTokenActivity.this);
                 }
             }, 100);
@@ -1911,6 +1913,25 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
     @Override
     public void onVisibilityChanged(boolean visible) {
         Utils.isKeyboardVisible = visible;
+    }
+
+    public PaymentsList rollbackSelectedCard() {
+        if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")) {
+            if (objMyApplication.getSelectedCard().getRelink()) {
+                selectedCard = objMyApplication.getPrevSelectedCard();
+                objMyApplication.setSelectedCard(selectedCard);
+            } else {
+                selectedCard = objMyApplication.getSelectedCard();
+            }
+        } else {
+            if (objMyApplication.getSelectedCard().getExpired()) {
+                selectedCard = objMyApplication.getPrevSelectedCard();
+                objMyApplication.setSelectedCard(selectedCard);
+            } else {
+                selectedCard = objMyApplication.getSelectedCard();
+            }
+        }
+        return selectedCard;
     }
 
 }

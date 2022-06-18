@@ -350,7 +350,7 @@ public class PaymentMethodsActivity extends BaseActivity {
         paymentMethodsViewModel.getCardDeleteResponseMutableLiveData().observe(this, new Observer<CardDeleteResponse>() {
             @Override
             public void onChanged(CardDeleteResponse cardDeleteResponse) {
-               pDialog.dismiss();
+                pDialog.dismiss();
                 if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
                     Utils.showCustomToast(PaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
                     getPaymentMethods();
@@ -561,6 +561,7 @@ public class PaymentMethodsActivity extends BaseActivity {
                     numberOfAccounts();
                     ControlMethod("addpayment");
                     strCurrent = "addpay";
+                    addPayment();
                 }
             });
         } catch (Exception ex) {
