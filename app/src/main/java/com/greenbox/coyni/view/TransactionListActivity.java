@@ -261,7 +261,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
 
                                 noMoreTransactionTV.setVisibility(View.GONE);
                             } else {
-                                noMoreTransactionTV.setVisibility(View.VISIBLE);
+//                                noMoreTransactionTV.setVisibility(View.VISIBLE);
                             }
 //                            if (total == TransactionListActivity.transactionListActivity.currentPage) {
 //                                noMoreTransactionTV.setVisibility(View.VISIBLE);
@@ -355,8 +355,10 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                                     if (currentPage > 0) {
                                         int myPos = globalPending.size() - transactionList.getData().getItems().getPendingTransactions().size();
                                         rvTransactionsPending.scrollToPosition(myPos);
+                                        noMoreTransactionTV.setVisibility(View.VISIBLE);
                                     } else {
                                         rvTransactionsPending.scrollToPosition(0);
+                                        noMoreTransactionTV.setVisibility(View.VISIBLE);
                                     }
                                 } else if (globalPending.size() == 0 && globalPosted.size() > 0) {
                                     noTransactionTV.setVisibility(View.GONE);
@@ -370,8 +372,10 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                                     if (currentPage > 0) {
                                         int myPos = globalPosted.size() - transactionList.getData().getItems().getPostedTransactions().size();
                                         getRvTransactionsPosted.scrollToPosition(myPos);
+                                        noMoreTransactionTV.setVisibility(View.VISIBLE);
                                     } else {
                                         getRvTransactionsPosted.scrollToPosition(0);
+                                        noMoreTransactionTV.setVisibility(View.VISIBLE);
                                     }
                                 } else if (globalPending.size() > 0 && globalPosted.size() > 0) {
                                     noTransactionTV.setVisibility(View.GONE);
@@ -391,8 +395,10 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                                     if (currentPage > 0) {
                                         int myPos = globalPosted.size() - transactionList.getData().getItems().getPostedTransactions().size();
                                         getRvTransactionsPosted.scrollToPosition(myPos);
+                                        noMoreTransactionTV.setVisibility(View.VISIBLE);
                                     } else {
                                         getRvTransactionsPosted.scrollToPosition(0);
+                                        noMoreTransactionTV.setVisibility(View.VISIBLE);
                                     }
 
                                 } else {
