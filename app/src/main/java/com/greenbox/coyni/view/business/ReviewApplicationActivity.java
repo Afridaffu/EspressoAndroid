@@ -794,7 +794,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             LogUtils.d(TAG, "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
-                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                                 Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
                                 intent.putExtra("showGetStarted", true);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

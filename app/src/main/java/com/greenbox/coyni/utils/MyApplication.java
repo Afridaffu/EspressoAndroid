@@ -710,7 +710,7 @@ public class MyApplication extends Application {
     }
 
     public void launchDeclinedActivity(Context context) {
-        if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
+        if (getAccountType() == Utils.BUSINESS_ACCOUNT || getAccountType() == Utils.SHARED_ACCOUNT) {
             Intent declinedIntent = new Intent(context, VerificationFailedActivity.class);
             declinedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(declinedIntent);
@@ -729,7 +729,7 @@ public class MyApplication extends Application {
                 && loginResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)
                 && loginResponse.getData() != null
                 && loginResponse.getData().getAccountStatus() != null) {
-            if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            if (getAccountType() == Utils.BUSINESS_ACCOUNT || getAccountType() == Utils.SHARED_ACCOUNT) {
                 return loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus());
             } else if (getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 return loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
@@ -742,7 +742,7 @@ public class MyApplication extends Application {
     public void launchDashboard(Context context, String fromScreen) {
         try {
             Intent dashboardIntent = new Intent(context, DashboardActivity.class);
-            if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            if (getAccountType() == Utils.BUSINESS_ACCOUNT || getAccountType() == Utils.SHARED_ACCOUNT) {
                 dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
 //                BusinessTrackerResponse btr = getBusinessTrackerResponse();
 //                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()

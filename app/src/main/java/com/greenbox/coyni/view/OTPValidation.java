@@ -916,7 +916,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                     }
                                 }, Utils.duration);
                             }
-                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                                 if (getIntent().getStringExtra("IS_OLD_EMAIL").equalsIgnoreCase("true")) {
                                     startActivity(new Intent(OTPValidation.this, OTPValidation.class)
                                             .putExtra("screen", "EditEmail")
@@ -1001,7 +1001,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                         }
                                     }
                                 }, Utils.duration);
-                            } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                            } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {

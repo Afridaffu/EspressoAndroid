@@ -109,7 +109,7 @@ public class EditPhoneActivity extends BaseActivity {
 
             if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 b_newPhoneET.setHint("New Phone Number");
-            } else if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            } else if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
                 currentPhoneET.setVisibility(View.GONE);
                 b_newPhoneET.setHint("Phone Number");
 
@@ -177,7 +177,7 @@ public class EditPhoneActivity extends BaseActivity {
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }
-                        } else if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT || myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                        } else  {
                             try {
                                 callSendPhoneOTPAPI();
                             } catch (Exception e) {

@@ -975,7 +975,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             RelativeLayout lySignet = findViewById(R.id.lySignet);
             View viewSignet = findViewById(R.id.viewSignet);
 
-            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                 lySignet.setVisibility(VISIBLE);
                 viewSignet.setVisibility(VISIBLE);
             } else {
@@ -1190,7 +1190,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             List<PaymentsList> listData = new ArrayList<>();
             if (paymentMethodsResponse != null) {
                 listData = paymentMethodsResponse.getData().getData();
-                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                     List<PaymentsList> filterData = new ArrayList<>();
                     for (int i = 0; i < listData.size(); i++) {
                         if (listData.get(i).getPaymentMethod().toLowerCase().equals("bank")) {

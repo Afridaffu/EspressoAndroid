@@ -230,12 +230,10 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
             //  dashboardViewModel.getProfiles();
             // Business Preferences
 
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
                 timezonetext.setVisibility(View.VISIBLE);
                 defaultaccLL.setVisibility(View.GONE);
-            }
-
-            if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+            } else if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 timezonetext.setVisibility(View.GONE);
                 defaultaccLL.setVisibility(View.VISIBLE);
             }

@@ -1085,8 +1085,10 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         addressObj.setAddressType(0);
                         addressObj.setCity(cityET.getText().toString().trim());
 //                        addressObj.setState(state.getText().toString().trim());
-                        addressObj.setState(Utils.tempStateName);
-                        addressObj.setStateCode(Utils.tempStateCode);
+//                        addressObj.setState(Utils.tempStateName);
+                        //As discussed stopped sending state code  - 17/6/22
+                        addressObj.setState(Utils.tempStateCode);
+//                        addressObj.setStateCode(Utils.tempStateCode);
 //                        addressObj.setCountry("us");
                         addressObj.setCountry(Utils.getStrCCode());
                         addressObj.setZipCode(zipcode.getText().toString().trim());
