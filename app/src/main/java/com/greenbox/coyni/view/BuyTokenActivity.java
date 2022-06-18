@@ -828,7 +828,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             SelectedPaymentMethodsAdapter selectedPaymentMethodsAdapter;
             prevSelectedCard = objMyApplication.getSelectedCard();
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                     paymentMethodsResponse = objMyApplication.businessPaymentMethods(paymentMethodsResponse, "buy");
                 }
                 selectedPaymentMethodsAdapter = new SelectedPaymentMethodsAdapter(paymentMethodsResponse.getData().getData(), BuyTokenActivity.this, "buytoken");

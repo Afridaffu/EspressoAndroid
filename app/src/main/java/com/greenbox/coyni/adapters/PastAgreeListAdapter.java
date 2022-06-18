@@ -77,7 +77,7 @@ public class PastAgreeListAdapter extends RecyclerView.Adapter<PastAgreeListAdap
                             mContext.startActivity(inte);
                         }
                     }
-                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                         if (position == 2) {
                             Intent inte = new Intent(Intent.ACTION_VIEW);
                             inte.setDataAndType(

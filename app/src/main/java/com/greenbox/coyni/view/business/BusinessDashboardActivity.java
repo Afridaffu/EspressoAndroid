@@ -387,7 +387,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void startTracker(int dbaOwnerId) {
-        Intent inTracker = new Intent(BusinessDashboardActivity.this, BusinessRegistrationTrackerActivity.class);
+        Intent inTracker = new Intent(BusinessDashboardActivity.this, BusinessDashboardActivity.class);
 //        if (dbaOwnerId != 0) {
 //            inTracker.putExtra(Utils.ADD_BUSINESS, true);
 //            inTracker.putExtra(Utils.ADD_DBA, true);
