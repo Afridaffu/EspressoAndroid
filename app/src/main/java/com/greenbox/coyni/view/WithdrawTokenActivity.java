@@ -1213,7 +1213,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         } else {
                             if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                                 isBank = true;
-                                objMyApplication.setResolveUrl(true);
+//                                objMyApplication.setResolveUrl(true);
                                 Intent i = new Intent(WithdrawTokenActivity.this, WebViewActivity.class);
                                 i.putExtra("signon", signOnData);
                                 startActivityForResult(i, 1);
