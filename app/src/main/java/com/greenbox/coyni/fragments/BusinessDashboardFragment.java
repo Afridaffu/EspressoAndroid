@@ -1094,7 +1094,8 @@ public class BusinessDashboardFragment extends BaseFragment {
 
                 LinearLayout payoutsList = mCurrentView.findViewById(R.id.reserveReleaseListLL);
                 payoutsList.removeAllViews();
-                for (int j = 0; j < 5; j++) {
+                int target = items.size() > 5 ? 5 : items.size();
+                for (int j = 0; j < target; j++) {
                     View xmlView = getLayoutInflater().inflate(R.layout.dashboard_reserve_release_list, null);
                     TextView releaseDate = xmlView.findViewById(R.id.reserveListDateTV);
                     TextView payoutManualTV = xmlView.findViewById(R.id.reserveListManualTV);
