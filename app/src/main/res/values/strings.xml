@@ -532,7 +532,7 @@
     <string name="reason_field_on_the_manual_release_flow">Reason field on the manual \nrelease flow.</string>
     <string name="transaction_amount">Transaction Amount</string>
     <string name="partial_refund">Partial Refund</string>
-    <string name="business_payout">Business Payout</string>
+    <string name="business_payout">Merchant Payout</string>
     <string name="transaction_type">Transaction Type</string>
     <string name="transaction_subtype">Transaction SubType</string>
     <string name="pending">Pending</string>
