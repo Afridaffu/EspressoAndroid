@@ -309,8 +309,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 
             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 scanMeScanCodeLL.setVisibility(View.VISIBLE);
-            }
-            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                 scanMeScanCodeLL.setVisibility(View.GONE);
             }
 

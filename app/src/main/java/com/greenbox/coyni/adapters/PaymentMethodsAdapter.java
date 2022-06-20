@@ -73,13 +73,17 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
             if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equals("bank")) {
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.tvCardNumber.setVisibility(View.GONE);
-                holder.imgBankIcon.setImageResource(R.drawable.ic_bankactive);
+//                holder.imgBankIcon.setImageResource(R.drawable.ic_bankactive);
                 if (!objData.getRelink()) {
                     holder.tvBankExpire.setVisibility(View.GONE);
                     holder.layoutBack.setBackgroundResource(R.drawable.ic_activebank);
+                    holder.imgBankIcon.setImageResource(R.drawable.ic_bankactive);
+                    holder.imgBankIcon.setVisibility(View.VISIBLE);
                 } else {
                     holder.tvBankExpire.setVisibility(View.VISIBLE);
                     holder.layoutBack.setBackgroundResource(R.drawable.ic_issuebank);
+                    holder.imgBankIcon.setImageResource(R.drawable.ic_bank_account_inactive);
+                    holder.imgBankIcon.setVisibility(View.VISIBLE);
                 }
                 holder.tvBankName.setText(objData.getBankName());
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
@@ -91,13 +95,17 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                 holder.tvBankHead.setText("Signet Account");
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.tvCardNumber.setVisibility(View.GONE);
-                holder.imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+//                holder.imgBankIcon.setImageResource(R.drawable.ic_signetactive);
                 if (!objData.getRelink()) {
                     holder.tvBankExpire.setVisibility(View.GONE);
                     holder.layoutBack.setBackgroundResource(R.drawable.ic_activesignet);
+                    holder.imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                    holder.imgBankIcon.setVisibility(View.VISIBLE);
                 } else {
                     holder.tvBankExpire.setVisibility(View.VISIBLE);
                     holder.layoutBack.setBackgroundResource(R.drawable.ic_issuesignet);
+                    holder.imgBankIcon.setImageResource(R.drawable.ic_signetinactive);
+                    holder.imgBankIcon.setVisibility(View.VISIBLE);
                 }
                 holder.tvAccNumber.setVisibility(View.GONE);
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {

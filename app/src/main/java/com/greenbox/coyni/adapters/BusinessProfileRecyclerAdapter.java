@@ -246,7 +246,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 childView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (listener != null) {
+                        if (selectedID != detailInfo.getId() && listener != null) {
                             selectedID = detailInfo.getId();
                             listener.onGroupClicked(groupPosition, detailInfo.getAccountType(), detailInfo.getId(), detailInfo.getFullName());
                             notifyDataSetChanged();
@@ -264,8 +264,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-
-                if (listener != null) {
+                if (selectedID != detailInfo.getId() && listener != null) {
                     selectedID = detailInfo.getId();
                     listener.onChildClicked(detailInfo);
                     notifyDataSetChanged();
@@ -400,7 +399,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 groupView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (listener != null) {
+                        if (selectedID != headerInfo.getId() && listener != null) {
                             selectedID = headerInfo.getId();
                             listener.onGroupClicked(groupPosition, headerInfo.getAccountType(), headerInfo.getId(), headerInfo.getFullName());
                             notifyDataSetChanged();

@@ -138,7 +138,7 @@ public class EditEmailActivity extends BaseActivity {
 //            });
 
 
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
                 currentEmailTIL.setVisibility(GONE);
             } else {
                 currentEmailTIL.setVisibility(VISIBLE);
@@ -184,7 +184,7 @@ public class EditEmailActivity extends BaseActivity {
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }
-                        } else if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT || myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                        } else  {
                             callSendEmailOTPAPI();
                         }
 
@@ -387,7 +387,7 @@ public class EditEmailActivity extends BaseActivity {
                                     .putExtra("NEW_EMAIL", b_newEmailET.getText().toString().trim())
                             );
                         }
-                        if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                        if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
                             startActivity(new Intent(EditEmailActivity.this, OTPValidation.class)
                                     .putExtra("screen", "EditEmail")
                                     .putExtra("OTP_TYPE", "OTP")
@@ -444,7 +444,7 @@ public class EditEmailActivity extends BaseActivity {
                                 newEmailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
                             }
                         }
-                        if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                        if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
                             if (!emailExistsResponse.getStatus().toLowerCase().equals("error")) {
                                 b_newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(EditEmailActivity.this));
                                 Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.primary_black));

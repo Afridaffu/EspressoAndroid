@@ -279,7 +279,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 tvCardHead.setText("Add New Credit Card");
             }
 
-            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                 layoutCvv.setVisibility(GONE);
                 isCvv = true;
                 LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

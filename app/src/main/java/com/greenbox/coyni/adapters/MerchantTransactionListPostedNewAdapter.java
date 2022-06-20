@@ -92,7 +92,7 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
             case ListItem.TYPE_GROUP:
                 GroupViewHolder groupViewHolder = (GroupViewHolder) holder;
                 DateItem dateItem = (DateItem) consolidatedListData.get(position);
-                setGroupViewData(dateItem, groupViewHolder);
+                setGroupViewData(dateItem, groupViewHolder, position);
                 break;
         }
     }
@@ -128,11 +128,13 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
         TextView date;
+        TextView cyn;
         View viewBottomCorner;
 
         public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
             date = itemView.findViewById(R.id.tv_group_name);
+            cyn = itemView.findViewById(R.id.tv_cyn);
             viewBottomCorner = itemView.findViewById(R.id.bottom_corners);
         }
     }
@@ -142,7 +144,12 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
         notifyDataSetChanged();
     }
 
-    private void setGroupViewData(DateItem date, GroupViewHolder holder) {
+    private void setGroupViewData(DateItem date, GroupViewHolder holder, int position) {
+        if(position == 0) {
+            holder.cyn.setVisibility(View.VISIBLE);
+        } else {
+            holder.cyn.setVisibility(View.GONE);
+        }
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strCurDate = spf.format(Calendar.getInstance().getTime());
