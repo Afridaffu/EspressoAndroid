@@ -281,21 +281,29 @@ public class TransactionDetailsActivity extends BaseActivity {
                     }
                     break;
                     case paid_order:
-                        if (token.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
+                        if (token.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase()))
                             ControlMethod(PAID_ORDER_TOKEN);
                             paidOrderToken(transactionDetails.getData());
+                        break;
+                    case refund:
+//                        if (received.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
+//                            ControlMethod(REFUND_RECEIVED);
+//                            paidOrderToken(transactionDetails.getData());
+//                        } else if (sent.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
+//                            ControlMethod(REFUND_SENT);
+//                            refundtoken(transactionDetails.getData());
+//                        }
+                        switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
+                            case received:
+                                ControlMethod(REFUND_RECEIVED);
+                                paidOrderToken(transactionDetails.getData());
+                                break;
+                            case sent:
+                                ControlMethod(REFUND_SENT);
+                                refundtoken(transactionDetails.getData());
+                                break;
                         }
                         break;
-                    case refund: {
-                        if (received.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
-                            ControlMethod(REFUND_RECEIVED);
-                            paidOrderToken(transactionDetails.getData());
-                        } else if (sent.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
-                            ControlMethod(REFUND_SENT);
-                            refundtoken(transactionDetails.getData());
-                        }
-                    }
-                    break;
                     case reserve_release: {
                         ControlMethod(RESERVE_RELEASE);
                         reserveRelease(transactionDetails.getData());
@@ -651,159 +659,75 @@ public class TransactionDetailsActivity extends BaseActivity {
     }
 
     private void refundtoken(TransactionData refundsentdata) {
-        TextView mTransactionType, mPaidStatus, mPaidAmount, mPaidDateAndTime, mAccountBalance, mReferenceID, mMerchantAccountID, mDbaName, mCustomerServiceEmail, mCustomerServicePhone, mDescription;
-        LinearLayout mReferenceCopy, mMerchantAccountCopy, mBackButton;
-        TextView mAmountPaid, mDateAndTime, mSaleReferenceID;
+        ImageView refundcopyIV;
+        TextView refundheadertv, refundamounttv, refundReasontv, refundStatustv, refundDatetimetv, refundreferencetv, refundfeetv, refundtotalAmounttv, refundreciptantNametv, refundReciptantEmailtv, refundOTIdatetv, refundOTIgrossamounttv, refundOTIFeetv, refundOTINetamounttv, refundOTIrefrencetv;
+        LinearLayout refundCloseLL, refundcopyLL;
 
-        mTransactionType = findViewById(R.id.transaction_types);
-        mPaidAmount = findViewById(R.id.paid_amount);
-        mPaidStatus = findViewById(R.id.paid_status);
-        mPaidDateAndTime = findViewById(R.id.paid_date_time);
-        mAccountBalance = findViewById(R.id.account_balance);
-        mReferenceID = findViewById(R.id.paid_reference_id);
-        mMerchantAccountID = findViewById(R.id.merchant_account_id);
-        mDbaName = findViewById(R.id.dba_name);
-        mCustomerServiceEmail = findViewById(R.id.customer_service_email);
-        mCustomerServicePhone = findViewById(R.id.customer_service_phone);
-        mReferenceCopy = findViewById(R.id.copy_ref_ll);
-        mMerchantAccountCopy = findViewById(R.id.copy_merchant_id);
-        mDescription = findViewById(R.id.description);
-        mBackButton = findViewById(R.id.back_button);
-
-        mAmountPaid = findViewById(R.id.amount_paid);
-        mDateAndTime = findViewById(R.id.date_and_time);
-        mSaleReferenceID = findViewById(R.id.reference_id);
-
+        refundheadertv = findViewById(R.id.RefundheaderTV);
+        refundcopyLL = findViewById(R.id.RefundcopyLL);
+        refundCloseLL = findViewById(R.id.RefundCloseLL);
+        refundamounttv = findViewById(R.id.RefundamountTV);
+        refundReasontv = findViewById(R.id.refundReasonTV);
+        refundStatustv = findViewById(R.id.refundStatusTV);
+        refundDatetimetv = findViewById(R.id.refundDatetimeTV);
+        refundreferencetv = findViewById(R.id.refundreferenceTV);
+        refundfeetv = findViewById(R.id.refundfeeTV);
+        refundtotalAmounttv = findViewById(R.id.refundtotalAmountTV);
+        refundreciptantNametv = findViewById(R.id.refundreciptantNameTV);
+        refundReciptantEmailtv = findViewById(R.id.refundReciptantEmailTV);
+        refundOTIdatetv = findViewById(R.id.refundOTIdateTV);
+        refundOTIgrossamounttv = findViewById(R.id.refundOTIgrossamountTV);
+        refundOTIFeetv = findViewById(R.id.refundOTIFeeTV);
+        refundOTINetamounttv = findViewById(R.id.refundOTINetamountTV);
+        refundOTIrefrencetv = findViewById(R.id.refundOTIrefrenceTV);
 
         if (refundsentdata.getTransactionType() != null && refundsentdata.getTransactionSubtype() != null) {
-            mTransactionType.setText(refundsentdata.getTransactionType() + " - " + refundsentdata.getTransactionSubtype());
+            refundheadertv.setText(refundsentdata.getTransactionType() + " - " + refundsentdata.getTransactionSubtype());
         }
-
-        if (refundsentdata.getPaidAmount() != null) {
-            mPaidAmount.setText(Utils.convertTwoDecimal(refundsentdata.getPaidAmount().replace("CYN", "").trim()));
-            findViewById(R.id.card_view_refund).setVisibility(View.GONE);
-            findViewById(R.id.original_transaction).setVisibility(View.GONE);
-            findViewById(R.id.description).setVisibility(View.VISIBLE);
-        }
-
-        if (refundsentdata.getRefundAmount() != null) {
-            mPaidAmount.setText(Utils.convertTwoDecimal(refundsentdata.getRefundAmount().replace("CYN", "").trim()));
-            findViewById(R.id.card_view_refund).setVisibility(View.VISIBLE);
-            findViewById(R.id.original_transaction).setVisibility(View.VISIBLE);
-            findViewById(R.id.description).setVisibility(View.GONE);
-        }
-
         if (refundsentdata.getStatus() != null) {
-            mPaidStatus.setText(refundsentdata.getStatus());
+            refundStatustv.setText(refundsentdata.getStatus());
             switch (refundsentdata.getStatus().toLowerCase()) {
-                case Utils.transCompleted:
-                    mPaidStatus.setTextColor(getResources().getColor(R.color.completed_status));
-                    mPaidStatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                case Utils.transCompleted: {
+                    refundStatustv.setTextColor(getResources().getColor(R.color.completed_status));
+                    refundStatustv.setBackgroundResource(R.drawable.txn_completed_bg);
                     break;
+                }
                 case Utils.transinprogress:
-                    mPaidStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
-                    mPaidStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    refundStatustv.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    refundStatustv.setBackgroundResource(R.drawable.txn_inprogress_bg);
                     break;
                 case Utils.refundd:
                 case Utils.partialrefund:
-                case Utils.transPending:
-                    mPaidStatus.setTextColor(getResources().getColor(R.color.pending_status));
-                    mPaidStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                case Utils.transPending: {
+                    refundStatustv.setTextColor(getResources().getColor(R.color.pending_status));
+                    refundStatustv.setBackgroundResource(R.drawable.txn_pending_bg);
                     break;
-                case Utils.transCancelled:
-                case Utils.transFailed:
-                    mPaidStatus.setTextColor(getResources().getColor(R.color.failed_status));
-                    mPaidStatus.setBackgroundResource(R.drawable.txn_failed_bg);
-                    break;
-            }
-        }
-
-        if (refundsentdata.getCreatedDate() != null) {
-            mPaidDateAndTime.setText(objMyApplication.convertZoneLatestTxn(refundsentdata.getCreatedDate()));
-        }
-
-        if (refundsentdata.getAccountBalance() != null) {
-            mAccountBalance.setText(Utils.convertTwoDecimal(refundsentdata.getAccountBalance().replace("CYN", "").trim()) + " CYN");
-        }
-
-        if (refundsentdata.getReferenceId() != null) {
-            if (refundsentdata.getReferenceId().length() > 10)
-                mReferenceID.setText(refundsentdata.getReferenceId().substring(0, 10) + "...");
-            else
-                mReferenceID.setText(refundsentdata.getReferenceId());
-
-            mReferenceCopy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Utils.copyText(refundsentdata.getReferenceId(), TransactionDetailsActivity.this);
                 }
-            });
-        }
-
-        if (refundsentdata.getMerchantId() != null) {
-            mMerchantAccountID.setText(refundsentdata.getMerchantId());
-        }
-
-        if (refundsentdata.getDbaName() != null) {
-            if (refundsentdata.getDbaName().length() > 20)
-                mDbaName.setText(refundsentdata.getDbaName().substring(0, 20) + "...");
-            else
-                mDbaName.setText(refundsentdata.getDbaName());
-        }
-
-        if (refundsentdata.getCustomerServiceMail() != null) {
-            if (refundsentdata.getCustomerServiceMail().length() > 20) {
-                mCustomerServiceEmail.setText(refundsentdata.getCustomerServiceMail().substring(0, 20) + "...");
-            } else {
-                mCustomerServiceEmail.setText(refundsentdata.getCustomerServiceMail());
+                case Utils.transCancelled:
+                case Utils.transFailed: {
+                    refundStatustv.setTextColor(getResources().getColor(R.color.failed_status));
+                    refundStatustv.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+                }
             }
         }
-        if (refundsentdata.getCustomerServicePhoneNo() != null) {
-            String phone_number = "(" + refundsentdata.getCustomerServicePhoneNo().substring(0, 3) + ")" + " " + refundsentdata.getCustomerServicePhoneNo().substring(3, 6) + "-" + refundsentdata.getCustomerServicePhoneNo().substring(6, 10);
-            mCustomerServicePhone.setText(phone_number);
+        if (refundsentdata.getRefundAmount() != null) {
+            refundamounttv.setText(Utils.convertTwoDecimal(refundsentdata.getRefundAmount().replace("CYN", "").trim()));
         }
 
-//        String mVar = getString(R.string.description);
-//        SpannableString spannableString = new SpannableString(mVar);
-//        ClickableSpan clickableSpan = new ClickableSpan() {
-//            @Override
-//            public void onClick(@NonNull View view) {
-//                try {
-//                    startActivity(new Intent(TransactionDetailsActivity.this, GetHelpWebViewActivity.class));
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void updateDrawState(@NonNull TextPaint ds) {
-//                super.updateDrawState(ds);
-//                ds.setUnderlineText(true);
-//                ds.setColor(getColor(R.color.primary_color));
-//            }
-//        };
-//
-//        spannableString.setSpan(clickableSpan, mVar.length() - 8, mVar.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        mDescription.setText(spannableString);
-//        mDescription.setMovementMethod(LinkMovementMethod.getInstance());
-//        mDescription.setHighlightColor(Color.TRANSPARENT);
-
-        if (refundsentdata.getSaleOrderNetAmount() != null) {
-            mAmountPaid.setText(Utils.convertTwoDecimal(refundsentdata.getSaleOrderNetAmount().replace("CYN", "").trim()) + " CYN");
+        if (refundsentdata.getReferenceId().length() > 10) {
+            refundreferencetv.setText(refundsentdata.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+        } else {
+            refundreferencetv.setText(refundsentdata.getReferenceId());
         }
-        if (refundsentdata.getSaleOrderDateAndTime() != null) {
-            mDateAndTime.setText(objMyApplication.convertZoneLatestTxn(refundsentdata.getSaleOrderDateAndTime()));
-        }
-
-        if (refundsentdata.getSaleOrderReferenceId() != null) {
-            if (refundsentdata.getSaleOrderReferenceId().length() > 10) {
-                String refId = refundsentdata.getSaleOrderReferenceId().substring(0, 10) + "...";
-                mSaleReferenceID.setText(Html.fromHtml("<u>" + refId + "</u>"));
-            } else
-                mSaleReferenceID.setText(Html.fromHtml("<u>" + refundsentdata.getSaleOrderReferenceId() + "</u>"));
+        if (refundsentdata.getSaleOrderReferenceId().length() > 10) {
+            refundOTIrefrencetv.setText(refundsentdata.getSaleOrderReferenceId().substring(0, 10) + "...");
+            refundOTIrefrencetv.setPaintFlags(refundOTIrefrencetv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        } else {
+            refundOTIrefrencetv.setText(refundsentdata.getSaleOrderReferenceId());
         }
         String saleOrderId = refundsentdata.getSaleOrderReferenceId();
-        mSaleReferenceID.setOnClickListener(new View.OnClickListener() {
+        refundOTIrefrencetv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(TransactionDetailsActivity.this, MerchantTransactionDetailsActivity.class)
@@ -812,16 +736,68 @@ public class TransactionDetailsActivity extends BaseActivity {
                         .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, saleOrderId));
             }
         });
-        mBackButton.setOnClickListener(new View.OnClickListener() {
+        if (refundsentdata.getRecipientName() != null) {
+            refundreciptantNametv.setText(Utils.capitalize(refundsentdata.getRecipientName()));
+        }
+        if (refundsentdata.getRecipientEmail() != null) {
+            refundReciptantEmailtv.setText(refundsentdata.getRecipientEmail());
+        }
+        if (refundsentdata.getCreatedDate() != null) {
+            refundDatetimetv.setText(objMyApplication.convertZoneLatestTxn(refundsentdata.getCreatedDate()));
+        }
+        if (refundsentdata.getFees() != null) {
+            refundfeetv.setText(Utils.convertTwoDecimal(refundsentdata.getFees().replace("CYN", "").trim()));
+        }
+        if (refundsentdata.getTotalAmount() != null) {
+            refundtotalAmounttv.setText(Utils.convertTwoDecimal(refundsentdata.getTotalAmount().replace("CYN", "").trim()));
+        }
+//            if (objData.getData().getSaleOrderDateAndTime() != null) {
+//                refundOTIdatetv.setText(objMyApplication.exportDate(objData.getData().getSaleOrderDateAndTime()));
+//
+//            }
+        if (refundsentdata.getSaleOrderDateAndTime() != null) {
+            String datee = refundsentdata.getSaleOrderDateAndTime();
+
+            if (datee != null && !datee.equals("")) {
+                if (datee.contains(".")) {
+                    datee = datee.substring(0, datee.lastIndexOf("."));
+                }
+                refundOTIdatetv.setText(objMyApplication.convertZoneDateTime(datee, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy HH:mm:ss"));
+            }
+        }
+        if (refundsentdata.getSaleOrderGrossAmount() != null) {
+            refundOTIgrossamounttv.setText(Utils.convertTwoDecimal(refundsentdata.getSaleOrderGrossAmount().replace("CYN", "").trim()));
+        }
+        if (refundsentdata.getFees() != null) {
+            refundOTIFeetv.setText(Utils.convertTwoDecimal(refundsentdata.getSaleOrderFees().replace("CYN", "").trim()));
+        }
+        if (refundsentdata.getSaleOrderNetAmount() != null) {
+            refundOTINetamounttv.setText(Utils.convertTwoDecimal(refundsentdata.getSaleOrderNetAmount().replace("CYN", "").trim()));
+        }
+        if (refundsentdata.getRemarks() != null) {
+            refundReasontv.setText(refundsentdata.getRemarks());
+        }
+        if (refundsentdata.getRemarks().equals("")) {
+            refundReasontv.setVisibility(View.GONE);
+        } else {
+            refundReasontv.setText("\"" + refundsentdata.getRemarks() + "\"");
+        }
+        refundCloseLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
-//        mBackButton.setOnClickListener(view -> finish());
 
-
+        refundcopyLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.copyText(refundsentdata.getReferenceId(), TransactionDetailsActivity.this);
+            }
+        });
     }
+
+
 
     private void payRequest(TransactionData objData) {
         try {
@@ -2221,6 +2197,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
                 case BUY_TOKEN: {
@@ -2235,6 +2212,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
                 case BUY_BANK: {
@@ -2249,6 +2227,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
                 case BUY_SIGNET: {
@@ -2263,6 +2242,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
                 case WITH_GIFT: {
@@ -2277,6 +2257,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
                 case WITH_Instant: {
@@ -2291,6 +2272,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
                 case WITH_BANK:
@@ -2306,6 +2288,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
                 case BUSINESS_PAYOUT: {
@@ -2320,6 +2303,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
                 case CANCELLED_WITH:
@@ -2335,9 +2319,9 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.VISIBLE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
-                case REFUND_SENT:
                 case PAID_ORDER_TOKEN:
                 case REFUND_RECEIVED: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
@@ -2351,6 +2335,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.VISIBLE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
                 case RESERVE_RELEASE: {
@@ -2365,9 +2350,24 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.VISIBLE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
-
+                 case REFUND_SENT: {
+                    findViewById(R.id.payrequest).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenCD).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenBank).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawGift).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.VISIBLE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.VISIBLE);
+                }
+                break;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
