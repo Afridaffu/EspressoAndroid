@@ -163,7 +163,7 @@
         android:layout_height="1dp"
         android:layout_marginBottom="@dimen/_2sdp"
         android:background="@color/viewcolor"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 </LinearLayout>
 

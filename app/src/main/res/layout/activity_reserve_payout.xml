@@ -34,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/buy_token"
-                    android:src="@drawable/ic_back" />
+                    android:src="@drawable/ic_chevron_left" />
             </LinearLayout>
 
             <TextView

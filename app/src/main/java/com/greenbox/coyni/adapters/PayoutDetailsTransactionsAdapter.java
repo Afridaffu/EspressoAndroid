@@ -178,7 +178,7 @@ public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<Re
             holder.amount.setTextColor(Color.parseColor("#008a05"));
         }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.Refund)){
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " to " + objData.getSenderName());
-            holder.amount.setText(" - " + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
             holder.amount.setTextColor(Color.parseColor("#000000"));
         }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.MerchantPayout)){
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " to " + objData.getReceiveName());
@@ -186,7 +186,7 @@ public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<Re
             holder.amount.setTextColor(Color.parseColor("#008a05"));
         }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.MonthlyServiceFee)){
             holder.txnTypeDn.setText(objData.getTxnTypeDn());
-            holder.amount.setText(" - " + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
             holder.amount.setTextColor(Color.parseColor("#000000"));
         }
 
@@ -197,6 +197,7 @@ public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<Re
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 break;
             case Utils.transPending:
+            case Utils.partial_refund:
                 holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.orange));
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);
                 break;

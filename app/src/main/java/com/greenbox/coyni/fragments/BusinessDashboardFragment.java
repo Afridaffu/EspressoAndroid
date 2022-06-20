@@ -964,7 +964,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     d.setHours(23);
                     d.setMinutes(59);
                     SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
-                    nxtPayoutDatenTimeTV.setText(dateFormat.format(d));
+                    nxtPayoutDatenTimeTV.setText(dateFormat.format(d).toLowerCase());
 //                    String date = listItems.get(i).getCreatedAt();
 //                    if (date.contains(".")) {
 //                        String res = date.substring(0, date.lastIndexOf("."));
