@@ -141,6 +141,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/percentage"
                         android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/opensans_semibold"
                         android:layout_centerVertical="true"
                         android:text="@string/ownership_title"
                         android:textColor="@color/dark_gray"

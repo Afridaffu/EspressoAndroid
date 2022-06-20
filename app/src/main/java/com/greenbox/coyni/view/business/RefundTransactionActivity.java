@@ -75,8 +75,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     private TextView etremarksTV, fullamounttv, halfamounttv;
     public EditText refundET, addNoteET;
     private TextView refundcurrencyTV, tvcynTV;
-    private LinearLayout remarksll,lyPRClose
-            ;
+    private LinearLayout remarksll,lyPRClose;
     private DatabaseHandler dbHandler;
     private CardView fullamount, halfamount;
     private CustomKeyboard cKey;
@@ -261,7 +260,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 try {
                     if (transactionData.getGrossAmount() != null && !transactionData.getGrossAmount().equals("")) {
 
-                        value1 = Double.parseDouble(Utils.convertTwoDecimal(transactionData.getGrossAmount().replace("CYN", "").trim()));
+                        value1 = Double.parseDouble(transactionData.getGrossAmount().replace("CYN", "").trim());
                         refundET.setText("" + Utils.convertTwoDecimal(transactionData.getGrossAmount().replace("CYN", "").trim()));
                         refundET.setSelection(refundET.getText().length());
                         fullamount.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
