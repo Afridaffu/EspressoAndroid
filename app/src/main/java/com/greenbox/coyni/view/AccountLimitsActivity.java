@@ -67,7 +67,7 @@ public class AccountLimitsActivity extends BaseActivity {
                 business_AccountLimitsLL.setVisibility(View.GONE);
                 //            accountLimitsViewModel.meAccountLimits(userType);
                 accountLimitsViewModel.meAccountLimits(Utils.userTypeCust);
-            } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                 business_AccountLimitsLL.setVisibility(View.VISIBLE);
                 personalAccountLimitsSv.setVisibility(View.GONE);
                 //            accountLimitsViewModel.meAccountLimits(b_userType);

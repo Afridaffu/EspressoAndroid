@@ -78,16 +78,22 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
 
 
             if (objData.getStatus() != null && !objData.getStatus().equals("")) {
-                holder.txStatus.setText(objData.getStatus());
-                if (objData.getStatus().equalsIgnoreCase(Utils.teammemberpending) || objData.getStatus().equalsIgnoreCase(Utils.actionRequired) || objData.getStatus().equalsIgnoreCase(Utils.unVerified)) {
+                holder.txStatus.setText(objData.getStatus().trim().replace(" ", "\n"));
+                if (objData.getStatus().equalsIgnoreCase(Utils.teammemberpending)) {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.pending_color));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_pending_bg);
-                } else if (objData.getStatus().equalsIgnoreCase(Utils.active)) {
+                } else if (objData.getStatus().equalsIgnoreCase(Utils.actionRequired)) {
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.xdark_gray));
+                    holder.txStatus.setBackgroundResource(R.drawable.txn_deactive_bg);
+                }else if (objData.getStatus().equalsIgnoreCase(Utils.unVerified)) {
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.xdark_gray));
+                    holder.txStatus.setBackgroundResource(R.drawable.txn_deactive_bg);
+                }else if (objData.getStatus().equalsIgnoreCase(Utils.active)) {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.active_green));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_active_bg);
                 } else if (objData.getStatus().equalsIgnoreCase(Utils.underReview)) {
-                    holder.txStatus.setTextColor(getContext().getColor(R.color.inprogress_status));
-                    holder.txStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.xdark_gray));
+                    holder.txStatus.setBackgroundResource(R.drawable.txn_deactive_bg);
                 } else if (objData.getStatus().equalsIgnoreCase(Utils.canceled)) {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.error_red));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_failed_bg);

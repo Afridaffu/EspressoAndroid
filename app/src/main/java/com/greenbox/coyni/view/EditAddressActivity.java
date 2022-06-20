@@ -94,7 +94,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            } else if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
                 try {
                     findViewById(R.id.customerEditAddressRL).setVisibility(GONE);
                     findViewById(R.id.businessEditAddressLL).setVisibility(VISIBLE);
@@ -1266,7 +1266,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
     protected void onResume() {
         super.onResume();
         try {
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
                 try {
                     b_address1ET.requestFocus();
                     b_address1ET.setSelection(Objects.requireNonNull(b_address1ET.getText()).length());

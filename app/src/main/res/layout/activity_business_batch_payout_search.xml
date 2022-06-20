@@ -218,7 +218,7 @@
                             android:gravity="center"
                             android:text="You have no more transactions"
                             android:textColor="@color/dark_grey"
-                            android:layout_marginBottom="@dimen/_6sdp"
+                            android:layout_marginBottom="@dimen/_20sdp"
                             android:textSize="@dimen/_10ssp"
                             android:visibility="visible" />
                     </LinearLayout>

@@ -424,16 +424,26 @@ public class TransactionDetailsActivity extends BaseActivity {
             reserveRules.setText(reserveData.getReserveRule());
         }
 
-        String depositTO;
+//        String depositTO;
+//        if (reserveData.getDepositTo() != null) {
+//            if (reserveData.getDepositTo().toLowerCase().contains("token account")) {
+//                tokenType.setText(reserveData.getDepositTo().split("Token")[0] + "Token Account");
+//            }
+//            depositTO = reserveData.getDepositTo().split("Account")[1].trim();
+//            if (depositTO.length() > 10)
+//                depositTo.setText(Html.fromHtml("<u>" + depositTO.substring(0, 10) + "..." + "</u>"));
+//            else
+//                depositTo.setText(Html.fromHtml("<u>" + depositTO + "</u>"));
+//        }
         if (reserveData.getDepositTo() != null) {
-            if (reserveData.getDepositTo().toLowerCase().contains("token account")) {
-                tokenType.setText(reserveData.getDepositTo().split("Token")[0] + "Token Account");
+            if (reserveData.getDepositTo().length() > 10) {
+                depositTo.setText(reserveData.getDepositTo().substring(0, 10) + "...");
+                depositTo.setPaintFlags(depositTo.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+            } else {
+                depositTo.setText(reserveData.getDepositTo());
+                depositTo.setPaintFlags(depositTo.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             }
-            depositTO = reserveData.getDepositTo().split("Account")[1].trim();
-            if (depositTO.length() > 10)
-                depositTo.setText(Html.fromHtml("<u>" + depositTO.substring(0, 10) + "..." + "</u>"));
-            else
-                depositTo.setText(Html.fromHtml("<u>" + depositTO + "</u>"));
         }
 
         if (reserveData.getTotalAmount() != null) {
@@ -1933,8 +1943,12 @@ public class TransactionDetailsActivity extends BaseActivity {
             if (businessPayoutData.getDepositTo() != null) {
                 if (businessPayoutData.getDepositTo().length() > 10) {
                     depositID.setText(businessPayoutData.getDepositTo().substring(0, 10) + "...");
+                    depositID.setPaintFlags(depositID.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
                 } else {
                     depositID.setText(businessPayoutData.getDepositTo());
+                    depositID.setPaintFlags(depositID.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
                 }
             }
 

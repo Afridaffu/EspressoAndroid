@@ -117,7 +117,7 @@ public class NotificationsActivity extends BaseActivity {
         headerTV = findViewById(R.id.headerTV);
 
         try {
-            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                 viewSideBarCV.setVisibility(View.GONE);
                 headerTV.setVisibility(View.VISIBLE);
             } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {

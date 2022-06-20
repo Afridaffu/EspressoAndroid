@@ -68,12 +68,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:focusable="true"
                 android:fontFamily="@font/opensans_regular"
                 android:hint="@string/name"
                 android:imeOptions="actionDone"
-                android:inputType="textNoSuggestions"
+                android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                 android:singleLine="true"
@@ -111,12 +110,13 @@
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/teamsCV"
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_11sdp"
         android:layout_marginVertical="@dimen/_11sdp"
         app:cardBackgroundColor="@color/white"
+        android:visibility="visible"
         app:cardCornerRadius="10dp">
 
         <LinearLayout
@@ -125,7 +125,13 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_9sdp"
             android:orientation="vertical">
-
+<LinearLayout
+    android:id="@+id/teamsCV"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/backgrndallcornrs"
+    android:orientation="vertical"
+    >
             <LinearLayout
                 android:id="@+id/addTeamMemberL"
                 android:layout_width="match_parent"
@@ -151,14 +157,16 @@
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
             </LinearLayout>
+    <View
+        android:id="@+id/dividerView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/_2sdp"
+        android:background="@color/viewcolor"
+        android:visibility="gone"/>
 
-            <View
-                android:id="@+id/dividerView"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/_2sdp"
-                android:background="@color/viewcolor"
-                android:visibility="gone"/>
+</LinearLayout>
+
 
             <!--            <ScrollView-->
             <!--                android:layout_width="match_parent"-->
@@ -173,19 +181,30 @@
                 android:layout_marginBottom="@dimen/_20sdp"
                 android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/noTeamMemberTV"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:fontFamily="@font/opensans_regular"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="Team member not found"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_11ssp"
-                android:visibility="gone" />
+<!--            <TextView-->
+<!--                android:id="@+id/noTeamMemberTV"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginTop="@dimen/_20sdp"-->
+<!--                android:fontFamily="@font/opensans_regular"-->
+<!--                android:gravity="center_vertical|center_horizontal"-->
+<!--                android:text="No Results"-->
+<!--                android:textColor="@color/primary_black"-->
+<!--                android:textSize="@dimen/_11ssp"-->
+<!--                android:visibility="gone" />-->
             <!--            </ScrollView>-->
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/noTeamMemberTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/opensans_regular"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:text="No Results"
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_11ssp"
+        android:visibility="gone" />
 
 </LinearLayout>

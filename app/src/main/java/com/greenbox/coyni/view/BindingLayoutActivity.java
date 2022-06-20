@@ -85,7 +85,7 @@ public class BindingLayoutActivity extends BaseActivity {
 
             objMyApplication = (MyApplication) getApplicationContext();
 
-            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT ) {
                 txvVerifyName.setText("Add Personal Account");
                 txvVerifyDescription.setText(" Please follow the instructions below to create personal account.");
             }
@@ -154,7 +154,7 @@ public class BindingLayoutActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                         identityVerificationViewModel.getPostAddCustomer();
                     } else {
                         Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
@@ -261,7 +261,7 @@ public class BindingLayoutActivity extends BaseActivity {
 
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
 
-                        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                             Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                             Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
                             i.putExtra("ADDPERSONAL", "true");

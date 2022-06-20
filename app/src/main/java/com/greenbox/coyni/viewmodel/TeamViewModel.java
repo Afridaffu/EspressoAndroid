@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.EmptyRequest;
+import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.team.TeamGetDataModel;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
@@ -32,6 +33,7 @@ public class TeamViewModel extends AndroidViewModel {
     }
 
     private MutableLiveData<TeamListResponse> teamRetrieveMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<TeamListResponse> teamSearchMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<TeamInfoAddModel> teamDelMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<TeamInfoAddModel> teamAddMutableLiveData = new MutableLiveData<>();
@@ -41,6 +43,10 @@ public class TeamViewModel extends AndroidViewModel {
 
     public MutableLiveData<TeamListResponse> getTeamRetrieveMutableLiveData() {
         return teamRetrieveMutableLiveData;
+    }
+
+    public MutableLiveData<TeamListResponse> getSearchTeamMutableLiveData() {
+        return teamSearchMutableLiveData;
     }
 
     public MutableLiveData<TeamInfoAddModel> getTeamDelMutableLiveData() {
@@ -92,6 +98,42 @@ public class TeamViewModel extends AndroidViewModel {
                 public void onFailure(Call<TeamListResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     teamRetrieveMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void searchTeamMember(SearchKeyRequest searchKey) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<TeamListResponse> mCall = apiService.getSearchData(searchKey);
+            mCall.enqueue(new Callback<TeamListResponse>() {
+                @Override
+                public void onResponse(Call<TeamListResponse> call, Response<TeamListResponse> response) {
+                    Log.d("TeamInfo", response.toString());
+                    try {
+                        if (response.isSuccessful()) {
+                            TeamListResponse obj = response.body();
+                            teamSearchMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<TeamListResponse>() {
+                            }.getType();
+                            TeamListResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            teamSearchMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        teamSearchMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TeamListResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    teamSearchMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

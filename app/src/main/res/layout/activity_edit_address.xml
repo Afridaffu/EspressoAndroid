@@ -825,7 +825,7 @@
                             android:maxLength="30"
                             android:padding="@dimen/_12sdp"
                             android:text="United States"
-                            android:textColor="@color/light_gray"
+                            android:textColor="@color/xdark_gray"
                             android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
