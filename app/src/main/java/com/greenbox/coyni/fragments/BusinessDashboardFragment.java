@@ -234,7 +234,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         nextReleaseNATV = mCurrentView.findViewById(R.id.nextReleaseNATV);
         lastReleaseNATV = mCurrentView.findViewById(R.id.lastReleaseNATV);
         releaseNoTransaction = mCurrentView.findViewById(R.id.releaseNoTransaction);
-        disable_reserve_list = mCurrentView.findViewById(R.id.disable_reserve_list);
+//        disable_reserve_list = mCurrentView.findViewById(R.id.disable_reserve_list);
 
         // For Processing Volume
         mGrossAmount = mCurrentView.findViewById(R.id.gross_amount);
@@ -976,13 +976,12 @@ public class BusinessDashboardFragment extends BaseFragment {
                 } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
                     String Amount = listItems.get(i).getTotalAmount();
                     lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
-
                     String date1 = listItems.get(i).getUpdatedAt();
-                    if (date1.contains(".")) {
+                    if (date1 !=null && date1.contains(".")) {
                         String res = date1.substring(0, date1.lastIndexOf("."));
                         lastPayoutDate.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
                     } else {
-                        Log.d("jkhj", date1);
+//                        lastPayoutDate.setText("N/A");
                     }
                     isPaid = true;
                 }
@@ -1005,11 +1004,11 @@ public class BusinessDashboardFragment extends BaseFragment {
                     TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
                     TextView payoutManualTV = xmlView.findViewById(R.id.payoutManualTV);
                     String listDate = listItems.get(j).getUpdatedAt();
-                    if (listDate.contains(".")) {
+                    if (listDate!= null && listDate.contains(".")) {
                         String listD = listDate.substring(0, listDate.lastIndexOf("."));
                         payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
                     } else {
-                        Log.d("listDate", listDate);
+//                        payoutDate.setText("N/A");
                     }
                     try {
                         String type = listItems.get(j).getProcessType();
@@ -1059,7 +1058,6 @@ public class BusinessDashboardFragment extends BaseFragment {
     private void showReserveRelease(ReserveListData listData) {
         showReserveReleaseBalance();
         mTvReserveList.setVisibility(View.VISIBLE);
-        disable_reserve_list.setVisibility(View.GONE);
 
         if (listData.getNextReserveReleaseAmount() != null) {
             nextReleaseAmountTV.setText(listData.getNextReserveReleaseAmount());
@@ -1067,7 +1065,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
         if (listData.getNextReserveReleaseDate() != null) {
             String date = listData.getNextReserveReleaseDate();
-            if (date.contains(".")) {
+            if (date !=null && date.contains(".")) {
                 date = date.substring(0, date.lastIndexOf("."));
             }
             nextReleaseNATV.setVisibility(View.GONE);
@@ -1088,7 +1086,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 lastReleaseAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
                 String datee = latest.getScheduledRelease();
                 if (datee != null && !datee.equals("")) {
-                    if (datee.contains(".")) {
+                    if ( datee.contains(".")) {
                         datee = datee.substring(0, datee.lastIndexOf("."));
                     }
                     lastReleaseDateTV.setText(myApplication.convertZoneDateTime(datee, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
@@ -1096,7 +1094,8 @@ public class BusinessDashboardFragment extends BaseFragment {
 
                 LinearLayout payoutsList = mCurrentView.findViewById(R.id.reserveReleaseListLL);
                 payoutsList.removeAllViews();
-                for (int j = 0; j < items.size(); j++) {
+                int target = items.size() > 5 ? 5 : items.size();
+                for (int j = 0; j < target; j++) {
                     View xmlView = getLayoutInflater().inflate(R.layout.dashboard_reserve_release_list, null);
                     TextView releaseDate = xmlView.findViewById(R.id.reserveListDateTV);
                     TextView payoutManualTV = xmlView.findViewById(R.id.reserveListManualTV);
