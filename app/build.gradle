@@ -44,13 +44,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 //            signingConfig signingConfigs.releaseSigningConfig
             signingConfig signingConfigs.config
-            applicationVariants.all { variant ->
-                variant.outputs.all {
-                    def currentFile = new File(outputFileName)
-                    def filename = currentFile.getName()
-                    outputFileName = "../../../../../app/build/outputs/apk/${filename}"
-                }
-            }
         }
         debug {
             buildConfigField 'boolean', 'LOGGING_ENABLED', 'true'
