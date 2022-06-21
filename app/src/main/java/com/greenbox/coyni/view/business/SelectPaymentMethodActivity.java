@@ -184,9 +184,13 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             } else if (requestCode == 2) {
-                if (objMyApplication.getSignet()) {
-                    objMyApplication.setSignet(false);
-                    getPaymentMethods();
+                if (strScreen.equals("withdraw")) {
+                    onBackPressed();
+                } else {
+                    if (objMyApplication.getSignet()) {
+                        objMyApplication.setSignet(false);
+                        getPaymentMethods();
+                    }
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -761,7 +765,9 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     isBankSuccess = false;
-                    if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+                        onBackPressed();
+                    } else if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
                         paymentMethods();
