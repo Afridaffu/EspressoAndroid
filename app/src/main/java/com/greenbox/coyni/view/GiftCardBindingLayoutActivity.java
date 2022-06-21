@@ -770,6 +770,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                                 onBackPressed();
                             } else {
                                 Intent i = new Intent(GiftCardBindingLayoutActivity.this, WithdrawPaymentMethodsActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(i);
                             }
                             finish();
