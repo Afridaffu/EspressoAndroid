@@ -130,19 +130,28 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 }
             } else if (requestCode == 3) {
                 if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                    if (cardList != null && cardList.size() > 0) {
-                        isDeCredit = true;
-                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                            ControlMethod("addpayment");
-                        } else {
-                            ControlMethod("addbpayment");
-                        }
-                    } else {
-                        ControlMethod("withdrawmethod");
-                        selectWithdrawMethod();
-                        strScreen = "withdrawmethod";
-                        strCurrent = "";
+                    //Modified on 21 Jun 2022 -
+//                    if (cardList != null && cardList.size() > 0) {
+//                        isDeCredit = true;
+//                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                            ControlMethod("addpayment");
+//                        } else {
+//                            ControlMethod("addbpayment");
+//                        }
+//                    } else {
+//                        ControlMethod("withdrawmethod");
+//                        selectWithdrawMethod();
+//                        strScreen = "withdrawmethod";
+//                        strCurrent = "";
+//                    }
+                    isDeCredit = true;
+                    if (addPayDialog != null && addPayDialog.isShowing()) {
+                        addPayDialog.dismiss();
                     }
+                    ControlMethod("withdrawmethod");
+                    selectWithdrawMethod();
+                    strScreen = "withdrawmethod";
+                    strCurrent = "";
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
@@ -160,6 +169,8 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     }
                     getPaymentMethods();
                 }
+            } else if (requestCode == 5) {
+                getPaymentMethods();
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
@@ -378,15 +389,16 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     getPayments(payMethodsResponse.getData().getData());
                     if (isDeCredit) {
                         isDeCredit = false;
-                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                            ControlMethod("addpayment");
-                            strCurrent = "addpayment";
-                            numberOfAccounts();
-                        } else {
-                            ControlMethod("addbpayment");
-                            strCurrent = "addbpayment";
-                            numberOfMerchantAccounts();
-                        }
+                        //Modified on 21 Jun 2022 -
+//                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                            ControlMethod("addpayment");
+//                            strCurrent = "addpayment";
+//                            numberOfAccounts();
+//                        } else {
+//                            ControlMethod("addbpayment");
+//                            strCurrent = "addbpayment";
+//                            numberOfMerchantAccounts();
+//                        }
                     } else if (isSignet) {
                         isSignet = false;
                         ControlMethod("addbpayment");
@@ -1225,7 +1237,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         } else {
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, SelectPaymentMethodActivity.class);
                             i.putExtra("screen", "withdraw");
-                            startActivity(i);
+                            startActivityForResult(i, 5);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
