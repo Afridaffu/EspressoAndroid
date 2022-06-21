@@ -4,35 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/top_rounded_bg">
+    android:background="@drawable/top_rounded_bg"
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <View
                 android:layout_width="@dimen/_65sdp"
                 android:layout_height="@dimen/_3sdp"
-                android:background="@drawable/bg_core_colorfill"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_13sdp"
-                android:layout_marginBottom="@dimen/_36sdp"/>
+                android:layout_marginBottom="@dimen/_36sdp"
+                android:background="@drawable/bg_core_colorfill" />
         </LinearLayout>
+
         <TextView
             android:id="@+id/userNameTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/paying_dba_name"
-            android:textSize="@dimen/_12ssp"
-            android:textColor="@color/black"
-            android:textAlignment="center"
-            android:fontFamily="@font/opensans_semibold"
             android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginEnd="@dimen/_12sdp"/>
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="@string/paying_dba_name"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/profile_account_profile_image"
@@ -51,10 +55,10 @@
                 android:id="@+id/userProfileIV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/primary_green"
                 android:contentDescription="@string/businessProfileAccountItemChildImage"
                 android:scaleType="fitXY"
-                android:background="@color/primary_green"
-                android:src="@drawable/ic_case"
+                android:src="@drawable/acct_profile"
                 android:visibility="visible" />
 
             <TextView
@@ -67,158 +71,177 @@
                 android:textSize="@dimen/_20sdp"
                 android:visibility="gone" />
         </androidx.cardview.widget.CardView>
+
         <LinearLayout
             android:id="@+id/merchantNameLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_marginStart="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_11sdp"
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/payingDbaNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_1sdp"
-                android:text="@string/zara"
-                android:textSize="@dimen/_12ssp"
+                android:layout_weight="0.1"
                 android:fontFamily="@font/opensans_semibold"
-                android:textColor="@color/primary_black"/>
+                android:gravity="end"
+                android:singleLine="true"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
             <TextView
                 android:id="@+id/businessTypeTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/retail"
                 android:layout_marginStart="@dimen/_5sdp"
-                android:textSize="@dimen/_11ssp"
+                android:layout_weight="1"
+                android:fontFamily="@font/opensans_semibold"
+                android:textAlignment="textStart"
                 android:textColor="@color/dark_grey"
-                android:fontFamily="@font/opensans_semibold"/>
+                android:textSize="@dimen/_11ssp" />
         </LinearLayout>
+
         <TextView
             android:id="@+id/accountAddressTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/account_address_hsdj89378"
-            android:gravity="center"
-            android:textSize="@dimen/_11ssp"
-            android:textColor="@color/dark_grey"
-            android:fontFamily="@font/opensans_semibold"
             android:layout_marginTop="@dimen/_1sdp"
-            android:layout_marginBottom="@dimen/_16sdp"/>
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="center"
+            android:text="@string/account_address_hsdj89378"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/_11ssp" />
+
         <View
             android:id="@+id/viewLineV"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
-            android:background="@color/blue_light"
             android:layout_marginStart="@dimen/_4sdp"
             android:layout_marginEnd="@dimen/_2sdp"
-            android:visibility="visible"/>
+            android:background="@color/blue_light"
+            android:visibility="visible" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:gravity="center">
+            android:layout_marginTop="@dimen/_20sdp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/amountPayTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0.00"
                 android:fontFamily="@font/opensans_bold"
+                android:text="0.00"
                 android:textColor="@color/primary_green"
-                android:textSize="@dimen/_35ssp"/>
+                android:textSize="@dimen/_35ssp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cyn"
-                android:textSize="@dimen/_11ssp"
-                android:textColor="@color/cyn_color"
-                android:fontFamily="@font/opensans_bold"
                 android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_7sdp"/>
+                android:layout_marginTop="@dimen/_7sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:text="@string/cyn"
+                android:textColor="@color/cyn_color"
+                android:textSize="@dimen/_11ssp" />
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_13sdp"
-                android:src="@drawable/ic_exchange_range"
                 android:contentDescription="@string/done"
-                android:visibility="gone"/>
+                android:src="@drawable/ic_exchange_range"
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_14sdp"
             android:layout_marginHorizontal="@dimen/_11sdp"
-            android:gravity="center">
+            android:layout_marginTop="@dimen/_14sdp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/paying_method"
-                android:textSize="@dimen/_11ssp"
-                android:textColor="@color/dark_grey"
-                android:singleLine="true"
-                android:fontFamily="@font/opensans_regular"
                 android:layout_marginStart="@dimen/_11sdp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:fontFamily="@font/opensans_regular"
+                android:singleLine="true"
+                android:text="@string/paying_method"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/_11ssp" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_marginEnd="@dimen/_11sdp"
                 android:gravity="end"
-                android:layout_marginEnd="@dimen/_11sdp">
-                    <TextView
-                        android:id="@+id/accountType"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/business_token_account"
-                        android:textSize="@dimen/_11ssp"
-                        android:fontFamily="@font/opensans_semibold"
-                        android:textColor="@color/primary_black"/>
-                    <TextView
-                        android:id="@+id/availBalTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/available_balance"
-                        android:textSize="@dimen/_9ssp"
-                        android:textColor="@color/dark_grey"
-                        android:fontFamily="@font/opensans_regular"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/accountType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/business_token_account"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:id="@+id/availBalTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="@string/available_balance"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/_9ssp" />
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginHorizontal="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginHorizontal="@dimen/_21sdp">
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/recipient_s_address"
-                android:textSize="@dimen/_11ssp"
+                android:layout_weight="1"
                 android:fontFamily="@font/opensans_regular"
+                android:text="@string/recipient_s_address"
                 android:textColor="@color/dark_grey"
-                android:layout_weight="1"/>
+                android:textSize="@dimen/_11ssp" />
+
             <LinearLayout
                 android:id="@+id/copyRecipientLL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-            <TextView
-                android:id="@+id/recipientAddTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hgj34239274"
-                android:textSize="@dimen/_9ssp"
-                android:textColor="@color/primary_black"
-                android:fontFamily="@font/opensans_semibold"/>
-            <ImageView
-                android:layout_width="@dimen/_9sdp"
-                android:layout_height="@dimen/_11sdp"
-                android:layout_marginStart="@dimen/_6sdp"
-                android:contentDescription="@string/cyn"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:src="@drawable/ic_copy"/>
+
+                <TextView
+                    android:id="@+id/recipientAddTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_9ssp" />
+
+                <ImageView
+                    android:layout_width="@dimen/_9sdp"
+                    android:layout_height="@dimen/_11sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:contentDescription="@string/cyn"
+                    android:src="@drawable/ic_copy" />
             </LinearLayout>
         </LinearLayout>
 
@@ -251,10 +274,10 @@
                 android:textColor="@color/primary_green"
                 android:textSize="@dimen/_15sdp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/im_lock"
                 app:layout_constraintStart_toEndOf="@+id/im_lock"
-                app:layout_constraintTop_toTopOf="@+id/im_lock"
-                android:visibility="gone"/>
+                app:layout_constraintTop_toTopOf="@+id/im_lock" />
 
             <com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView
                 android:id="@+id/tv_lable"
@@ -275,24 +298,24 @@
                 app:layout_constraintBottom_toBottomOf="@id/im_lock"
                 app:layout_constraintStart_toEndOf="@+id/im_lock"
                 app:layout_constraintTop_toTopOf="@+id/im_lock"
-                app:speed="500"
                 app:maxFPS="24"
-                app:simultaneousColors="8"/>
-<!--            <TextView-->
-<!--                android:id="@+id/tv_lable"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="8dp"-->
-<!--                android:ellipsize="end"-->
-<!--                android:gravity="center"-->
-<!--                android:paddingEnd="16dp"-->
-<!--                android:text="@string/slide_to_confirm"-->
-<!--                android:textColor="@color/primary_color"-->
-<!--                android:textSize="@dimen/_15ssp"-->
-<!--                android:textStyle="bold"-->
-<!--                app:layout_constraintBottom_toBottomOf="@id/im_lock"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/im_lock"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/im_lock" />-->
+                app:simultaneousColors="8"
+                app:speed="500" />
+            <!--            <TextView-->
+            <!--                android:id="@+id/tv_lable"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="8dp"-->
+            <!--                android:ellipsize="end"-->
+            <!--                android:gravity="center"-->
+            <!--                android:paddingEnd="16dp"-->
+            <!--                android:text="@string/slide_to_confirm"-->
+            <!--                android:textColor="@color/primary_color"-->
+            <!--                android:textSize="@dimen/_15ssp"-->
+            <!--                android:textStyle="bold"-->
+            <!--                app:layout_constraintBottom_toBottomOf="@id/im_lock"-->
+            <!--                app:layout_constraintStart_toEndOf="@+id/im_lock"-->
+            <!--                app:layout_constraintTop_toTopOf="@+id/im_lock" />-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/im_lock"
                 android:layout_width="@dimen/_44sdp"

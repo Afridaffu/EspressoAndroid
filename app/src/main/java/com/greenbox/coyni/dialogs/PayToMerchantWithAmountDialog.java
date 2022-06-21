@@ -202,9 +202,9 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             }
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getContext());
-                utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_case);
+                utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.acct_profile);
             } else {
-                userProfile.setImageResource(R.drawable.ic_case);
+                userProfile.setImageResource(R.drawable.acct_profile);
             }
             recipientAddress = "";
             recipientAddress = userDetails.getData().getWalletId();

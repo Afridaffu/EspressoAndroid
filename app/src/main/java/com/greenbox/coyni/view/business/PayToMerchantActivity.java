@@ -637,9 +637,9 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
                 userProfile.setVisibility(View.VISIBLE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-                utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_case);
+                utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.acct_profile);
             } else {
-                userProfile.setImageResource(R.drawable.ic_case);
+                userProfile.setImageResource(R.drawable.acct_profile);
             }
             recipientAddress = "";
             recipientAddress = userDetails.getData().getWalletId();
