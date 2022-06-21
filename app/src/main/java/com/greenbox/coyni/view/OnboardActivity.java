@@ -123,7 +123,7 @@ public class OnboardActivity extends BaseActivity {
                 Utils.setStrReferer(refererUrl);
             }
 
-            CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
+            CheckOutModel  checkOutModel= objMyApplication.getCheckOutModel();
 
             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
@@ -269,6 +269,12 @@ public class OnboardActivity extends BaseActivity {
             } else {
                 Utils.setIsTouchEnabled(false);
                 Utils.setIsFaceEnabled(false);
+            }
+
+            CheckOutModel  checkOutModel= objMyApplication.getCheckOutModel();
+            if (checkOutModel != null && checkOutModel.isCheckOutFlag()) {
+                startActivity(new Intent(OnboardActivity.this, LoginActivity.class));
+                finish();
             }
         } catch (Exception ex) {
             ex.printStackTrace();

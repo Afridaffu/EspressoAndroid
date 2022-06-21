@@ -362,6 +362,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         myApplication.setAccountType(btResp.getData().getAccountType());
                         myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
                         myApplication.setIsReserveEnabled(btResp.getData().isReserveEnabled());
+                        myApplication.setIsLoggedIn(true);
 
                         if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
                             myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());

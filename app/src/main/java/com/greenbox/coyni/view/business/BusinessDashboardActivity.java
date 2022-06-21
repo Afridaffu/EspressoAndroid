@@ -228,7 +228,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-//                        startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
+                        startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
                     }
                 });
             } catch (Exception ex) {
