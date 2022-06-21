@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:scrollbars="none">
         <RelativeLayout
+            android:id="@+id/applicationApprovedRl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -173,7 +174,7 @@
                     android:layout_marginLeft="@dimen/_2sdp"
                     android:layout_marginTop="@dimen/_11sdp"
                     android:layout_marginRight="@dimen/_2sdp"
-                    android:layout_marginBottom="@dimen/_80sdp"
+                    android:layout_marginBottom="@dimen/_110sdp"
                     app:cardCornerRadius="@dimen/_7sdp">
 
                     <LinearLayout

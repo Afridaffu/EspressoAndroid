@@ -75,20 +75,20 @@ public class CompanyInfoDetails extends BaseActivity {
                 e.printStackTrace();
             }
         });
-
-        emailLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(CompanyInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "CompanyInfo").putExtra("action", "EditEmailCompany").putExtra("value", companyEmail));
-            }
-        });
-
-        phoneLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(CompanyInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "CompanyInfo").putExtra("action", "EditPhoneCompany").putExtra("value", companyPhone));
-            }
-        });
+        if (myApplication.getDbaOwnerId() == null || myApplication.getDbaOwnerId() == 0) {
+            emailLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(CompanyInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "CompanyInfo").putExtra("action", "EditEmailCompany").putExtra("value", companyEmail));
+                }
+            });
+            phoneLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(CompanyInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "CompanyInfo").putExtra("action", "EditPhoneCompany").putExtra("value", companyPhone));
+                }
+            });
+        }
     }
 
     @Override

@@ -84,7 +84,7 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
         BatchPayoutListItems objData = listItems.get(position);
 
         if (objData.getSentTo() != null && !objData.getSentTo().equals("")) {
-            holder.payoutSentTextTV.setText(objData.getSentTo());
+            holder.payoutSentTextTV.setText("Sent to" + " " +objData.getSentTo());
         }
         if (objData.getTotalAmount() != null && !objData.getTotalAmount().equals("")) {
             holder.payoutMoneyTV.setText(Utils.convertTwoDecimal(objData.getTotalAmount()));
@@ -110,11 +110,8 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
                 holder.statusTV.setTextColor(context.getColor(R.color.completed_status));
                 holder.statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
-            case "in progress":
-                holder.statusTV.setTextColor(context.getColor(R.color.inprogress_status));
-                holder.statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
-                break;
             case "open":
+            case "in progress":
                 holder.statusTV.setTextColor(context.getColor(R.color.inprogress_status));
                 holder.statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 break;
