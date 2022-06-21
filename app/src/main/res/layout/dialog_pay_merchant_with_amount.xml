@@ -53,6 +53,8 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/businessProfileAccountItemChildImage"
                 android:scaleType="fitXY"
+                android:background="@color/primary_green"
+                android:src="@drawable/ic_case"
                 android:visibility="visible" />
 
             <TextView

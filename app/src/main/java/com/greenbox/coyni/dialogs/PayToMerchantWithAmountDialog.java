@@ -16,6 +16,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.PayRequestActivity;
 import com.greenbox.coyni.view.ScanActivity;
@@ -34,15 +35,16 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     private final String pay = "payTransaction";
     private double balance;
+    private MyApplication myApplication;
     private String businessTypeValue;
 
-    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails, boolean isShowIcon, double balance, String bType) {
+    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails, boolean isShowIcon, double balance, MyApplication bTypeResp) {
         super(context);
         amount = strAmount;
         this.userDetails = userDetails;
         this.screenCheck = isShowIcon;
         this.balance = balance;
-        this.businessTypeValue = bType;
+        this.myApplication = bTypeResp;
     }
 
     @SuppressLint("SetTextI18n")
@@ -78,14 +80,36 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             availableBalance.setText("Available: " + Utils.USNumberFormat(balance) + "CYN");
         }
 
-        if (userDetails!= null && userDetails.getData()!= null && userDetails.getData().getFullName() != null) {
-            userName.setText("Paying " + userDetails.getData().getFullName());
+        if (userDetails != null && userDetails.getData() != null && userDetails.getData().getDbaName() != null) {
+            userName.setText("Paying " + userDetails.getData().getDbaName());
         }
-        if (businessTypeValue != null) {
-            if (businessTypeValue.length() > 20) {
-                bTypeValue.setText(businessTypeValue.substring(0, 21) + "...");
-            } else {
-                bTypeValue.setText(businessTypeValue);
+//        if (businessTypeValue != null) {
+//            if (businessTypeValue.length() >= 21) {
+//                bTypeValue.setText(businessTypeValue.substring(0, 21) + "...");
+//            } else {
+//                bTypeValue.setText(businessTypeValue);
+//            }
+//        }
+        for (int i = 0; i < myApplication.getBusinessTypeResp().getData().size(); i++) {
+            try {
+                if (userDetails != null && userDetails.getData().getBusinessType().toLowerCase().trim().equals(myApplication.getBusinessTypeResp().getData().get(i).getKey().toLowerCase().trim())) {
+                    businessTypeValue = myApplication.getBusinessTypeResp().getData().get(i).getValue();
+                    break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (businessTypeValue != null && businessTypeValue.length() > 0) {
+            try {
+                businessTypeValue = businessTypeValue.split("\\(")[0];
+                if (businessTypeValue.length() >= 21) {
+                    bTypeValue.setText("("+businessTypeValue.substring(0, 21) + "..."+")");
+                } else {
+                    bTypeValue.setText("("+businessTypeValue+")");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -132,10 +156,10 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     @SuppressLint("SetTextI18n")
     private void bindUserInfo(UserDetails userDetails) {
         try {
-            TextView tvName, userName, userWalletAddre;
+            TextView tvName, userWalletAddre;
             ImageView userProfile;
             tvName = findViewById(R.id.payingDbaNameTV);
-            userName = findViewById(R.id.userProfileTextTV);
+//            userName = findViewById(R.id.userProfileTextTV);
             userProfile = findViewById(R.id.userProfileIV);
             userWalletAddre = findViewById(R.id.accountAddressTV);
 
@@ -148,37 +172,39 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 
             }
 //            requestedToUserId = userDetails.getData().getUserId();
-            if (userDetails != null && userDetails.getData() != null && userDetails.getData().getFullName() != null) {
-                if (userDetails.getData().getFullName().length() > 20) {
-                    tvName.setText(Utils.capitalize(userDetails.getData().getFullName()).substring(0, 20) + "...");
+//            if (userDetails != null && userDetails.getData() != null && userDetails.getData().getFullName() != null) {
+//                if (userDetails.getData().getFullName().length() > 20) {
+//                    tvName.setText(Utils.capitalize(userDetails.getData().getFullName()).substring(0, 20) + "...");
+//                } else {
+//                    tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
+//                }
+//            }
+            if (userDetails != null && userDetails.getData() != null && userDetails.getData().getDbaName() != null) {
+                if (userDetails.getData().getDbaName().length() >= 21) {
+                    tvName.setText(Utils.capitalize(userDetails.getData().getDbaName().substring(0, 21)) + "...");
                 } else {
-                    tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
+                    tvName.setText(userDetails.getData().getDbaName());
                 }
+
             }
 //            tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
 //            strUserName = Utils.capitalize(userDetails.getData().getFullName());
-            String imageTextNew = "";
-            if (userDetails != null && userDetails.getData() != null && userDetails.getData().getFirstName() != null && userDetails.getData().getLastName() != null) {
-                imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
-                        userDetails.getData().getLastName().substring(0, 1).toUpperCase();
-            }
-            userName.setText(imageTextNew);
+//            String imageTextNew = "";
+//            if (userDetails != null && userDetails.getData() != null && userDetails.getData().getFirstName() != null && userDetails.getData().getLastName() != null) {
+//                imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
+//                        userDetails.getData().getLastName().substring(0, 1).toUpperCase();
+//            }
+//            userName.setText(imageTextNew);
             if (userDetails.getData().getWalletId().length() > 10) {
                 userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, 10) + "...");
             } else {
                 userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
             }
-            userName.setVisibility(View.VISIBLE);
-            userProfile.setVisibility(View.GONE);
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
-                userProfile.setVisibility(View.VISIBLE);
-                userName.setVisibility(View.GONE);
-
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(ScanActivity.scanActivity);
-                utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getContext());
+                utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_case);
             } else {
-                userProfile.setVisibility(View.GONE);
-                userName.setVisibility(View.VISIBLE);
+                userProfile.setImageResource(R.drawable.ic_case);
             }
             recipientAddress = "";
             recipientAddress = userDetails.getData().getWalletId();
