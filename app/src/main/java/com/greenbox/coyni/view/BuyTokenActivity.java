@@ -115,11 +115,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     SignOnData signOnData;
     float fontSize, dollarFont;
     Boolean isUSD = false, isCYN = false, isBank = false, isFaceLock = false, isTouchId = false, isBuyTokenAPICalled = false, isButtonClick = false, isMinimumError = false;
+    Boolean isPayment = false;
     public static BuyTokenActivity buyTokenActivity;
     TextInputEditText etCVV;
     Long mLastClickTime = 0L;
-    SQLiteDatabase mydatabase;
-    Cursor dsFacePin, dsTouchID, dsPermanentToken;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     public String strType = "";
 
@@ -261,36 +260,40 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try {
             super.onActivityResult(requestCode, resultCode, data);
-            switch (resultCode) {
-                case RESULT_OK:
-                    try {
-                        if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
-                            pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
-                            BiometricTokenRequest request = new BiometricTokenRequest();
-                            request.setDeviceId(Utils.getDeviceID());
-                            request.setMobileToken(objMyApplication.getStrMobileToken());
-                            request.setActionType(Utils.buyActionType);
-                            coyniViewModel.biometricToken(request);
-                        } else if (data == null && requestCode == 1) {
-                            if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-                                Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
-                            } else {
-                                pDialog = Utils.showProgressDialog(this);
-                                customerProfileViewModel.meSyncAccount();
+            if (requestCode == 3) {
+                isPayment = true;
+            } else {
+                switch (resultCode) {
+                    case RESULT_OK:
+                        try {
+                            if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+                                pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
+                                BiometricTokenRequest request = new BiometricTokenRequest();
+                                request.setDeviceId(Utils.getDeviceID());
+                                request.setMobileToken(objMyApplication.getStrMobileToken());
+                                request.setActionType(Utils.buyActionType);
+                                coyniViewModel.biometricToken(request);
+                            } else if (data == null && requestCode == 1) {
+                                if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                                    Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
+                                } else {
+                                    pDialog = Utils.showProgressDialog(this);
+                                    customerProfileViewModel.meSyncAccount();
+                                }
                             }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
                         }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    break;
-                case 0:
-                    if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
-                        startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
-                                .putExtra("TYPE", "ENTER")
-                                .putExtra("screen", "buy")
-                                .putExtra("cynValue", String.valueOf(cynValue)));
-                    }
-                    break;
+                        break;
+                    case 0:
+                        if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+                            startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
+                                    .putExtra("TYPE", "ENTER")
+                                    .putExtra("screen", "buy")
+                                    .putExtra("cynValue", String.valueOf(cynValue)));
+                        }
+                        break;
+                }
             }
         } catch (Exception ex) {
             super.onActivityResult(requestCode, resultCode, data);
@@ -674,19 +677,38 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
-                if (payMethodsResponse != null) {
-                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                        PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
-                        objMyApplication.setPaymentMethodsResponse(objResponse);
-                        paymentMethodsResponse = objResponse;
-                    } else {
-                        objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
-                        paymentMethodsResponse = payMethodsResponse;
-                    }
-                    if (objMyApplication.getSelectedCard() != null) {
+                try {
+                    if (payMethodsResponse != null) {
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
+                            objMyApplication.setPaymentMethodsResponse(objResponse);
+                            paymentMethodsResponse = objResponse;
+                        } else {
+                            objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
+                            paymentMethodsResponse = payMethodsResponse;
+                        }
+//                    if (objMyApplication.getSelectedCard() != null) {
+                        PaymentsList objData = paymentMethodsResponse.getData().getData().get(0);
+                        if (!isPayment && objMyApplication.getSelectedCard() != null) {
 //                        selectedCard = objMyApplication.getSelectedCard();
-                        bindPayMethod(rollbackSelectedCard());
+                            bindPayMethod(rollbackSelectedCard());
+                        } else {
+                            isPayment = false;
+                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                if (!objData.getPaymentMethod().toLowerCase().equals("debit")) {
+                                    objMyApplication.setSelectedCard(objData);
+                                    bindPayMethod(objData);
+                                } else {
+                                    bindPayMethod(rollbackSelectedCard());
+                                }
+                            } else {
+                                objMyApplication.setSelectedCard(objData);
+                                bindPayMethod(objData);
+                            }
+                        }
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
