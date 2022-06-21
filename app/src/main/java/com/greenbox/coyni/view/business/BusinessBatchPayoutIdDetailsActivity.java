@@ -297,19 +297,21 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                 payoutTokenIdTV.setText(objData.getTokenAccount());
             }
         }
-        if (objData.getReserveWalletId() != null && !objData.getReserveWalletId().equals("")) {
-            payoutReserveIdLL.setOnClickListener(v -> Utils.copyText(objData.getReserveWalletId(), BusinessBatchPayoutIdDetailsActivity.this));
-            reserveIDLL.setVisibility(View.VISIBLE);
-            if (objData.getReserveWalletId().length() > 10) {
+        if(objMyApplication.isReserveEnabled()) {
+            if (objData.getReserveWalletId() != null && !objData.getReserveWalletId().equals("")) {
+                payoutReserveIdLL.setOnClickListener(v -> Utils.copyText(objData.getReserveWalletId(), BusinessBatchPayoutIdDetailsActivity.this));
                 reserveIDLL.setVisibility(View.VISIBLE);
-                SpannableString content = new SpannableString(objData.getReserveWalletId().substring(0, 10));
-                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                ReserveIdTV.setText(content);
-            } else {
-                reserveIDLL.setVisibility(View.VISIBLE);
-                ReserveIdTV.setText(objData.getReserveWalletId());
+                if (objData.getReserveWalletId().length() > 10) {
+                    reserveIDLL.setVisibility(View.VISIBLE);
+                    SpannableString content = new SpannableString(objData.getReserveWalletId().substring(0, 10));
+                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                    ReserveIdTV.setText(content);
+                } else {
+                    reserveIDLL.setVisibility(View.VISIBLE);
+                    ReserveIdTV.setText(objData.getReserveWalletId());
+                }
             }
-        } else {
+        }else {
             reserveIDLL.setVisibility(View.GONE);
         }
     }

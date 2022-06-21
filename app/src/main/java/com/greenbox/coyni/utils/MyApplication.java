@@ -146,7 +146,7 @@ public class MyApplication extends Application {
 //        mCurrentUserData.setMerchantBalance(merchantBalance);
 //    }
 
-    public int getDbaOwnerId() {
+    public Integer getDbaOwnerId() {
         return mCurrentUserData.getDbaOwnerId();
     }
 

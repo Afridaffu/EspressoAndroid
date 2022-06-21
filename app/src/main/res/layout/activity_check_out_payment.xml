@@ -79,7 +79,7 @@
                         android:background="@color/primary_green"
                         android:contentDescription="@string/businessProfileAccountItemChildImage"
                         android:scaleType="fitXY"
-                        android:src="@drawable/ic_case"
+                        android:src="@drawable/acct_profile"
                         android:visibility="visible" />
 
                     <TextView
@@ -97,13 +97,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_11sdp"
-                    android:gravity="center"
+                    android:layout_marginStart="@dimen/_11sdp"
+                    android:layout_marginEnd="@dimen/_11sdp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/checkout_user_name_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.1"
+                        android:gravity="end"
+                        android:singleLine="true"
                         android:fontFamily="@font/opensans_semibold"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_14ssp" />
@@ -113,6 +117,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/opensans_semibold"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_11ssp" />

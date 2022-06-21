@@ -29,6 +29,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -90,6 +91,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     private ActionRequiredResponse actionRequired;
     private int documentID;
     private LinearLayout selectedLayout = null;
+    private RelativeLayout additionalActionRL;
     private TextView selectedText = null;
     public static ArrayList<File> documentsFIle;
     private JSONObject informationJSON;
@@ -130,8 +132,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         imvCLose = findViewById(R.id.imvCLose);
         submitCV = findViewById(R.id.submitCV);
         adminMessageTV = findViewById(R.id.adminMessageTV);
+        additionalActionRL = findViewById(R.id.additionalActionRL);
 
         underwritingUserActionRequiredViewModel = new ViewModelProvider(this).get(UnderwritingUserActionRequiredViewModel.class);
+        showProgressDialog();
         underwritingUserActionRequiredViewModel.getAdditionalActionRequiredData();
 
         fileUpload = new HashMap<Integer, String>();
@@ -276,6 +280,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     @Override
                     public void onChanged(ActionRequiredResponse actionRequiredResponse) {
                         try {
+                            dismissDialog();
+                            additionalActionRL.setVisibility(View.VISIBLE);
                             // LogUtils.d(TAG, "ActionRequiredResponse" + actionRequiredResponse.getData().getWebsiteChange().size());
                             actionRequired = actionRequiredResponse;
                             if (actionRequiredResponse != null && actionRequiredResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
@@ -600,7 +606,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     }
 
     private void showReserveRule(ActionRequiredResponse actionRequiredResponse) {
-
         llHeading.setVisibility(View.GONE);
         llBottomView.setVisibility(View.GONE);
         scrollview.setVisibility(View.GONE);

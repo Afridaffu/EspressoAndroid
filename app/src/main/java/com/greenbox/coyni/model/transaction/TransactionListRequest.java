@@ -21,10 +21,19 @@ public class TransactionListRequest {
     private String gbxTransactionId;
     private  boolean isFilters;
     private boolean isMerchantTransactions;
+    private boolean isMerchantTokenTransactions ;
 
     private ArrayList<Integer> transactionType;
     private ArrayList<Integer> transactionSubType;
     private ArrayList<Integer> txnStatus;
+
+    public boolean isMerchantTokenTransactions() {
+        return isMerchantTokenTransactions;
+    }
+
+    public void setMerchantTokenTransactions(boolean merchantTokenTransactions) {
+        isMerchantTokenTransactions = merchantTokenTransactions;
+    }
 
     public String getWalletCategory() {
         return walletCategory;

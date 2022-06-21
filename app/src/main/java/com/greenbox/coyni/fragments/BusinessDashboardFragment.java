@@ -460,7 +460,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                         }
 
                                         if (data.get(position).getFee() != null) {
-                                            processingFee = Double.parseDouble(data.get(position).getFee());
+                                            processingFee = processingFee + Double.parseDouble(data.get(position).getFee());
                                         }
                                     } else if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.refundtxntype)
                                             && data.get(position).getTransactionSubType() == null) {
@@ -469,8 +469,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             refunds = Double.parseDouble(data.get(position).getTotalAmount());
                                         }
 
-                                        double processFee = processingFee + Double.parseDouble(data.get(position).getFee());
-                                        processingFee = processFee;
+                                        processingFee = processingFee + Double.parseDouble(data.get(position).getFee());
                                     } else if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.monthlyServiceFeetxntype)
                                             && data.get(position).getTransactionSubType() == null) {
 
@@ -859,7 +858,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 mSbTodayVolume.setVisibility(View.GONE);
                 saleOrdersText.setVisibility(View.GONE);
                 strFromDate = myApplication.convertZoneDateTime(getFirstDayOfMonthString(), dateAndTime, date) + startTime;
-                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime);
+                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + endTime;
                 businessActivityAPICall(strFromDate, strToDate);
             }
             break;
@@ -977,7 +976,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     String Amount = listItems.get(i).getTotalAmount();
                     lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
                     String date1 = listItems.get(i).getUpdatedAt();
-                    if (date1 !=null && date1.contains(".")) {
+                    if (date1 != null && date1.contains(".")) {
                         String res = date1.substring(0, date1.lastIndexOf("."));
                         lastPayoutDate.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
                     } else {
@@ -1004,7 +1003,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
                     TextView payoutManualTV = xmlView.findViewById(R.id.payoutManualTV);
                     String listDate = listItems.get(j).getUpdatedAt();
-                    if (listDate!= null && listDate.contains(".")) {
+                    if (listDate != null && listDate.contains(".")) {
                         String listD = listDate.substring(0, listDate.lastIndexOf("."));
                         payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
                     } else {
@@ -1065,7 +1064,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
         if (listData.getNextReserveReleaseDate() != null) {
             String date = listData.getNextReserveReleaseDate();
-            if (date !=null && date.contains(".")) {
+            if (date != null && date.contains(".")) {
                 date = date.substring(0, date.lastIndexOf("."));
             }
             nextReleaseNATV.setVisibility(View.GONE);
@@ -1086,7 +1085,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 lastReleaseAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
                 String datee = latest.getScheduledRelease();
                 if (datee != null && !datee.equals("")) {
-                    if ( datee.contains(".")) {
+                    if (datee.contains(".")) {
                         datee = datee.substring(0, datee.lastIndexOf("."));
                     }
                     lastReleaseDateTV.setText(myApplication.convertZoneDateTime(datee, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));

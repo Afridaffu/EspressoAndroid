@@ -162,6 +162,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 
                         TransactionListRequest transactionListRequest = new TransactionListRequest();
                         transactionListRequest.setTransactionType(getDefaultTransactionTypes());
+                        transactionListRequest.setMerchantTokenTransactions(true);
                         transactionListRequest.setPageNo(String.valueOf(currentPage));
                         transactionListRequest.setWalletCategory(Utils.walletCategory);
                         transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
@@ -202,6 +203,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                                 Log.e("CurrentPage", currentPage + "");
                                 TransactionListRequest transactionListRequest = new TransactionListRequest();
                                 transactionListRequest.setTransactionType(getDefaultTransactionTypes());
+                                transactionListRequest.setMerchantTokenTransactions(true);
                                 transactionListRequest.setPageNo(String.valueOf(currentPage));
                                 transactionListRequest.setWalletCategory(Utils.walletCategory);
                                 transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
@@ -734,6 +736,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
             total = 0;
             TransactionListRequest transactionListRequest = new TransactionListRequest();
             transactionListRequest.setTransactionType(getDefaultTransactionTypes());
+            transactionListRequest.setMerchantTokenTransactions(true);
             transactionListRequest.setPageNo(String.valueOf(currentPage));
             transactionListRequest.setWalletCategory(Utils.walletCategory);
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
@@ -1308,6 +1311,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 TransactionListRequest transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNo(String.valueOf(currentPage));
                 transactionListRequest.setWalletCategory(Utils.walletCategory);
+                transactionListRequest.setMerchantTokenTransactions(true);
                 transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
 
                 transactionType = new ArrayList<>();
@@ -1595,6 +1599,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
             noMoreTransactionTV.setVisibility(View.GONE);
             TransactionListRequest transactionListRequest = new TransactionListRequest();
             transactionListRequest.setTransactionType(getDefaultTransactionTypes());
+            transactionListRequest.setMerchantTokenTransactions(true);
             transactionListRequest.setPageNo(String.valueOf(currentPage));
             transactionListRequest.setWalletCategory(Utils.walletCategory);
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));

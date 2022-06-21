@@ -35,6 +35,7 @@ import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
+import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayRequest;
@@ -430,7 +431,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
 
         if (orderInfoResponse.getData().getMerchantLogo() != null) {
             DisplayImageUtility utility = DisplayImageUtility.getInstance(CheckOutPaymentActivity.this);
-            utility.addImage(orderInfoResponse.getData().getMerchantLogo(), merchantImage, R.drawable.ic_case);
+            utility.addImage(orderInfoResponse.getData().getMerchantLogo(), merchantImage, R.drawable.acct_profile);
         }
 
     }
@@ -582,9 +583,10 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                myApplication.setStrScreen("payRequest");
+                myApplication.setStrScreen("CheckOutFlow");
+                myApplication.getCheckOutModel().setCheckOutFlag(false);
                 Intent i = new Intent(CheckOutPaymentActivity.this, BuyTokenPaymentMethodsActivity.class);
-                i.putExtra("screen", "payRequest");
+                i.putExtra("screen", "CheckOut");
                 startActivity(i);
                 //finish();
             }
