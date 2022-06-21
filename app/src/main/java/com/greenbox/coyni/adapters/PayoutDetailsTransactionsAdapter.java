@@ -197,6 +197,7 @@ public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<Re
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 break;
             case Utils.transPending:
+            case Utils.refundd:
             case Utils.partial_refund:
                 holder.txnStatus.setTextColor(mContext.getResources().getColor(R.color.orange));
                 holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);

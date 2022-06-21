@@ -1927,6 +1927,9 @@ public class Utils {
     }
 
     public static String getCapsSentences(String Name) {
+        if(Name == null) {
+            return "";
+        }
         String[] splits = Name.split(" ");
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < splits.length; i++) {

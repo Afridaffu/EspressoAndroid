@@ -204,7 +204,8 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         AccountsData accountsData = new AccountsData(filterList);
         ArrayList<BaseProfile> groupData = accountsData.getGroupData();
         for (BaseProfile profile : groupData) {
-            if (profile.getAccountType().equalsIgnoreCase(Utils.PERSONAL)) {
+            if (profile.getAccountType().equalsIgnoreCase(Utils.PERSONAL)
+                    || profile.getAccountType().equalsIgnoreCase(Utils.SHARED)) {
                 continue;
             }
             boolean isInActiveDBAFound = false;

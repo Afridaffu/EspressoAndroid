@@ -235,7 +235,8 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 statusTV.setVisibility(View.GONE);
             }
         }
-
+        childView.setAlpha(1.0f);
+        childView.setEnabled(true);
         if (detailInfo.getAccountType().equals(Utils.SHARED)) {
             if(detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
                 childView.setAlpha(0.5f);
