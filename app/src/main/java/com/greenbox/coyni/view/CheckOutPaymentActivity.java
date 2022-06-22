@@ -545,7 +545,12 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         boolean value = false;
 
         if (userAmount > availableBalance) {
-            displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
+            if (myApplication.getAccountType() == Utils.PERSONAL_ACCOUNT){
+                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
+            }
+            else if (myApplication.getAccountType() == Utils.BUSINESS_ACCOUNT){
+                displayMerchantAlert(getString(R.string.buy_token_message),CheckOutPaymentActivity.this,"coyni");
+            }
         } else if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
             displayAlertNew("Amount should be greater than zero.", CheckOutPaymentActivity.this, "Oops!");
         } else if ((Double.parseDouble(strPay.replace(",", "")) < minimumLimit)) {
@@ -583,11 +588,12 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                myApplication.setStrScreen("CheckOutFlow");
+                myApplication.setStrScreen(CheckOutConstants.FlowCheckOut);
                 myApplication.getCheckOutModel().setCheckOutFlag(false);
                 Intent i = new Intent(CheckOutPaymentActivity.this, BuyTokenPaymentMethodsActivity.class);
-                i.putExtra("screen", "CheckOut");
+                i.putExtra("screen", CheckOutConstants.ScreenCheckOut);
                 startActivity(i);
+
                 //finish();
             }
         });
@@ -610,7 +616,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                 changeSlideState();
             }
         });
-            dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
 
@@ -639,7 +645,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         }
     }
 
-    public void displayAlertNew(String msg, final Context context, String headerText) {
+    private void displayAlertNew(String msg, final Context context, String headerText) {
         // custom dialog
         displayAlertDialog = new Dialog(context);
         displayAlertDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -688,6 +694,59 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         displayAlertDialog.setCanceledOnTouchOutside(true);
         displayAlertDialog.show();
     }
+
+    private void displayMerchantAlert(String msg, final Context context, String headerText) {
+        // custom dialog
+        displayAlertDialog = new Dialog(context);
+        displayAlertDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        displayAlertDialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+        displayAlertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView header = displayAlertDialog.findViewById(R.id.tvHead);
+        TextView message = displayAlertDialog.findViewById(R.id.tvMessage);
+        CardView actionCV = displayAlertDialog.findViewById(R.id.cvAction);
+        TextView actionText = displayAlertDialog.findViewById(R.id.tvAction);
+
+        if (!headerText.equals("")) {
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
+        actionCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayAlertDialog.dismiss();
+                finish();
+//                changeSlideState();
+            }
+        });
+
+        displayAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+//                changeSlideState();
+                myApplication.setCheckOutModel(null);
+            }
+        });
+
+        message.setText(msg);
+        Window window = displayAlertDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        displayAlertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        displayAlertDialog.setCanceledOnTouchOutside(true);
+        displayAlertDialog.show();
+    }
+
 
 
 }

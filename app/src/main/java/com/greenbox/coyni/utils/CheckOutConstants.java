@@ -7,4 +7,6 @@ public class CheckOutConstants {
     public static final String CheckOutAmount = "checkoutAmount";
     public static final String REQUEST_TOKEN = "encryptedToken";
     public static final String CheckOut = "CheckOut";
+    public static final String FlowCheckOut = "CheckOutFlow";
+    public static String ScreenCheckOut = "ScreenCheckOut";
 }
