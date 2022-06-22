@@ -1414,6 +1414,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //                    startActivity(i);
                     try {
                         if (objMyApplication.getStrScreen().equalsIgnoreCase(CheckOutConstants.FlowCheckOut)) {
+                            objMyApplication.getCheckOutModel().setCheckOutFlag(true);
                             startActivity(new Intent(BuyTokenActivity.this,CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         }
                         else {

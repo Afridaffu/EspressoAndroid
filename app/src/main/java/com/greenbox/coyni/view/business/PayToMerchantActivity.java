@@ -172,6 +172,8 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                     cynValidation = 0.0;
                     disableButtons(true);
                     cKey.clearData();
+                    tvError.setVisibility(View.GONE);
+                    lyBalance.setVisibility(View.VISIBLE);
                 } else {
                     payET.setText("");
                     cynValue = 0.0;
