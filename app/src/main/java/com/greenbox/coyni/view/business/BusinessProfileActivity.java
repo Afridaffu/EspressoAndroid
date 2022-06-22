@@ -364,7 +364,7 @@ public class BusinessProfileActivity extends BaseActivity {
                     }
                 } else {
                     if (fullname.length() == 21) {
-                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 20) + "...");
+                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 22) + "...");
                     } else if (fullname.length() > 22) {
                         userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 22) + "...");
                     } else {
@@ -514,8 +514,8 @@ public class BusinessProfileActivity extends BaseActivity {
                     } else if (myApplication.getMyProfile().getData().getDbaName() != null && !myApplication.getMyProfile().getData().getDbaName().equals(" ")) {
                         fullname = Utils.capitalize(myApplication.getMyProfile().getData().getDbaName());
                     }
-                    if (fullname.length() > 22) {
-                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 22) + " ");
+                    if (fullname.length() > 20) {
+                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 20) + " ");
                     } else {
                         userFullname.setText(Utils.getCapsSentences(fullname));
                     }
@@ -732,8 +732,8 @@ public class BusinessProfileActivity extends BaseActivity {
                                     }
                                 } else if (profile.getData().getDbaName() != null) {
                                     fullname = profile.getData().getDbaName();
-                                    if (fullname != null && fullname.length() > 22) {
-                                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 22) + " ");
+                                    if (fullname != null && fullname.length() > 20) {
+                                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 20) + " ");
                                     } else {
                                         userFullname.setText(Utils.getCapsSentences(fullname));
                                     }
@@ -853,8 +853,8 @@ public class BusinessProfileActivity extends BaseActivity {
                 }
                 userFullname.setText(getResources().getString(R.string.dba_name, userName));
 
-                if (userName != null && userName.length() > 18) {
-                    userFullname.setText( Utils.getCapsSentences(userName).substring(0, 18) + " ");
+                if (userName != null && userName.length() > 20) {
+                    userFullname.setText( Utils.getCapsSentences(userName).substring(0, 20) + " ");
                 } else {
                     userFullname.setText( Utils.getCapsSentences(userName));
                 }
@@ -868,8 +868,8 @@ public class BusinessProfileActivity extends BaseActivity {
                 }
             } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
                 userName = myApplication.getMyProfile().getData().getDbaName();
-                if (userName != null && userName.length() > 18) {
-                    userFullname.setText( Utils.getCapsSentences(userName).substring(0, 18) + " ");
+                if (userName != null && userName.length() > 20) {
+                    userFullname.setText( Utils.getCapsSentences(userName).substring(0, 20) + " ");
                 } else if (userName != null) {
                     userFullname.setText(Utils.getCapsSentences(userName));
                 }

@@ -662,6 +662,7 @@
                     android:editable="false"
                     android:clickable="true"
                     android:focusable="false"
+                    android:paddingEnd="@dimen/_30sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:imeOptions="actionNext"
                     android:importantForAutofill="no"

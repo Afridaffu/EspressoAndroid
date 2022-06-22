@@ -99,15 +99,13 @@
                     android:layout_marginTop="@dimen/_11sdp"
                     android:layout_marginStart="@dimen/_11sdp"
                     android:layout_marginEnd="@dimen/_11sdp"
+                    android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/checkout_user_name_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:gravity="end"
-                        android:singleLine="true"
                         android:fontFamily="@font/opensans_semibold"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_14ssp" />
@@ -117,7 +115,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_weight="1"
                         android:textAlignment="textStart"
                         android:fontFamily="@font/opensans_semibold"
                         android:textColor="@color/dark_grey"
@@ -513,9 +510,9 @@
                                 android:layout_below="@+id/tvBalHead"
                                 android:layout_alignParentRight="true"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Available: 9,999,00CYN"
+                                android:text="Available: 0.00CYN"
                                 android:textColor="@color/xdark_gray"
-                                android:textSize="@dimen/_9ssp"/>
+                                android:textSize="@dimen/_9ssp" />
                         </RelativeLayout>
 
                         <TextView
