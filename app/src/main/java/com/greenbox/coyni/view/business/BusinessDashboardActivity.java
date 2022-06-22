@@ -448,7 +448,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                     if (profile != null) {
                         objMyApplication.setMyProfile(profile);
                         if (profile.getData() != null) {
-                            objMyApplication.setIsReserveEnabled(profile.getData().isReserveEnabled());
+//                            objMyApplication.setIsReserveEnabled(profile.getData().isReserveEnabled());
                             objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                         }
                         enableDisableTabView();
@@ -601,8 +601,8 @@ public class BusinessDashboardActivity extends BaseActivity {
                 iconText = objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
             }
             userName = objMyApplication.getMyProfile().getData().getDbaName();
-            if (userName != null && userName.length() > 21) {
-                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 21) + " ");
+            if (userName != null && userName.length() > 20) {
+                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 20) + " ");
             } else if (userName != null) {
                 mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
             }
@@ -628,7 +628,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             } else {
                 if (userName.length() == 21) {
-                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 20) + "...");
+                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 22) + "...");
                 } else if (userName.length() > 22) {
                     mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 22) + "...");
                 } else {

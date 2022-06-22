@@ -56,47 +56,47 @@ public class PastAgreeListAdapter extends RecyclerView.Adapter<PastAgreeListAdap
             } else if (objData.getSignatureType() == 0) {
                 holder.listagreementsTV.setText("Terms of Service " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
             }
-            if (objData.getSignatureType() == 5) {
+            if (objData.getSignatureType() == 2) {
                 holder.listagreementsTV.setText("Merchant’s Agreement " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
             }
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                        if (objData.getSignatureType() == 0) {
-                            Intent inte = new Intent(Intent.ACTION_VIEW);
-                            inte.setDataAndType(
-                                    Uri.parse(tosURL + "?" + System.currentTimeMillis()),
-                                    "application/pdf");
-                            mContext.startActivity(inte);
-                        } else {
-                            Intent inte = new Intent(Intent.ACTION_VIEW);
-                            inte.setDataAndType(
-                                    Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
-                                    "application/pdf");
-                            mContext.startActivity(inte);
-                        }
-                    }
-                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-                        if (position == 2) {
-                            Intent inte = new Intent(Intent.ACTION_VIEW);
-                            inte.setDataAndType(
-                                    Uri.parse(tosURL + "?" + System.currentTimeMillis()),
-                                    "application/pdf");
-                            mContext.startActivity(inte);
-
-                        }
-                        if (position == 1) {
-                            Intent inte = new Intent(Intent.ACTION_VIEW);
-                            inte.setDataAndType(
-                                    Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
-                                    "application/pdf");
-                            mContext.startActivity(inte);
-
-                        }
-                    }
-                }
-            });
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                        if (objData.getSignatureType() == 0) {
+//                            Intent inte = new Intent(Intent.ACTION_VIEW);
+//                            inte.setDataAndType(
+//                                    Uri.parse(tosURL + "?" + System.currentTimeMillis()),
+//                                    "application/pdf");
+//                            mContext.startActivity(inte);
+//                        } else {
+//                            Intent inte = new Intent(Intent.ACTION_VIEW);
+//                            inte.setDataAndType(
+//                                    Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
+//                                    "application/pdf");
+//                            mContext.startActivity(inte);
+//                        }
+//                    }
+//                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+//                        if (position == 2) {
+//                            Intent inte = new Intent(Intent.ACTION_VIEW);
+//                            inte.setDataAndType(
+//                                    Uri.parse(tosURL + "?" + System.currentTimeMillis()),
+//                                    "application/pdf");
+//                            mContext.startActivity(inte);
+//
+//                        }
+//                        if (position == 1) {
+//                            Intent inte = new Intent(Intent.ACTION_VIEW);
+//                            inte.setDataAndType(
+//                                    Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
+//                                    "application/pdf");
+//                            mContext.startActivity(inte);
+//
+//                        }
+//                    }
+//                }
+//            });
 
         } catch (Exception ex) {
             ex.printStackTrace();
