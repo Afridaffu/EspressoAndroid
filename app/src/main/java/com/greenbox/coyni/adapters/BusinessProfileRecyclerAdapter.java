@@ -115,9 +115,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 ////            }
             if (detailInfo.getDbaName() != null) {
                 if (detailInfo.getDbaName().length() > 20) {
-                    childItem.setText(detailInfo.getDbaName().substring(0, 20) + "...");
+                    childItem.setText(Utils.capitalize(detailInfo.getDbaName().substring(0, 20) + "..."));
                 } else {
-                    childItem.setText(detailInfo.getDbaName());
+                    childItem.setText(Utils.capitalize(detailInfo.getDbaName()));
                 }
             } else {
                 childItem.setText("[Dba Name]");
@@ -138,9 +138,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         } else if (detailInfo.getAccountType().equals(Utils.BUSINESS)) {
             if (detailInfo.getDbaName() != null) {
                 if (detailInfo.getDbaName().length() > 20) {
-                    childItem.setText(detailInfo.getDbaName().substring(0, 20) +"...");
+                    childItem.setText(Utils.capitalize(detailInfo.getDbaName().substring(0, 20) +"..."));
                 } else {
-                    childItem.setText(detailInfo.getDbaName());
+                    childItem.setText(Utils.capitalize(detailInfo.getDbaName()));
                 }
             } else {
                 childItem.setText("[Dba Name]");
@@ -343,9 +343,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             }
             if (headerInfo.getFullName() != null) {
                 if (headerInfo.getFullName().length() > 21) {
-                    heading.setText(headerInfo.getFullName().substring(0, 20));
+                    heading.setText(Utils.capitalize(headerInfo.getFullName().substring(0, 20)));
                 } else {
-                    heading.setText(headerInfo.getFullName());
+                    heading.setText(Utils.capitalize(headerInfo.getFullName()));
                 }
             } else {
                 heading.setText("[Personal]");
@@ -367,9 +367,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             arrowImg.setVisibility(View.VISIBLE);
             if (headerInfo.getCompanyName() != null) {
                 if (headerInfo.getCompanyName().length() > 21) {
-                    heading.setText(headerInfo.getCompanyName().substring(0, 20));
+                    heading.setText(Utils.capitalize(headerInfo.getCompanyName().substring(0, 20)));
                 } else {
-                    heading.setText(headerInfo.getCompanyName());
+                    heading.setText(Utils.capitalize(headerInfo.getCompanyName()));
                 }
             } else {
                 heading.setText("[Company Name]");
