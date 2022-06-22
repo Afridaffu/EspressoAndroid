@@ -388,7 +388,9 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dashboardNavigation();
+                    if (objMyApplication.getStrScreen().equalsIgnoreCase(CheckOutConstants.FlowCheckOut)) {
+                        dashboardNavigation();
+                    }
                 }
             });
 

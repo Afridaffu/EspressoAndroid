@@ -115,7 +115,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 ////            }
             if (detailInfo.getDbaName() != null) {
                 if (detailInfo.getDbaName().length() > 20) {
-                    childItem.setText(detailInfo.getDbaName().substring(0, 20));
+                    childItem.setText(detailInfo.getDbaName().substring(0, 20) + "...");
                 } else {
                     childItem.setText(detailInfo.getDbaName());
                 }
@@ -138,7 +138,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         } else if (detailInfo.getAccountType().equals(Utils.BUSINESS)) {
             if (detailInfo.getDbaName() != null) {
                 if (detailInfo.getDbaName().length() > 20) {
-                    childItem.setText(detailInfo.getDbaName().substring(0, 20));
+                    childItem.setText(detailInfo.getDbaName().substring(0, 20) +"...");
                 } else {
                     childItem.setText(detailInfo.getDbaName());
                 }

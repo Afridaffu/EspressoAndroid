@@ -107,10 +107,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/cvProfile"
-                        android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/_6sdp"
                         android:fontFamily="@font/opensans_semibold"
                         android:text=""
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        android:gravity="center"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_14ssp" />
 

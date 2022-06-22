@@ -69,51 +69,15 @@ public class PastAgreeListAdapter extends RecyclerView.Adapter<PastAgreeListAdap
                 @Override
                 public void onClick(View v) {
                     Item data = (Item) v.getTag();
-                    if(listener != null) {
+                    if (listener != null) {
                         listener.click(v, data);
                     }
-
-//                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-//                        if (objData.getSignatureType() == 0) {
-//                            Intent inte = new Intent(Intent.ACTION_VIEW);
-//                            inte.setDataAndType(
-//                                    Uri.parse(tosURL + "?" + System.currentTimeMillis()),
-//                                    "application/pdf");
-//                            mContext.startActivity(inte);
-//                        } else {
-//                            Intent inte = new Intent(Intent.ACTION_VIEW);
-//                            inte.setDataAndType(
-//                                    Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
-//                                    "application/pdf");
-//                            mContext.startActivity(inte);
-//                        }
-//                    }
-//                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-//                        if (position == 2) {
-//                            Intent inte = new Intent(Intent.ACTION_VIEW);
-//                            inte.setDataAndType(
-//                                    Uri.parse(tosURL + "?" + System.currentTimeMillis()),
-//                                    "application/pdf");
-//                            mContext.startActivity(inte);
-//
-//                        }
-//                        if (position == 1) {
-//                            Intent inte = new Intent(Intent.ACTION_VIEW);
-//                            inte.setDataAndType(
-//                                    Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
-//                                    "application/pdf");
-//                            mContext.startActivity(inte);
-//
-//                        }
-//                    }
                 }
             });
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-
 
     @Override
     public int getItemCount() {

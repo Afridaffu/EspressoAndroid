@@ -153,8 +153,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             }
             userNameTV.setText(getResources().getString(R.string.dba_name, userName));
 
-            if (userName != null && userName.length() > 18) {
-                userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 18) + " ");
+            if (userName != null && userName.length() > 20) {
+                userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 20) + " ");
             } else {
                 userNameTV.setText(Utils.getCapsSentences(userName));
             }
@@ -168,8 +168,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             }
         } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
             userName = myApplication.getMyProfile().getData().getDbaName();
-            if (userName != null && userName.length() > 18) {
-                userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 18) + " ");
+            if (userName != null && userName.length() > 20) {
+                userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 20) + " ");
             } else if (userName != null) {
                 userNameTV.setText(Utils.getCapsSentences(userName));
             }
@@ -195,8 +195,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                     userName = userName + " ";
                     userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
                 }
-                if (userName != null && userName.length() > 21) {
-                    userNameTV.setText( Utils.getCapsSentences(userName).substring(0, 21) + " ");
+                if (userName != null && userName.length() > 20) {
+                    userNameTV.setText( Utils.getCapsSentences(userName).substring(0, 20) + " ");
                 } else {
                     userNameTV.setText(Utils.getCapsSentences(userName));
                 }
@@ -221,16 +221,16 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (userNameTV.getText().toString().contains("...")) {
-                    if (userName.length() == 18 || userName.length() > 18) {
-                        userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 18));
+                    if (userName.length() == 21 || userName.length() > 21) {
+                        userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 20));
                     } else {
                         userNameTV.setText(Utils.getCapsSentences(userName));
                     }
                 } else {
-                    if (userName.length() == 18) {
-                        userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 17) + "...");
-                    } else if (userName.length() > 18) {
-                        userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 18) + "...");
+                    if (userName.length() == 21) {
+                        userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 22) + "...");
+                    } else if (userName.length() > 22) {
+                        userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 22) + "...");
                     } else {
                         userNameTV.setText(Utils.getCapsSentences(userName));
                     }
