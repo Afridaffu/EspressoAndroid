@@ -184,7 +184,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             } else if (requestCode == 2) {
-                if (strScreen.equals("withdraw")) {
+                if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
                     onBackPressed();
                 } else {
                     if (objMyApplication.getSignet()) {
