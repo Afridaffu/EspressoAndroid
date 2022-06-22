@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.PaymentMethodsAdapter;
@@ -427,11 +428,12 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                            strCurrent = "signet";
-                            Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-                            startActivityForResult(i, 2);
-                        }
+//                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+//                            strCurrent = "signet";
+//                            Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+//                            startActivityForResult(i, 2);
+//                        }
+                        Toast.makeText(BusinessPaymentMethodsActivity.this, "Coming soon", Toast.LENGTH_LONG).show();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
