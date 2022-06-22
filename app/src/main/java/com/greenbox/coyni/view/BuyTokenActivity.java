@@ -777,7 +777,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 } else {
                     tvBankName.setText(objData.getBankName());
                 }
-                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
+                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
                     tvBAccNumber.setText(objData.getAccountNumber().substring(0, 10) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
                     tvBAccNumber.setText(objData.getAccountNumber());
