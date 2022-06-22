@@ -39,7 +39,6 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
-        int docId = items.get(pos).getSignatureType();
         if (items.get(pos).getSignatureType() == Utils.cPP) {
             holder.agreementTV.setText(context.getResources().getString(R.string.privacy_policy) + " ");
         } else if (items.get(pos).getSignatureType() == Utils.cTOS) {
@@ -51,11 +50,11 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
             holder.listDocsTV.setText(items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
         }
 
-        holder.itemView.setTag(docId);
+        holder.itemView.setTag(items.get(pos));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int doc = (int) view.getTag();
+                Item doc = (Item) view.getTag();
                 recyclerClickListener.click(view, doc);
             }
         });
@@ -70,7 +69,7 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
     }
 
     public interface RecyclerClickListener {
-        void click(View view, int docId);
+        void click(View view, Item doc);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
