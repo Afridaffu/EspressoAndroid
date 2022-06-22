@@ -518,7 +518,6 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
 //                            Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
 //                            startActivityForResult(i, 2);
 //                        }
-                        Toast.makeText(SelectPaymentMethodActivity.this, "Coming soon", Toast.LENGTH_LONG).show();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -621,17 +620,17 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                     tvSignetCount.setTextColor(getColor(R.color.light_gray));
                     tvSignetMsg.setTextColor(getColor(R.color.light_gray));
                     imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
-//                    imgSignetLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
                     imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
                 } else {
                     tvSignetError.setVisibility(View.GONE);
-                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
-                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
+//                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
+//                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
+                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
+                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
                     tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
                     imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
-//                    imgSignetLogo.setImageResource(R.drawable.ic_credit_debit_card);
-                    imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
-
+//                    imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
+                    imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
                 }
             }
         } catch (Exception ex) {

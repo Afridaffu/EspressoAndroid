@@ -656,6 +656,9 @@ public interface ApiService {
     @GET("api/v2/agreements/url")
     Call<DownloadDocumentResponse> getAgreementUrl(@Query("agreementType") String agreementType);
 
+    @GET("api/v2/agreements/url/{documentNumber}")
+    Call<DownloadDocumentResponse> getAgreementUrlByDocumentNumber(@Path("documentNumber") String documentNumber);
+
     @POST("api/v2/node/paidOrder")
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);
 

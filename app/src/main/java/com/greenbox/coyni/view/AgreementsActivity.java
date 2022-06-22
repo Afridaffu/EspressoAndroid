@@ -1,7 +1,6 @@
 package com.greenbox.coyni.view;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -22,12 +21,9 @@ import com.greenbox.coyni.adapters.PastAgreeListAdapter;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
-import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.model.profile.DownloadDocumentData;
 import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
-import com.greenbox.coyni.model.profile.DownloadImageData;
-import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -132,6 +128,39 @@ public class AgreementsActivity extends BaseActivity {
             }
         }
 
+        sortAgreements(activeItems);
+        adapter = new AgreeListAdapter(AgreementsActivity.this, activeItems, listener);
+        recyclerView.setAdapter(adapter);
+
+        if (activeItems.size() > 0) {
+            findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
+        }
+
+        if (pastItems.size() > 0) {
+            cvPast.setVisibility(View.VISIBLE);
+            pastTV.setVisibility(View.VISIBLE);
+            activeTV.setVisibility(View.VISIBLE);
+            findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
+            sortAgreements(pastItems);
+            pastAdapter = new PastAgreeListAdapter(pastItems, AgreementsActivity.this);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(AgreementsActivity.this);
+            recyclPastAgree.setLayoutManager(mLayoutManager);
+            recyclPastAgree.setItemAnimator(new DefaultItemAnimator());
+            recyclPastAgree.setAdapter(pastAdapter);
+            pastAdapter.setOnAgreementClickListener(new PastAgreeListAdapter.AgreementClickListener() {
+                @Override
+                public void click(View view, Item doc) {
+                    showAgreementData(doc);
+                }
+            });
+        } else {
+            pastTV.setVisibility(View.GONE);
+            cvPast.setVisibility(View.GONE);
+            activeTV.setVisibility(View.GONE);
+        }
+    }
+
+    private void sortAgreements(List<Item> items) {
         ArrayList<Integer> sortTODisplay = new ArrayList<>();
         if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
             sortTODisplay.add(Utils.cPP);
@@ -141,7 +170,8 @@ public class AgreementsActivity extends BaseActivity {
             sortTODisplay.add(Utils.mTOS);
             sortTODisplay.add(Utils.mAgmt);
         }
-        Collections.sort(activeItems, new Comparator<Item>() {
+
+        Collections.sort(items, new Comparator<Item>() {
             @Override
             public int compare(Item o1, Item o2) {
                 int o1Index = sortTODisplay.indexOf(o1.getSignatureType());
@@ -155,28 +185,6 @@ public class AgreementsActivity extends BaseActivity {
                 }
             }
         });
-        adapter = new AgreeListAdapter(AgreementsActivity.this, activeItems, listener);
-        recyclerView.setAdapter(adapter);
-
-        if (activeItems.size() > 0) {
-            findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
-        }
-
-        if (pastItems.size() > 0) {
-            cvPast.setVisibility(View.VISIBLE);
-            pastTV.setVisibility(View.VISIBLE);
-            activeTV.setVisibility(View.VISIBLE);
-            findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
-            pastAdapter = new PastAgreeListAdapter(pastItems, AgreementsActivity.this);
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(AgreementsActivity.this);
-            recyclPastAgree.setLayoutManager(mLayoutManager);
-            recyclPastAgree.setItemAnimator(new DefaultItemAnimator());
-            recyclPastAgree.setAdapter(pastAdapter);
-        } else {
-            pastTV.setVisibility(View.GONE);
-            cvPast.setVisibility(View.GONE);
-            activeTV.setVisibility(View.GONE);
-        }
     }
 
     private void initObserver() {
@@ -245,18 +253,23 @@ public class AgreementsActivity extends BaseActivity {
     private void setOnClickListener() {
         try {
             listener = (view, doc) -> {
-                showProgressDialog();
-                if (doc == Utils.cTOS)
-                    selectedAgreement = getString(R.string.gbx_tos);
-                else if (doc == Utils.cPP)
-                    selectedAgreement = getString(R.string.gbx_pp);
-                else if (doc == Utils.mAgmt)
-                    selectedAgreement = getString(R.string.gbx_merchant);
-                dashboardViewModel.getDocumentUrl(doc);
+                showAgreementData(doc);
             };
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void showAgreementData(Item item) {
+        showProgressDialog();
+        if (item.getSignatureType() == Utils.cTOS) {
+            selectedAgreement = getString(R.string.gbx_tos);
+        } else if (item.getSignatureType() == Utils.cPP) {
+            selectedAgreement = getString(R.string.gbx_pp);
+        } else if (item.getSignatureType() == Utils.mAgmt) {
+            selectedAgreement = getString(R.string.gbx_merchant);
+        }
+        dashboardViewModel.getAgreementUrlByDocumentNumber(item.getRefId());
     }
 
 }
