@@ -196,11 +196,13 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             } else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
                 strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getDbaName());
             }
-            if (strName.length() > 22) {
-                tvName.setText(strName.substring(0, 22) + "...");
-            } else {
-                tvName.setText(strName);
-            }
+            tvName.setText(strName);
+
+//            if (strName.length() > 22) {
+//                tvName.setText(strName.substring(0, 22) + "...");
+//            } else {
+//                tvName.setText(strName);
+//            }
             bindImage();
             savedStrName = strName;
 
