@@ -409,6 +409,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     status.setBackgroundResource(R.drawable.txn_pending_bg);
                     break;
                 case Utils.transFailed:
+                case Utils.transCancelled:
                     status.setTextColor(getResources().getColor(R.color.failed_status));
                     status.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;

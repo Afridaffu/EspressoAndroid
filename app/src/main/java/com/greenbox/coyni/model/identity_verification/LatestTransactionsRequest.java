@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class LatestTransactionsRequest {
     private int userId;
     private ArrayList<Integer> transactionType;
+    private boolean isMerchantTokenTransactions;
 
     public int getUserId() {
         return userId;
@@ -22,4 +23,11 @@ public class LatestTransactionsRequest {
         this.transactionType = transactionType;
     }
 
+    public boolean isMerchantTokenTransactions() {
+        return isMerchantTokenTransactions;
+    }
+
+    public void setMerchantTokenTransactions(boolean merchantTokenTransactions) {
+        isMerchantTokenTransactions = merchantTokenTransactions;
+    }
 }

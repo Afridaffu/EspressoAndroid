@@ -11,7 +11,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
-import com.greenbox.coyni.model.AbstractResponse;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
@@ -38,7 +37,6 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.LogUtils;
-import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -277,6 +275,41 @@ public class DashboardViewModel extends AndroidViewModel {
         }
     }
 
+    public void getAgreementUrlByDocumentNumber(String refId) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<DownloadDocumentResponse> mcall = apiService.getAgreementUrlByDocumentNumber(refId);
+            mcall.enqueue(new Callback<DownloadDocumentResponse>() {
+                @Override
+                public void onResponse(Call<DownloadDocumentResponse> call, Response<DownloadDocumentResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            DownloadDocumentResponse obj = response.body();
+                            downloadDocumentResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<DownloadDocumentResponse>() {
+                            }.getType();
+                            DownloadDocumentResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            downloadDocumentResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        downloadDocumentResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DownloadDocumentResponse> call, Throwable t) {
+                    LogUtils.v("getDocumentUrl failure", "" + t.getLocalizedMessage());
+                    downloadDocumentResponse.setValue(null);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void agreementsByType(String agreementsType) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -457,7 +490,7 @@ public class DashboardViewModel extends AndroidViewModel {
 //        }
 //    }
 
-    public void meChangePassword(ChangePasswordRequest changePasswordRequest,String token) {
+    public void meChangePassword(ChangePasswordRequest changePasswordRequest, String token) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
 //            Call<ChangePassword> mcall = apiService.mChangePassword(changePasswordRequest);
@@ -847,8 +880,7 @@ public class DashboardViewModel extends AndroidViewModel {
                             DownloadImageResponse obj = response.body();
                             downloadUrlResponse.setValue(obj);
                             //setData(obj);
-                        }
-                        else {
+                        } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<DownloadImageResponse>() {
                             }.getType();
@@ -910,17 +942,16 @@ public class DashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void getActivityLog(String txnId,String userType){
+    public void getActivityLog(String txnId, String userType) {
         ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-        Call<ActivityLogResp> call = apiService.activityLog(txnId,userType);
+        Call<ActivityLogResp> call = apiService.activityLog(txnId, userType);
         call.enqueue(new Callback<ActivityLogResp>() {
             @Override
             public void onResponse(Call<ActivityLogResp> call, Response<ActivityLogResp> response) {
-                if (response.isSuccessful()){
-                    ActivityLogResp resp= response.body();
+                if (response.isSuccessful()) {
+                    ActivityLogResp resp = response.body();
                     activityLogRespMutableLiveData.setValue(resp);
-                }
-                else {
+                } else {
                     Gson gson = new Gson();
                     Type type = new TypeToken<ActivityLogResp>() {
                     }.getType();
@@ -936,7 +967,7 @@ public class DashboardViewModel extends AndroidViewModel {
 
             @Override
             public void onFailure(Call<ActivityLogResp> call, Throwable t) {
-                    activityLogRespMutableLiveData.setValue(null);
+                activityLogRespMutableLiveData.setValue(null);
             }
         });
     }

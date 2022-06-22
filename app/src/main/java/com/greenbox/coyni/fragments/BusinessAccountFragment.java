@@ -95,6 +95,7 @@ public class BusinessAccountFragment extends BaseFragment {
                     request.setUserId(objMyApplication.getMyProfile().getData().getId());
                 }
                 request.setTransactionType(getDefaultTransactionTypes());
+                request.setMerchantTokenTransactions(true);
                 ((BusinessDashboardActivity) getActivity()).showProgressDialog();
                 dashboardViewModel.getLatestTxns(request);
                 transactionsNSV.smoothScrollTo(0, 0);
@@ -202,6 +203,7 @@ public class BusinessAccountFragment extends BaseFragment {
                 request.setUserId(objMyApplication.getMyProfile().getData().getId());
             }
             request.setTransactionType(getDefaultTransactionTypes());
+            request.setMerchantTokenTransactions(true);
 
             dashboardViewModel.getLatestTxns(request);
             ((BusinessDashboardActivity) getActivity()).showProgressDialog();

@@ -1,8 +1,6 @@
 package com.greenbox.coyni.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +17,16 @@ import java.util.List;
 import java.util.Locale;
 
 public class PastAgreeListAdapter extends RecyclerView.Adapter<PastAgreeListAdapter.MyViewHolder> {
-    List<Item> items;
-    Context mContext;
-    String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
-    String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
-    MyApplication objMyApplication;
+    private List<Item> items;
+    private Context mContext;
+    private String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
+    private String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
+    //MyApplication objMyApplication;
+    private AgreementClickListener listener;
+
+    public interface AgreementClickListener {
+        void click(View view, Item doc);
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView listagreementsTV;
@@ -34,10 +37,13 @@ public class PastAgreeListAdapter extends RecyclerView.Adapter<PastAgreeListAdap
         }
     }
 
-
     public PastAgreeListAdapter(List<Item> list, Context context) {
         this.mContext = context;
         this.items = list;
+    }
+
+    public void setOnAgreementClickListener(AgreementClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -51,58 +57,27 @@ public class PastAgreeListAdapter extends RecyclerView.Adapter<PastAgreeListAdap
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             Item objData = items.get(position);
-            if (objData.getSignatureType() == 1) {
+            if (objData.getSignatureType() == Utils.cPP) {
                 holder.listagreementsTV.setText("Privacy Policy " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
-            } else if (objData.getSignatureType() == 0) {
+            } else if (objData.getSignatureType() == Utils.cTOS) {
                 holder.listagreementsTV.setText("Terms of Service " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
-            }
-            if (objData.getSignatureType() == 2) {
+            } else if (objData.getSignatureType() == Utils.mAgmt) {
                 holder.listagreementsTV.setText("Merchant’s Agreement " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
             }
-//            holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-//                        if (objData.getSignatureType() == 0) {
-//                            Intent inte = new Intent(Intent.ACTION_VIEW);
-//                            inte.setDataAndType(
-//                                    Uri.parse(tosURL + "?" + System.currentTimeMillis()),
-//                                    "application/pdf");
-//                            mContext.startActivity(inte);
-//                        } else {
-//                            Intent inte = new Intent(Intent.ACTION_VIEW);
-//                            inte.setDataAndType(
-//                                    Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
-//                                    "application/pdf");
-//                            mContext.startActivity(inte);
-//                        }
-//                    }
-//                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-//                        if (position == 2) {
-//                            Intent inte = new Intent(Intent.ACTION_VIEW);
-//                            inte.setDataAndType(
-//                                    Uri.parse(tosURL + "?" + System.currentTimeMillis()),
-//                                    "application/pdf");
-//                            mContext.startActivity(inte);
-//
-//                        }
-//                        if (position == 1) {
-//                            Intent inte = new Intent(Intent.ACTION_VIEW);
-//                            inte.setDataAndType(
-//                                    Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
-//                                    "application/pdf");
-//                            mContext.startActivity(inte);
-//
-//                        }
-//                    }
-//                }
-//            });
-
+            holder.itemView.setTag(objData);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Item data = (Item) v.getTag();
+                    if (listener != null) {
+                        listener.click(v, data);
+                    }
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-
 
     @Override
     public int getItemCount() {
