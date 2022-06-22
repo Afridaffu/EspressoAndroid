@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -511,12 +512,13 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                            strCurrent = "signet";
-                            strOnPauseScreen = "";
-                            Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
-                            startActivityForResult(i, 2);
-                        }
+//                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+//                            strCurrent = "signet";
+//                            strOnPauseScreen = "";
+//                            Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
+//                            startActivityForResult(i, 2);
+//                        }
+                        Toast.makeText(SelectPaymentMethodActivity.this, "Coming soon", Toast.LENGTH_LONG).show();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
