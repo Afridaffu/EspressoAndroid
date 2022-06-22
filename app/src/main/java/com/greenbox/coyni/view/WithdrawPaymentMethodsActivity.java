@@ -1077,7 +1077,6 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
 //                            strCurrent = "signet";
 //                            showAddPayment("signet");
 //                        }
-                        Toast.makeText(WithdrawPaymentMethodsActivity.this, "Coming soon", Toast.LENGTH_LONG).show();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
