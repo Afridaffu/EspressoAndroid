@@ -127,7 +127,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
             Utils.setUpperHintColor(currencyTIL, getColor(R.color.xdark_gray));
 
             accountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-            Utils.setUpperHintColor(accountTIL, getColor(R.color.xdark_gray));
+            Utils.setUpperHintColor(accountTIL, getColor(R.color.text_color));
 
             timeZoneRL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -142,6 +142,10 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
 
             accountET.setOnClickListener(view -> {
                 try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     final Dialog dialog = new Dialog(PreferencesActivity.this);
                     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.default_account_dialog);
@@ -172,6 +176,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
 
                     dialog.setCanceledOnTouchOutside(true);
                     dialog.show();
+                    doneButton.setEnabled(false);
 
 
                     doneButton.setOnClickListener(new View.OnClickListener() {
@@ -331,7 +336,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                             myApplicationObj.setStrPreference("AST");
                         }
                         timeZoneET.setText(myApplicationObj.getTimezone());
-                        Utils.showCustomToast(PreferencesActivity.this, getResources().getString(R.string.time_zone_changed), R.drawable.ic_custom_tick, "authid");
+                        Utils.showCustomToast(PreferencesActivity.this, getResources().getString(R.string.default_account_changed), R.drawable.ic_custom_tick, "authid");
 
                     }
                 }

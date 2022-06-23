@@ -87,7 +87,9 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
 
         if (filterTransactionListRequest != null) {
             isFilters = true;
-            transactionType = filterTransactionListRequest.getTransactionType();
+            if(filterTransactionListRequest.getTransactionType() != null) {
+                transactionType.addAll(filterTransactionListRequest.getTransactionType());
+            }
 
             if (transactionType == null) {
                 transactionType = new ArrayList<>();
@@ -110,11 +112,16 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                     }
                 }
             }
-            transactionSubType = filterTransactionListRequest.getTransactionSubType();
+            if(filterTransactionListRequest.getTransactionSubType() != null) {
+                transactionSubType.addAll(filterTransactionListRequest.getTransactionSubType());
+            }
             if (transactionSubType == null) {
                 transactionSubType = new ArrayList<>();
             }
-            txnStatus = filterTransactionListRequest.getTxnStatus();
+
+            if(filterTransactionListRequest.getTxnStatus() != null) {
+                txnStatus.addAll(filterTransactionListRequest.getTxnStatus());
+            }
             if (txnStatus == null) {
                 txnStatus = new ArrayList<>();
             }
