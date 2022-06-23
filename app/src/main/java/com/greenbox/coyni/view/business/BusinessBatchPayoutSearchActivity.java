@@ -32,6 +32,7 @@ import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
 import com.greenbox.coyni.model.reservemanual.ReserveFilter;
 import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MatomoConstants;
 import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -70,7 +71,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_batch_payout_search);
-        MatomoUtility.getInstance().trackScreen("BatchPayout Transactions Screen");
+        MatomoUtility.getInstance().trackScreen(MatomoConstants.BATCH_PAYOUT_SCREEN);
         initFields();
         initObserver();
         loadData();
@@ -182,7 +183,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                 @Override
                 public void onDialogClicked(String action, Object value) {
                     if (action.equalsIgnoreCase(applyFilter)) {
-                        MatomoUtility.getInstance().trackEvent("BatchPayout Filters", "Applied");
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.BATCH_PAYOUT_FILTERS, MatomoConstants.BATCH_PAYOUT_FILTERS_APPLIED);
                         searchET.setText("");
                         filterIconIV.setImageResource(R.drawable.ic_filter_enabled);
                         batchFilter = (ReserveFilter) value;

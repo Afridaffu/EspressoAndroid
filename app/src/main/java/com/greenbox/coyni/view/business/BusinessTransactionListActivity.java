@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
@@ -38,6 +37,7 @@ import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
+import com.greenbox.coyni.utils.MatomoConstants;
 import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -96,7 +96,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_transaction_list);
-        MatomoUtility.getInstance().trackScreen("Token Transactions Screen");
+        MatomoUtility.getInstance().trackScreen(MatomoConstants.TOKEN_TRANSACTIONS_SCREEN);
         try {
             transactionListActivity = this;
             closeBtn = findViewById(R.id.closeBtnIV);
@@ -1278,7 +1278,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MatomoUtility.getInstance().trackEvent("Token Transactions Filters","Applied");
+                MatomoUtility.getInstance().trackEvent(MatomoConstants.TOKEN_TRANSACTIONS_FILTERS, MatomoConstants.TOKEN_TRANSACTIONS_FILTERS_APPLIED);
                 if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
                     return;
                 }
@@ -1371,8 +1371,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                         noMoreTransactionTV.setVisibility(View.GONE);
                         dialog.dismiss();
                     }
-                }
-                else {
+                } else {
                     transactionsAPI(transactionListRequest);
                     objMyApplication.initializeTransactionSearch();
                     objMyApplication.setTransactionListSearch(transactionListRequest);
