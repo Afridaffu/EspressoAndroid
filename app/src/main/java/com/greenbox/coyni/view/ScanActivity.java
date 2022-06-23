@@ -1476,10 +1476,13 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         String strAmount = "", strReturn = "";
         try {
             strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
-            etAmount.removeTextChangedListener(ScanActivity.this);
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-            etAmount.addTextChangedListener(ScanActivity.this);
-            etAmount.setSelection(etAmount.getText().toString().length());
+            InputFilter[] FilterArray = new InputFilter[1];
+            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+            setAmount.setFilters(FilterArray);
+            setAmount.removeTextChangedListener(ScanActivity.this);
+            setAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            setAmount.addTextChangedListener(ScanActivity.this);
+            setAmount.setSelection(etAmount.getText().toString().length());
             strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
             changeTextSize(strReturn);
             setDefaultLength();

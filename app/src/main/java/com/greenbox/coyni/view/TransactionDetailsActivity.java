@@ -585,20 +585,27 @@ public class TransactionDetailsActivity extends BaseActivity {
             mMerchantAccountID.setText(paidOrderData.getMerchantId());
         }
 
-        if (paidOrderData.getDbaName() != null) {
-            if (paidOrderData.getDbaName().length() > 20)
-                mDbaName.setText(paidOrderData.getDbaName().substring(0, 20) + "...");
-            else
-                mDbaName.setText(paidOrderData.getDbaName());
+//        if (paidOrderData.getDbaName() != null) {
+//            if (paidOrderData.getDbaName().length() > 20)
+//                mDbaName.setText(paidOrderData.getDbaName().substring(0, 20) + "...");
+//            else
+//                mDbaName.setText(paidOrderData.getDbaName());
+//        }
+        if (paidOrderData.getDbaName() != null){
+            mDbaName.setText(paidOrderData.getDbaName());
         }
 
-        if (paidOrderData.getCustomerServiceMail() != null) {
-            if (paidOrderData.getCustomerServiceMail().length() > 20) {
-                mCustomerServiceEmail.setText(paidOrderData.getCustomerServiceMail().substring(0, 20) + "...");
-            } else {
-                mCustomerServiceEmail.setText(paidOrderData.getCustomerServiceMail());
-            }
+//        if (paidOrderData.getCustomerServiceMail() != null) {
+//            if (paidOrderData.getCustomerServiceMail().length() > 20) {
+//                mCustomerServiceEmail.setText(paidOrderData.getCustomerServiceMail().substring(0, 20) + "...");
+//            } else {
+//                mCustomerServiceEmail.setText(paidOrderData.getCustomerServiceMail());
+//            }
+//        }
+        if (paidOrderData.getCustomerServiceMail() != null){
+            mCustomerServiceEmail.setText(paidOrderData.getCustomerServiceMail());
         }
+
         if (paidOrderData.getCustomerServicePhoneNo() != null) {
             String phone_number = "(" + paidOrderData.getCustomerServicePhoneNo().substring(0, 3) + ")" + " " + paidOrderData.getCustomerServicePhoneNo().substring(3, 6) + "-" + paidOrderData.getCustomerServicePhoneNo().substring(6, 10);
             mCustomerServicePhone.setText(phone_number);

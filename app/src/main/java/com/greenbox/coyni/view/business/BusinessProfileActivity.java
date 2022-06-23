@@ -2,7 +2,6 @@ package com.greenbox.coyni.view.business;
 
 import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,14 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.dialogs.UnderReviewErrorMsgDialog;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
@@ -41,6 +39,7 @@ import com.greenbox.coyni.model.logout.LogoutResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
+import com.greenbox.coyni.utils.MatomoConstants;
 import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -48,10 +47,7 @@ import com.greenbox.coyni.view.AccountLimitsActivity;
 import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
-import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
-import com.greenbox.coyni.view.CustomerProfileActivity;
-import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
@@ -70,7 +66,7 @@ public class BusinessProfileActivity extends BaseActivity {
             businessResetPin, preferencesLL, beneficialOwnersLL;
     private ConstraintLayout userProfileCL;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
-    static String strToken = "",userName;
+    static String strToken = "", userName;
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private final int CODE_AUTHENTICATION_VERIFICATION = 251, CODE_AUTHENTICATION = 512;
     private final int CODE_AUTHENTICATION_VERIFICATION_RESET_PIN = 252;
@@ -90,7 +86,7 @@ public class BusinessProfileActivity extends BaseActivity {
     private Long mLastClickTime = 0L;
     private TextView tvVersion;
     private ScrollView profileSV;
-    private String fullname = "",firstName = "",lastName = "";
+    private String fullname = "", firstName = "", lastName = "";
     private LoginViewModel loginViewModel;
     private DisplayImageUtility displayImageUtility;
 
@@ -100,7 +96,7 @@ public class BusinessProfileActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_profile);
-        MatomoUtility.getInstance().trackScreen("Business Profile Screen");
+        MatomoUtility.getInstance().trackScreen(MatomoConstants.BUSINESS_PROFILE_SCREEN);
 
         try {
             displayImageUtility = DisplayImageUtility.getInstance(getApplicationContext());
@@ -164,7 +160,7 @@ public class BusinessProfileActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        MatomoUtility.getInstance().trackEvent("Business Preferences", "Clicked");
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.BUSINESS_PREFERENCES, MatomoConstants.BUSINESS_PREFERENCES_CLICKED);
                         Intent intent = new Intent(BusinessProfileActivity.this, PreferencesActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
@@ -210,7 +206,7 @@ public class BusinessProfileActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        MatomoUtility.getInstance().trackEvent("Business Agreements", "Clicked");
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.BUSINESS_AGREEMENTS, MatomoConstants.BUSINESS_AGREEMENTS_CLICKED);
                         Intent intent = new Intent(BusinessProfileActivity.this, AgreementsActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
@@ -334,7 +330,7 @@ public class BusinessProfileActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        MatomoUtility.getInstance().trackEvent("Business AccountLimits", "Clicked");
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.BUSINESS_ACCOUNT_LIMITS, MatomoConstants.BUSINESS_ACCOUNT_LIMITS_CLICKED);
                         Intent intent = new Intent(BusinessProfileActivity.this, AccountLimitsActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
@@ -346,7 +342,7 @@ public class BusinessProfileActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        MatomoUtility.getInstance().trackEvent("Business PaymentMethods", "Clicked");
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.BUSINESS_PAYMENT_METHODS, MatomoConstants.BUSINESS_PAYMENT_METHODS_CLICKED);
                         Intent intent = new Intent(BusinessProfileActivity.this, BusinessPaymentMethodsActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
@@ -390,7 +386,7 @@ public class BusinessProfileActivity extends BaseActivity {
             });
 
             findViewById(R.id.b_cpChangePassword).setOnClickListener(view -> {
-                MatomoUtility.getInstance().trackEvent("Business ChangePassword", "Clicked");
+                MatomoUtility.getInstance().trackEvent(MatomoConstants.BUSINESS_PASSWORD, MatomoConstants.BUSINESS_PASSWORD_CLICKED);
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
@@ -426,7 +422,12 @@ public class BusinessProfileActivity extends BaseActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
 
-                        startActivity(new Intent(BusinessProfileActivity.this, BusinessReceivePaymentActivity.class));
+                        if (isAccountVerified()) {
+                            startActivity(new Intent(BusinessProfileActivity.this, BusinessReceivePaymentActivity.class));
+                        } else {
+                            UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(BusinessProfileActivity.this);
+                            reviewErrorMsgDialog.show();
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -502,11 +503,11 @@ public class BusinessProfileActivity extends BaseActivity {
                     if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                             && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
                             && myApplication.getMyProfile().getData().getFirstName() != null) {
-                         firstName = myApplication.getMyProfile().getData().getFirstName();
+                        firstName = myApplication.getMyProfile().getData().getFirstName();
                         // iconText = firstName.substring(0, 1).toUpperCase();
                         fullname = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
                         if (myApplication.getMyProfile().getData().getLastName() != null) {
-                             lastName = myApplication.getMyProfile().getData().getLastName();
+                            lastName = myApplication.getMyProfile().getData().getLastName();
                             //iconText = iconText + lastName.substring(0, 1).toUpperCase();
                             fullname = fullname + " ";
                             fullname = fullname + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
@@ -538,6 +539,18 @@ public class BusinessProfileActivity extends BaseActivity {
     public void onBackPressed() {
         setResult(RESULT_OK);
         finish();
+    }
+
+    private boolean isAccountVerified() {
+        boolean isVerified = false;
+        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                && myApplication.getMyProfile().getData().getAccountStatus() != null) {
+            String accountStatus = myApplication.getMyProfile().getData().getAccountStatus();
+            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                isVerified = true;
+            }
+        }
+        return isVerified;
     }
 
     private void enableDisableMerchantSettings() {
@@ -692,7 +705,7 @@ public class BusinessProfileActivity extends BaseActivity {
                                 } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.xdark_gray));
                                     statusDot.setCardBackgroundColor(getResources().getColor(R.color.light_gray));
-                                }else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                                } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.orange));
                                     statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
                                 } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
@@ -854,9 +867,9 @@ public class BusinessProfileActivity extends BaseActivity {
                 userFullname.setText(getResources().getString(R.string.dba_name, userName));
 
                 if (userName != null && userName.length() > 20) {
-                    userFullname.setText( Utils.capitalize(userName).substring(0, 20) + " ");
+                    userFullname.setText(Utils.capitalize(userName).substring(0, 20) + " ");
                 } else {
-                    userFullname.setText( Utils.capitalize(userName));
+                    userFullname.setText(Utils.capitalize(userName));
                 }
                 if (firstName != null && !firstName.equals("") && lastName != null && !lastName.equals("")) {
                     char first = firstName.charAt(0);
@@ -869,7 +882,7 @@ public class BusinessProfileActivity extends BaseActivity {
             } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
                 userName = myApplication.getMyProfile().getData().getDbaName();
                 if (userName != null && userName.length() > 20) {
-                    userFullname.setText( Utils.capitalize(userName).substring(0, 20) + " ");
+                    userFullname.setText(Utils.capitalize(userName).substring(0, 20) + " ");
                 } else if (userName != null) {
                     userFullname.setText(Utils.capitalize(userName));
                 }

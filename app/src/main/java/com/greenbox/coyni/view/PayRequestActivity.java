@@ -61,6 +61,7 @@ import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MatomoConstants;
 import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -109,7 +110,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_pay_request);
-            MatomoUtility.getInstance().trackScreen("Customer PayRequest Screen");
+            MatomoUtility.getInstance().trackScreen(MatomoConstants.CUSTOMER_PAY_REQUEST_SCREEN);
             initialization();
             initObservers();
         } catch (Exception ex) {
@@ -342,7 +343,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
-                            MatomoUtility.getInstance().trackEvent("Customer Pay", "Clicked");
+                            MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_PAY, MatomoConstants.CUSTOMER_PAY_CLICKED);
                             convertDecimal();
                             if (payValidation()) {
                                 isPayClick = true;
@@ -368,7 +369,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                 convertDecimal();
                                 if (requestValidation()) {
                                     if (Double.parseDouble(payRequestET.getText().toString().replace(",", "")) > 0) {
-                                        MatomoUtility.getInstance().trackEvent("Customer Request", "Clicked");
+                                        MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_REQUEST, MatomoConstants.CUSTOMER_REQUEST_CLICKED);
                                         requestPreview();
                                     } else {
                                         disableButtons(true);

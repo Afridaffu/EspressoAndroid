@@ -51,6 +51,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
+import com.greenbox.coyni.utils.MatomoConstants;
 import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -106,7 +107,7 @@ public class CustomerProfileActivity extends BaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_customer_profile);
-            MatomoUtility.getInstance().trackScreen("Customer Profile Screen");
+            MatomoUtility.getInstance().trackScreen(MatomoConstants.CUSTOMER_PROFILE_SCREEN);
 
             displayImageUtility = DisplayImageUtility.getInstance(this);
             initialization();
@@ -272,7 +273,7 @@ public class CustomerProfileActivity extends BaseActivity {
             });
 
             cpChangePasswordLL.setOnClickListener(view -> {
-                MatomoUtility.getInstance().trackEvent("Customer ChangePassword", "Clicked");
+                MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_PASSWORD, MatomoConstants.CUSTOMER_PASSWORD_CLICKED);
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
@@ -350,7 +351,7 @@ public class CustomerProfileActivity extends BaseActivity {
             cpAgreementsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MatomoUtility.getInstance().trackEvent("Customer Agreements", "Clicked");
+                    MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_AGREEMENTS, MatomoConstants.CUSTOMER_AGREEMENTS_CLICKED);
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
@@ -362,7 +363,7 @@ public class CustomerProfileActivity extends BaseActivity {
             cpAccountLimitsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MatomoUtility.getInstance().trackEvent("Customer AccountLimits", "Clicked");
+                    MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_ACCOUNT_LIMITS, MatomoConstants.CUSTOMER_ACCOUNT_LIMITS_CLICKED);
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
@@ -399,7 +400,7 @@ public class CustomerProfileActivity extends BaseActivity {
             cpPaymentMethodsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MatomoUtility.getInstance().trackEvent("Customer PaymentMethods", "Clicked");
+                    MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_PAYMENT_METHODS, MatomoConstants.CUSTOMER_PAYMENT_METHODS_CLICKED);
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
@@ -445,7 +446,7 @@ public class CustomerProfileActivity extends BaseActivity {
             cpPreferencesLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MatomoUtility.getInstance().trackEvent("Customer Preferences", "Clicked");
+                    MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_PREFERENCES, MatomoConstants.CUSTOMER_PREFERENCES_CLICKED);
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }

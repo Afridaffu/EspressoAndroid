@@ -4,7 +4,6 @@ package com.greenbox.coyni.view.business;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.greenbox.coyni.utils.Utils.convertTwoDecimal;
-import static com.greenbox.coyni.view.PreferencesActivity.customerProfileViewModel;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -125,6 +124,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private BankAccountsViewModel bankAccountsViewModel;
     private DashboardViewModel dashboardViewModel;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private CustomerProfileViewModel customerProfileViewModel;
     private String strScreen = "", strSignOn = "";
     private Boolean isBank = false;
     private Boolean isCPwdEye = false;

@@ -75,6 +75,7 @@ import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.MatomoConstants;
 import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -135,9 +136,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             initialization();
             initObserver();
             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                MatomoUtility.getInstance().trackScreen("Customer BuyToken Screen");
+                MatomoUtility.getInstance().trackScreen(MatomoConstants.CUSTOMER_BUY_TOKEN_SCREEN);
             } else {
-                MatomoUtility.getInstance().trackScreen("Business BuyToken Screen");
+                MatomoUtility.getInstance().trackScreen(MatomoConstants.BUSINESS_BUY_TOKEN_SCREEN);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1073,7 +1074,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             tvTotal.setText(Utils.USNumberFormat(total) + " USD");
             prepareBuyRequest();
             if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
-                MatomoUtility.getInstance().trackEvent("BuyToken Bank", "Clicked");
+                MatomoUtility.getInstance().trackEvent(MatomoConstants.BUY_TOKEN_BANK, MatomoConstants.BUY_TOKEN_BANK_CLICKED);
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
                 tvBankName.setText(selectedCard.getBankName());
@@ -1083,7 +1084,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     tvAccount.setText(selectedCard.getAccountNumber());
                 }
             } else {
-                MatomoUtility.getInstance().trackEvent("BuyToken Card", "Clicked");
+                MatomoUtility.getInstance().trackEvent(MatomoConstants.BUY_TOKEN_CARD, MatomoConstants.BUY_TOKEN_CARD_CLICKED);
                 layoutBank.setVisibility(View.GONE);
                 layoutCard.setVisibility(View.VISIBLE);
                 tvPayMethod.setText("****" + selectedCard.getLastFour());
