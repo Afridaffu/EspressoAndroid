@@ -31,7 +31,8 @@ public class IntentForwardingActivity extends AppCompatActivity {
 
     private void handleIntent(Intent intent) {
         getIntentData(intent);
-        intent.setClass(this, Utils.launchedActivity);
+        intent.setClass(this, OnboardActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         finish();
         startActivity(intent);
     }

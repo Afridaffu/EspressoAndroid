@@ -39,13 +39,34 @@
                 android:textSize="@dimen/_11ssp" />
 
             <ImageView
-                android:id="@+id/imgWebsite"
+                android:id="@+id/imgWebsite1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvheading"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_case" />
+                android:src="@drawable/ic_case"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/imgWebsite2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgWebsite1"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_case"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/imgWebsite3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgWebsite2"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_case"
+                android:visibility="gone" />
 
         </RelativeLayout>
 

@@ -908,10 +908,10 @@ public class BusinessDashboardFragment extends BaseFragment {
         MerchantActivityRequest request = new MerchantActivityRequest();
         request.setStartDate(strFromDate);
         request.setEndDate(strToDate);
-
-        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
-            request.setUserId("" + myApplication.getMyProfile().getData().getId());
-        }
+//
+//        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
+//            request.setUserId("" + myApplication.getMyProfile().getData().getId());
+//        }
         businessDashboardViewModel.merchantActivity(request);
 
     }
