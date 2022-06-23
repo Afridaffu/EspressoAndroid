@@ -5,15 +5,10 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.app.UiAutomation;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -60,12 +55,11 @@ import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.EmailRequest;
 import com.greenbox.coyni.model.profile.DownloadDocumentData;
 import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
-import com.greenbox.coyni.model.profile.DownloadImageData;
-import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.utils.MatomoConstants;
 import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Singleton;
@@ -75,11 +69,8 @@ import com.greenbox.coyni.view.business.PDFWebViewActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import okhttp3.internal.Util;
 
 public class CreateAccountActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     OutLineBoxPhoneNumberEditText phoneNumberET;
@@ -137,7 +128,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_create_account);
-            MatomoUtility.getInstance().trackScreen("Create Account Screen");
+            MatomoUtility.getInstance().trackScreen(MatomoConstants.CREATE_ACCOUNT_SCREEN);
             if (getIntent() != null) {
                 accountType = getIntent().getIntExtra(Utils.ACCOUNT_TYPE, Utils.PERSONAL_ACCOUNT);
             }
@@ -272,7 +263,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
             nextCV.setOnClickListener(view -> {
                 if (isNextEnabled) {
-                    MatomoUtility.getInstance().trackEvent("SignUp","SignUp Clicked");
+                    MatomoUtility.getInstance().trackEvent(MatomoConstants.SIGNUP, MatomoConstants.SIGNUP_CLICKED);
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
