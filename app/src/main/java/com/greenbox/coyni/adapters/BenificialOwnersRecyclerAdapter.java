@@ -33,6 +33,7 @@ public class BenificialOwnersRecyclerAdapter extends
     private int count = 0;
     private OnSelectListner listener;
     Boolean isCPwdEye = false;
+    private  String convert;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -86,7 +87,8 @@ public class BenificialOwnersRecyclerAdapter extends
             }
             if (objData.getSsn() != null && !objData.getSsn().equals("")) {
                 isCPwdEye = true;
-                String converted = objData.getSsn().replaceAll("\\w(?=\\w{2})", "•");
+                convert = objData.getSsn().replace("\\-","");
+                String converted = convert.replaceAll("\\w(?=\\w{2})", "•");
                 String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5,converted.length());
                 //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
                 holder.ssnTx.setText(hifened);
@@ -125,15 +127,14 @@ public class BenificialOwnersRecyclerAdapter extends
                                 if (!isCPwdEye) {
                                     isCPwdEye = true;
                                     holder.llEin.setBackgroundResource(R.drawable.ic_eyeclose);
-                                    String converted = objData.getSsn().replaceAll("\\w(?=\\w{2})", "•");
+                                    String converted = convert.replaceAll("\\w(?=\\w{2})", "•");
                                     String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5,converted.length());
                                     //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
                                     holder.ssnTx.setText(hifened);
                                 } else {
                                     isCPwdEye = false;
                                     holder.llEin.setBackgroundResource(R.drawable.ic_eyeopen);
-                                    String converted = objData.getSsn();
-                                    String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5,converted.length());
+                                    String hifened = convert.substring(0, 3) + " - " + convert.substring(3, 5) + " - " + convert.substring(5,convert.length());
                                     holder.ssnTx.setText(hifened);
                                    // holder.ssnTx.setText(objData.getSsn().substring(0, 2) + "-" + objData.getSsn().substring(2));
                                 }
