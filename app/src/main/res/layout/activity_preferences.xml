@@ -268,6 +268,7 @@
                             android:padding="@dimen/_14sdp"
                             android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                             android:singleLine="true"
+                            android:paddingEnd="@dimen/_30sdp"
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"

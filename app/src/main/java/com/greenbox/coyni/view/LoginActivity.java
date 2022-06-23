@@ -122,6 +122,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
     protected void onResume() {
         super.onResume();
         dismissDialog();
+        objMyApplication.setIsLoggedIn(false);
         isPwdEye = false;
         try {
             if (Utils.checkBiometric(LoginActivity.this) && Utils.checkAuthentication(LoginActivity.this)) {

@@ -718,7 +718,6 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 displayAlertDialog.dismiss();
-                finish();
 //                changeSlideState();
             }
         });
@@ -728,6 +727,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             public void onDismiss(DialogInterface dialogInterface) {
 //                changeSlideState();
                 myApplication.setCheckOutModel(null);
+                finish();
             }
         });
 

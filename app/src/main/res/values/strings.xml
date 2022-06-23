@@ -706,4 +706,5 @@
     <string name="alert">Alert</string>
     <string name="checkout_cancel_message">Do you want to cancel the Payment.</string>
     <string name="buy_token_message">You are unable to complete this purchase due to insufficient balance.please try again when you have enough to cover this order.</string>
+    <string name="dot_value">…</string>
 </resources>

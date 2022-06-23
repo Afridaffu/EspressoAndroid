@@ -221,7 +221,6 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         noMoreTransactionTV = findViewById(R.id.noMoreTransactions);
         pendingTxt = findViewById(R.id.pendingTV);
         searchET = findViewById(R.id.searchET);
-
     }
 
     void initObservers() {
@@ -357,8 +356,6 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         showProgressDialog();
         dashboardViewModel.meTransactionList(transactionListRequest);
     }
-
-
 
     private void showTransactionDetails(TransactionListPosted selectedTransaction) {
         Intent inDetails = new Intent(MerchantTransactionListActivity.this, MerchantTransactionDetailsActivity.class);
