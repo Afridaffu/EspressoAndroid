@@ -772,7 +772,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                 } else {
                     for (int i = 0; i < tempTransactionType.size(); i++) {
                         if (tempTransactionType.get(i) == Utils.buyTokens) {
-                            tempTransactionType.remove(Utils.buyTokens);
+                            tempTransactionType.remove(i);
                             break;
                         }
                     }

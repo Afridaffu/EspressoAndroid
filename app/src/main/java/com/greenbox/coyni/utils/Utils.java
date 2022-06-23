@@ -1329,7 +1329,7 @@ public class Utils {
                         userPreferenceModel.setPreferredAccount(myApplicationObj.getMyProfile().getData().getId());
 
                         PreferencesActivity preferencesActivity = (PreferencesActivity) context;
-                        preferencesActivity.customerProfileViewModel.updatePreferences(userPreferenceModel);
+                        preferencesActivity.callTimeZonePreferenceApi(userPreferenceModel);
 
                     } else if (from.equals("COMPANY_INFO")) {
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());

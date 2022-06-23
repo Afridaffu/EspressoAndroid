@@ -29,7 +29,6 @@ import com.greenbox.coyni.model.AccountsData;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
-import com.greenbox.coyni.model.profile.BusinessAccountDbaInfo;
 import com.greenbox.coyni.model.profile.BusinessAccountsListInfo;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.utils.LogUtils;
@@ -57,7 +56,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
     private TextView timezonetext, mTvUserIconText, defualtAccountDialogPersonalNameTV;
     private ImageView accountDDIV;
     private View disableView;
-    public static CustomerProfileViewModel customerProfileViewModel;
+    private CustomerProfileViewModel customerProfileViewModel;
     private int timeZoneID = 0;
     public static PreferencesActivity preferencesActivity;
     private ExpandableListView profilesListView;
@@ -78,6 +77,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
     private String childName;
     private int userId;
     private CardView doneButton;
+    private boolean isTimeZone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +92,11 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void callTimeZonePreferenceApi(UserPreferenceModel model) {
+        isTimeZone = true;
+        customerProfileViewModel.updatePreferences(model);
     }
 
     public void initFields() {
@@ -188,6 +193,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                             userPreferenceModel.setLocalCurrency(0);
                             userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
                             userPreferenceModel.setPreferredAccount(accountTypeId);
+                            isTimeZone = false;
                             customerProfileViewModel.updatePreferences(userPreferenceModel);
                             dialog.dismiss();
 
@@ -336,7 +342,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                             myApplicationObj.setStrPreference("AST");
                         }
                         timeZoneET.setText(myApplicationObj.getTimezone());
-                        Utils.showCustomToast(PreferencesActivity.this, getResources().getString(R.string.default_account_changed), R.drawable.ic_custom_tick, "authid");
+                        Utils.showCustomToast(PreferencesActivity.this, isTimeZone ? getString(R.string.time_zone_changed) : getString(R.string.default_account_changed), R.drawable.ic_custom_tick, "authid");
 
                     }
                 }
@@ -354,7 +360,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                         filterList = profilesResponse.getData();
                         for (ProfilesResponse.Profiles c : filterList) {
                             if (c.getId() == accountTypeId) {
-                                if(c.getAccountType().equals(Utils.PERSONAL)) {
+                                if (c.getAccountType().equals(Utils.PERSONAL)) {
                                     selectedName = c.getFullName();
                                 } else {
                                     selectedName = c.getDbaName();
