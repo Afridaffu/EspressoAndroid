@@ -388,11 +388,11 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     public void startTracker(int dbaOwnerId) {
         Intent inTracker = new Intent(BusinessDashboardActivity.this, BusinessRegistrationTrackerActivity.class);
-//        if (dbaOwnerId != 0) {
-//            inTracker.putExtra(Utils.ADD_BUSINESS, true);
-//            inTracker.putExtra(Utils.ADD_DBA, true);
-//            inTracker.putExtra(Utils.IS_TRACKER, true);
-//        }
+        if (dbaOwnerId != 0) {
+            inTracker.putExtra(Utils.ADD_BUSINESS, true);
+            inTracker.putExtra(Utils.ADD_DBA, true);
+            inTracker.putExtra(Utils.IS_TRACKER, true);
+        }
         startActivity(inTracker);
     }
 
@@ -448,7 +448,9 @@ public class BusinessDashboardActivity extends BaseActivity {
                     if (profile != null) {
                         objMyApplication.setMyProfile(profile);
                         if (profile.getData() != null) {
-//                            objMyApplication.setIsReserveEnabled(profile.getData().isReserveEnabled());
+                            if(objMyApplication.getAccountType()!=Utils.SHARED_ACCOUNT) {
+                            objMyApplication.setIsReserveEnabled(profile.getData().isReserveEnabled());
+                            }
                             objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                         }
                         enableDisableTabView();
