@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -184,7 +185,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             } else if (requestCode == 2) {
-                if (strScreen.equals("withdraw")) {
+                if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
                     onBackPressed();
                 } else {
                     if (objMyApplication.getSignet()) {
@@ -511,12 +512,12 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                            strCurrent = "signet";
-                            strOnPauseScreen = "";
-                            Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
-                            startActivityForResult(i, 2);
-                        }
+//                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+//                            strCurrent = "signet";
+//                            strOnPauseScreen = "";
+//                            Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
+//                            startActivityForResult(i, 2);
+//                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -619,17 +620,17 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                     tvSignetCount.setTextColor(getColor(R.color.light_gray));
                     tvSignetMsg.setTextColor(getColor(R.color.light_gray));
                     imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
-//                    imgSignetLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
                     imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
                 } else {
                     tvSignetError.setVisibility(View.GONE);
-                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
-                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
+//                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
+//                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
+                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
+                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
                     tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
                     imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
-//                    imgSignetLogo.setImageResource(R.drawable.ic_credit_debit_card);
-                    imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
-
+//                    imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
+                    imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
                 }
             }
         } catch (Exception ex) {

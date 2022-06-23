@@ -72,6 +72,7 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
+import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MatomoUtility;
@@ -777,7 +778,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 } else {
                     tvBankName.setText(objData.getBankName());
                 }
-                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
+                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
                     tvBAccNumber.setText(objData.getAccountNumber().substring(0, 10) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
                     tvBAccNumber.setText(objData.getAccountNumber());
@@ -1412,14 +1413,20 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                    startActivity(i);
                     try {
-                        Intent i;
-                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                            i = new Intent(BuyTokenActivity.this, DashboardActivity.class);
-                        } else {
-                            i = new Intent(BuyTokenActivity.this, BusinessDashboardActivity.class);
+                        if (objMyApplication.getStrScreen().equalsIgnoreCase(CheckOutConstants.FlowCheckOut)) {
+                            objMyApplication.getCheckOutModel().setCheckOutFlag(true);
+                            startActivity(new Intent(BuyTokenActivity.this,CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         }
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
+                        else {
+                            Intent i;
+                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                                i = new Intent(BuyTokenActivity.this, DashboardActivity.class);
+                            } else {
+                                i = new Intent(BuyTokenActivity.this, BusinessDashboardActivity.class);
+                            }
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

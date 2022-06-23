@@ -36,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.greenbox.coyni.R;
@@ -55,6 +56,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.view.business.AddPaymentSignetActivity;
+import com.greenbox.coyni.view.business.BusinessPaymentMethodsActivity;
 import com.greenbox.coyni.view.business.SelectPaymentMethodActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -1065,16 +1067,16 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        MatomoUtility.getInstance().trackEvent("Signet Account", "Clicked");
-                        if (signetList != null && signetList.size() > 0) {
-                            selectPayMethod(signetList);
-                        } else {
+//                        MatomoUtility.getInstance().trackEvent("Signet Account", "Clicked");
+//                        if (signetList != null && signetList.size() > 0) {
+//                            selectPayMethod(signetList);
+//                        } else {
+////                            strCurrent = "signet";
+////                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+////                            startActivityForResult(i, 4);
 //                            strCurrent = "signet";
-//                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-//                            startActivityForResult(i, 4);
-                            strCurrent = "signet";
-                            showAddPayment("signet");
-                        }
+//                            showAddPayment("signet");
+//                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

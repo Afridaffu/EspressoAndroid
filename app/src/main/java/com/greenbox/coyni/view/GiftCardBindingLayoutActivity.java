@@ -388,7 +388,16 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dashboardNavigation();
+                    try {
+                        if (objMyApplication.getStrScreen() != null && objMyApplication.getStrScreen().equalsIgnoreCase(CheckOutConstants.FlowCheckOut)) {
+                            objMyApplication.getCheckOutModel().setCheckOutFlag(true);
+                            startActivity(new Intent(GiftCardBindingLayoutActivity.this, CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        } else {
+                            dashboardNavigation();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 

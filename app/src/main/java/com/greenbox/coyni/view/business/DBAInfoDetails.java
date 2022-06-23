@@ -169,9 +169,9 @@ public class DBAInfoDetails extends BaseActivity {
             if (dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
                 String name =  dbaInfoResp.getData().getName();
                 if (name != null && name.length() > 20) {
-                    nameTV.setText(Utils.getCapsSentences(name).substring(0, 20) + "...");
+                    nameTV.setText(Utils.capitalize(name).substring(0, 20) + "...");
                 } else {
-                    nameTV.setText(Utils.getCapsSentences(name));
+                    nameTV.setText(Utils.capitalize(name));
                 }
                 nameTV.setOnClickListener(view -> {
 
@@ -181,9 +181,9 @@ public class DBAInfoDetails extends BaseActivity {
                             nameTV.setText(objMyApplication.getDbaInfoResp().getData().getName());
 
                         } else if (name.length() >= 21) {
-                            nameTV.setText(Utils.getCapsSentences(name).substring(0, 20) + "...");
+                            nameTV.setText(Utils.capitalize(name).substring(0, 20) + "...");
                         } else {
-                            nameTV.setText(Utils.getCapsSentences(name));
+                            nameTV.setText(Utils.capitalize(name));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -339,9 +339,9 @@ public class DBAInfoDetails extends BaseActivity {
                             objMyApplication.setDbaInfoResp(dbaInfoResp);
                             String str = dbaInfoResp.getData().getName();
                             if (str != null && str.length() > 20) {
-                                nameTV.setText(Utils.getCapsSentences(str).substring(0, 20) + "...");
+                                nameTV.setText(Utils.capitalize(str).substring(0, 20) + "...");
                             } else if (str != null) {
-                                nameTV.setText(Utils.getCapsSentences(str));
+                                nameTV.setText(Utils.capitalize(str));
                             }
                             if (dbaInfoResp.getData().getEmail() != null) {
                                 emailTV.setText(dbaInfoResp.getData().getEmail());

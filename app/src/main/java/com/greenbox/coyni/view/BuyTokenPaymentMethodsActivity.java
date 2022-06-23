@@ -47,6 +47,7 @@ import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
+import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -348,7 +349,13 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 if (payMethodsResponse != null) {
 //                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
 //                    paymentMethodsResponse = payMethodsResponse;
-                    PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
+                    PaymentMethodsResponse objResponse;
+                    if (strScreen.equalsIgnoreCase(CheckOutConstants.ScreenCheckOut)){
+                        objResponse = objMyApplication.filterCheckPaymentMethods(payMethodsResponse);
+                    }
+                    else {
+                        objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
+                    }
                     objMyApplication.setPaymentMethodsResponse(objResponse);
                     paymentMethodsResponse = objResponse;
                     if (isDeCredit) {

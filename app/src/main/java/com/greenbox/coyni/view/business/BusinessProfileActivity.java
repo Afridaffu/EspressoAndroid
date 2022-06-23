@@ -358,17 +358,17 @@ public class BusinessProfileActivity extends BaseActivity {
             userFullname.setOnClickListener(view -> {
                 if (userFullname.getText().toString().contains("...")) {
                     if (fullname.length() == 21 || fullname.length() > 21) {
-                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 20));
+                        userFullname.setText(Utils.capitalize(fullname).substring(0, 20));
                     } else {
-                        userFullname.setText(Utils.getCapsSentences(fullname));
+                        userFullname.setText(Utils.capitalize(fullname));
                     }
                 } else {
                     if (fullname.length() == 21) {
-                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 20) + "...");
+                        userFullname.setText(Utils.capitalize(fullname).substring(0, 22) + "...");
                     } else if (fullname.length() > 22) {
-                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 22) + "...");
+                        userFullname.setText(Utils.capitalize(fullname).substring(0, 22) + "...");
                     } else {
-                        userFullname.setText(Utils.getCapsSentences(fullname));
+                        userFullname.setText(Utils.capitalize(fullname));
                     }
                 }
             });
@@ -514,10 +514,10 @@ public class BusinessProfileActivity extends BaseActivity {
                     } else if (myApplication.getMyProfile().getData().getDbaName() != null && !myApplication.getMyProfile().getData().getDbaName().equals(" ")) {
                         fullname = Utils.capitalize(myApplication.getMyProfile().getData().getDbaName());
                     }
-                    if (fullname.length() > 22) {
-                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 22) + " ");
+                    if (fullname.length() > 20) {
+                        userFullname.setText(Utils.capitalize(fullname).substring(0, 20) + " ");
                     } else {
-                        userFullname.setText(Utils.getCapsSentences(fullname));
+                        userFullname.setText(Utils.capitalize(fullname));
                     }
 
                 } catch (Resources.NotFoundException e) {
@@ -732,10 +732,10 @@ public class BusinessProfileActivity extends BaseActivity {
                                     }
                                 } else if (profile.getData().getDbaName() != null) {
                                     fullname = profile.getData().getDbaName();
-                                    if (fullname != null && fullname.length() > 22) {
-                                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 22) + " ");
+                                    if (fullname != null && fullname.length() > 20) {
+                                        userFullname.setText(Utils.capitalize(fullname).substring(0, 20) + " ");
                                     } else {
-                                        userFullname.setText(Utils.getCapsSentences(fullname));
+                                        userFullname.setText(Utils.capitalize(fullname));
                                     }
                                 }
 //                                userFullname.setText(fullname);
@@ -853,10 +853,10 @@ public class BusinessProfileActivity extends BaseActivity {
                 }
                 userFullname.setText(getResources().getString(R.string.dba_name, userName));
 
-                if (userName != null && userName.length() > 18) {
-                    userFullname.setText( Utils.getCapsSentences(userName).substring(0, 18) + " ");
+                if (userName != null && userName.length() > 20) {
+                    userFullname.setText( Utils.capitalize(userName).substring(0, 20) + " ");
                 } else {
-                    userFullname.setText( Utils.getCapsSentences(userName));
+                    userFullname.setText( Utils.capitalize(userName));
                 }
                 if (firstName != null && !firstName.equals("") && lastName != null && !lastName.equals("")) {
                     char first = firstName.charAt(0);
@@ -868,10 +868,10 @@ public class BusinessProfileActivity extends BaseActivity {
                 }
             } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
                 userName = myApplication.getMyProfile().getData().getDbaName();
-                if (userName != null && userName.length() > 18) {
-                    userFullname.setText( Utils.getCapsSentences(userName).substring(0, 18) + " ");
+                if (userName != null && userName.length() > 20) {
+                    userFullname.setText( Utils.capitalize(userName).substring(0, 20) + " ");
                 } else if (userName != null) {
-                    userFullname.setText(Utils.getCapsSentences(userName));
+                    userFullname.setText(Utils.capitalize(userName));
                 }
                 profileImage.setVisibility(View.VISIBLE);
                 if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
