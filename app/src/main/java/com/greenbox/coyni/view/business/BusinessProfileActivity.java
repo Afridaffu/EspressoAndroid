@@ -41,6 +41,7 @@ import com.greenbox.coyni.model.logout.LogoutResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
+import com.greenbox.coyni.utils.MatomoConstants;
 import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -100,7 +101,7 @@ public class BusinessProfileActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_profile);
-        MatomoUtility.getInstance().trackScreen("Business Profile Screen");
+        MatomoUtility.getInstance().trackScreen(MatomoConstants.BUSINESS_PROFILE_SCREEN);
 
         try {
             displayImageUtility = DisplayImageUtility.getInstance(getApplicationContext());
@@ -164,7 +165,7 @@ public class BusinessProfileActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        MatomoUtility.getInstance().trackEvent("Business Preferences", "Clicked");
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.BUSINESS_PREFERENCES, MatomoConstants.BUSINESS_PREFERENCES_CLICKED);
                         Intent intent = new Intent(BusinessProfileActivity.this, PreferencesActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
@@ -210,7 +211,7 @@ public class BusinessProfileActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        MatomoUtility.getInstance().trackEvent("Business Agreements", "Clicked");
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.BUSINESS_AGREEMENTS, MatomoConstants.BUSINESS_AGREEMENTS_CLICKED);
                         Intent intent = new Intent(BusinessProfileActivity.this, AgreementsActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
@@ -334,7 +335,7 @@ public class BusinessProfileActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        MatomoUtility.getInstance().trackEvent("Business AccountLimits", "Clicked");
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.BUSINESS_ACCOUNT_LIMITS, MatomoConstants.BUSINESS_ACCOUNT_LIMITS_CLICKED);
                         Intent intent = new Intent(BusinessProfileActivity.this, AccountLimitsActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
@@ -346,7 +347,7 @@ public class BusinessProfileActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        MatomoUtility.getInstance().trackEvent("Business PaymentMethods", "Clicked");
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.BUSINESS_PAYMENT_METHODS, MatomoConstants.BUSINESS_PAYMENT_METHODS_CLICKED);
                         Intent intent = new Intent(BusinessProfileActivity.this, BusinessPaymentMethodsActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
@@ -390,7 +391,7 @@ public class BusinessProfileActivity extends BaseActivity {
             });
 
             findViewById(R.id.b_cpChangePassword).setOnClickListener(view -> {
-                MatomoUtility.getInstance().trackEvent("Business ChangePassword", "Clicked");
+                MatomoUtility.getInstance().trackEvent(MatomoConstants.BUSINESS_PASSWORD, MatomoConstants.BUSINESS_PASSWORD_CLICKED);
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
