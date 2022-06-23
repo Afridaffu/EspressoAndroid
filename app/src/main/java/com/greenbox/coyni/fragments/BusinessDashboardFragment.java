@@ -81,11 +81,15 @@ import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 //Business Dashboard Fragment
 public class BusinessDashboardFragment extends BaseFragment {
@@ -835,8 +839,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 mTicketsLayout.setVisibility(View.GONE);
                 mSbTodayVolume.setVisibility(View.VISIBLE);
                 saleOrdersText.setVisibility(View.VISIBLE);
-                strFromDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + startTime;
-                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + endTime;
+                strFromDate = Utils.convertZoneDateTime(getCurrentTimeString(),dateAndTime,dateAndTime,"PST").split(" ")[0] + startTime;
+                strToDate = Utils.convertZoneDateTime(getCurrentTimeString(),dateAndTime,dateAndTime,"PST").split(" ")[0] + endTime;
+                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate,dateAndTime,dateAndTime,"PST");
+                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate,dateAndTime,dateAndTime,"PST");
                 businessActivityAPICall(strFromDate, strToDate);
                 commissionActivityCall(strFromDate, strToDate);
             }
@@ -846,8 +852,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 mTicketsLayout.setVisibility(View.GONE);
                 mSbTodayVolume.setVisibility(View.VISIBLE);
                 saleOrdersText.setVisibility(View.VISIBLE);
-                strFromDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + startTime;
-                strToDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + endTime;
+                strFromDate = Utils.convertZoneDateTime(getYesterdayDateString(),dateAndTime,dateAndTime, "PST").split(" ")[0] + startTime;
+                strToDate = Utils.convertZoneDateTime(getYesterdayDateString(),dateAndTime,dateAndTime, "PST").split(" ")[0] + endTime;
+                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate,dateAndTime,dateAndTime,"PST");
+                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate,dateAndTime,dateAndTime,"PST");
                 businessActivityAPICall(strFromDate, strToDate);
                 commissionActivityCall(strFromDate, strToDate);
             }
