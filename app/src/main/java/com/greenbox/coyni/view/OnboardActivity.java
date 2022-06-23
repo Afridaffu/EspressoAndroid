@@ -79,6 +79,7 @@ public class OnboardActivity extends BaseActivity {
             layoutOnBoarding = findViewById(R.id.layoutOnBoarding);
             layoutAuth = findViewById(R.id.layoutAuth);
             objMyApplication = (MyApplication) getApplicationContext();
+            objMyApplication.setIsLoggedIn(false);
             getVersionName();
 //            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
 //                if (Utils.isFingerPrint(OnboardActivity.this)) {
@@ -254,6 +255,7 @@ public class OnboardActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
+        objMyApplication.setIsLoggedIn(false);
         super.onResume();
         try {
             if (Utils.isKeyboardVisible)

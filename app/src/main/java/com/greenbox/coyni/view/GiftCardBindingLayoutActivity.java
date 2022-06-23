@@ -705,7 +705,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         LinearLayout lyMessage = findViewById(R.id.lyMessage);
 
 
-        lyReference.setVisibility(View.GONE);
+        lyReference.setVisibility(View.VISIBLE);
         if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
             objMyApplication.setCheckOutModel(null);
         }
@@ -719,18 +719,18 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         tvCurrency.setVisibility(View.VISIBLE);
 
         giftCardAmountTV.setText(Utils.USNumberFormat(cynValue));
-//        if (objMyApplication.getPaidOrderResp().getPaidResponseData().getGbxTransactionId().length() > 10) {
-//            tvReference.setText(objMyApplication.getPaidOrderResp().getPaidResponseData().getGbxTransactionId().substring(0, 10) + "...");
-//        } else {
-//            tvReference.setText(objMyApplication.getPaidOrderResp().getPaidResponseData().getGbxTransactionId());
-//        }
-//        lyReference.setOnClickListener(view -> {
-//            try {
-//                Utils.copyText(objMyApplication.getPaidOrderResp().getPaidResponseData().getGbxTransactionId(), GiftCardBindingLayoutActivity.this);
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-//        });
+        if (objMyApplication.getOrderPayResponse().getData().getGbxTransactionId().length() > 10) {
+            tvReference.setText(objMyApplication.getOrderPayResponse().getData().getGbxTransactionId().substring(0, 10) + getString(R.string.dot_value));
+        } else {
+            tvReference.setText(objMyApplication.getOrderPayResponse().getData().getGbxTransactionId());
+        }
+        lyReference.setOnClickListener(view -> {
+            try {
+                Utils.copyText(objMyApplication.getOrderPayResponse().getData().getGbxTransactionId(), GiftCardBindingLayoutActivity.this);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
         doneCV.setOnClickListener(new View.OnClickListener() {
             @Override
