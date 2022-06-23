@@ -377,7 +377,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             View websiteView = getLayoutInflater().inflate(R.layout.additional_website_changes_item, null);
             TextView tvheading = websiteView.findViewById(R.id.tvheading);
             CheckBox checkboxCB = websiteView.findViewById(R.id.checkboxCB);
-            ImageView imgWebsite = websiteView.findViewById(R.id.imgWebsite);
+            ImageView imgWebsite1 = websiteView.findViewById(R.id.imgWebsite1);
+            ImageView imgWebsite2 = websiteView.findViewById(R.id.imgWebsite2);
+            ImageView imgWebsite3 = websiteView.findViewById(R.id.imgWebsite3);
 
             int headerLength = actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader().length();
             String websiteChanges = actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader()
@@ -387,29 +389,17 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             SS.setSpan(new CustomTypefaceSpan("", font), 0, headerLength, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
             tvheading.setText(SS);
 
-            if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1() != null) {
-                imgWebsite.setVisibility(View.VISIBLE);
-                imgWebsite.setTag(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1());
-                imgWebsite.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        ShowFullPageImageDialog showImgDialog = new ShowFullPageImageDialog(BusinessAdditionalActionRequiredActivity.this, (String) imgWebsite.getTag());
-                        showImgDialog.show();
-                    }
-                });
-                DisplayImageUtility.ImageHolder holder = new DisplayImageUtility.ImageHolder();
-                holder.key = actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1();
-                holder.imageView = imgWebsite;
-                holder.resId = 0;
-                imagesList.add(holder);
-//                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-//                utility.addImage(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1(), imgWebsite, 0);
-            } else {
-                imgWebsite.setVisibility(View.GONE);
+            if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1() != null
+                    && !actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1().equals("")) {
+                imagesList.add(displayWebsiteImage(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1(), imgWebsite1));
+            }
+            if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl2() != null
+                    && !actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl2().equals("")) {
+                imagesList.add(displayWebsiteImage(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl2(), imgWebsite2));
+            }
+            if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl3() != null
+                    && !actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl3().equals("")) {
+                imagesList.add(displayWebsiteImage(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl3(), imgWebsite3));
             }
 
             fileUpload.put(actionRequiredResponse.getData().getWebsiteChange().get(i).getId(), null);
@@ -544,7 +534,28 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         enableOrDisableNext();
     }
 
-    //
+
+    private DisplayImageUtility.ImageHolder displayWebsiteImage(String imageId, ImageView iv) {
+        iv.setVisibility(View.VISIBLE);
+        iv.setTag(imageId);
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                ShowFullPageImageDialog showImgDialog = new ShowFullPageImageDialog(BusinessAdditionalActionRequiredActivity.this, (String) v.getTag());
+                showImgDialog.show();
+            }
+        });
+        DisplayImageUtility.ImageHolder holder = new DisplayImageUtility.ImageHolder();
+        holder.key = imageId;
+        holder.imageView = iv;
+        holder.resId = 0;
+        return holder;
+    }
+
     private String capFirstLetter(String text) {
         if (text == null || text.equals("")) {
             return "";
