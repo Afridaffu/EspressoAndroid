@@ -119,7 +119,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private LoginViewModel loginViewModel;
     private MyApplication objMyApplication;
     private String mCompanyName = "", mBusinessEntity = "", mEIN = "", mEmail = "", mPhoneNumber = "", mAddress = "", mArticleDate = "", mEINDate = "", mW9Date = "";
-    private String mDbName = "", mBusinessType = "", mTimeZone = "", mWebsite = "", mMonthlyProcVolume = "", mHighTicket = "", mAverageTicket = "", mCustomerServiceEmail = "", mCustomerServicePhone = "", mDbAddressLine = "", mDbFillingDate = "";
+    private String mDbName = "", mBusinessType = "",convert = "", mTimeZone = "", mWebsite = "", mMonthlyProcVolume = "", mHighTicket = "", mAverageTicket = "", mCustomerServiceEmail = "", mCustomerServicePhone = "", mDbAddressLine = "", mDbFillingDate = "";
     private Boolean addBusiness = false;
     private Boolean addDBA = false;
     private BankAccountsViewModel bankAccountsViewModel;
@@ -226,8 +226,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         isCPwdEye = true;
                         llEin.setBackgroundResource(R.drawable.ic_eyeclose);
                         if (cir.getIdentificationType() == 11) {
-                            String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", "•");
-                            String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5, converted.length());
+                             convert = cir.getSsnOrEin().replaceAll("\\-", "");
+                            String converted = convert.replaceAll("\\w(?=\\w{2})", "•");
+                            String hifened = converted.substring(0, 3)  + " - "  + converted.substring(3, 5) +  " - "  + converted.substring(5, converted.length());
                             mEINTx.setText(hifened);
                         } else {
                             String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", "•");
@@ -240,7 +241,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     } else {
                         isCPwdEye = false;
                         if (cir.getIdentificationType() == 11) {
-                            mEINTx.setText(cir.getSsnOrEin().substring(0, 3) + " - " + cir.getSsnOrEin().substring(3, 5) + " - " + cir.getSsnOrEin().substring(5, cir.getSsnOrEin().length()));
+
+                            String convert1 = cir.getSsnOrEin().replaceAll("\\-", " - ");
+                            mEINTx.setText(convert1);
 
                         } else {
                             mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + " - " + cir.getSsnOrEin().substring(2));
@@ -490,9 +493,10 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     if (cir.getIdentificationType() == 11) {
                                         ssnEinTV.setText("SSN");
                                         isCPwdEye = true;
-                                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", "•");
-                                        String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5, converted.length());
+                                        String converted = convert.replaceAll("\\w(?=\\w{2})", "•");
+                                        String hifened = converted.substring(0, 3)  + " - "  + converted.substring(3, 5) +  " - "  + converted.substring(5, converted.length());
                                         mEINTx.setText(hifened);
+
                                     } else {
                                         ssnEinTV.setText("EIN/TIN");
                                         isCPwdEye = true;
