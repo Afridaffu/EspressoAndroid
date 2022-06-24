@@ -3,17 +3,8 @@ package com.greenbox.coyni.model.identity_verification;
 import java.util.ArrayList;
 
 public class LatestTransactionsRequest {
-    private int userId;
     private ArrayList<Integer> transactionType;
     private boolean isMerchantTokenTransactions;
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     public ArrayList<Integer> getTransactionType() {
         return transactionType;

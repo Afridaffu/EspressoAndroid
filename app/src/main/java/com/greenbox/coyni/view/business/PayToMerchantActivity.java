@@ -597,12 +597,12 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     @SuppressLint("SetTextI18n")
     private void bindUserInfo(UserDetails userDetails) {
         try {
-            TextView tvName, userName, userWalletAddre;
+            TextView tvName, userName;
             ImageView userProfile;
             tvName = findViewById(R.id.merchantyNameTV);
             userName = findViewById(R.id.userProfileTextTV);
             userProfile = findViewById(R.id.userProfileIV);
-            userWalletAddre = findViewById(R.id.accountAddress);
+//            userWalletAddre = findViewById(R.id.accountAddress);
 
             if (userDetails.getData() != null) {
                 requestedToUserId = userDetails.getData().getUserId();
@@ -629,13 +629,13 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 //                        userDetails.getData().getLastName().substring(0, 1).toUpperCase();
 //            }
 //            userName.setText(imageTextNew);
-            if (userDetails.getData().getWalletId() != null) {
-                if (userDetails.getData().getWalletId().length() > Integer.parseInt(getString(R.string.waddress_length))) {
-                    userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-                } else {
-                    userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
-                }
-            }
+//            if (userDetails.getData().getWalletId() != null) {
+//                if (userDetails.getData().getWalletId().length() > Integer.parseInt(getString(R.string.waddress_length))) {
+//                    userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+//                } else {
+//                    userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
+//                }
+//            }
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
                 userProfile.setVisibility(View.VISIBLE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());

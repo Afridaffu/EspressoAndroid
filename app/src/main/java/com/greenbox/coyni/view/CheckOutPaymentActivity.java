@@ -116,6 +116,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
             if (myApplication.getCheckOutModel().getEncryptedToken() != null && !myApplication.getCheckOutModel().getEncryptedToken().equals("")) {
                 requestToken = myApplication.getCheckOutModel().getEncryptedToken();
+//                checkOutViewModel.scanQRCode(requestToken);
                 orderInfoAPICall(requestToken);
             }
         }
@@ -280,7 +281,9 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                         if (orderInfoResponse.getData() != null && orderInfoResponse.getData().isCheckoutUser()) {
                             initUserData(orderInfoResponse);
                             TransactionLimitAPICall();
-
+                            if (orderInfoResponse.getData().getOrderId() != null) {
+                                checkOutViewModel.scanQRCode(orderInfoResponse.getData().getOrderId());
+                            }
                         }
                     } else {
                         slideToConfirm.setInteractionEnabled(false);
@@ -545,11 +548,10 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         boolean value = false;
 
         if (userAmount > availableBalance) {
-            if (myApplication.getAccountType() == Utils.PERSONAL_ACCOUNT){
+            if (myApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
-            }
-            else if (myApplication.getAccountType() == Utils.BUSINESS_ACCOUNT){
-                displayMerchantAlert(getString(R.string.buy_token_message),CheckOutPaymentActivity.this,"coyni");
+            } else if (myApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                displayMerchantAlert(getString(R.string.buy_token_message), CheckOutPaymentActivity.this, "coyni");
             }
         } else if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
             displayAlertNew("Amount should be greater than zero.", CheckOutPaymentActivity.this, "Oops!");
@@ -746,7 +748,6 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         displayAlertDialog.setCanceledOnTouchOutside(true);
         displayAlertDialog.show();
     }
-
 
 
 }

@@ -5,7 +5,6 @@ public class MerchantActivityRequest {
     private String duration;
     private String endDate;
     private String startDate;
-    private String userId;
 
 
     public void setDuration(String duration) {
@@ -23,7 +22,4 @@ public class MerchantActivityRequest {
     }
 
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 }

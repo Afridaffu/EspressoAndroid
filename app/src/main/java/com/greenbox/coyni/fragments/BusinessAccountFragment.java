@@ -91,9 +91,9 @@ public class BusinessAccountFragment extends BaseFragment {
         latestTxnRefresh.setOnRefreshListener(() -> {
             try {
                 LatestTransactionsRequest request = new LatestTransactionsRequest();
-                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
-                    request.setUserId(objMyApplication.getMyProfile().getData().getId());
-                }
+//                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+//                    request.setUserId(objMyApplication.getMyProfile().getData().getId());
+//                }
                 request.setTransactionType(getDefaultTransactionTypes());
                 request.setMerchantTokenTransactions(true);
                 ((BusinessDashboardActivity) getActivity()).showProgressDialog();
@@ -199,9 +199,9 @@ public class BusinessAccountFragment extends BaseFragment {
 //            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
             businessDashboardViewModel.meMerchantWallet(walletRequest);
             LatestTransactionsRequest request = new LatestTransactionsRequest();
-            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
-                request.setUserId(objMyApplication.getMyProfile().getData().getId());
-            }
+//            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+//                request.setUserId(objMyApplication.getMyProfile().getData().getId());
+//            }
             request.setTransactionType(getDefaultTransactionTypes());
             request.setMerchantTokenTransactions(true);
 
@@ -254,6 +254,7 @@ public class BusinessAccountFragment extends BaseFragment {
         transactionType.add(Utils.refund);
         transactionType.add(Utils.paidInvoice);
         transactionType.add(Utils.businessPayout);
+        transactionType.add(Utils.reserveRelease);
         return transactionType;
     }
 
