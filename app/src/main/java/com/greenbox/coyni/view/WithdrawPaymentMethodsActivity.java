@@ -222,12 +222,6 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
     @Override
     protected void onResume() {
         try {
-//            if (addPayDialog != null) {
-//                addPayDialog.dismiss();
-//            }
-//            if (extBankDialog != null) {
-//                extBankDialog.dismiss();
-//            }
             if (strOnPauseScreen.equals("externalBank")) {
                 ControlMethod("externalBank");
                 strCurrent = "externalBank";
@@ -392,6 +386,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     getPayments(payMethodsResponse.getData().getData());
                     if (isDeCredit) {
                         isDeCredit = false;
+                        isPayments = false;
                         //Modified on 21 Jun 2022 -
 //                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
 //                            ControlMethod("addpayment");
