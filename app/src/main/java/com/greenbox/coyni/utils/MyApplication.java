@@ -146,7 +146,7 @@ public class MyApplication extends Application {
 //        mCurrentUserData.setMerchantBalance(merchantBalance);
 //    }
 
-    public int getDbaOwnerId() {
+    public Integer getDbaOwnerId() {
         return mCurrentUserData.getDbaOwnerId();
     }
 
@@ -894,4 +894,23 @@ public class MyApplication extends Application {
         }
         return isFaceLock;
     }
+
+    public  PaymentMethodsResponse filterCheckPaymentMethods(PaymentMethodsResponse objResponse) {
+        PaymentMethodsResponse payMethodsResponse = objResponse;
+        List<PaymentsList> listData = new ArrayList<>();
+        try {
+            if (objResponse != null && objResponse.getData() != null && objResponse.getData().getData() != null && objResponse.getData().getData().size() > 0) {
+                for (int i = 0; i < objResponse.getData().getData().size(); i++) {
+                    if (!objResponse.getData().getData().get(i).getPaymentMethod().equalsIgnoreCase("bank")) {
+                        listData.add(objResponse.getData().getData().get(i));
+                    }
+                }
+                payMethodsResponse.getData().setData(listData);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return payMethodsResponse;
+    }
+
 }

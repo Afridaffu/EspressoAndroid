@@ -33,6 +33,7 @@ import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MatomoConstants;
 import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -71,7 +72,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_merchant_transactions_list);
-        MatomoUtility.getInstance().trackScreen("Merchant Transactions Screen");
+        MatomoUtility.getInstance().trackScreen(MatomoConstants.MERCHANT_TRANSACTIONS_SCREEN);
 
         try {
             initFields();
@@ -220,7 +221,6 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         noMoreTransactionTV = findViewById(R.id.noMoreTransactions);
         pendingTxt = findViewById(R.id.pendingTV);
         searchET = findViewById(R.id.searchET);
-
     }
 
     void initObservers() {
@@ -357,8 +357,6 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         dashboardViewModel.meTransactionList(transactionListRequest);
     }
 
-
-
     private void showTransactionDetails(TransactionListPosted selectedTransaction) {
         Intent inDetails = new Intent(MerchantTransactionListActivity.this, MerchantTransactionDetailsActivity.class);
         inDetails.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, selectedTransaction.getGbxTransactionId());
@@ -378,7 +376,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             @Override
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(Utils.applyFilter)) {
-                    MatomoUtility.getInstance().trackEvent("Transaction Filters", "Applied");
+                    MatomoUtility.getInstance().trackEvent(MatomoConstants.MERCHANT_FILTERS, MatomoConstants.MERCHANT_FILTERS_APPLIED);
                     dismissDialog();
                     globalPending.clear();
                     globalPosted.clear();

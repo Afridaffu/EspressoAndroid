@@ -228,7 +228,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-//                        startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
+                        startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
                     }
                 });
             } catch (Exception ex) {
@@ -388,11 +388,11 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     public void startTracker(int dbaOwnerId) {
         Intent inTracker = new Intent(BusinessDashboardActivity.this, BusinessRegistrationTrackerActivity.class);
-//        if (dbaOwnerId != 0) {
-//            inTracker.putExtra(Utils.ADD_BUSINESS, true);
-//            inTracker.putExtra(Utils.ADD_DBA, true);
-//            inTracker.putExtra(Utils.IS_TRACKER, true);
-//        }
+        if (dbaOwnerId != 0) {
+            inTracker.putExtra(Utils.ADD_BUSINESS, true);
+            inTracker.putExtra(Utils.ADD_DBA, true);
+            inTracker.putExtra(Utils.IS_TRACKER, true);
+        }
         startActivity(inTracker);
     }
 
@@ -448,7 +448,9 @@ public class BusinessDashboardActivity extends BaseActivity {
                     if (profile != null) {
                         objMyApplication.setMyProfile(profile);
                         if (profile.getData() != null) {
+                            if(objMyApplication.getAccountType()!=Utils.SHARED_ACCOUNT) {
                             objMyApplication.setIsReserveEnabled(profile.getData().isReserveEnabled());
+                            }
                             objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                         }
                         enableDisableTabView();
@@ -584,9 +586,9 @@ public class BusinessDashboardActivity extends BaseActivity {
             mTvUserName.setText(getResources().getString(R.string.dba_name, userName));
 
             if (userName != null && userName.length() > 21) {
-                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 21) + " ");
+                mTvUserName.setText("Hi! " + Utils.capitalize(userName).substring(0, 21) + " ");
             } else {
-                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
+                mTvUserName.setText("Hi! " + Utils.capitalize(userName));
             }
             if (firstName != null && !firstName.equals("") && lastName != null && !lastName.equals("")) {
                 char first = firstName.charAt(0);
@@ -601,10 +603,10 @@ public class BusinessDashboardActivity extends BaseActivity {
                 iconText = objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
             }
             userName = objMyApplication.getMyProfile().getData().getDbaName();
-            if (userName != null && userName.length() > 21) {
-                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 21) + " ");
+            if (userName != null && userName.length() > 20) {
+                mTvUserName.setText("Hi! " + Utils.capitalize(userName).substring(0, 20) + " ");
             } else if (userName != null) {
-                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
+                mTvUserName.setText("Hi! " + Utils.capitalize(userName));
             }
             mIvUserIcon.setVisibility(View.VISIBLE);
             if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
@@ -622,17 +624,17 @@ public class BusinessDashboardActivity extends BaseActivity {
         mTvUserName.setOnClickListener(view -> {
             if (mTvUserName.getText().toString().contains("...")) {
                 if (userName.length() == 21 || userName.length() > 21) {
-                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 20));
+                    mTvUserName.setText("Hi! " + Utils.capitalize(userName).substring(0, 20));
                 } else {
-                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
+                    mTvUserName.setText("Hi! " + Utils.capitalize(userName));
                 }
             } else {
                 if (userName.length() == 21) {
-                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 20) + "...");
+                    mTvUserName.setText("Hi! " + Utils.capitalize(userName).substring(0, 22) + "...");
                 } else if (userName.length() > 22) {
-                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 22) + "...");
+                    mTvUserName.setText("Hi! " + Utils.capitalize(userName).substring(0, 22) + "...");
                 } else {
-                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
+                    mTvUserName.setText("Hi! " + Utils.capitalize(userName));
                 }
             }
         });

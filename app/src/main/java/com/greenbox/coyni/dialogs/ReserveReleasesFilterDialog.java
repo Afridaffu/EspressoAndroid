@@ -35,20 +35,20 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
     private MyApplication objMyApplication;
     private DateRangePickerDialog dateRangePickerDialog;
     private ReserveFilter filter;
-    private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
-    private SharedPreferences sharedPreferences;
+    private Long mLastClickTime = 0L;
     private SharedPreferences.Editor mEditor;
-    private String storedSelectDate = "", tempStrSelectedDate = "", strFromDate = "", strToDate = "", strSelectedDate = "", strupdated = "", strended = "", strupdateddate = "", strtoupdateddate = "", strF = "", strT = "";
+    private String tempStrSelectedDate = "", strFromDate = "", strToDate = "",
+            strSelectedDate = "", strupdated = "", strended = "", strF = "", strT = "";
     private String displayFormat = "MM-dd-yyyy";
     private SimpleDateFormat displayFormatter;
     private Date startDateD = null;
     private Date endDateD = null;
+    private boolean isOpen, isOnHold, isReleased, isCancelled, isFailed;
 
-
-    public ReserveReleasesFilterDialog(Context context, ReserveFilter filter1) {
+    public ReserveReleasesFilterDialog(Context context, ReserveFilter filter) {
         super(context);
         this.context = context;
-        this.filter = filter1;
+        this.filter = filter;
     }
 
     @Override
@@ -57,7 +57,6 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
         setContentView(R.layout.dialog_reserve_filter);
         displayFormatter = new SimpleDateFormat(displayFormat);
         initFields();
-
     }
 
     private void initFields() {
@@ -73,9 +72,9 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
         dateClick = findViewById(R.id.dateRangePickerLL);
         dateRange = findViewById(R.id.datePickET);
 
-
         try {
-            if (filter != null && filter.getUpdatedFromDate() != null && filter.getUpdatedToDate() != null) {
+            if (filter != null && filter.getUpdatedFromDate() != null
+                    && filter.getUpdatedToDate() != null) {
                 strF = filter.getUpdatedFromDate();
                 strT = filter.getUpdatedToDate();
 
@@ -115,13 +114,19 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
             e.printStackTrace();
         }
 
-
         if (filter.isFilterApplied) {
-            openC.setChecked(filter.isOpen());
-            onHoldC.setChecked(filter.isOnHold());
-            releasedC.setChecked(filter.isReleased());
-            canceledC.setChecked(filter.isCancelled());
-            failedC.setChecked(filter.isFailed());
+
+            isOpen = filter.isOpen();
+            isOnHold = filter.isOnHold();
+            isReleased = filter.isReleased();
+            isCancelled = filter.isCancelled();
+            isFailed = filter.isFailed();
+
+            openC.setChecked(isOpen);
+            onHoldC.setChecked(isOnHold);
+            releasedC.setChecked(isReleased);
+            canceledC.setChecked(isCancelled);
+            failedC.setChecked(isFailed);
         } else {
             rangeDates = new RangeDates();
             rangeDates.setUpdatedFromDate("");
@@ -134,28 +139,32 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 filter.isFilterApplied = true;
-                filter.setOpen(isChecked);
+                //filter.setOpen(isChecked);
+                isOpen = isChecked;
             }
         });
         releasedC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 filter.isFilterApplied = true;
-                filter.setReleased(isChecked);
+                //filter.setReleased(isChecked);
+                isReleased = isChecked;
             }
         });
         onHoldC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 filter.isFilterApplied = true;
-                filter.setOnHold(isChecked);
+                //filter.setOnHold(isChecked);
+                isOnHold = isChecked;
             }
         });
         canceledC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 filter.isFilterApplied = true;
-                filter.setCancelled(isChecked);
+                //filter.setCancelled(isChecked);
+                isCancelled = isChecked;
             }
         });
 
@@ -163,7 +172,8 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 filter.isFilterApplied = true;
-                filter.setFailed(isChecked);
+                //filter.setFailed(isChecked);
+                isFailed = isChecked;
             }
         });
 
@@ -205,6 +215,11 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                     dateRange.setText("");
                     //Toast.makeText(context, "plese select fromdate and todate", Toast.LENGTH_SHORT).show();
                 } else {
+                    filter.setOpen(isOpen);
+                    filter.setOnHold(isOnHold);
+                    filter.setReleased(isReleased);
+                    filter.setCancelled(isCancelled);
+                    filter.setFailed(isFailed);
                     if (getOnDialogClickListener() != null) {
                         getOnDialogClickListener().onDialogClicked("ApplyFilter", filter);
                         dismiss();

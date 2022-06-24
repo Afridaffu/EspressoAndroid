@@ -5,9 +5,7 @@ import static android.view.View.VISIBLE;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,7 +28,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-//import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -71,7 +68,6 @@ import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.DBAInfoDetails;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
@@ -211,48 +207,6 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             ex.printStackTrace();
         }
         return strDate;
-    }
-
-    private void setToDate(EditText dob) {
-//        try {
-//
-//            Calendar c = Calendar.getInstance();
-//            mYear = c.get(Calendar.YEAR);
-//            mMonth = c.get(Calendar.MONTH);
-//            mDay = c.get(Calendar.DAY_OF_MONTH);
-//
-//            DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.CalendarDialogTheme,
-//                    new DatePickerDialog.OnDateSetListener() {
-//                        @Override
-//                        public void onDateSet(DatePicker view, int year,
-//                                              int monthOfYear, int dayOfMonth) {
-//                            try {
-//                                String dateToConvert = Utils.changeFormat(dayOfMonth) + "/" + Utils.changeFormat((monthOfYear + 1)) + "/" + year;
-//                                String convertedDate = convertDate(dateToConvert);
-//                                dob.setText(convertedDate);
-//                                isDOBSelected = true;
-//                                dateOfBirth = year + "-" + Utils.changeFormat((monthOfYear + 1)) + "-" + Utils.changeFormat(dayOfMonth);
-//                                enableNext();
-//                                ssnET.clearFocus();
-//                                datepicker = new DatePicker(IdentityVerificationActivity.this);
-//                                datepicker.init(year, monthOfYear + 1, dayOfMonth, null);
-//                                Utils.setUpperHintColor(dobTIL, getResources().getColor(R.color.primary_black));
-//                            } catch (Exception ex) {
-//                                ex.printStackTrace();
-//                            }
-//                        }
-//                    }, mYear, mMonth, mDay);
-//
-//            long years = 568025136000L;
-//            long yearsback = c.getTimeInMillis() - years;
-//            datePickerDialog.getDatePicker().setMaxDate(yearsback);
-//            if (datepicker != null) {
-//                datePickerDialog.updateDate(datepicker.getYear(), datepicker.getMonth() - 1, datepicker.getDayOfMonth());
-//            }
-//            datePickerDialog.show();
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
     }
 
     private void setToDateWheelPicker(TextInputEditText dobET) {
@@ -961,7 +915,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 public void onClick(View view) {
                     if (Utils.isKeyboardVisible)
                         Utils.hideKeypad(IdentityVerificationActivity.this);
-                    new Handler().postDelayed(() -> finish(), 100);
+                    new Handler().postDelayed(() -> finishMethod(), 100);
 
                 }
             });
@@ -971,7 +925,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 public void onClick(View view) {
                     if (Utils.isKeyboardVisible)
                         Utils.hideKeypad(IdentityVerificationActivity.this);
-                    new Handler().postDelayed(() -> finish(), 100);
+                    new Handler().postDelayed(() -> finishMethod(), 100);
                 }
             });
 
@@ -1328,31 +1282,33 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         if (btResp.getStatus().toLowerCase().toString().equals("success") || btResp.getStatus().equals("SUCCESS")) {
                             LogUtils.d("btResp", "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
-                            if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
-                                    || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
-                                    || respCode.equalsIgnoreCase("CI24")) {
-                                //Success
-                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                        .putExtra("screen", "SUCCESS"));
-                            } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
-                                //SSN Error
-                                startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class));
-
-                            } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
-                                    || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
-                                    || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
-                                    || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
-                                    || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
-                                //Under Review
-                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                        .putExtra("screen", "UNDER_REVIEW"));
-
-                            } else {
-                                //Failed
-                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                        .putExtra("screen", "FAILED"));
-
-                            }
+                            myApplicationObj.setMyProfile(null);
+                            finish();
+//                            if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
+//                                    || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
+//                                    || respCode.equalsIgnoreCase("CI24")) {
+//                                //Success
+//                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+//                                        .putExtra("screen", "SUCCESS"));
+//                            } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
+//                                //SSN Error
+//                                startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class));
+//
+//                            } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
+//                                    || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
+//                                    || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
+//                                    || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
+//                                    || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
+//                                //Under Review
+//                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+//                                        .putExtra("screen", "UNDER_REVIEW"));
+//
+//                            } else {
+//                                //Failed
+//                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+//                                        .putExtra("screen", "FAILED"));
+//
+//                            }
                         } else {
                             LogUtils.d("elseeeee", "addBusiness" + btResp);
                         }
@@ -1390,36 +1346,28 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     if (identityAddressResponse.getStatus().equalsIgnoreCase("success")) {
                         LogUtils.d("addBusiness", "addBusiness" + addBusiness);
                         respCode = identityAddressResponse.getData().getGiactResponseName();
+                        if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
+                                || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
+                                || respCode.equalsIgnoreCase("CI24")) {
+                            //Success
+                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                    .putExtra("screen", "SUCCESS"));
+                        } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
+                            //SSN Error
+                            startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class));
 
-                        if (addBusiness.equalsIgnoreCase("true")) {
-                            loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
+                        } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
+                                || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
+                                || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
+                                || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
+                                || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
+                            //Under Review
+                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                    .putExtra("screen", "UNDER_REVIEW"));
                         } else {
-                            if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
-                                    || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
-                                    || respCode.equalsIgnoreCase("CI24")) {
-                                //Success
-                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                        .putExtra("screen", "SUCCESS"));
-                            } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
-                                //SSN Error
-                                startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class));
-
-                            } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
-                                    || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
-                                    || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
-                                    || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
-                                    || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
-                                //Under Review
-                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                        .putExtra("screen", "UNDER_REVIEW"));
-
-                            } else {
-                                //Failed
-                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                        .putExtra("screen", "FAILED"));
-
-                            }
-
+                            //Failed
+                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                    .putExtra("screen", "FAILED"));
                         }
 
                     } else {

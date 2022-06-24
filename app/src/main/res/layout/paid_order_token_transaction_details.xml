@@ -313,7 +313,7 @@
                         </LinearLayout>
                     </RelativeLayout>
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
@@ -325,7 +325,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
+                            android:layout_weight="0"
                             android:fontFamily="@font/opensans_regular"
                             android:text="@string/dba_name_text"
                             android:textColor="@color/dark_grey"
@@ -335,14 +335,16 @@
                             android:id="@+id/dba_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
+                            android:layout_weight="1"
+                            android:textAlignment="textEnd"
+                            android:layout_marginStart="@dimen/_5sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
 
-                    </RelativeLayout>
+                    </LinearLayout>
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
@@ -354,7 +356,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
+                            android:layout_weight="0"
                             android:fontFamily="@font/opensans_regular"
                             android:text="@string/customer_service_email"
                             android:textColor="@color/dark_grey"
@@ -364,12 +366,14 @@
                             android:id="@+id/customer_service_email"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
+                            android:layout_weight="1"
+                            android:textAlignment="textEnd"
+                            android:layout_marginStart="@dimen/_5sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="end"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
-                    </RelativeLayout>
+                    </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"

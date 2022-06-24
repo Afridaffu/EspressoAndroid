@@ -122,9 +122,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
     public static WithdrawTokenActivity withdrawTokenActivity;
     Long mLastClickTime = 0L, bankId, cardId;
     Boolean isUSD = false, isCYN = false, isBank = false, isButtonClick = false, isMinimumError = false;
-    Boolean isFaceLock = false, isTouchId = false;
-    SQLiteDatabase mydatabase;
-    Cursor dsFacePin, dsTouchID;
+    Boolean isFaceLock = false, isTouchId = false, isPayment = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     private static int FOR_RESULT = 235;
     boolean isAuthenticationCalled = false;
@@ -169,36 +167,40 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case RESULT_OK:
-                try {
-                    if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
-                        pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
-                        BiometricTokenRequest request = new BiometricTokenRequest();
-                        request.setDeviceId(Utils.getDeviceID());
-                        request.setMobileToken(objMyApplication.getStrMobileToken());
-                        request.setActionType(Utils.withdrawActionType);
-                        coyniViewModel.biometricToken(request);
-                    } else if (data == null && requestCode == 1) {
-                        if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-                            Utils.displayAlert("Bank integration has been cancelled", WithdrawTokenActivity.this, "", "");
-                        } else {
-                            pDialog = Utils.showProgressDialog(this);
-                            customerProfileViewModel.meSyncAccount();
+        if (requestCode == 3) {
+            isPayment = true;
+        } else {
+            switch (resultCode) {
+                case RESULT_OK:
+                    try {
+                        if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+                            pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
+                            BiometricTokenRequest request = new BiometricTokenRequest();
+                            request.setDeviceId(Utils.getDeviceID());
+                            request.setMobileToken(objMyApplication.getStrMobileToken());
+                            request.setActionType(Utils.withdrawActionType);
+                            coyniViewModel.biometricToken(request);
+                        } else if (data == null && requestCode == 1) {
+                            if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                                Utils.displayAlert("Bank integration has been cancelled", WithdrawTokenActivity.this, "", "");
+                            } else {
+                                pDialog = Utils.showProgressDialog(this);
+                                customerProfileViewModel.meSyncAccount();
+                            }
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                break;
-            case 0:
-                if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
-                    startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
-                            .putExtra("TYPE", "ENTER")
-                            .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
-                            .putExtra("screen", "Withdraw"));
-                }
-                break;
+                    break;
+                case 0:
+                    if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+                        startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
+                                .putExtra("screen", "Withdraw"));
+                    }
+                    break;
+            }
         }
     }
 
@@ -613,10 +615,20 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                         paymentMethodsResponse = payMethodsResponse;
                     }
-                    if (objMyApplication.getSelectedCard() != null) {
+//                    if (objMyApplication.getSelectedCard() != null) {
+                    PaymentsList objData = paymentMethodsResponse.getData().getData().get(0);
+                    if (!isPayment && objMyApplication.getSelectedCard() != null) {
 //                        selectedCard = objMyApplication.getSelectedCard();
 //                        bindPayMethod(selectedCard);
                         bindPayMethod(rollbackSelectedCard());
+                    } else {
+                        isPayment = false;
+                        if (!objData.getPaymentMethod().toLowerCase().equals("credit")) {
+                            objMyApplication.setSelectedCard(objData);
+                            bindPayMethod(objData);
+                        } else {
+                            bindPayMethod(rollbackSelectedCard());
+                        }
                     }
                 }
             }
@@ -787,11 +799,11 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                                 Intent i = new Intent(WithdrawTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
                                 i.putExtra("screen", "withdraw");
-                                startActivity(i);
+                                startActivityForResult(i, 3);
                             } else {
                                 Intent i = new Intent(WithdrawTokenActivity.this, SelectPaymentMethodActivity.class);
                                 i.putExtra("screen", "withdraw");
-                                startActivity(i);
+                                startActivityForResult(i, 3);
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();

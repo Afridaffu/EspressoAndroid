@@ -196,11 +196,13 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             } else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
                 strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getDbaName());
             }
-            if (strName.length() > 22) {
-                tvName.setText(strName.substring(0, 22) + "...");
-            } else {
-                tvName.setText(strName);
-            }
+            tvName.setText(strName);
+
+//            if (strName.length() > 22) {
+//                tvName.setText(strName.substring(0, 22) + "...");
+//            } else {
+//                tvName.setText(strName);
+//            }
             bindImage();
             savedStrName = strName;
 
@@ -518,12 +520,16 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                 }
                 scanMeSetAmountTV.setText(getString(R.string.clear_amount));
                 scanMeRequestAmount.setText(USFormat(setAmount));
+//                InputFilter[] FilterArray = new InputFilter[1];
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                setAmount.setFilters(FilterArray);
                 saveSetAmount.setText(USFormat(setAmount));
                 scanAmountLL.setVisibility(View.VISIBLE);
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("cynAmount", scanMeRequestAmount.getText().toString());
                 jsonObject.put("referenceID", strWallet);
                 generateQRCode(jsonObject.toString());
+                setDefaultLength();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -552,11 +558,14 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
     private String USFormat(EditText etAmount) {
         String strAmount, strReturn = "";
         try {
-            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
-            etAmount.removeTextChangedListener(BusinessReceivePaymentActivity.this);
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-            etAmount.addTextChangedListener(BusinessReceivePaymentActivity.this);
-            etAmount.setSelection(etAmount.getText().toString().length());
+            strAmount = Utils.convertBigDecimalUSDC(setAmount.getText().toString().trim().replace(",", ""));
+            InputFilter[] FilterArray = new InputFilter[1];
+            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+            setAmount.setFilters(FilterArray);
+            setAmount.removeTextChangedListener(BusinessReceivePaymentActivity.this);
+            setAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            setAmount.addTextChangedListener(BusinessReceivePaymentActivity.this);
+            setAmount.setSelection(etAmount.getText().toString().length());
             strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
             changeTextSize(strReturn);
             setDefaultLength();

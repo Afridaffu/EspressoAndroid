@@ -51,6 +51,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -866,16 +867,17 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             @Override
             public void onChanged(BusinessTypeResp businessTypeResp) {
                 if (businessTypeResp != null && businessTypeResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-                    for (int i = 0; i < businessTypeResp.getData().size(); i++) {
-                        try {
-                            if (details != null && details.getData().getBusinessType().toLowerCase().trim().equals(businessTypeResp.getData().get(i).getKey().toLowerCase().trim())) {
-                                businessTypeValue = businessTypeResp.getData().get(i).getValue();
-                                break;
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+//                    for (int i = 0; i < businessTypeResp.getData().size(); i++) {
+//                        try {
+//                            if (details != null && details.getData().getBusinessType().toLowerCase().trim().equals(businessTypeResp.getData().get(i).getKey().toLowerCase().trim())) {
+//                                businessTypeValue = businessTypeResp.getData().get(i).getValue();
+//                                break;
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+                    objMyApplication.setBusinessTypeResp(businessTypeResp);
                 }
             }
         });
@@ -1474,10 +1476,13 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         String strAmount = "", strReturn = "";
         try {
             strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
-            etAmount.removeTextChangedListener(ScanActivity.this);
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-            etAmount.addTextChangedListener(ScanActivity.this);
-            etAmount.setSelection(etAmount.getText().toString().length());
+            InputFilter[] FilterArray = new InputFilter[1];
+            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+            setAmount.setFilters(FilterArray);
+            setAmount.removeTextChangedListener(ScanActivity.this);
+            setAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            setAmount.addTextChangedListener(ScanActivity.this);
+            setAmount.setSelection(etAmount.getText().toString().length());
             strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
             changeTextSize(strReturn);
             setDefaultLength();
@@ -1665,7 +1670,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             mcodeScanner.stopPreview();
         }
-        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails, false, balance, btypeValue);
+        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails, false, balance,objMyApplication);
         payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {

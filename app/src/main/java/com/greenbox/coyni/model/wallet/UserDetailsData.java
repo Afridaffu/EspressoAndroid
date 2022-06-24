@@ -12,6 +12,15 @@ public class UserDetailsData {
     private String walletType;
     private int accountType;
     private String businessType;
+    private String dbaName;
+
+    public String getDbaName() {
+        return dbaName;
+    }
+
+    public void setDbaName(String dbaName) {
+        this.dbaName = dbaName;
+    }
 
     public String getBusinessType() {
         return businessType;

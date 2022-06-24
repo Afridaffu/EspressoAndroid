@@ -516,7 +516,7 @@
         <ScrollView
             android:id="@+id/b_scrlViewIV2nd"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/topLL"
             android:layout_marginStart="@dimen/_11sdp"
             android:layout_marginTop="@dimen/_11sdp"
@@ -528,7 +528,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:orientation="vertical">
@@ -837,7 +837,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_43sdp"
                     android:layout_below="@id/countryRL"
-                    android:layout_marginTop="@dimen/_50sdp"
+                    android:layout_marginTop="@dimen/_100sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     app:cardBackgroundColor="@color/inactive_color"
                     app:cardCornerRadius="@dimen/_21sdp">

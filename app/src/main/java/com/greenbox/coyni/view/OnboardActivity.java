@@ -79,6 +79,7 @@ public class OnboardActivity extends BaseActivity {
             layoutOnBoarding = findViewById(R.id.layoutOnBoarding);
             layoutAuth = findViewById(R.id.layoutAuth);
             objMyApplication = (MyApplication) getApplicationContext();
+            objMyApplication.setIsLoggedIn(false);
             getVersionName();
 //            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
 //                if (Utils.isFingerPrint(OnboardActivity.this)) {
@@ -123,7 +124,7 @@ public class OnboardActivity extends BaseActivity {
                 Utils.setStrReferer(refererUrl);
             }
 
-            CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
+            CheckOutModel  checkOutModel= objMyApplication.getCheckOutModel();
 
             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
@@ -254,6 +255,7 @@ public class OnboardActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
+        objMyApplication.setIsLoggedIn(false);
         super.onResume();
         try {
             if (Utils.isKeyboardVisible)
@@ -269,6 +271,12 @@ public class OnboardActivity extends BaseActivity {
             } else {
                 Utils.setIsTouchEnabled(false);
                 Utils.setIsFaceEnabled(false);
+            }
+
+            CheckOutModel  checkOutModel= objMyApplication.getCheckOutModel();
+            if (checkOutModel != null && checkOutModel.isCheckOutFlag()) {
+                startActivity(new Intent(OnboardActivity.this, LoginActivity.class));
+                finish();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -322,6 +330,7 @@ public class OnboardActivity extends BaseActivity {
                                 objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
+                                objMyApplication.setDbaOwnerId(loginResponse.getData().getDbaOwnerId());
                                 if (loginResponse.getData().getPasswordExpired()) {
 //                                    Intent i = new Intent(OnboardActivity.this, PINActivity.class);
 //                                    i.putExtra("screen", "loginExpiry");

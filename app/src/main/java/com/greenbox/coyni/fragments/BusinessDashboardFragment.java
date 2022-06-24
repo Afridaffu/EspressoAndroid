@@ -81,11 +81,15 @@ import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 //Business Dashboard Fragment
 public class BusinessDashboardFragment extends BaseFragment {
@@ -460,7 +464,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                         }
 
                                         if (data.get(position).getFee() != null) {
-                                            processingFee = Double.parseDouble(data.get(position).getFee());
+                                            processingFee = processingFee + Double.parseDouble(data.get(position).getFee());
                                         }
                                     } else if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.refundtxntype)
                                             && data.get(position).getTransactionSubType() == null) {
@@ -469,8 +473,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             refunds = Double.parseDouble(data.get(position).getTotalAmount());
                                         }
 
-                                        double processFee = processingFee + Double.parseDouble(data.get(position).getFee());
-                                        processingFee = processFee;
+                                        processingFee = processingFee + Double.parseDouble(data.get(position).getFee());
                                     } else if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.monthlyServiceFeetxntype)
                                             && data.get(position).getTransactionSubType() == null) {
 
@@ -836,8 +839,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 mTicketsLayout.setVisibility(View.GONE);
                 mSbTodayVolume.setVisibility(View.VISIBLE);
                 saleOrdersText.setVisibility(View.VISIBLE);
-                strFromDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + startTime;
-                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + endTime;
+                strFromDate = Utils.convertZoneDateTime(getCurrentTimeString(),dateAndTime,dateAndTime,"PST").split(" ")[0] + startTime;
+                strToDate = Utils.convertZoneDateTime(getCurrentTimeString(),dateAndTime,dateAndTime,"PST").split(" ")[0] + endTime;
+                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate,dateAndTime,dateAndTime,"PST");
+                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate,dateAndTime,dateAndTime,"PST");
                 businessActivityAPICall(strFromDate, strToDate);
                 commissionActivityCall(strFromDate, strToDate);
             }
@@ -847,8 +852,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 mTicketsLayout.setVisibility(View.GONE);
                 mSbTodayVolume.setVisibility(View.VISIBLE);
                 saleOrdersText.setVisibility(View.VISIBLE);
-                strFromDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + startTime;
-                strToDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + endTime;
+                strFromDate = Utils.convertZoneDateTime(getYesterdayDateString(),dateAndTime,dateAndTime, "PST").split(" ")[0] + startTime;
+                strToDate = Utils.convertZoneDateTime(getYesterdayDateString(),dateAndTime,dateAndTime, "PST").split(" ")[0] + endTime;
+                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate,dateAndTime,dateAndTime,"PST");
+                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate,dateAndTime,dateAndTime,"PST");
                 businessActivityAPICall(strFromDate, strToDate);
                 commissionActivityCall(strFromDate, strToDate);
             }
@@ -858,8 +865,12 @@ public class BusinessDashboardFragment extends BaseFragment {
                 mTicketsLayout.setVisibility(View.VISIBLE);
                 mSbTodayVolume.setVisibility(View.GONE);
                 saleOrdersText.setVisibility(View.GONE);
-                strFromDate = myApplication.convertZoneDateTime(getFirstDayOfMonthString(), dateAndTime, date) + startTime;
-                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime);
+//                strFromDate = myApplication.convertZoneDateTime(getFirstDayOfMonthString(), dateAndTime, date) + startTime;
+//                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + endTime;
+                strFromDate = Utils.convertZoneDateTime(getFirstDayOfMonthString(),dateAndTime,dateAndTime, "PST").split(" ")[0] + startTime;
+                strToDate = Utils.convertZoneDateTime(getCurrentTimeString(),dateAndTime,dateAndTime, "PST").split(" ")[0] + endTime;
+                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate,dateAndTime,dateAndTime,"PST");
+                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate,dateAndTime,dateAndTime,"PST");
                 businessActivityAPICall(strFromDate, strToDate);
             }
             break;
@@ -868,8 +879,12 @@ public class BusinessDashboardFragment extends BaseFragment {
                 mTicketsLayout.setVisibility(View.VISIBLE);
                 mSbTodayVolume.setVisibility(View.GONE);
                 saleOrdersText.setVisibility(View.GONE);
-                strFromDate = myApplication.convertZoneDateTime(getPreviousMonthFirstDate(), dateAndTime, date) + startTime;
-                strToDate = myApplication.convertZoneDateTime(getPreviousMonthLastDate(), dateAndTime, date) + endTime;
+//                strFromDate = myApplication.convertZoneDateTime(getPreviousMonthFirstDate(), dateAndTime, date) + startTime;
+//                strToDate = myApplication.convertZoneDateTime(getPreviousMonthLastDate(), dateAndTime, date) + endTime;
+                strFromDate = Utils.convertZoneDateTime(getPreviousMonthFirstDate(),dateAndTime,dateAndTime, "PST").split(" ")[0] + startTime;
+                strToDate = Utils.convertZoneDateTime(getPreviousMonthLastDate(),dateAndTime,dateAndTime, "PST").split(" ")[0] + endTime;
+                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate,dateAndTime,dateAndTime,"PST");
+                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate,dateAndTime,dateAndTime,"PST");
                 businessActivityAPICall(strFromDate, strToDate);
 
             }
@@ -889,10 +904,14 @@ public class BusinessDashboardFragment extends BaseFragment {
                             if (rangeDates != null) {
                                 mTicketsLayout.setVisibility(View.GONE);
                                 mSbTodayVolume.setVisibility(View.GONE);
-                                String fromDate = rangeDates.getUpdatedFromDate() + midTime;
-                                String toDate = rangeDates.getUpdatedToDate().trim() + midTime;
-                                strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + startTime;
-                                strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + endTime;
+                                String fromDate = rangeDates.getUpdatedFromDate() + startTime;
+                                String toDate = rangeDates.getUpdatedToDate().trim() + endTime;
+//                                strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + startTime;
+//                                strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + endTime;
+                                strFromDate = Utils.convertZoneDateTime(fromDate,"MM-dd-yyyy HH:mm:ss",dateAndTime, "PST").split(" ")[0] + startTime;
+                                strToDate = Utils.convertZoneDateTime(toDate,"MM-dd-yyyy HH:mm:ss",dateAndTime, "PST").split(" ")[0] + endTime;
+                                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate,dateAndTime,dateAndTime,"PST");
+                                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate,dateAndTime,dateAndTime,"PST");
                                 mTvProcessingVolume.setText(R.string.custom_date_range);
                                 businessActivityAPICall(strFromDate, strToDate);
                             }
@@ -909,10 +928,10 @@ public class BusinessDashboardFragment extends BaseFragment {
         MerchantActivityRequest request = new MerchantActivityRequest();
         request.setStartDate(strFromDate);
         request.setEndDate(strToDate);
-
-        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
-            request.setUserId("" + myApplication.getMyProfile().getData().getId());
-        }
+//
+//        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
+//            request.setUserId("" + myApplication.getMyProfile().getData().getId());
+//        }
         businessDashboardViewModel.merchantActivity(request);
 
     }
@@ -977,7 +996,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     String Amount = listItems.get(i).getTotalAmount();
                     lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
                     String date1 = listItems.get(i).getUpdatedAt();
-                    if (date1 !=null && date1.contains(".")) {
+                    if (date1 != null && date1.contains(".")) {
                         String res = date1.substring(0, date1.lastIndexOf("."));
                         lastPayoutDate.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
                     } else {
@@ -1004,7 +1023,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
                     TextView payoutManualTV = xmlView.findViewById(R.id.payoutManualTV);
                     String listDate = listItems.get(j).getUpdatedAt();
-                    if (listDate!= null && listDate.contains(".")) {
+                    if (listDate != null && listDate.contains(".")) {
                         String listD = listDate.substring(0, listDate.lastIndexOf("."));
                         payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
                     } else {
@@ -1065,7 +1084,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
         if (listData.getNextReserveReleaseDate() != null) {
             String date = listData.getNextReserveReleaseDate();
-            if (date !=null && date.contains(".")) {
+            if (date != null && date.contains(".")) {
                 date = date.substring(0, date.lastIndexOf("."));
             }
             nextReleaseNATV.setVisibility(View.GONE);
@@ -1086,7 +1105,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 lastReleaseAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
                 String datee = latest.getScheduledRelease();
                 if (datee != null && !datee.equals("")) {
-                    if ( datee.contains(".")) {
+                    if (datee.contains(".")) {
                         datee = datee.substring(0, datee.lastIndexOf("."));
                     }
                     lastReleaseDateTV.setText(myApplication.convertZoneDateTime(datee, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));

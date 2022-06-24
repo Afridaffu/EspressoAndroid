@@ -91,9 +91,9 @@
                     <ScrollView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_above="@+id/bottomNaviLL"
                         android:background="@color/white"
-                        android:scrollbars="none"
-                        android:layout_above="@+id/bottomNaviLL">
+                        android:scrollbars="none">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -158,8 +158,8 @@
                                         android:id="@+id/fileSelectedLL"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:orientation="horizontal"
                                         android:gravity="center"
+                                        android:orientation="horizontal"
                                         android:visibility="visible">
 
                                         <TextView
@@ -274,6 +274,7 @@
                                         style="@style/TextInputLayout.OutlinedBox"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginBottom="@dimen/_20sdp"
                                         android:clickable="true"
                                         android:focusable="false"
                                         android:hint="@string/dobol"
@@ -287,8 +288,7 @@
                                         app:hintTextColor="@color/primary_color"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        android:layout_marginBottom="@dimen/_20sdp">
+                                        app:layout_constraintStart_toStartOf="parent">
 
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:id="@+id/idveriDOBET"

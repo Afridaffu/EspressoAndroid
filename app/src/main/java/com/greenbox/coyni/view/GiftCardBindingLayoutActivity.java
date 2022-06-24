@@ -388,7 +388,16 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dashboardNavigation();
+                    try {
+                        if (objMyApplication.getStrScreen() != null && objMyApplication.getStrScreen().equalsIgnoreCase(CheckOutConstants.FlowCheckOut)) {
+                            objMyApplication.getCheckOutModel().setCheckOutFlag(true);
+                            startActivity(new Intent(GiftCardBindingLayoutActivity.this, CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        } else {
+                            dashboardNavigation();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -696,7 +705,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         LinearLayout lyMessage = findViewById(R.id.lyMessage);
 
 
-        lyReference.setVisibility(View.GONE);
+        lyReference.setVisibility(View.VISIBLE);
         if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
             objMyApplication.setCheckOutModel(null);
         }
@@ -710,18 +719,18 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         tvCurrency.setVisibility(View.VISIBLE);
 
         giftCardAmountTV.setText(Utils.USNumberFormat(cynValue));
-//        if (objMyApplication.getPaidOrderResp().getPaidResponseData().getGbxTransactionId().length() > 10) {
-//            tvReference.setText(objMyApplication.getPaidOrderResp().getPaidResponseData().getGbxTransactionId().substring(0, 10) + "...");
-//        } else {
-//            tvReference.setText(objMyApplication.getPaidOrderResp().getPaidResponseData().getGbxTransactionId());
-//        }
-//        lyReference.setOnClickListener(view -> {
-//            try {
-//                Utils.copyText(objMyApplication.getPaidOrderResp().getPaidResponseData().getGbxTransactionId(), GiftCardBindingLayoutActivity.this);
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-//        });
+        if (objMyApplication.getOrderPayResponse().getData().getGbxTransactionId().length() > 10) {
+            tvReference.setText(objMyApplication.getOrderPayResponse().getData().getGbxTransactionId().substring(0, 10) + getString(R.string.dot_value));
+        } else {
+            tvReference.setText(objMyApplication.getOrderPayResponse().getData().getGbxTransactionId());
+        }
+        lyReference.setOnClickListener(view -> {
+            try {
+                Utils.copyText(objMyApplication.getOrderPayResponse().getData().getGbxTransactionId(), GiftCardBindingLayoutActivity.this);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
         doneCV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -770,6 +779,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                                 onBackPressed();
                             } else {
                                 Intent i = new Intent(GiftCardBindingLayoutActivity.this, WithdrawPaymentMethodsActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(i);
                             }
                             finish();

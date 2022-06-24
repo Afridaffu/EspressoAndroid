@@ -45,7 +45,6 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
     private LinearLayout payoytBackLL, payoutRefIdLL, payoutTokenNoLL, payoutReserveIdLL, reserveIDLL;
     //    private MerchantTransactionListPostedNewAdapter transactionListPostedAdapter;
     private PayoutDetailsTransactionsAdapter payoutDetailsTransactionsAdapter;
-    private NestedScrollView nestedScrollView;
     private TransactionListPendingAdapter transactionListPendingAdapter;
     private ExpandableHeightRecyclerView rvTransactionsPending, getRvTransactionsPosted;
     private LinearLayout layoutTransactionspending, layoutTransactionsposted, clearTextLL;
@@ -105,7 +104,6 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
             layoutTransactionsposted = findViewById(R.id.layoutLLposted);
             rvTransactionsPending = findViewById(R.id.transactionListPendingRV);
             getRvTransactionsPosted = findViewById(R.id.transactionListPostedRV);
-            nestedScrollView = findViewById(R.id.nestedSV);
 
 
             payoytBackLL.setOnClickListener(new View.OnClickListener() {
@@ -155,11 +153,11 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
 
                                 if (transactionList.getData() != null) {
                                     if (transactionList.getData().getItems() != null) {
-                                        if (transactionList.getData().getItems().getPendingTransactions() != null) {
-                                            noTransactions.setVisibility(View.GONE);
-                                            globalPending.addAll(transactionList.getData().getItems().getPendingTransactions());
-                                            LogUtils.v(TAG, " Get Pending Transactions");
-                                        }
+//                                        if (transactionList.getData().getItems().getPendingTransactions() != null) {
+//                                            noTransactions.setVisibility(View.GONE);
+//                                            globalPending.addAll(transactionList.getData().getItems().getPendingTransactions());
+//                                            LogUtils.v(TAG, " Get Pending Transactions");
+//                                        }
                                         if (transactionList.getData().getItems().getPostedTransactions() != null) {
                                             globalPosted.addAll(transactionList.getData().getItems().getPostedTransactions());
                                             LogUtils.v(TAG, " Get Posted Transactions");
@@ -169,26 +167,26 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                                     total = transactionList.getData().getTotalPages();
                                 }
                                 getRvTransactionsPosted.setNestedScrollingEnabled(false);
-                                rvTransactionsPending.setNestedScrollingEnabled(false);
-                                rvTransactionsPending.setExpanded(true);
                                 getRvTransactionsPosted.setExpanded(true);
-
-                                if (globalPending.size() > 0) {
-                                    noTransactions.setVisibility(View.GONE);
-                                    transactionListPendingAdapter = new TransactionListPendingAdapter(globalPending, BusinessBatchPayoutIdDetailsActivity.this);
-//                                    pendingTxt.setVisibility(View.VISIBLE);
-                                    rvTransactionsPending.setLayoutManager(mLayoutManager);
-                                    rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
-                                    rvTransactionsPending.setAdapter(transactionListPendingAdapter);
-                                    if (currentPage > 0) {
-                                        int myPos = globalPending.size() - transactionList.getData().getItems().getPendingTransactions().size();
-                                        rvTransactionsPending.scrollToPosition(myPos);
-                                    } else {
-                                        rvTransactionsPending.scrollToPosition(0);
-                                    }
-                                } else {
-//                                    pendingTxt.setVisibility(View.GONE);
-                                }
+//                                rvTransactionsPending.setNestedScrollingEnabled(false);
+//                                rvTransactionsPending.setExpanded(true);
+//
+//                                if (globalPending.size() > 0) {
+//                                    noTransactions.setVisibility(View.GONE);
+//                                    transactionListPendingAdapter = new TransactionListPendingAdapter(globalPending, BusinessBatchPayoutIdDetailsActivity.this);
+////                                    pendingTxt.setVisibility(View.VISIBLE);
+//                                    rvTransactionsPending.setLayoutManager(mLayoutManager);
+//                                    rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
+//                                    rvTransactionsPending.setAdapter(transactionListPendingAdapter);
+//                                    if (currentPage > 0) {
+//                                        int myPos = globalPending.size() - transactionList.getData().getItems().getPendingTransactions().size();
+//                                        rvTransactionsPending.scrollToPosition(myPos);
+//                                    } else {
+//                                        rvTransactionsPending.scrollToPosition(0);
+//                                    }
+//                                } else {
+////                                    pendingTxt.setVisibility(View.GONE);
+//                                }
 
                                 if (globalPosted.size() > 0) {
                                     //bottomCorners.setVisibility(View.VISIBLE);
@@ -204,6 +202,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                                     }
                                 } else {
 //                                    bottomCorners.setVisibility(View.GONE);
+                                    noTransactions.setVisibility(View.VISIBLE);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -297,19 +296,21 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                 payoutTokenIdTV.setText(objData.getTokenAccount());
             }
         }
-        if (objData.getReserveWalletId() != null && !objData.getReserveWalletId().equals("")) {
-            payoutReserveIdLL.setOnClickListener(v -> Utils.copyText(objData.getReserveWalletId(), BusinessBatchPayoutIdDetailsActivity.this));
-            reserveIDLL.setVisibility(View.VISIBLE);
-            if (objData.getReserveWalletId().length() > 10) {
+        if(objMyApplication.isReserveEnabled()) {
+            if (objData.getReserveWalletId() != null && !objData.getReserveWalletId().equals("")) {
+                payoutReserveIdLL.setOnClickListener(v -> Utils.copyText(objData.getReserveWalletId(), BusinessBatchPayoutIdDetailsActivity.this));
                 reserveIDLL.setVisibility(View.VISIBLE);
-                SpannableString content = new SpannableString(objData.getReserveWalletId().substring(0, 10));
-                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                ReserveIdTV.setText(content);
-            } else {
-                reserveIDLL.setVisibility(View.VISIBLE);
-                ReserveIdTV.setText(objData.getReserveWalletId());
+                if (objData.getReserveWalletId().length() > 10) {
+                    reserveIDLL.setVisibility(View.VISIBLE);
+                    SpannableString content = new SpannableString(objData.getReserveWalletId().substring(0, 10));
+                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                    ReserveIdTV.setText(content);
+                } else {
+                    reserveIDLL.setVisibility(View.VISIBLE);
+                    ReserveIdTV.setText(objData.getReserveWalletId());
+                }
             }
-        } else {
+        }else {
             reserveIDLL.setVisibility(View.GONE);
         }
     }

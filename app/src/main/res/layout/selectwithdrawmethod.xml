@@ -154,11 +154,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/use_a_visa_or_mastercard_debit_cards_for_instant_coyni_withdraws_via_instant_pay"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_10sdp"/>
+                        android:textSize="@dimen/_10sdp" />
 
                 </LinearLayout>
 
@@ -211,11 +211,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/purchase_gift_cards_from_over_100_popular_stores_restaurants_and_more"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_10sdp"/>
+                        android:textSize="@dimen/_10sdp" />
 
                 </LinearLayout>
 
@@ -242,6 +242,14 @@
                 android:paddingEnd="@dimen/_7sdp"
                 android:visibility="gone">
 
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/imgSignetAcLogo"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_centerVertical="true"-->
+                <!--                    android:layout_marginEnd="@dimen/_10sdp"-->
+                <!--                    android:contentDescription="@string/signet_account"-->
+                <!--                    android:src="@drawable/ic_signet_ac_logo" />-->
                 <ImageView
                     android:id="@+id/imgSignetAcLogo"
                     android:layout_width="wrap_content"
@@ -249,7 +257,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:contentDescription="@string/signet_account"
-                    android:src="@drawable/ic_signet_ac_logo" />
+                    android:src="@drawable/ic_signetinactive" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -265,17 +273,27 @@
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="@string/signet_account"
-                        android:textColor="@color/primary_black"
+                        android:textColor="@color/light_gray"
                         android:textSize="@dimen/_12ssp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/signet_ac_withdrawing_funds"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_10ssp"
-                        android:layout_marginBottom="@dimen/_10sdp"/>
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Coming soon"
+                        android:textColor="@color/primary_color"
+                        android:textSize="@dimen/_10ssp" />
 
                 </LinearLayout>
 

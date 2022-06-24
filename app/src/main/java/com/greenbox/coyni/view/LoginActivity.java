@@ -53,6 +53,7 @@ import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MatomoConstants;
 import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -96,7 +97,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_login);
-            MatomoUtility.getInstance().trackScreen("Login Screen");
+            MatomoUtility.getInstance().trackScreen(MatomoConstants.LOGIN_SCREEN);
             if (getIntent() != null && getIntent().getExtras() != null) {
                 LogUtils.v("TAG", getIntent().getExtras() + "");
             }
@@ -121,6 +122,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
     protected void onResume() {
         super.onResume();
         dismissDialog();
+        objMyApplication.setIsLoggedIn(false);
         isPwdEye = false;
         try {
             if (Utils.checkBiometric(LoginActivity.this) && Utils.checkAuthentication(LoginActivity.this)) {
@@ -524,7 +526,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                 @Override
                 public void onClick(View v) {
                     try {
-                        MatomoUtility.getInstance().trackEvent("Login","Login Clicked");
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.LOGIN, MatomoConstants.LOGIN_CLICKED);
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
                         }
@@ -750,6 +752,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
+                                objMyApplication.setDbaOwnerId(loginResponse.getData().getDbaOwnerId());
                                 if (loginResponse.getData().getPasswordExpired()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("screen", "loginExpiry");

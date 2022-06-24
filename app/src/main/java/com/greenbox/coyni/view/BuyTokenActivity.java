@@ -72,8 +72,10 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
+import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.MatomoConstants;
 import com.greenbox.coyni.utils.MatomoUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -115,11 +117,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     SignOnData signOnData;
     float fontSize, dollarFont;
     Boolean isUSD = false, isCYN = false, isBank = false, isFaceLock = false, isTouchId = false, isBuyTokenAPICalled = false, isButtonClick = false, isMinimumError = false;
+    Boolean isPayment = false;
     public static BuyTokenActivity buyTokenActivity;
     TextInputEditText etCVV;
     Long mLastClickTime = 0L;
-    SQLiteDatabase mydatabase;
-    Cursor dsFacePin, dsTouchID, dsPermanentToken;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     public String strType = "";
 
@@ -135,9 +136,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             initialization();
             initObserver();
             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                MatomoUtility.getInstance().trackScreen("Customer BuyToken Screen");
+                MatomoUtility.getInstance().trackScreen(MatomoConstants.CUSTOMER_BUY_TOKEN_SCREEN);
             } else {
-                MatomoUtility.getInstance().trackScreen("Business BuyToken Screen");
+                MatomoUtility.getInstance().trackScreen(MatomoConstants.BUSINESS_BUY_TOKEN_SCREEN);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -261,36 +262,40 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try {
             super.onActivityResult(requestCode, resultCode, data);
-            switch (resultCode) {
-                case RESULT_OK:
-                    try {
-                        if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
-                            pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
-                            BiometricTokenRequest request = new BiometricTokenRequest();
-                            request.setDeviceId(Utils.getDeviceID());
-                            request.setMobileToken(objMyApplication.getStrMobileToken());
-                            request.setActionType(Utils.buyActionType);
-                            coyniViewModel.biometricToken(request);
-                        } else if (data == null && requestCode == 1) {
-                            if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-                                Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
-                            } else {
-                                pDialog = Utils.showProgressDialog(this);
-                                customerProfileViewModel.meSyncAccount();
+            if (requestCode == 3) {
+                isPayment = true;
+            } else {
+                switch (resultCode) {
+                    case RESULT_OK:
+                        try {
+                            if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+                                pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
+                                BiometricTokenRequest request = new BiometricTokenRequest();
+                                request.setDeviceId(Utils.getDeviceID());
+                                request.setMobileToken(objMyApplication.getStrMobileToken());
+                                request.setActionType(Utils.buyActionType);
+                                coyniViewModel.biometricToken(request);
+                            } else if (data == null && requestCode == 1) {
+                                if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                                    Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
+                                } else {
+                                    pDialog = Utils.showProgressDialog(this);
+                                    customerProfileViewModel.meSyncAccount();
+                                }
                             }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
                         }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    break;
-                case 0:
-                    if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
-                        startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
-                                .putExtra("TYPE", "ENTER")
-                                .putExtra("screen", "buy")
-                                .putExtra("cynValue", String.valueOf(cynValue)));
-                    }
-                    break;
+                        break;
+                    case 0:
+                        if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+                            startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
+                                    .putExtra("TYPE", "ENTER")
+                                    .putExtra("screen", "buy")
+                                    .putExtra("cynValue", String.valueOf(cynValue)));
+                        }
+                        break;
+                }
             }
         } catch (Exception ex) {
             super.onActivityResult(requestCode, resultCode, data);
@@ -674,19 +679,38 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
-                if (payMethodsResponse != null) {
-                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                        PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
-                        objMyApplication.setPaymentMethodsResponse(objResponse);
-                        paymentMethodsResponse = objResponse;
-                    } else {
-                        objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
-                        paymentMethodsResponse = payMethodsResponse;
-                    }
-                    if (objMyApplication.getSelectedCard() != null) {
+                try {
+                    if (payMethodsResponse != null) {
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
+                            objMyApplication.setPaymentMethodsResponse(objResponse);
+                            paymentMethodsResponse = objResponse;
+                        } else {
+                            objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
+                            paymentMethodsResponse = payMethodsResponse;
+                        }
+//                    if (objMyApplication.getSelectedCard() != null) {
+                        PaymentsList objData = paymentMethodsResponse.getData().getData().get(0);
+                        if (!isPayment && objMyApplication.getSelectedCard() != null) {
 //                        selectedCard = objMyApplication.getSelectedCard();
-                        bindPayMethod(rollbackSelectedCard());
+                            bindPayMethod(rollbackSelectedCard());
+                        } else {
+                            isPayment = false;
+                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                if (!objData.getPaymentMethod().toLowerCase().equals("debit")) {
+                                    objMyApplication.setSelectedCard(objData);
+                                    bindPayMethod(objData);
+                                } else {
+                                    bindPayMethod(rollbackSelectedCard());
+                                }
+                            } else {
+                                objMyApplication.setSelectedCard(objData);
+                                bindPayMethod(objData);
+                            }
+                        }
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -755,7 +779,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 } else {
                     tvBankName.setText(objData.getBankName());
                 }
-                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
+                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
                     tvBAccNumber.setText(objData.getAccountNumber().substring(0, 10) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
                     tvBAccNumber.setText(objData.getAccountNumber());
@@ -1050,7 +1074,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             tvTotal.setText(Utils.USNumberFormat(total) + " USD");
             prepareBuyRequest();
             if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
-                MatomoUtility.getInstance().trackEvent("BuyToken Bank", "Clicked");
+                MatomoUtility.getInstance().trackEvent(MatomoConstants.BUY_TOKEN_BANK, MatomoConstants.BUY_TOKEN_BANK_CLICKED);
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
                 tvBankName.setText(selectedCard.getBankName());
@@ -1060,7 +1084,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     tvAccount.setText(selectedCard.getAccountNumber());
                 }
             } else {
-                MatomoUtility.getInstance().trackEvent("BuyToken Card", "Clicked");
+                MatomoUtility.getInstance().trackEvent(MatomoConstants.BUY_TOKEN_CARD, MatomoConstants.BUY_TOKEN_CARD_CLICKED);
                 layoutBank.setVisibility(View.GONE);
                 layoutCard.setVisibility(View.VISIBLE);
                 tvPayMethod.setText("****" + selectedCard.getLastFour());
@@ -1390,14 +1414,20 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                    startActivity(i);
                     try {
-                        Intent i;
-                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                            i = new Intent(BuyTokenActivity.this, DashboardActivity.class);
-                        } else {
-                            i = new Intent(BuyTokenActivity.this, BusinessDashboardActivity.class);
+                        if (objMyApplication.getStrScreen().equalsIgnoreCase(CheckOutConstants.FlowCheckOut)) {
+                            objMyApplication.getCheckOutModel().setCheckOutFlag(true);
+                            startActivity(new Intent(BuyTokenActivity.this,CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         }
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
+                        else {
+                            Intent i;
+                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                                i = new Intent(BuyTokenActivity.this, DashboardActivity.class);
+                            } else {
+                                i = new Intent(BuyTokenActivity.this, BusinessDashboardActivity.class);
+                            }
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
