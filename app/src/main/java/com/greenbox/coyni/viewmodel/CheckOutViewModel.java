@@ -12,6 +12,8 @@ import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
+import com.greenbox.coyni.model.check_out_transactions.ScanQRRequest;
+import com.greenbox.coyni.model.check_out_transactions.ScanQrCodeResp;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
@@ -25,6 +27,7 @@ public class CheckOutViewModel extends AndroidViewModel {
 
    private MutableLiveData<OrderInfoResponse> orderInfoResponseMutableLiveData = new MutableLiveData<>();
    private MutableLiveData<OrderPayResponse> orderPayResponseMutableLiveData = new MutableLiveData<>();
+   private MutableLiveData<ScanQrCodeResp> scanQrCodeRespMutableLiveData = new MutableLiveData<>();
 
     public CheckOutViewModel(@NonNull Application application) {
         super(application);
@@ -100,5 +103,33 @@ public class CheckOutViewModel extends AndroidViewModel {
             }
         });
     }
+
+    public void scanQRCode(ScanQRRequest string) {
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<ScanQrCodeResp> mCall = apiService.scanQrCode(string);
+        mCall.enqueue(new Callback<ScanQrCodeResp>() {
+            @Override
+            public void onResponse(Call<ScanQrCodeResp> call, Response<ScanQrCodeResp> response) {
+                if (response.isSuccessful()) {
+                    ScanQrCodeResp scanQrCodeResp = response.body();
+                    scanQrCodeRespMutableLiveData.setValue(scanQrCodeResp);
+                } else {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ScanQrCodeResp>() {
+                    }.getType();
+                    ScanQrCodeResp errorResponse = gson.fromJson(response.errorBody().charStream(),type);
+                    if (errorResponse!= null){
+                        scanQrCodeRespMutableLiveData.setValue(errorResponse);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ScanQrCodeResp> call, Throwable t) {
+                scanQrCodeRespMutableLiveData.setValue(null);
+            }
+        });
+    }
+
 
 }

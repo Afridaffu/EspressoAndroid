@@ -72,57 +72,52 @@
                 android:visibility="gone" />
         </androidx.cardview.widget.CardView>
 
-        <LinearLayout
-            android:id="@+id/merchantNameLL"
+        <TextView
+            android:id="@+id/payingDbaNameTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_11sdp"
             android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center"
             android:layout_marginEnd="@dimen/_11sdp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/payingDbaNameTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/opensans_semibold"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
-
-            <TextView
-                android:id="@+id/businessTypeTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:fontFamily="@font/opensans_semibold"
-                android:textColor="@color/dark_grey"
-                android:textSize="@dimen/_11ssp" />
-        </LinearLayout>
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
 
         <TextView
-            android:id="@+id/accountAddressTV"
+            android:id="@+id/businessTypeTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_1sdp"
-            android:fontFamily="@font/opensans_semibold"
+            android:layout_marginStart="@dimen/_5sdp"
             android:gravity="center"
+            android:fontFamily="@font/opensans_semibold"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/_11ssp" />
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/accountAddressTV"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="@dimen/_1sdp"-->
+        <!--            android:fontFamily="@font/opensans_semibold"-->
+        <!--            android:gravity="center"-->
+        <!--            android:textColor="@color/dark_grey"-->
+        <!--            android:textSize="@dimen/_11ssp" />-->
 
         <View
             android:id="@+id/viewLineV"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginStart="@dimen/_11sdp"
+            android:layout_marginEnd="@dimen/_11sdp"
             android:background="@color/blue_light"
             android:visibility="visible" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_11sdp"
             android:gravity="center"
             android:orientation="horizontal">
 

@@ -156,18 +156,17 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     @SuppressLint("SetTextI18n")
     private void bindUserInfo(UserDetails userDetails) {
         try {
-            TextView tvName, userWalletAddre;
+            TextView tvName;
             ImageView userProfile;
             tvName = findViewById(R.id.payingDbaNameTV);
 //            userName = findViewById(R.id.userProfileTextTV);
             userProfile = findViewById(R.id.userProfileIV);
-            userWalletAddre = findViewById(R.id.accountAddressTV);
 
             if (screenCheck) {
 
                 findViewById(R.id.profile_account_profile_image).setVisibility(View.GONE);
-                findViewById(R.id.merchantNameLL).setVisibility(View.GONE);
-                userWalletAddre.setVisibility(View.GONE);
+                findViewById(R.id.payingDbaNameTV).setVisibility(View.GONE);
+                findViewById(R.id.businessTypeTV).setVisibility(View.GONE);
                 findViewById(R.id.viewLineV).setVisibility(View.GONE);
 
             }
@@ -195,11 +194,11 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 //                        userDetails.getData().getLastName().substring(0, 1).toUpperCase();
 //            }
 //            userName.setText(imageTextNew);
-            if (userDetails.getData().getWalletId().length() > 10) {
-                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, 10) + "...");
-            } else {
-                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
-            }
+//            if (userDetails.getData().getWalletId().length() > 10) {
+//                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, 10) + "...");
+//            } else {
+//                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
+//            }
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getContext());
                 utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.acct_profile);
