@@ -1284,31 +1284,6 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             Utils.setStrAuth(btResp.getData().getJwtToken());
                             myApplicationObj.setMyProfile(null);
                             finish();
-//                            if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
-//                                    || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
-//                                    || respCode.equalsIgnoreCase("CI24")) {
-//                                //Success
-//                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-//                                        .putExtra("screen", "SUCCESS"));
-//                            } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
-//                                //SSN Error
-//                                startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class));
-//
-//                            } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
-//                                    || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
-//                                    || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
-//                                    || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
-//                                    || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
-//                                //Under Review
-//                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-//                                        .putExtra("screen", "UNDER_REVIEW"));
-//
-//                            } else {
-//                                //Failed
-//                                startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-//                                        .putExtra("screen", "FAILED"));
-//
-//                            }
                         } else {
                             LogUtils.d("elseeeee", "addBusiness" + btResp);
                         }
