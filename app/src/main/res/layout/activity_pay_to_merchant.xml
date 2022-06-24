@@ -52,13 +52,11 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <LinearLayout
                 android:id="@+id/layoutLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/ckb"
-                android:layout_alignParentTop="true"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
@@ -155,6 +153,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_12sdp"
                             android:background="@color/white"
+                            android:gravity="center"
                             android:paddingStart="@dimen/_20sdp"
                             android:paddingEnd="@dimen/_30sdp">
 
@@ -195,6 +194,7 @@
                                     android:textColor="@color/primary_black"
                                     android:textColorHint="@color/light_gray"
                                     android:textCursorDrawable="@drawable/cursorcolor"
+                                    android:textDirection="rtl"
                                     android:textSize="@dimen/_53ssp" />
 
 
@@ -208,7 +208,6 @@
                                     android:textSize="@dimen/_12ssp"
                                     android:visibility="visible" />
                             </LinearLayout>
-
 
                             <ImageView
                                 android:id="@+id/imageConvertIV"
@@ -227,7 +226,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginLeft="@dimen/_10sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
                             android:layout_marginRight="@dimen/_10sdp"
                             android:text="Amount entered exceeds your daily limit"
                             android:textColor="@color/error"
