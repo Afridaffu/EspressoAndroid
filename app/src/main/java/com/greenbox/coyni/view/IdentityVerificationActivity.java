@@ -1283,6 +1283,11 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             LogUtils.d("btResp", "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
                             myApplicationObj.setMyProfile(null);
+                            myApplicationObj.setLoginUserId(btResp.getData().getUserId());
+                            myApplicationObj.setStrEmail(btResp.getData().getEmail());
+                            myApplicationObj.setAccountType(btResp.getData().getAccountType());
+                            myApplicationObj.setDbaOwnerId(btResp.getData().getDbaOwnerId());
+                            myApplicationObj.setIsReserveEnabled(btResp.getData().isReserveEnabled());
                             finish();
                         } else {
                             LogUtils.d("elseeeee", "addBusiness" + btResp);

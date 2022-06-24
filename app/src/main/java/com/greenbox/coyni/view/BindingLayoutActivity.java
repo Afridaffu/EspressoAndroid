@@ -265,6 +265,11 @@ public class BindingLayoutActivity extends BaseActivity {
                         if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT
                                 || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                             Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+                            objMyApplication.setLoginUserId(identityImageResponse.getData().getUserId());
+                            objMyApplication.setStrEmail(identityImageResponse.getData().getEmail());
+                            objMyApplication.setAccountType(identityImageResponse.getData().getAccountType());
+                            objMyApplication.setDbaOwnerId(identityImageResponse.getData().getDbaOwnerId());
+                            objMyApplication.setIsReserveEnabled(identityImageResponse.getData().isReserveEnabled());
                             Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
                             i.putExtra("ADDPERSONAL", "true");
                             startActivity(i);
