@@ -120,28 +120,45 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onAccountTabSelected(View view) {
-        if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-            return;
-        }
-        mLastClickTimeQA = SystemClock.elapsedRealtime();
-        if (!isTabsEnabled) {
-            UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(this);
-            reviewErrorMsgDialog.show();
-        } else {
-            try {
-                if (selectedTab != Tabs.ACCOUNT) {
-                    selectedTab = Tabs.ACCOUNT;
-                    setSelectedTab(false, true, false, false);
-                    LogUtils.d(TAG, "onAccountTabSelected");
-                    pushFragment(new BusinessAccountFragment());
+        int selectedTextColor = getColor(R.color.primary_green);
+        int unSelectedTextColor = getColor(R.color.light_gray);
+        if(objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
+                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())) {
+            mTvAccount.setClickable(false);
+            mTvAccount.setTextColor(isTabsEnabled ? selectedTextColor : unSelectedTextColor);
+            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_active : R.drawable.ic_account_disabled);
+        }else {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            if (!isTabsEnabled) {
+                UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(this);
+                reviewErrorMsgDialog.show();
+            } else {
+                try {
+                    if (selectedTab != Tabs.ACCOUNT) {
+                        selectedTab = Tabs.ACCOUNT;
+                        setSelectedTab(false, true, false, false);
+                        LogUtils.d(TAG, "onAccountTabSelected");
+                        pushFragment(new BusinessAccountFragment());
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
             }
         }
     }
 
     public void onTransactionsTabSelected(View view) {
+        int selectedTextColor = getColor(R.color.primary_green);
+        int disabledColor = getColor(R.color.light_gray);
+        if(objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
+                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())){
+            mIvTransactions.setClickable(false);
+            mTvTransactions.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
+            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_active : R.drawable.ic_transactions_disabled);
+        }else{
         if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
             return;
         }
@@ -157,6 +174,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+        }
         }
     }
 
@@ -175,64 +193,70 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onQuickMenuTabSelected(View view) {
-        if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-            return;
-        }
-        mLastClickTimeQA = SystemClock.elapsedRealtime();
-        if (!isTabsEnabled) {
-            UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(this);
-            reviewErrorMsgDialog.show();
-        } else {
-            try {
-                LogUtils.d(TAG, "onQuickMenuTabSelected");
-                Dialog dialog = new Dialog(BusinessDashboardActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.getWindow().setBackgroundDrawableResource(R.color.mb_transparent);
-                dialog.setContentView(R.layout.activity_business_quick_action);
-                Window window = dialog.getWindow();
-                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                WindowManager.LayoutParams wl = window.getAttributes();
-                wl.gravity = Gravity.BOTTOM;
-                wl.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                window.setAttributes(wl);
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.show();
-                LinearLayout buyTokenLL = dialog.findViewById(R.id.buy_TokenLL);
-                LinearLayout widthdrawtoLL = dialog.findViewById(R.id.widthdrawtoLL);
-                LinearLayout receivePaymentLL = dialog.findViewById(R.id.receive_PaymentLL);
-                LinearLayout llScan = dialog.findViewById(R.id.llScan);
+        if(objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
+                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())){
+            mIvMenu.setClickable(false);
+            mIvMenu.setImageResource(isTabsEnabled ? R.drawable.quick_action_btn : R.drawable.quick_action_btn_disabled);
+        }else {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            if (!isTabsEnabled) {
+                UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(this);
+                reviewErrorMsgDialog.show();
+            } else {
+                try {
+                    LogUtils.d(TAG, "onQuickMenuTabSelected");
+                    Dialog dialog = new Dialog(BusinessDashboardActivity.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.getWindow().setBackgroundDrawableResource(R.color.mb_transparent);
+                    dialog.setContentView(R.layout.activity_business_quick_action);
+                    Window window = dialog.getWindow();
+                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    WindowManager.LayoutParams wl = window.getAttributes();
+                    wl.gravity = Gravity.BOTTOM;
+                    wl.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                    window.setAttributes(wl);
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.show();
+                    LinearLayout buyTokenLL = dialog.findViewById(R.id.buy_TokenLL);
+                    LinearLayout widthdrawtoLL = dialog.findViewById(R.id.widthdrawtoLL);
+                    LinearLayout receivePaymentLL = dialog.findViewById(R.id.receive_PaymentLL);
+                    LinearLayout llScan = dialog.findViewById(R.id.llScan);
 
-                buyTokenLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        launchBuyTokens();
-                    }
-                });
-                widthdrawtoLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        startActivity(new Intent(BusinessDashboardActivity.this, WithdrawPaymentMethodsActivity.class));
-                    }
-                });
-                receivePaymentLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        startActivity(new Intent(BusinessDashboardActivity.this, BusinessReceivePaymentActivity.class));
-                    }
-                });
-                llScan.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
-                    }
-                });
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                    buyTokenLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            launchBuyTokens();
+                        }
+                    });
+                    widthdrawtoLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            startActivity(new Intent(BusinessDashboardActivity.this, WithdrawPaymentMethodsActivity.class));
+                        }
+                    });
+                    receivePaymentLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            startActivity(new Intent(BusinessDashboardActivity.this, BusinessReceivePaymentActivity.class));
+                        }
+                    });
+                    llScan.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
+                        }
+                    });
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
@@ -274,17 +298,19 @@ public class BusinessDashboardActivity extends BaseActivity {
             mTvAccount.setTextColor(isTabsEnabled ? selectedTextColor : unSelectedTextColor);
             mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_active : R.drawable.ic_account_inactive);
         } else {
-//            mTvAccount.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
-//            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_inactive : R.drawable.ic_account_disabled);
+            mTvAccount.setClickable(false);
+            mTvAccount.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
+            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_inactive : R.drawable.ic_account_disabled);
         }
         if (selectedTab == Tabs.TRANSACTIONS) {
             mTvTransactions.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
             mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_active : R.drawable.ic_transactions_inactive);
         } else {
-//            mTvTransactions.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
-//            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_inactive : R.drawable.ic_transactions_disabled);
+            mTvTransactions.setClickable(false);
+            mTvTransactions.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
+            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_inactive : R.drawable.ic_transactions_disabled);
         }
-//        mIvMenu.setImageResource(isTabsEnabled ? R.drawable.quick_action_btn : R.drawable.quick_action_btn_disabled);
+        mIvMenu.setImageResource(isTabsEnabled ? R.drawable.quick_action_btn : R.drawable.quick_action_btn_disabled);
     }
 
     private void pushFragment(BaseFragment fragment) {
@@ -366,6 +392,8 @@ public class BusinessDashboardActivity extends BaseActivity {
             String accountStatus = objMyApplication.getMyProfile().getData().getAccountStatus();
             if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 isTabsEnabled = true;
+            }else if(accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())){
+                isTabsEnabled = false;
             }
         }
         setEnabledTabs();

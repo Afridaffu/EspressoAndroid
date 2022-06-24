@@ -231,7 +231,7 @@ public class CustomerProfileActivity extends BaseActivity {
                         } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
                                 objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
                                 objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                            Utils.showCustomToast(CustomerProfileActivity.this, getString(R.string.complete_idve), 0, "");
+//                            Utils.showCustomToast(CustomerProfileActivity.this, getString(R.string.complete_idve), 0, "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

@@ -470,6 +470,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 break;
             }
         }
+        showProgressDialog();
         startActivity(inNewAccount);
     }
 }

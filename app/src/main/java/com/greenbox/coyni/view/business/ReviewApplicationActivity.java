@@ -226,7 +226,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         isCPwdEye = true;
                         llEin.setBackgroundResource(R.drawable.ic_eyeclose);
                         if (cir.getIdentificationType() == 11) {
-                             convert = cir.getSsnOrEin().replaceAll("\\-", "");
                             String converted = convert.replaceAll("\\w(?=\\w{2})", "•");
                             String hifened = converted.substring(0, 3)  + " - "  + converted.substring(3, 5) +  " - "  + converted.substring(5, converted.length());
                             mEINTx.setText(hifened);
@@ -241,9 +240,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     } else {
                         isCPwdEye = false;
                         if (cir.getIdentificationType() == 11) {
-
-                            String convert1 = cir.getSsnOrEin().replaceAll("\\-", " - ");
-                            mEINTx.setText(convert1);
+                            String hifened = convert.substring(0, 3)  + " - "  + convert.substring(3, 5) +  " - "  + convert.substring(5, convert.length());
+                            mEINTx.setText(hifened);
 
                         } else {
                             mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + " - " + cir.getSsnOrEin().substring(2));
@@ -493,6 +491,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     if (cir.getIdentificationType() == 11) {
                                         ssnEinTV.setText("SSN");
                                         isCPwdEye = true;
+                                        convert = cir.getSsnOrEin().replaceAll("\\-", "");
                                         String converted = convert.replaceAll("\\w(?=\\w{2})", "•");
                                         String hifened = converted.substring(0, 3)  + " - "  + converted.substring(3, 5) +  " - "  + converted.substring(5, converted.length());
                                         mEINTx.setText(hifened);

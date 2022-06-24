@@ -351,7 +351,7 @@
                     android:id="@+id/dateRangePickerLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_25sdp"
+                    android:layout_marginBottom="@dimen/_90sdp"
                     android:background="@drawable/bg_small_corners"
                     android:gravity="center"
                     android:orientation="horizontal">
