@@ -378,9 +378,9 @@ public class DashboardActivity extends BaseActivity {
 //                                && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
                         if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
                             LatestTransactionsRequest request = new LatestTransactionsRequest();
-                            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
-                                request.setUserId(objMyApplication.getMyProfile().getData().getId());
-                            }
+//                            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+//                                request.setUserId(objMyApplication.getMyProfile().getData().getId());
+//                            }
                             request.setTransactionType(getDefaultTransactionTypes());
                             dashboardViewModel.getLatestTxns(request);
 
@@ -556,9 +556,9 @@ public class DashboardActivity extends BaseActivity {
                             noTxnTV.setVisibility(View.VISIBLE);
                         }
                         LatestTransactionsRequest request = new LatestTransactionsRequest();
-                        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
-                            request.setUserId(objMyApplication.getMyProfile().getData().getId());
-                        }
+//                        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+//                            request.setUserId(objMyApplication.getMyProfile().getData().getId());
+//                        }
                         request.setTransactionType(getDefaultTransactionTypes());
 
                         dashboardViewModel.getLatestTxns(request);

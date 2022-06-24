@@ -64,6 +64,8 @@ import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
+import com.greenbox.coyni.model.check_out_transactions.ScanQRRequest;
+import com.greenbox.coyni.model.check_out_transactions.ScanQrCodeResp;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
@@ -684,6 +686,9 @@ public interface ApiService {
 
     @POST("api/v2/checkout/pay")
     Call<OrderPayResponse> orderPay(@Body OrderPayRequest request);
+
+    @POST("/api/v2/checkout/scanQRCode")
+    Call<ScanQrCodeResp> scanQrCode(@Body ScanQRRequest string);
 
 }
 

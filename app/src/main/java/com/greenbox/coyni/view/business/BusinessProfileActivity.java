@@ -425,8 +425,8 @@ public class BusinessProfileActivity extends BaseActivity {
                         if (isAccountVerified()) {
                             startActivity(new Intent(BusinessProfileActivity.this, BusinessReceivePaymentActivity.class));
                         } else {
-                            UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(BusinessProfileActivity.this);
-                            reviewErrorMsgDialog.show();
+//                            UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(BusinessProfileActivity.this);
+//                            reviewErrorMsgDialog.show();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
