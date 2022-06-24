@@ -40,6 +40,7 @@ import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
+import com.greenbox.coyni.model.check_out_transactions.ScanQRRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.utils.CheckOutConstants;
@@ -282,7 +283,9 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                             initUserData(orderInfoResponse);
                             TransactionLimitAPICall();
                             if (orderInfoResponse.getData().getOrderId() != null) {
-                                checkOutViewModel.scanQRCode(orderInfoResponse.getData().getOrderId());
+                                ScanQRRequest request = new ScanQRRequest();
+                                request.setOrderId(orderInfoResponse.getData().getOrderId());
+                                checkOutViewModel.scanQRCode(request);
                             }
                         }
                     } else {

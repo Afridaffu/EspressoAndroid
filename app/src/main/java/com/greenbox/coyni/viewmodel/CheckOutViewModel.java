@@ -12,6 +12,7 @@ import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
+import com.greenbox.coyni.model.check_out_transactions.ScanQRRequest;
 import com.greenbox.coyni.model.check_out_transactions.ScanQrCodeResp;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
@@ -103,7 +104,7 @@ public class CheckOutViewModel extends AndroidViewModel {
         });
     }
 
-    public void scanQRCode(String string) {
+    public void scanQRCode(ScanQRRequest string) {
         ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
         Call<ScanQrCodeResp> mCall = apiService.scanQrCode(string);
         mCall.enqueue(new Callback<ScanQrCodeResp>() {
