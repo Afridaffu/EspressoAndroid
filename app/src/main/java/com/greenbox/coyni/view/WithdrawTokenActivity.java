@@ -124,7 +124,6 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
     Boolean isUSD = false, isCYN = false, isBank = false, isButtonClick = false, isMinimumError = false;
     Boolean isFaceLock = false, isTouchId = false, isPayment = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
-    private static int FOR_RESULT = 235;
     boolean isAuthenticationCalled = false;
 
     @Override
@@ -1364,6 +1363,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
             etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            ctKey.setEnteredText(etAmount.getText().toString());
             etAmount.addTextChangedListener(WithdrawTokenActivity.this);
             etAmount.setSelection(etAmount.getText().toString().length());
             strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
