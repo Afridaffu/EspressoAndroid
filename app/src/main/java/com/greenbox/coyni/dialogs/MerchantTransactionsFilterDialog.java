@@ -9,6 +9,7 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -60,6 +61,8 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.merchant_transactions_filter);
+        int height = (int) (context.getResources().getDisplayMetrics().heightPixels * 0.90);
+        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, height);
         displayFormatter = new SimpleDateFormat(displayFormat);
         initFields();
 
