@@ -320,6 +320,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         ImageView profileImage = view.findViewById(R.id.profile_img);
         ImageView arrowImg = view.findViewById(R.id.arrowImg);
         ImageView tickIcon = view.findViewById(R.id.tickIcon);
+        TextView status = view.findViewById(R.id.statusTV);
         LinearLayout groupView = view.findViewById(R.id.ll_group_view);
 
         LogUtils.v(TAG, "isselectedId" + selectedID);
@@ -362,6 +363,28 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 profileImage.setImageResource(R.drawable.ic_profilelogo);
 //                String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
 //                personalText.setText(userName);
+            }
+            if (headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) || headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                arrowImg.setVisibility(View.GONE);
+                status.setVisibility(View.VISIBLE);
+                status.setBackground(context.getDrawable(R.drawable.txn_failed_bg));
+                status.setText(headerInfo.getAccountStatus());
+                status.setTextColor(context.getColor(R.color.default_red));
+            } else if (headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
+                status.setVisibility(View.VISIBLE);
+                status.setBackground(context.getDrawable(R.drawable.txn_inprogress_bg));
+                status.setText(headerInfo.getAccountStatus());
+                status.setTextColor(context.getColor(R.color.under_review_blue));
+            } else if (headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                status.setVisibility(View.VISIBLE);
+                status.setText(headerInfo.getAccountStatus());
+                status.setBackground(context.getDrawable(R.drawable.txn_pending_bg));
+                status.setTextColor(context.getColor(R.color.orange_status));
+            }else if (headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+                status.setVisibility(View.VISIBLE);
+                status.setText(headerInfo.getAccountStatus());
+                status.setBackground(context.getDrawable(R.drawable.txn_deactive_bg));
+                status.setTextColor(context.getColor(R.color.xdark_gray));
             }
         } else if (headerInfo.getAccountType().equals(Utils.BUSINESS)) {
             arrowImg.setVisibility(View.VISIBLE);
@@ -407,6 +430,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                         }
                     }
                 });
+
             }
         }
 
