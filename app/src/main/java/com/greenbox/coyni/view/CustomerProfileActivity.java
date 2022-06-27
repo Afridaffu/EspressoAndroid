@@ -1029,7 +1029,7 @@ public class CustomerProfileActivity extends BaseActivity {
             public void onChanged(Profile profile) {
                 if (profile != null) {
                     objMyApplication.setMyProfile(profile);
-                    objMyApplication.setAccountType(profile.getData().getAccountype());
+                    objMyApplication.setAccountType(profile.getData().getAccountType());
                     bindImage(objMyApplication.getMyProfile().getData().getImage());
                 }
             }
