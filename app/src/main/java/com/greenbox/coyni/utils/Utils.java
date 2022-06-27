@@ -1927,7 +1927,7 @@ public class Utils {
     }
 
     public static String getCapsSentences(String Name) {
-        if(Name == null) {
+        if (Name == null) {
             return "";
         }
         String[] splits = Name.split(" ");
@@ -2072,9 +2072,9 @@ public class Utils {
         return dtExpiry;
     }
 
-    public static PaymentMethodsResponse businessPaymentMethods(int accountType, PaymentMethodsResponse objResponse,String strScreen) {
+    public static PaymentMethodsResponse businessPaymentMethods(int accountType, PaymentMethodsResponse objResponse, String strScreen) {
         try {
-            if (accountType == Utils.BUSINESS_ACCOUNT) {
+            if (accountType == Utils.BUSINESS_ACCOUNT || accountType == Utils.SHARED_ACCOUNT) {
                 PaymentMethodsResponse objData = objResponse;
                 List<PaymentsList> listPayments = objData.getData().getData();
                 List<PaymentsList> listBusPayments = new ArrayList<>();
@@ -2083,13 +2083,13 @@ public class Utils {
 //                        if (listPayments.get(i).getPaymentMethod() != null
 //                                && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
 //                        if (listPayments.get(i).getPaymentMethod() != null && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank"))) {
-                        if(strScreen.equals("")) {
+                        if (strScreen.equals("")) {
                             if (listPayments.get(i).getPaymentMethod() != null && (!listPayments.get(i).getPaymentMethod().toLowerCase().equals("credit"))) {
                                 listBusPayments.add(listPayments.get(i));
                             }
-                        }else{
+                        } else {
                             if (listPayments.get(i).getPaymentMethod() != null
-                                && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
+                                    && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
                                 listBusPayments.add(listPayments.get(i));
                             }
                         }
@@ -2563,8 +2563,6 @@ public class Utils {
         }
         return captilizedString;
     }
-
-
 
 
     //Dynamic Tracker - VT
