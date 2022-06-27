@@ -197,6 +197,8 @@ public class AgreementsActivity extends BaseActivity {
                         LogUtils.v(TAG, agreements.getStatus());
                         if (agreements.getStatus().contains(Utils.SUCCESS)) {
                             processAgreements(agreements.getData());
+                        }else{
+                            Utils.displayAlert(agreements.getError().getErrorDescription(), AgreementsActivity.this, "", agreements.getError().getFieldErrors().get(0));
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
