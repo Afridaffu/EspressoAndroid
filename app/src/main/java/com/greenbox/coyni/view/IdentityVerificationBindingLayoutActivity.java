@@ -19,12 +19,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.logout.LogoutResponse;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
@@ -37,6 +39,7 @@ public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
     private LoginViewModel loginViewModel;
     private DisplayImageUtility displayImageUtility;
     private DatabaseHandler dbHandler;
+    CustomerProfileViewModel customerProfileViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,7 @@ public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
     private void initialization() {
         try {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+            customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             dbHandler = DatabaseHandler.getInstance(IdentityVerificationBindingLayoutActivity.this);
             displayImageUtility = DisplayImageUtility.getInstance(this);
             successCloseIV = findViewById(R.id.successCloseIV);
@@ -72,6 +76,8 @@ public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
             idveriDoneBtn = findViewById(R.id.idveriDoneBtn);
 
             objMyApplication = (MyApplication) getApplicationContext();
+
+            customerProfileViewModel.meSignOn();
 
             Log.d("objMyApplication", "objMyApplication" + objMyApplication.getAccountType());
 
@@ -200,6 +206,29 @@ public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
                                 Utils.displayAlert(logoutResponse.getError().getFieldErrors().get(0), IdentityVerificationBindingLayoutActivity.this, "", "");
                             }
                         }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+                @Override
+                public void onChanged(SignOn signOn) {
+                    try {
+                        if (signOn != null) {
+                            if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+                                objMyApplication.setSignOnData(signOn.getData());
+                                objMyApplication.setStrSignOnError("");
+                            } else {
+                                objMyApplication.setSignOnData(null);
+                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });

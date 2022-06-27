@@ -15,7 +15,7 @@ public class Agreements {
     private AgreementsData data;
     @SerializedName("error")
     @Expose
-    private AgreementsData error;
+    private Error error;
 
     public String getStatus() {
         return status;
@@ -41,11 +41,11 @@ public class Agreements {
         this.data = data;
     }
 
-    public AgreementsData getError() {
+    public Error getError() {
         return error;
     }
 
-    public void setError(AgreementsData error) {
+    public void setError(Error error) {
         this.error = error;
     }
 
