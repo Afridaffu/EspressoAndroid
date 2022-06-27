@@ -25,7 +25,7 @@ public class ProfileData {
     private String dob;
     private boolean isReserveEnabled;
     private int ssn;
-    private int accountype;
+    private int accountType;
 
     public String getIdentityDocument() {
         return identityDocument;
@@ -75,12 +75,12 @@ public class ProfileData {
         this.ssn = ssn;
     }
 
-    public int getAccountype() {
-        return accountype;
+    public int getAccountType() {
+        return accountType;
     }
 
-    public void setAccountype(int accountype) {
-        this.accountype = accountype;
+    public void setAccountType(int accountType) {
+        this.accountType = accountType;
     }
 
     public int getId() {
