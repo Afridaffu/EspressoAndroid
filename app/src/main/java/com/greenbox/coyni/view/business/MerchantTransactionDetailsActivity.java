@@ -400,7 +400,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             if (objData.getData().getAccountBalance() != null) {
                 salesMerchantBalanceTV.setText(Utils.convertTwoDecimal(objData.getData().getAccountBalance().replace("CYN", "").trim()));
             }
-            if (objData.getData().getReserve() != null && !objData.getData().getReserve().equals("")) {
+            if (objMyApplication.isReserveEnabled() && objData.getData().getReserve() != null && !objData.getData().getReserve().equals("")) {
                 salesreserveLL.setVisibility(View.VISIBLE);
                 salesreserveTV.setText(Utils.convertTwoDecimal(objData.getData().getReserve().replace("CYN", "").trim()));
             } else {
