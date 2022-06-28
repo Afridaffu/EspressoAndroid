@@ -417,7 +417,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                 if (action.equalsIgnoreCase(applyFilter)) {
                     MatomoUtility.getInstance().trackEvent(MatomoConstants.RESERVE_RELEASE_FILTER, MatomoConstants.RESERVE_RELEASE_FILTER_APPLIED);
                     reserveFilter = (ReserveFilter) value;
-                    ivFilterIcon.setImageResource(R.drawable.ic_filter_enabled);
+                    ivFilterIcon.setImageResource(reserveFilter.isFilterApplied ? R.drawable.ic_filter_enabled : R.drawable.ic_filtericon);
                     getReserveRollingData();
 //                    dismissDialog();
                 } else if (action.equalsIgnoreCase(resetFilter)) {

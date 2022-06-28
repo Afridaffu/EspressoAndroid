@@ -506,7 +506,10 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         LinearLayout dateRangePickerLL = dialog.findViewById(R.id.dateRangePickerLL);
         EditText getDateFromPickerET = dialog.findViewById(R.id.datePickET);
         TextView resetFiltersTV = dialog.findViewById(R.id.resetFiltersTV);
-//
+        tempTransactionType = new ArrayList<Integer>();
+        tempTransactionSubType = new ArrayList<Integer>();
+        tempTxnStatus = new ArrayList<Integer>();
+
         if (isFilters) {
             tempTransactionType.clear();
             tempTransactionType.addAll(transactionType);
