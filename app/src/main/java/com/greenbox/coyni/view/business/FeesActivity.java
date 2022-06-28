@@ -55,10 +55,13 @@ FeesActivity extends BaseActivity {
             monthlyFeeDollTV = findViewById(R.id.monthlyFeeDollTV);
             monthlyFeePerTV = findViewById(R.id.monthlyFeePerTV);
 
-            viewModel=new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+            viewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
 
             feeStructure_id = objMyApplication.getAccountType();
+            if (feeStructure_id == Utils.SHARED_ACCOUNT) {
+                feeStructure_id = Utils.BUSINESS_ACCOUNT;
+            }
             bpbackBtn.setOnClickListener(v -> finish());
             showProgressDialog();
             try {
@@ -210,10 +213,9 @@ FeesActivity extends BaseActivity {
                         } catch (NumberFormatException e) {
                             e.printStackTrace();
                         }
-                    }
-                    else {
+                    } else {
                         try {
-                            Utils.displayAlert(fees.getError().getErrorDescription(),FeesActivity.this,"",fees.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(fees.getError().getErrorDescription(), FeesActivity.this, "", fees.getError().getFieldErrors().get(0));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
