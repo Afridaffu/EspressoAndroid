@@ -121,6 +121,7 @@
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_18sdp"
                     android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_2sdp"
                     android:background="@color/white"
                     app:cardCornerRadius="@dimen/_10sdp">
 
