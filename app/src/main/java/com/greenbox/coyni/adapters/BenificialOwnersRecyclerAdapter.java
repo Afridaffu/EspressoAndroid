@@ -87,9 +87,9 @@ public class BenificialOwnersRecyclerAdapter extends
             }
             if (objData.getSsn() != null && !objData.getSsn().equals("")) {
                 isCPwdEye = true;
-                convert = objData.getSsn().replace("\\-","");
+                convert = objData.getSsn().replaceAll("\\-","");
                 String converted = convert.replaceAll("\\w(?=\\w{2})", "•");
-                String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5,converted.length());
+                String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5);
                 //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
                 holder.ssnTx.setText(hifened);
             }
@@ -113,7 +113,7 @@ public class BenificialOwnersRecyclerAdapter extends
                             try {
                                 listener.selectedItem(objData.getRequiredDocuments().
                                         get(0).getImgLink());
-                                notifyDataSetChanged();
+//                                notifyDataSetChanged();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
