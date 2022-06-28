@@ -508,6 +508,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 public void onDialogClicked(String action, Object value) {
                     if (action.equalsIgnoreCase(ACTIONN)) {
                         Intent i = new Intent(RefundTransactionActivity.this, SelectPaymentMethodActivity.class);
+                        i.putExtra("menuitem", "buy");
                         startActivity(i);
                     }
                 }
