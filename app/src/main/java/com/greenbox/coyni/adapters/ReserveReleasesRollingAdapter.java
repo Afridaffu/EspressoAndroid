@@ -59,9 +59,11 @@ public class ReserveReleasesRollingAdapter extends BaseRecyclerViewAdapter<Reser
         }
         if (objData.getStatus() != null && !objData.getStatus().equals("")){
             holder.statusType.setText(objData.getStatus());
+            holder.amount.setTextColor(context.getColor(R.color.active_black));
             if(objData.getStatus().equalsIgnoreCase(Utils.ROLLING_LIST_STATUS.OPEN.getStatus())) {
                 holder.statusType.setTextColor(context.getColor(R.color.inprogress_status));
                 holder.statusType.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                holder.amount.setTextColor(context.getColor(R.color.dark_grey));
             } else if(objData.getStatus().equalsIgnoreCase(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatus())) {
                 holder.amount.setTextColor(context.getColor(R.color.active_black));
                 holder.statusType.setTextColor(context.getColor(R.color.pending_color));
