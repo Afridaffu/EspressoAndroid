@@ -241,6 +241,7 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                     failedC.setChecked(false);
                     strSelectedDate = "";
                     filter.isFilterApplied = false;
+                    filter = new ReserveFilter();
                     strF = "";
                     strT = "";
                     dateRange.setText("");

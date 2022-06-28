@@ -1,10 +1,12 @@
 package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,6 +29,7 @@ public class CompanyInfoDetails extends BaseActivity {
     private int companyId = 0;
     MyApplication myApplication;
     private String strName = "";
+    private ImageView emailIconIV, phoneIconIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,20 @@ public class CompanyInfoDetails extends BaseActivity {
         mBusinessEntity = (TextView) findViewById(R.id.business_entity);
         emailLL = (LinearLayout) findViewById(R.id.emailLL);
         phoneLL = (LinearLayout) findViewById(R.id.phoneLL);
+        emailIconIV = (ImageView) findViewById(R.id.emailIconIV);
+        phoneIconIV = (ImageView) findViewById(R.id.phoneIconIV);
         myApplication = (MyApplication) getApplicationContext();
+        if (myApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+            emailIconIV.setVisibility(View.GONE);
+            phoneIconIV.setVisibility(View.GONE);
+            emailLL.setEnabled(false);
+            phoneLL.setEnabled(false);
+        } else {
+            emailIconIV.setVisibility(View.VISIBLE);
+            phoneIconIV.setVisibility(View.VISIBLE);
+            emailLL.setEnabled(true);
+            phoneLL.setEnabled(true);
+        }
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 
         closeLL.setOnClickListener(new View.OnClickListener() {
