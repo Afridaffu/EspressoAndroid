@@ -37,6 +37,8 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -383,38 +385,45 @@ public class DashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void updateProfile(MultipartBody.Part body) {
+    public void updateProfile(MultipartBody.Part body, MyApplication objMyApplication) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<ImageResponse> mCall = apiService.updateProfile(body);
-            mCall.enqueue(new Callback<ImageResponse>() {
-                @Override
-                public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            ImageResponse obj = response.body();
-                            imageResponseMutableLiveData.setValue(obj);
-                            Log.e("success", "success");
-                        } else {
-                            Log.e("failed", "failed");
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
-                            }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
+            Call<ImageResponse> mCall = null;
+            if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT)
+                mCall = apiService.updateProfileShared(body);
+            else
+                mCall = apiService.updateProfile(body);
+
+            if (mCall != null) {
+                mCall.enqueue(new Callback<ImageResponse>() {
+                    @Override
+                    public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
+                        try {
+                            if (response.isSuccessful()) {
+                                ImageResponse obj = response.body();
+                                imageResponseMutableLiveData.setValue(obj);
+                                Log.e("success", "success");
+                            } else {
+                                Log.e("failed", "failed");
+                                Gson gson = new Gson();
+                                Type type = new TypeToken<APIError>() {
+                                }.getType();
+                                APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                                apiErrorMutableLiveData.setValue(errorResponse);
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            apiErrorMutableLiveData.setValue(null);
                         }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ImageResponse> call, Throwable t) {
+                        Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                         apiErrorMutableLiveData.setValue(null);
                     }
-                }
-
-                @Override
-                public void onFailure(Call<ImageResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
+                });
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -528,10 +537,15 @@ public class DashboardViewModel extends AndroidViewModel {
 
     }
 
-    public void mePreferences() {
+    public void mePreferences(MyApplication myApplicationObj) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<Preferences> mCall = apiService.mePreferences();
+            Call<Preferences> mCall = null;
+            if (myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT)
+                mCall = apiService.mePreferencesShared(myApplicationObj.getBusinessUserID());
+            else
+                mCall = apiService.mePreferences();
+
             mCall.enqueue(new Callback<Preferences>() {
                 @Override
                 public void onResponse(Call<Preferences> call, Response<Preferences> response) {

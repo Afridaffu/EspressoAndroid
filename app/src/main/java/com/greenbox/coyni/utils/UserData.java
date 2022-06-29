@@ -95,6 +95,8 @@ public class UserData {
     boolean isReserveEnabled = false;
     private String strToken;
     private boolean isLoggedIn = false;
+    private String businessUserID = "";
+    private String ownerImage = "";
 
     public OrderPayResponse getOrderPayResponse() {
         return orderPayResponse;
@@ -706,5 +708,21 @@ public class UserData {
 
     public void setIsLoggedIn(boolean isLoggedIn) {
         this.isLoggedIn = isLoggedIn;
+    }
+
+    public String getBusinessUserID() {
+        return businessUserID;
+    }
+
+    public void setBusinessUserID(String businessUserID) {
+        this.businessUserID = businessUserID;
+    }
+
+    public String getOwnerImage() {
+        return ownerImage;
+    }
+
+    public void setOwnerImage(String ownerImage) {
+        this.ownerImage = ownerImage;
     }
 }

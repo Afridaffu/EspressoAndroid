@@ -293,6 +293,10 @@ public interface ApiService {
     @PATCH("api/v2/profile/me/uploadImage")
     Call<ImageResponse> updateProfile(@Part MultipartBody.Part image);
 
+    @Multipart
+    @PATCH("api/v2/business/uploadImage")
+    Call<ImageResponse> updateProfileShared(@Part MultipartBody.Part image);
+
     @DELETE("api/v2/profile/me/removeImage")
     Call<ImageResponse> removeImage(@Query("filename") String filename);
 
@@ -302,8 +306,14 @@ public interface ApiService {
     @GET("api/v2/profile/me/preferences")
     Call<Preferences> mePreferences();
 
+    @GET("api/v2/admin/{id}/preferences")
+    Call<Preferences> mePreferencesShared(@Path("id") String id);
+
     @POST("api/v2/profile/me/preferences")
     Call<UserPreference> meUpdatePreferences(@Body UserPreferenceModel request);
+
+    @POST("api/v2/business/preferences")
+    Call<UserPreference> meUpdatePreferences_Shared(@Body UserPreferenceModel request);
 
     @PATCH("api/v2/profile/me/update-address")
     Call<User> meUpdateAddress(@Body UserData request);
@@ -676,7 +686,7 @@ public interface ApiService {
     @Multipart
     @POST("api/v2/underwriting/user/customer/action-required")
     Call<SubmitActionRqrdResponse> submitActRqrd(@Part MultipartBody.Part[] body,
-                                                  @Part("underwritingActionRequired") RequestBody type);
+                                                 @Part("underwritingActionRequired") RequestBody type);
 
     @POST("api/v2/logs/transaction")
     Call<ActivityLogResp> activityLog(@Query("txnId") String txnId, @Query("userType") String userType);

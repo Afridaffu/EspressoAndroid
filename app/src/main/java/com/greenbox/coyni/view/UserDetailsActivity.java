@@ -147,7 +147,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             initFields();
             initObservers();
             showProgressDialog();
-            dashboardViewModel.mePreferences();
+            dashboardViewModel.mePreferences(myApplicationObj);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -487,7 +487,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                             userPreferenceModel.setLocalCurrency(0);
                             userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
                             userPreferenceModel.setPreferredAccount(accountTypeId);
-                            customerProfileViewModel.updatePreferences(userPreferenceModel);
+                            customerProfileViewModel.updatePreferences(userPreferenceModel, myApplicationObj);
                             dialog.dismiss();
 
                         }
@@ -806,7 +806,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     globalProfileResp = profilesResponse;
                     for (ProfilesResponse.Profiles c : filterList) {
                         if (c.getId() == accountTypeId) {
-                            if(c.getAccountType().equals(Utils.PERSONAL)) {
+                            if (c.getAccountType().equals(Utils.PERSONAL)) {
                                 selectedName = c.getFullName();
                             } else {
                                 selectedName = c.getDbaName();
@@ -976,7 +976,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 //            MultipartBody.Part body = MultipartBody.Part.createFormData("image", userId + "_profile" + extention, requestFile);
             dialog = Utils.showProgressDialog(UserDetailsActivity.this);
-            dashboardViewModel.updateProfile(body);
+            dashboardViewModel.updateProfile(body, myApplicationObj);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

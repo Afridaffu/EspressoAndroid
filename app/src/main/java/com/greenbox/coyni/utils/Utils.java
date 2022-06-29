@@ -1322,15 +1322,8 @@ public class Utils {
                 dialog.dismiss();
                 try {
                     if (from.equals("PREFERENCES")) {
-
-                        UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
-                        userPreferenceModel.setLocalCurrency(0);
-                        userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
-                        userPreferenceModel.setPreferredAccount(myApplicationObj.getMyProfile().getData().getId());
-
                         PreferencesActivity preferencesActivity = (PreferencesActivity) context;
-                        preferencesActivity.callTimeZonePreferenceApi(userPreferenceModel);
-
+                        preferencesActivity.callTimeZonePreferenceApi();
                     } else if (from.equals("COMPANY_INFO")) {
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
@@ -2226,6 +2219,23 @@ public class Utils {
         return strDate;
     }
 
+    public static String convertPrefZoneTimeFromPST(String date, String format, String requiredFormat, String zoneId) {
+        String strDate = "";
+        try {
+            DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern(format)
+                    .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                    .toFormatter()
+                    .withZone(ZoneId.of("PST", ZoneId.SHORT_IDS));
+            ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
+            DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(requiredFormat);
+            zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(zoneId, ZoneId.SHORT_IDS));
+            strDate = zonedTime.format(DATE_TIME_FORMATTER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
     public static String convertZoneDateTime(String date, String format, String requiredFormat, String zoneId) {
         String strDate = "";
         try {
@@ -2251,6 +2261,7 @@ public class Utils {
         }
         return strDate;
     }
+
 
     public static String exportDate(String date, String zoneId) {
         if (date.length() == 22) {
