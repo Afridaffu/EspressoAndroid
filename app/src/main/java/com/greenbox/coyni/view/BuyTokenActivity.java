@@ -263,7 +263,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         try {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == 3) {
-                isPayment = true;
+                if (objMyApplication.getCardSave()) {
+                    objMyApplication.setCardSave(false);
+                    isPayment = true;
+                }
             } else {
                 switch (resultCode) {
                     case RESULT_OK:
