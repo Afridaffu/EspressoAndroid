@@ -42,6 +42,7 @@ public class BusinessUserDetailsPreviewActivity extends BaseActivity implements 
     private Long mLastClickTime = 0L;
     private MyApplication myApplicationObj;
     public static BusinessUserDetailsPreviewActivity businessUserDetailsPreviewActivity;
+    public String state = "";
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -292,8 +293,16 @@ public class BusinessUserDetailsPreviewActivity extends BaseActivity implements 
                 if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
                     addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
                 }
-                if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-                    addressFormatted = addressFormatted + profile.getData().getState() + ", ";
+//                if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+//                    addressFormatted = addressFormatted + profile.getData().getState() + ", ";
+//                }
+                state = profile.getData().getState().toLowerCase();
+                String stateCode = Utils.getStateCode(state, myApplicationObj.getListStates());
+                if (stateCode != null && !stateCode.equals("")) {
+                    addressFormatted = addressFormatted + stateCode + ", " ;
+                }
+                if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
                 }
 
                 if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {

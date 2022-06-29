@@ -1,5 +1,7 @@
 package com.greenbox.coyni.view.business;
 
+import static com.greenbox.coyni.view.business.CompanyInfoDetails.myApplication;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -20,6 +22,7 @@ public class BenificialOwnerDetails extends BaseActivity {
     private int position = 0;
     private LinearLayout bpbackBtn, primaryLL;
     private BOResp.BeneficialOwner beneficialOwner;
+    public String state = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +77,18 @@ public class BenificialOwnerDetails extends BaseActivity {
         if (beneficialOwner.getCity() != null && !beneficialOwner.getCity().equals("")) {
             mMailingAddress.append(", " + beneficialOwner.getCity());
         }
-        if (beneficialOwner.getState() != null && !beneficialOwner.getState().equals("")) {
-            mMailingAddress.append(", " + beneficialOwner.getState());
-        }
-//        if (beneficialOwner.getCountry() != null && !beneficialOwner.getCountry().equals("")) {
-//            mMailingAddress.append(", " + beneficialOwner.getCountry());
+//        if (beneficialOwner.getState() != null && !beneficialOwner.getState().equals("")) {
+//            mMailingAddress.append(", " + beneficialOwner.getState());
 //        }
+        state = beneficialOwner.getState().toLowerCase();
+        String stateCode = Utils.getStateCode(state, myApplication.getListStates());
+        if (stateCode != null && !stateCode.equals("")) {
+            mMailingAddress.append(", " + stateCode);
+
+        }
+        if (beneficialOwner.getCountry() != null && !beneficialOwner.getCountry().equals("")) {
+            mMailingAddress.append(", " + beneficialOwner.getCountry());
+        }
         if (beneficialOwner.getZipCode() != null && !beneficialOwner.getZipCode().equals("")) {
             mMailingAddress.append(", " + beneficialOwner.getZipCode() + ".");
         }
