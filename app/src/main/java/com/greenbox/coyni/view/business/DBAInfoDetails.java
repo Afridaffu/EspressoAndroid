@@ -1,7 +1,5 @@
 package com.greenbox.coyni.view.business;
 
-import static com.greenbox.coyni.view.business.CompanyInfoDetails.myApplication;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -37,7 +35,6 @@ import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.DBAInfo.BusinessType;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
-import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
@@ -72,7 +69,6 @@ public class DBAInfoDetails extends BaseActivity {
     Long mLastClickTime = 0L;
     private LinearLayout editEmail, editPhone;
     String emailID, phone_Number, bType=" ";
-    public String state = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,17 +225,10 @@ public class DBAInfoDetails extends BaseActivity {
                 if (dbaInfoResp.getData().getCity() != null && !dbaInfoResp.getData().getCity().equals("")) {
                     addressFormatted = addressFormatted + dbaInfoResp.getData().getCity() + ", ";
                 }
-//                if (dbaInfoResp.getData().getState() != null && !dbaInfoResp.getData().getState().equals("")) {
-//                    addressFormatted = addressFormatted + dbaInfoResp.getData().getState() + ", ";
-//                }
-                String stateCode = Utils.getStateCode(state, myApplication.getListStates());
-                if (stateCode != null && !stateCode.equals("")) {
-                    addressFormatted = addressFormatted + stateCode + ", " ;
+                if (dbaInfoResp.getData().getState() != null && !dbaInfoResp.getData().getState().equals("")) {
+                    addressFormatted = addressFormatted + dbaInfoResp.getData().getState() + ", ";
                 }
 
-                if (dbaInfoResp.getData().getCountry() != null && !dbaInfoResp.getData().getCountry().equals("")) {
-                    addressFormatted = addressFormatted + dbaInfoResp.getData().getCountry() + ", ";
-                }
                 if (dbaInfoResp.getData().getZipCode() != null && !dbaInfoResp.getData().getZipCode().equals("")) {
                     addressFormatted = addressFormatted + dbaInfoResp.getData().getZipCode() + ", ";
                 }
@@ -397,17 +386,8 @@ public class DBAInfoDetails extends BaseActivity {
                             if (dbaInfoResp.getData().getCity() != null && !dbaInfoResp.getData().getCity().equals("")) {
                                 addressFormatted = addressFormatted + dbaInfoResp.getData().getCity() + ", ";
                             }
-//                            if (dbaInfoResp.getData().getState() != null && !dbaInfoResp.getData().getState().equals("")) {
-//                                addressFormatted = addressFormatted + dbaInfoResp.getData().getState() + ", ";
-//                            }
-                            state = dbaInfoResp.getData().getState().toLowerCase();
-                            String stateCode = Utils.getStateCode(state, myApplication.getListStates());
-                            if (stateCode != null && !stateCode.equals("")) {
-                                addressFormatted = addressFormatted + stateCode + ", " ;
-                            }
-
-                            if (dbaInfoResp.getData().getCountry() != null && !dbaInfoResp.getData().getCountry().equals("")) {
-                                addressFormatted = addressFormatted + dbaInfoResp.getData().getCountry() + ", ";
+                            if (dbaInfoResp.getData().getState() != null && !dbaInfoResp.getData().getState().equals("")) {
+                                addressFormatted = addressFormatted + dbaInfoResp.getData().getState() + ", ";
                             }
 
                             if (dbaInfoResp.getData().getZipCode() != null && !dbaInfoResp.getData().getZipCode().equals("")) {
@@ -631,7 +611,7 @@ public class DBAInfoDetails extends BaseActivity {
             MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 //            MultipartBody.Part body = MultipartBody.Part.createFormData("image", userId + "_profile" + extention, requestFile);
             dialog = Utils.showProgressDialog(this);
-            dashboardViewModel.updateProfile(body);
+            dashboardViewModel.updateProfile(body,objMyApplication);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -716,5 +696,4 @@ public class DBAInfoDetails extends BaseActivity {
             e.printStackTrace();
         }
     }
-
 }
