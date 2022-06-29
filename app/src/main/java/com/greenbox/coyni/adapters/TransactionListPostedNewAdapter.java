@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class TransactionListPostedNewAdapter extends RecyclerView.Adapter<TransactionListPostedNewAdapter.MyViewHolder> {
     Context mContext;
@@ -80,6 +81,7 @@ public class TransactionListPostedNewAdapter extends RecyclerView.Adapter<Transa
         try {
             int currentYear = Calendar.getInstance().get(Calendar.YEAR);
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            spf.setTimeZone(TimeZone.getTimeZone("UTC"));
             String strCurDate = spf.format(Calendar.getInstance().getTime());
             if (dates.get(position).equals(objMyApplication.convertZoneDateLastYear(strCurDate))) {
                 holder.date.setText("Today");

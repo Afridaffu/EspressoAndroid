@@ -839,10 +839,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 mTicketsLayout.setVisibility(View.GONE);
                 mSbTodayVolume.setVisibility(View.VISIBLE);
                 saleOrdersText.setVisibility(View.VISIBLE);
-                strFromDate = Utils.convertZoneDateTime(getCurrentTimeString(),dateAndTime,dateAndTime,"PST").split(" ")[0] + startTime;
-                strToDate = Utils.convertZoneDateTime(getCurrentTimeString(),dateAndTime,dateAndTime,"PST").split(" ")[0] + endTime;
-                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate,dateAndTime,dateAndTime,"PST");
-                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate,dateAndTime,dateAndTime,"PST");
+                strFromDate = Utils.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime, "PST").split(" ")[0] + startTime;
+                strToDate = Utils.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime, "PST").split(" ")[0] + endTime;
+                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate, dateAndTime, dateAndTime, "PST");
+                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate, dateAndTime, dateAndTime, "PST");
                 businessActivityAPICall(strFromDate, strToDate);
                 commissionActivityCall(strFromDate, strToDate);
             }
@@ -852,10 +852,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 mTicketsLayout.setVisibility(View.GONE);
                 mSbTodayVolume.setVisibility(View.VISIBLE);
                 saleOrdersText.setVisibility(View.VISIBLE);
-                strFromDate = Utils.convertZoneDateTime(getYesterdayDateString(),dateAndTime,dateAndTime, "PST").split(" ")[0] + startTime;
-                strToDate = Utils.convertZoneDateTime(getYesterdayDateString(),dateAndTime,dateAndTime, "PST").split(" ")[0] + endTime;
-                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate,dateAndTime,dateAndTime,"PST");
-                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate,dateAndTime,dateAndTime,"PST");
+                strFromDate = Utils.convertZoneDateTime(getYesterdayDateString(), dateAndTime, dateAndTime, "PST").split(" ")[0] + startTime;
+                strToDate = Utils.convertZoneDateTime(getYesterdayDateString(), dateAndTime, dateAndTime, "PST").split(" ")[0] + endTime;
+                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate, dateAndTime, dateAndTime, "PST");
+                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate, dateAndTime, dateAndTime, "PST");
                 businessActivityAPICall(strFromDate, strToDate);
                 commissionActivityCall(strFromDate, strToDate);
             }
@@ -867,10 +867,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 saleOrdersText.setVisibility(View.GONE);
 //                strFromDate = myApplication.convertZoneDateTime(getFirstDayOfMonthString(), dateAndTime, date) + startTime;
 //                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + endTime;
-                strFromDate = Utils.convertZoneDateTime(getFirstDayOfMonthString(),dateAndTime,dateAndTime, "PST").split(" ")[0] + startTime;
-                strToDate = Utils.convertZoneDateTime(getCurrentTimeString(),dateAndTime,dateAndTime, "PST").split(" ")[0] + endTime;
-                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate,dateAndTime,dateAndTime,"PST");
-                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate,dateAndTime,dateAndTime,"PST");
+                strFromDate = Utils.convertZoneDateTime(getFirstDayOfMonthString(), dateAndTime, dateAndTime, "PST").split(" ")[0] + startTime;
+                strToDate = Utils.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime, "PST").split(" ")[0] + endTime;
+                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate, dateAndTime, dateAndTime, "PST");
+                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate, dateAndTime, dateAndTime, "PST");
                 businessActivityAPICall(strFromDate, strToDate);
             }
             break;
@@ -881,10 +881,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 saleOrdersText.setVisibility(View.GONE);
 //                strFromDate = myApplication.convertZoneDateTime(getPreviousMonthFirstDate(), dateAndTime, date) + startTime;
 //                strToDate = myApplication.convertZoneDateTime(getPreviousMonthLastDate(), dateAndTime, date) + endTime;
-                strFromDate = Utils.convertZoneDateTime(getPreviousMonthFirstDate(),dateAndTime,dateAndTime, "PST").split(" ")[0] + startTime;
-                strToDate = Utils.convertZoneDateTime(getPreviousMonthLastDate(),dateAndTime,dateAndTime, "PST").split(" ")[0] + endTime;
-                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate,dateAndTime,dateAndTime,"PST");
-                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate,dateAndTime,dateAndTime,"PST");
+                strFromDate = Utils.convertZoneDateTime(getPreviousMonthFirstDate(), dateAndTime, dateAndTime, "PST").split(" ")[0] + startTime;
+                strToDate = Utils.convertZoneDateTime(getPreviousMonthLastDate(), dateAndTime, dateAndTime, "PST").split(" ")[0] + endTime;
+                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate, dateAndTime, dateAndTime, "PST");
+                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate, dateAndTime, dateAndTime, "PST");
                 businessActivityAPICall(strFromDate, strToDate);
 
             }
@@ -908,10 +908,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                                 String toDate = rangeDates.getUpdatedToDate().trim() + endTime;
 //                                strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + startTime;
 //                                strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + endTime;
-                                strFromDate = Utils.convertZoneDateTime(fromDate,"MM-dd-yyyy HH:mm:ss",dateAndTime, "PST").split(" ")[0] + startTime;
-                                strToDate = Utils.convertZoneDateTime(toDate,"MM-dd-yyyy HH:mm:ss",dateAndTime, "PST").split(" ")[0] + endTime;
-                                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate,dateAndTime,dateAndTime,"PST");
-                                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate,dateAndTime,dateAndTime,"PST");
+                                strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", dateAndTime, "PST").split(" ")[0] + startTime;
+                                strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", dateAndTime, "PST").split(" ")[0] + endTime;
+                                strFromDate = Utils.convertPreferenceZoneToUtcDateTime(strFromDate, dateAndTime, dateAndTime, "PST");
+                                strToDate = Utils.convertPreferenceZoneToUtcDateTime(strToDate, dateAndTime, dateAndTime, "PST");
                                 mTvProcessingVolume.setText(R.string.custom_date_range);
                                 businessActivityAPICall(strFromDate, strToDate);
                             }
@@ -1200,26 +1200,31 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private String getYesterdayDateString() {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(yesterday());
     }
 
     private String getFirstDayOfMonthString() {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(firstDayOfCurrentMonth());
     }
 
     private String getCurrentTimeString() {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(Calendar.getInstance().getTime());
     }
 
     private String getPreviousMonthFirstDate() {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(previousMonthFirstDate());
     }
 
     private String getPreviousMonthLastDate() {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(previousMonthLastDate());
     }
 
