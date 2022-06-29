@@ -356,6 +356,10 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getDbaOwnerId());
                         myApplication.clearUserData();
+                        if (btResp.getData() != null) {
+                            myApplication.setBusinessUserID(String.valueOf(btResp.getData().getBusinessUserId()));
+                            myApplication.setOwnerImage(btResp.getData().getOwnerImage());
+                        }
                         Utils.setStrAuth(btResp.getData().getJwtToken());
                         myApplication.setLoginUserId(btResp.getData().getUserId());
                         myApplication.setStrEmail(btResp.getData().getEmail());

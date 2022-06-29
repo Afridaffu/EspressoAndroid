@@ -1,6 +1,7 @@
 package com.greenbox.coyni.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,8 @@ import com.greenbox.coyni.model.users.UserData;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 
 import java.lang.reflect.Type;
 
@@ -143,36 +146,44 @@ public class CustomerProfileViewModel extends AndroidViewModel {
         }
     }
 
-    public void updatePreferences(UserPreferenceModel request) {
+    public void updatePreferences(UserPreferenceModel request, MyApplication myApplicationObj) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<UserPreference> mCall = apiService.meUpdatePreferences(request);
-            mCall.enqueue(new Callback<UserPreference>() {
-                @Override
-                public void onResponse(Call<UserPreference> call, Response<UserPreference> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            UserPreference obj = response.body();
-                            userPreferenceMutableLiveData.setValue(obj);
-                        } else {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<UserPreference>() {
-                            }.getType();
-                            UserPreference errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            userPreferenceMutableLiveData.setValue(errorResponse);
+            Call<UserPreference> mCall = null;
+            if (myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT)
+                mCall = apiService.meUpdatePreferences_Shared(request);
+            else
+                mCall = apiService.meUpdatePreferences(request);
+            if (mCall != null) {
+                mCall.enqueue(new Callback<UserPreference>() {
+                    @Override
+                    public void onResponse(Call<UserPreference> call, Response<UserPreference> response) {
+                        try {
+                            if (response.isSuccessful()) {
+                                UserPreference obj = response.body();
+                                userPreferenceMutableLiveData.setValue(obj);
+                            } else {
+                                Gson gson = new Gson();
+                                Type type = new TypeToken<UserPreference>() {
+                                }.getType();
+                                UserPreference errorResponse = gson.fromJson(response.errorBody().string(), type);
+                                userPreferenceMutableLiveData.setValue(errorResponse);
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            apiErrorMutableLiveData.setValue(null);
                         }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserPreference> call, Throwable t) {
+                        Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                         apiErrorMutableLiveData.setValue(null);
                     }
-                }
-
-                @Override
-                public void onFailure(Call<UserPreference> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
+                });
+            } else {
+//                Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

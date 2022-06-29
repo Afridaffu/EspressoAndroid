@@ -51,7 +51,9 @@ import com.greenbox.coyni.network.ApiClient;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Singleton;
+import com.greenbox.coyni.utils.UserData;
 
 import java.lang.reflect.Type;
 
@@ -106,6 +108,7 @@ public class LoginViewModel extends AndroidViewModel {
     public MutableLiveData<EmailResendResponse> getEmailresendMutableLiveData() {
         return emailresendMutableLiveData;
     }
+
     public MutableLiveData<AddBusinessUserResponse> postChangeAccountResponse() {
         return postChangeAccountResponse;
     }
@@ -654,7 +657,7 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
-    public void biometricLogin(BiometricLoginRequest request) {
+    public void biometricLogin(BiometricLoginRequest request, MyApplication objMyApplication) {
         try {
             ApiService apiService = ApiClient.getInstance().create(ApiService.class);
             Call<LoginResponse> mCall = apiService.biometricLogin(request);
@@ -663,7 +666,10 @@ public class LoginViewModel extends AndroidViewModel {
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     if (response.isSuccessful()) {
                         LoginResponse obj = response.body();
-
+                        if (obj != null && obj.getData() != null) {
+                            objMyApplication.setBusinessUserID(String.valueOf(obj.getData().getBusinessUserId()));
+                            objMyApplication.setOwnerImage(obj.getData().getOwnerImage());
+                        }
                         biometricResponseMutableLiveData.setValue(obj);
                         Log.e("Bio Success", new Gson().toJson(obj));
                     } else {
@@ -887,7 +893,7 @@ public class LoginViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<AddBusinessUserResponse> call, Response<AddBusinessUserResponse> response) {
                     try {
-                        LogUtils.d("LOGINVIEW","MOdel"+response);
+                        LogUtils.d("LOGINVIEW", "MOdel" + response);
                         if (response.isSuccessful()) {
                             AddBusinessUserResponse obj = response.body();
                             postChangeAccountResponse.setValue(obj);
