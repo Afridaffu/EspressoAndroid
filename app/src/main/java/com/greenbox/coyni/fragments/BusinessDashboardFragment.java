@@ -54,6 +54,7 @@ import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
+import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
@@ -143,6 +144,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     private static final String lastMonthDate = "Last Month";
     private static final String customDate = "Custom Date Range";
     private static final String dateAndTime = "yyyy-MM-dd HH:mm:ss";
+    private static final String dateAndTimePM = "yyyy-MM-dd HH:mm:ss a";
+    private static final String onlyTime = "HH:mm:ss a";
     private static final String date = "yyyy-MM-dd";
     private static final String dateResult = "MM/dd/yyyy";
     private static final String startTime = " 00:00:00";
@@ -333,6 +336,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private void transactionsAPI(TransactionListRequest transactionListRequest) {
 //        showProgressDialog();
         dashboardViewModel.meTransactionList(transactionListRequest);
+        dashboardViewModel.mePreferences(myApplication);
     }
 
     private void removeObservers() {
@@ -633,6 +637,57 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
             }
         });
+
+        try {
+            dashboardViewModel.getPreferenceMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Preferences>() {
+                @Override
+                public void onChanged(Preferences preferences) {
+
+                    try {
+                        if (preferences != null) {
+                            if (preferences.getData().getTimeZone() == 0) {
+                                myApplication.setTempTimezone(getString(R.string.PST));
+                                myApplication.setTempTimezoneID(0);
+                                myApplication.setStrPreference("PST");
+                            } else if (preferences.getData().getTimeZone() == 1) {
+                                myApplication.setTempTimezone(getString(R.string.MST));
+                                myApplication.setTempTimezoneID(1);
+                                myApplication.setStrPreference("America/Denver");
+                            } else if (preferences.getData().getTimeZone() == 2) {
+                                myApplication.setTempTimezone(getString(R.string.CST));
+                                myApplication.setTempTimezoneID(2);
+                                myApplication.setStrPreference("CST");
+                            } else if (preferences.getData().getTimeZone() == 3) {
+                                myApplication.setTempTimezone(getString(R.string.EST));
+                                myApplication.setTempTimezoneID(3);
+                                myApplication.setStrPreference("America/New_York");
+                            } else if (preferences.getData().getTimeZone() == 4) {
+                                myApplication.setTempTimezone(getString(R.string.HST));
+                                myApplication.setTempTimezoneID(4);
+                                myApplication.setStrPreference("HST");
+                            } else if (preferences.getData().getTimeZone() == 5) {
+                                myApplication.setTempTimezone(getString(R.string.AST));
+                                myApplication.setTempTimezoneID(5);
+                                myApplication.setStrPreference("AST");
+                            }
+
+//                            String appendText = Utils.convertPrefZoneTimeFromPST(getCurrentTimeString().split(" ")[0] + " 11:59:59 pm", dateAndTimePM, onlyTime, myApplication.getStrPreference())+" "+myApplication.getStrPreference();
+//                            String mainText = "All Payouts are deposited into Business Token Account. Your active batch is set to automatically pay out at ";
+//                            SpannableString ss = new SpannableString(mainText+" "+appendText);
+//                            Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
+//                            ss.setSpan(new CustomTypefaceSpan("", font), 31, 53, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+//                            ss.setSpan(new CustomTypefaceSpan("", font), 108, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+//                            spannableTextView.setText(ss);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateUIAfterWalletBalance() {
@@ -971,7 +1026,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     String amt = Utils.convertBigDecimalUSDC((amount));
                     nextPayoutAmountTV.setText(amt);
 
-                    if (amt.equals("0.00")) {
+                    if (Double.parseDouble(amt) <= 0) {
                         mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         mCvBatchNow.setClickable(false);
                     } else {
@@ -1227,5 +1282,4 @@ public class BusinessDashboardFragment extends BaseFragment {
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(previousMonthLastDate());
     }
-
 }
