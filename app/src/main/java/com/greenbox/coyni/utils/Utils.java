@@ -4,7 +4,6 @@ import static android.content.Context.FINGERPRINT_SERVICE;
 import static android.content.Context.KEYGUARD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
-import static com.greenbox.coyni.view.business.CompanyInfoDetails.myApplication;
 
 import android.app.Activity;
 import android.app.Dialog;
