@@ -323,9 +323,9 @@
                         android:paddingBottom="@dimen/_11sdp">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0"
+                            android:layout_weight="1"
                             android:fontFamily="@font/opensans_regular"
                             android:text="@string/dba_name_text"
                             android:textColor="@color/dark_grey"
@@ -333,12 +333,12 @@
 
                         <TextView
                             android:id="@+id/dba_name"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="textEnd"
                             android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
+                            android:textAlignment="textEnd"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
 
@@ -354,9 +354,9 @@
                         android:paddingBottom="@dimen/_11sdp">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0"
+                            android:layout_weight="1"
                             android:fontFamily="@font/opensans_regular"
                             android:text="@string/customer_service_email"
                             android:textColor="@color/dark_grey"
@@ -364,18 +364,18 @@
 
                         <TextView
                             android:id="@+id/customer_service_email"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="textEnd"
                             android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="end"
+                            android:textAlignment="textEnd"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
@@ -385,9 +385,9 @@
                         android:paddingBottom="@dimen/_11sdp">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
+                            android:layout_weight="1"
                             android:fontFamily="@font/opensans_regular"
                             android:text="@string/customer_service_phone"
                             android:textColor="@color/dark_grey"
@@ -396,14 +396,14 @@
 
                         <TextView
                             android:id="@+id/customer_service_phone"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
+                            android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
-                            android:gravity="end"
+                            android:textAlignment="textEnd"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
-                    </RelativeLayout>
+                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -416,21 +416,21 @@
                 android:layout_marginBottom="@dimen/_30sdp"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="start"
-                android:visibility="gone"
                 android:lineSpacingExtra="@dimen/_2sdp"
                 android:textColor="@color/dark_grey"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_10ssp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/original_transaction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Original Transaction Information"
-                android:textSize="@dimen/_12ssp"
-                android:visibility="gone"
-                android:textColor="@color/primary_black"
                 android:layout_marginStart="@dimen/_21sdp"
-                android:fontFamily="@font/opensans_bold"/>
+                android:fontFamily="@font/opensans_bold"
+                android:text="Original Transaction Information"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp"
+                android:visibility="gone" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_view_refund"

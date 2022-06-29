@@ -751,11 +751,11 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                            strCurrent = "signet";
-                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-                            startActivityForResult(i, 4);
-                        }
+//                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+//                            strCurrent = "signet";
+//                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+//                            startActivityForResult(i, 4);
+//                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -865,10 +865,11 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
                 } else {
                     tvSignetError.setVisibility(View.GONE);
-                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
-                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
+//                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
+//                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
+                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
+                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
                     tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
-//                    imgSignetArrow.clearColorFilter();
                     imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
                     imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
 
@@ -1814,8 +1815,8 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                             strCurrent = "externalBank";
                             showExternalBank();
                         } else if (strType.equals("signet")) {
-                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-                            startActivityForResult(i, 4);
+//                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+//                            startActivityForResult(i, 4);
                         } else {
                             strCurrent = "debit";
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);

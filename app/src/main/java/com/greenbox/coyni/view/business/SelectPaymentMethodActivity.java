@@ -48,6 +48,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.view.AddCardActivity;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
@@ -60,7 +61,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectPaymentMethodActivity extends AppCompatActivity {
+public class SelectPaymentMethodActivity extends BaseActivity {
     MyApplication objMyApplication;
     PaymentMethodsResponse paymentMethodsResponse;
     CustomerProfileViewModel customerProfileViewModel;
@@ -157,7 +158,8 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                     if (extBankDialog != null) {
                         extBankDialog.dismiss();
                     }
-                    dialog = Utils.showProgressDialog(this);
+//                    dialog = Utils.showProgressDialog(this);
+                    showProgressDialog();
                     customerProfileViewModel.meSyncAccount();
                 }
             } else if (requestCode == 3) {
@@ -317,7 +319,8 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             @Override
             public void onChanged(SyncAccount syncAccount) {
                 try {
-                    dialog.dismiss();
+//                    dialog.dismiss();
+                    dismissDialog();
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
                             dashboardViewModel.mePaymentMethods();
@@ -337,9 +340,10 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+//                if (dialog != null) {
+//                    dialog.dismiss();
+//                }
+                dismissDialog();
                 if (payMethodsResponse != null) {
                     if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                         PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
@@ -426,7 +430,8 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
     private void getPaymentMethods() {
         try {
             isPayments = true;
-            dialog = Utils.showProgressDialog(this);
+//            dialog = Utils.showProgressDialog(this);
+            showProgressDialog();
             dashboardViewModel.mePaymentMethods();
         } catch (Exception ex) {
             ex.printStackTrace();

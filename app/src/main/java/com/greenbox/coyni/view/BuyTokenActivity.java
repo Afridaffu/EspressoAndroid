@@ -263,7 +263,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         try {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == 3) {
-                isPayment = true;
+                if (objMyApplication.getCardSave()) {
+                    objMyApplication.setCardSave(false);
+                    isPayment = true;
+                }
             } else {
                 switch (resultCode) {
                     case RESULT_OK:
@@ -696,7 +699,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                             bindPayMethod(rollbackSelectedCard());
                         } else {
                             isPayment = false;
-                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                                 if (!objData.getPaymentMethod().toLowerCase().equals("debit")) {
                                     objMyApplication.setSelectedCard(objData);
                                     bindPayMethod(objData);
@@ -1416,9 +1419,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     try {
                         if (objMyApplication.getStrScreen().equalsIgnoreCase(CheckOutConstants.FlowCheckOut)) {
                             objMyApplication.getCheckOutModel().setCheckOutFlag(true);
-                            startActivity(new Intent(BuyTokenActivity.this,CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                        }
-                        else {
+                            startActivity(new Intent(BuyTokenActivity.this, CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        } else {
                             Intent i;
                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                                 i = new Intent(BuyTokenActivity.this, DashboardActivity.class);

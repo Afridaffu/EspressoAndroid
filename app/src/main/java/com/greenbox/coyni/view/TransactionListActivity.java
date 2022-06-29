@@ -1455,9 +1455,8 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
             public void onClick(View view) {
                 try {
                     dialog.dismiss();
-                    getDateFromPickerET.setText(strSelectedDate);
-
                     if (!strSelectedDate.equals("")) {
+                        getDateFromPickerET.setText(strSelectedDate);
                         new Date(startDateLong).getYear();
                         Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
                         int mYear = c.get(Calendar.YEAR);

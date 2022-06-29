@@ -1255,26 +1255,31 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private String getYesterdayDateString() {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(yesterday());
     }
 
     private String getFirstDayOfMonthString() {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(firstDayOfCurrentMonth());
     }
 
     private String getCurrentTimeString() {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(Calendar.getInstance().getTime());
     }
 
     private String getPreviousMonthFirstDate() {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(previousMonthFirstDate());
     }
 
     private String getPreviousMonthLastDate() {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(previousMonthLastDate());
     }
 }
