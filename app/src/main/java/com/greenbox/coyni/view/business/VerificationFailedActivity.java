@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.greenbox.coyni.R;
@@ -20,7 +21,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.DashboardActivity;
 
-public class VerificationFailedActivity extends BaseActivity {
+public class VerificationFailedActivity extends AppCompatActivity {
 
     private TextView mTvName, mTvDbaName, mTvLegalName, descTV;
     private CardView mCvDone;
@@ -43,12 +44,17 @@ public class VerificationFailedActivity extends BaseActivity {
             LoginData data = loginResponse.getData();
             if (data != null) {
                 if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-                    if (data.getCompanyName() != null && !data.getCompanyName().equals("")) {
-
-                        String name = getString(R.string.dear_name, data.getCompanyName());
+                    if (data.getFirstName() != null && data.getLastName() != null) {
+                        String name = getString(R.string.dear_name, data.getFirstName() + " " + data.getLastName());
                         SpannableStringBuilder spannableName = new SpannableStringBuilder(name);
                         spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                         mTvName.setText(spannableName);
+                    }
+                    if (data.getCompanyName() != null && !data.getCompanyName().equals("")) {
+//                        String name = getString(R.string.dear_name, data.getCompanyName());
+//                        SpannableStringBuilder spannableName = new SpannableStringBuilder(name);
+//                        spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+//                        mTvName.setText(spannableName);
 
                         String legalName = getString(R.string.legal_name_name, data.getCompanyName());
                         SpannableStringBuilder spannableLegalName = new SpannableStringBuilder(legalName);
@@ -65,7 +71,7 @@ public class VerificationFailedActivity extends BaseActivity {
                 } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     if (data.getEmail() != null && !data.getEmail().equals("")) {
 
-                        String name = getString(R.string.dear_name, data.getFirstName()+" "+data.getLastName());
+                        String name = getString(R.string.dear_name, data.getFirstName() + " " + data.getLastName());
                         SpannableStringBuilder spannableName = new SpannableStringBuilder(name);
                         spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                         mTvName.setText(spannableName);

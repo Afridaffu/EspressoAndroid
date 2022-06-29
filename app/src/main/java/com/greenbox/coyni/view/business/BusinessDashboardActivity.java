@@ -247,11 +247,13 @@ public class BusinessDashboardActivity extends BaseActivity {
                             startActivity(new Intent(BusinessDashboardActivity.this, BusinessReceivePaymentActivity.class));
                         }
                     });
+                    llScan.setAlpha(0.5f);
+                    llScan.setEnabled(false);
                     llScan.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
-                            startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
+//                            dialog.dismiss();
+//                            startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
                         }
                     });
                 } catch (Exception ex) {
