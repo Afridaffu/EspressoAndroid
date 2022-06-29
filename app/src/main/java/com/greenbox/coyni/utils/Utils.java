@@ -4,6 +4,8 @@ import static android.content.Context.FINGERPRINT_SERVICE;
 import static android.content.Context.KEYGUARD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
+import static com.greenbox.coyni.view.business.CompanyInfoDetails.myApplication;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.KeyguardManager;
@@ -1365,6 +1367,18 @@ public class Utils {
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    public static String getStateCode(String state, List<States> listStates) {
+        if(listStates == null) {
+            return null;
+        }
+        for (int i = 0; i < listStates.size(); i++) {
+            if (state.equals(listStates.get(i).getName().toLowerCase())) {
+                return listStates.get(i).getIsocode();
+            }
+        }
+        return null;
     }
 
     public static void generateUUID(Context context) {

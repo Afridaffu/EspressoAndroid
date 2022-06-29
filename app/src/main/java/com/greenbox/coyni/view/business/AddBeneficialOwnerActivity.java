@@ -1637,7 +1637,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
             if (zipcodeET.getText().toString().trim().length() >= 5)
                 boRequest.setZipCode(zipcodeET.getText().toString().trim());
-            boRequest.setCountry("us");
+            boRequest.setCountry("United States");
 
 //            }
         } catch (Exception e) {
