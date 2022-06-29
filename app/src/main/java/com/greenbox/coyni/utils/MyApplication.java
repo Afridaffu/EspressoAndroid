@@ -824,6 +824,7 @@ public class MyApplication extends Application {
     public String convertZoneLatestTxn(String date) {
         return Utils.convertZoneLatestTxn(date, getStrPreference());
     }
+
     public String convertZoneLatestTxndate(String date) {
         return Utils.convertZoneLatestTxndate(date, getStrPreference());
     }
@@ -895,7 +896,7 @@ public class MyApplication extends Application {
         return isFaceLock;
     }
 
-    public  PaymentMethodsResponse filterCheckPaymentMethods(PaymentMethodsResponse objResponse) {
+    public PaymentMethodsResponse filterCheckPaymentMethods(PaymentMethodsResponse objResponse) {
         PaymentMethodsResponse payMethodsResponse = objResponse;
         List<PaymentsList> listData = new ArrayList<>();
         try {
@@ -911,6 +912,22 @@ public class MyApplication extends Application {
             ex.printStackTrace();
         }
         return payMethodsResponse;
+    }
+
+    public String getBusinessUserID() {
+        return mCurrentUserData.getBusinessUserID();
+    }
+
+    public void setBusinessUserID(String id) {
+        mCurrentUserData.setBusinessUserID(id);
+    }
+
+    public String getOwnerImage() {
+        return mCurrentUserData.getOwnerImage();
+    }
+
+    public void setOwnerImage(String ownerImage) {
+        mCurrentUserData.setOwnerImage(ownerImage);
     }
 
 }

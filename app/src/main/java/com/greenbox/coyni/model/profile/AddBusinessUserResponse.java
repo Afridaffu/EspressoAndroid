@@ -81,6 +81,7 @@ public class AddBusinessUserResponse {
         private String firstName;
         private String lastName;
         private String agreementsSigned;
+        private String ownerImage;
 
         public boolean isReserveEnabled() {
             return isReserveEnabled;
@@ -346,6 +347,14 @@ public class AddBusinessUserResponse {
 
         public void setAgreementSigned(boolean agreementSigned) {
             isAgreementSigned = agreementSigned;
+        }
+
+        public String getOwnerImage() {
+            return ownerImage;
+        }
+
+        public void setOwnerImage(String ownerImage) {
+            this.ownerImage = ownerImage;
         }
 
         @Override

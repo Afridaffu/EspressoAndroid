@@ -1,7 +1,6 @@
 package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -15,11 +14,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
+import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessUserDetailsPreviewActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
+
+import java.util.List;
 
 public class CompanyInfoDetails extends BaseActivity {
     private LinearLayout closeLL, emailLL, phoneLL;
@@ -27,9 +29,13 @@ public class CompanyInfoDetails extends BaseActivity {
     private String companyEmail = "", companyPhone = "", companyCountryCode = "";
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private int companyId = 0;
-    MyApplication myApplication;
-    private String strName = "";
+   public static MyApplication myApplication;
+    private final String strName = "";
+    private static String state = "";
     private ImageView emailIconIV, phoneIconIV;
+
+    public static String StateName = "";
+    public static String StateCode = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +85,7 @@ public class CompanyInfoDetails extends BaseActivity {
         nameTX.setOnClickListener(view -> {
 
             try {
-                if (nameTX.getText().toString().contains("...") && myApplication.getCompanyInfoResp().getData().getName().toString().length() >= 21) {
+                if (nameTX.getText().toString().contains("...") && myApplication.getCompanyInfoResp().getData().getName().length() >= 21) {
                     nameTX.setText(myApplication.getCompanyInfoResp().getData().getName());
 
                 } else if (myApplication.getCompanyInfoResp().getData().getName().length() >= 21) {
@@ -121,7 +127,7 @@ public class CompanyInfoDetails extends BaseActivity {
                 public void onChanged(CompanyInfoResp companyInfoResp) {
                     dismissDialog();
                     if (companyInfoResp != null) {
-                        if (companyInfoResp.getStatus().toLowerCase().toString().equals("success")) {
+                        if (companyInfoResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                             try {
                                 CompanyInfoResp.Data cir = companyInfoResp.getData();
                                 myApplication.setCompanyInfoResp(companyInfoResp);
@@ -160,12 +166,19 @@ public class CompanyInfoDetails extends BaseActivity {
                                 if (cir.getCity() != null && !cir.getCity().equals("")) {
                                     mAddressTx.append(", " + cir.getCity());
                                 }
-                                if (cir.getState() != null && !cir.getState().equals("")) {
-                                    mAddressTx.append(", " + cir.getState());
-                                }
-//                                if (cir.getCountry() != null && !cir.getCountry().equals("")) {
-//                                    mAddressTx.append(", " + cir.getCountry());
+//                                if (cir.getState() != null && !cir.getState().equals("")) {
+//                                    mAddressTx.append(", " + cir.getState());
 //                                }
+                              state = cir.getState().toLowerCase();
+                                String stateCode = Utils.getStateCode(state, myApplication.getListStates());
+
+                                if (stateCode != null && !stateCode.equals("")) {
+                                    mAddressTx.append(", " + stateCode);
+                                }
+
+                                if (cir.getCountry() != null && !cir.getCountry().equals("")) {
+                                    mAddressTx.append(", " + cir.getCountry());
+                                }
                                 if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
                                     mAddressTx.append(", " + cir.getZipCode() + ".");
                                 }
@@ -184,4 +197,6 @@ public class CompanyInfoDetails extends BaseActivity {
             e.printStackTrace();
         }
     }
+
+
 }

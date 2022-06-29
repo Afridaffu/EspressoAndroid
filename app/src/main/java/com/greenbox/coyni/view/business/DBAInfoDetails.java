@@ -611,7 +611,7 @@ public class DBAInfoDetails extends BaseActivity {
             MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 //            MultipartBody.Part body = MultipartBody.Part.createFormData("image", userId + "_profile" + extention, requestFile);
             dialog = Utils.showProgressDialog(this);
-            dashboardViewModel.updateProfile(body);
+            dashboardViewModel.updateProfile(body,objMyApplication);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

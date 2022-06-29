@@ -124,7 +124,7 @@ public class OnboardActivity extends BaseActivity {
                 Utils.setStrReferer(refererUrl);
             }
 
-            CheckOutModel  checkOutModel= objMyApplication.getCheckOutModel();
+            CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
 
             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
@@ -273,7 +273,7 @@ public class OnboardActivity extends BaseActivity {
                 Utils.setIsFaceEnabled(false);
             }
 
-            CheckOutModel  checkOutModel= objMyApplication.getCheckOutModel();
+            CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
             if (checkOutModel != null && checkOutModel.isCheckOutFlag()) {
                 startActivity(new Intent(OnboardActivity.this, LoginActivity.class));
                 finish();
@@ -349,7 +349,7 @@ public class OnboardActivity extends BaseActivity {
 //                                        Intent i = new Intent(OnboardActivity.this, DashboardActivity.class);
 //                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                                        startActivity(i);
-                                        launchDashboard();
+                                    launchDashboard();
 //                                    }
 //                                    Intent i = null;
 //                                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
@@ -469,7 +469,7 @@ public class OnboardActivity extends BaseActivity {
             request.setEnableBiometic(true);
 //            request.setMobileToken(strToken);
             request.setMobileToken(objMyApplication.getStrMobileToken());
-            loginViewModel.biometricLogin(request);
+            loginViewModel.biometricLogin(request, objMyApplication);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

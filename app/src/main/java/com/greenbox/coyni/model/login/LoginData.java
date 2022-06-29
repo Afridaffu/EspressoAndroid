@@ -31,6 +31,7 @@ public class LoginData {
     private String firstName;
     private String lastName;
     private String requestToken;
+    private String ownerImage;
     private int businessUserId;
     private Object[] authorities;
 
@@ -272,6 +273,14 @@ public class LoginData {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getOwnerImage() {
+        return ownerImage;
+    }
+
+    public void setOwnerImage(String ownerImage) {
+        this.ownerImage = ownerImage;
     }
 }
 
