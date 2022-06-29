@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.TimeZone;
 
 public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder> {
     private Context mContext;
@@ -145,13 +146,14 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
     }
 
     private void setGroupViewData(DateItem date, GroupViewHolder holder, int position) {
-        if(position == 0) {
+        if (position == 0) {
             holder.cyn.setVisibility(View.VISIBLE);
         } else {
             holder.cyn.setVisibility(View.GONE);
         }
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        spf.setTimeZone(TimeZone.getTimeZone("UTC"));
         String strCurDate = spf.format(Calendar.getInstance().getTime());
         if (holder.getAdapterPosition() == 0) {
             holder.viewBottomCorner.setVisibility(View.GONE);
