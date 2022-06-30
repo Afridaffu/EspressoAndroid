@@ -393,12 +393,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             strZip = etZipCode.getText().toString().trim();
                             strCountry = Utils.getStrCCode();
                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-//                                new Handler().postDelayed(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        prepareJson();
-//                                    }
-//                                }, 100);
                                 prepareCareRequest();
                             } else {
                                 BusinessCardRequest request = new BusinessCardRequest();
@@ -1688,10 +1682,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-//            WindowManager.LayoutParams lp = window.getAttributes();
-//            lp.dimAmount = 0.7f;
-//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            preDialog.getWindow().setAttributes(lp);
             preDialog.setCancelable(false);
             preDialog.show();
             cvDone = preDialog.findViewById(R.id.cvDone);
