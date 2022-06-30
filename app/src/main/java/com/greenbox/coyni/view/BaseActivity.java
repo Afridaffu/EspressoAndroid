@@ -1,29 +1,21 @@
 package com.greenbox.coyni.view;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
-import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.PayToMerchantActivity;
-
-import org.w3c.dom.Text;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -103,24 +95,31 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    private void handleCheckoutFlow(String accountStatus, int accountType) {
+        if (accountType == Utils.PERSONAL_ACCOUNT
+                && accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+            launchCheckoutFlow();
+        } else if (accountType == Utils.BUSINESS_ACCOUNT) {
+            myApplication.setCheckOutModel(new CheckOutModel());
+            Utils.displayAlertNew(getString(R.string.merchant_shared_message), BaseActivity.this, "coyni");
+        } else {
+            myApplication.setCheckOutModel(new CheckOutModel());
+            Utils.displayAlertNew(getString(R.string.please_use_active_account), BaseActivity.this, "coyni");
+        }
+    }
+
     private void launchCheckout() {
         if (myApplication.getCheckOutModel() != null) {
             CheckOutModel checkOutModel = myApplication.getCheckOutModel();
-            if (checkOutModel.isCheckOutFlag() ) {
+            if (checkOutModel.isCheckOutFlag()) {
                 dismissDialog();
 
                 if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                         && myApplication.getMyProfile().getData().getAccountStatus() != null) {
-                    if(myApplication.getMyProfile().getData().getAccountType() == Utils.PERSONAL_ACCOUNT
-                            && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                        launchCheckoutFlow(checkOutModel);
-                    } else if(myApplication.getMyProfile().getData().getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                        myApplication.setCheckOutModel(new CheckOutModel());
-                        Utils.displayAlertNew(getString(R.string.merchant_shared_message), BaseActivity.this, "coyni");
-                    } else {
-                        myApplication.setCheckOutModel(new CheckOutModel());
-                        Utils.displayAlertNew(getString(R.string.please_use_active_account), BaseActivity.this, "coyni");
-                    }
+                    handleCheckoutFlow(myApplication.getMyProfile().getData().getAccountStatus(), myApplication.getMyProfile().getData().getAccountType());
+                } else if (myApplication.getLoginResponse() != null && myApplication.getLoginResponse().getData() != null
+                        && myApplication.getLoginResponse().getData().getAccountStatus() != null) {
+                    handleCheckoutFlow(myApplication.getLoginResponse().getData().getAccountStatus(), myApplication.getLoginResponse().getData().getAccountType());
                 }
 
 
@@ -142,7 +141,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    private void launchCheckoutFlow(CheckOutModel checkOutModel) {
+    private void launchCheckoutFlow() {
         try {
             dismissDialog();
             startActivity(new Intent(BaseActivity.this, CheckOutPaymentActivity.class));

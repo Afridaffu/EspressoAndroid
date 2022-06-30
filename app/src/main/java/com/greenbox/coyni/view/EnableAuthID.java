@@ -537,6 +537,7 @@ public class EnableAuthID extends BaseActivity {
 
     private void launchDashboard() {
         if (objMyApplication.checkForDeclinedStatus()) {
+            objMyApplication.setIsLoggedIn(true);
             objMyApplication.launchDeclinedActivity(this);
         } else {
             objMyApplication.setIsLoggedIn(true);
