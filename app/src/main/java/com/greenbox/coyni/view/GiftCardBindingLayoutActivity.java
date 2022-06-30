@@ -61,6 +61,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     Long mLastClickTime = 0L;
     Dialog pDialog;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
+    private static int CODE_AUTHENTICATION = 512;
     CoyniViewModel coyniViewModel;
     SQLiteDatabase mydatabase;
     DatabaseHandler dbHandler;
@@ -889,21 +890,25 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         dialog.dismiss();
-                        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
-                        if (!fingerprintManager.isHardwareDetected()) {
-                            Log.e("Not support", "Not support");
-                        } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-                            final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
-                            enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                                    BIOMETRIC_STRONG);
-                            startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
-                        } else {
-                            pDialog = Utils.showProgressDialog(GiftCardBindingLayoutActivity.this);
-                            BiometricRequest biometricRequest = new BiometricRequest();
-                            biometricRequest.setBiometricEnabled(true);
-                            biometricRequest.setDeviceId(Utils.getDeviceID());
-                            coyniViewModel.saveBiometric(biometricRequest);
+                        if (Utils.getIsBiometric() && (Utils.getIsFaceEnabled() || Utils.getIsTouchEnabled())) {
+                            Utils.checkAuthentication(GiftCardBindingLayoutActivity.this, CODE_AUTHENTICATION);
                         }
+
+//                        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
+//                        if (!fingerprintManager.isHardwareDetected()) {
+//                            Log.e("Not support", "Not support");
+//                        } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+//                            final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
+//                            enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+//                                    BIOMETRIC_STRONG);
+//                            startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
+//                        } else {
+//                            pDialog = Utils.showProgressDialog(GiftCardBindingLayoutActivity.this);
+//                            BiometricRequest biometricRequest = new BiometricRequest();
+//                            biometricRequest.setBiometricEnabled(true);
+//                            biometricRequest.setDeviceId(Utils.getDeviceID());
+//                            coyniViewModel.saveBiometric(biometricRequest);
+//                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -939,6 +944,14 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                 biometricRequest.setBiometricEnabled(true);
                 biometricRequest.setDeviceId(Utils.getDeviceID());
                 coyniViewModel.saveBiometric(biometricRequest);
+            } else if (requestCode == CODE_AUTHENTICATION) {
+                if (resultCode == RESULT_OK) {
+                    pDialog = Utils.showProgressDialog(GiftCardBindingLayoutActivity.this);
+                    BiometricRequest biometricRequest = new BiometricRequest();
+                    biometricRequest.setBiometricEnabled(true);
+                    biometricRequest.setDeviceId(Utils.getDeviceID());
+                    coyniViewModel.saveBiometric(biometricRequest);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
