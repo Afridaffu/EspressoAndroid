@@ -64,7 +64,7 @@ public class ReserveReleaseManualListAdapter extends BaseRecyclerViewAdapter<Res
             if (timeDate.contains(".")) {
                 timeDate = timeDate.substring(0, timeDate.lastIndexOf("."));
             }
-            timeDate = myApplication.convertZoneDateTime(timeDate, "yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy @ hh:mma");
+            timeDate = myApplication.convertZoneDateTime(timeDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase();
             holder.dateTime.setText(timeDate);
         }
     }
