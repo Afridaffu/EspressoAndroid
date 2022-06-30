@@ -505,23 +505,26 @@ public class DBAInfoDetails extends BaseActivity {
     }
 
     private void bindImage(String imageString, DBAInfoResp dbaInfoResp) {
-
         try {
-            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                    && objMyApplication.getMyProfile().getData().getImage() != null) {
-//                dba_imageTextTV.setVisibility(View.GONE);
-                dba_userProfileIV.setVisibility(View.VISIBLE);
-
-                String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-                utility.addImage(imageUrl, dba_userProfileIV, R.drawable.acct_profile);
+            dba_userProfileIV.setVisibility(View.VISIBLE);
+            if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+                if (objMyApplication.getOwnerImage() != null && !objMyApplication.getOwnerImage().equals("")) {
+                    String imageUrl = objMyApplication.getOwnerImage().trim();
+                    DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                    utility.addImage(imageUrl, dba_userProfileIV, R.drawable.acct_profile);
+                }
             } else {
-                dba_userProfileIV.setVisibility(View.VISIBLE);
+                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                        && objMyApplication.getMyProfile().getData().getImage() != null) {
+                    String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
+                    DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                    utility.addImage(imageUrl, dba_userProfileIV, R.drawable.acct_profile);
+                }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
