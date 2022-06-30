@@ -513,6 +513,10 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
         EditText getDateFromPickerET = dialog.findViewById(R.id.datePickET);
         TextView resetFiltersTV = dialog.findViewById(R.id.resetFiltersTV);
 
+        tempTransactionType = new ArrayList<Integer>();
+        tempTransactionSubType = new ArrayList<Integer>();
+        tempTxnStatus = new ArrayList<Integer>();
+
         if (isFilters) {
 
             tempTransactionType.clear();
