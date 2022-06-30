@@ -2,6 +2,7 @@ package com.greenbox.coyni.utils;
 
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
@@ -97,6 +98,7 @@ public class UserData {
     private boolean isLoggedIn = false;
     private String businessUserID = "";
     private String ownerImage = "";
+    private List<BatchPayoutListItems> batchPayList = new ArrayList<>();
 
     public OrderPayResponse getOrderPayResponse() {
         return orderPayResponse;
@@ -724,5 +726,13 @@ public class UserData {
 
     public void setOwnerImage(String ownerImage) {
         this.ownerImage = ownerImage;
+    }
+
+    public List<BatchPayoutListItems> getBatchPayList() {
+        return batchPayList;
+    }
+
+    public void setBatchPayList(List<BatchPayoutListItems> batchPayList) {
+        this.batchPayList = batchPayList;
     }
 }

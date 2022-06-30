@@ -11,6 +11,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.IdentityVerificationBindingLayoutActivity;
@@ -928,6 +929,14 @@ public class MyApplication extends Application {
 
     public void setOwnerImage(String ownerImage) {
         mCurrentUserData.setOwnerImage(ownerImage);
+    }
+
+    public List<BatchPayoutListItems> getBatchPayList() {
+        return mCurrentUserData.getBatchPayList();
+    }
+
+    public void setBatchPayList(List<BatchPayoutListItems> batchPayList) {
+        mCurrentUserData.setBatchPayList(batchPayList);
     }
 
 }
