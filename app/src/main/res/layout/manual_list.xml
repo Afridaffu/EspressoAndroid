@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/_9sdp"
         android:layout_toStartOf="@id/ammont_TV"
         android:fontFamily="@font/opensans_semibold"
-        android:text="@string/reason_field"
+        android:text=""
         android:textColor="@color/primary_black"
         android:textSize="@dimen/_11ssp"
         tools:ignore="RelativeOverlap" />
@@ -29,19 +29,20 @@
         android:layout_marginTop="@dimen/_9sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         android:fontFamily="@font/opensans_bold"
-        android:text="10,000.00"
+        android:text=""
         android:textColor="@color/active_green"
         android:textSize="@dimen/_12ssp" />
 
     <TextView
         android:id="@+id/tokenAcTV"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reasonTV"
         android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_13sdp"
+        android:layout_toStartOf="@id/dateTime_TV"
         android:fontFamily="@font/opensans_semibold"
-        android:text="@string/business_token_account"
+        android:text=""
         android:textColor="@color/xdark_gray"
         android:textSize="@dimen/_9ssp" />
 
@@ -54,15 +55,16 @@
         android:layout_marginTop="@dimen/_13sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         android:fontFamily="@font/opensans_semibold"
-        android:text="06/23/2021 @ 2:20am"
+        android:text=""
         android:textColor="@color/xdark_gray"
-        android:textSize="@dimen/_9ssp" />
+        android:textSize="@dimen/_9ssp"
+        android:layout_marginStart="@dimen/_7sdp"/>
 
     <View
         android:id="@+id/Vview"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/dateTime_TV"
+        android:layout_below="@id/tokenAcTV"
         android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_10sdp"

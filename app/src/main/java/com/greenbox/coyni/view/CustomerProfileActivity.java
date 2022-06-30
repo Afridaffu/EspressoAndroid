@@ -135,8 +135,6 @@ public class CustomerProfileActivity extends BaseActivity {
             cpResetPin = findViewById(R.id.cpResetPin);
             cpAccountLimitsLL = findViewById(R.id.cpAccountLimitsLL);
             cpAgreementsLL = findViewById(R.id.cpAgreementsLL);
-            switchOff = findViewById(R.id.switchOff);
-            switchOn = findViewById(R.id.switchOn);
             cpChangePasswordLL = findViewById(R.id.cpChangePassword);
             tvBMSetting = findViewById(R.id.tvBMSetting);
             userProfile = findViewById(R.id.linearLayout);
