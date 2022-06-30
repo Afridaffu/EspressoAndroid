@@ -1366,7 +1366,7 @@ public class Utils {
             return null;
         }
         for (int i = 0; i < listStates.size(); i++) {
-            if (state.equals(listStates.get(i).getName().toLowerCase())) {
+            if (state.equalsIgnoreCase(listStates.get(i).getName().toLowerCase())) {
                 return listStates.get(i).getIsocode();
             }
         }

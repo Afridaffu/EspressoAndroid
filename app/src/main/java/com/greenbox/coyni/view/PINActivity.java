@@ -1118,6 +1118,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 
     private void launchDashboard() {
         if (objMyApplication.checkForDeclinedStatus()) {
+            objMyApplication.setIsLoggedIn(true);
             objMyApplication.launchDeclinedActivity(this);
         } else {
             objMyApplication.setIsLoggedIn(true);

@@ -485,7 +485,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                 + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
         if (height < 10)
             height = 200;
-        params.height = height;
+        params.height = (int) (height * 0.55);
         listView.setLayoutParams(params);
         listView.requestLayout();
     }

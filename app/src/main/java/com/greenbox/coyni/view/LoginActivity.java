@@ -821,8 +821,10 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
 
     private void launchDashboard() {
         if (objMyApplication.checkForDeclinedStatus()) {
+            objMyApplication.setIsLoggedIn(true);
             objMyApplication.launchDeclinedActivity(this);
         } else {
+            objMyApplication.setIsLoggedIn(true);
             objMyApplication.launchDashboard(this, "login");
         }
     }

@@ -225,8 +225,17 @@ public class DBAInfoDetails extends BaseActivity {
                 if (dbaInfoResp.getData().getCity() != null && !dbaInfoResp.getData().getCity().equals("")) {
                     addressFormatted = addressFormatted + dbaInfoResp.getData().getCity() + ", ";
                 }
+//                if (dbaInfoResp.getData().getState() != null && !dbaInfoResp.getData().getState().equals("")) {
+//                    addressFormatted = addressFormatted + dbaInfoResp.getData().getState() + ", ";
+//                }
+
                 if (dbaInfoResp.getData().getState() != null && !dbaInfoResp.getData().getState().equals("")) {
-                    addressFormatted = addressFormatted + dbaInfoResp.getData().getState() + ", ";
+                    String state = dbaInfoResp.getData().getState().toLowerCase();
+                    String stateCode = Utils.getStateCode(state, objMyApplication.getListStates());
+
+                    if (stateCode != null && !stateCode.equals("")) {
+                        addressFormatted = addressFormatted + stateCode + ", ";
+                    }
                 }
 
                 if (dbaInfoResp.getData().getZipCode() != null && !dbaInfoResp.getData().getZipCode().equals("")) {
@@ -386,8 +395,17 @@ public class DBAInfoDetails extends BaseActivity {
                             if (dbaInfoResp.getData().getCity() != null && !dbaInfoResp.getData().getCity().equals("")) {
                                 addressFormatted = addressFormatted + dbaInfoResp.getData().getCity() + ", ";
                             }
+//                            if (dbaInfoResp.getData().getState() != null && !dbaInfoResp.getData().getState().equals("")) {
+//                                addressFormatted = addressFormatted + dbaInfoResp.getData().getState() + ", ";
+//                            }
+
                             if (dbaInfoResp.getData().getState() != null && !dbaInfoResp.getData().getState().equals("")) {
-                                addressFormatted = addressFormatted + dbaInfoResp.getData().getState() + ", ";
+                                String state = dbaInfoResp.getData().getState().toLowerCase();
+                                String stateCode = Utils.getStateCode(state, objMyApplication.getListStates());
+
+                                if (stateCode != null && !stateCode.equals("")) {
+                                    addressFormatted = addressFormatted + stateCode + ", ";
+                                }
                             }
 
                             if (dbaInfoResp.getData().getZipCode() != null && !dbaInfoResp.getData().getZipCode().equals("")) {

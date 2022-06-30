@@ -85,7 +85,7 @@ public class BindingLayoutActivity extends BaseActivity {
 
             objMyApplication = (MyApplication) getApplicationContext();
 
-            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT ) {
+            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                 txvVerifyName.setText("Add Personal Account");
                 txvVerifyDescription.setText(" Please follow the instructions below to create personal account.");
             }
@@ -267,7 +267,11 @@ public class BindingLayoutActivity extends BaseActivity {
                             Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                             objMyApplication.setLoginUserId(identityImageResponse.getData().getUserId());
                             objMyApplication.setStrEmail(identityImageResponse.getData().getEmail());
-                            objMyApplication.setAccountType(identityImageResponse.getData().getAccountType());
+                            if (identityImageResponse.getData().getAccountType() != 0) {
+                                objMyApplication.setAccountType(identityImageResponse.getData().getAccountType());
+                            } else {
+                                objMyApplication.setAccountType(Utils.PERSONAL_ACCOUNT);
+                            }
                             objMyApplication.setDbaOwnerId(identityImageResponse.getData().getDbaOwnerId());
                             objMyApplication.setIsReserveEnabled(identityImageResponse.getData().isReserveEnabled());
                             Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
@@ -316,10 +320,10 @@ public class BindingLayoutActivity extends BaseActivity {
     private void onLogoutSuccess() {
         objMyApplication.setStrRetrEmail("");
         dropAllTables();
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
         Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
     }
 }
