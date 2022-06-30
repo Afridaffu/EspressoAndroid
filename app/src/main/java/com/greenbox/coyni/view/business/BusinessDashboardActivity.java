@@ -122,12 +122,12 @@ public class BusinessDashboardActivity extends BaseActivity {
     public void onAccountTabSelected(View view) {
         int selectedTextColor = getColor(R.color.primary_green);
         int unSelectedTextColor = getColor(R.color.light_gray);
-        if(objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
+        if (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
                 objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())) {
             mTvAccount.setClickable(false);
             mTvAccount.setTextColor(isTabsEnabled ? selectedTextColor : unSelectedTextColor);
             mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_active : R.drawable.ic_account_disabled);
-        }else {
+        } else {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                 return;
             }
@@ -153,28 +153,28 @@ public class BusinessDashboardActivity extends BaseActivity {
     public void onTransactionsTabSelected(View view) {
         int selectedTextColor = getColor(R.color.primary_green);
         int disabledColor = getColor(R.color.light_gray);
-        if(objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
-                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())){
+        if (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
+                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())) {
             mIvTransactions.setClickable(false);
             mTvTransactions.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
             mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_active : R.drawable.ic_transactions_disabled);
-        }else{
-        if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-            return;
-        }
-        mLastClickTimeQA = SystemClock.elapsedRealtime();
-        if (!isTabsEnabled) {
-            UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(this);
-            reviewErrorMsgDialog.show();
         } else {
-            try {
-                if (selectedTab != Tabs.TRANSACTIONS) {
-                    startActivity(new Intent(BusinessDashboardActivity.this, MerchantTransactionListActivity.class));
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
             }
-        }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            if (!isTabsEnabled) {
+                UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(this);
+                reviewErrorMsgDialog.show();
+            } else {
+                try {
+                    if (selectedTab != Tabs.TRANSACTIONS) {
+                        startActivity(new Intent(BusinessDashboardActivity.this, MerchantTransactionListActivity.class));
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 
@@ -193,11 +193,11 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onQuickMenuTabSelected(View view) {
-        if(objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
-                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())){
+        if (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
+                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())) {
             mIvMenu.setClickable(false);
             mIvMenu.setImageResource(isTabsEnabled ? R.drawable.quick_action_btn : R.drawable.quick_action_btn_disabled);
-        }else {
+        } else {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                 return;
             }
@@ -247,11 +247,13 @@ public class BusinessDashboardActivity extends BaseActivity {
                             startActivity(new Intent(BusinessDashboardActivity.this, BusinessReceivePaymentActivity.class));
                         }
                     });
+                    llScan.setAlpha(0.5f);
+                    llScan.setEnabled(false);
                     llScan.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
-                            startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
+//                            dialog.dismiss();
+//                            startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
                         }
                     });
                 } catch (Exception ex) {
@@ -392,7 +394,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             String accountStatus = objMyApplication.getMyProfile().getData().getAccountStatus();
             if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 isTabsEnabled = true;
-            }else if(accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())){
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
                 isTabsEnabled = false;
             }
         }
@@ -476,8 +478,8 @@ public class BusinessDashboardActivity extends BaseActivity {
                     if (profile != null) {
                         objMyApplication.setMyProfile(profile);
                         if (profile.getData() != null) {
-                            if(objMyApplication.getAccountType()!=Utils.SHARED_ACCOUNT) {
-                            objMyApplication.setIsReserveEnabled(profile.getData().isReserveEnabled());
+                            if (objMyApplication.getAccountType() != Utils.SHARED_ACCOUNT) {
+                                objMyApplication.setIsReserveEnabled(profile.getData().isReserveEnabled());
                             }
                             objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                         }
@@ -574,7 +576,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             return;
         }
         String accountStatus = profile.getData().getAccountStatus();
-        if(isTabsEnabled && selectedTab == Tabs.ACCOUNT) {
+        if (isTabsEnabled && selectedTab == Tabs.ACCOUNT) {
             pushFragment(new BusinessAccountFragment());
         } else {
             if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
@@ -637,15 +639,25 @@ public class BusinessDashboardActivity extends BaseActivity {
                 mTvUserName.setText("Hi! " + Utils.capitalize(userName));
             }
             mIvUserIcon.setVisibility(View.VISIBLE);
-            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                    && objMyApplication.getMyProfile().getData().getImage() != null) {
-                mTvUserIconText.setVisibility(View.GONE);
-
-                String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-                utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
+            if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+                if (objMyApplication.getOwnerImage() != null && !objMyApplication.getOwnerImage().equals("")) {
+                    mTvUserIconText.setVisibility(View.GONE);
+                    String imageUrl = objMyApplication.getOwnerImage().trim();
+                    DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                    utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
+                } else {
+                    mIvUserIcon.setImageResource(R.drawable.acct_profile);
+                }
             } else {
-                mIvUserIcon.setImageResource(R.drawable.acct_profile);
+                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                        && objMyApplication.getMyProfile().getData().getImage() != null) {
+                    mTvUserIconText.setVisibility(View.GONE);
+                    String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
+                    DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                    utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
+                } else {
+                    mIvUserIcon.setImageResource(R.drawable.acct_profile);
+                }
             }
         }
 

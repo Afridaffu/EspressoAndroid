@@ -1722,7 +1722,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 dbaInfoRequest.setState(stateET.getText().toString().trim());
             if (zipcodeET.getText().toString().trim().length() >= 5)
                 dbaInfoRequest.setZipCode(zipcodeET.getText().toString().trim());
-            dbaInfoRequest.setCountry("us");
+            dbaInfoRequest.setCountry("United States");
 //            }
         } catch (Exception e) {
             e.printStackTrace();

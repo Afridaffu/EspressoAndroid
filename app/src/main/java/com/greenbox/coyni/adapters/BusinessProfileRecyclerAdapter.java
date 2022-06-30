@@ -138,7 +138,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         } else if (detailInfo.getAccountType().equals(Utils.BUSINESS)) {
             if (detailInfo.getDbaName() != null) {
                 if (detailInfo.getDbaName().length() > 20) {
-                    childItem.setText(Utils.capitalize(detailInfo.getDbaName().substring(0, 20) +"..."));
+                    childItem.setText(Utils.capitalize(detailInfo.getDbaName().substring(0, 20) + "..."));
                 } else {
                     childItem.setText(Utils.capitalize(detailInfo.getDbaName()));
                 }
@@ -192,7 +192,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_pending_bg));
                     statusTV.setTextColor(context.getColor(R.color.orange_status));
-                }else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+                } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_deactive_bg));
@@ -225,7 +225,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_pending_bg));
                     statusTV.setTextColor(context.getColor(R.color.orange_status));
-                }else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+                } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_deactive_bg));
@@ -238,10 +238,10 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         childView.setAlpha(1.0f);
         childView.setEnabled(true);
         if (detailInfo.getAccountType().equals(Utils.SHARED)) {
-            if(detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+            if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
                 childView.setAlpha(0.5f);
                 childView.setEnabled(false);
-            }else {
+            } else {
                 childView.setAlpha(1.0f);
                 childView.setEnabled(true);
                 childView.setOnClickListener(new View.OnClickListener() {
@@ -380,7 +380,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 status.setText(headerInfo.getAccountStatus());
                 status.setBackground(context.getDrawable(R.drawable.txn_pending_bg));
                 status.setTextColor(context.getColor(R.color.orange_status));
-            }else if (headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+            } else if (headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
                 status.setVisibility(View.VISIBLE);
                 status.setText(headerInfo.getAccountStatus());
                 status.setBackground(context.getDrawable(R.drawable.txn_deactive_bg));
@@ -398,17 +398,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 heading.setText("[Company Name]");
             }
 
-            if (headerInfo.getImage() != null) {
-                personalText.setVisibility(View.GONE);
-                profileImage.setVisibility(View.VISIBLE);
-
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
-                utility.addImage(headerInfo.getImage(), profileImage, R.drawable.ic_case);
-            } else {
-                personalText.setVisibility(View.GONE);
-                profileImage.setVisibility(View.VISIBLE);
-                profileImage.setImageResource(R.drawable.ic_case);
-            }
+            personalText.setVisibility(View.GONE);
+            profileImage.setVisibility(View.VISIBLE);
+            profileImage.setImageResource(R.drawable.ic_case);
 
         }
         groupView.setEnabled(true);

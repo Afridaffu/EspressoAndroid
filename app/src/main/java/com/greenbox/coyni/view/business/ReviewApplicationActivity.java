@@ -136,6 +136,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     Long mLastClickTimeQA = 0L;
     Long mLastClickTime = 0L;
     private String selectedAgreement = "";
+    private  String Cstate = "";
+    private  String Dstate = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -516,8 +518,16 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             if (cir.getCity() != null) {
                                 sbCompany.append(", ").append(cir.getCity());
                             }
-                            if (cir.getState() != null) {
-                                sbCompany.append(", ").append(cir.getState());
+//                            if (cir.getState() != null) {
+//                                sbCompany.append(", ").append(cir.getState());
+//                            }
+                            Cstate = cir.getState().toLowerCase();
+                            String stateCode = Utils.getStateCode(Cstate, objMyApplication.getListStates());
+                            if (stateCode != null && !stateCode.equals("")) {
+                                sbCompany.append(", ").append(stateCode);
+                            }
+                            if (cir.getCountry() != null) {
+                                sbCompany.append(", ").append(cir.getCountry());
                             }
                             if (cir.getZipCode() != null) {
                                 sbCompany.append(", ").append(cir.getZipCode());
@@ -660,8 +670,16 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             if (dbaInfo.getCity() != null && !dbaInfo.getCity().equals("")) {
                                 sb.append(", ").append(dbaInfo.getCity());
                             }
-                            if (dbaInfo.getState() != null && !dbaInfo.getState().equals("")) {
-                                sb.append(", ").append(dbaInfo.getState());
+//                            if (dbaInfo.getState() != null && !dbaInfo.getState().equals("")) {
+//                                sb.append(", ").append(dbaInfo.getState());
+//                            }
+                            Dstate = dbaInfo.getState().toLowerCase();
+                            String statecode = Utils.getStateCode(Dstate, objMyApplication.getListStates());
+                            if (statecode != null && !statecode.equals("")) {
+                                sb.append(", ").append(statecode);
+                            }
+                            if (dbaInfo.getCountry() != null && !dbaInfo.getCountry().equals("")) {
+                                sb.append(", ").append(dbaInfo.getCountry());
                             }
                             if (dbaInfo.getZipCode() != null && !dbaInfo.getZipCode().equals("")) {
                                 sb.append(", ").append(dbaInfo.getZipCode());

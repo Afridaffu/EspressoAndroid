@@ -680,6 +680,10 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 objMyApplication.setAccountType(login.getData().getAccountType());
                                 objMyApplication.setDbaOwnerId(login.getData().getDbaOwnerId());
                                 objMyApplication.setIsReserveEnabled(login.getData().isReserveEnabled());
+                                if (login.getData() != null) {
+                                    objMyApplication.setBusinessUserID(String.valueOf(login.getData().getBusinessUserId()));
+                                    objMyApplication.setOwnerImage(login.getData().getOwnerImage());
+                                }
                                 if (login.getData().getPasswordExpired()) {
                                     isExpiry = true;
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
@@ -842,7 +846,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             request.setDeviceId(Utils.getDeviceID());
             request.setEnableBiometic(true);
             request.setMobileToken(strToken);
-            loginViewModel.biometricLogin(request);
+            loginViewModel.biometricLogin(request,objMyApplication);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

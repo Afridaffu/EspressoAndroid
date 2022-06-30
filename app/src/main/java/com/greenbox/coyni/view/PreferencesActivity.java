@@ -94,9 +94,15 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
         }
     }
 
-    public void callTimeZonePreferenceApi(UserPreferenceModel model) {
+    public void callTimeZonePreferenceApi() {
+        UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
+        userPreferenceModel.setLocalCurrency(0);
+        userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
+        if (myApplicationObj.getAccountType() != Utils.SHARED_ACCOUNT)
+            userPreferenceModel.setPreferredAccount(myApplicationObj.getMyProfile().getData().getId());
+
         isTimeZone = true;
-        customerProfileViewModel.updatePreferences(model);
+        customerProfileViewModel.updatePreferences(userPreferenceModel, myApplicationObj);
     }
 
     public void initFields() {
@@ -194,7 +200,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                             userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
                             userPreferenceModel.setPreferredAccount(accountTypeId);
                             isTimeZone = false;
-                            customerProfileViewModel.updatePreferences(userPreferenceModel);
+                            customerProfileViewModel.updatePreferences(userPreferenceModel, myApplicationObj);
                             dialog.dismiss();
 
                         }
@@ -236,7 +242,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
 
             dialog = Utils.showProgressDialog(this);
 
-            dashboardViewModel.mePreferences();
+            dashboardViewModel.mePreferences(myApplicationObj);
 
             //  dashboardViewModel.getProfiles();
             // Business Preferences
@@ -296,7 +302,10 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                             myApplicationObj.setTempTimezoneID(5);
                             myApplicationObj.setStrPreference("AST");
                         }
-                        dashboardViewModel.getProfiles();
+                        if (myApplicationObj.getAccountType() != Utils.SHARED_ACCOUNT)
+                            dashboardViewModel.getProfiles();
+                        else
+                            dialog.dismiss();
                         if (preferences.getData().getPreferredAccount() != null && !preferences.getData().getPreferredAccount().trim().equals("")) {
                             accountTypeId = Integer.parseInt(preferences.getData().getPreferredAccount());
                             preferredId = accountTypeId;
@@ -310,77 +319,83 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
             }
         });
 
-        customerProfileViewModel.getUserPreferenceMutableLiveData().observe(this, new Observer<UserPreference>() {
-            @Override
-            public void onChanged(UserPreference userPreference) {
-                if (userPreference != null) {
-                    if (!userPreference.getStatus().toLowerCase().equals("success")) {
-                        Utils.displayAlert(userPreference.getError().getErrorDescription(), PreferencesActivity.this, "", userPreference.getError().getFieldErrors().get(0));
-                    } else {
-                        try {
-                            if (selectedName.equals(""))
-                                accountET.setText(Utils.capitalize(globalProfileResp.getData().get(0).getFullName()));
-                            else
-                                accountET.setText(selectedName);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        preferredId = accountTypeId;
-                        myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
-                        myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
-                        if (myApplicationObj.getTempTimezoneID() == 0) {
-                            myApplicationObj.setStrPreference("PST");
-                        } else if (myApplicationObj.getTempTimezoneID() == 1) {
-                            myApplicationObj.setStrPreference("America/Denver");
-                        } else if (myApplicationObj.getTempTimezoneID() == 2) {
-                            myApplicationObj.setStrPreference("CST");
-                        } else if (myApplicationObj.getTempTimezoneID() == 3) {
-                            myApplicationObj.setStrPreference("America/New_York");
-                        } else if (myApplicationObj.getTempTimezoneID() == 4) {
-                            myApplicationObj.setStrPreference("HST");
-                        } else if (myApplicationObj.getTempTimezoneID() == 5) {
-                            myApplicationObj.setStrPreference("AST");
-                        }
-                        timeZoneET.setText(myApplicationObj.getTimezone());
-                        Utils.showCustomToast(PreferencesActivity.this, isTimeZone ? getString(R.string.time_zone_changed) : getString(R.string.default_account_changed), R.drawable.ic_custom_tick, "authid");
+        customerProfileViewModel.getUserPreferenceMutableLiveData().
 
-                    }
-                }
-            }
-        });
-
-        dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
-            @Override
-            public void onChanged(ProfilesResponse profilesResponse) {
-                dialog.dismiss();
-                if (profilesResponse != null) {
-                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getFullName()));
-                    globalProfileResp = profilesResponse;
-                    if (profilesResponse.getStatus().equals("SUCCESS")) {
-                        filterList = profilesResponse.getData();
-                        for (ProfilesResponse.Profiles c : filterList) {
-                            if (c.getId() == accountTypeId) {
-                                if (c.getAccountType().equals(Utils.PERSONAL)) {
-                                    selectedName = c.getFullName();
-                                } else {
-                                    selectedName = c.getDbaName();
+                observe(this, new Observer<UserPreference>() {
+                    @Override
+                    public void onChanged(UserPreference userPreference) {
+                        if (userPreference != null) {
+                            if (!userPreference.getStatus().toLowerCase().equals("success")) {
+                                Utils.displayAlert(userPreference.getError().getErrorDescription(), PreferencesActivity.this, "", userPreference.getError().getFieldErrors().get(0));
+                            } else {
+                                try {
+                                    if (selectedName.equals(""))
+                                        accountET.setText(Utils.capitalize(globalProfileResp.getData().get(0).getFullName()));
+                                    else
+                                        accountET.setText(selectedName);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                                accountET.setText(selectedName);
+                                preferredId = accountTypeId;
+                                myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
+                                myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
+                                if (myApplicationObj.getTempTimezoneID() == 0) {
+                                    myApplicationObj.setStrPreference("PST");
+                                } else if (myApplicationObj.getTempTimezoneID() == 1) {
+                                    myApplicationObj.setStrPreference("America/Denver");
+                                } else if (myApplicationObj.getTempTimezoneID() == 2) {
+                                    myApplicationObj.setStrPreference("CST");
+                                } else if (myApplicationObj.getTempTimezoneID() == 3) {
+                                    myApplicationObj.setStrPreference("America/New_York");
+                                } else if (myApplicationObj.getTempTimezoneID() == 4) {
+                                    myApplicationObj.setStrPreference("HST");
+                                } else if (myApplicationObj.getTempTimezoneID() == 5) {
+                                    myApplicationObj.setStrPreference("AST");
+                                }
+                                timeZoneET.setText(myApplicationObj.getTimezone());
+                                Utils.showCustomToast(PreferencesActivity.this, isTimeZone ? getString(R.string.time_zone_changed) : getString(R.string.default_account_changed), R.drawable.ic_custom_tick, "authid");
+
                             }
                         }
                     }
-                }
-            }
-        });
+                });
 
-        dashboardViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
-            @Override
-            public void onChanged(APIError apiError) {
-                if (apiError == null) {
-                    dialog.dismiss();
-                }
-            }
-        });
+        dashboardViewModel.getProfileRespMutableLiveData().
+
+                observe(this, new Observer<ProfilesResponse>() {
+                    @Override
+                    public void onChanged(ProfilesResponse profilesResponse) {
+                        dialog.dismiss();
+                        if (profilesResponse != null) {
+                            accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getFullName()));
+                            globalProfileResp = profilesResponse;
+                            if (profilesResponse.getStatus().equals("SUCCESS")) {
+                                filterList = profilesResponse.getData();
+                                for (ProfilesResponse.Profiles c : filterList) {
+                                    if (c.getId() == accountTypeId) {
+                                        if (c.getAccountType().equals(Utils.PERSONAL)) {
+                                            selectedName = c.getFullName();
+                                        } else {
+                                            selectedName = c.getDbaName();
+                                        }
+                                        accountET.setText(selectedName);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+        dashboardViewModel.getApiErrorMutableLiveData().
+
+                observe(this, new Observer<APIError>() {
+                    @Override
+                    public void onChanged(APIError apiError) {
+                        if (apiError == null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
     }
 
     private void setProfilesAdapter() {

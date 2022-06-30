@@ -1009,7 +1009,7 @@ public class DashboardActivity extends BaseActivity {
         if (Utils.checkInternet(DashboardActivity.this)) {
 //            progressDialog = Utils.showProgressDialog(this);
             dashboardViewModel.meProfile();
-            dashboardViewModel.mePreferences();
+            dashboardViewModel.mePreferences(objMyApplication);
             transactionsNSV.smoothScrollTo(0, 0);
         } else {
             Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "", "");

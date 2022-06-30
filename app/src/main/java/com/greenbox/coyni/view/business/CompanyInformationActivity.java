@@ -1680,7 +1680,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 companyInfoRequest.setState(stateET.getText().toString().trim());
             if (zipcodeET.getText().toString().trim().length() >= 5)
                 companyInfoRequest.setZipCode(zipcodeET.getText().toString().trim());
-            companyInfoRequest.setCountry("us");
+            companyInfoRequest.setCountry("United States");
 //            }
         } catch (Exception e) {
             e.printStackTrace();

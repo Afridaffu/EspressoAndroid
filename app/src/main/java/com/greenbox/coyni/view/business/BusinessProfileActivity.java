@@ -887,15 +887,27 @@ public class BusinessProfileActivity extends BaseActivity {
                     userFullname.setText(Utils.capitalize(userName));
                 }
                 profileImage.setVisibility(View.VISIBLE);
-                if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-                        && myApplication.getMyProfile().getData().getImage() != null) {
-                    profileText.setVisibility(View.GONE);
-                    String imageUrl = myApplication.getMyProfile().getData().getImage().trim();
-                    DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-                    utility.addImage(imageUrl, profileImage, R.drawable.acct_profile);
+                if (myApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+                    if (myApplication.getOwnerImage() != null && !myApplication.getOwnerImage().equals("")) {
+                        profileText.setVisibility(View.GONE);
+                        String imageUrl = myApplication.getOwnerImage().trim();
+                        DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                        utility.addImage(imageUrl, profileImage, R.drawable.acct_profile);
+                    } else {
+                        profileImage.setImageResource(R.drawable.acct_profile);
+                    }
                 } else {
-                    profileImage.setImageResource(R.drawable.acct_profile);
+                    if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                            && myApplication.getMyProfile().getData().getImage() != null) {
+                        profileText.setVisibility(View.GONE);
+                        String imageUrl = myApplication.getMyProfile().getData().getImage().trim();
+                        DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                        utility.addImage(imageUrl, profileImage, R.drawable.acct_profile);
+                    } else {
+                        profileImage.setImageResource(R.drawable.acct_profile);
+                    }
                 }
+
             }
 
 

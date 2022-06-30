@@ -75,12 +75,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (dialog != null && dialog.isShowing()) {
             return;
         }
-//        dialog = new ProgressDialog(BaseActivity.this, R.style.MyAlertDialogStyle);
-//        dialog.setIndeterminate(false);
-//        dialog.setMessage(message);
-//        dialog.setCanceledOnTouchOutside(isCanceledOnTouchOutside);
-//        dialog.show();
-
 
         dialog = new Dialog(baseActivity);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -114,20 +108,36 @@ public abstract class BaseActivity extends AppCompatActivity {
             CheckOutModel checkOutModel = myApplication.getCheckOutModel();
             if (checkOutModel.isCheckOutFlag() ) {
                 dismissDialog();
+
                 if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                         && myApplication.getMyProfile().getData().getAccountStatus() != null) {
-                    if (myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                    if(myApplication.getMyProfile().getData().getAccountType() == Utils.PERSONAL_ACCOUNT
+                            && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                         launchCheckoutFlow(checkOutModel);
+                    } else if(myApplication.getMyProfile().getData().getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                        myApplication.setCheckOutModel(new CheckOutModel());
+                        Utils.displayAlertNew(getString(R.string.merchant_shared_message), BaseActivity.this, "coyni");
                     } else {
                         myApplication.setCheckOutModel(new CheckOutModel());
                         Utils.displayAlertNew(getString(R.string.please_use_active_account), BaseActivity.this, "coyni");
                     }
-                } else if (myApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                    launchCheckoutFlow(checkOutModel);
-                } else {
-                    myApplication.setCheckOutModel(new CheckOutModel());
-                    Utils.displayAlertNew(getString(R.string.please_use_active_account), BaseActivity.this, "coyni");
                 }
+
+
+//                if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+//                        && myApplication.getMyProfile().getData().getAccountStatus() != null) {
+//                    if (myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+//                        launchCheckoutFlow(checkOutModel);
+//                    } else {
+//                        myApplication.setCheckOutModel(new CheckOutModel());
+//                        Utils.displayAlertNew(getString(R.string.please_use_active_account), BaseActivity.this, "coyni");
+//                    }
+//                } else if (myApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+//                    launchCheckoutFlow(checkOutModel);
+//                } else {
+//                    myApplication.setCheckOutModel(new CheckOutModel());
+//                    Utils.displayAlertNew(getString(R.string.please_use_active_account), BaseActivity.this, "coyni");
+//                }
             }
         }
     }

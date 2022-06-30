@@ -1,5 +1,7 @@
 package com.greenbox.coyni.view;
 
+import static com.greenbox.coyni.view.business.CompanyInfoDetails.myApplication;
+
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -95,7 +97,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     private DatabaseHandler dbHandler;
     private ExpandableListView profilesListView;
     private Long mLastClickTime = 0L;
-
+    public String state = "";
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
@@ -147,7 +149,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             initFields();
             initObservers();
             showProgressDialog();
-            dashboardViewModel.mePreferences();
+            dashboardViewModel.mePreferences(myApplicationObj);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -395,10 +397,17 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
                         addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
                     }
-                    if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-                        addressFormatted = addressFormatted + profile.getData().getState() + ", ";
+//                    if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+//                        addressFormatted = addressFormatted + profile.getData().getState() + ", ";
+//                    }
+                    state = profile.getData().getState().toLowerCase();
+                    String stateCode = Utils.getStateCode(state, myApplicationObj.getListStates());
+                    if (stateCode != null && !stateCode.equals("")) {
+                        addressFormatted = addressFormatted + stateCode + ", " ;
                     }
-
+                    if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
+                        addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
+                    }
                     if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
                         addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
                     }
@@ -487,7 +496,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                             userPreferenceModel.setLocalCurrency(0);
                             userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
                             userPreferenceModel.setPreferredAccount(accountTypeId);
-                            customerProfileViewModel.updatePreferences(userPreferenceModel);
+                            customerProfileViewModel.updatePreferences(userPreferenceModel, myApplicationObj);
                             dialog.dismiss();
 
                         }
@@ -729,8 +738,15 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                             if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
                                 addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
                             }
-                            if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-                                addressFormatted = addressFormatted + profile.getData().getState() + ", ";
+//                            if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+//                                addressFormatted = addressFormatted + profile.getData().getState() + ", ";
+//                            }
+                            String stateCode = Utils.getStateCode(state, myApplicationObj.getListStates());
+                            if (stateCode != null && !stateCode.equals("")) {
+                                addressFormatted = addressFormatted + stateCode + ", " ;
+                            }
+                            if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
+                                addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
                             }
 
                             if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
@@ -806,7 +822,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     globalProfileResp = profilesResponse;
                     for (ProfilesResponse.Profiles c : filterList) {
                         if (c.getId() == accountTypeId) {
-                            if(c.getAccountType().equals(Utils.PERSONAL)) {
+                            if (c.getAccountType().equals(Utils.PERSONAL)) {
                                 selectedName = c.getFullName();
                             } else {
                                 selectedName = c.getDbaName();
@@ -976,7 +992,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 //            MultipartBody.Part body = MultipartBody.Part.createFormData("image", userId + "_profile" + extention, requestFile);
             dialog = Utils.showProgressDialog(UserDetailsActivity.this);
-            dashboardViewModel.updateProfile(body);
+            dashboardViewModel.updateProfile(body, myApplicationObj);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
