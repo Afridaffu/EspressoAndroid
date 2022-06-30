@@ -521,10 +521,12 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //                            if (cir.getState() != null) {
 //                                sbCompany.append(", ").append(cir.getState());
 //                            }
-                            Cstate = cir.getState().toLowerCase();
-                            String stateCode = Utils.getStateCode(Cstate, objMyApplication.getListStates());
-                            if (stateCode != null && !stateCode.equals("")) {
-                                sbCompany.append(", ").append(stateCode);
+                            if (cir.getState() != null && !cir.getState().equals("")) {
+                                Cstate = cir.getState().toLowerCase();
+                                String stateCode = Utils.getStateCode(Cstate, objMyApplication.getListStates());
+                                if (stateCode != null && !stateCode.equals("")) {
+                                    sbCompany.append(", ").append(stateCode);
+                                }
                             }
                             if (cir.getCountry() != null) {
                                 sbCompany.append(", ").append(cir.getCountry());
@@ -673,10 +675,12 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //                            if (dbaInfo.getState() != null && !dbaInfo.getState().equals("")) {
 //                                sb.append(", ").append(dbaInfo.getState());
 //                            }
-                            Dstate = dbaInfo.getState().toLowerCase();
-                            String statecode = Utils.getStateCode(Dstate, objMyApplication.getListStates());
-                            if (statecode != null && !statecode.equals("")) {
-                                sb.append(", ").append(statecode);
+                            if (dbaInfo.getState() != null && !dbaInfo.getState().equals("")) {
+                                Dstate = dbaInfo.getState().toLowerCase();
+                                String statecode = Utils.getStateCode(Dstate, objMyApplication.getListStates());
+                                if (statecode != null && !statecode.equals("")) {
+                                    sb.append(", ").append(statecode);
+                                }
                             }
                             if (dbaInfo.getCountry() != null && !dbaInfo.getCountry().equals("")) {
                                 sb.append(", ").append(dbaInfo.getCountry());

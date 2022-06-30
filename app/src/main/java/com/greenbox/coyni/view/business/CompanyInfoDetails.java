@@ -14,14 +14,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
-import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessUserDetailsPreviewActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
-
-import java.util.List;
 
 public class CompanyInfoDetails extends BaseActivity {
     private LinearLayout closeLL, emailLL, phoneLL;
@@ -29,7 +26,7 @@ public class CompanyInfoDetails extends BaseActivity {
     private String companyEmail = "", companyPhone = "", companyCountryCode = "";
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private int companyId = 0;
-   public static MyApplication myApplication;
+    public static MyApplication myApplication;
     private final String strName = "";
     private static String state = "";
     private ImageView emailIconIV, phoneIconIV;
@@ -169,11 +166,13 @@ public class CompanyInfoDetails extends BaseActivity {
 //                                if (cir.getState() != null && !cir.getState().equals("")) {
 //                                    mAddressTx.append(", " + cir.getState());
 //                                }
-                              state = cir.getState().toLowerCase();
-                                String stateCode = Utils.getStateCode(state, myApplication.getListStates());
+                                if (cir.getState() != null && !cir.getState().equals("")) {
+                                    state = cir.getState().toLowerCase();
+                                    String stateCode = Utils.getStateCode(state, myApplication.getListStates());
 
-                                if (stateCode != null && !stateCode.equals("")) {
-                                    mAddressTx.append(", " + stateCode);
+                                    if (stateCode != null && !stateCode.equals("")) {
+                                        mAddressTx.append(", " + stateCode);
+                                    }
                                 }
 
                                 if (cir.getCountry() != null && !cir.getCountry().equals("")) {

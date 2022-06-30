@@ -400,10 +400,12 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 //                    if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
 //                        addressFormatted = addressFormatted + profile.getData().getState() + ", ";
 //                    }
-                    state = profile.getData().getState().toLowerCase();
-                    String stateCode = Utils.getStateCode(state, myApplicationObj.getListStates());
-                    if (stateCode != null && !stateCode.equals("")) {
-                        addressFormatted = addressFormatted + stateCode + ", " ;
+                    if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+                        state = profile.getData().getState().toLowerCase();
+                        String stateCode = Utils.getStateCode(state, myApplicationObj.getListStates());
+                        if (stateCode != null && !stateCode.equals("")) {
+                            addressFormatted = addressFormatted + stateCode + ", ";
+                        }
                     }
                     if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
                         addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
@@ -528,7 +530,8 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
         if (height < 10)
             height = 200;
-        params.height = height;
+//        params.height = height;
+        params.height = (int) (height * 0.55);
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
@@ -566,7 +569,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
-
 
     private void setProfilesAdapter() {
 
@@ -738,12 +740,11 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                             if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
                                 addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
                             }
-//                            if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-//                                addressFormatted = addressFormatted + profile.getData().getState() + ", ";
-//                            }
-                            String stateCode = Utils.getStateCode(state, myApplicationObj.getListStates());
-                            if (stateCode != null && !stateCode.equals("")) {
-                                addressFormatted = addressFormatted + stateCode + ", " ;
+                            if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+                                String stateCode = Utils.getStateCode(profile.getData().getState().toLowerCase(), myApplicationObj.getListStates());
+                                if (stateCode != null && !stateCode.equals("")) {
+                                    addressFormatted = addressFormatted + stateCode + ", ";
+                                }
                             }
                             if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
                                 addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";

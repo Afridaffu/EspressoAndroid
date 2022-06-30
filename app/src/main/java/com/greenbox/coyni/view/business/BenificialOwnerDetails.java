@@ -80,11 +80,12 @@ public class BenificialOwnerDetails extends BaseActivity {
 //        if (beneficialOwner.getState() != null && !beneficialOwner.getState().equals("")) {
 //            mMailingAddress.append(", " + beneficialOwner.getState());
 //        }
-        state = beneficialOwner.getState().toLowerCase();
-        String stateCode = Utils.getStateCode(state, myApplication.getListStates());
-        if (stateCode != null && !stateCode.equals("")) {
-            mMailingAddress.append(", " + stateCode);
-
+        if (beneficialOwner.getState() != null && !beneficialOwner.getState().equals("")) {
+            state = beneficialOwner.getState().toLowerCase();
+            String stateCode = Utils.getStateCode(state, myApplication.getListStates());
+            if (stateCode != null && !stateCode.equals("")) {
+                mMailingAddress.append(", " + stateCode);
+            }
         }
         if (beneficialOwner.getCountry() != null && !beneficialOwner.getCountry().equals("")) {
             mMailingAddress.append(", " + beneficialOwner.getCountry());
