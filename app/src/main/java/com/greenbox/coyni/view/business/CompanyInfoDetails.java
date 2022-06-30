@@ -26,7 +26,7 @@ public class CompanyInfoDetails extends BaseActivity {
     private String companyEmail = "", companyPhone = "", companyCountryCode = "";
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private int companyId = 0;
-    public static MyApplication myApplication;
+    private MyApplication myApplication;
     private final String strName = "";
     private static String state = "";
     private ImageView emailIconIV, phoneIconIV;

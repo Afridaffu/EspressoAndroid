@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -78,6 +79,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private LinearLayout closeButton;
     private String actionTypeYes = "YES";
     private String actionTypeNo = "No";
+    private Long mLastClickTime = 0L;
     private double transactionLimit = 0.0, minimumLimit = 0.0, userAmount = 0.0;
     private float fontSize, dollarFont;
     private static Dialog displayAlertDialog = null;
@@ -456,6 +458,10 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
         getAlertDialog();
     }
 

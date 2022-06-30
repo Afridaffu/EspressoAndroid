@@ -42,9 +42,11 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.dialogs.AddCommentsDialog;
 import com.greenbox.coyni.dialogs.ApplicationApprovedDialog;
+import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ShowFullPageImageDialog;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
+import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredSubmitResponse;
 import com.greenbox.coyni.model.underwriting.InformationChangeData;
@@ -634,7 +636,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         CardView cardAccept = reserveRule.findViewById(R.id.cardAccept);
         TextView tvcardDeclined = reserveRule.findViewById(R.id.cardDeclined);
 
-        if (actionRequiredResponse.getData().getReserveRule().getReserveReason() != null && actionRequiredResponse.getData().getReserveRule().getReserveReason().equals("")) {
+        if (actionRequiredResponse.getData().getReserveRule().getReserveReason() != null
+                && !actionRequiredResponse.getData().getReserveRule().getReserveReason().equals("")) {
             note.setText(actionRequiredResponse.getData().getReserveRule().getReserveReason());
         } else {
             note.setText(R.string.thank_you_for_your_interest_in_coyni_after_ncarefully_reviewing_the_coyni_team_made_ndecision_to_approve_your_application_with);
@@ -689,7 +692,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 reservedRuleAccepted = false;
-                postSubmitAPiCall();
+                //postSubmitAPiCall();
+                showDeclineDialog();
             }
         });
 
@@ -896,6 +900,23 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             e.printStackTrace();
 
         }
+    }
+
+    private void showDeclineDialog() {
+        DialogAttributes attributes = new DialogAttributes(getString(R.string.decline_reserve_rules),
+                getString(R.string.decline_reserve_rules_message), getString(R.string.yes),
+                getString(R.string.no_go_back));
+        CustomConfirmationDialog dialog = new CustomConfirmationDialog(BusinessAdditionalActionRequiredActivity.this, attributes);
+        dialog.setOnDialogClickListener(new OnDialogClickListener() {
+            @Override
+            public void onDialogClicked(String action, Object value) {
+                if (action.equalsIgnoreCase(getString(R.string.yes))) {
+                    postSubmitAPiCall();
+                }
+            }
+        });
+
+        dialog.show();
 
     }
 
