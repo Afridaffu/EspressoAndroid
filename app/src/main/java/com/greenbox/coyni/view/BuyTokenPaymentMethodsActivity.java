@@ -350,10 +350,9 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
 //                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
 //                    paymentMethodsResponse = payMethodsResponse;
                     PaymentMethodsResponse objResponse;
-                    if (strScreen.equalsIgnoreCase(CheckOutConstants.ScreenCheckOut)){
+                    if (strScreen.equalsIgnoreCase(CheckOutConstants.ScreenCheckOut)) {
                         objResponse = objMyApplication.filterCheckPaymentMethods(payMethodsResponse);
-                    }
-                    else {
+                    } else {
                         objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
                     }
                     objMyApplication.setPaymentMethodsResponse(objResponse);
@@ -603,57 +602,57 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 tvDCardError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + " cards");
                 tvCCardError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxCreditCardsAllowed() + " cards");
             }
-            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-                if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                    tvBankError.setVisibility(View.VISIBLE);
-                    tvExtBHead.setTextColor(getColor(R.color.light_gray));
-                    tvExtBankHead.setTextColor(getColor(R.color.light_gray));
-                    tvExtBankMsg.setTextColor(getColor(R.color.light_gray));
-                    imgBankArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgBankIcon.setImageResource(R.drawable.ic_bank_account_inactive);
-                } else {
-                    tvBankError.setVisibility(View.GONE);
-                    tvExtBHead.setTextColor(getColor(R.color.primary_black));
-                    tvExtBankHead.setTextColor(getColor(R.color.dark_grey));
-                    tvExtBankMsg.setTextColor(getColor(R.color.dark_grey));
+//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+            if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
+                tvBankError.setVisibility(View.VISIBLE);
+                tvExtBHead.setTextColor(getColor(R.color.light_gray));
+                tvExtBankHead.setTextColor(getColor(R.color.light_gray));
+                tvExtBankMsg.setTextColor(getColor(R.color.light_gray));
+                imgBankArrow.setColorFilter(getColor(R.color.light_gray));
+                imgBankIcon.setImageResource(R.drawable.ic_bank_account_inactive);
+            } else {
+                tvBankError.setVisibility(View.GONE);
+                tvExtBHead.setTextColor(getColor(R.color.primary_black));
+                tvExtBankHead.setTextColor(getColor(R.color.dark_grey));
+                tvExtBankMsg.setTextColor(getColor(R.color.dark_grey));
 //                    imgBankArrow.clearColorFilter();
-                    imgBankArrow.setColorFilter(getColor(R.color.primary_black));
-                    imgBankIcon.setImageResource(R.drawable.ic_bank_account_active);
-                }
-                if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
-                    tvDCardError.setVisibility(View.VISIBLE);
-                    tvDCHead.setTextColor(getColor(R.color.light_gray));
-                    tvDCardHead.setTextColor(getColor(R.color.light_gray));
-                    tvDCardMsg.setTextColor(getColor(R.color.light_gray));
-                    imgDCardArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
-                } else {
-                    tvDCardError.setVisibility(View.GONE);
-                    tvDCHead.setTextColor(getColor(R.color.primary_black));
-                    tvDCardHead.setTextColor(getColor(R.color.dark_grey));
-                    tvDCardMsg.setTextColor(getColor(R.color.dark_grey));
-//                    imgDCardArrow.clearColorFilter();
-                    imgDCardArrow.setColorFilter(getColor(R.color.primary_black));
-                    imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
-                }
-                if (paymentMethodsResponse.getData().getCreditCardCount() >= paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
-                    tvCCardError.setVisibility(View.VISIBLE);
-                    tvCCHead.setTextColor(getColor(R.color.light_gray));
-                    tvCCardHead.setTextColor(getColor(R.color.light_gray));
-                    tvCCardMsg.setTextColor(getColor(R.color.light_gray));
-                    imgCCardArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgCCardLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
-                } else {
-                    tvCCardError.setVisibility(View.GONE);
-                    tvCCHead.setTextColor(getColor(R.color.primary_black));
-                    tvCCardHead.setTextColor(getColor(R.color.dark_grey));
-                    tvCCardMsg.setTextColor(getColor(R.color.dark_grey));
-//                    imgCCardArrow.clearColorFilter();
-                    imgCCardArrow.setColorFilter(getColor(R.color.primary_black));
-                    imgCCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
-
-                }
+                imgBankArrow.setColorFilter(getColor(R.color.primary_black));
+                imgBankIcon.setImageResource(R.drawable.ic_bank_account_active);
             }
+            if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                tvDCardError.setVisibility(View.VISIBLE);
+                tvDCHead.setTextColor(getColor(R.color.light_gray));
+                tvDCardHead.setTextColor(getColor(R.color.light_gray));
+                tvDCardMsg.setTextColor(getColor(R.color.light_gray));
+                imgDCardArrow.setColorFilter(getColor(R.color.light_gray));
+                imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
+            } else {
+                tvDCardError.setVisibility(View.GONE);
+                tvDCHead.setTextColor(getColor(R.color.primary_black));
+                tvDCardHead.setTextColor(getColor(R.color.dark_grey));
+                tvDCardMsg.setTextColor(getColor(R.color.dark_grey));
+//                    imgDCardArrow.clearColorFilter();
+                imgDCardArrow.setColorFilter(getColor(R.color.primary_black));
+                imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
+            }
+            if (paymentMethodsResponse.getData().getCreditCardCount() >= paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
+                tvCCardError.setVisibility(View.VISIBLE);
+                tvCCHead.setTextColor(getColor(R.color.light_gray));
+                tvCCardHead.setTextColor(getColor(R.color.light_gray));
+                tvCCardMsg.setTextColor(getColor(R.color.light_gray));
+                imgCCardArrow.setColorFilter(getColor(R.color.light_gray));
+                imgCCardLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
+            } else {
+                tvCCardError.setVisibility(View.GONE);
+                tvCCHead.setTextColor(getColor(R.color.primary_black));
+                tvCCardHead.setTextColor(getColor(R.color.dark_grey));
+                tvCCardMsg.setTextColor(getColor(R.color.dark_grey));
+//                    imgCCardArrow.clearColorFilter();
+                imgCCardArrow.setColorFilter(getColor(R.color.primary_black));
+                imgCCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
+
+            }
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

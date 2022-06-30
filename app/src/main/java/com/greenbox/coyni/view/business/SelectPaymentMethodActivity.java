@@ -586,58 +586,58 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 tvDCardError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + " cards");
                 tvSignetError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxSignetAccountsAllowed() + " accounts");
             }
-            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-                if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                    tvBankError.setVisibility(View.VISIBLE);
-                    tvExtBHead.setTextColor(getColor(R.color.light_gray));
-                    tvExtBankHead.setTextColor(getColor(R.color.light_gray));
-                    tvExtBankMsg.setTextColor(getColor(R.color.light_gray));
-                    imgBankArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgBankIcon.setImageResource(R.drawable.ic_bank_account_inactive);
-                } else {
-                    tvBankError.setVisibility(View.GONE);
-                    tvExtBHead.setTextColor(getColor(R.color.primary_black));
-                    tvExtBankHead.setTextColor(getColor(R.color.dark_grey));
-                    tvExtBankMsg.setTextColor(getColor(R.color.dark_grey));
+//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+            if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
+                tvBankError.setVisibility(View.VISIBLE);
+                tvExtBHead.setTextColor(getColor(R.color.light_gray));
+                tvExtBankHead.setTextColor(getColor(R.color.light_gray));
+                tvExtBankMsg.setTextColor(getColor(R.color.light_gray));
+                imgBankArrow.setColorFilter(getColor(R.color.light_gray));
+                imgBankIcon.setImageResource(R.drawable.ic_bank_account_inactive);
+            } else {
+                tvBankError.setVisibility(View.GONE);
+                tvExtBHead.setTextColor(getColor(R.color.primary_black));
+                tvExtBankHead.setTextColor(getColor(R.color.dark_grey));
+                tvExtBankMsg.setTextColor(getColor(R.color.dark_grey));
 //                    imgBankArrow.clearColorFilter();
-                    imgBankArrow.setColorFilter(getColor(R.color.primary_black));
-                    imgBankIcon.setImageResource(R.drawable.ic_bank_account_active);
-                }
-                if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
-                    tvDCardError.setVisibility(View.VISIBLE);
-                    tvDCHead.setTextColor(getColor(R.color.light_gray));
-                    tvDCardHead.setTextColor(getColor(R.color.light_gray));
-                    tvDCardMsg.setTextColor(getColor(R.color.light_gray));
-                    imgDCardArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
-                } else {
-                    tvDCardError.setVisibility(View.GONE);
-                    tvDCHead.setTextColor(getColor(R.color.primary_black));
-                    tvDCardHead.setTextColor(getColor(R.color.dark_grey));
-                    tvDCardMsg.setTextColor(getColor(R.color.dark_grey));
+                imgBankArrow.setColorFilter(getColor(R.color.primary_black));
+                imgBankIcon.setImageResource(R.drawable.ic_bank_account_active);
+            }
+            if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                tvDCardError.setVisibility(View.VISIBLE);
+                tvDCHead.setTextColor(getColor(R.color.light_gray));
+                tvDCardHead.setTextColor(getColor(R.color.light_gray));
+                tvDCardMsg.setTextColor(getColor(R.color.light_gray));
+                imgDCardArrow.setColorFilter(getColor(R.color.light_gray));
+                imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
+            } else {
+                tvDCardError.setVisibility(View.GONE);
+                tvDCHead.setTextColor(getColor(R.color.primary_black));
+                tvDCardHead.setTextColor(getColor(R.color.dark_grey));
+                tvDCardMsg.setTextColor(getColor(R.color.dark_grey));
 //                    imgDCardArrow.clearColorFilter();
-                    imgDCardArrow.setColorFilter(getColor(R.color.primary_black));
-                    imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
-                }
-                if (paymentMethodsResponse.getData().getSignetCount() >= paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                    tvSignetError.setVisibility(View.VISIBLE);
-                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
-                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
-                    tvSignetMsg.setTextColor(getColor(R.color.light_gray));
-                    imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
-                } else {
-                    tvSignetError.setVisibility(View.GONE);
+                imgDCardArrow.setColorFilter(getColor(R.color.primary_black));
+                imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
+            }
+            if (paymentMethodsResponse.getData().getSignetCount() >= paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                tvSignetError.setVisibility(View.VISIBLE);
+                tvSignetHead.setTextColor(getColor(R.color.light_gray));
+                tvSignetCount.setTextColor(getColor(R.color.light_gray));
+                tvSignetMsg.setTextColor(getColor(R.color.light_gray));
+                imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
+                imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
+            } else {
+                tvSignetError.setVisibility(View.GONE);
 //                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
 //                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
-                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
-                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
-                    tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
-                    imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
+                tvSignetHead.setTextColor(getColor(R.color.light_gray));
+                tvSignetCount.setTextColor(getColor(R.color.light_gray));
+                tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
+                imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
 //                    imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
-                    imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
-                }
+                imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
             }
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
