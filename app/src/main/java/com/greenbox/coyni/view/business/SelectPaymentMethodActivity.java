@@ -287,7 +287,8 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             @Override
             public void onChanged(APIError apiError) {
                 try {
-                    dialog.dismiss();
+//                    dialog.dismiss();
+                    dismissDialog();
                     if (apiError != null) {
                         if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
                             objMyApplication.setResolveUrl(true);
