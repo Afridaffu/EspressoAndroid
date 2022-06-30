@@ -296,10 +296,12 @@ public class BusinessUserDetailsPreviewActivity extends BaseActivity implements 
 //                if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
 //                    addressFormatted = addressFormatted + profile.getData().getState() + ", ";
 //                }
-                state = profile.getData().getState().toLowerCase();
-                String stateCode = Utils.getStateCode(state, myApplicationObj.getListStates());
-                if (stateCode != null && !stateCode.equals("")) {
-                    addressFormatted = addressFormatted + stateCode + ", " ;
+                if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+                    state = profile.getData().getState().toLowerCase();
+                    String stateCode = Utils.getStateCode(state, myApplicationObj.getListStates());
+                    if (stateCode != null && !stateCode.equals("")) {
+                        addressFormatted = addressFormatted + stateCode + ", ";
+                    }
                 }
                 if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
                     addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
