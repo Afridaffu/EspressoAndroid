@@ -162,121 +162,6 @@ public class DBAInfoDetails extends BaseActivity {
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private void initData() {
-        try {
-            DBAInfoResp dbaInfoResp = objMyApplication.getDbaInfoResp();
-            if (dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-                String name =  dbaInfoResp.getData().getName();
-                if (name != null && name.length() > 20) {
-                    nameTV.setText(Utils.capitalize(name).substring(0, 20) + "...");
-                } else {
-                    nameTV.setText(Utils.capitalize(name));
-                }
-                nameTV.setOnClickListener(view -> {
-
-                    try {
-                        if (nameTV.getText().toString().contains("...") && dbaInfoResp.getData().getName().length() >= 21) {
-
-                            nameTV.setText(objMyApplication.getDbaInfoResp().getData().getName());
-
-                        } else if (name.length() >= 21) {
-                            nameTV.setText(Utils.capitalize(name).substring(0, 20) + "...");
-                        } else {
-                            nameTV.setText(Utils.capitalize(name));
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-                if (dbaInfoResp.getData().getEmail() != null) {
-                    emailTV.setText(dbaInfoResp.getData().getEmail());
-                    try {
-                        emailID = dbaInfoResp.getData().getEmail();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    emailTV.setText("");
-                }
-                if (dbaInfoResp.getData().getWebsite() != null && !dbaInfoResp.getData().getWebsite().equals("")) {
-                    webLL.setVisibility(View.VISIBLE);
-                    webSiteTV.setText("https://" + dbaInfoResp.getData().getWebsite());
-                } else {
-                    webLL.setVisibility(View.GONE);
-                    webSiteTV.setText("");
-                }
-                if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null && !dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().equals("") && dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().length() >= 10) {
-                    String pnhNum = dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber();
-                    String phone_number = "(" + pnhNum.substring(0, 3) + ") " + pnhNum.substring(3, 6) + "-" + pnhNum.substring(6, 10);
-                    phoneNumberTV.setText(phone_number);
-                    phone_Number = phone_number;
-                } else {
-                    phoneNumberTV.setText("");
-                }
-
-                String addressFormatted = "";
-                if (dbaInfoResp.getData().getAddressLine1() != null && !dbaInfoResp.getData().getAddressLine1().equals("")) {
-                    addressFormatted = addressFormatted + dbaInfoResp.getData().getAddressLine1() + ", ";
-                }
-                if (dbaInfoResp.getData().getAddressLine2() != null && !dbaInfoResp.getData().getAddressLine2().equals("")) {
-                    addressFormatted = addressFormatted + dbaInfoResp.getData().getAddressLine2() + ", ";
-                }
-                if (dbaInfoResp.getData().getCity() != null && !dbaInfoResp.getData().getCity().equals("")) {
-                    addressFormatted = addressFormatted + dbaInfoResp.getData().getCity() + ", ";
-                }
-//                if (dbaInfoResp.getData().getState() != null && !dbaInfoResp.getData().getState().equals("")) {
-//                    addressFormatted = addressFormatted + dbaInfoResp.getData().getState() + ", ";
-//                }
-
-                if (dbaInfoResp.getData().getState() != null && !dbaInfoResp.getData().getState().equals("")) {
-                    String state = dbaInfoResp.getData().getState().toLowerCase();
-                    String stateCode = Utils.getStateCode(state, objMyApplication.getListStates());
-
-                    if (stateCode != null && !stateCode.equals("")) {
-                        addressFormatted = addressFormatted + stateCode + ", ";
-                    }
-                }
-
-                if (dbaInfoResp.getData().getZipCode() != null && !dbaInfoResp.getData().getZipCode().equals("")) {
-                    addressFormatted = addressFormatted + dbaInfoResp.getData().getZipCode() + ", ";
-                }
-
-                if (addressFormatted.equals("")) {
-                    addressFormatted = addressFormatted + "United States";
-                    addressTV.setText(addressFormatted);
-                    //                        business_userAddreTV.setText(addressFormatted);
-                    //                        address=addressFormatted;
-                } else {
-                    addressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                    //                        business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                    //                        address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
-                }
-
-                for (int i = 0; i < responce.size(); i++) {
-                    try {
-                        if (dbaInfoResp.getData().getBusinessType().toLowerCase().trim().equals(responce.get(i).getKey().toLowerCase().trim())) {
-                            businessType.setText(responce.get(i).getValue());
-                            break;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                try {
-                    bindImage(objMyApplication.getMyProfile().getData().getImage(), dbaInfoResp);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
     public static void showImagePickerDialog(Activity activity) {
         // custom dialog
         try {
@@ -406,6 +291,10 @@ public class DBAInfoDetails extends BaseActivity {
                                 if (stateCode != null && !stateCode.equals("")) {
                                     addressFormatted = addressFormatted + stateCode + ", ";
                                 }
+                            }
+
+                            if (dbaInfoResp.getData().getCountry() != null && !dbaInfoResp.getData().getCountry().equals("")) {
+                                addressFormatted = addressFormatted + dbaInfoResp.getData().getCountry() + ", ";
                             }
 
                             if (dbaInfoResp.getData().getZipCode() != null && !dbaInfoResp.getData().getZipCode().equals("")) {

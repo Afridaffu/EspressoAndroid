@@ -82,6 +82,7 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -337,7 +338,6 @@ public class BusinessDashboardFragment extends BaseFragment {
     private void transactionsAPI(TransactionListRequest transactionListRequest) {
 //        showProgressDialog();
         dashboardViewModel.meTransactionList(transactionListRequest);
-        dashboardViewModel.mePreferences(myApplication);
     }
 
     private void removeObservers() {
@@ -365,7 +365,8 @@ public class BusinessDashboardFragment extends BaseFragment {
                             tv_PayoutNoHistory.setVisibility(View.GONE);
                             mPayoutHistory.setVisibility(View.VISIBLE);
                             myApplication.setBatchPayList(batchPayoutListResponse.getData().getItems());
-//                            showData(batchPayoutListResponse.getData().getItems());
+                            dashboardViewModel.mePreferences(myApplication);
+                            showData(batchPayoutListResponse.getData().getItems());
                         } else {
                             Log.d(TAG, "No items found");
                         }
@@ -1030,31 +1031,24 @@ public class BusinessDashboardFragment extends BaseFragment {
                         mCvBatchNow.setClickable(true);
                         nextPayoutAmountTV.setText(amt);
                     }
-//                    Date d = new Date();
-//                    d.setHours(23);
-//                    d.setMinutes(59);
-//                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy @ hh:mm a");
-//                    nxtPayoutDatenTimeTV.setText(dateFormat.format(d).toLowerCase());
                     String date = listItems.get(i).getCreatedAt();
                     if (date.contains(".")) {
                         String res = date.substring(0, date.lastIndexOf("."));
-                        String timeFormat1 = " 11:59:59PM",timeFormat2 = " 11:59:59 PM";
-                        String pstDate = Utils.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy","PST");
-                        String convertedDateTime  = Utils.convertPrefZoneTimeFromPST(pstDate+timeFormat1, "MM/dd/yyyy hh:mm:ssa", "MM/dd/yyyy @ hh:mma",myApplication.getStrPreference());
+                        String pstDate = Utils.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy", "PST");
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
+                        Date newDate = Utils.simpleDate(pstDate);
+                        newDate.setHours(23);
+                        newDate.setMinutes(59);
+
+                        String convertedDateTime = Utils.convertPrefZoneTimeFromPST(dateFormat.format(newDate), "MM/dd/yyyy @ hh:mma", "MM/dd/yyyy @ hh:mma", myApplication.getStrPreference());
                         nxtPayoutDatenTimeTV.setText(convertedDateTime.toLowerCase());
 
-                        String convertedOnlyTime  = Utils.convertPrefZoneTimeFromPST(pstDate+timeFormat2, "MM/dd/yyyy hh:mm:ss a", "MM/dd/yyyy @ hh:mm a",myApplication.getStrPreference());
-                        String mainText = "All Payouts are deposited into Business Token Account. Your active batch is set to automatically pay out at ";
-                        SpannableString ss = new SpannableString(mainText+convertedOnlyTime.split("@")[1]+" "+myApplication.getStrPreference());
-                        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
-                        ss.setSpan(new CustomTypefaceSpan("", font), 31, 53, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-                        ss.setSpan(new CustomTypefaceSpan("", font), 108, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-                        spannableTextView.setText(ss);
+                        setSpannableTextView();
 
                     } else {
                         Log.d("date format", date);
                     }
-
 
 
                     isOpen = true;
@@ -1120,6 +1114,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 batchView.setVisibility(View.VISIBLE);
             }
         } else {
+            setSpannableTextView();
             batchNoTransaction.setVisibility(View.VISIBLE);
             batchView.setVisibility(View.VISIBLE);
             mPayoutHistory.setVisibility(View.GONE);
@@ -1130,6 +1125,22 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
         Log.d(TAG, "No Batch Payouts for this user");
 
+    }
+
+    private void setSpannableTextView() {
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM/dd/yyyy @ hh:mm:ss a");
+        Date newDate = new Date();
+        newDate.setHours(23);
+        newDate.setMinutes(59);
+        newDate.setSeconds(59);
+
+        String convertedOnlyTime = Utils.convertPrefZoneTimeFromPST(dateFormat2.format(newDate), "MM/dd/yyyy @ hh:mm:ss a", "MM/dd/yyyy @ hh:mm:ss a", myApplication.getStrPreference());
+        String mainText = "All Payouts are deposited into Business Token Account. Your active batch is set to automatically pay out at ";
+        SpannableString ss = new SpannableString(mainText + convertedOnlyTime.split("@")[1] + " " + myApplication.getStrPreference());
+        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
+        ss.setSpan(new CustomTypefaceSpan("", font), 31, 53, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        ss.setSpan(new CustomTypefaceSpan("", font), 108, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        spannableTextView.setText(ss);
     }
 
     private void showReserveReleaseBalance() {

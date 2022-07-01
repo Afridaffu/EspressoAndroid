@@ -265,6 +265,7 @@ public class BindingLayoutActivity extends BaseActivity {
                         if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT
                                 || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                             Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+                            objMyApplication.setOldLoginUserId(objMyApplication.getLoginUserId());
                             objMyApplication.setLoginUserId(identityImageResponse.getData().getUserId());
                             objMyApplication.setStrEmail(identityImageResponse.getData().getEmail());
                             if (identityImageResponse.getData().getAccountType() != 0) {

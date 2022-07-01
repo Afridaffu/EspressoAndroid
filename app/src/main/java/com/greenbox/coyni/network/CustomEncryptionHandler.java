@@ -18,7 +18,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import okhttp3.Interceptor;
@@ -35,6 +37,7 @@ public class CustomEncryptionHandler implements Interceptor {
     private final String TAG = getClass().getSimpleName();
     private final String encryptionPassword = "A#$#@123#431";
     private final String[] methodsAllowed = {"POST", "PUT", "PATCH"};
+    private final Integer[] errorCodes = {500};
     private final String USER_AGENT = "Coyni";
     private final String APPLICATION_JSON = "application/json";
     private final String TEXT_PLAIN = "text/plain";
@@ -93,23 +96,31 @@ public class CustomEncryptionHandler implements Interceptor {
         MediaType mediaType = MediaType.parse(APPLICATION_JSON);
 
         if (response.code() != 200 && response.body() != null) {
-            String errorResponse = response.peekBody(2048).string();
-            if (!Utils.isValidJson(errorResponse)) {
-                response = response.newBuilder()
-                        .body(ResponseBody.create(getCustomError(), mediaType))
-                        .build();
-            } else {
-                Gson gson = new Gson();
-                AbstractResponse resp = gson.fromJson(errorResponse, AbstractResponse.class);
-                if (resp != null && resp.getError() != null
-                        && resp.getError().getErrorDescription().equalsIgnoreCase(Utils.ACCESS_TOKEN_EXPIRED)) {
+//            if (ArrayUtils.contains(errorCodes, response.code())) {
+//                Utils.deploymentErrorDialog();
+//            } else {
+                String errorResponse = response.peekBody(2048).string();
+                if (!Utils.isValidJson(errorResponse)) {
                     response = response.newBuilder()
-                            .body(ResponseBody.create("", mediaType))
+                            .body(ResponseBody.create(getCustomError(), mediaType))
                             .build();
-                    launchLogin(MyApplication.getContext());
+                } else {
+                    Gson gson = new Gson();
+                    AbstractResponse resp = gson.fromJson(errorResponse, AbstractResponse.class);
+                    if (resp != null && resp.getError() != null
+                            && resp.getError().getErrorDescription().equalsIgnoreCase(Utils.ACCESS_TOKEN_EXPIRED)) {
+                        response = response.newBuilder()
+                                .body(ResponseBody.create("", mediaType))
+                                .build();
+                        launchLogin(MyApplication.getContext());
+                    }
                 }
-            }
+//            }
+
         }
+//        else if (response.code() == 200 && response.body() != null){
+//            Utils.deploymentErrorDialog();
+//        }
 
         return response;
     }
@@ -136,7 +147,7 @@ public class CustomEncryptionHandler implements Interceptor {
         Buffer buffer = new Buffer();
         requestBody.writeTo(buffer);
         String strOldBody = buffer.readUtf8();
-        if(strOldBody.equals("")) {
+        if (strOldBody.equals("")) {
             strOldBody = "{}";
         }
         String strNewBody = null;
