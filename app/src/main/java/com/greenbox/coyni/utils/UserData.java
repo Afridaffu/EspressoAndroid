@@ -59,7 +59,7 @@ public class UserData {
     private PaymentMethodsResponse paymentMethodsResponse;
     //    WalletResponse walletResponse;
     private String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
-    private int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType, dbaOwnerId = 0;
+    private int timezoneID = 0, tempTimezoneID = 0, loginUserId,oldLoginUserID, accountType, dbaOwnerId = 0;
     private LoginResponse loginResponse;
     private TransactionList transactionList;
     private PaymentsList selectedCard, prevSelectedCard;
@@ -370,6 +370,14 @@ public class UserData {
 
     public void setLoginUserId(int loginUserId) {
         this.loginUserId = loginUserId;
+    }
+
+    public int getOldLoginUserID() {
+        return oldLoginUserID;
+    }
+
+    public void setOldLoginUserID(int oldLoginUserID) {
+        this.oldLoginUserID = oldLoginUserID;
     }
 
     public LoginResponse getLoginResponse() {

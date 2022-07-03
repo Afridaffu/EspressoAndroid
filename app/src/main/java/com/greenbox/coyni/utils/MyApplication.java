@@ -355,6 +355,14 @@ public class MyApplication extends Application {
         mCurrentUserData.setLoginUserId(logUserId);
     }
 
+    public int getOldLoginUserId() {
+        return mCurrentUserData.getOldLoginUserID();
+    }
+
+    public void setOldLoginUserId(int logUserId) {
+        mCurrentUserData.setOldLoginUserID(logUserId);
+    }
+
     public LoginResponse getLoginResponse() {
         return mCurrentUserData.getLoginResponse();
     }

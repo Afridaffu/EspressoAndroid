@@ -1080,7 +1080,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
     private void finishMethod() {
 
         if (addBusiness.equalsIgnoreCase("true")) {
-            loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
+            loginViewModel.postChangeAccount(myApplicationObj.getOldLoginUserId());
         } else {
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(IdentityVerificationActivity.this);

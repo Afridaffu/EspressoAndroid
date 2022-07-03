@@ -566,16 +566,23 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             if (objData.getData().getReferenceId() != null) {
                 if (objData.getData().getReferenceId().length() > 10) {
                     mreferenceIdtv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-                    mPIdeposittotv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-                    mPIdeposittotv.setPaintFlags(mPIdeposittotv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
-
+                    mreferenceIdtv.setPaintFlags(mreferenceIdtv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 } else {
                     mreferenceIdtv.setText(objData.getData().getReferenceId());
-                    mPIdeposittotv.setText(objData.getData().getReferenceId());
-
+                    mreferenceIdtv.setPaintFlags(mreferenceIdtv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 }
             }
+
+            if (objData.getData().getDepositTo() != null) {
+                if (objData.getData().getDepositTo().length() > 10) {
+                    mPIdeposittotv.setText(objData.getData().getDepositTo().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+                    mPIdeposittotv.setPaintFlags(mPIdeposittotv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                } else {
+                    mPIdeposittotv.setText(objData.getData().getDepositTo());
+                    mPIdeposittotv.setPaintFlags(mPIdeposittotv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                }
+            }
+
             if (objData.getData().getPayoutId() != null) {
                 if (objData.getData().getPayoutId().length() > 10) {
                     mPayoutIdtv.setText(objData.getData().getPayoutId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");

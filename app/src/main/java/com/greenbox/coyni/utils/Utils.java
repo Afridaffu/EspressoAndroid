@@ -5,6 +5,8 @@ import static android.content.Context.KEYGUARD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 
+import static com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.KeyguardManager;
@@ -25,6 +27,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -434,6 +437,8 @@ public class Utils {
 
     //Display Alert double popup check
     public static Dialog displayAlertDialog = null;
+
+    public static boolean isDeploymentPopup = false;
 
     public static String getStrLang() {
         return strLang;
@@ -1362,7 +1367,7 @@ public class Utils {
     }
 
     public static String getStateCode(String state, List<States> listStates) {
-        if(listStates == null) {
+        if (listStates == null) {
             return null;
         }
         for (int i = 0; i < listStates.size(); i++) {
@@ -2235,14 +2240,21 @@ public class Utils {
     public static String convertPrefZoneTimeFromPST(String date, String format, String requiredFormat, String zoneId) {
         String strDate = "";
         try {
-            DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern(format)
-                    .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                    .toFormatter()
-                    .withZone(ZoneId.of("PST", ZoneId.SHORT_IDS));
-            ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-            DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(requiredFormat);
-            zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(zoneId, ZoneId.SHORT_IDS));
-            strDate = zonedTime.format(DATE_TIME_FORMATTER);
+            Log.e("date",date);
+            Log.e("format",format);
+            Log.e("requiredFormat",requiredFormat);
+            Log.e("zoneId",zoneId);
+            if (Build.VERSION.SDK_INT >= 26) {
+                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern(format)
+                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                        .toFormatter()
+                        .withZone(ZoneId.of("PST", ZoneId.SHORT_IDS));
+                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
+                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(requiredFormat);
+                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(zoneId, ZoneId.SHORT_IDS));
+                strDate = zonedTime.format(DATE_TIME_FORMATTER);
+
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -2348,14 +2360,14 @@ public class Utils {
                         .toFormatter()
                         .withZone(ZoneOffset.UTC);
                 ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm a");
+                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
                 zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(zoneId, ZoneId.SHORT_IDS));
                 strDate = zonedTime.format(DATE_TIME_FORMATTER);
             } else {
                 SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 spf.setTimeZone(TimeZone.getTimeZone("UTC"));
                 Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat("MM/dd/yyyy HH:mm a");
+                spf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
                 spf.setTimeZone(TimeZone.getTimeZone(zoneId));
                 strDate = spf.format(newDate);
             }
@@ -2674,4 +2686,56 @@ public class Utils {
     }
 
     //Dynamic Tracker - VT
+
+    public static void deploymentErrorDialog() {
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (!isDeploymentPopup) {
+                    Activity activity = OnboardActivity.onboardActivity;
+                    Dialog dialog = new Dialog(activity);
+                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+                    DisplayMetrics mertics = activity.getResources().getDisplayMetrics();
+                    int width = mertics.widthPixels;
+
+                    TextView message = dialog.findViewById(R.id.tvMessage);
+                    CardView actionCV = dialog.findViewById(R.id.cvAction);
+
+                    actionCV.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                            isDeploymentPopup = false;
+                        }
+                    });
+
+                    message.setText("Looks like we are having an issue, please try after sometime.");
+                    Window window = dialog.getWindow();
+                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                    WindowManager.LayoutParams wlp = window.getAttributes();
+
+                    wlp.gravity = Gravity.BOTTOM;
+                    wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                    window.setAttributes(wlp);
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+                    try {
+                        dialog.show();
+                        isDeploymentPopup = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+    }
+
 }
