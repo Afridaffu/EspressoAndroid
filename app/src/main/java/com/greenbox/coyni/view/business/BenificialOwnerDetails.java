@@ -1,7 +1,5 @@
 package com.greenbox.coyni.view.business;
 
-import static com.greenbox.coyni.view.business.CompanyInfoDetails.myApplication;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -12,6 +10,7 @@ import android.widget.TextView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 
@@ -22,6 +21,7 @@ public class BenificialOwnerDetails extends BaseActivity {
     private int position = 0;
     private LinearLayout bpbackBtn, primaryLL;
     private BOResp.BeneficialOwner beneficialOwner;
+    private MyApplication myApplication;
     public String state = "";
 
     @Override
@@ -45,6 +45,8 @@ public class BenificialOwnerDetails extends BaseActivity {
         mName = findViewById(R.id.owner_name);
         mDob = findViewById(R.id.dob_bo);
         primaryLL = findViewById(R.id.primaryLL);
+        myApplication = (MyApplication) getApplicationContext();
+
         if (position != 0) {
             primaryLL.setVisibility(View.GONE);
         } else {

@@ -85,10 +85,10 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingBottom="@dimen/_2sdp"
                         android:background="@color/at_gray"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/_2sdp"
+                        android:paddingBottom="@dimen/_2sdp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -180,10 +180,10 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="@dimen/_2sdp"
-                        android:paddingBottom="@dimen/_2sdp"
                         android:background="@color/at_gray"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/_2sdp"
+                        android:paddingBottom="@dimen/_2sdp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -205,9 +205,9 @@
                                 android:id="@+id/tvreserveAMountTransaction"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_1sdp"
                                 android:fontFamily="@font/opensans_bold"
                                 android:singleLine="true"
-                                android:layout_marginEnd="@dimen/_1sdp"
                                 android:text=""
                                 android:textColor="@color/primary_color"
                                 android:textSize="@dimen/_12ssp"
