@@ -7,6 +7,7 @@ import static com.greenbox.coyni.utils.Utils.convertTwoDecimal;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -22,8 +23,10 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -35,6 +38,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -47,11 +51,15 @@ import com.greenbox.coyni.adapters.BenificialOwnersRecyclerAdapter;
 import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
+import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
+import com.greenbox.coyni.model.bank.SyncAccount;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.profile.DownloadDocumentData;
 import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
@@ -73,7 +81,10 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.BuyTokenActivity;
+import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.DashboardActivity;
+import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.WebViewActivity;
 import com.greenbox.coyni.viewmodel.ApplicationSubmissionViewModel;
 import com.greenbox.coyni.viewmodel.BankAccountsViewModel;
@@ -101,7 +112,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
     private TextView noBanksTv, noBoTV, ssnEinTV;
-    private LinearLayout banksLL, boLL, CloseLL,companyEditLL,websiteLL;
+    private LinearLayout banksLL, boLL, CloseLL, companyEditLL, websiteLL;
     private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL, llDBADocuments;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
     private BusinessApplicationSummaryViewModel summaryViewModel;
@@ -113,12 +124,12 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //    private String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
     private ImageView mPrivacyImg, mTermsImg, mAgreementsImg;
     private LinearLayout llPrivacy, llTerms, llMerchant;
-    private Dialog progressDialog;
+    private Dialog progressDialog, syncLoader;
     private boolean isAgree = false;
     private LoginViewModel loginViewModel;
     private MyApplication objMyApplication;
     private String mCompanyName = "", mBusinessEntity = "", mEIN = "", mEmail = "", mPhoneNumber = "", mAddress = "", mArticleDate = "", mEINDate = "", mW9Date = "";
-    private String mDbName = "", mBusinessType = "",convert = "", mTimeZone = "", mWebsite = "", mMonthlyProcVolume = "", mHighTicket = "", mAverageTicket = "", mCustomerServiceEmail = "", mCustomerServicePhone = "", mDbAddressLine = "", mDbFillingDate = "";
+    private String mDbName = "", mBusinessType = "", convert = "", mTimeZone = "", mWebsite = "", mMonthlyProcVolume = "", mHighTicket = "", mAverageTicket = "", mCustomerServiceEmail = "", mCustomerServicePhone = "", mDbAddressLine = "", mDbFillingDate = "";
     private Boolean addBusiness = false;
     private Boolean addDBA = false;
     private BankAccountsViewModel bankAccountsViewModel;
@@ -136,8 +147,10 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     Long mLastClickTimeQA = 0L;
     Long mLastClickTime = 0L;
     private String selectedAgreement = "";
-    private  String Cstate = "";
-    private  String Dstate = "";
+    private String Cstate = "";
+    private String Dstate = "";
+    private int bankMaxAllowedCount = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +163,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         setKeyboardVisibilityListener(ReviewApplicationActivity.this);
 
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        dashboardViewModel.mePaymentMethods();
 
         objMyApplication = (MyApplication) getApplicationContext();
 
@@ -229,7 +243,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         llEin.setBackgroundResource(R.drawable.ic_eyeclose);
                         if (cir.getIdentificationType() == 11) {
                             String converted = convert.replaceAll("\\w(?=\\w{2})", "•");
-                            String hifened = converted.substring(0, 3)  + " - "  + converted.substring(3, 5) +  " - "  + converted.substring(5, converted.length());
+                            String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5, converted.length());
                             mEINTx.setText(hifened);
                         } else {
                             String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", "•");
@@ -242,7 +256,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     } else {
                         isCPwdEye = false;
                         if (cir.getIdentificationType() == 11) {
-                            String hifened = convert.substring(0, 3)  + " - "  + convert.substring(3, 5) +  " - "  + convert.substring(5, convert.length());
+                            String hifened = convert.substring(0, 3) + " - " + convert.substring(3, 5) + " - " + convert.substring(5, convert.length());
                             mEINTx.setText(hifened);
 
                         } else {
@@ -495,7 +509,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                         isCPwdEye = true;
                                         convert = cir.getSsnOrEin().replaceAll("\\-", "");
                                         String converted = convert.replaceAll("\\w(?=\\w{2})", "•");
-                                        String hifened = converted.substring(0, 3)  + " - "  + converted.substring(3, 5) +  " - "  + converted.substring(5, converted.length());
+                                        String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5, converted.length());
                                         mEINTx.setText(hifened);
 
                                     } else {
@@ -611,9 +625,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             }
                             if (dbaInfo.getIdentificationType() == 8) {
                                 mWebsiteHeadTX.setText("Website (Optional)");
-                                if(dbaInfo.getWebsite() == null || dbaInfo.getWebsite().equals("")){
+                                if (dbaInfo.getWebsite() == null || dbaInfo.getWebsite().equals("")) {
                                     websiteLL.setVisibility(GONE);
-                                }else {
+                                } else {
                                     websiteLL.setVisibility(VISIBLE);
                                 }
                             } else if (dbaInfo.getIdentificationType() == 9) {
@@ -621,9 +635,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 httpHeader.setVisibility(View.VISIBLE);
                                 websiteLL.setVisibility(VISIBLE);
                             }
-                            if (dbaInfo.getWebsite() != null ) {
+                            if (dbaInfo.getWebsite() != null) {
                                 mWebsiteTx.setText(dbaInfo.getWebsite());
-                            }else{
+                            } else {
                                 websiteLL.setVisibility(GONE);
                             }
 
@@ -631,7 +645,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 // monthlyProcVolume=cir.getMonthlyProcessingVolume();
                                 if (Integer.parseInt(dbaInfo.getMonthlyProcessingVolume().toString()) != 0) {
                                     mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
-                                }else{
+                                } else {
                                     mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
 
                                 }
@@ -640,15 +654,15 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             if (dbaInfo.getHighTicket() != null) {
                                 if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0) {
                                     mHighTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getHighTicket().toString()));
-                                }else{
+                                } else {
                                     mHighTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getHighTicket().toString()));
                                 }
                             }
 
                             if (dbaInfo.getAverageTicket() != null) {
-                                if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0){
+                                if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0) {
                                     mAverageTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
-                            }else{
+                                } else {
                                     mAverageTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
                                 }
                             }
@@ -849,9 +863,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //                        if (addBusiness) {
 //                            loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
 //                        } else {
-                            Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                        Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
 //                        }
 
                     } else {
@@ -914,6 +928,73 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 }
             }
         });
+
+        customerProfileViewModel.getSyncAccountMutableLiveData().observe(this, new Observer<SyncAccount>() {
+            @Override
+            public void onChanged(SyncAccount syncAccount) {
+                try {
+                    if (syncLoader != null)
+                        syncLoader.dismiss();
+                    if (syncAccount != null) {
+                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+                            summaryViewModel.getApplicationSummaryData();
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        customerProfileViewModel.getApiErrorMutableLiveData().observe(ReviewApplicationActivity.this, new Observer<APIError>() {
+            @Override
+            public void onChanged(APIError apiError) {
+                try {
+//                    dialog.dismiss();
+                    if (apiError != null) {
+                        if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                            Log.e("setResolveUrl", "252 setResolveUrl");
+                            objMyApplication.setResolveUrl(true);
+                            customerProfileViewModel.meSignOn();
+                        } else if (!isBank) {
+                            if (!apiError.getError().getErrorDescription().equals("")) {
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), ReviewApplicationActivity.this, "", apiError.getError().getFieldErrors().get(0));
+                            } else {
+                                Utils.displayAlert(apiError.getError().getFieldErrors().get(0), ReviewApplicationActivity.this, "", apiError.getError().getFieldErrors().get(0));
+                            }
+                        } else {
+                            isBank = false;
+                            if (apiError.getError().getErrorCode().equals(getString(R.string.bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("this payment method has already")) {
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), ReviewApplicationActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
+                            } else if (apiError.getError().getErrorCode().equals(getString(R.string.no_bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("no bank accounts found")) {
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), ReviewApplicationActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
+                            } else {
+                                displayError();
+                            }
+                        }
+
+                        if (syncLoader != null)
+                            syncLoader.dismiss();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse payMethodsResponse) {
+                try {
+                    if (payMethodsResponse != null && payMethodsResponse.getStatus().toLowerCase().equals("success")) {
+                        bankMaxAllowedCount = payMethodsResponse.getData().getMaxBankAccountsAllowed();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
 
     }
 
@@ -987,8 +1068,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     summaryViewModel.getApplicationSummaryData();
                 }
             }, 1500);
-            //temporary API Call to proceed further,not required response
-            summaryViewModel.fees();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1099,4 +1178,52 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 .putExtra("NAME", selectedAgreement));
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null && requestCode == 1) {
+            if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                Utils.displayAlert("Bank integration has been cancelled", ReviewApplicationActivity.this, "", "");
+            } else {
+                syncLoader = Utils.showProgressDialog(ReviewApplicationActivity.this);
+                customerProfileViewModel.meSyncAccount();
+            }
+        }
+    }
+
+    private void displayError() {
+        try {
+            Dialog extBankDialog = new Dialog(ReviewApplicationActivity.this);
+            extBankDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            extBankDialog.setContentView(R.layout.activity_first_tym_fail);
+            extBankDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvErrorHead = extBankDialog.findViewById(R.id.tvErrorHead);
+            TextView tvErrorMessage = extBankDialog.findViewById(R.id.tvErrorMessage);
+            CardView cvTryAgain = extBankDialog.findViewById(R.id.cvTryAgain);
+            tvErrorHead.setText(getString(R.string.bank_exhausthead));
+            tvErrorMessage.setText("There is an account limit of " + bankMaxAllowedCount + " total bank accounts, and it looks like you surpassed that number via the Fiserv bank account verification process. Please try again or remove one or more of your current bank account payment methods.");
+            cvTryAgain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    extBankDialog.dismiss();
+                }
+            });
+
+            Window window = extBankDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            extBankDialog.setCanceledOnTouchOutside(false);
+            extBankDialog.setCancelable(false);
+            extBankDialog.show();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

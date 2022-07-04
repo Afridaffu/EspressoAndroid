@@ -1,7 +1,5 @@
 package com.greenbox.coyni.view;
 
-import static com.greenbox.coyni.view.business.CompanyInfoDetails.myApplication;
-
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
