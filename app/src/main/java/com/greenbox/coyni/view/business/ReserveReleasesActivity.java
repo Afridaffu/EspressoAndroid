@@ -167,6 +167,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
         showProgressDialog();
         clearAdapterData();
         RollingListRequest listRequest = new RollingListRequest();
+        listRequest.setProcessType("A");
         listRequest.setPayoutType(Utils.reserveRelease);
         ArrayList<Integer> status = new ArrayList<>();
 

@@ -3,10 +3,12 @@ package com.greenbox.coyni.view.business;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -276,9 +279,9 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 if (downloadDocumentResponse != null && downloadDocumentResponse.getStatus() != null) {
                     if (downloadDocumentResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         DownloadDocumentData data = downloadDocumentResponse.getData();
-                        if(data != null ) {
+                        if (data != null) {
                             if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
-                                launchDocumentUrl(data.getDownloadUrl().replace("&","%26"));
+                                launchDocumentUrl(data.getDownloadUrl().replace("&", "%26"));
                             } else {
                                 Utils.displayAlert(getString(R.string.unable_to_get_document), MerchantsAgrementActivity.this, "", "");
                             }
@@ -300,6 +303,12 @@ public class MerchantsAgrementActivity extends BaseActivity {
 
         webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + url);
 
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.e("onConfigurationChanged","onConfigurationChanged");
     }
 }
 

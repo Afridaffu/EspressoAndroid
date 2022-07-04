@@ -10,6 +10,8 @@ public class RollingListRequest {
 
     private String toDate;
 
+    private String processType;
+
     private ArrayList<Integer> status = new ArrayList<>();
 
     public ArrayList<Integer> getStatus() {
@@ -45,4 +47,11 @@ public class RollingListRequest {
         this.toDate = toDate;
     }
 
+    public String getProcessType() {
+        return processType;
+    }
+
+    public void setProcessType(String processType) {
+        this.processType = processType;
+    }
 }
