@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -278,9 +279,9 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 if (downloadDocumentResponse != null && downloadDocumentResponse.getStatus() != null) {
                     if (downloadDocumentResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         DownloadDocumentData data = downloadDocumentResponse.getData();
-                        if(data != null ) {
+                        if (data != null) {
                             if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
-                                launchDocumentUrl(data.getDownloadUrl().replace("&","%26"));
+                                launchDocumentUrl(data.getDownloadUrl().replace("&", "%26"));
                             } else {
                                 Utils.displayAlert(getString(R.string.unable_to_get_document), MerchantsAgrementActivity.this, "", "");
                             }
@@ -307,6 +308,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        Log.e("onConfigurationChanged","onConfigurationChanged");
     }
 }
 
