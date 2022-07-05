@@ -566,10 +566,10 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             if (objData.getData().getReferenceId() != null) {
                 if (objData.getData().getReferenceId().length() > 10) {
                     mreferenceIdtv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-                    mreferenceIdtv.setPaintFlags(mreferenceIdtv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+//                    mreferenceIdtv.setPaintFlags(mreferenceIdtv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 } else {
                     mreferenceIdtv.setText(objData.getData().getReferenceId());
-                    mreferenceIdtv.setPaintFlags(mreferenceIdtv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+//                    mreferenceIdtv.setPaintFlags(mreferenceIdtv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 }
             }
 

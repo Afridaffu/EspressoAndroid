@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -25,12 +26,13 @@ public class SeekBarWithFloatingText extends RelativeLayout {
 
     private TextView tvStartTime;
     private TextView tvEndTime;
-    private TextView tvFloatingText;
+    private TextView tvFloatingText, tv_floating_text_currency;
+    private LinearLayout tvFloatingTextLL;
     private SeekBar seekBar;
     private View thumbView;
     private String floatingText;
     private List<Earning> userData;
-    String defaultValue = " 0.00 CYN";
+    String defaultValue = " 0.00";
     private double totalAmountCumulate = 0.0;
     private ArrayList<Integer> keys = new ArrayList<>();
 
@@ -80,6 +82,8 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         tvStartTime = findViewById(R.id.tv_start_time);
         tvEndTime = findViewById(R.id.tv_end_time);
         tvFloatingText = findViewById(R.id.tv_floating_text);
+        tvFloatingTextLL = findViewById(R.id.tv_floating_text_LL);
+        tv_floating_text_currency = findViewById(R.id.tv_floating_text_currency);
         seekBar = findViewById(R.id.seekbar);
         seekBar.setThumb(getThumb());
 
@@ -146,7 +150,7 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         }
         if (calculatedWidth < width) {
             layoutParams.setMargins(calculatedWidth, 0, 0, 0);
-            tvFloatingText.setLayoutParams(layoutParams);
+            tvFloatingTextLL.setLayoutParams(layoutParams);
         }
         tvFloatingText.setText(text + defaultValue);
         if (earningList != null) {
@@ -172,9 +176,11 @@ public class SeekBarWithFloatingText extends RelativeLayout {
 
         }
         if (totalAmountCumulate != 0) {
-            tvFloatingText.setText(text + " " + Utils.convertTwoDecimal(String.valueOf(totalAmountCumulate)) + " CYN");
+            tvFloatingText.setText(text + " " + Utils.convertTwoDecimal(String.valueOf(totalAmountCumulate)));
+            tv_floating_text_currency.setText(" CYN");
         } else {
             tvFloatingText.setText(text + defaultValue);
+            tv_floating_text_currency.setText(" CYN");
         }
 
     }

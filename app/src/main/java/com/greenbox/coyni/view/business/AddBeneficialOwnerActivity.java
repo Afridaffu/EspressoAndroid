@@ -362,7 +362,11 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     if (fromScreen != null && !fromScreen.equals("EDIT_BO")) {
                         confirmationAlert();
                     } else {
-                        finish();
+                        if (isNextEnabled && isSaveEnabled) {
+                            confirmationAlert();
+                        } else {
+                            finish();
+                        }
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1818,7 +1822,11 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 if (fromScreen != null && !fromScreen.equals("EDIT_BO")) {
                     confirmationAlert();
                 } else {
-                    super.onBackPressed();
+                    if (isNextEnabled && isSaveEnabled) {
+                        confirmationAlert();
+                    } else {
+                        super.onBackPressed();
+                    }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -1882,8 +1890,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 dialog.dismiss();
                 if (fromScreen != null && !fromScreen.equals("EDIT_BO")) {
                     businessIdentityVerificationViewModel.deleteBeneficialOwner(boID);
-                    finish();
                 }
+                finish();
             }
         });
 

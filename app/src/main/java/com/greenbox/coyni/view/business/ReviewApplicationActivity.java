@@ -1184,7 +1184,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null && requestCode == 1) {
             if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-                Utils.displayAlert("Bank integration has been cancelled", ReviewApplicationActivity.this, "", "");
+//                Utils.displayAlert("Bank integration has been cancelled", ReviewApplicationActivity.this, "", "");
             } else {
                 syncLoader = Utils.showProgressDialog(ReviewApplicationActivity.this);
                 customerProfileViewModel.meSyncAccount();

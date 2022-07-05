@@ -10,6 +10,7 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.ReserveDetailsListAdapter;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
@@ -120,7 +122,8 @@ public class ReserveDetailsActivity extends BaseActivity {
         transactionListRequest.setTxnStatus(getDefaultStatus());
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String createdDate = selected.getScheduledRelease();
+//        String createdDate = selected.getScheduledRelease();
+        String createdDate = selected.getCreatedAt();
 
         if (createdDate != null) {
             Date date = null;
@@ -150,6 +153,8 @@ public class ReserveDetailsActivity extends BaseActivity {
                 transactionListRequest.setUpdatedFromDateOperator(">=");
                 transactionListRequest.setUpdatedToDate(reqToDate);
                 transactionListRequest.setUpdatedToDateOperator("<=");
+                transactionListRequest.setMerchantTransactions(true);
+                Log.e("transactionListRequest", new Gson().toJson(transactionListRequest));
                 dashboardViewModel.meTransactionList(transactionListRequest);
             } catch (Exception e) {
                 e.printStackTrace();
