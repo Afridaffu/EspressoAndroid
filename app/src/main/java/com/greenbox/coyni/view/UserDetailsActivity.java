@@ -22,6 +22,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 
@@ -54,6 +55,7 @@ import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.AccountsData;
 import com.greenbox.coyni.model.States;
+import com.greenbox.coyni.model.preferences.BaseProfile;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
@@ -96,6 +98,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     private ExpandableListView profilesListView;
     private Long mLastClickTime = 0L;
     public String state = "";
+    private AccountsData accountsData;
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
@@ -471,7 +474,12 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     dialog.show();
                     doneButton.setEnabled(false);
                     profilesListView.setAdapter(profilesListAdapter);
-                    setInitialListViewHeight(profilesListView);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            setInitialListViewHeight(profilesListView);
+                        }
+                    }, 200);
                     profilesListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
                         @Override
                         public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -528,8 +536,8 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
         if (height < 10)
             height = 200;
-//        params.height = height;
-        params.height = (int) (height * 0.55);
+        params.height = height;
+//        params.height = (int) (height * 0.55);
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
@@ -571,12 +579,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     private void setProfilesAdapter() {
 
         boolean showDBA = false;
-        AccountsData accountsData = new AccountsData(filterList);
         profilesListView.setVisibility(View.VISIBLE);
-
-        accountsData.removeSharedAccounts();
-        accountsData.removeDeclinedPersonalAccount();
-
         profilesListAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, accountsData, preferredId, showDBA);
 
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
@@ -819,21 +822,53 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     LogUtils.v(TAG, "getProfileRespMutableLiveData" + profilesResponse.getData());
                     LogUtils.v(TAG, "accountTypeId" + accountTypeId);
                     globalProfileResp = profilesResponse;
-                    for (ProfilesResponse.Profiles c : filterList) {
-                        if (c.getId() == accountTypeId) {
-                            if (c.getAccountType().equals(Utils.PERSONAL)) {
-                                selectedName = c.getFullName();
-                            } else {
-                                selectedName = c.getDbaName();
-                            }
-                            business_defaultaccountET.setText(selectedName);
-                        }
-                    }
-
+                    setDefaultAccountData();
                 }
             }
         });
 
+    }
+
+    private void setDefaultAccountData() {
+        if(filterList == null) {
+            return;
+        }
+
+        for (ProfilesResponse.Profiles c : filterList) {
+            if (c.getId() == accountTypeId) {
+                if (c.getAccountType().equals(Utils.PERSONAL)) {
+                    selectedName = c.getFullName();
+                } else {
+                    selectedName = c.getDbaName();
+                }
+                business_defaultaccountET.setText(selectedName);
+            }
+        }
+
+        accountsData = new AccountsData(filterList);
+
+        accountsData.removeSharedAccounts();
+        accountsData.removeDeclinedPersonalAccount();
+
+
+        if(accountsData.getGroupData().size() > 1) {
+            business_defaultaccountET.setEnabled(true);
+            business_defaultAccTIL.setAlpha(1f);
+        } else if(accountsData.getGroupData().size() == 1) {
+            BaseProfile groupProfile = accountsData.getGroupData().get(0);
+            ArrayList<ProfilesResponse.Profiles> profilesList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(groupProfile.getId());
+            if (groupProfile.getAccountType().equalsIgnoreCase(Utils.PERSONAL)
+                    || profilesList == null || profilesList.size() <= 1) {
+                business_defaultaccountET.setEnabled(false);
+                business_defaultAccTIL.setAlpha(0.5f);
+            } else {
+                business_defaultaccountET.setEnabled(true);
+                business_defaultAccTIL.setAlpha(1f);
+            }
+        } else {
+            business_defaultaccountET.setEnabled(false);
+            business_defaultAccTIL.setAlpha(0.5f);
+        }
     }
 
     private void bindImage(String imageString) {

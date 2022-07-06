@@ -2,6 +2,7 @@ package com.greenbox.coyni.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -26,6 +27,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.AccountsData;
+import com.greenbox.coyni.model.preferences.BaseProfile;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
@@ -78,6 +80,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
     private int userId;
     private CardView doneButton;
     private boolean isTimeZone = false;
+    private AccountsData accountsData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -371,16 +374,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                             globalProfileResp = profilesResponse;
                             if (profilesResponse.getStatus().equals("SUCCESS")) {
                                 filterList = profilesResponse.getData();
-                                for (ProfilesResponse.Profiles c : filterList) {
-                                    if (c.getId() == accountTypeId) {
-                                        if (c.getAccountType().equals(Utils.PERSONAL)) {
-                                            selectedName = c.getFullName();
-                                        } else {
-                                            selectedName = c.getDbaName();
-                                        }
-                                        accountET.setText(selectedName);
-                                    }
-                                }
+                                setDefaultAccountData();
                             }
                         }
                     }
@@ -398,11 +392,50 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                 });
     }
 
-    private void setProfilesAdapter() {
-        boolean showDBA = false;
-        AccountsData accountsData = new AccountsData(filterList);
+    private void setDefaultAccountData() {
+        if(filterList == null) {
+            return;
+        }
+
+        for (ProfilesResponse.Profiles c : filterList) {
+            if (c.getId() == accountTypeId) {
+                if (c.getAccountType().equals(Utils.PERSONAL)) {
+                    selectedName = c.getFullName();
+                } else {
+                    selectedName = c.getDbaName();
+                }
+                accountET.setText(selectedName);
+            }
+        }
+
+        accountsData = new AccountsData(filterList);
+
         accountsData.removeSharedAccounts();
         accountsData.removeDeclinedPersonalAccount();
+
+
+        if(accountsData.getGroupData().size() > 1) {
+            accountET.setEnabled(true);
+            accountTIL.setAlpha(1f);
+        } else if(accountsData.getGroupData().size() == 1) {
+            BaseProfile groupProfile = accountsData.getGroupData().get(0);
+            ArrayList<ProfilesResponse.Profiles> profilesList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(groupProfile.getId());
+            if (groupProfile.getAccountType().equalsIgnoreCase(Utils.PERSONAL)
+                    || profilesList == null || profilesList.size() <= 1) {
+                accountET.setEnabled(false);
+                accountTIL.setAlpha(0.5f);
+            } else {
+                accountET.setEnabled(true);
+                accountTIL.setAlpha(1f);
+            }
+        } else {
+            accountET.setEnabled(false);
+            accountTIL.setAlpha(0.5f);
+        }
+    }
+
+    private void setProfilesAdapter() {
+        boolean showDBA = false;
         profilesListView.setVisibility(View.VISIBLE);
         profilesListAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, accountsData, preferredId, showDBA);
 
@@ -448,7 +481,13 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
         });
 
         profilesListView.setAdapter(profilesListAdapter);
-        setInitialListViewHeight(profilesListView);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setInitialListViewHeight(profilesListView);
+            }
+        }, 200);
+
         profilesListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -485,7 +524,8 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                 + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
         if (height < 10)
             height = 200;
-        params.height = (int) (height * 0.55);
+        //params.height = (int) (height * 0.55);
+        params.height = height;
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
