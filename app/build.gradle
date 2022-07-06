@@ -47,7 +47,7 @@ android {
         }
         debug {
             buildConfigField 'boolean', 'LOGGING_ENABLED', 'true'
-            buildConfigField 'boolean', 'ANALYTICS_ENABLED', 'true'
+            buildConfigField 'boolean', 'ANALYTICS_ENABLED', 'false'
             testCoverageEnabled true
         }
     }
