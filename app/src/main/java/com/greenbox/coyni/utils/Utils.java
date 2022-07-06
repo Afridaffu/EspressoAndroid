@@ -1367,12 +1367,17 @@ public class Utils {
     }
 
     public static String getStateCode(String state, List<States> listStates) {
-        if (listStates == null) {
-            return null;
-        }
-        for (int i = 0; i < listStates.size(); i++) {
-            if (state.equalsIgnoreCase(listStates.get(i).getName().toLowerCase())) {
-                return listStates.get(i).getIsocode();
+
+        if (state.trim().length() == 2) {
+            return state.toUpperCase();
+        } else {
+            if (listStates == null) {
+                return null;
+            }
+            for (int i = 0; i < listStates.size(); i++) {
+                if (state.equalsIgnoreCase(listStates.get(i).getName().toLowerCase())) {
+                    return listStates.get(i).getIsocode();
+                }
             }
         }
         return null;
@@ -2240,10 +2245,10 @@ public class Utils {
     public static String convertPrefZoneTimeFromPST(String date, String format, String requiredFormat, String zoneId) {
         String strDate = "";
         try {
-            Log.e("date",date);
-            Log.e("format",format);
-            Log.e("requiredFormat",requiredFormat);
-            Log.e("zoneId",zoneId);
+            Log.e("date", date);
+            Log.e("format", format);
+            Log.e("requiredFormat", requiredFormat);
+            Log.e("zoneId", zoneId);
             if (Build.VERSION.SDK_INT >= 26) {
                 DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern(format)
                         .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
@@ -2738,4 +2743,17 @@ public class Utils {
 
     }
 
+    public static void setStateFromList(String state, EditText editText, MyApplication myApplication) {
+        if (state.length() == 2) {
+            List<States> listStates = myApplication.getListStates();
+            for (int i = 0; i < listStates.size(); i++) {
+                if (state.trim().equals(listStates.get(i).getIsocode())) {
+                    editText.setText(listStates.get(i).getName());
+                    break;
+                }
+            }
+        } else {
+            editText.setText(state);
+        }
+    }
 }
