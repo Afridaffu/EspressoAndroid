@@ -157,6 +157,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private RangeDates rangeDates;
     private String strFromDate, strToDate;
     int walletCount = 0;
+    private String localPreferenceValue = "";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -652,26 +653,32 @@ public class BusinessDashboardFragment extends BaseFragment {
                                 myApplication.setTempTimezone(getString(R.string.PST));
                                 myApplication.setTempTimezoneID(0);
                                 myApplication.setStrPreference("PST");
+                                localPreferenceValue = "PST";
                             } else if (preferences.getData().getTimeZone() == 1) {
                                 myApplication.setTempTimezone(getString(R.string.MST));
                                 myApplication.setTempTimezoneID(1);
                                 myApplication.setStrPreference("America/Denver");
+                                localPreferenceValue = "MST";
                             } else if (preferences.getData().getTimeZone() == 2) {
                                 myApplication.setTempTimezone(getString(R.string.CST));
                                 myApplication.setTempTimezoneID(2);
                                 myApplication.setStrPreference("CST");
+                                localPreferenceValue = "CST";
                             } else if (preferences.getData().getTimeZone() == 3) {
                                 myApplication.setTempTimezone(getString(R.string.EST));
                                 myApplication.setTempTimezoneID(3);
                                 myApplication.setStrPreference("America/New_York");
+                                localPreferenceValue = "EST";
                             } else if (preferences.getData().getTimeZone() == 4) {
                                 myApplication.setTempTimezone(getString(R.string.HST));
                                 myApplication.setTempTimezoneID(4);
                                 myApplication.setStrPreference("HST");
+                                localPreferenceValue = "HST";
                             } else if (preferences.getData().getTimeZone() == 5) {
                                 myApplication.setTempTimezone(getString(R.string.AST));
                                 myApplication.setTempTimezoneID(5);
                                 myApplication.setStrPreference("AST");
+                                localPreferenceValue = "AST";
                             }
 
                             showData(myApplication.getBatchPayList());
@@ -1136,7 +1143,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
         String convertedOnlyTime = Utils.convertPrefZoneTimeFromPST(dateFormat2.format(newDate), "MM/dd/yyyy @ hh:mm:ss a", "MM/dd/yyyy @ hh:mm:ss a", myApplication.getStrPreference());
         String mainText = "All Payouts are deposited into Business Token Account. Your active batch is set to automatically pay out at ";
-        SpannableString ss = new SpannableString(mainText + convertedOnlyTime.split("@")[1] + " " + myApplication.getStrPreference());
+        SpannableString ss = new SpannableString(mainText + convertedOnlyTime.split("@")[1] + " " + localPreferenceValue);
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
         ss.setSpan(new CustomTypefaceSpan("", font), 31, 53, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         ss.setSpan(new CustomTypefaceSpan("", font), 108, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);

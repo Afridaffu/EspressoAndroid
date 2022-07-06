@@ -177,7 +177,7 @@ public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<Re
             holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
         }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.Refund)){
-            holder.txnTypeDn.setText(objData.getTxnTypeDn() + " to " + objData.getSenderName());
+            holder.txnTypeDn.setText(objData.getTxnTypeDn() + " to " + objData.getReceiveName());
             holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
             holder.amount.setTextColor(Color.parseColor("#000000"));
         }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.MerchantPayout)){

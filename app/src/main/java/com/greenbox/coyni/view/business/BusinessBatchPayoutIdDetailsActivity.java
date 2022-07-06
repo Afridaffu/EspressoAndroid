@@ -55,7 +55,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
     private List<TransactionListPending> globalPending = new ArrayList<>();
     private List<TransactionListPosted> globalPosted = new ArrayList<>();
     private MyApplication objMyApplication;
-    private TextView bathPayoutIdTV, payoutIDAmountTV, payoutStatusTV, payoutIDdateTimeTV,noTransactions,merchantNoMoreTransactions;
+    private TextView bathPayoutIdTV, payoutIDAmountTV, payoutStatusTV, payoutIDdateTimeTV, noTransactions, merchantNoMoreTransactions;
     private BatchPayoutListItems selectedItem;
     private CardView cardViewList;
     BatchPayoutIdDetailsData objData;
@@ -114,7 +114,8 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
             });
 
             TransactionListRequest transactionListRequest = new TransactionListRequest();
-            transactionListRequest.setTransactionType(getDefaultTransactionTypes());
+            transactionListRequest.setMerchantTransactions(true);
+//            transactionListRequest.setTransactionType(getDefaultTransactionTypes());
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
 
             transactionsAPI(transactionListRequest);
@@ -268,7 +269,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                     break;
             }
         }
-        if(objData.getPayoutDate()!=null && !objData.getPayoutDate().equals("")) {
+        if (objData.getPayoutDate() != null && !objData.getPayoutDate().equals("")) {
             String date = objData.getPayoutDate();
             if (date.contains(".")) {
                 String formattedDate = date.substring(0, date.lastIndexOf("."));
@@ -280,8 +281,9 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
             if (objData.getPayoutReferenceId().length() > 10) {
                 payoutRefIdLL.setOnClickListener(v -> Utils.copyText(objData.getPayoutReferenceId(), BusinessBatchPayoutIdDetailsActivity.this));
                 SpannableString content = new SpannableString(objData.getPayoutReferenceId().substring(0, 10));
+                content = SpannableString.valueOf(content+ "...");
                 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                payoutRefIdTV.setText(content);
+                payoutRefIdTV.setText(content );
             } else {
                 payoutRefIdTV.setText(objData.getPayoutReferenceId());
             }
@@ -290,19 +292,21 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
             if (objData.getTokenAccount().length() > 10) {
                 payoutTokenNoLL.setOnClickListener(v -> Utils.copyText(objData.getTokenAccount(), BusinessBatchPayoutIdDetailsActivity.this));
                 SpannableString content = new SpannableString(objData.getTokenAccount().substring(0, 10));
+                content = SpannableString.valueOf(content+ "...");
                 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                 payoutTokenIdTV.setText(content);
             } else {
                 payoutTokenIdTV.setText(objData.getTokenAccount());
             }
         }
-        if(objMyApplication.isReserveEnabled()) {
+        if (objMyApplication.isReserveEnabled()) {
             if (objData.getReserveWalletId() != null && !objData.getReserveWalletId().equals("")) {
                 payoutReserveIdLL.setOnClickListener(v -> Utils.copyText(objData.getReserveWalletId(), BusinessBatchPayoutIdDetailsActivity.this));
                 reserveIDLL.setVisibility(View.VISIBLE);
                 if (objData.getReserveWalletId().length() > 10) {
                     reserveIDLL.setVisibility(View.VISIBLE);
                     SpannableString content = new SpannableString(objData.getReserveWalletId().substring(0, 10));
+                    content = SpannableString.valueOf(content+ "...");
                     content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                     ReserveIdTV.setText(content);
                 } else {
@@ -310,7 +314,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                     ReserveIdTV.setText(objData.getReserveWalletId());
                 }
             }
-        }else {
+        } else {
             reserveIDLL.setVisibility(View.GONE);
         }
     }
