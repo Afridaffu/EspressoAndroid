@@ -119,7 +119,7 @@ public class ReserveDetailsActivity extends BaseActivity {
 
         TransactionListRequest transactionListRequest = new TransactionListRequest();
         transactionListRequest.setTransactionType(getDefaultTransactionTypes());
-        transactionListRequest.setTxnStatus(getDefaultStatus());
+//        transactionListRequest.setTxnStatus(getDefaultStatus());
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        String createdDate = selected.getScheduledRelease();

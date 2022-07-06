@@ -99,7 +99,7 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                 strType = latestTxns.getData().get(position).getTxnTypeDn().toLowerCase();
             }
 
-            if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid")) {
+            if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid") || strType.equalsIgnoreCase("refund")) {
                 holder.amountTV.setText("-" + Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()).split(" ")[0]);
             } else {
                 holder.amountTV.setText("+" + Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()).split(" ")[0]);

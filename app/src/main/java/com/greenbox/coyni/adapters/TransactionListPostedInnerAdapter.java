@@ -104,12 +104,14 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             strType = objData.getTxnTypeDn().toLowerCase();
         }
 
-        if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid")) {
+        if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid") || strType.equalsIgnoreCase("refund")) {
             holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN","").trim());
-            holder.amount.setTextColor(Color.parseColor("#000000"));
-        } else if (strType.contains("buy") || strType.equals("receive") || strType.equals("refund")) {
+            holder.amount.setTextColor(mContext.getResources().getColor(R.color.black));
+
+//        } else if (strType.contains("buy") || strType.equals("receive") || strType.equals("refund")) {
+        } else if (strType.contains("buy") || strType.equals("receive") ) {
             holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()).replace("CYN","").trim());
-            holder.amount.setTextColor(Color.parseColor("#008a05"));
+            holder.amount.setTextColor(mContext.getResources().getColor(R.color.active_green));
 
         } else {
             holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN","").trim());
