@@ -318,7 +318,8 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 }
                 if (myApplicationObj.getMyProfile().getData().getState() != null
                         && !myApplicationObj.getMyProfile().getData().getState().equals("")) {
-                    stateET.setText(myApplicationObj.getMyProfile().getData().getState());
+//                    stateET.setText(myApplicationObj.getMyProfile().getData().getState());
+                    Utils.setStateFromList(myApplicationObj.getMyProfile().getData().getState(),stateET,myApplicationObj);
                     Utils.tempStateName = myApplicationObj.getMyProfile().getData().getState();
                     isState = true;
                 } else {
@@ -366,7 +367,8 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 }
                 if (myApplicationObj.getMyProfile().getData().getState() != null
                         && !myApplicationObj.getMyProfile().getData().getState().equals("")) {
-                    b_stateET.setText(myApplicationObj.getMyProfile().getData().getState());
+//                    b_stateET.setText(myApplicationObj.getMyProfile().getData().getState());
+                    Utils.setStateFromList(myApplicationObj.getMyProfile().getData().getState(),b_stateET,myApplicationObj);
                     Utils.setUpperHintColor(b_stateTIL, getResources().getColor(R.color.primary_black));
                     Utils.tempStateName = myApplicationObj.getMyProfile().getData().getState();
                     isState = true;
@@ -1330,4 +1332,5 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
             Utils.isKeyboardVisible = false;
         }
     }
+
 }

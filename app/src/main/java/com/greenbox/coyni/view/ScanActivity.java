@@ -329,7 +329,12 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 }
             }
             bindImage();
-            String savedStrName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
+            String savedStrName = null;
+            try {
+                savedStrName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             if (savedStrName != null && savedStrName.length() > 22) {
                 tvSaveUserName.setText(savedStrName.substring(0, 22) + "...");
