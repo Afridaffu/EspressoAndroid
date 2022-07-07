@@ -604,33 +604,60 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginEnd="@dimen/_11sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:layout_marginBottom="@dimen/_11sdp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="@dimen/_10sdp">
+        app:cardCornerRadius="@dimen/_10sdp"
+        >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/stateCL"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/cityErrorLL"
-            android:paddingBottom="@dimen/_23sdp"
-            android:layout_marginTop="@dimen/_14sdp">
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/stateCL"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@+id/cityErrorLL"-->
+<!--            android:paddingBottom="@dimen/_23sdp"-->
+<!--            android:layout_marginTop="@dimen/_14sdp">-->
 
-            <ImageButton
-                android:id="@+id/stateimg"
+<!--            <ImageButton-->
+<!--                android:id="@+id/stateimg"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@color/white"-->
+<!--                android:src="@drawable/ic_down"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="@id/b_accountTIL"-->
+<!--                app:layout_constraintHorizontal_bias="0.952"-->
+<!--                app:layout_constraintStart_toStartOf="@id/b_accountTIL"-->
+<!--                app:layout_constraintTop_toTopOf="@id/b_accountTIL"-->
+<!--                app:layout_constraintVertical_bias="0.567"-->
+<!--                app:layout_editor_absoluteX="336.24dp"-->
+<!--                app:layout_editor_absoluteY="26.28dp" />-->
+
+            <RelativeLayout
+                android:id="@+id/accountCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_23sdp"
+                android:layout_marginBottom="@dimen/_35sdp">
+
+            <ImageView
+                android:id="@+id/accountDDIConn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="@dimen/_25sdp"
                 android:src="@drawable/ic_down"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/b_accountTIL"
-                app:layout_constraintHorizontal_bias="0.952"
-                app:layout_constraintStart_toStartOf="@id/b_accountTIL"
-                app:layout_constraintTop_toTopOf="@id/b_accountTIL"
-                app:layout_constraintVertical_bias="0.567"
-                app:layout_editor_absoluteX="336.24dp"
-                app:layout_editor_absoluteY="26.28dp" />
+                android:visibility="visible" />
+
+
+            <View
+                android:id="@+id/accountDisableVieww"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_41sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:background="@drawable/disable_bg"
+                android:visibility="gone"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginEnd="@dimen/_11sdp"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/b_accountTIL"
@@ -678,7 +705,9 @@
 
 
             </com.google.android.material.textfield.TextInputLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </RelativeLayout>
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
     </androidx.cardview.widget.CardView>

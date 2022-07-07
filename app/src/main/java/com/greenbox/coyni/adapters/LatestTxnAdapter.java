@@ -81,7 +81,8 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
             holder.amountTV.setText(latestTxns.getData().get(position).getAmount());
 //            holder.dateTV.setText(latestTxns.getData().get(position).getUpdatedAt());
             holder.balanceTV.setText("Balance " + Utils.convertTwoDecimal(latestTxns.getData().get(position).getWalletBalance()).split(" ")[0]);
-            String strType = "";
+            String strType = "", strSubtype = "";
+            strSubtype = latestTxns.getData().get(position).getTxnSubTypeDn().toLowerCase();
 
             if (latestTxns.getData().get(position).getTxnTypeDn().toLowerCase().contains("withdraw")) {
                 strType = "withdraw";
@@ -99,9 +100,17 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                 strType = latestTxns.getData().get(position).getTxnTypeDn().toLowerCase();
             }
 
-            if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid") || strType.equalsIgnoreCase("refund")) {
+            if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid")) {
                 holder.amountTV.setText("-" + Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()).split(" ")[0]);
             } else {
+                holder.amountTV.setText("+" + Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()).split(" ")[0]);
+                holder.amountTV.setTextColor(mContext.getResources().getColor(R.color.active_green));
+            }
+
+            if(strSubtype.equalsIgnoreCase("Sent")){
+                holder.amountTV.setText("-" + Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()).split(" ")[0]);
+                holder.amountTV.setTextColor(mContext.getResources().getColor(R.color.black));
+            }else if(strSubtype.equalsIgnoreCase("Received")){
                 holder.amountTV.setText("+" + Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()).split(" ")[0]);
                 holder.amountTV.setTextColor(mContext.getResources().getColor(R.color.active_green));
             }
@@ -141,7 +150,7 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                         i.putExtra("gbxTxnIdType", objData.getGbxTransactionId());
                         i.putExtra("txnType", objData.getTxnTypeDn());
                         i.putExtra("txnSubType", objData.getTxnSubTypeDn());
-                        i.putExtra("txnId",objData.getTransactionId());
+                        i.putExtra("txnId", objData.getTransactionId());
                         mContext.startActivity(i);
                     } catch (Exception ex) {
                         ex.printStackTrace();

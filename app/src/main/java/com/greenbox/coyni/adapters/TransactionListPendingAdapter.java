@@ -96,7 +96,7 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
             strType = objData.getTxnTypeDn().toLowerCase();
         }
 
-        if (strType.contains("pay") || strType.equals("withdraw") || strType.equalsIgnoreCase("refund")) {
+        if (strType.contains("pay") || strType.equals("withdraw")) {
             holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN"," ").trim());
         } else {
             holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()).replace("CYN"," ").trim());

@@ -41,7 +41,7 @@ public class ApiClient {
     Gson gson = gsonBuilder.create();
 
     private Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(Utils.getStrURL_PRODUCTION())
+            .baseUrl(BuildConfig.URL_PRODUCTION)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();

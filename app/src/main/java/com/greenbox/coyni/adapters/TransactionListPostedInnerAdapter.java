@@ -52,7 +52,7 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
     @Override
     public void onBindViewHolder(@NonNull TransactionListPostedInnerAdapter.MyViewHolder holder, int position) {
         TransactionListPosted objData = transactionListItemsposted.get(position);
-        String strType = "";
+        String strType = "", strSubtype = "";
 
 
         String[] data = objData.getTxnDescription().replace("****", "-").split("-");
@@ -70,7 +70,7 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             e.printStackTrace();
         }
 
-        holder.walletBal.setText("Balance "+convertTwoDecimal(objData.getWalletBalance()));
+        holder.walletBal.setText("Balance " + convertTwoDecimal(objData.getWalletBalance()));
 
         if (position == transactionListItemsposted.size() - 1) {
             holder.blankView.setVisibility(View.VISIBLE);
@@ -85,6 +85,7 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             }
         });
 
+        strSubtype = objData.getTxnSubTypeDn().toLowerCase();
         //type transaction
         if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
             strType = "withdraw";
@@ -104,18 +105,28 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             strType = objData.getTxnTypeDn().toLowerCase();
         }
 
-        if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid") || strType.equalsIgnoreCase("refund")) {
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN","").trim());
+        if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid")) {
+            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN", "").trim());
             holder.amount.setTextColor(mContext.getResources().getColor(R.color.black));
 
 //        } else if (strType.contains("buy") || strType.equals("receive") || strType.equals("refund")) {
-        } else if (strType.contains("buy") || strType.equals("receive") ) {
-            holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()).replace("CYN","").trim());
+        } else {
+            holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()).replace("CYN", "").trim());
             holder.amount.setTextColor(mContext.getResources().getColor(R.color.active_green));
 
-        } else {
-            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN","").trim());
         }
+//        else{
+//            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN", "").trim());
+//        }
+
+        if (strSubtype.equalsIgnoreCase("Sent")) {
+            holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()).split(" ")[0]);
+            holder.amount.setTextColor(mContext.getResources().getColor(R.color.black));
+        } else if (strSubtype.equalsIgnoreCase("Received")) {
+            holder.amount.setText("+" + Utils.convertTwoDecimal(objData.getAmount()).split(" ")[0]);
+            holder.amount.setTextColor(mContext.getResources().getColor(R.color.active_green));
+        }
+
         holder.txnStatus.setText(objData.getTxnStatusDn());
         switch (objData.getTxnStatusDn().replace(" ", "").toLowerCase()) {
             case Utils.transInProgress:
@@ -151,7 +162,7 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
                     i.putExtra("gbxTxnIdType", objData.getGbxTransactionId());
                     i.putExtra("txnType", objData.getTxnTypeDn());
                     i.putExtra("txnSubType", objData.getTxnSubTypeDn());
-                    i.putExtra("txnId",objData.getTransactionId());
+                    i.putExtra("txnId", objData.getTransactionId());
                     mContext.startActivity(i);
                 } catch (Exception ex) {
                     ex.printStackTrace();

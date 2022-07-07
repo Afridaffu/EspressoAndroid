@@ -137,6 +137,8 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     private String childName;
     private ProfilesResponse globalProfileResp;
     private CardView doneButton;
+    private ImageView accountDDIV;
+    private View accountDisableView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,6 +192,10 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             business_AddreLL = findViewById(R.id.b_addressLL);
             business_defaultAccTIL = findViewById(R.id.b_accountTIL);
             business_defaultaccountET = findViewById(R.id.b_accountET);
+
+            accountDDIV = findViewById(R.id.accountDDIConn);
+            accountDisableView = findViewById(R.id.accountDisableVieww);
+
 
             business_defaultAccTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(UserDetailsActivity.this));
 //            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
@@ -830,7 +836,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     }
 
     private void setDefaultAccountData() {
-        if(filterList == null) {
+        if (filterList == null) {
             return;
         }
 
@@ -851,25 +857,36 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         accountsData.removeDeclinedPersonalAccount();
 
 
-        if(accountsData.getGroupData().size() > 1) {
+        if (accountsData.getGroupData().size() > 1) {
             business_defaultaccountET.setEnabled(true);
-            business_defaultAccTIL.setAlpha(1f);
-        } else if(accountsData.getGroupData().size() == 1) {
+            enableOrDisableAccount(false);
+        } else if (accountsData.getGroupData().size() == 1) {
             BaseProfile groupProfile = accountsData.getGroupData().get(0);
             ArrayList<ProfilesResponse.Profiles> profilesList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(groupProfile.getId());
             if (groupProfile.getAccountType().equalsIgnoreCase(Utils.PERSONAL)
                     || profilesList == null || profilesList.size() <= 1) {
                 business_defaultaccountET.setEnabled(false);
-                business_defaultAccTIL.setAlpha(0.5f);
+                enableOrDisableAccount(true);
             } else {
                 business_defaultaccountET.setEnabled(true);
-                business_defaultAccTIL.setAlpha(1f);
+                enableOrDisableAccount(false);
             }
         } else {
             business_defaultaccountET.setEnabled(false);
-            business_defaultAccTIL.setAlpha(0.5f);
+            enableOrDisableAccount(true);
         }
     }
+
+    private void enableOrDisableAccount(boolean enable) {
+        if (enable) {
+            accountDDIV.setVisibility(View.VISIBLE);
+            accountDisableView.setVisibility(View.VISIBLE);
+        } else {
+            accountDDIV.setVisibility(View.GONE);
+            accountDisableView.setVisibility(View.GONE);
+        }
+    }
+
 
     private void bindImage(String imageString) {
         try {

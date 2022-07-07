@@ -57,7 +57,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
     private LinearLayout preferencesCloseLL, defaultaccLL;
     private TextView timezonetext, mTvUserIconText, defualtAccountDialogPersonalNameTV;
     private ImageView accountDDIV;
-    private View disableView;
+    private View accountDisableView;
     private CustomerProfileViewModel customerProfileViewModel;
     private int timeZoneID = 0;
     public static PreferencesActivity preferencesActivity;
@@ -81,6 +81,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
     private CardView doneButton;
     private boolean isTimeZone = false;
     private AccountsData accountsData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,10 +128,12 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
             currencyET = findViewById(R.id.currencyET);
             timeZoneRL = findViewById(R.id.timezoneRL);
             accountDDIV = findViewById(R.id.accountDDICon);
+            accountDisableView = findViewById(R.id.accountDisableView);
             //disableView = findViewById(R.id.disableView);
             preferencesCloseLL = findViewById(R.id.preferencesCloseLL);
             timezonetext = findViewById(R.id.timezoneTextTV);
             defaultaccLL = findViewById(R.id.defaultaccLL);
+
 
             mCurrentUserData = new UserData();
             userId = myApplicationObj.getLoginUserId();
@@ -416,21 +419,21 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
 
         if(accountsData.getGroupData().size() > 1) {
             accountET.setEnabled(true);
-            accountTIL.setAlpha(1f);
+            enableOrDisableAccount(false);
         } else if(accountsData.getGroupData().size() == 1) {
             BaseProfile groupProfile = accountsData.getGroupData().get(0);
             ArrayList<ProfilesResponse.Profiles> profilesList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(groupProfile.getId());
             if (groupProfile.getAccountType().equalsIgnoreCase(Utils.PERSONAL)
                     || profilesList == null || profilesList.size() <= 1) {
                 accountET.setEnabled(false);
-                accountTIL.setAlpha(0.5f);
+                enableOrDisableAccount(true);
             } else {
                 accountET.setEnabled(true);
-                accountTIL.setAlpha(1f);
+                enableOrDisableAccount(false);
             }
         } else {
             accountET.setEnabled(false);
-            accountTIL.setAlpha(0.5f);
+            enableOrDisableAccount(true);
         }
     }
 
@@ -562,5 +565,14 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
         listView.requestLayout();
     }
 
+    private void enableOrDisableAccount(boolean enable){
+        if(enable){
+            accountDDIV.setVisibility(View.VISIBLE);
+            accountDisableView.setVisibility(View.VISIBLE);
+        }else{
+            accountDDIV.setVisibility(View.GONE);
+            accountDisableView.setVisibility(View.GONE);
+        }
+    }
 
 }

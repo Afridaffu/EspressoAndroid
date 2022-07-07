@@ -618,8 +618,8 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                     tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
                     //imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
                     imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
-//                    imgSignetArrow.clearColorFilter();
-                    imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
+//                    imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
+                    imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
 
                 }
             }

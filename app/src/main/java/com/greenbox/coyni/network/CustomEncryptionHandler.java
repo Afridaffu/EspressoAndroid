@@ -2,6 +2,7 @@ package com.greenbox.coyni.network;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -66,11 +67,11 @@ public class CustomEncryptionHandler implements Interceptor {
         Request.Builder requestBuild = request.newBuilder();
         requestBuild.header(KEY_PROTOCOL_VERSION, VERSION);
         requestBuild.header(KEY_CLIENT, CLIENT);
-        requestBuild.header(KEY_REFERER, Utils.getStrReferer());
+        requestBuild.header(KEY_REFERER, BuildConfig.Referer);
         requestBuild.header(KEY_ACCEPT, APPLICATION_JSON);
         requestBuild.header(KEY_USER_AGENT, USER_AGENT);
-        requestBuild.header(KEY_APP_VERSION, Utils.getAppVersion());
-        requestBuild.header(KEY_ACCEPT_LANGUAGE, Utils.getStrLang());
+        requestBuild.header(KEY_APP_VERSION, "Android : " + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")");
+        requestBuild.header(KEY_ACCEPT_LANGUAGE, "en-US");
         requestBuild.header(KEY_REQUEST_ID, randomReqId);
         // TODO Check this tag is required or not
         requestBuild.header("Requested-portal", "customer");
@@ -151,6 +152,7 @@ public class CustomEncryptionHandler implements Interceptor {
             strOldBody = "{}";
         }
         String strNewBody = null;
+        Log.e("API REQUEST", strOldBody);
         String base64Str = java.util.Base64.getEncoder().encodeToString(strOldBody.getBytes());
         String finalStr = appendDateTime(base64Str) + "." + randomRequestId;
         try {
