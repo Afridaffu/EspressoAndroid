@@ -330,7 +330,9 @@ public class EnableAuthID extends BaseActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        startActivity(new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class).putExtra("FROM", "signup"));
+                        startActivity(new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class)
+                                .putExtra("FROM", "signup")
+                                .putExtra(Utils.IS_TRACKER, true));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

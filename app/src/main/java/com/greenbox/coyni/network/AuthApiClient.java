@@ -50,7 +50,7 @@ public class AuthApiClient {
             build();
 
     private final Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(Utils.getStrURL_PRODUCTION())
+            .baseUrl(BuildConfig.URL_PRODUCTION)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build();

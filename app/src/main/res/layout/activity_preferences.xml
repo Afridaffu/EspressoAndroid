@@ -232,6 +232,15 @@
                         android:src="@drawable/ic_down"
                         android:visibility="visible" />
 
+
+                        <View
+                            android:id="@+id/accountDisableView"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_41sdp"
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:background="@drawable/disable_bg"
+                            android:visibility="gone"/>
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/accountTIL"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -272,7 +281,7 @@
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
-                            android:textSize="@dimen/_12ssp"/>
+                            android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </RelativeLayout>

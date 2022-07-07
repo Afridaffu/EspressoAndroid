@@ -1153,7 +1153,10 @@ public class Utils {
             }
         });
 
-        message.setText(msg);
+        if (msg.equals("")) {
+            message.setText(context.getString(R.string.please_try_after));
+        } else
+            message.setText(msg);
         Window window = displayAlertDialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
