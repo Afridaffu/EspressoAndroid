@@ -933,7 +933,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
             CardView cNext = extBankDialog.findViewById(R.id.cvNext);
             LinearLayout lyClose = extBankDialog.findViewById(R.id.lyExternalClose);
             tvBankHead.setText("Link External Bank Account");
-            tvEBMessage.setText("We will now redirect you to our trusted partner Fiserv. Who will help you verify your external bank account with us. Are you ready to begin the process?");
+            tvEBMessage.setText("We will now redirect you to our trusted partner Fiserv.\nWho will help you verify your external bank account with us.\n\nAre you ready to begin the process?");
             tvLearn.setVisibility(View.GONE);
 
             Window window = extBankDialog.getWindow();
