@@ -1,9 +1,5 @@
 package com.greenbox.coyni.view;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -11,6 +7,9 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.users.AccountLimits;
@@ -69,7 +68,8 @@ public class AccountLimitsActivity extends BaseActivity {
                 personalAccountLimitsSv.setVisibility(View.VISIBLE);
                 business_AccountLimitsLL.setVisibility(View.GONE);
                 accountLimitsViewModel.meAccountLimits(Utils.userTypeCust);
-            } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+            } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT
+                    || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                 business_AccountLimitsLL.setVisibility(View.VISIBLE);
                 personalAccountLimitsSv.setVisibility(View.GONE);
                 accountLimitsViewModel.meAccountLimits(Utils.userTypeBusiness);
@@ -122,7 +122,8 @@ public class AccountLimitsActivity extends BaseActivity {
                 setPayRequestData(data);
                 setBuyTokensData(data);
                 setWithdrawData(data);
-            } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT){
+            } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT
+                    || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                 /* For Merchant Account */
                 setMerchantMerchantProcessingData(data);
                 setMerchantBuyTokensDataTypeTwo(data);
@@ -136,24 +137,32 @@ public class AccountLimitsActivity extends BaseActivity {
     }
 
     private void setMerchantMerchantProcessingData(AccountLimitsData data) {
-        b_monthlyProcessingVolume.setText(" ");
-        switch (data.getTransactionHighTicketType()) {
-            case DAILY:
-                b_highTicketLimit.setText(getUsFormat(data.getTransactionHighTicketTxnLimit()).concat(dayStr));
-                break;
-            case WEEKLY:
-                b_highTicketLimit.setText(getUsFormat(data.getTransactionHighTicketTxnLimit()).concat(weekStr));
-                break;
-            case NOLIMIT:
-                b_highTicketLimit.setText(NOLIMIT_STR);
-                break;
-            case PERTRANSACTION:
-                b_highTicketLimit.setText(getUsFormat(data.getTransactionHighTicketTxnLimit()).concat(transactionStr));
-                break;
-            case MONTHLY:
-                b_highTicketLimit.setText(getUsFormat(data.getTransactionHighTicketTxnLimit()).concat(monthStr));
-                break;
+        if (objMyApplication.getDbaInfoResp() != null && objMyApplication.getDbaInfoResp().getData() != null) {
+            if (objMyApplication.getDbaInfoResp().getData().getMonthlyProcessingVolume() != null) {
+                b_monthlyProcessingVolume.setText(getUsFormat(objMyApplication.getDbaInfoResp().getData().getMonthlyProcessingVolume()));
+            }
+            if (objMyApplication.getDbaInfoResp().getData().getHighTicket() != null) {
+                b_highTicketLimit.setText(getUsFormat(objMyApplication.getDbaInfoResp().getData().getHighTicket()));
+            }
         }
+        //b_monthlyProcessingVolume.setText(" ");
+//        switch (data.getTransactionHighTicketType()) {
+//            case DAILY:
+//                b_highTicketLimit.setText(getUsFormat(data.getTransactionHighTicketTxnLimit()).concat(dayStr));
+//                break;
+//            case WEEKLY:
+//                b_highTicketLimit.setText(getUsFormat(data.getTransactionHighTicketTxnLimit()).concat(weekStr));
+//                break;
+//            case NOLIMIT:
+//                b_highTicketLimit.setText(NOLIMIT_STR);
+//                break;
+//            case PERTRANSACTION:
+//                b_highTicketLimit.setText(getUsFormat(data.getTransactionHighTicketTxnLimit()).concat(transactionStr));
+//                break;
+//            case MONTHLY:
+//                b_highTicketLimit.setText(getUsFormat(data.getTransactionHighTicketTxnLimit()).concat(monthStr));
+//                break;
+//        }
     }
 
     private void setWithdrawData(AccountLimitsData data) {

@@ -79,21 +79,21 @@ public class CompanyInfoDetails extends BaseActivity {
             }
         });
 
-        nameTX.setOnClickListener(view -> {
-
-            try {
-                if (nameTX.getText().toString().contains("...") && myApplication.getCompanyInfoResp().getData().getName().length() >= 21) {
-                    nameTX.setText(myApplication.getCompanyInfoResp().getData().getName());
-
-                } else if (myApplication.getCompanyInfoResp().getData().getName().length() >= 21) {
-                    nameTX.setText(myApplication.getCompanyInfoResp().getData().getName().substring(0, 20) + "...");
-                } else {
-                    nameTX.setText(myApplication.getCompanyInfoResp().getData().getName());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+//        nameTX.setOnClickListener(view -> {
+//
+//            try {
+//                if (nameTX.getText().toString().contains("...") && myApplication.getCompanyInfoResp().getData().getName().length() >= 21) {
+//                    nameTX.setText(myApplication.getCompanyInfoResp().getData().getName());
+//
+//                } else if (myApplication.getCompanyInfoResp().getData().getName().length() >= 21) {
+//                    nameTX.setText(myApplication.getCompanyInfoResp().getData().getName().substring(0, 20) + "...");
+//                } else {
+//                    nameTX.setText(myApplication.getCompanyInfoResp().getData().getName());
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        });
         if (myApplication.getDbaOwnerId() == null || myApplication.getDbaOwnerId() == 0) {
             emailLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -131,11 +131,11 @@ public class CompanyInfoDetails extends BaseActivity {
                                 String str = cir.getName();
 //                                fullname = cir.getName().substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
                                 if (str != null && !str.equals("")) {
-                                    if (str.length() > 20) {
-                                        nameTX.setText(Utils.getCapsSentences(str).substring(0, 20) + "...");
-                                    } else {
+//                                    if (str.length() > 20) {
+//                                        nameTX.setText(Utils.getCapsSentences(str).substring(0, 20) + "...");
+//                                    } else {
                                         nameTX.setText(Utils.getCapsSentences(str));
-                                    }
+//                                    }
                                 }
                                 if (cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")) {
                                     mBusinessEntity.setText(cir.getBusinessEntity());

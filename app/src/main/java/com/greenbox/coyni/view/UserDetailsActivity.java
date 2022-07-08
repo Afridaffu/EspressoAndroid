@@ -879,14 +879,13 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
     private void enableOrDisableAccount(boolean enable) {
         if (enable) {
-            accountDDIV.setVisibility(View.VISIBLE);
+            accountDDIV.setVisibility(View.GONE);
             accountDisableView.setVisibility(View.VISIBLE);
         } else {
-            accountDDIV.setVisibility(View.GONE);
+            accountDDIV.setVisibility(View.VISIBLE);
             accountDisableView.setVisibility(View.GONE);
         }
     }
-
 
     private void bindImage(String imageString) {
         try {

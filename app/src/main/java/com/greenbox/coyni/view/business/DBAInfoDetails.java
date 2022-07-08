@@ -232,11 +232,11 @@ public class DBAInfoDetails extends BaseActivity {
 
                             objMyApplication.setDbaInfoResp(dbaInfoResp);
                             String str = dbaInfoResp.getData().getName();
-                            if (str != null && str.length() > 20) {
-                                nameTV.setText(Utils.capitalize(str).substring(0, 20) + "...");
-                            } else if (str != null) {
+//                            if (str != null && str.length() > 20) {
+//                                nameTV.setText(Utils.capitalize(str).substring(0, 20) + "...");
+//                            } else if (str != null) {
                                 nameTV.setText(Utils.capitalize(str));
-                            }
+//                            }
                             if (dbaInfoResp.getData().getEmail() != null) {
                                 emailTV.setText(dbaInfoResp.getData().getEmail());
                             } else {
