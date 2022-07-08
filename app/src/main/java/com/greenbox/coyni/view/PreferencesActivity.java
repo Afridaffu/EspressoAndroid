@@ -102,9 +102,9 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
         UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
         userPreferenceModel.setLocalCurrency(0);
         userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
-        if (myApplicationObj.getAccountType() != Utils.SHARED_ACCOUNT)
-            userPreferenceModel.setPreferredAccount(myApplicationObj.getMyProfile().getData().getId());
-
+        if (myApplicationObj.getAccountType() != Utils.SHARED_ACCOUNT) {
+            userPreferenceModel.setPreferredAccount(preferredId);
+        }
         isTimeZone = true;
         customerProfileViewModel.updatePreferences(userPreferenceModel, myApplicationObj);
     }
@@ -203,7 +203,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                             LogUtils.d("profilesss", "childid" + accountTypeId);
                             UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
                             userPreferenceModel.setLocalCurrency(0);
-                            userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
+                            //userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
                             userPreferenceModel.setPreferredAccount(accountTypeId);
                             isTimeZone = false;
                             customerProfileViewModel.updatePreferences(userPreferenceModel, myApplicationObj);
@@ -253,7 +253,8 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
             //  dashboardViewModel.getProfiles();
             // Business Preferences
 
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT
+                    || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
                 timezonetext.setVisibility(View.VISIBLE);
                 defaultaccLL.setVisibility(View.GONE);
             } else if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
@@ -567,10 +568,10 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
 
     private void enableOrDisableAccount(boolean enable){
         if(enable){
-            accountDDIV.setVisibility(View.VISIBLE);
+            accountDDIV.setVisibility(View.GONE);
             accountDisableView.setVisibility(View.VISIBLE);
         }else{
-            accountDDIV.setVisibility(View.GONE);
+            accountDDIV.setVisibility(View.VISIBLE);
             accountDisableView.setVisibility(View.GONE);
         }
     }
