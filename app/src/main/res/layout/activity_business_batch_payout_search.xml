@@ -158,11 +158,13 @@
                         android:orientation="vertical">
 
                         <androidx.cardview.widget.CardView
+                            android:id="@+id/payoutListCV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_2sdp"
                             android:background="@drawable/bg_white"
-                            app:cardCornerRadius="@dimen/_10sdp">
+                            app:cardCornerRadius="@dimen/_10sdp"
+                            android:visibility="gone">
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/payoutRecyclerView"
@@ -170,8 +172,7 @@
                                 android:layout_height="wrap_content"
                                 android:paddingStart="@dimen/_6sdp"
                                 android:paddingTop="@dimen/_11sdp"
-                                android:paddingEnd="@dimen/_6sdp"
-                                android:visibility="gone">
+                                android:paddingEnd="@dimen/_6sdp">
 
                             </androidx.recyclerview.widget.RecyclerView>
                         </androidx.cardview.widget.CardView>
