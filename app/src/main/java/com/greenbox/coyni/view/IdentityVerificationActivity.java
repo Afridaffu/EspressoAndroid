@@ -1334,7 +1334,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                                     .putExtra("screen", "SUCCESS"));
                         } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
                             //SSN Error
-                            startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class));
+                            startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class)
+                                    .putExtra("from","IDVE"));
 
                         } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
                                 || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")

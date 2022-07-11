@@ -114,7 +114,7 @@
     <string name="sic">State-Issued Card</string>
 
     <string name="ivunder_review">Thank you for your interest in coyni. Please allow us up to 72 business hours for further review of your account. Within that time you may receive a notification and/or email if further information is needed.</string>
-    <string name="ivtitle">Identify Verification Under Review</string>
+    <string name="ivtitle">Identity Verification Under Review</string>
     <string name="done">Done</string>
 
     <string name="add_ac">Additional Action Required</string>
@@ -460,7 +460,7 @@
     <string name="withdraw_token_to_usd">Withdraw token to USD.</string>
     <string name="authorization_failed">Authorization Failed</string>
     <string name="card_authorization_failed">The card authorization failed due to error \ncode: {error code - error code \ndescription}. Please try again.</string>
-    <string name="identify_verification_failed">Identify Verification \nFailed</string>
+    <string name="identify_verification_failed">Identity Verification \nFailed</string>
     <string name="thank_you_for_your_interest">Thank you for your interest in coyni. Please contact coyni customer support if you need further assistance.</string>
     <string name="account_deactivated_description">We’re sorry but your account has been deactivated by the coyni customer support</string>
     <string name="customer"><u>customer</u></string>
@@ -708,4 +708,6 @@
     <string name="buy_token_message">You are unable to complete this purchase due to insufficient balance.please try again when you have enough to cover this order.</string>
     <string name="dot_value">…</string>
     <string name="please_try_after">Looks like we are having an issue, please try after sometime.</string>
+    <string name="action_required_msg_SSN">Update this msg</string>
+    <string name="action_required_msg_upload">The coyni team requires you to upload your documents within 30 days to further verify you.</string>
 </resources>

@@ -430,8 +430,23 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             if (imageString != null && !imageString.trim().equals("")) {
                 imgProfile.setVisibility(View.VISIBLE);
                 userNameTV.setVisibility(View.GONE);
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
-                utility.addImage(imageString, imgProfile, R.drawable.acct_profile);
+//                DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
+//                utility.addImage(imageString, imgProfile, R.drawable.acct_profile);
+                if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+                    if (objMyApplication.getOwnerImage() != null && !objMyApplication.getOwnerImage().equals("")) {
+                        String imageUrl = objMyApplication.getOwnerImage().trim();
+                        DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                        utility.addImage(imageUrl, imgProfile, R.drawable.acct_profile);
+                    }
+                } else {
+                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                            && objMyApplication.getMyProfile().getData().getImage() != null) {
+                        String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
+                        DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                        utility.addImage(imageUrl, imgProfile, R.drawable.acct_profile);
+                    }
+                }
+
             } else if (!objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                 imgProfile.setVisibility(View.VISIBLE);
                 userNameTV.setVisibility(View.GONE);
@@ -478,8 +493,22 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                 saveProfileIV.setVisibility(View.VISIBLE);
                 saveProfileTitle.setVisibility(View.GONE);
 
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
-                utility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
+//                DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
+//                utility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
+                if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+                    if (objMyApplication.getOwnerImage() != null && !objMyApplication.getOwnerImage().equals("")) {
+                        String imageUrl = objMyApplication.getOwnerImage().trim();
+                        DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                        utility.addImage(imageUrl, saveProfileIV, R.drawable.acct_profile);
+                    }
+                } else {
+                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                            && objMyApplication.getMyProfile().getData().getImage() != null) {
+                        String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
+                        DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                        utility.addImage(imageUrl, saveProfileIV, R.drawable.acct_profile);
+                    }
+                }
             } else if (!objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                 saveProfileIV.setVisibility(View.VISIBLE);
                 saveProfileTitle.setVisibility(View.GONE);

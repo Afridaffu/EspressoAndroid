@@ -45,6 +45,9 @@ public class IdentityAddressResponse {
         private String giactResponseCode;
         private String giactResponseName;
         private String giactResponseDescription;
+        private String accountStatus;
+        private String documentTypeCode;
+        private String documentTypeDescription;
 
         public String getGiactResponseCode() {
             return giactResponseCode;
@@ -68,6 +71,30 @@ public class IdentityAddressResponse {
 
         public void setGiactResponseDescription(String giactResponseDescription) {
             this.giactResponseDescription = giactResponseDescription;
+        }
+
+        public String getAccountStatus() {
+            return accountStatus;
+        }
+
+        public void setAccountStatus(String accountStatus) {
+            this.accountStatus = accountStatus;
+        }
+
+        public String getDocumentTypeCode() {
+            return documentTypeCode;
+        }
+
+        public void setDocumentTypeCode(String documentTypeCode) {
+            this.documentTypeCode = documentTypeCode;
+        }
+
+        public String getDocumentTypeDescription() {
+            return documentTypeDescription;
+        }
+
+        public void setDocumentTypeDescription(String documentTypeDescription) {
+            this.documentTypeDescription = documentTypeDescription;
         }
     }
 }

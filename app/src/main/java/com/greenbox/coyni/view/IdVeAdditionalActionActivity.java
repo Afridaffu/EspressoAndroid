@@ -36,7 +36,7 @@ import com.greenbox.coyni.utils.outline_et.SSNBOEditText;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 
 public class IdVeAdditionalActionActivity extends AppCompatActivity {
-//    TextInputEditText ssnET;
+    //    TextInputEditText ssnET;
     TextInputLayout ssnaacTIL;
     CardView idveridoneBtn;
     public boolean isssn = false, isSubmitEnabled = false;
@@ -75,7 +75,14 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
         ssnCloseLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                if (getIntent().getStringExtra("from").equals("IDVE")) {
+                    Intent i = new Intent(IdVeAdditionalActionActivity.this, DashboardActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                } else {
+                    finish();
+                }
+
             }
         });
 
@@ -199,35 +206,38 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                     if (identityAddressResponse.getStatus().equalsIgnoreCase("success")) {
-//                        String respCode = identityAddressResponse.getData().getGiactResponseName();
-//                        if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
-//                                || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
-//                                || respCode.equalsIgnoreCase("CI24")) {
                         //Success
-                        startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                .putExtra("screen", "SUCCESS"));
-                        finish();
-//                        } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
-//                            //SSN Error
-//                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdVeAdditionalActionActivity.class));
-//                            finish();
-//                        } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
-//                                || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
-//                                || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
-//                                || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
-//                                || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
-//                            //Under Review
-//                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
-//                                    .putExtra("screen", "UNDER_REVIEW"));
-//                            finish();
-//
-//                        } else {
-//                            //Failed
-//                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
-//                                    .putExtra("screen", "FAILED"));
-//                            finish();
-//
-//                        }
+//                        startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
+//                                .putExtra("screen", "SUCCESS"));
+//                        finish();
+                        String respCode = identityAddressResponse.getData().getGiactResponseName();
+                        if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
+                                || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
+                                || respCode.equalsIgnoreCase("CI24")) {
+                            //Success
+                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                    .putExtra("screen", "SUCCESS"));
+                        } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
+                            //SSN Error
+                            if (identityAddressResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus()) ||
+                                    identityAddressResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                                //Failed
+                                startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                        .putExtra("screen", "FAILED"));
+                            }
+                        } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
+                                || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
+                                || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
+                                || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
+                                || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
+                            //Under Review
+                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                    .putExtra("screen", "UNDER_REVIEW"));
+                        } else {
+                            //Failed
+                            startActivity(new Intent(IdVeAdditionalActionActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                    .putExtra("screen", "FAILED"));
+                        }
                     } else {
                         Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), IdVeAdditionalActionActivity.this, "", identityAddressResponse.getError().getFieldErrors().get(0));
                     }
