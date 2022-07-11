@@ -22,7 +22,7 @@ public class BenificialOwnerDetails extends BaseActivity {
     private LinearLayout bpbackBtn, primaryLL;
     private BOResp.BeneficialOwner beneficialOwner;
     private MyApplication myApplication;
-    public String state = "";
+    public String state = "", convert = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +96,9 @@ public class BenificialOwnerDetails extends BaseActivity {
             mMailingAddress.append(", " + beneficialOwner.getZipCode() + ".");
         }
         if (beneficialOwner.getSsn() != null && !beneficialOwner.getSsn().equals("")) {
-            String converted = beneficialOwner.getSsn().replaceAll("\\w(?=\\w{2})", "•");
-            String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5, converted.length());
+            convert = beneficialOwner.getSsn().replaceAll("\\-", "");
+            String converted = convert.replaceAll("\\w(?=\\w{2})", "•");
+            String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5);
             mSSN.setText(hifened);
         }
 
