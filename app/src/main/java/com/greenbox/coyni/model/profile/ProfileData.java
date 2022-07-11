@@ -23,6 +23,7 @@ public class ProfileData {
     private String identityUploadDate;
     private String identityDocumentName;
     private String dob;
+    private String statusChangeReasonType;
     private boolean isReserveEnabled;
     private int ssn;
     private int accountType;
@@ -225,6 +226,14 @@ public class ProfileData {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String getStatusChangeReasonType() {
+        return statusChangeReasonType;
+    }
+
+    public void setStatusChangeReasonType(String statusChangeReasonType) {
+        this.statusChangeReasonType = statusChangeReasonType;
     }
 
     @Override
