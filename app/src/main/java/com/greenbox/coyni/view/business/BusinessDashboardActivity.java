@@ -133,8 +133,8 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
             mLastClickTimeQA = SystemClock.elapsedRealtime();
             if (!isTabsEnabled) {
-                UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(this);
-                reviewErrorMsgDialog.show();
+//                UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(this);
+//                reviewErrorMsgDialog.show();
             } else {
                 try {
                     if (selectedTab != Tabs.ACCOUNT) {
@@ -164,8 +164,8 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
             mLastClickTimeQA = SystemClock.elapsedRealtime();
             if (!isTabsEnabled) {
-                UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(this);
-                reviewErrorMsgDialog.show();
+//                UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(this);
+//                reviewErrorMsgDialog.show();
             } else {
                 try {
                     if (selectedTab != Tabs.TRANSACTIONS) {
@@ -204,7 +204,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             mLastClickTimeQA = SystemClock.elapsedRealtime();
             if (!isTabsEnabled) {
                 UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(this);
-                reviewErrorMsgDialog.show();
+//                reviewErrorMsgDialog.show();
             } else {
                 try {
                     LogUtils.d(TAG, "onQuickMenuTabSelected");
