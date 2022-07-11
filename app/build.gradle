@@ -79,7 +79,7 @@ android {
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
             buildConfigField 'String', 'MATOMO_SERVER', '\"https://qa-analytics.coyni.com\"'
-            buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'true'
+            buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
         }
         dev {
             buildConfigField 'String', 'URL_PRODUCTION', '\"http://api-gateway-dev-1893379566.us-east-1.elb.amazonaws.com:80/\"'
