@@ -979,7 +979,7 @@ public class TransactionDetailsActivity extends BaseActivity {
         }
 
         if (objData.getYouPay() != null) {
-            purchaseAmountTV.setText(objData.getYouPay());
+            purchaseAmountTV.setText(Utils.convertBigDecimalUSDC(objData.getYouPay()));
         }
 
         if (objData.getCardBrand() != null) {
@@ -1095,7 +1095,7 @@ public class TransactionDetailsActivity extends BaseActivity {
         }
 
         if (objData.getYouGet() != null) {
-            amount.setText(objData.getYouGet().replace("CYN", "").trim());
+            amount.setText(Utils.convertBigDecimalUSDC(objData.getYouGet().replace("CYN", "").trim()));
         }
         cancelTxnCV.setVisibility(View.GONE);
 
@@ -1920,7 +1920,7 @@ public class TransactionDetailsActivity extends BaseActivity {
             }
 
             if (businessPayoutData.getTotalTransactions() != null) {
-                totalTransactions.setText(businessPayoutData.getTotalTransactions());
+                totalTransactions.setText(Utils.convertToWithoutDecimal(businessPayoutData.getTotalTransactions()));
             }
 
 

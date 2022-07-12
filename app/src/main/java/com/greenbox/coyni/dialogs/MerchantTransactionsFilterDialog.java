@@ -664,7 +664,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     private void USFormat(EditText etAmount, String mode) {
         try {
             String strAmount = "";
-            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
+            strAmount = Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", ""));
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
             etAmount.setSelection(etAmount.getText().length());
             if (mode.equals("START")) {

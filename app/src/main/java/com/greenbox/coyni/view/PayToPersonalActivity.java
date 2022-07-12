@@ -475,13 +475,13 @@ public class PayToPersonalActivity extends AppCompatActivity {
             CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
             userNamePayTV.setText(strUserName);
             String strPFee = "";
-            strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
+            strPFee = Utils.convertBigDecimalUSD(String.valueOf(pfee));
             if (strAddress.length() > 13) {
                 recipAddreTV.setText(strAddress.substring(0, 13) + "...");
             } else {
                 recipAddreTV.setText(strAddress);
             }
-            String enteredAmount = Utils.convertBigDecimalUSDC(tvAmount.getText().toString().replace(",", ""));
+            String enteredAmount = Utils.convertBigDecimalUSD(tvAmount.getText().toString().replace(",", ""));
             amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
             total = cynValue + Double.parseDouble(strPFee);
@@ -605,7 +605,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     private String USFormat(TextView etAmount) {
         String strAmount = "", strReturn = "";
         try {
-            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
+            strAmount = Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", ""));
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
             strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
             changeTextSize(strReturn);

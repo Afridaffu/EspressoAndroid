@@ -23,7 +23,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -69,7 +68,6 @@ import com.greenbox.coyni.utils.SeekBarWithFloatingText;
 import com.greenbox.coyni.utils.UserData;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
-import com.greenbox.coyni.view.PayRequestActivity;
 import com.greenbox.coyni.view.ValidatePinActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
@@ -82,11 +80,7 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -465,7 +459,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             grossAmount = Double.parseDouble(data.get(position).getTotalAmount());
                                         }
                                         if (data.get(position).getCount() > 0) {
-                                            mTransactions.setText(String.valueOf(data.get(position).getCount()));
+                                            mTransactions.setText(Utils.convertToWithoutDecimal(String.valueOf(data.get(position).getCount())));
                                             totalTransactions = data.get(position).getCount();
                                         } else {
                                             mTransactions.setText("0");
@@ -1163,7 +1157,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mTvReserveList.setVisibility(View.VISIBLE);
 
         if (listData.getNextReserveReleaseAmount() != null) {
-            nextReleaseAmountTV.setText(listData.getNextReserveReleaseAmount());
+            nextReleaseAmountTV.setText(Utils.convertBigDecimalUSDC(listData.getNextReserveReleaseAmount()));
         }
 
         if (listData.getNextReserveReleaseDate() != null) {
@@ -1186,7 +1180,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             if (items.size() > 0) {
                 ReserveListItems latest = items.get(0);
                 String amount = latest.getReserveAmount();
-                lastReleaseAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
+                lastReleaseAmountTV.setText(Utils.convertBigDecimalUSDC(amount));
                 String datee = latest.getScheduledRelease();
                 if (datee != null && !datee.equals("")) {
                     if (datee.contains(".")) {

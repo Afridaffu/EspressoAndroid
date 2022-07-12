@@ -615,7 +615,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                 mPItotalamounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));
             }
             if (objData.getData().getTotalTransactions() != null) {
-                mPItotaltransactionstv.setText(objData.getData().getTotalTransactions());
+                mPItotaltransactionstv.setText(Utils.convertToWithoutDecimal(String.valueOf(objData.getData().getTotalTransactions())));
             }
             mpayoutll.setOnClickListener(new View.OnClickListener() {
                 @Override

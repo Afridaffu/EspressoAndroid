@@ -368,7 +368,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
 
             Double bal = cynValue + objMyApplication.getGBTBalance();
-            String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
+            String strBal = Utils.convertBigDecimalUSD(String.valueOf(bal));
             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
             tvAmount.setText(Utils.USNumberFormat(cynValue));
 //            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement as " + objData.getDescriptorName().toLowerCase() + ".");
@@ -534,11 +534,11 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             tvHeading.setText("Transaction In Progress");
             imgLogo.setImageResource(R.drawable.ic_in_progress_icon);
             Double bal = cynValue + objMyApplication.getGBTBalance();
-            String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
+            String strBal = Utils.convertBigDecimalUSD(String.valueOf(bal));
             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
             tvAmount.setText("$ " + Utils.USNumberFormat(cynValue));
 //            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement as " + objData.getDescriptorName().toLowerCase() + ".");
-            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement.");
+            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your bank statement.");
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

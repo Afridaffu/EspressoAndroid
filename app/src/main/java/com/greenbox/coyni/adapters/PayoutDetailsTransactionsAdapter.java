@@ -174,19 +174,19 @@ public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<Re
         }        //type transaction
         if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.SaleOrder)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
-            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setText(Utils.convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
         }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.Refund)){
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " to " + objData.getReceiveName());
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
             holder.amount.setTextColor(Color.parseColor("#000000"));
         }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.MerchantPayout)){
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " to " + objData.getReceiveName());
-            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setText(Utils.convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
         }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.MonthlyServiceFee)){
             holder.txnTypeDn.setText(objData.getTxnTypeDn());
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
             holder.amount.setTextColor(Color.parseColor("#000000"));
         }
 

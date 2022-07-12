@@ -70,7 +70,7 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             e.printStackTrace();
         }
 
-        holder.walletBal.setText("Balance " + convertTwoDecimal(objData.getWalletBalance()));
+        holder.walletBal.setText("Balance " + Utils.convertTwoDecimal(objData.getWalletBalance()));
 
         if (position == transactionListItemsposted.size() - 1) {
             holder.blankView.setVisibility(View.VISIBLE);
@@ -106,12 +106,12 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
         }
 
         if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid")) {
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN", "").trim());
+            holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN", "").trim());
             holder.amount.setTextColor(mContext.getResources().getColor(R.color.black));
 
 //        } else if (strType.contains("buy") || strType.equals("receive") || strType.equals("refund")) {
         } else {
-            holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()).replace("CYN", "").trim());
+            holder.amount.setText("+" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN", "").trim());
             holder.amount.setTextColor(mContext.getResources().getColor(R.color.active_green));
 
         }
@@ -199,20 +199,20 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
 
     }
 
-    private String convertTwoDecimal(String strAmount) {
-        String strValue = "", strAmt = "";
-        try {
-            if (strAmount.contains(" ")) {
-                strAmt = Utils.convertBigDecimalUSDC(strAmount.split(" ")[0]);
-                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt)) + " " + strAmount.split(" ")[1];
-            } else {
-                strAmt = Utils.convertBigDecimalUSDC(strAmount);
-                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strValue;
-    }
+//    private String convertTwoDecimal(String strAmount) {
+//        String strValue = "", strAmt = "";
+//        try {
+//            if (strAmount.contains(" ")) {
+//                strAmt = Utils.convertBigDecimalUSDC(strAmount.split(" ")[0]);
+//                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt)) + " " + strAmount.split(" ")[1];
+//            } else {
+//                strAmt = Utils.convertBigDecimalUSDC(strAmount);
+//                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt));
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//        return strValue;
+//    }
 
 }

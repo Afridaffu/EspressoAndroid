@@ -481,7 +481,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         objMyApplication.setTransferFeeResponse(transferFeeResponse);
                         feeInAmount = transferFeeResponse.getData().getFeeInAmount();
                         feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
-                        if (isButtonClick && !etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Double.parseDouble(etAmount.getText().toString()) > 0) {
+                        if (isButtonClick && !etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Double.parseDouble(etAmount.getText().toString().replace(",","")) > 0) {
                             isButtonClick = false;
                             Double pay = Double.parseDouble(etAmount.getText().toString().replace(",", ""));
                             pfee = transferFeeResponse.getData().getFee();
@@ -836,7 +836,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
 //                } else if ((daily == 0 || daily < 0) && week > 0) {
 //                    strLimit = "week";
 //                    maxValue = week;
-//                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(week));
+//                    strAmount = Utils.convertBigDecimalUSD(String.valueOf(week));
 //                    tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
 //                } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
 //                    tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
@@ -844,16 +844,16 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
 //                } else {
 //                    strLimit = "daily";
 //                    maxValue = daily;
-//                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
+//                    strAmount = Utils.convertBigDecimalUSD(String.valueOf(daily));
 //                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
 //                }
             if (objLimit.getLimitType().toLowerCase().equals("daily")) {
                 strLimit = "daily";
-                strAmount = Utils.convertBigDecimalUSDC(String.valueOf(maxValue));
+                strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
                 tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
             } else if (objLimit.getLimitType().toLowerCase().equals("weekly")) {
                 strLimit = "week";
-                strAmount = Utils.convertBigDecimalUSDC(String.valueOf(maxValue));
+                strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
                 tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
             } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
                 tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
@@ -985,7 +985,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
         isMinimumError = false;
         try {
             cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
-            String strPay = Utils.convertBigDecimalUSDC((etAmount.getText().toString().trim().replace("\"", "")).replace(",", ""));
+            String strPay = Utils.convertBigDecimalUSD((etAmount.getText().toString().trim().replace("\"", "")).replace(",", ""));
             if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
 //                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                 setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", WithdrawTokenActivity.this, tvError, 17);
@@ -1072,7 +1072,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             tvPurchaseHead.setText("Withdraw Amount");
             tvCYN.setVisibility(View.GONE);
             String strPFee = "";
-            strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
+            strPFee = Utils.convertBigDecimalUSD(String.valueOf(pfee));
             tvGet.setText("$ " + Utils.USNumberFormat(cynValue));
             tvPurchaseAmt.setText(Utils.USNumberFormat(cynValue) + " " + getString(R.string.currency));
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
@@ -1363,7 +1363,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
     private String USFormat(EditText etAmount) {
         String strAmount = "", strReturn = "";
         try {
-            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
+            strAmount = Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", ""));
             etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
             ctKey.setEnteredText(etAmount.getText().toString());
@@ -1582,7 +1582,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                 return;
             }
-            cynValue = Double.parseDouble(etAmount.getText().toString().trim());
+            cynValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
             mLastClickTime = SystemClock.elapsedRealtime();
             isButtonClick = true;
             convertUSDtoCYN();
@@ -1613,7 +1613,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 etAmount.setFilters(FilterArray);
                 etAmount.removeTextChangedListener(WithdrawTokenActivity.this);
 //                etAmount.setText(String.valueOf(cynValue));
-                etAmount.setText(Utils.convertBigDecimalUSDC(String.valueOf(cynValue)));
+                etAmount.setText(Utils.convertBigDecimalUSD(String.valueOf(cynValue)));
                 etAmount.addTextChangedListener(WithdrawTokenActivity.this);
                 USFormat(etAmount);
                 etAmount.setSelection(etAmount.getText().length());
@@ -1699,7 +1699,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             tvHeading.setText("Transaction in Progress");
             imgLogo.setImageResource(R.drawable.ic_in_progress_icon);
             Double bal = cynValue + objMyApplication.getGBTBalance();
-            String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
+            String strBal = Utils.convertBigDecimalUSD(String.valueOf(bal));
             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
             tvAmount.setText("$ " + Utils.USNumberFormat(cynValue));
 //            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement as " + objData.getDescriptorName().toLowerCase() + ".");

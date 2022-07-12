@@ -653,7 +653,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         } else {
             tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("", "CYN")));
         }
-        String percent = Utils.convertBigDecimalUSDC(String.valueOf(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString()));
+        String percent = Utils.convertBigDecimalUSD(String.valueOf(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString()));
         tv_reserveAmount.setText(Utils.convertTwoDecimal(percent.replace("0*$", "") + " %"));
         tv_reservePeriod.setText(actionRequiredResponse.getData().getReserveRule().getReservePeriod() + " " + "days");
 
