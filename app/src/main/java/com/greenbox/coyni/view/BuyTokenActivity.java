@@ -941,11 +941,14 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strLimit = "week";
                 strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
                 tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
-            } else if (objLimit.getLimitType().toLowerCase().equals("unlimited")) {
-                tvLimit.setText("Your daily limit is " + objLimit.getTransactionLimit() + strCurrency);
-                strLimit = "unlimited";
-            } else {
-                strLimit = "";
+            }
+//            else if (objLimit.getTransactionLimit().toLowerCase().equals("unlimited")) {
+//                tvLimit.setText("Your daily limit is " + objLimit.getTransactionLimit() + strCurrency);
+//                strLimit = "unlimited";
+//            }
+            else {
+//                strLimit = "";
+                strLimit = objLimit.getLimitType().toLowerCase();
                 tvLimit.setVisibility(View.GONE);
             }
 
@@ -1010,7 +1013,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
 //            } else if (!strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
-            } else if (!strLimit.equals("unlimited") && cynValue > maxValue) {
+            } else if (!strLimit.equals("") && !strLimit.equals("unlimited") && !strLimit.equals("no limit") && cynValue > maxValue) {
 //                if (strLimit.equals("daily")) {
 //                    tvError.setText("Amount entered exceeds your daily limit");
 //                } else if (strLimit.equals("week")) {
@@ -1274,7 +1277,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 convertCYNtoUSD();
             }
             isButtonClick = true;
-            calculateFee(Utils.USNumberFormat(cynValue));
+//            calculateFee(Utils.USNumberFormat(cynValue));
+            calculateFee(Utils.USNumberFormat(usdValue));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

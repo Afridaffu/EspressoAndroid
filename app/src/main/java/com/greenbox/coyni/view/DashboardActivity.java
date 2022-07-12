@@ -82,7 +82,7 @@ public class DashboardActivity extends BaseActivity {
     IdentityVerificationViewModel identityVerificationViewModel;
     public NotificationsViewModel notificationsViewModel;
     TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV,
-            welcomeCoyniTV, buyTokenWelcomeCoyniTV, contactUSTV, idVeriStatus;
+            welcomeCoyniTV, buyTokenWelcomeCoyniTV, contactUSTV, idVeriStatus,actionRequiredMsgTV;
     MyApplication objMyApplication;
     Dialog dialog;
     RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL;
@@ -166,6 +166,7 @@ public class DashboardActivity extends BaseActivity {
             welcomeCoyniTV = findViewById(R.id.welcomeCoyniTV);
             underReviewCV = findViewById(R.id.underReviewCV);
             additionalActionCV = findViewById(R.id.additionalActionCV);
+            actionRequiredMsgTV = findViewById(R.id.actionRequiredMsgTV);
             buyTokensCV = findViewById(R.id.buyTokensCV);
             buyTokenWelcomeCoyniTV = findViewById(R.id.buyTokenWelcomeCoyniTV);
             cvPayRequest = findViewById(R.id.cvPayRequest);
@@ -319,7 +320,14 @@ public class DashboardActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, AdditionalActionUploadActivity.class));
+                    if(objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equals("ACTION_REQUIRED_ADDITIONAL_INFO"))
+                        startActivity(new Intent(DashboardActivity.this, AdditionalActionUploadActivity.class));
+                    else if(objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equals("ACTION_REQUIRED_FULL_SSN"))
+                        startActivity(new Intent(DashboardActivity.this, IdVeAdditionalActionActivity.class)
+                                .putExtra("from","DASHBOARD"));
+
+
+
                 }
             });
 
@@ -599,6 +607,10 @@ public class DashboardActivity extends BaseActivity {
                             underReviewCV.setVisibility(View.GONE);
                             additionalActionCV.setVisibility(View.VISIBLE);
                             buyTokensCV.setVisibility(View.GONE);
+                            if(objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equals("ACTION_REQUIRED_ADDITIONAL_INFO"))
+                                actionRequiredMsgTV.setText(getString(R.string.action_required_msg_upload));
+                            else if(objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equals("ACTION_REQUIRED_FULL_SSN"))
+                                actionRequiredMsgTV.setText(getString(R.string.action_required_msg_SSN));
                         }
                     }
                     bindImage();
