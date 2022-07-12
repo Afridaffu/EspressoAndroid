@@ -855,11 +855,14 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 strLimit = "week";
                 strAmount = Utils.convertBigDecimalUSDC(String.valueOf(maxValue));
                 tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
-            } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
-                tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
-                strLimit = "unlimited";
-            } else {
-                strLimit = "";
+            }
+//            else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
+//                tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
+//                strLimit = "unlimited";
+//            }
+            else {
+//                strLimit = "";
+                strLimit = objLimit.getLimitType().toLowerCase();
                 tvLimit.setVisibility(View.GONE);
             }
 
@@ -995,7 +998,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 value = false;
             } else if (Double.parseDouble(strPay.replace(",", "")) <= 0) {
                 value = false;
-            } else if (!strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
+            } else if (!strLimit.equals("") && !strLimit.equals("unlimited") && !strLimit.equals("no limit") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
 //                if (strLimit.equals("daily")) {
 //                    tvError.setText("Amount entered exceeds your daily limit");
 //                } else if (strLimit.equals("week")) {
