@@ -70,7 +70,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
     private Long mLastClickTime = 0L;
     private int documentID;
     private LinearLayout selectedLayout = null;
-    private TextView selectedText = null,adminMessageTV;
+    private TextView selectedText = null, adminMessageTV;
     public static ArrayList<File> documentsFIle;
     public static File mediaFile;
     private LinearLayout additionalDocumentRequiredLL;
@@ -115,7 +115,8 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                postSubmitAPiCall();
+                if (isSubmitEnabled)
+                    postSubmitAPiCall();
             }
         });
     }

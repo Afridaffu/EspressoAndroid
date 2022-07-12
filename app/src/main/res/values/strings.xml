@@ -708,6 +708,6 @@
     <string name="buy_token_message">You are unable to complete this purchase due to insufficient balance.please try again when you have enough to cover this order.</string>
     <string name="dot_value">…</string>
     <string name="please_try_after">Looks like we are having an issue, please try after sometime.</string>
-    <string name="action_required_msg_SSN">Update this msg</string>
+    <string name="action_required_msg_SSN">Social Security number verification.</string>
     <string name="action_required_msg_upload">The coyni team requires you to upload your documents within 30 days to further verify you.</string>
 </resources>
