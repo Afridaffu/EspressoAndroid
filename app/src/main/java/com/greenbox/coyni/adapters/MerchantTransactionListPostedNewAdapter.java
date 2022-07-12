@@ -29,7 +29,7 @@ import java.util.TimeZone;
 public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private MyApplication objMyApplication;
-    private List<ListItem> consolidatedListData = new ArrayList<>();
+    private List<ListItem> consolidatedListData;
     private List<TransactionListPosted> transactionListItemsPosted;
     private OnItemClickListener listener;
 
@@ -175,19 +175,19 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
 
         if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.SaleOrder)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
-            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN", " "));
+            holder.amount.setText(Utils.convertTwoDecimal(objData.getAmount()).replace("CYN", ""));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
         } else if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.Refund)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " to " + objData.getReceiveName());
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN", " "));
+            holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN", ""));
             holder.amount.setTextColor(Color.parseColor("#000000"));
         } else if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.MerchantPayout)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " to " + objData.getReceiveName());
-            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN", " "));
+            holder.amount.setText(Utils.convertTwoDecimal(objData.getAmount()).replace("CYN", ""));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
         } else if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.MonthlyServiceFee)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn());
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN", " "));
+            holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN", ""));
             holder.amount.setTextColor(Color.parseColor("#000000"));
         }
         if (objData.getCreatedAt() != null && !objData.getCreatedAt().equals("")) {

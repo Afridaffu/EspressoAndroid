@@ -256,7 +256,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
                     strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getAvailabilityToUse()));
-                    userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+                    userBalanceTV.setText(strAmount);
                 }
             } else {
                 userBalanceTV.setText("0.00");

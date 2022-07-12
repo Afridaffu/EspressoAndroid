@@ -144,7 +144,7 @@ public class BusinessAccountFragment extends BaseFragment {
                             String strAmount;
                             objMyApplication.setGBTBalance(walletInfo.get(0).getAvailabilityToUse(), walletInfo.get(0).getWalletType());
                             strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(0).getAvailabilityToUse()));
-                            tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+                            tvBalance.setText(strAmount);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

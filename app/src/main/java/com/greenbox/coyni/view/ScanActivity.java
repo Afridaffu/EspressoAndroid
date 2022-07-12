@@ -1482,7 +1482,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     private String USFormat(EditText etAmount) {
         String strAmount = "", strReturn = "";
         try {
-            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
+            strAmount = Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", ""));
             InputFilter[] FilterArray = new InputFilter[1];
             FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
             setAmount.setFilters(FilterArray);

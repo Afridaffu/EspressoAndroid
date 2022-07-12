@@ -377,8 +377,8 @@ public class ReserveDetailsActivity extends BaseActivity {
 
         //Released Details
         if (selected != null && selected.getReserveAmount() != null) {
-            releasedAMT.setText(selected.getReserveAmount() + " CYN");
-            amount.setText(selected.getReserveAmount() + " CYN");
+            releasedAMT.setText(Utils.convertTwoDecimal(selected.getReserveAmount())+ " CYN");
+            amount.setText(Utils.convertTwoDecimal(selected.getReserveAmount()) + " CYN");
         } else {
             releasedAMT.setText("0.00 CYN");
             amount.setText("0.00 CYN");

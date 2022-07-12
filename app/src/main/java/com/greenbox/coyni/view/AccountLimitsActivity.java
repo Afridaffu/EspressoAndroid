@@ -408,6 +408,6 @@ public class AccountLimitsActivity extends BaseActivity {
     }
 
     private String getUsFormat(String s) {
-        return Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(s)));
+        return Utils.convertBigDecimalUSDC(s);
     }
 }

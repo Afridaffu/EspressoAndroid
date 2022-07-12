@@ -1041,7 +1041,7 @@ public class DashboardActivity extends BaseActivity {
 //                    objMyApplication.setWalletResponseData(walletResponse);
 //                    objMyApplication.setGbtWallet(walletInfo.get(i));
                     strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getAvailabilityToUse()));
-                    tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+                    tvBalance.setText(strAmount);
                     objMyApplication.setGBTBalance(walletInfo.get(i).getAvailabilityToUse(), walletInfo.get(0).getWalletType());
 //                    }
                 }

@@ -1434,7 +1434,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
     private void USFormat(EditText etAmount, String mode) {
         try {
             String strAmount = "";
-            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
+            strAmount = Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", ""));
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
             etAmount.setSelection(etAmount.getText().length());
             if (mode.equals("START")) {
@@ -1619,7 +1619,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
     public Double getUSFormat(String amount) {
         String strAmount = "";
         try {
-//            strAmount = Utils.convertBigDecimalUSDC(amount.trim().replace(",", ""));
+//            strAmount = Utils.convertBigDecimalUSD(amount.trim().replace(",", ""));
             strAmount = amount.trim().replace(",", "");
         } catch (Exception ex) {
             ex.printStackTrace();

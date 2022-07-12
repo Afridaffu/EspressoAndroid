@@ -702,7 +702,33 @@ public class Utils {
         }
     }
 
+    public static String convertToWithoutDecimal(String amount) {
+        String strValue = "";
+        try {
+            int amt = Integer.parseInt(amount);
+            NumberFormat format = NumberFormat.getNumberInstance(Locale.US);
+            strValue = format.format(amt);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strValue;
+    }
+
     public static String convertBigDecimalUSDC(String amount) {
+        String strValue = "";
+        try {
+            double amt = Double.parseDouble(amount);
+            NumberFormat format = DecimalFormat.getCurrencyInstance(Locale.US);
+            format.setMaximumFractionDigits(2);
+            strValue = format.format(amt).replace("$", "");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return strValue;
+    }
+
+    public static String convertBigDecimalUSD(String amount) {
         String strValue = "";
         BigDecimal value;
         try {
@@ -1605,12 +1631,13 @@ public class Utils {
         String strValue = "", strAmt = "";
         try {
             if (strAmount.contains(" ")) {
-                strAmt = Utils.convertBigDecimalUSDC(strAmount.split(" ")[0]);
-                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt)) + " " + strAmount.split(" ")[1];
+                String[] split = strAmount.split(" ");
+                //strAmt = Utils.convertBigDecimalUSDC(strAmount.split(" ")[0]);
+                strValue = Utils.convertBigDecimalUSDC(split[0]) + " " + split[1];
             } else {
-                strAmt = Utils.convertBigDecimalUSDC(strAmount);
+                strValue = Utils.convertBigDecimalUSDC(strAmount);
 //                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt)) + " " + mContext.getString(R.string.currency);
-                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt));
+//                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt));
             }
             Log.e("str", strValue);
         } catch (Exception ex) {

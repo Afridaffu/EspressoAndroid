@@ -917,12 +917,12 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //                if ((week == 0 || week < 0) && daily > 0) {
 //                    strLimit = "daily";
 //                    maxValue = daily;
-//                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
+//                    strAmount = Utils.convertBigDecimalUSD(String.valueOf(daily));
 //                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
 //                } else if ((daily == 0 || daily < 0) && week > 0) {
 //                    strLimit = "week";
 //                    maxValue = week;
-//                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(week));
+//                    strAmount = Utils.convertBigDecimalUSD(String.valueOf(week));
 //                    tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
 //                } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
 //                    tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
@@ -930,16 +930,16 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //                } else {
 //                    strLimit = "daily";
 //                    maxValue = daily;
-//                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
+//                    strAmount = Utils.convertBigDecimalUSD(String.valueOf(daily));
 //                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
 //                }
             if (objLimit.getLimitType().toLowerCase().equals("daily")) {
                 strLimit = "daily";
-                strAmount = Utils.convertBigDecimalUSDC(String.valueOf(maxValue));
+                strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
                 tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
             } else if (objLimit.getLimitType().toLowerCase().equals("weekly")) {
                 strLimit = "week";
-                strAmount = Utils.convertBigDecimalUSDC(String.valueOf(maxValue));
+                strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
                 tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
             }
 //            else if (objLimit.getTransactionLimit().toLowerCase().equals("unlimited")) {
@@ -1072,7 +1072,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
 
             String strPFee = "";
-            strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
+            strPFee = Utils.convertBigDecimalUSD(String.valueOf(pfee));
             tvGet.setText(Utils.USNumberFormat(cynValue));
             tvPurchaseAmt.setText(Utils.USNumberFormat(cynValue) + " USD");
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " USD");
@@ -1182,7 +1182,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     private String USFormat(EditText etAmount) {
         String strAmount = "", strReturn = "";
         try {
-            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
+            strAmount = Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", ""));
             etAmount.removeTextChangedListener(BuyTokenActivity.this);
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
             etAmount.addTextChangedListener(BuyTokenActivity.this);
@@ -1200,10 +1200,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             if (isUSD) {
                 isUSD = false;
 //                usdValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-                usdValue = Double.parseDouble(Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", "")));
+                usdValue = Double.parseDouble(Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", "")));
 //                cynValue = usdValue * (1 - (feeInPercentage / 100)) - feeInAmount;
                 Double calValue = usdValue * (1 - (feeInPercentage / 100)) - feeInAmount;
-                cynValue = Double.parseDouble(Utils.convertBigDecimalUSDC(String.valueOf(calValue)));
+                cynValue = Double.parseDouble(Utils.convertBigDecimalUSD(String.valueOf(calValue)));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1215,10 +1215,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             if (isCYN) {
                 isCYN = false;
 //                cynValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-                cynValue = Double.parseDouble(Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", "")));
+                cynValue = Double.parseDouble(Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", "")));
 //                usdValue = (cynValue + feeInAmount) / (1 - (feeInPercentage / 100));
                 Double calValue = (cynValue + feeInAmount) / (1 - (feeInPercentage / 100));
-                usdValue = Double.parseDouble(Utils.convertBigDecimalUSDC(String.valueOf(calValue)));
+                usdValue = Double.parseDouble(Utils.convertBigDecimalUSD(String.valueOf(calValue)));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1234,7 +1234,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 etAmount.setFilters(FilterArray);
                 etAmount.removeTextChangedListener(BuyTokenActivity.this);
 //                etAmount.setText(String.valueOf(cynValue));
-                etAmount.setText(Utils.convertBigDecimalUSDC(String.valueOf(cynValue)));
+                etAmount.setText(Utils.convertBigDecimalUSD(String.valueOf(cynValue)));
                 ctKey.setEnteredText(etAmount.getText().toString());
                 etAmount.addTextChangedListener(BuyTokenActivity.this);
                 USFormat(etAmount);
@@ -1254,7 +1254,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 etAmount.setFilters(FilterArray);
                 etAmount.removeTextChangedListener(BuyTokenActivity.this);
 //                etAmount.setText(String.valueOf(usdValue));
-                etAmount.setText(Utils.convertBigDecimalUSDC(String.valueOf(usdValue)));
+                etAmount.setText(Utils.convertBigDecimalUSD(String.valueOf(usdValue)));
                 ctKey.setEnteredText(etAmount.getText().toString());
                 etAmount.addTextChangedListener(BuyTokenActivity.this);
                 USFormat(etAmount);
@@ -1290,7 +1290,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             request.setBankId(strBankId);
             request.setCardId(strCardId);
             request.setCvc(strCvv);
-            request.setTokens(Utils.convertBigDecimalUSDC(String.valueOf(total)));
+            request.setTokens(Utils.convertBigDecimalUSD(String.valueOf(total)));
             request.setTxnSubType(strSubType);
             objMyApplication.setBuyRequest(request);
         } catch (Exception ex) {
@@ -1305,7 +1305,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //            request.setBankId(strBankId);
 //            request.setCardId(strCardId);
 //            request.setCvc(strCvv);
-//            request.setTokens(Utils.convertBigDecimalUSDC(String.valueOf(total)));
+//            request.setTokens(Utils.(String.valueOf(total)));
 //            request.setTxnSubType(strSubType);
             if (Utils.checkInternet(BuyTokenActivity.this)) {
                 buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest(), objMyApplication.getStrToken());
@@ -1385,7 +1385,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
 
             Double bal = cynValue + objMyApplication.getGBTBalance();
-            String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
+            String strBal = Utils.convertBigDecimalUSD(String.valueOf(bal));
             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
             tvAmount.setText(Utils.USNumberFormat(cynValue));
 

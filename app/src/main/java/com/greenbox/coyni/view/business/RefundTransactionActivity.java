@@ -564,8 +564,8 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             CardView im_lock_ = refundDialog.findViewById(R.id.im_lock_);
             userefundTV.setText(strUserName);
             String strPFee = "";
-            strPFee = Utils.convertBigDecimalUSDC(String.valueOf(processingFee));
-            String enteredAmount = Utils.convertBigDecimalUSDC(refundET.getText().toString().replace(",", ""));
+            strPFee = Utils.convertBigDecimalUSD(String.valueOf(processingFee));
+            String enteredAmount = Utils.convertBigDecimalUSD(refundET.getText().toString().replace(",", ""));
             amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
             total = cynValue + Double.parseDouble(strPFee);

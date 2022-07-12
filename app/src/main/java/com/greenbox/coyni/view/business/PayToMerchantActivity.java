@@ -746,7 +746,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         try {
             TemplateRequest request = new TemplateRequest();
             request.setBody1(objMyApplication.getStrUserName());
-            request.setBody2(Utils.convertBigDecimalUSDC(payET.getText().toString().trim().replace(",", "")));
+            request.setBody2(Utils.convertBigDecimalUSD(payET.getText().toString().trim().replace(",", "")));
             request.setBody3(recipientAddress);
             payViewModel.getTemplate(Utils.requestId, request);
         } catch (Exception ex) {
@@ -766,7 +766,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     private String USFormat(EditText etAmount) {
         String strAmount = "", strReturn = "";
         try {
-            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
+            strAmount = Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", ""));
             etAmount.removeTextChangedListener(PayToMerchantActivity.this);
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
             cKey.setEnteredText(etAmount.getText().toString());

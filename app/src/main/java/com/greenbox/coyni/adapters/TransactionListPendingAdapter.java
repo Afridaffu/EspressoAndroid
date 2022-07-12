@@ -80,7 +80,7 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
 
         holder.txnStatus.setText(objData.getTxnStatusDn());
         holder.txnStatus.setBackgroundResource(R.drawable.txn_pending_bg);
-        holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
+        holder.walletBal.setText(Utils.convertTwoDecimal(objData.getWalletBalance()));
         holder.date.setVisibility(View.GONE);
         if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
             strType = "withdraw";
@@ -97,9 +97,9 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
         }
 
         if (strType.contains("pay") || strType.equals("withdraw")) {
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN"," ").trim());
+            holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN"," ").trim());
         } else {
-            holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()).replace("CYN"," ").trim());
+            holder.amount.setText("+" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN"," ").trim());
             holder.amount.setTextColor(Color.parseColor("#008a05"));
         }
 
@@ -171,10 +171,10 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
         String strValue = "", strAmt = "";
         try {
             if (strAmount.contains(" ")) {
-                strAmt = Utils.convertBigDecimalUSDC(strAmount.split(" ")[0]);
+                strAmt = Utils.convertBigDecimalUSD(strAmount.split(" ")[0]);
                 strValue = Utils.USNumberFormat(Double.parseDouble(strAmt)) + " " + strAmount.split(" ")[1];
             } else {
-                strAmt = Utils.convertBigDecimalUSDC(strAmount);
+                strAmt = Utils.convertBigDecimalUSD(strAmount);
                 strValue = Utils.USNumberFormat(Double.parseDouble(strAmt));
             }
         } catch (Exception ex) {

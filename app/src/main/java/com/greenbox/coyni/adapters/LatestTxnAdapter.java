@@ -78,7 +78,7 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
 
 //            holder.txnDescTV.setText(latestTxns.getData().get(position).getTxnDescription());
 //
-            holder.amountTV.setText(latestTxns.getData().get(position).getAmount());
+            holder.amountTV.setText(Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()));
 //            holder.dateTV.setText(latestTxns.getData().get(position).getUpdatedAt());
             holder.balanceTV.setText("Balance " + Utils.convertTwoDecimal(latestTxns.getData().get(position).getWalletBalance()).split(" ")[0]);
             String strType = "", strSubtype = "";
