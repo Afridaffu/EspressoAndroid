@@ -377,8 +377,8 @@ public class ReserveDetailsActivity extends BaseActivity {
 
         //Released Details
         if (selected != null && selected.getReserveAmount() != null) {
-            releasedAMT.setText(Utils.convertTwoDecimal("103465432.54")+ " CYN");
-            amount.setText(Utils.convertTwoDecimal("12345654321.54") + " CYN");
+            releasedAMT.setText(Utils.convertTwoDecimal(selected.getReserveAmount())+ " CYN");
+            amount.setText(Utils.convertTwoDecimal(selected.getReserveAmount()) + " CYN");
         } else {
             releasedAMT.setText("0.00 CYN");
             amount.setText("0.00 CYN");
@@ -405,7 +405,7 @@ public class ReserveDetailsActivity extends BaseActivity {
             }
 
             time = myApplication.convertZoneDateTime(timeDateTemp, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy");
-            amt = Utils.convertTwoDecimal("12344321234") + " CYN";
+            amt = Utils.convertTwoDecimal(selected.getReserveAmount()) + " CYN";
         }
     }
 
