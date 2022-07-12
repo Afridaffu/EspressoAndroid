@@ -632,23 +632,27 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
         buyTokenViewModel.getTransferFeeResponseMutableLiveData().observe(this, new Observer<TransferFeeResponse>() {
             @Override
             public void onChanged(TransferFeeResponse transferFeeResponse) {
-                if (pDialog != null) {
-                    pDialog.dismiss();
-                }
-                if (transferFeeResponse != null) {
-                    objMyApplication.setTransferFeeResponse(transferFeeResponse);
-                    feeInAmount = transferFeeResponse.getData().getFeeInAmount();
-                    feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
-                    pfee = transferFeeResponse.getData().getFee();
-                    if (!payRequestET.getText().toString().equals("") && !payRequestET.getText().toString().equals("0") && Double.parseDouble(payRequestET.getText().toString()) > 0) {
-                        if (isPayClick) {
-                            isPayClick = false;
-                            Log.e("payRequestET", payRequestET.getText().toString());
-                            payPreview();
-                        }
-                    } else {
-                        disableButtons(true);
+                try {
+                    if (pDialog != null) {
+                        pDialog.dismiss();
                     }
+                    if (transferFeeResponse != null) {
+                        objMyApplication.setTransferFeeResponse(transferFeeResponse);
+                        feeInAmount = transferFeeResponse.getData().getFeeInAmount();
+                        feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
+                        pfee = transferFeeResponse.getData().getFee();
+                        if (!payRequestET.getText().toString().equals("") && !payRequestET.getText().toString().equals("0") && Double.parseDouble(payRequestET.getText().toString()) > 0) {
+                            if (isPayClick) {
+                                isPayClick = false;
+                                Log.e("payRequestET", payRequestET.getText().toString());
+                                payPreview();
+                            }
+                        } else {
+                            disableButtons(true);
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
             }
         });
