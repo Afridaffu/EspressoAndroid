@@ -859,7 +859,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 lyBalance.setVisibility(View.GONE);
                 value = false;
 //            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
-            } else if (Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+            } else if (!strLimit.equals("") && !strLimit.equals("unlimited") && !strLimit.equals("no limit") && Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
                 tvError.setText("Amount entered exceeds transaction limit.");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
@@ -1155,8 +1155,9 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                     strLimit = "daily";
                 } else if (objLimit.getLimitType().equalsIgnoreCase("weekly")) {
                     strLimit = "week";
-                } else if (objLimit.getLimitType().equalsIgnoreCase("unlimited")) {
-                    strLimit = "unlimited";
+                } else if (objLimit.getLimitType().equalsIgnoreCase("unlimited") || objLimit.getLimitType().equalsIgnoreCase("no limit")) {
+//                    strLimit = "unlimited";
+                    strLimit = objLimit.getLimitType().toLowerCase();
                 } else {
                     strLimit = "daily";
                 }

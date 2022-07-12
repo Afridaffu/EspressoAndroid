@@ -81,7 +81,11 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
         }
 
         if (userDetails != null && userDetails.getData() != null && userDetails.getData().getDbaName() != null) {
-            userName.setText("Paying " + userDetails.getData().getDbaName());
+            if (userDetails.getData().getDbaName().length() > 21) {
+                userName.setText("Paying " + userDetails.getData().getDbaName().substring(0, 21) + "...");
+            } else {
+                userName.setText("Paying " + userDetails.getData().getDbaName());
+            }
         }
 //        if (businessTypeValue != null) {
 //            if (businessTypeValue.length() >= 21) {
@@ -104,9 +108,9 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             try {
                 businessTypeValue = businessTypeValue.split("\\(")[0];
                 if (businessTypeValue.length() >= 21) {
-                    bTypeValue.setText("("+businessTypeValue.substring(0, 21) + "..."+")");
+                    bTypeValue.setText("(" + businessTypeValue.substring(0, 21) + "..." + ")");
                 } else {
-                    bTypeValue.setText("("+businessTypeValue+")");
+                    bTypeValue.setText("(" + businessTypeValue + ")");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
