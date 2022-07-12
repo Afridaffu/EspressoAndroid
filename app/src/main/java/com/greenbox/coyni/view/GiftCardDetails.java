@@ -545,7 +545,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                                         isAmount = true;
                                         amountErrorLL.setVisibility(GONE);
                                     }
-                                } else {
+                                } else if (!limitType.equalsIgnoreCase("NO LIMIT")) {
                                     if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
                                         isAmount = false;
                                         amountErrorLL.setVisibility(VISIBLE);
