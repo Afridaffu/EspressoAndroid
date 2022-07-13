@@ -490,23 +490,23 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
 //                            Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_black));
                             Double walletAmount = 0.0;
                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+                                walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
                             } else {
-//                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
-                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+//                                walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+                                walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
                             }
-//                            Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
-                            Double giftCardAmount = Double.parseDouble(amountET.getText().toString().replace(",", "")) * (1 - (feeInPercentage / 100)) - feeInAmount;
-                            Double giftCardETAmount = Double.parseDouble(amountET.getText().toString().replace(",", ""));
+//                            Double giftCardAmount = (Utils.doubleParsing(amountET.getText().toString().replace(",", "")) + Utils.doubleParsing(fee.toString().replace(",", "")));
+                            Double giftCardAmount = Utils.doubleParsing(amountET.getText().toString().replace(",", "")) * (1 - (feeInPercentage / 100)) - feeInAmount;
+                            Double giftCardETAmount = Utils.doubleParsing(amountET.getText().toString().replace(",", ""));
                             if (objTranLimit.getData() != null && objTranLimit.getData().getMinimumLimit() != null) {
-                                minValue = Double.parseDouble(objTranLimit.getData().getMinimumLimit());
+                                minValue = Utils.doubleParsing(objTranLimit.getData().getMinimumLimit());
                             }
                             if (minValue < min) {
                                 minValue = min;
                             }
 
                             String strPFee = Utils.convertBigDecimalUSD(String.valueOf(fee));
-                            Double total = Double.parseDouble(amountET.getText().toString().trim().replace(",","")) + Double.parseDouble(strPFee);
+                            Double total = Utils.doubleParsing(amountET.getText().toString().trim().replace(",","")) + Utils.doubleParsing(strPFee);
                             if (walletAmount.equals(giftCardETAmount)) {
                                 isAmount = false;
                                 amountErrorLL.setVisibility(VISIBLE);
@@ -528,7 +528,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                             } else {
                                 String limitType = objTranLimit.getData().getLimitType();
                                 if (limitType.equalsIgnoreCase("PER TRANSACTION")) {
-                                    if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
+                                    if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
                                         isAmount = false;
                                         amountErrorLL.setVisibility(VISIBLE);
                                         amountErrorTV.setText("Amount entered exceeds transaction limit");
@@ -537,7 +537,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                                         amountErrorLL.setVisibility(GONE);
                                     }
                                 } else if (limitType.equalsIgnoreCase("DAILY")) {
-                                    if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
+                                    if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
                                         isAmount = false;
                                         amountErrorLL.setVisibility(VISIBLE);
                                         amountErrorTV.setText("Amount entered exceeds daily limit");
@@ -546,7 +546,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                                         amountErrorLL.setVisibility(GONE);
                                     }
                                 } else if (!limitType.equalsIgnoreCase("NO LIMIT")) {
-                                    if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
+                                    if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
                                         isAmount = false;
                                         amountErrorLL.setVisibility(VISIBLE);
                                         amountErrorTV.setText("Amount entered exceeds weekly limit");
@@ -957,7 +957,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
             etAmount.setFilters(FilterArray);
             String strAmount = "";
             strAmount = Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", ""));
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
             etAmount.setSelection(etAmount.getText().length() - 3);
             FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
             etAmount.setFilters(FilterArray);
@@ -1018,7 +1018,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
             public void onClick(View view) {
                 dialog.dismiss();
                 try {
-                    amountET.setText(Utils.USNumberFormat(Double.parseDouble(selectedFixedAmount)));
+                    amountET.setText(Utils.USNumberFormat(Utils.doubleParsing(selectedFixedAmount)));
                     amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                     Utils.setUpperHintColor(amountTIL, getColor(R.color.primary_black));
                 } catch (NumberFormatException e) {
@@ -1049,23 +1049,23 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                 Double week = 0.0, daily = 0.0;
                 String strCurrency = "", strAmount = "";
                 if (objLimit.getWeeklyAccountLimit() != null && !objLimit.getWeeklyAccountLimit().toLowerCase().equals("NA") && !objLimit.getWeeklyAccountLimit().toLowerCase().equals("unlimited")) {
-                    week = Double.parseDouble(objLimit.getWeeklyAccountLimit());
+                    week = Utils.doubleParsing(objLimit.getWeeklyAccountLimit());
                 }
                 if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().toLowerCase().equals("NA") && !objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
-                    daily = Double.parseDouble(objLimit.getDailyAccountLimit());
+                    daily = Utils.doubleParsing(objLimit.getDailyAccountLimit());
                 }
                 strCurrency = " USD";
-                minValue = Double.parseDouble(objLimit.getMinimumLimit());
+                minValue = Utils.doubleParsing(objLimit.getMinimumLimit());
                 if ((week == 0 || week < 0) && daily > 0) {
                     strLimit = "daily";
                     maxValue = daily;
                     strAmount = Utils.convertBigDecimalUSD(String.valueOf(daily));
-//                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+//                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
                 } else if ((daily == 0 || daily < 0) && week > 0) {
                     strLimit = "week";
                     maxValue = week;
                     strAmount = Utils.convertBigDecimalUSD(String.valueOf(week));
-//                    tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+//                    tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
                 } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
                     strLimit = "unlimited";
 //                    tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + " USD");
@@ -1073,7 +1073,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                     strLimit = "daily";
                     maxValue = daily;
                     strAmount = Utils.convertBigDecimalUSD(String.valueOf(daily));
-//                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+//                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
                 }
             } else {
 //                tvLimit.setVisibility(View.GONE);
@@ -1110,11 +1110,11 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
 
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSD(String.valueOf(fee));
-            feeTV.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " CYN");
-            Double total = Double.parseDouble(amountET.getText().toString().trim().replace(",", "")) + Double.parseDouble(strPFee);
-            totalTV.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSD(total.toString()))) + " CYN");
-            subTotalTV.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSD(amountET.getText().toString().trim().replace(",","")))) + " CYN");
-            giftCardAmountTV.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSD(amountET.getText().toString().trim().replace(",", "")))));
+            feeTV.setText(Utils.USNumberFormat(Utils.doubleParsing(strPFee)) + " CYN");
+            Double total = Utils.doubleParsing(amountET.getText().toString().trim().replace(",", "")) + Utils.doubleParsing(strPFee);
+            totalTV.setText(Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSD(total.toString()))) + " CYN");
+            subTotalTV.setText(Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSD(amountET.getText().toString().trim().replace(",","")))) + " CYN");
+            giftCardAmountTV.setText(Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSD(amountET.getText().toString().trim().replace(",", "")))));
             giftCardTypeTV.setText(brandsResponseObj.getData().getBrands().get(0).getBrandName());
             recipientMailTV.setText(emailET.getText().toString());
 
@@ -1337,12 +1337,12 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
         GiftCardWithDrawInfo giftCardWithDrawInfo = new GiftCardWithDrawInfo();
         giftCardWithDrawInfo.setGiftCardName(brandsResponseObj.getData().getBrands().get(0).getBrandName());
         giftCardWithDrawInfo.setGiftCardCurrency(brandsResponseObj.getData().getBrands().get(0).getItems().get(0).getCurrencyCode());
-        giftCardWithDrawInfo.setTotalAmount(Double.parseDouble(Utils.convertBigDecimalUSD(amountET.getText().toString().replace(",", ""))));
+        giftCardWithDrawInfo.setTotalAmount(Utils.doubleParsing(Utils.convertBigDecimalUSD(amountET.getText().toString().replace(",", ""))));
         giftCardWithDrawInfo.setUtid(brandsResponseObj.getData().getBrands().get(0).getItems().get(0).getUtid());
 
         List<RecipientDetail> recipientDetailList = new ArrayList<>();
         RecipientDetail recipientDetail = new RecipientDetail();
-        recipientDetail.setAmount(Double.parseDouble(Utils.convertBigDecimalUSD(amountET.getText().toString().replace(",",""))));
+        recipientDetail.setAmount(Utils.doubleParsing(Utils.convertBigDecimalUSD(amountET.getText().toString().replace(",",""))));
         recipientDetail.setFirstName(firstNameET.getText().toString());
         recipientDetail.setLastName(lastNameET.getText().toString());
         recipientDetail.setEmail(emailET.getText().toString());
@@ -1353,7 +1353,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
         request.setBankId(0L);
         request.setCardId(0L);
         request.setGiftCardWithDrawInfo(giftCardWithDrawInfo);
-        request.setTokens(Double.parseDouble(Utils.convertBigDecimalUSD(amountET.getText().toString().trim().replace(",", ""))));
+        request.setTokens(Utils.doubleParsing(Utils.convertBigDecimalUSD(amountET.getText().toString().trim().replace(",", ""))));
         request.setRemarks("");
         request.setWithdrawType(Utils.giftcardType);
 

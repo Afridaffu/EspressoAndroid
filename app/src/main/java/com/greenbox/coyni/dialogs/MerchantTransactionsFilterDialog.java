@@ -454,8 +454,8 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
 
                         if (!transAmountStartET.getText().toString().equals("") && !transAmountStartET.getText().toString().equals("")) {
 
-                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
-                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                            Double startAmount = Utils.doubleParsing(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Utils.doubleParsing(transAmountEndET.getText().toString().replace(",", "").trim());
                             if (endAmount < startAmount) {
                                 Utils.displayAlert(context.getString(R.string.transAmountAlert), activity, "", "");
 
@@ -489,8 +489,8 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
 
                         if (!transAmountEndET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
 
-                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
-                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                            Double startAmount = Utils.doubleParsing(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Utils.doubleParsing(transAmountEndET.getText().toString().replace(",", "").trim());
                             if (endAmount < startAmount) {
                                 Utils.displayAlert(context.getString(R.string.transAmountAlert), activity, "", "");
                                 transAmountStartET.setText("");
@@ -597,8 +597,8 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 }
 
                 if (!transAmountStartET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
-                    Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
-                    Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                    Double startAmount = Utils.doubleParsing(transAmountStartET.getText().toString().replace(",", "").trim());
+                    Double endAmount = Utils.doubleParsing(transAmountEndET.getText().toString().replace(",", "").trim());
                     if (endAmount < startAmount) {
                         Utils.displayAlert(context.getString(R.string.transAmountAlert), activity, "", "");
                         transAmountStartET.setText("");
@@ -665,12 +665,12 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
         try {
             String strAmount = "";
             strAmount = Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", ""));
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
             etAmount.setSelection(etAmount.getText().length());
             if (mode.equals("START")) {
-                strStartAmount = Utils.USNumberFormat(Double.parseDouble(strAmount));
+                strStartAmount = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             } else {
-                strEndAmount = Utils.USNumberFormat(Double.parseDouble(strAmount));
+                strEndAmount = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             }
         } catch (Exception ex) {
             ex.printStackTrace();

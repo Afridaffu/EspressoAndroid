@@ -1569,23 +1569,23 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         dbaFillingLL.setVisibility(VISIBLE);
                     }
 
-//                    if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Double.parseDouble(cir.getMonthlyProcessingVolume()) > 0) {
+//                    if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Utils.doubleParsing(cir.getMonthlyProcessingVolume()) > 0) {
                     if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("")) {
-                        mpvOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getMonthlyProcessingVolume())));
+                        mpvOET.setText(Utils.USNumberFormat(Utils.doubleParsing(cir.getMonthlyProcessingVolume())));
                         isMPV = true;
                         mpvOET.setSelection();
                     }
 
-//                    if (cir.getHighTicket() != null && !cir.getHighTicket().equals("") && Double.parseDouble(cir.getHighTicket()) > 0) {
+//                    if (cir.getHighTicket() != null && !cir.getHighTicket().equals("") && Utils.doubleParsing(cir.getHighTicket()) > 0) {
                     if (cir.getHighTicket() != null && !cir.getHighTicket().equals("")) {
-                        highTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getHighTicket())));
+                        highTicketOET.setText(Utils.USNumberFormat(Utils.doubleParsing(cir.getHighTicket())));
                         isHighTkt = true;
                         highTicketOET.setSelection();
                     }
 
-//                    if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("") && Double.parseDouble(cir.getAverageTicket()) > 0) {
+//                    if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("") && Utils.doubleParsing(cir.getAverageTicket()) > 0) {
                     if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("")) {
-                        avgTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getAverageTicket())));
+                        avgTicketOET.setText(Utils.USNumberFormat(Utils.doubleParsing(cir.getAverageTicket())));
                         isAvgTkt = true;
                         avgTicketOET.setSelection();
                     }

@@ -184,7 +184,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 
                     }
 
-//                    if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
+//                    if (Utils.doubleParsing(editable.toString().replace(",", "")) > 0) {
 //                        disableButtons(false);
 //                    } else {
 //                        disableButtons(true);
@@ -348,7 +348,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                             if (payValidation()) {
                                 isPayClick = true;
                                 pDialog = Utils.showProgressDialog(PayRequestActivity.this);
-                                cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
+                                cynValue = Utils.doubleParsing(payRequestET.getText().toString().trim().replace(",", ""));
                                 calculateFee(Utils.USNumberFormat(cynValue));
                             }
                         }
@@ -368,7 +368,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                 mLastClickTime = SystemClock.elapsedRealtime();
                                 convertDecimal();
                                 if (requestValidation()) {
-                                    if (Double.parseDouble(payRequestET.getText().toString().replace(",", "")) > 0) {
+                                    if (Utils.doubleParsing(payRequestET.getText().toString().replace(",", "")) > 0) {
                                         MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_REQUEST, MatomoConstants.CUSTOMER_REQUEST_CLICKED);
                                         requestPreview();
                                     } else {
@@ -641,7 +641,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                         feeInAmount = transferFeeResponse.getData().getFeeInAmount();
                         feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
                         pfee = transferFeeResponse.getData().getFee();
-                        if (!payRequestET.getText().toString().equals("") && !payRequestET.getText().toString().equals("0") && Double.parseDouble(payRequestET.getText().toString()) > 0) {
+                        if (!payRequestET.getText().toString().equals("") && !payRequestET.getText().toString().equals("0") && Utils.doubleParsing(payRequestET.getText().toString()) > 0) {
                             if (isPayClick) {
                                 isPayClick = false;
                                 Log.e("payRequestET", payRequestET.getText().toString());
@@ -694,7 +694,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                     if (templateResponse != null) {
                         if (Utils.checkInternet(PayRequestActivity.this)) {
                             UserRequest request = new UserRequest();
-                            request.setAmount(Double.parseDouble(payRequestET.getText().toString().replace(",", "")));
+                            request.setAmount(Utils.doubleParsing(payRequestET.getText().toString().replace(",", "")));
                             request.setContent(templateResponse.getData().getInviteBody());
                             request.setPortalType(Utils.portal);
                             request.setRemarks(addNoteTV.getText().toString().trim());
@@ -851,19 +851,19 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
         Boolean value = true;
         try {
             String strPay = payRequestET.getText().toString().trim().replace("\"", "");
-            if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
+            if (Utils.doubleParsing(strPay.replace(",", "")) == 0.0) {
                 //Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
                 tvError.setText("Amount should be greater than zero.");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
                 value = false;
-            } else if ((Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(objResponse.getData().getMinimumLimit()))) {
-                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getMinimumLimit())) + " CYN");
+            } else if ((Utils.doubleParsing(strPay.replace(",", "")) < Utils.doubleParsing(objResponse.getData().getMinimumLimit()))) {
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(Utils.doubleParsing(objResponse.getData().getMinimumLimit())) + " CYN");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
                 value = false;
-//            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
-            } else if (!strLimit.equals("") && !strLimit.equals("unlimited") && !strLimit.equals("no limit") && Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+//            } else if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
+            } else if (!strLimit.equals("") && !strLimit.equals("unlimited") && !strLimit.equals("no limit") && Utils.doubleParsing(strPay.replace(",", "")) > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
                 tvError.setText("Amount entered exceeds transaction limit.");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
@@ -881,7 +881,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     private Boolean payValidation() {
         Boolean value = true;
         try {
-//            if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+//            if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
 //                Utils.displayAlert("Amount entered exceeds transaction limit.", PayRequestActivity.this, "Oops!", "");
 //                value = false;
 //            } else
@@ -903,16 +903,16 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             if (strPay.equals("")) {
                 Utils.displayAlert("Please enter Amount", PayRequestActivity.this, "Oops!", "");
                 return value = false;
-            } else if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
+            } else if (Utils.doubleParsing(strPay.replace(",", "")) == 0.0) {
                 Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
                 return value = false;
-//            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
-            } else if (Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
-                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getTransactionLimit())) + " CYN", PayRequestActivity.this, "Oops!", "");
+//            } else if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
+            } else if (Utils.doubleParsing(strPay.replace(",", "")) > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
+                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Utils.doubleParsing(objResponse.getData().getTransactionLimit())) + " CYN", PayRequestActivity.this, "Oops!", "");
                 value = false;
-            } else if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
+            } else if ((Utils.doubleParsing(strPay.replace(",", "")) > Utils.doubleParsing(getString(R.string.payrequestMaxAmt)))) {
                 value = false;
-                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", PayRequestActivity.this, "Oops!", "");
+                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Utils.doubleParsing(getString(R.string.payrequestMaxAmt))) + " CYN", PayRequestActivity.this, "Oops!", "");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1120,7 +1120,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 
     private void convertUSDValue() {
         try {
-            usdValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
+            usdValue = Utils.doubleParsing(payRequestET.getText().toString().trim().replace(",", ""));
             cynValue = (usdValue + (usdValue * (feeInPercentage / 100))) + feeInAmount;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1132,11 +1132,11 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
         try {
             strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
             etAmount.removeTextChangedListener(PayRequestActivity.this);
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
             cKey.setEnteredText(etAmount.getText().toString());
             etAmount.addTextChangedListener(PayRequestActivity.this);
             etAmount.setSelection(etAmount.getText().toString().length());
-            strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
+            strReturn = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             changeTextSize(strReturn);
             setDefaultLength();
         } catch (Exception ex) {
@@ -1149,10 +1149,10 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
         try {
 //                Double week = 0.0, daily = 0.0;
             if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().toLowerCase().equals("NA") && !objLimit.getTransactionLimit().toLowerCase().equals("unlimited")) {
-                maxValue = Double.parseDouble(objLimit.getTransactionLimit());
+                maxValue = Utils.doubleParsing(objLimit.getTransactionLimit());
             }
 //                if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().toLowerCase().equals("NA") && !objLimit.getTransactionLimit().toLowerCase().equals("unlimited")) {
-//                    daily = Double.parseDouble(objLimit.getTransactionLimit());
+//                    daily = Utils.doubleParsing(objLimit.getTransactionLimit());
 //                }
             if (maxValue > 0) {
                 if (objLimit.getLimitType().equalsIgnoreCase("daily")) {
@@ -1377,9 +1377,9 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 recipAddreTV.setText(recipientAddress);
             }
             String enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString().replace(",", ""));
-            amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
-            tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
-            total = cynValue + Double.parseDouble(strPFee);
+            amountPayTV.setText(Utils.USNumberFormat(Utils.doubleParsing(enteredAmount)));
+            tvProcessingFee.setText(Utils.USNumberFormat(Utils.doubleParsing(strPFee)) + " " + getString(R.string.currency));
+            total = cynValue + Utils.doubleParsing(strPFee);
             tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
 
             isAuthenticationCalled = false;
@@ -1500,7 +1500,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 recipAddreTV.setText(recipientAddress);
             }
             String enteredAmount = Utils.convertBigDecimalUSDC(payRequestET.getText().toString().replace(",", ""));
-            amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
+            amountPayTV.setText(Utils.USNumberFormat(Utils.doubleParsing(enteredAmount)));
             lyProcessing.setVisibility(View.GONE);
             lyTotal.setVisibility(View.GONE);
             isAuthenticationCalled = false;

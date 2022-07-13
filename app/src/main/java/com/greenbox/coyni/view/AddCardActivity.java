@@ -595,7 +595,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         etPreAmount.setText("");
                         ctKey.clearData();
                         if (!((LinkedTreeMap) apiError.getData()).get("attempts").toString().equals("")) {
-                            double value = Double.parseDouble(((LinkedTreeMap) apiError.getData()).get("attempts").toString());
+                            double value = Utils.doubleParsing(((LinkedTreeMap) apiError.getData()).get("attempts").toString());
                             int attempt = (int) value;
                             llError.setVisibility(VISIBLE);
                             etlAmount.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));

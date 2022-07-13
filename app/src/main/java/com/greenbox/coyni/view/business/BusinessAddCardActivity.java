@@ -558,7 +558,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                         etPreAmount.setText("");
                         ctKey.clearData();
                         if (!((LinkedTreeMap) apiError.getData()).get("attempts").toString().equals("")) {
-                            double value = Double.parseDouble(((LinkedTreeMap) apiError.getData()).get("attempts").toString());
+                            double value = Utils.doubleParsing(((LinkedTreeMap) apiError.getData()).get("attempts").toString());
                             int attempt = (int) value;
                             tvError.setVisibility(VISIBLE);
                             if (attempt != 3) {

@@ -304,8 +304,8 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                     if (transactionLimitResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         if (transactionLimitResponse.getData() != null) {
                             if (transactionLimitResponse.getData().getTransactionLimit() != null && transactionLimitResponse.getData().getMinimumLimit() != null) {
-                                transactionLimit = Double.parseDouble(transactionLimitResponse.getData().getTransactionLimit());
-                                minimumLimit = Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit());
+                                transactionLimit = Utils.doubleParsing(transactionLimitResponse.getData().getTransactionLimit());
+                                minimumLimit = Utils.doubleParsing(transactionLimitResponse.getData().getMinimumLimit());
                             }
 //                            validation(transactionLimitResponse);
                         }
@@ -369,7 +369,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             request.setAmount(mAmount.getText().toString().replace(",", "").trim());
             request.setEncryptedToken(myApplication.getCheckOutModel().getEncryptedToken());
             //TODO set Request token here
-            myApplication.setWithdrawAmount(Double.parseDouble(mAmount.getText().toString().replace(",", "").trim()));
+            myApplication.setWithdrawAmount(Utils.doubleParsing(mAmount.getText().toString().replace(",", "").trim()));
             if (request.getAmount() != null && request.getEncryptedToken() != null) {
                 checkOutViewModel.orderPay(request);
             }
@@ -381,19 +381,19 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         try {
             if (transactionLimitResponse != null) {
                 String strPay = mAmount.getText().toString().trim().replace("\"", "");
-                if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
+                if (Utils.doubleParsing(strPay.replace(",", "")) == 0.0) {
                     Utils.displayAlert("Amount should be greater than zero.", CheckOutPaymentActivity.this, "Oops!", "");
 //                    errorText.setText("Amount should be greater than zero.");
 //                    errorText.setVisibility(View.VISIBLE);
 //                    slideToConfirm.setInteractionEnabled(false);
 //                    lyBalance.setVisibility(View.GONE);
-                } else if ((Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit()))) {
-                    Utils.displayAlertNew("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit())) + " CYN", CheckOutPaymentActivity.this, "Oops!");
+                } else if ((Utils.doubleParsing(strPay.replace(",", "")) < Utils.doubleParsing(transactionLimitResponse.getData().getMinimumLimit()))) {
+                    Utils.displayAlertNew("Minimum Amount is " + Utils.USNumberFormat(Utils.doubleParsing(transactionLimitResponse.getData().getMinimumLimit())) + " CYN", CheckOutPaymentActivity.this, "Oops!");
 //                    errorText.setVisibility(View.VISIBLE);
 //                    lyBalance.setVisibility(View.GONE);
 //                    slideToConfirm.setInteractionEnabled(false);
-                    //            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
-                } else if (Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(transactionLimitResponse.getData().getTransactionLimit())) {
+                    //            } else if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
+                } else if (Utils.doubleParsing(strPay.replace(",", "")) > Utils.doubleParsing(transactionLimitResponse.getData().getTransactionLimit())) {
 //                    errorText.setText("Amount entered exceeds transaction limit.");
 //                    errorText.setVisibility(View.VISIBLE);
 //                    lyBalance.setVisibility(View.GONE);
@@ -434,7 +434,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         }
         if (orderInfoResponse.getData().getAmount() != null) {
             mAmount.setText(Utils.convertTwoDecimal(orderInfoResponse.getData().getAmount()));
-            userAmount = Double.parseDouble(orderInfoResponse.getData().getAmount());
+            userAmount = Utils.doubleParsing(orderInfoResponse.getData().getAmount());
         }
 
         if (orderInfoResponse.getData().getMerchantLogo() != null) {
@@ -562,11 +562,11 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             } else if (myApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 displayMerchantAlert(getString(R.string.buy_token_message), CheckOutPaymentActivity.this, "coyni");
             }
-        } else if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
+        } else if (Utils.doubleParsing(strPay.replace(",", "")) == 0.0) {
             displayAlertNew("Amount should be greater than zero.", CheckOutPaymentActivity.this, "Oops!");
-        } else if ((Double.parseDouble(strPay.replace(",", "")) < minimumLimit)) {
+        } else if ((Utils.doubleParsing(strPay.replace(",", "")) < minimumLimit)) {
             displayAlertNew("Minimum Amount is " + Utils.USNumberFormat(minimumLimit) + " CYN", CheckOutPaymentActivity.this, "Oops!");
-        } else if (Double.parseDouble(strPay.replace(",", "")) > transactionLimit) {
+        } else if (Utils.doubleParsing(strPay.replace(",", "")) > transactionLimit) {
             displayAlertNew("Amount exceeds transaction limit.", CheckOutPaymentActivity.this, "Oops!");
         } else {
             value = true;

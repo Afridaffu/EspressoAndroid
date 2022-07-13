@@ -1203,8 +1203,8 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 
                         if (!transAmountStartET.getText().toString().equals("") && !transAmountStartET.getText().toString().equals("")) {
 
-                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
-                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                            Double startAmount = Utils.doubleParsing(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Utils.doubleParsing(transAmountEndET.getText().toString().replace(",", "").trim());
                             if (endAmount < startAmount) {
                                 Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", BusinessTransactionListActivity.this, "", "");
 
@@ -1238,8 +1238,8 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 
                         if (!transAmountEndET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
 
-                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
-                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                            Double startAmount = Utils.doubleParsing(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Utils.doubleParsing(transAmountEndET.getText().toString().replace(",", "").trim());
                             if (endAmount < startAmount) {
                                 Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", BusinessTransactionListActivity.this, "", "");
                                 transAmountStartET.setText("");
@@ -1374,8 +1374,8 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 }
 
                 if (!transAmountStartET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
-                    Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
-                    Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                    Double startAmount = Utils.doubleParsing(transAmountStartET.getText().toString().replace(",", "").trim());
+                    Double endAmount = Utils.doubleParsing(transAmountEndET.getText().toString().replace(",", "").trim());
                     if (endAmount < startAmount) {
                         Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", BusinessTransactionListActivity.this, "", "");
                         transAmountStartET.setText("");
@@ -1435,12 +1435,12 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         try {
             String strAmount = "";
             strAmount = Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", ""));
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
             etAmount.setSelection(etAmount.getText().length());
             if (mode.equals("START")) {
-                strStartAmount = Utils.USNumberFormat(Double.parseDouble(strAmount));
+                strStartAmount = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             } else {
-                strEndAmount = Utils.USNumberFormat(Double.parseDouble(strAmount));
+                strEndAmount = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1624,7 +1624,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return Double.parseDouble(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+        return Utils.doubleParsing(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
     }
 
     private void transactionsAPI(TransactionListRequest transactionListRequest) {

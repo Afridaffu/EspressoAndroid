@@ -32,7 +32,7 @@ public class RefundInsufficeintTokenDialog extends BaseDialog {
         toKenaccountLL = findViewById(R.id.TOKenaccountLL);
         accountbalanceTV = findViewById(R.id.AccountbalanceTV);
         if (businessBalance != null) {
-            accountbalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(String.valueOf(businessBalance))));
+            accountbalanceTV.setText(Utils.USNumberFormat(Utils.doubleParsing(String.valueOf(businessBalance))));
         }
 
 

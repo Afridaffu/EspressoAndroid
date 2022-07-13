@@ -77,7 +77,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             if (getIntent().getStringExtra("status") != null && !getIntent().getStringExtra("status").equals("")) {
                 strScreen = getIntent().getStringExtra("status");
                 if (getIntent().getStringExtra("cynValue") != null && !getIntent().getStringExtra("cynValue").equals("")) {
-                    cynValue = Double.parseDouble(getIntent().getStringExtra("cynValue"));
+                    cynValue = Utils.doubleParsing(getIntent().getStringExtra("cynValue"));
                 }
                 ControlMethod(strScreen, getIntent().getStringExtra("subtype"));
             }
@@ -369,7 +369,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
 
             Double bal = cynValue + objMyApplication.getGBTBalance();
             String strBal = Utils.convertBigDecimalUSD(String.valueOf(bal));
-            tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
+            tvBalance.setText(Utils.USNumberFormat(Utils.doubleParsing(strBal)) + " " + getString(R.string.currency));
             tvAmount.setText(Utils.USNumberFormat(cynValue));
 //            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement as " + objData.getDescriptorName().toLowerCase() + ".");
 
@@ -535,7 +535,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             imgLogo.setImageResource(R.drawable.ic_in_progress_icon);
             Double bal = cynValue + objMyApplication.getGBTBalance();
             String strBal = Utils.convertBigDecimalUSD(String.valueOf(bal));
-            tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
+            tvBalance.setText(Utils.USNumberFormat(Utils.doubleParsing(strBal)) + " " + getString(R.string.currency));
             tvAmount.setText("$ " + Utils.USNumberFormat(cynValue));
 //            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement as " + objData.getDescriptorName().toLowerCase() + ".");
             tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your bank statement.");

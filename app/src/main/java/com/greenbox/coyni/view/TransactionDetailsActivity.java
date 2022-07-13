@@ -1005,8 +1005,8 @@ public class TransactionDetailsActivity extends BaseActivity {
 
 
         if (objData.getYouGet() != null && objData.getProcessingFee() != null) {
-            Double purchaseAmount = Double.parseDouble(objData.getYouGet().replace("CYN", "").trim());
-            Double processingFee = Double.parseDouble(objData.getProcessingFee().replace("USD", "").trim());
+            Double purchaseAmount = Utils.doubleParsing(objData.getYouGet().replace("CYN", "").trim());
+            Double processingFee = Utils.doubleParsing(objData.getProcessingFee().replace("USD", "").trim());
             purchaseAmountTV.setText("$" + Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
             fee.setText("$" + Utils.convertTwoDecimal((objData.getProcessingFee().replace("USD", "").trim())));
             total.setText("$" + Utils.convertTwoDecimal(String.valueOf(purchaseAmount + processingFee)));
@@ -1317,7 +1317,7 @@ public class TransactionDetailsActivity extends BaseActivity {
 
         Double subtotall = null;
         if (objData.getTotalPaidAmount() != null) {
-            subtotall = Double.parseDouble(objData.getTotalPaidAmount().replace("CYN", "").trim());
+            subtotall = Utils.doubleParsing(objData.getTotalPaidAmount().replace("CYN", "").trim());
             grandTotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotall)));
         }
 
@@ -1587,8 +1587,8 @@ public class TransactionDetailsActivity extends BaseActivity {
             withBankDateTime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
         }
 //
-//        Double subtotal = Double.parseDouble(objData.getWithdrawAmount().replace("USD", "").trim());
-//        Double procesFee = Double.parseDouble(objData.getProcessingFee().replace("CYN", "").trim());
+//        Double subtotal = Utils.doubleParsing(objData.getWithdrawAmount().replace("USD", "").trim());
+//        Double procesFee = Utils.doubleParsing(objData.getProcessingFee().replace("CYN", "").trim());
 
 //        withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
         if (objData.getWithdrawAmount() != null) {

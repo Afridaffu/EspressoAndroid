@@ -300,10 +300,10 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
         try {
             if (strAmount.contains(" ")) {
                 strAmt = Utils.convertBigDecimalUSDC(strAmount.split(" ")[0]);
-                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt)) + " " + strAmount.split(" ")[1];
+                strValue = Utils.USNumberFormat(Utils.doubleParsing(strAmt)) + " " + strAmount.split(" ")[1];
             } else {
                 strAmt = Utils.convertBigDecimalUSDC(strAmount);
-                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt));
+                strValue = Utils.USNumberFormat(Utils.doubleParsing(strAmt));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
