@@ -27,6 +27,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.dialogs.UnderReviewErrorMsgDialog;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
@@ -455,12 +456,14 @@ public class BusinessProfileActivity extends BaseActivity {
             tvVersion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    try {
-                        String strEndPoint = "";
-                        strEndPoint = "End Point Url - " + Utils.getStrURL_PRODUCTION();
-                        Utils.displayAlert(strEndPoint, BusinessProfileActivity.this, "API Details", "");
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                    if (!BuildConfig.FLAVOR.equals("sat") && !BuildConfig.FLAVOR.equals("uat")) {
+                        try {
+                            String strEndPoint = "";
+                            strEndPoint = "End Point Url - " + Utils.getStrURL_PRODUCTION();
+                            Utils.displayAlert(strEndPoint, BusinessProfileActivity.this, "API Details", "");
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
             });

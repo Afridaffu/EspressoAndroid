@@ -40,6 +40,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
@@ -509,12 +510,14 @@ public class CustomerProfileActivity extends BaseActivity {
             tvVersion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    try {
-                        String strEndPoint = "";
-                        strEndPoint = "End Point Url - " + Utils.getStrURL_PRODUCTION();
-                        //Utils.displayAlert(strEndPoint, CustomerProfileActivity.this, "API Details", "");
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                    if (!BuildConfig.FLAVOR.equals("sat") && !BuildConfig.FLAVOR.equals("uat")) {
+                        try {
+                            String strEndPoint = "";
+                            strEndPoint = "End Point Url - " + Utils.getStrURL_PRODUCTION();
+                            //Utils.displayAlert(strEndPoint, CustomerProfileActivity.this, "API Details", "");
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
             });

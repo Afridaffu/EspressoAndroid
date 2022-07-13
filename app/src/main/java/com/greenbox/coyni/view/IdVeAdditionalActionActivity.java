@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,8 +47,8 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
     GetIdentityResponse IDVEResponse;
     Dialog dialog;
     private Long mLastClickTime = 0L;
-
     SSNBOEditText ssnET;
+    public ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
         ssnErrorTV = findViewById(R.id.ssnErrorTV);
         idveridoneBtn = findViewById(R.id.idveridoneBtn);
         ssnaacTIL = findViewById(R.id.ssnTIL);
+        scrollView = findViewById(R.id.scrollView);
 
         ssnET = findViewById(R.id.ssnOutLineBoxET);
         ssnET.setFrom("IDVE_SSN", this);
@@ -257,4 +259,5 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
             idveridoneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
         }
     }
+
 }
