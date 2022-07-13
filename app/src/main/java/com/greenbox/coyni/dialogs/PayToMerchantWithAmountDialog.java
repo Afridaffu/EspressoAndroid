@@ -68,7 +68,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 
         if (amount != null) {
             amount = amount.replace(",", "").trim();
-            payAmount.setText(Utils.USNumberFormat(Double.parseDouble(amount)));
+            payAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(amount)));
         }
         if (recipientAddress.length() > 13) {
             recipientAddressTV.setText(recipientAddress.substring(0, 13) + "...");

@@ -456,7 +456,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             && data.get(position).getTransactionSubType() == null) {
                                         if (data.get(position).getTotalAmount() != null) {
                                             mGrossAmount.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
-                                            grossAmount = Double.parseDouble(data.get(position).getTotalAmount());
+                                            grossAmount = Utils.doubleParsing(data.get(position).getTotalAmount());
                                         }
                                         if (data.get(position).getCount() > 0) {
                                             mTransactions.setText(Utils.convertToWithoutDecimal(String.valueOf(data.get(position).getCount())));
@@ -466,22 +466,22 @@ public class BusinessDashboardFragment extends BaseFragment {
                                         }
 
                                         if (data.get(position).getFee() != null) {
-                                            processingFee = processingFee + Double.parseDouble(data.get(position).getFee());
+                                            processingFee = processingFee + Utils.doubleParsing(data.get(position).getFee());
                                         }
                                     } else if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.refundtxntype)
                                             && data.get(position).getTransactionSubType() == null) {
                                         if (data.get(position).getTotalAmount() != null) {
                                             mRefunds.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
-                                            refunds = Double.parseDouble(data.get(position).getTotalAmount());
+                                            refunds = Utils.doubleParsing(data.get(position).getTotalAmount());
                                         }
 
-                                        processingFee = processingFee + Double.parseDouble(data.get(position).getFee());
+                                        processingFee = processingFee + Utils.doubleParsing(data.get(position).getFee());
                                     } else if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.monthlyServiceFeetxntype)
                                             && data.get(position).getTransactionSubType() == null) {
 
                                         if (data.get(position).getTotalAmount() != null) {
                                             mMISCFees.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
-                                            miscFee = Double.parseDouble(data.get(position).getTotalAmount());
+                                            miscFee = Utils.doubleParsing(data.get(position).getTotalAmount());
                                         }
                                     } else if (data.get(position).getTransactionType() == null && data.get(position).getTransactionSubType() == null) {
                                         if (data.get(position).getTotalAmount() != null)
@@ -1024,7 +1024,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     String amt = Utils.convertBigDecimalUSDC((amount));
                     nextPayoutAmountTV.setText(amt);
 
-                    if (Double.parseDouble(amt) <= 0) {
+                    if (Utils.doubleParsing(amt.replaceAll(",", "")) <= 0) {
                         mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         mCvBatchNow.setClickable(false);
                     } else {
@@ -1137,7 +1137,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
         String convertedOnlyTime = Utils.convertPrefZoneTimeFromPST(dateFormat2.format(newDate), "MM/dd/yyyy @ hh:mm:ss a", "MM/dd/yyyy @ hh:mm:ss a", myApplication.getStrPreference());
         String mainText = "All Payouts are deposited into Business Token Account. Your active batch is set to automatically pay out at ";
-        SpannableString ss = new SpannableString(mainText + convertedOnlyTime.split("@")[1] + " " + localPreferenceValue);
+        SpannableString ss = new SpannableString(mainText + convertedOnlyTime.split("@")[1].toLowerCase() + " " + localPreferenceValue);
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
         ss.setSpan(new CustomTypefaceSpan("", font), 31, 53, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         ss.setSpan(new CustomTypefaceSpan("", font), 108, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);

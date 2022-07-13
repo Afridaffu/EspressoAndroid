@@ -1152,10 +1152,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         PaidOrderRequest request = new PaidOrderRequest();
 //        request.setRequestToken(Utils.getStrToken());
         request.setRequestToken(objMyApplication.getStrToken());
-        request.setTokensAmount(Double.parseDouble(getIntent().getStringExtra(Utils.amount)));
+        request.setTokensAmount(Utils.doubleParsing(getIntent().getStringExtra(Utils.amount)));
         request.setRecipientWalletId(getIntent().getStringExtra(Utils.wallet));
 
-        objMyApplication.setWithdrawAmount(Double.parseDouble(getIntent().getStringExtra(Utils.amount)));
+        objMyApplication.setWithdrawAmount(Utils.doubleParsing(getIntent().getStringExtra(Utils.amount)));
 
         if (Utils.checkInternet(PINActivity.this)) {
             try {

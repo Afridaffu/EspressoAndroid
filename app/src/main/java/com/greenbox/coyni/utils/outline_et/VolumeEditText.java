@@ -209,7 +209,7 @@ public class VolumeEditText extends ConstraintLayout {
         try {
             String strAmount = "";
             strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
             etAmount.setSelection(etAmount.getText().length());
 
         } catch (Exception ex) {

@@ -717,7 +717,7 @@ public class Utils {
     public static String convertBigDecimalUSDC(String amount) {
         String strValue = "";
         try {
-            double amt = Double.parseDouble(amount);
+            double amt = Utils.doubleParsing(amount.replaceAll(",", ""));
             NumberFormat format = DecimalFormat.getCurrencyInstance(Locale.US);
             format.setMaximumFractionDigits(2);
             strValue = format.format(amt).replace("$", "");
@@ -1636,8 +1636,8 @@ public class Utils {
                 strValue = Utils.convertBigDecimalUSDC(split[0]) + " " + split[1];
             } else {
                 strValue = Utils.convertBigDecimalUSDC(strAmount);
-//                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt)) + " " + mContext.getString(R.string.currency);
-//                strValue = Utils.USNumberFormat(Double.parseDouble(strAmt));
+//                strValue = Utils.USNumberFormat(Utils.doubleParsing(strAmt)) + " " + mContext.getString(R.string.currency);
+//                strValue = Utils.USNumberFormat(Utils.doubleParsing(strAmt));
             }
             Log.e("str", strValue);
         } catch (Exception ex) {
@@ -2785,5 +2785,9 @@ public class Utils {
         } else {
             editText.setText(state);
         }
+    }
+
+    public static Double doubleParsing(String value) {
+        return Double.parseDouble(value.replaceAll(",", ""));
     }
 }

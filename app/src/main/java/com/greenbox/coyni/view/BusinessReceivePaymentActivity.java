@@ -110,7 +110,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
     public void afterTextChanged(Editable editable) {
         if (editable == setAmount.getEditableText()) {
             try {
-//                if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00") && Double.parseDouble(editable.toString()) > 0) {
+//                if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00") && Utils.doubleParsing(editable.toString()) > 0) {
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     setAmount.setHint("");
                     if (editable.length() > 8) {
@@ -122,7 +122,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                     }
 //                    ctKey.enableButton();
 
-                    if (Double.parseDouble(editable.toString()) > 0.005)
+                    if (Utils.doubleParsing(editable.toString()) > 0.005)
                         ctKey.enableButton();
                     else
                         ctKey.disableButton();
@@ -571,10 +571,10 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             String strPay = setAmount.getText().toString().trim().replace("\"", "");
             if (strPay.equals("")) {
                 value = false;
-            } else if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
+            } else if ((Utils.doubleParsing(strPay.replace(",", "")) > Utils.doubleParsing(getString(R.string.payrequestMaxAmt)))) {
                 value = false;
-                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", BusinessReceivePaymentActivity.this, "Oops!", "");
-            } else if (Double.parseDouble(strPay.replace(",", "")) <= 0) {
+                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Utils.doubleParsing(getString(R.string.payrequestMaxAmt))) + " CYN", BusinessReceivePaymentActivity.this, "Oops!", "");
+            } else if (Utils.doubleParsing(strPay.replace(",", "")) <= 0) {
                 value = false;
                 Utils.displayAlert("Amount should be greater than zero.", BusinessReceivePaymentActivity.this, "Oops!", "");
             }
@@ -592,10 +592,10 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
             setAmount.setFilters(FilterArray);
             setAmount.removeTextChangedListener(BusinessReceivePaymentActivity.this);
-            setAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            setAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
             setAmount.addTextChangedListener(BusinessReceivePaymentActivity.this);
             setAmount.setSelection(etAmount.getText().toString().length());
-            strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
+            strReturn = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             changeTextSize(strReturn);
             setDefaultLength();
         } catch (Exception ex) {

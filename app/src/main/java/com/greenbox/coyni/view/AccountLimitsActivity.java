@@ -228,11 +228,11 @@ public class AccountLimitsActivity extends BaseActivity {
         switch (data.getBuyTokenBankAccountType()) {
             case DAILY:
                 mBuyBankLimit.setText(getUsFormat(data.getBuyTokenBankAccountTxnLimit()).concat(dayStr));
-//                b_buyBankAccount.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + data.getBuyTokenBankAccountTxnLimit()))) + "/Day");
+//                b_buyBankAccount.setText(Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC("" + data.getBuyTokenBankAccountTxnLimit()))) + "/Day");
                 break;
             case WEEKLY:
                 mBuyBankLimit.setText(getUsFormat(data.getBuyTokenBankAccountTxnLimit()).concat(weekStr));
-//                b_buyBankAccount.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + data.getBuyTokenBankAccountTxnLimit()))) + "/Week");
+//                b_buyBankAccount.setText(Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC("" + data.getBuyTokenBankAccountTxnLimit()))) + "/Week");
                 break;
             case NOLIMIT:
                 mBuyBankLimit.setText(NOLIMIT_STR);
@@ -240,11 +240,11 @@ public class AccountLimitsActivity extends BaseActivity {
                 break;
             case PERTRANSACTION:
                 mBuyBankLimit.setText(getUsFormat(data.getBuyTokenBankAccountTxnLimit()).concat(transactionStr));
-//                b_buyBankAccount.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + data.getBuyTokenBankAccountTxnLimit()))) + "/Transaction");
+//                b_buyBankAccount.setText(Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC("" + data.getBuyTokenBankAccountTxnLimit()))) + "/Transaction");
                 break;
             case MONTHLY:
                 mBuyBankLimit.setText(getUsFormat(data.getBuyTokenBankAccountTxnLimit()).concat(monthStr));
-//                b_buyBankAccount.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC("" + data.getBuyTokenBankAccountTxnLimit()))) + "/Month");
+//                b_buyBankAccount.setText(Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC("" + data.getBuyTokenBankAccountTxnLimit()))) + "/Month");
                 break;
         }
         switch (data.getBuyTokenCardType()) {

@@ -148,7 +148,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                         payET.setTextSize(Utils.pixelsToSp(PayToMerchantActivity.this, fontSize));
                         tvCurrency.setTextSize(Utils.pixelsToSp(PayToMerchantActivity.this, dollarFont));
                     }
-                    if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
+                    if (Utils.doubleParsing(editable.toString().replace(",", "")) > 0) {
                         disableButtons(false);
                     } else {
                         disableButtons(true);
@@ -327,7 +327,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             if (payValidation()) {
                 pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
                 isPayClick = true;
-                cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
+                cynValue = Utils.doubleParsing(payET.getText().toString().trim().replace(",", ""));
                 calculateFee(Utils.USNumberFormat(cynValue));
             }
         }
@@ -421,7 +421,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 feeInAmount = transferFeeResponse.getData().getFeeInAmount();
                 feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
                 pfee = transferFeeResponse.getData().getFee();
-                if (!payET.getText().toString().equals("") && !payET.getText().toString().equals("0") && Double.parseDouble(payET.getText().toString()) > 0) {
+                if (!payET.getText().toString().equals("") && !payET.getText().toString().equals("0") && Utils.doubleParsing(payET.getText().toString()) > 0) {
                     if (isPayClick) {
                         isPayClick = false;
                         LogUtils.e("payRequestET", payET.getText().toString());
@@ -597,19 +597,19 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         boolean value = true;
         try {
             String strPay = payET.getText().toString().trim().replace("\"", "");
-            if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
+            if (Utils.doubleParsing(strPay.replace(",", "")) == 0.0) {
                 //Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
                 tvError.setText("Amount should be greater than zero.");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
                 value = false;
-            } else if ((Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(objResponse.getData().getMinimumLimit()))) {
-                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getMinimumLimit())) + " CYN");
+            } else if ((Utils.doubleParsing(strPay.replace(",", "")) < Utils.doubleParsing(objResponse.getData().getMinimumLimit()))) {
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(Utils.doubleParsing(objResponse.getData().getMinimumLimit())) + " CYN");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
                 value = false;
-//            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
-            } else if (!strLimit.equals("") && !strLimit.equals("unlimited") && !strLimit.equals("no limit") && Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+//            } else if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
+            } else if (!strLimit.equals("") && !strLimit.equals("unlimited") && !strLimit.equals("no limit") && Utils.doubleParsing(strPay.replace(",", "")) > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
                 tvError.setText("Amount entered exceeds transaction limit.");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
@@ -628,9 +628,9 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         Boolean value = true;
         try {
             String strPay = payET.getText().toString().trim().replace("\"", "");
-            if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
+            if ((Utils.doubleParsing(strPay.replace(",", "")) > Utils.doubleParsing(getString(R.string.payrequestMaxAmt)))) {
                 value = false;
-                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", PayToMerchantActivity.this, "Oops!", "");
+                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Utils.doubleParsing(getString(R.string.payrequestMaxAmt))) + " CYN", PayToMerchantActivity.this, "Oops!", "");
             }
 //            else if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
 //                value = false;
@@ -715,7 +715,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     private void payTransaction() {
         try {
             PaidOrderRequest request = new PaidOrderRequest();
-            request.setTokensAmount(Double.parseDouble(payET.getText().toString().trim().replace(",", "").trim()));
+            request.setTokensAmount(Utils.doubleParsing(payET.getText().toString().trim().replace(",", "").trim()));
             request.setRecipientWalletId(recipientAddress);
 //            request.setRequestToken(Utils.getStrToken());
             request.setRequestToken(objMyApplication.getStrToken());
@@ -756,7 +756,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
     private void convertUSDValue() {
         try {
-            usdValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
+            usdValue = Utils.doubleParsing(payET.getText().toString().trim().replace(",", ""));
             cynValue = (usdValue + (usdValue * (feeInPercentage / 100))) + feeInAmount;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -768,11 +768,11 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         try {
             strAmount = Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", ""));
             etAmount.removeTextChangedListener(PayToMerchantActivity.this);
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
             cKey.setEnteredText(etAmount.getText().toString());
             etAmount.addTextChangedListener(PayToMerchantActivity.this);
             etAmount.setSelection(etAmount.getText().toString().length());
-            strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
+            strReturn = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             changeTextSize(strReturn);
             setDefaultLength();
         } catch (Exception ex) {
@@ -784,7 +784,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     private void setDailyWeekLimit(LimitResponseData objLimit) {
         try {
             if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().equalsIgnoreCase("NA") && !objLimit.getTransactionLimit().equalsIgnoreCase("unlimited")) {
-                maxValue = Double.parseDouble(objLimit.getTransactionLimit());
+                maxValue = Utils.doubleParsing(objLimit.getTransactionLimit());
             }
             if (maxValue > 0) {
                 if (objLimit.getLimitType().equalsIgnoreCase("daily")) {
@@ -980,13 +980,13 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             if (payValidation()) {
                 isPayClick = true;
                 pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
-                cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
+                cynValue = Utils.doubleParsing(payET.getText().toString().trim().replace(",", ""));
                 calculateFee(Utils.USNumberFormat(cynValue));
             }
 //                                if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
 //                                    isPayClick = true;
 //                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
-//                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
+//                                    cynValue = Utils.doubleParsing(payRequestET.getText().toString().trim().replace(",", ""));
 //                                    calculateFee(Utils.USNumberFormat(cynValue));
 //                                } else {
 //                                    objMyApplication.setStrScreen("payRequest");

@@ -193,7 +193,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     public void afterTextChanged(Editable editable) {
         if (editable == setAmount.getEditableText()) {
             try {
-//                if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00") && Double.parseDouble(editable.toString()) > 0) {
+//                if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00") && Utils.doubleParsing(editable.toString()) > 0) {
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     setAmount.setHint("");
                     if (editable.length() > 8) {
@@ -203,7 +203,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                     } else {
                         setAmount.setTextSize(Utils.pixelsToSp(ScanActivity.this, fontSize));
                     }
-                    if (Double.parseDouble(editable.toString()) > 0.005)
+                    if (Utils.doubleParsing(editable.toString()) > 0.005)
                         ctKey.enableButton();
                     else
                         ctKey.disableButton();
@@ -706,7 +706,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                 details = userDetails;
                                 String amount = strQRAmount;
                                 dialog = Utils.showProgressDialog(ScanActivity.this);
-                                cynValue = Double.parseDouble(strQRAmount.toString().trim().replace(",", ""));
+                                cynValue = Utils.doubleParsing(strQRAmount.toString().trim().replace(",", ""));
                                 calculateFee(Utils.USNumberFormat(cynValue));
                                 businessIdentityVerificationViewModel.getBusinessType();
                                 showPayToMerchantWithAmountDialog(amount, userDetails, avaBal, businessTypeValue);
@@ -1464,10 +1464,10 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         Boolean value = false;
         try {
             String strPay = setAmount.getText().toString().trim().replace("\"", "");
-            if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
+            if ((Utils.doubleParsing(strPay.replace(",", "")) > Utils.doubleParsing(getString(R.string.payrequestMaxAmt)))) {
                 value = false;
-                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", ScanActivity.this, "Oops!", "");
-            } else if (Double.parseDouble(strPay.replace(",", "")) <= 0.00) {
+                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Utils.doubleParsing(getString(R.string.payrequestMaxAmt))) + " CYN", ScanActivity.this, "Oops!", "");
+            } else if (Utils.doubleParsing(strPay.replace(",", "")) <= 0.00) {
                 value = false;
                 Utils.displayAlert("Amount should be greater than zero.", ScanActivity.this, "Oops!", "");
             } else {
@@ -1487,10 +1487,10 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
             setAmount.setFilters(FilterArray);
             setAmount.removeTextChangedListener(ScanActivity.this);
-            setAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            setAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
             setAmount.addTextChangedListener(ScanActivity.this);
             setAmount.setSelection(etAmount.getText().toString().length());
-            strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
+            strReturn = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             changeTextSize(strReturn);
             setDefaultLength();
         } catch (Exception ex) {
@@ -1806,7 +1806,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 //                payViewModel.sendTokens(request);
 //            }
             PaidOrderRequest request = new PaidOrderRequest();
-            request.setTokensAmount(Double.parseDouble(strQRAmount.trim().replace(",", "").trim()));
+            request.setTokensAmount(Utils.doubleParsing(strQRAmount.trim().replace(",", "").trim()));
             request.setRecipientWalletId(strScanWallet);
 //            request.setRequestToken(Utils.getStrToken());
             request.setRequestToken(objMyApplication.getStrToken());
@@ -1828,12 +1828,12 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 slideActionEnabled = true;
                 displayAlertNew("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
-            } else if (cynValue < Double.parseDouble(objResponse.getData().getMinimumLimit())) {
+            } else if (cynValue < Utils.doubleParsing(objResponse.getData().getMinimumLimit())) {
                 slideActionEnabled = true;
-                displayAlert("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getMinimumLimit())) + " CYN", "Oops!");
+                displayAlert("Minimum Amount is " + Utils.USNumberFormat(Utils.doubleParsing(objResponse.getData().getMinimumLimit())) + " CYN", "Oops!");
                 value = false;
 
-            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+            } else if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
                 slideActionEnabled = true;
                 displayAlert("Amount entered exceeds transaction limit.", "Oops!");
                 value = false;
@@ -1850,10 +1850,10 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     private void setDailyWeekLimit(LimitResponseData objLimit) {
         try {
             if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().equalsIgnoreCase("NA") && !objLimit.getTransactionLimit().equalsIgnoreCase("unlimited")) {
-                maxValue = Double.parseDouble(objLimit.getTransactionLimit());
+                maxValue = Utils.doubleParsing(objLimit.getTransactionLimit());
             }
 //                if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getDailyAccountLimit().equalsIgnoreCase("unlimited")) {
-//                    daily = Double.parseDouble(objLimit.getDailyAccountLimit());
+//                    daily = Utils.doubleParsing(objLimit.getDailyAccountLimit());
 //                }
             if (maxValue > 0) {
                 if (objLimit.getLimitType().equalsIgnoreCase("daily")) {

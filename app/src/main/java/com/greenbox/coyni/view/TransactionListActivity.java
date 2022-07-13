@@ -1190,8 +1190,8 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
 
                         if (!transAmountStartET.getText().toString().equals("") && !transAmountStartET.getText().toString().equals("")) {
 
-                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
-                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                            Double startAmount = Utils.doubleParsing(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Utils.doubleParsing(transAmountEndET.getText().toString().replace(",", "").trim());
                             if (endAmount < startAmount) {
                                 Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
 
@@ -1225,8 +1225,8 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
 
                         if (!transAmountEndET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
 
-                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
-                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                            Double startAmount = Utils.doubleParsing(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Utils.doubleParsing(transAmountEndET.getText().toString().replace(",", "").trim());
                             if (endAmount < startAmount) {
                                 Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
                                 transAmountStartET.setText("");
@@ -1357,8 +1357,8 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                 }
 
                 if (!transAmountStartET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
-                    Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
-                    Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                    Double startAmount = Utils.doubleParsing(transAmountStartET.getText().toString().replace(",", "").trim());
+                    Double endAmount = Utils.doubleParsing(transAmountEndET.getText().toString().replace(",", "").trim());
                     if (endAmount < startAmount) {
                         Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", TransactionListActivity.this, "", "");
                         transAmountStartET.setText("");
@@ -1418,12 +1418,12 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
         try {
             String strAmount = "";
             strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
             etAmount.setSelection(etAmount.getText().length());
             if (mode.equals("START")) {
-                strStartAmount = Utils.USNumberFormat(Double.parseDouble(strAmount));
+                strStartAmount = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             } else {
-                strEndAmount = Utils.USNumberFormat(Double.parseDouble(strAmount));
+                strEndAmount = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1606,7 +1606,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return Double.parseDouble(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+        return Utils.doubleParsing(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
     }
 
     private void transactionsAPI(TransactionListRequest transactionListRequest) {

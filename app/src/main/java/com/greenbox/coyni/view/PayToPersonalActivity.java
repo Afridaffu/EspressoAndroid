@@ -227,7 +227,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
                                 isPayCalled = true;
                                 if (payValidation()) {
                                     pDialog = Utils.showProgressDialog(PayToPersonalActivity.this);
-                                    cynValue = Double.parseDouble(tvAmount.getText().toString().trim().replace(",", ""));
+                                    cynValue = Utils.doubleParsing(tvAmount.getText().toString().trim().replace(",", ""));
                                     calculateFee(Utils.USNumberFormat(cynValue));
                                 }
                             }
@@ -263,7 +263,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
 
                 tvAmount.setText(getIntent().getStringExtra("amount"));
                 USFormat(tvAmount);
-                cynValue = Double.parseDouble(tvAmount.getText().toString().trim().replace(",", ""));
+                cynValue = Utils.doubleParsing(tvAmount.getText().toString().trim().replace(",", ""));
             }
             lyPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -482,9 +482,9 @@ public class PayToPersonalActivity extends AppCompatActivity {
                 recipAddreTV.setText(strAddress);
             }
             String enteredAmount = Utils.convertBigDecimalUSD(tvAmount.getText().toString().replace(",", ""));
-            amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
-            tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
-            total = cynValue + Double.parseDouble(strPFee);
+            amountPayTV.setText(Utils.USNumberFormat(Utils.doubleParsing(enteredAmount)));
+            tvProcessingFee.setText(Utils.USNumberFormat(Utils.doubleParsing(strPFee)) + " " + getString(R.string.currency));
+            total = cynValue + Utils.doubleParsing(strPFee);
             tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
 
             isAuthenticationCalled = false;
@@ -606,8 +606,8 @@ public class PayToPersonalActivity extends AppCompatActivity {
         String strAmount = "", strReturn = "";
         try {
             strAmount = Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", ""));
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-            strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
+            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
+            strReturn = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             changeTextSize(strReturn);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -618,10 +618,10 @@ public class PayToPersonalActivity extends AppCompatActivity {
     private Boolean payValidation() {
         Boolean value = true;
         try {
-            if (cynValue < Double.parseDouble(objResponse.getData().getMinimumLimit())) {
-                displayAlertNew("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getMinimumLimit())) + " CYN", PayToPersonalActivity.this, "Oops!");
+            if (cynValue < Utils.doubleParsing(objResponse.getData().getMinimumLimit())) {
+                displayAlertNew("Minimum Amount is " + Utils.USNumberFormat(Utils.doubleParsing(objResponse.getData().getMinimumLimit())) + " CYN", PayToPersonalActivity.this, "Oops!");
                 value = false;
-            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+            } else if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
                 displayAlertNew("Amount entered exceeds transaction limit.", PayToPersonalActivity.this, "Oops!");
                 value = false;
             } else if (cynValue > avaBal) {
@@ -841,7 +841,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
 //                tvCurrency.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, dollarFont));
 //            }
             tvAmount.setFilters(FilterArray);
-            tvAmount.setText(Utils.USNumberFormat(Double.parseDouble(editable.replace(",", ""))));
+            tvAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(editable.replace(",", ""))));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

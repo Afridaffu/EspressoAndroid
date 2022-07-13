@@ -87,7 +87,7 @@ FeesActivity extends BaseActivity {
                         try {
                             //withdrawal
                             if (fees.getData().getWithdrawalBankFeeInDollar() != null) {
-                                tvEBADoll.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalBankFeeInDollar()))));
+                                tvEBADoll.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalBankFeeInDollar()))));
                             } else {
                                 tvEBADoll.setText("");
                             }
@@ -99,7 +99,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getWithdrawalInstantFeeInDollar() != null) {
-                                instantPayDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalInstantFeeInDollar()))));
+                                instantPayDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalInstantFeeInDollar()))));
                             } else {
                                 instantPayDollTV.setText("");
                             }
@@ -111,7 +111,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getWithdrawalSignetFeeInDollar() != null) {
-                                signetAccDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalSignetFeeInDollar()))));
+                                signetAccDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalSignetFeeInDollar()))));
                             } else {
                                 signetAccDollTV.setText("");
                             }
@@ -123,7 +123,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getWithdrawalGiftcardFeeInDollar() != null) {
-                                giftCardDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalGiftcardFeeInDollar()))));
+                                giftCardDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalGiftcardFeeInDollar()))));
                             } else {
                                 giftCardDollTV.setText("");
                             }
@@ -135,7 +135,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getWithdrawalFailedBankFeeInDollar() != null) {
-                                fdwDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalFailedBankFeeInDollar()))));
+                                fdwDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalFailedBankFeeInDollar()))));
                             } else {
                                 fdwDollTV.setText("");
                             }
@@ -149,7 +149,7 @@ FeesActivity extends BaseActivity {
                             //buy token
 
                             if (fees.getData().getBuyTokenBankFeeInDollar() != null) {
-                                buyTokenEBADollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenBankFeeInDollar()))));
+                                buyTokenEBADollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenBankFeeInDollar()))));
                             } else {
                                 buyTokenEBADollTV.setText("");
                             }
@@ -161,7 +161,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getBuyTokenSignetFeeInDollar() != null) {
-                                buytokenSignetDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenSignetFeeInDollar()))));
+                                buytokenSignetDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenSignetFeeInDollar()))));
                             } else {
                                 buytokenSignetDollTV.setText("");
                             }
@@ -174,7 +174,7 @@ FeesActivity extends BaseActivity {
 
                             //other fees
                             if (fees.getData().getMonthlyServiceFeeInDollar() != null) {
-                                monthlyFeeDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getMonthlyServiceFeeInDollar()))));
+                                monthlyFeeDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getMonthlyServiceFeeInDollar()))));
                             } else {
                                 monthlyFeeDollTV.setText("");
                             }
@@ -187,7 +187,7 @@ FeesActivity extends BaseActivity {
 
                             //transactions
                             if (fees.getData().getTransactionSaleOrderTokenFeeInDollar() != null) {
-                                salesOrderDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInDollar()))));
+                                salesOrderDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInDollar()))));
                             } else {
                                 salesOrderDollTV.setText("");
                             }
@@ -199,7 +199,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getTransactionRefundFeeInDollar() != null) {
-                                refundDollTV.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getTransactionRefundFeeInDollar()))));
+                                refundDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getTransactionRefundFeeInDollar()))));
                             } else {
                                 refundDollTV.setText("");
                             }

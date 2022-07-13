@@ -219,7 +219,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
 
         if (transactionData.getGrossAmount() != null && !transactionData.getGrossAmount().equals("")) {
-            value = Double.parseDouble(Utils.convertTwoDecimal(transactionData.getGrossAmount().replace("CYN", "").trim()));
+            value = Utils.doubleParsing(Utils.convertTwoDecimal(transactionData.getGrossAmount().replace("CYN", "").trim()));
             refundcurrencyTV.setText("" + Utils.convertTwoDecimal(transactionData.getGrossAmount().replace("CYN", "").trim()));
 
         }
@@ -260,7 +260,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 try {
                     if (transactionData.getGrossAmount() != null && !transactionData.getGrossAmount().equals("")) {
 
-                        value1 = Double.parseDouble(transactionData.getGrossAmount().replace("CYN", "").trim());
+                        value1 = Utils.doubleParsing(transactionData.getGrossAmount().replace("CYN", "").trim());
                         refundET.setText("" + Utils.convertTwoDecimal(transactionData.getGrossAmount().replace("CYN", "").trim()));
                         refundET.setSelection(refundET.getText().length());
                         fullamount.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
@@ -285,7 +285,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             public void onClick(View v) {
                 try {
                     if (transactionData.getGrossAmount() != null && !transactionData.getGrossAmount().equals("")) {
-                        Value = Double.parseDouble(transactionData.getGrossAmount().replace("CYN", "").trim());
+                        Value = Utils.doubleParsing(transactionData.getGrossAmount().replace("CYN", "").trim());
                         Value = Value / 2;
                         refundET.setText("" + Utils.convertTwoDecimal(String.valueOf(Value)));
                         refundET.setSelection(refundET.getText().length());
@@ -348,7 +348,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             refundamount = refundET.getText().toString().trim();
             refundreason = etremarksTV.getText().toString().trim();
 
-            refundrefrequest.setAmount(Double.parseDouble(refundamount));
+            refundrefrequest.setAmount(Utils.doubleParsing(refundamount));
             refundrefrequest.setRemarks(refundreason);
             refundrefrequest.setGbxTransactionId(gbxid);
         } catch (Exception e) {
@@ -361,7 +361,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     public RefundReferenceRequest refundTransaction() {
         RefundReferenceRequest request = new RefundReferenceRequest();
         try {
-            request.setAmount(Double.parseDouble(refundamount));
+            request.setAmount(Utils.doubleParsing(refundamount));
             request.setRemarks(refundreason);
             request.setGbxTransactionId(gbxid);
             request.setWalletType(wallettype);
@@ -566,9 +566,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSD(String.valueOf(processingFee));
             String enteredAmount = Utils.convertBigDecimalUSD(refundET.getText().toString().replace(",", ""));
-            amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
-            tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
-            total = cynValue + Double.parseDouble(strPFee);
+            amountPayTV.setText(Utils.USNumberFormat(Utils.doubleParsing(enteredAmount)));
+            tvProcessingFee.setText(Utils.USNumberFormat(Utils.doubleParsing(strPFee)) + " " + getString(R.string.currency));
+            total = cynValue + Utils.doubleParsing(strPFee);
             tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
             if (gbxid != null && !gbxid.equals("")) {
                 if (gbxid.length() > 10) {
@@ -771,7 +771,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
     private void enableRefund() {
         try {
-            etValue = Double.parseDouble(Utils.convertBigDecimal(refundET.getText().toString()));
+            etValue = Utils.doubleParsing(Utils.convertBigDecimal(refundET.getText().toString()));
 
             if (etValue >= 0.006 && etValue <= value
 //                    && !etremarksTV.getText().toString().equals("")
@@ -789,7 +789,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
     private void convertUSDValue() {
         try {
-            usdValue = Double.parseDouble(refundET.getText().toString().trim().replace(",", ""));
+            usdValue = Utils.doubleParsing(refundET.getText().toString().trim().replace(",", ""));
             cynValue = (usdValue + (usdValue * (feeInPercentage / 100))) + feeInAmount;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -823,10 +823,10 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         try {
             strAmount = Utils.convertTwoDecimal(etAmount.getText().toString().trim().replace(",", ""));
             etAmount.removeTextChangedListener(RefundTransactionActivity.this);
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
             etAmount.addTextChangedListener(RefundTransactionActivity.this);
             etAmount.setSelection(etAmount.getText().toString().length());
-            strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
+            strReturn = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             changeTextSize(strReturn);
             setDefaultLength();
             cKey.setEnteredText(refundET.getText().toString().trim());
