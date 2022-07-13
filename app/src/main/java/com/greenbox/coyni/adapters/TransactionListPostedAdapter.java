@@ -191,7 +191,7 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
         //txn description
 
         holder.txnDescrip.setText(objData.getTxnDescription());
-        holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
+        holder.walletBal.setText(Utils.convertTwoDecimal(objData.getWalletBalance()));
 
 
         //type transaction
@@ -210,14 +210,14 @@ public class TransactionListPostedAdapter extends RecyclerView.Adapter<Transacti
         }
 
         if (strType.contains("pay") || strType.equals("withdraw")) {
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()));
+            holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()));
             holder.amount.setTextColor(Color.parseColor("#000000"));
         } else if (strType.contains("buy") || strType.equals("receive")) {
-            holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()));
+            holder.amount.setText("+" + Utils.convertTwoDecimal(objData.getAmount()));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
 
         } else {
-            holder.amount.setText(convertTwoDecimal(objData.getAmount()));
+            holder.amount.setText(Utils.convertTwoDecimal(objData.getAmount()));
         }
         holder.txnStatus.setText(objData.getTxnStatusDn());
         switch (objData.getTxnStatusDn().replace(" ", "").toLowerCase()) {
