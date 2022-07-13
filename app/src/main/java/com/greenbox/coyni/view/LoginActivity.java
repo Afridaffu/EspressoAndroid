@@ -566,18 +566,20 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             coyniLogoIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    try {
-                        String strEndPoint = "";
-                        strEndPoint = BuildConfig.FLAVOR + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.URL_PRODUCTION;
-                        if (logoClickCount == 5) {
-                            logoClickCount = 0;
-                            Toast.makeText(LoginActivity.this, strEndPoint, Toast.LENGTH_LONG).show();
-                        } else {
-                            logoClickCount++;
-                        }
+                    if(!BuildConfig.FLAVOR.equals("sat") && !BuildConfig.FLAVOR.equals("uat")) {
+                        try {
+                            String strEndPoint = "";
+                            strEndPoint = BuildConfig.FLAVOR + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.URL_PRODUCTION;
+                            if (logoClickCount == 5) {
+                                logoClickCount = 0;
+                                Toast.makeText(LoginActivity.this, strEndPoint, Toast.LENGTH_LONG).show();
+                            } else {
+                                logoClickCount++;
+                            }
 
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
             });

@@ -1024,7 +1024,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     String amt = Utils.convertBigDecimalUSDC((amount));
                     nextPayoutAmountTV.setText(amt);
 
-                    if (Utils.doubleParsing(amt.replaceAll(",","")) <= 0) {
+                    if (Utils.doubleParsing(amt.replaceAll(",", "")) <= 0) {
                         mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         mCvBatchNow.setClickable(false);
                     } else {
@@ -1137,7 +1137,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
         String convertedOnlyTime = Utils.convertPrefZoneTimeFromPST(dateFormat2.format(newDate), "MM/dd/yyyy @ hh:mm:ss a", "MM/dd/yyyy @ hh:mm:ss a", myApplication.getStrPreference());
         String mainText = "All Payouts are deposited into Business Token Account. Your active batch is set to automatically pay out at ";
-        SpannableString ss = new SpannableString(mainText + convertedOnlyTime.split("@")[1] + " " + localPreferenceValue);
+        SpannableString ss = new SpannableString(mainText + convertedOnlyTime.split("@")[1].toLowerCase() + " " + localPreferenceValue);
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
         ss.setSpan(new CustomTypefaceSpan("", font), 31, 53, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         ss.setSpan(new CustomTypefaceSpan("", font), 108, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
