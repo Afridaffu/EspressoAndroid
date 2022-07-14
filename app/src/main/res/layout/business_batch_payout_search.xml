@@ -23,7 +23,9 @@
                     android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:text=""
+                    android:singleLine="true"
                     android:textColor="@color/primary_black"
+                    android:layout_weight="1"
                     android:textSize="@dimen/_11ssp" />
 
                 <TextView
@@ -31,10 +33,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_6sdp"
-                    android:layout_weight="1"
+                    android:layout_weight=".001"
                     android:fontFamily="@font/opensans_bold"
                     android:gravity="end"
-                    android:text=""
+                    android:singleLine="true"
                     android:textColor="@color/active_green"
                     android:textSize="@dimen/_12ssp" />
             </LinearLayout>
