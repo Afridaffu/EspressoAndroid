@@ -115,6 +115,8 @@ public class ImageUtility {
                 // DBAInfoAcivity.dbaInfoAcivity.removeAndUploadAdditionalDoc(8);
             } else if (from.equals("ADD_BO")) {
                 AddBeneficialOwnerActivity.identityFile = mediaFile;
+                AddBeneficialOwnerActivity.isFileSelected = true;
+//                AddBeneficialOwnerActivity.isDocUploaded = false;
 //                DBAInfoAcivity.dbaInfoAcivity.removeAndUploadAdditionalDoc(8);
             } else if (from.equals("BAARA")) {
                 BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.saveFileFromCamera(mediaFile);

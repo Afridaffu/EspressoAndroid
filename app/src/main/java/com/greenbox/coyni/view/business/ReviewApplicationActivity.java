@@ -150,7 +150,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private String Cstate = "";
     private String Dstate = "";
     private int bankMaxAllowedCount = 0;
-
+    public static ReviewApplicationActivity reviewApplicationActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +182,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     }
 
     private void initFields() {
+        reviewApplicationActivity = this;
         objMyApplication = (MyApplication) getApplicationContext();
         edit1 = findViewById(R.id.edit1);
         edit2 = findViewById(R.id.edit2TV);
@@ -230,6 +231,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ReviewApplicationActivity.this, AdditionalBeneficialOwnersActivity.class);
+                intent.putExtra("FROM","REVIEW");
                 startActivity(intent);
             }
         });

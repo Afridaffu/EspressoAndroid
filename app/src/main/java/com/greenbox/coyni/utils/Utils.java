@@ -639,6 +639,14 @@ public class Utils {
         }
     }
 
+    public static String getDocUpdatedDate() {
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("dd/MM/yyyy");
+            return spf.format(new Date());
+        } catch (Exception ex) {
+            return null;
+        }
+    }
     public static String convertDate(String date) {
         String strDate = "";
         try {
