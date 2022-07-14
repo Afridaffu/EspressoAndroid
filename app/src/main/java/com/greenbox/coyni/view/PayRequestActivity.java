@@ -1110,7 +1110,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
         try {
             TemplateRequest request = new TemplateRequest();
             request.setBody1(objMyApplication.getStrUserName());
-            request.setBody2(Utils.convertBigDecimalUSDC(payRequestET.getText().toString().trim().replace(",", "")));
+            request.setBody2(Utils.convertBigDecimalUSD(payRequestET.getText().toString().trim().replace(",", "")));
             request.setBody3(recipientAddress);
             payViewModel.getTemplate(Utils.requestId, request);
         } catch (Exception ex) {

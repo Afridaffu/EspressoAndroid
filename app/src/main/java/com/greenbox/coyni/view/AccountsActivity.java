@@ -91,7 +91,8 @@ public class AccountsActivity extends BaseActivity {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
 //                        objMyApplication.setGbtWallet(walletInfo.get(i));
                     strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getAvailabilityToUse()));
-                    userBalanceTV.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
+//                    userBalanceTV.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
+                    userBalanceTV.setText(strAmount);
                     objMyApplication.setGBTBalance(walletInfo.get(i).getAvailabilityToUse(), walletInfo.get(0).getWalletType());
 //                    }
                 }

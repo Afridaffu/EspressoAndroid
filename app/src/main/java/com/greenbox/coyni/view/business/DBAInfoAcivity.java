@@ -1694,13 +1694,13 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 dbaInfoRequest.setIdentificationType(identificationType);
             //Avg ticket
             if (avgTicketOET.getText().trim().length() > 0)
-                dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(avgTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
+                dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSD(avgTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
             //high ticket
             if (highTicketOET.getText().trim().length() > 0)
-                dbaInfoRequest.setHighTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(highTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
+                dbaInfoRequest.setHighTicket(Integer.parseInt(Utils.convertBigDecimalUSD(highTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
             //MPV
             if (mpvOET.getText().trim().length() > 0)
-                dbaInfoRequest.setMonthlyProcessingVolume(Integer.parseInt(Utils.convertBigDecimalUSDC(mpvOET.getText().trim().replace(",", "")).split("\\.")[0]));
+                dbaInfoRequest.setMonthlyProcessingVolume(Integer.parseInt(Utils.convertBigDecimalUSD(mpvOET.getText().trim().replace(",", "")).split("\\.")[0]));
             dbaInfoRequest.setCopyCompanyInfo(isCopyCompanyInfo);
             dbaInfoRequest.setTimeZone(objMyApplication.getTimezoneID());
             //Website
