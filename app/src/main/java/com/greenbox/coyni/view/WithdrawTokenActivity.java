@@ -114,7 +114,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
     Dialog pDialog;
-    String strLimit = "", strType = "", strBankId = "", strCardId = "", strSubType = "", strSignOn = "";
+    String strLimit = "", strType = "", strBankId = "", strCardId = "", strSubType = "", strSignOn = "", signetWalletId = "";
     Double maxValue = 0.0, dget = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
     SignOnData signOnData;
@@ -481,7 +481,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         objMyApplication.setTransferFeeResponse(transferFeeResponse);
                         feeInAmount = transferFeeResponse.getData().getFeeInAmount();
                         feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
-                        if (isButtonClick && !etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Utils.doubleParsing(etAmount.getText().toString().replace(",","")) > 0) {
+                        if (isButtonClick && !etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Utils.doubleParsing(etAmount.getText().toString().replace(",", "")) > 0) {
                             isButtonClick = false;
                             Double pay = Utils.doubleParsing(etAmount.getText().toString().replace(",", ""));
                             pfee = transferFeeResponse.getData().getFee();
@@ -904,9 +904,11 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                     strType = "bank";
                     strSubType = Utils.bankType;
+                    signetWalletId = "";
                 } else {
                     strType = "signet";
                     strSubType = Utils.signetType;
+                    signetWalletId = objData.getAccountNumber();
                 }
                 strBankId = String.valueOf(objData.getId());
                 obj.setTransactionSubType(Integer.parseInt(Utils.bankType));
@@ -1818,6 +1820,9 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
         request.setTokens(cynValue);
         request.setRemarks(etRemarks.getText().toString().trim());
         request.setWithdrawType(strSubType);
+        if (!signetWalletId.equals("")) {
+            request.setSignetWalletId(signetWalletId);
+        }
         objMyApplication.setWithdrawRequest(request);
         objMyApplication.setWithdrawAmount(cynValue);
 
