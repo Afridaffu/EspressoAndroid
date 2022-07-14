@@ -34,6 +34,7 @@ import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MatomoConstants;
 import com.greenbox.coyni.utils.MatomoUtility;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -53,6 +54,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     private int currentPage = 1, total = 0;
     private RecyclerView recyclerView;
     private CardView recyclerViewPayouts;
+    private MyApplication objMyApplication;
     private List<BatchPayoutListItems> payoutList = new ArrayList<>();
     private BusinessDashboardViewModel businessDashboardViewModel;
     private BatchPayoutListAdapter batchPayoutListAdapter;
@@ -70,6 +72,8 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     }
 
     private void initFields() {
+
+        objMyApplication = (MyApplication) getApplicationContext();
         closeBtnIV = findViewById(R.id.closeBtnIV);
         filterIconIV = findViewById(R.id.filterIconIV);
         applyFilterBtnCV = findViewById(R.id.applyFilterBtnCV);
@@ -176,7 +180,6 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         }
     }
 
-
     private void initObserver() {
         try {
             businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(this, new Observer<BatchPayoutListResponse>() {
@@ -220,7 +223,6 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void payoutAPI(String search) {
@@ -297,11 +299,8 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
             if (batchFilter.getUpdatedToDate() != null && batchFilter.getUpdatedFromDate() != null) {
                 if (!batchFilter.getUpdatedToDate().isEmpty() && !batchFilter.getUpdatedFromDate().isEmpty()) {
 
-                    String strF = batchFilter.getUpdatedFromDate();
-                    String strL = batchFilter.getUpdatedToDate();
-                    String strFromDate = Utils.payoutDate(strF);
-                    String strToDate = Utils.payoutDate(strL);
-
+                    String strFromDate = Utils.convertPreferenceZoneToUtcDateTime(batchFilter.getUpdatedFromDate() + " 00:00:00", "MM-dd-yyyy HH:mm:ss", "yyyy-MM-dd HH:mm:ss", objMyApplication.getStrPreference());
+                    String strToDate = Utils.convertPreferenceZoneToUtcDateTime(batchFilter.getUpdatedToDate() + " 59:59:59", "MM-dd-yyyy HH:mm:ss", "yyyy-MM-dd HH:mm:ss", objMyApplication.getStrPreference());
                     listRequest.setFromDate(strFromDate);
                     listRequest.setToDate(strToDate);
                 }

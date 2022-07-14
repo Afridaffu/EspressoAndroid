@@ -59,6 +59,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.biometric.BiometricManager;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -2797,5 +2798,33 @@ public class Utils {
 
     public static Double doubleParsing(String value) {
         return Double.parseDouble(value.replaceAll(",", ""));
+    }
+
+    public static String newFormatPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null && phoneNumber.equals("")) {
+            return "";
+        }
+        if (phoneNumber.contains("(")) {
+            return phoneNumber;
+        }
+
+        if (phoneNumber.length() != 10) {
+            return phoneNumber;
+        }
+        return  phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
+    }
+
+    public static void setTextSize(TextView tv1, String text,float textSize) {
+        if(tv1 == null) {
+            return;
+        }
+        if(text != null && text.length() > 0) {
+            float maxTextSize = textSize;
+            if (text.length() > 6) {
+                maxTextSize = maxTextSize / 2 - (text.length() / 2);
+                tv1.setTextSize(TypedValue.COMPLEX_UNIT_SP, maxTextSize);
+            }
+            tv1.setText(text);
+        }
     }
 }

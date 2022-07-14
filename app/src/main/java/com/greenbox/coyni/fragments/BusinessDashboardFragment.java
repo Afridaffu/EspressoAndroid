@@ -88,6 +88,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import okhttp3.internal.Util;
+
 //Business Dashboard Fragment
 public class BusinessDashboardFragment extends BaseFragment {
 
@@ -455,11 +457,13 @@ public class BusinessDashboardFragment extends BaseFragment {
                                     if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.saleOrdertxntype)
                                             && data.get(position).getTransactionSubType() == null) {
                                         if (data.get(position).getTotalAmount() != null) {
-                                            mGrossAmount.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
+                                            String amount = Utils.convertTwoDecimal(data.get(position).getTotalAmount());
+                                            Utils.setTextSize(mGrossAmount, amount, 42);
                                             grossAmount = Utils.doubleParsing(data.get(position).getTotalAmount());
                                         }
                                         if (data.get(position).getCount() > 0) {
-                                            mTransactions.setText(Utils.convertToWithoutDecimal(String.valueOf(data.get(position).getCount())));
+                                            String count = Utils.convertToWithoutDecimal(String.valueOf(data.get(position).getCount()));
+                                            Utils.setTextSize(mTransactions, count, 42);
                                             totalTransactions = data.get(position).getCount();
                                         } else {
                                             mTransactions.setText("0");
@@ -471,7 +475,8 @@ public class BusinessDashboardFragment extends BaseFragment {
                                     } else if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.refundtxntype)
                                             && data.get(position).getTransactionSubType() == null) {
                                         if (data.get(position).getTotalAmount() != null) {
-                                            mRefunds.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
+                                            String refund = Utils.convertTwoDecimal(data.get(position).getTotalAmount());
+                                            Utils.setTextSize(mRefunds, refund, 42);
                                             refunds = Utils.doubleParsing(data.get(position).getTotalAmount());
                                         }
 
@@ -480,13 +485,15 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             && data.get(position).getTransactionSubType() == null) {
 
                                         if (data.get(position).getTotalAmount() != null) {
-                                            mMISCFees.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
+                                            String fees = Utils.convertTwoDecimal(data.get(position).getTotalAmount());
+                                            Utils.setTextSize(mMISCFees, fees, 42);
                                             miscFee = Utils.doubleParsing(data.get(position).getTotalAmount());
                                         }
                                     } else if (data.get(position).getTransactionType() == null && data.get(position).getTransactionSubType() == null) {
-                                        if (data.get(position).getTotalAmount() != null)
-                                            mHighestTicket.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
-
+                                        if (data.get(position).getTotalAmount() != null) {
+                                            String highestTicket = Utils.convertTwoDecimal(data.get(position).getTotalAmount());
+                                            Utils.setTextSize(mHighestTicket, highestTicket, 42);
+                                        }
                                         if (data.get(position).getCreatedAt() != null) {
                                             mDateHighestTicket.setText(myApplication.convertZoneDateTime(data.get(position).getCreatedAt(), dateAndTime, dateResult));
                                         } else {
@@ -494,9 +501,11 @@ public class BusinessDashboardFragment extends BaseFragment {
                                         }
                                     }
                                 }
-                                mProcessingFees.setText(Utils.convertTwoDecimal(String.valueOf(processingFee)));
+                                String processingFees = Utils.convertTwoDecimal(String.valueOf(processingFee));
+                                Utils.setTextSize(mProcessingFees, processingFees, 42);
                                 netAmount = grossAmount - refunds - processingFee - miscFee;
-                                mNetAmount.setText(Utils.convertTwoDecimal(String.valueOf(netAmount)));
+                                String netAmountDecimal = Utils.convertBigDecimalUSDC(String.valueOf(netAmount));
+                                Utils.setTextSize(mNetAmount, netAmountDecimal, 42);
                                 if (grossAmount > 0 && totalTransactions >= 1) {
                                     averageTicket = grossAmount / totalTransactions;
                                 } else {
@@ -1019,10 +1028,9 @@ public class BusinessDashboardFragment extends BaseFragment {
             boolean isOpen = false, isPaid = false;
             while (i < listItems.size()) {
                 if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
-
                     String amount = listItems.get(i).getTotalAmount();
                     String amt = Utils.convertBigDecimalUSDC((amount));
-                    nextPayoutAmountTV.setText(amt);
+                    Utils.setTextSize(nextPayoutAmountTV, amt, 48);
 
                     if (Utils.doubleParsing(amt.replaceAll(",", "")) <= 0) {
                         mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
@@ -1030,7 +1038,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     } else {
                         mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                         mCvBatchNow.setClickable(true);
-                        nextPayoutAmountTV.setText(amt);
+//                        Utils.setTextSize(nextPayoutAmountTV,"1,000.00");
                     }
                     String date = listItems.get(i).getCreatedAt();
                     if (date.contains(".")) {
@@ -1054,8 +1062,8 @@ public class BusinessDashboardFragment extends BaseFragment {
 
                     isOpen = true;
                 } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
-                    String Amount = listItems.get(i).getTotalAmount();
-                    lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
+                    String amount = Utils.convertBigDecimalUSDC((listItems.get(i).getTotalAmount()));
+                    Utils.setTextSize(lastPayoutAmountTV, amount, 48);
                     String date1 = listItems.get(i).getUpdatedAt();
                     if (date1 != null && date1.contains(".")) {
                         String res = date1.substring(0, date1.lastIndexOf("."));
@@ -1157,7 +1165,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         mTvReserveList.setVisibility(View.VISIBLE);
 
         if (listData.getNextReserveReleaseAmount() != null) {
-            nextReleaseAmountTV.setText(Utils.convertBigDecimalUSDC(listData.getNextReserveReleaseAmount()));
+            String amt = Utils.convertBigDecimalUSDC(listData.getNextReserveReleaseAmount());
+            Utils.setTextSize(nextReleaseAmountTV, amt, 48);
         }
 
         if (listData.getNextReserveReleaseDate() != null) {
@@ -1179,8 +1188,8 @@ public class BusinessDashboardFragment extends BaseFragment {
             Collections.sort(items, Collections.reverseOrder());
             if (items.size() > 0) {
                 ReserveListItems latest = items.get(0);
-                String amount = latest.getReserveAmount();
-                lastReleaseAmountTV.setText(Utils.convertBigDecimalUSDC(amount));
+                String amount = Utils.convertBigDecimalUSDC(latest.getReserveAmount());
+                Utils.setTextSize(lastReleaseAmountTV, amount, 48);
                 String datee = latest.getScheduledRelease();
                 if (datee != null && !datee.equals("")) {
                     if (datee.contains(".")) {
