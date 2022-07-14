@@ -252,7 +252,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/_12sdp"
-                    android:src="@drawable/ic_signetinactive" />
+                    android:src="@drawable/ic_signetactive" />
 
                 <LinearLayout
                     android:id="@+id/layoutSDetails"
@@ -275,7 +275,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_semibold"
                             android:text="Signet Account"
-                            android:textColor="@color/light_gray"
+                            android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp" />
 
                         <TextView
@@ -285,7 +285,7 @@
                             android:layout_marginLeft="@dimen/_10sdp"
                             android:fontFamily="@font/opensans_regular"
                             android:text="(0/0)"
-                            android:textColor="@color/light_gray"
+                            android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
 
@@ -296,15 +296,16 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="Used for buying tokens or withdrawing funds."
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_9sdp"
-                        android:visibility="gone"/>
+                        android:textSize="@dimen/_9sdp" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_bold"
                         android:text="Coming soon"
                         android:textColor="@color/primary_color"
-                        android:textSize="@dimen/_9sdp" />
+                        android:textSize="@dimen/_9sdp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tvSignetError"

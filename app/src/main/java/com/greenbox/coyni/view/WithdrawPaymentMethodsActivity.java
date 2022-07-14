@@ -751,11 +751,11 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-//                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-//                            strCurrent = "signet";
-//                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-//                            startActivityForResult(i, 4);
-//                        }
+                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                            strCurrent = "signet";
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                            startActivityForResult(i, 4);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -865,10 +865,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
                 } else {
                     tvSignetError.setVisibility(View.GONE);
-//                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
-//                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
-                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
-                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
+                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
+                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
+//                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
+//                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
                     tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
                     imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
                     imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
@@ -1064,16 +1064,16 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-//                        MatomoUtility.getInstance().trackEvent(MatomoConstants.SIGNET_ACCOUNT, MatomoConstants.SIGNET_ACCOUNT_CLICKED);
-//                        if (signetList != null && signetList.size() > 0) {
-//                            selectPayMethod(signetList);
-//                        } else {
-////                            strCurrent = "signet";
-////                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-////                            startActivityForResult(i, 4);
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.SIGNET_ACCOUNT, MatomoConstants.SIGNET_ACCOUNT_CLICKED);
+                        if (signetList != null && signetList.size() > 0) {
+                            selectPayMethod(signetList);
+                        } else {
 //                            strCurrent = "signet";
-//                            showAddPayment("signet");
-//                        }
+//                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+//                            startActivityForResult(i, 4);
+                            strCurrent = "signet";
+                            showAddPayment("signet");
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

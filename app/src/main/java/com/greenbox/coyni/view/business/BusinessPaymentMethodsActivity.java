@@ -97,7 +97,6 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                                 if (extBankDialog != null) {
                                     extBankDialog.dismiss();
                                 }
-//                                dialog = Utils.showProgressDialog(BusinessPaymentMethodsActivity.this);
                                 showProgressDialog();
                                 customerProfileViewModel.meSyncAccount();
                             }
@@ -433,11 +432,11 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-//                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-//                            strCurrent = "signet";
-//                            Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-//                            startActivityForResult(i, 2);
-//                        }
+                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                            strCurrent = "signet";
+                            Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                            startActivityForResult(i, 2);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -611,15 +610,15 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                     imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
                 } else {
                     tvSignetError.setVisibility(View.GONE);
-//                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
-//                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
-                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
-                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
+                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
+                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
+//                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
+//                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
                     tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
-                    //imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
-                    imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
-//                    imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
-                    imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
+                    imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
+//                    imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
+                    imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
+//                    imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
 
                 }
             }

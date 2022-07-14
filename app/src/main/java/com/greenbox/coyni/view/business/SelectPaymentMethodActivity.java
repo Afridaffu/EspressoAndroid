@@ -341,9 +341,6 @@ public class SelectPaymentMethodActivity extends BaseActivity {
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
-//                if (dialog != null) {
-//                    dialog.dismiss();
-//                }
                 dismissDialog();
                 if (payMethodsResponse != null) {
                     if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
@@ -518,12 +515,12 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-//                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-//                            strCurrent = "signet";
-//                            strOnPauseScreen = "";
-//                            Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
-//                            startActivityForResult(i, 2);
-//                        }
+                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                            strCurrent = "signet";
+                            strOnPauseScreen = "";
+                            Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
+                            startActivityForResult(i, 2);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -629,14 +626,14 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
             } else {
                 tvSignetError.setVisibility(View.GONE);
-//                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
-//                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
-                tvSignetHead.setTextColor(getColor(R.color.light_gray));
-                tvSignetCount.setTextColor(getColor(R.color.light_gray));
+                tvSignetHead.setTextColor(getColor(R.color.primary_black));
+                tvSignetCount.setTextColor(getColor(R.color.dark_grey));
+//                tvSignetHead.setTextColor(getColor(R.color.light_gray));
+//                tvSignetCount.setTextColor(getColor(R.color.light_gray));
                 tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
                 imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
-//                    imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
-                imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
+                imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
+//                imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
             }
 //            }
         } catch (Exception ex) {

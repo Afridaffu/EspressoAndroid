@@ -2134,8 +2134,8 @@ public class Utils {
                                 listBusPayments.add(listPayments.get(i));
                             }
                         } else {
-                            if (listPayments.get(i).getPaymentMethod() != null
-                                    && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
+//                            if (listPayments.get(i).getPaymentMethod() != null && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
+                            if (listPayments.get(i).getPaymentMethod() != null && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank"))) {
                                 listBusPayments.add(listPayments.get(i));
                             }
                         }

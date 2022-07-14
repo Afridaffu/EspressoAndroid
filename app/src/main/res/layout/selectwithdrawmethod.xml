@@ -242,14 +242,6 @@
                 android:paddingEnd="@dimen/_7sdp"
                 android:visibility="gone">
 
-                <!--                <ImageView-->
-                <!--                    android:id="@+id/imgSignetAcLogo"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_centerVertical="true"-->
-                <!--                    android:layout_marginEnd="@dimen/_10sdp"-->
-                <!--                    android:contentDescription="@string/signet_account"-->
-                <!--                    android:src="@drawable/ic_signet_ac_logo" />-->
                 <ImageView
                     android:id="@+id/imgSignetAcLogo"
                     android:layout_width="wrap_content"
@@ -257,7 +249,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:contentDescription="@string/signet_account"
-                    android:src="@drawable/ic_signetinactive" />
+                    android:src="@drawable/ic_signetactive" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -273,7 +265,7 @@
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="@string/signet_account"
-                        android:textColor="@color/light_gray"
+                        android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
                     <TextView
@@ -283,8 +275,7 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/signet_ac_withdrawing_funds"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_10ssp"
-                        android:visibility="gone" />
+                        android:textSize="@dimen/_10ssp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -293,7 +284,8 @@
                         android:fontFamily="@font/opensans_bold"
                         android:text="Coming soon"
                         android:textColor="@color/primary_color"
-                        android:textSize="@dimen/_10ssp" />
+                        android:textSize="@dimen/_10ssp"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
