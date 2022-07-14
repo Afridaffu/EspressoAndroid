@@ -28,7 +28,7 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView txnDescrip, txnDescripExtention, amountTV, dateTV, statusTV, balanceTV;
         LinearLayout statusLL;
-        public View gapView;
+        public View gapView,descriptionView;
 
         public MyViewHolder(View view) {
             super(view);
@@ -40,6 +40,7 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
             balanceTV = (TextView) view.findViewById(R.id.balanceTV);
             statusLL = (LinearLayout) view.findViewById(R.id.statusLL);
             gapView = (View) view.findViewById(R.id.gapView);
+            descriptionView = (View) view.findViewById(R.id.description1);
         }
     }
 
@@ -69,10 +70,13 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                     holder.txnDescrip.setText(data[0]);
                     holder.txnDescripExtention.setText("**" + data[1]);
                     holder.txnDescrip.setVisibility(View.VISIBLE);
+                    if (holder.gapView.getVisibility() == View.VISIBLE)
                     holder.gapView.setVisibility(View.GONE);
                 } else {
                     holder.txnDescrip.setText(objData.getTxnDescription());
                     holder.txnDescripExtention.setVisibility(View.GONE);
+                    holder.descriptionView.setVisibility(View.VISIBLE);
+                    if (holder.gapView.getVisibility() == View.GONE)
                     holder.gapView.setVisibility(View.VISIBLE);
                 }
             } catch (Exception e) {
