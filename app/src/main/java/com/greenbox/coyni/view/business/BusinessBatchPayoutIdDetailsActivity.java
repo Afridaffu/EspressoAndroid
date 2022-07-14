@@ -9,22 +9,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
-import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.adapters.MerchantTransactionListPostedNewAdapter;
-import com.greenbox.coyni.adapters.OnItemClickListener;
 import com.greenbox.coyni.adapters.PayoutDetailsTransactionsAdapter;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsData;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
-import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
@@ -58,7 +54,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
     private TextView bathPayoutIdTV, payoutIDAmountTV, payoutStatusTV, payoutIDdateTimeTV, noTransactions, merchantNoMoreTransactions;
     private BatchPayoutListItems selectedItem;
     private CardView cardViewList;
-    BatchPayoutIdDetailsData objData;
+    BatchPayoutIdDetailsData objData = new BatchPayoutIdDetailsData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +64,9 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
 
         selectedItem = (BatchPayoutListItems) getIntent().getSerializableExtra(Utils.SELECTED_BATCH_PAYOUT);
+        Log.v("TAG", "updatedAt::" + selectedItem.getUpdatedAt());
+        Log.v("TAG", "Created::" + selectedItem.getCreatedAt());
+        Log.v("TAG", "Payout::" + objData.getPayoutDate());
         initFields();
         initObservers();
         BatchPayoutDetailsRequest batchPayoutDetailsRequest = new BatchPayoutDetailsRequest();
@@ -115,7 +114,25 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
 
             TransactionListRequest transactionListRequest = new TransactionListRequest();
             transactionListRequest.setMerchantTransactions(true);
-//            transactionListRequest.setTransactionType(getDefaultTransactionTypes());
+            if (selectedItem.getCreatedAt() != null) {
+                String createdAt = selectedItem.getCreatedAt();
+                if (createdAt.contains(".")) {
+                    createdAt = selectedItem.getCreatedAt().split("\\.")[0];
+                }
+                transactionListRequest.setUpdatedFromDate(createdAt);
+            }
+            transactionListRequest.setUpdatedFromDateOperator(">=");
+
+            if (selectedItem.getUpdatedAt() != null) {
+                String updatedAt = selectedItem.getUpdatedAt();
+                if (updatedAt.contains(".")) {
+                    updatedAt = updatedAt.split("\\.")[0];
+                }
+                transactionListRequest.setUpdatedToDate(updatedAt);
+            }
+
+            transactionListRequest.setUpdatedFromDateOperator("<=");
+            transactionListRequest.setTransactionType(getDefaultTransactionTypes());
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
 
             transactionsAPI(transactionListRequest);
@@ -129,8 +146,8 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
         ArrayList<Integer> transactionType = new ArrayList<>();
         transactionType.add(Utils.saleOrder);
         transactionType.add(Utils.refund);
-        transactionType.add(Utils.merchantPayout);
-        transactionType.add(Utils.monthlyServiceFee);
+//        transactionType.add(Utils.merchantPayout);
+//        transactionType.add(Utils.monthlyServiceFee);
         return transactionType;
     }
 
@@ -235,6 +252,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
     }
 
     private void showDetails(BatchPayoutIdDetailsData objData) {
+        this.objData = objData;
 
         if (objData.getBatchId() != null && !objData.getBatchId().equals("")) {
             bathPayoutIdTV.setText(objData.getBatchId());
@@ -271,6 +289,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
         }
         if (objData.getPayoutDate() != null && !objData.getPayoutDate().equals("")) {
             String date = objData.getPayoutDate();
+            Log.v("TAG", "" + date);
             if (date.contains(".")) {
                 String formattedDate = date.substring(0, date.lastIndexOf("."));
                 payoutIDdateTimeTV.setText(objMyApplication.convertZoneDateTime(formattedDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a").toLowerCase());
@@ -281,9 +300,9 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
             if (objData.getPayoutReferenceId().length() > 10) {
                 payoutRefIdLL.setOnClickListener(v -> Utils.copyText(objData.getPayoutReferenceId(), BusinessBatchPayoutIdDetailsActivity.this));
                 SpannableString content = new SpannableString(objData.getPayoutReferenceId().substring(0, 10));
-                content = SpannableString.valueOf(content+ "...");
+                content = SpannableString.valueOf(content + "...");
                 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                payoutRefIdTV.setText(content );
+                payoutRefIdTV.setText(content);
             } else {
                 payoutRefIdTV.setText(objData.getPayoutReferenceId());
             }
@@ -292,7 +311,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
             if (objData.getTokenAccount().length() > 10) {
                 payoutTokenNoLL.setOnClickListener(v -> Utils.copyText(objData.getTokenAccount(), BusinessBatchPayoutIdDetailsActivity.this));
                 SpannableString content = new SpannableString(objData.getTokenAccount().substring(0, 10));
-                content = SpannableString.valueOf(content+ "...");
+                content = SpannableString.valueOf(content + "...");
                 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                 payoutTokenIdTV.setText(content);
             } else {
@@ -306,7 +325,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                 if (objData.getReserveWalletId().length() > 10) {
                     reserveIDLL.setVisibility(View.VISIBLE);
                     SpannableString content = new SpannableString(objData.getReserveWalletId().substring(0, 10));
-                    content = SpannableString.valueOf(content+ "...");
+                    content = SpannableString.valueOf(content + "...");
                     content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                     ReserveIdTV.setText(content);
                 } else {
