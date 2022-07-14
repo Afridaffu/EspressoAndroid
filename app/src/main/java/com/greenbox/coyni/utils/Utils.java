@@ -1086,50 +1086,6 @@ public class Utils {
         return colorState;
     }
 
-    /**
-     * @deprecated use {@link #getErrorColorState(Context)} instead.
-     */
-//    @Deprecated
-//    public static ColorStateList getErrorColorState() {
-//        errorState = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
-//        errorColor = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red), OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red)};
-//        errorColorState = new ColorStateList(errorState, errorColor);
-//
-//        return errorColorState;
-//    }
-
-    /**
-     * @deprecated use {@link #getNormalColorState(Context)} instead.
-     */
-//    @Deprecated
-//    public static ColorStateList getNormalColorState() {
-//        state = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
-//        color = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray), OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray)};
-//        colorState = new ColorStateList(state, color);
-//        return colorState;
-//    }
-
-//    public static void setUpperHintColor(TextInputLayout til, int color) {
-//        try {
-//            Field field = til.getClass().getDeclaredField("defaultHintTextColor");
-//            field.setAccessible(true);
-//            int[][] states = new int[][]{
-//                    new int[]{}
-//            };
-//            int[] colors = new int[]{
-//                    color
-//            };
-//            ColorStateList myList = new ColorStateList(states, colors);
-//            field.set(til, myList);
-//
-//            Method method = til.getClass().getDeclaredMethod("updateLabelState", boolean.class);
-//            method.setAccessible(true);
-//            method.invoke(til, true);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
     public static void setUpperHintColor(TextInputLayout til, int color) {
         try {
             int[][] states = new int[][]{
