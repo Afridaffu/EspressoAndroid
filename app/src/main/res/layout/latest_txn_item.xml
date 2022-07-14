@@ -18,9 +18,8 @@
 
         <TextView
             android:id="@+id/latestmessageTV"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight=".65"
             android:ellipsize="end"
             android:fontFamily="@font/opensans_semibold"
             android:maxLines="1"
@@ -35,12 +34,18 @@
             android:layout_width="@dimen/_10sdp"
             android:layout_height="@dimen/_10sdp"
             android:visibility="gone" />
+        <View
+            android:id="@+id/description1"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:visibility="gone"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/latestmessagTV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight=".3"
+            android:layout_weight="1"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="start"
             android:singleLine="true"
