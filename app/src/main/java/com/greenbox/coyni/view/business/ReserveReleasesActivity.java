@@ -199,9 +199,9 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
             }
             if (reserveFilter.getUpdatedToDate() != null && reserveFilter.getUpdatedFromDate() != null) {
                 if (!reserveFilter.getUpdatedToDate().isEmpty() && !reserveFilter.getUpdatedFromDate().isEmpty()) {
-                    String strFromDate = Utils.payoutDate(reserveFilter.getUpdatedFromDate());
+                    String strFromDate = Utils.convertPreferenceZoneToUtcDateTime(reserveFilter.getUpdatedFromDate() + " 00:00:00", "MM-dd-yyyy HH:mm:ss", "yyyy-MM-dd HH:mm:ss", objMyApplication.getStrPreference());
                     listRequest.setFromDate(strFromDate);
-                    String strToDate = Utils.payoutDate(reserveFilter.getUpdatedToDate());
+                    String strToDate = Utils.convertPreferenceZoneToUtcDateTime(reserveFilter.getUpdatedToDate() + " 23:59:59", "MM-dd-yyyy HH:mm:ss", "yyyy-MM-dd HH:mm:ss", objMyApplication.getStrPreference());
                     listRequest.setToDate(strToDate);
                 }
             }
@@ -410,23 +410,18 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
 
     private void showFiltersPopup() {
         ReserveReleasesFilterDialog showReserveReleaseDialog = new ReserveReleasesFilterDialog(ReserveReleasesActivity.this, reserveFilter);
-        showReserveReleaseDialog.setOnDialogClickListener(new OnDialogClickListener() {
-            @Override
-            public void onDialogClicked(String action, Object value) {
-                searchET.setText("");
-//                LogUtils.d(TAG, "onclickkk" + action + value);
-                if (action.equalsIgnoreCase(applyFilter)) {
-                    MatomoUtility.getInstance().trackEvent(MatomoConstants.RESERVE_RELEASE_FILTER, MatomoConstants.RESERVE_RELEASE_FILTER_APPLIED);
-                    reserveFilter = (ReserveFilter) value;
-                    ivFilterIcon.setImageResource(reserveFilter.isFilterApplied ? R.drawable.ic_filter_enabled : R.drawable.ic_filtericon);
-                    getReserveRollingData();
-//                    dismissDialog();
-                } else if (action.equalsIgnoreCase(resetFilter)) {
-                    reserveFilter = (ReserveFilter) value;
-                    ivFilterIcon.setImageResource(R.drawable.ic_filtericon);
-                    getReserveRollingData();
-                    dismissDialog();
-                }
+        showReserveReleaseDialog.setOnDialogClickListener((action, value) -> {
+            searchET.setText("");
+            if (action.equalsIgnoreCase(applyFilter)) {
+                MatomoUtility.getInstance().trackEvent(MatomoConstants.RESERVE_RELEASE_FILTER, MatomoConstants.RESERVE_RELEASE_FILTER_APPLIED);
+                reserveFilter = (ReserveFilter) value;
+                ivFilterIcon.setImageResource(reserveFilter.isFilterApplied ? R.drawable.ic_filter_enabled : R.drawable.ic_filtericon);
+                getReserveRollingData();
+            } else if (action.equalsIgnoreCase(resetFilter)) {
+                reserveFilter = (ReserveFilter) value;
+                ivFilterIcon.setImageResource(R.drawable.ic_filtericon);
+                getReserveRollingData();
+                dismissDialog();
             }
         });
         showReserveReleaseDialog.show();
@@ -493,8 +488,6 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                 reserveRecyclerView.setVisibility(View.VISIBLE);
                 getManualData();
                 dismissDialog();
-
-
             }
         }
     }
@@ -505,6 +498,5 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
         if (editable == searchET.getEditableText()) {
 
         }
-
     }
 }
