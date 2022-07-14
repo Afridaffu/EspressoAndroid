@@ -111,7 +111,7 @@ public class RetakeActivity extends AppCompatActivity {
                 } else if (from.equals("IDVE")) {
                     IdentityVerificationActivity.enableNext();
                 } else if (from.equals("ADD_BO")) {
-                    AddBeneficialOwnerActivity.addBeneficialOwnerActivity.removeAndUploadBODoc();
+                    AddBeneficialOwnerActivity.addBeneficialOwnerActivity.setDocSelected();
                     AddBeneficialOwnerActivity.enableOrDisableNext();
                 } else if (from.equals("BAARA")) {
                     BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.saveFileFromCamera(ImageUtility.mediaFile);

@@ -114,8 +114,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
     public static int identityType = 0, existingIdentityType = -1;
     public static boolean isFileSelected = false;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
-
     SSNBOEditText ssnET;
+    private boolean isCloseOrBackPressed = false;
+//    public static boolean isDocUploaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -359,13 +360,16 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    isCloseOrBackPressed = true;
                     if (fromScreen != null && !fromScreen.equals("EDIT_BO")) {
                         confirmationAlert();
                     } else {
-                        if (isNextEnabled && isSaveEnabled) {
+                        if (isNextEnabled && isSaveEnabled && !isFileSelected) {
+                            beneficialOwnerAPICall(boID, prepareRequest());
+                        } else if (isNextEnabled && isSaveEnabled && isFileSelected) {
+                            removeAndUploadBODoc();
+                        } else if (!isNextEnabled || !isSaveEnabled) {
                             confirmationAlert();
-                        } else {
-                            finish();
                         }
                     }
                 } catch (Exception ex) {
@@ -397,8 +401,10 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (isNextEnabled) {
+                if (isNextEnabled && !isFileSelected) {
                     beneficialOwnerAPICall(boID, prepareRequest());
+                } else if (isNextEnabled) {
+                    removeAndUploadBODoc();
                 }
             }
         });
@@ -426,9 +432,14 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 return;
             }
             mLastClickTime = SystemClock.elapsedRealtime();
-            if (isSaveEnabled) {
+            if (isSaveEnabled && !isFileSelected) {
                 beneficialOwnerAPICall(boID, prepareRequest());
+            } else if (isSaveEnabled) {
+                removeAndUploadBODoc();
             }
+//            if (isSaveEnabled) {
+//                beneficialOwnerAPICall(boID, prepareRequest());
+//            }
         });
 
         stateET.setOnClickListener(view -> {
@@ -535,6 +546,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                                         existingIdentityType = boResp.getData().get(i).getRequiredDocuments().get(0).getIdentityId();
 
                                         isFileUploaded = true;
+//                                        isDocUploaded = true;
 
                                         uploadTV.setVisibility(GONE);
                                         uploadedLL.setVisibility(VISIBLE);
@@ -596,29 +608,32 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     Log.e("upload respo", identityImageResponse.toString());
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         isFileUploaded = true;
-                        if (identityType == 4) {
-                            uploadTV.setVisibility(GONE);
-                            uploadedLL.setVisibility(VISIBLE);
-                            uploadedTV.setText("Uploaded Driver’s License");
-                            updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
-                        } else if (identityType == 2) {
-                            uploadTV.setVisibility(GONE);
-                            uploadedLL.setVisibility(VISIBLE);
-                            updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
-                            uploadedTV.setText("Uploaded Passport");
-                        } else if (identityType == 1) {
-                            uploadTV.setVisibility(GONE);
-                            uploadedLL.setVisibility(VISIBLE);
-                            updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
-                            uploadedTV.setText("Uploaded State-Issued Card");
-                        } else {
-                            isFileUploaded = false;
-                            uploadTV.setVisibility(VISIBLE);
-                            uploadedLL.setVisibility(GONE);
-                        }
-
-                        enableOrDisableNext();
-                        enableOrDisableSave();
+                        isFileSelected = false;
+//                        isDocUploaded = true;
+                        existingIdentityType = identityType;
+//                        if (identityType == 4) {
+//                            uploadTV.setVisibility(GONE);
+//                            uploadedLL.setVisibility(VISIBLE);
+//                            uploadedTV.setText("Uploaded Driver’s License");
+//                            updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
+//                        } else if (identityType == 2) {
+//                            uploadTV.setVisibility(GONE);
+//                            uploadedLL.setVisibility(VISIBLE);
+//                            updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
+//                            uploadedTV.setText("Uploaded Passport");
+//                        } else if (identityType == 1) {
+//                            uploadTV.setVisibility(GONE);
+//                            uploadedLL.setVisibility(VISIBLE);
+//                            updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
+//                            uploadedTV.setText("Uploaded State-Issued Card");
+//                        } else {
+//                            isFileUploaded = false;
+//                            uploadTV.setVisibility(VISIBLE);
+//                            uploadedLL.setVisibility(GONE);
+//                        }
+                        beneficialOwnerAPICall(boID, prepareRequest());
+//                        enableOrDisableNext();
+//                        enableOrDisableSave();
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), AddBeneficialOwnerActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
@@ -635,20 +650,23 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
                     if (boPatchResp != null) {
                         if (boPatchResp.getStatus().toLowerCase().toString().equals("success")) {
-//                            objMyApplication.setBeneficialOwnersResponse(boResp);
 
-                            closeIV.setVisibility(GONE);
-                            backIV.setVisibility(VISIBLE);
-
-                            if (selectedPage == 0) {
-                                viewPager.setCurrentItem(1);
+                            if (isCloseOrBackPressed) {
+                                finish();
+                            } else {
                                 closeIV.setVisibility(GONE);
                                 backIV.setVisibility(VISIBLE);
-                                divider1.setBackgroundResource(R.drawable.button_background1);
-                                divider2.setBackgroundResource(R.drawable.button_background);
-                            } else if (selectedPage == 1) {
-                                startActivity(new Intent(AddBeneficialOwnerActivity.this, AdditionalBeneficialOwnersActivity.class));
-                                finish();
+                                if (selectedPage == 0) {
+                                    viewPager.setCurrentItem(1);
+                                    closeIV.setVisibility(GONE);
+                                    backIV.setVisibility(VISIBLE);
+                                    divider1.setBackgroundResource(R.drawable.button_background1);
+                                    divider2.setBackgroundResource(R.drawable.button_background);
+                                } else if (selectedPage == 1) {
+                                    startActivity(new Intent(AddBeneficialOwnerActivity.this, AdditionalBeneficialOwnersActivity.class));
+                                    finish();
+                                }
+
                             }
 
                         } else {
@@ -1542,7 +1560,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
     public static void enableOrDisableNext() {
 
         try {
-            if (isfname && islname && isDOBSelected && isssn && isownership && isFileUploaded) {
+            if (isfname && islname && isDOBSelected && isssn && isownership && (isFileUploaded || isFileSelected)) {
                 isNextEnabled = true;
                 nextcv.setCardBackgroundColor(addBeneficialOwnerActivity.getResources().getColor(R.color.primary_green));
                 viewPager.setPagingEnabled(true);
@@ -1815,10 +1833,49 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         }
     }
 
+    public void setDocSelected() {
+        isFileSelected = true;
+        if (identityType == 4) {
+            uploadTV.setVisibility(GONE);
+            uploadedLL.setVisibility(VISIBLE);
+            uploadedTV.setText("Uploaded Driver’s License");
+            updatedOnTV.setText("Uploaded on " + Utils.getDocUpdatedDate());
+        } else if (identityType == 2) {
+            uploadTV.setVisibility(GONE);
+            uploadedLL.setVisibility(VISIBLE);
+            updatedOnTV.setText("Uploaded on " + Utils.getDocUpdatedDate());
+            uploadedTV.setText("Uploaded Passport");
+        } else if (identityType == 1) {
+            uploadTV.setVisibility(GONE);
+            uploadedLL.setVisibility(VISIBLE);
+            updatedOnTV.setText("Uploaded on " + Utils.getDocUpdatedDate());
+            uploadedTV.setText("Uploaded State-Issued Card");
+        } else {
+            isFileUploaded = false;
+            uploadTV.setVisibility(VISIBLE);
+            uploadedLL.setVisibility(GONE);
+        }
+        enableOrDisableNext();
+        enableOrDisableSave();
+    }
+
     @Override
     public void onBackPressed() {
         if (selectedPage == 0) {
             try {
+                isCloseOrBackPressed = true;
+                if (fromScreen != null && !fromScreen.equals("EDIT_BO")) {
+                    confirmationAlert();
+                } else {
+                    if (isNextEnabled && isSaveEnabled && !isFileSelected) {
+                        beneficialOwnerAPICall(boID, prepareRequest());
+                    } else if (isNextEnabled && isSaveEnabled && isFileSelected) {
+                        removeAndUploadBODoc();
+                    } else if (!isNextEnabled || !isSaveEnabled) {
+                        confirmationAlert();
+                    }
+                }
+
                 if (fromScreen != null && !fromScreen.equals("EDIT_BO")) {
                     confirmationAlert();
                 } else {

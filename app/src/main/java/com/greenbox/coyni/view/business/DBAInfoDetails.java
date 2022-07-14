@@ -35,16 +35,20 @@ import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.DBAInfo.BusinessType;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
+import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DisplayImageUtility;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessUserDetailsPreviewActivity;
+import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
@@ -57,7 +61,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class DBAInfoDetails extends BaseActivity {
-    private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType,dba_imageTextTV;
+    private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType, dba_imageTextTV;
     private LinearLayout closeLL, webLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     DashboardViewModel dashboardViewModel;
@@ -68,7 +72,8 @@ public class DBAInfoDetails extends BaseActivity {
     Dialog dialog;
     Long mLastClickTime = 0L;
     private LinearLayout editEmail, editPhone;
-    String emailID, phone_Number, bType=" ";
+    String emailID, phone_Number, bType = " ";
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +93,7 @@ public class DBAInfoDetails extends BaseActivity {
 
     private void initFields() {
         try {
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             closeLL = findViewById(R.id.closeLL);
             nameTV = findViewById(R.id.nameTV);
@@ -235,7 +241,7 @@ public class DBAInfoDetails extends BaseActivity {
 //                            if (str != null && str.length() > 20) {
 //                                nameTV.setText(Utils.capitalize(str).substring(0, 20) + "...");
 //                            } else if (str != null) {
-                                nameTV.setText(Utils.capitalize(str));
+                            nameTV.setText(Utils.capitalize(str));
 //                            }
                             if (dbaInfoResp.getData().getEmail() != null) {
                                 emailTV.setText(dbaInfoResp.getData().getEmail());
@@ -371,6 +377,8 @@ public class DBAInfoDetails extends BaseActivity {
 
                             try {
                                 dashboardViewModel.meProfile();
+                                if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT)
+                                    loginViewModel.postChangeAccount(objMyApplication.getOldLoginUserId());
                                 Utils.showCustomToast(DBAInfoDetails.this, imageResponse.getData().getMessage(), R.drawable.ic_custom_tick, "");
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -383,6 +391,28 @@ public class DBAInfoDetails extends BaseActivity {
                             }
                         }
 
+                    }
+                }
+            });
+
+            loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+                @Override
+                public void onChanged(AddBusinessUserResponse btResp) {
+                    try {
+                        dismissDialog();
+                        if (btResp != null) {
+                            if (btResp.getStatus().toLowerCase().toString().equals("success")) {
+                                LogUtils.d(TAG, "btResp" + btResp);
+                                Utils.setStrAuth(btResp.getData().getJwtToken());
+
+                                if (btResp.getData() != null) {
+                                    objMyApplication.setBusinessUserID(String.valueOf(btResp.getData().getBusinessUserId()));
+                                    objMyApplication.setOwnerImage(btResp.getData().getOwnerImage());
+                                }
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });
@@ -521,7 +551,7 @@ public class DBAInfoDetails extends BaseActivity {
             MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 //            MultipartBody.Part body = MultipartBody.Part.createFormData("image", userId + "_profile" + extention, requestFile);
             dialog = Utils.showProgressDialog(this);
-            dashboardViewModel.updateProfile(body,objMyApplication);
+            dashboardViewModel.updateProfile(body, objMyApplication);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -19,6 +19,7 @@ import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -393,7 +394,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 @Override
                 public void onClick(View view) {
 //                    setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
-                    finish();
+                    onBackPressed();
                 }
             });
 
@@ -1708,7 +1709,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     @Override
     public void onBackPressed() {
         if (selectedPage == 0) {
-            super.onBackPressed();
+            if (isNew)
+                confirmationAlert();
+            else
+                super.onBackPressed();
         } else if (selectedPage == 1) {
             close.setVisibility(VISIBLE);
             backIV.setVisibility(GONE);
@@ -1954,4 +1958,47 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             chooseFilePopup(this, selectedDocType);
         }
     }
+
+    private void confirmationAlert() {
+        // custom dialog
+        final Dialog dialog = new Dialog(CompanyInformationActivity.this);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_confirmation_alert);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView tvNo = dialog.findViewById(R.id.tvNo);
+        TextView tvYes = dialog.findViewById(R.id.tvYes);
+
+        tvYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        tvNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
 }

@@ -93,7 +93,19 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
 
 //            loadBeneficialOwners();
 
-            backIV.setOnClickListener(v -> finish());
+            backIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (getIntent().getStringExtra("FROM").equals("REVIEW")) {
+                        if (ReviewApplicationActivity.reviewApplicationActivity != null)
+                            ReviewApplicationActivity.reviewApplicationActivity.finish();
+                        finish();
+                    } else
+                        finish();
+
+
+                }
+            });
 
             addNewBOLL.setOnClickListener(view -> {
                 try {
@@ -244,7 +256,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
                 startActivity(new Intent(this, AddBeneficialOwnerActivity.class)
                         .putExtra("FROM", "EDIT_BO")
                         .putExtra("ID", boID));
-                finish();
+//                finish();
             });
 
             deleteLL.setOnClickListener(view -> {
