@@ -1402,12 +1402,14 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement as " + objData.getDescriptorName().toLowerCase() + ".");
             Window window = prevDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+//
+//            WindowManager.LayoutParams wlp = window.getAttributes();
+//
+//            wlp.gravity = Gravity.BOTTOM;
+//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            window.setAttributes(wlp);
 
-            WindowManager.LayoutParams wlp = window.getAttributes();
-
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
+            prevDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
@@ -1797,12 +1799,14 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             tvMessage.setText("The transaction failed due to error code:\n" + objData.getError().getErrorCode() + " - " + objData.getError().getErrorDescription() + ". Please try again.");
             Window window = prevDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+//
+//            WindowManager.LayoutParams wlp = window.getAttributes();
+//
+//            wlp.gravity = Gravity.BOTTOM;
+//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            window.setAttributes(wlp);
 
-            WindowManager.LayoutParams wlp = window.getAttributes();
-
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
+            prevDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 

@@ -401,6 +401,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                viewPager.setPagingEnabled(false);
                 if (isNextEnabled && !isFileSelected) {
                     beneficialOwnerAPICall(boID, prepareRequest());
                 } else if (isNextEnabled) {
@@ -635,6 +636,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 //                        enableOrDisableNext();
 //                        enableOrDisableSave();
                     } else {
+                        viewPager.setPagingEnabled(true);
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), AddBeneficialOwnerActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
                 }
@@ -647,7 +649,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             businessIdentityVerificationViewModel.getPatchBOresponse().observe(this, new Observer<BOPatchResp>() {
                 @Override
                 public void onChanged(BOPatchResp boPatchResp) {
-
+                    viewPager.setPagingEnabled(true);
                     if (boPatchResp != null) {
                         if (boPatchResp.getStatus().toLowerCase().toString().equals("success")) {
 
@@ -663,7 +665,15 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                                     divider1.setBackgroundResource(R.drawable.button_background1);
                                     divider2.setBackgroundResource(R.drawable.button_background);
                                 } else if (selectedPage == 1) {
-                                    startActivity(new Intent(AddBeneficialOwnerActivity.this, AdditionalBeneficialOwnersActivity.class));
+                                    try {
+                                        if (AdditionalBeneficialOwnersActivity.additionalBeneficialOwnersActivity != null) {
+                                            AdditionalBeneficialOwnersActivity.additionalBeneficialOwnersActivity.finish();
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    startActivity(new Intent(AddBeneficialOwnerActivity.this, AdditionalBeneficialOwnersActivity.class)
+                                            .putExtra("FROM", fromScreen));
                                     finish();
                                 }
 
@@ -1875,16 +1885,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         confirmationAlert();
                     }
                 }
-
-                if (fromScreen != null && !fromScreen.equals("EDIT_BO")) {
-                    confirmationAlert();
-                } else {
-                    if (isNextEnabled && isSaveEnabled) {
-                        confirmationAlert();
-                    } else {
-                        super.onBackPressed();
-                    }
-                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -1955,6 +1955,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         tvNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isCloseOrBackPressed = false;
                 dialog.dismiss();
             }
         });

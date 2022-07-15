@@ -552,9 +552,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                                 objMyApplication.setBeneficialOwnersResponse(finalBOResp);
                                 if (boAPICallFrom.equals("INCOMPLETE")) {
                                     Log.e("One", "One");
-                                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AdditionalBeneficialOwnersActivity.class);
-                                    intent.putExtra("FROM","TRACKER");
-                                    startActivity(intent);
+                                    if (!AdditionalBeneficialOwnersActivity.isActivityVisible){
+                                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AdditionalBeneficialOwnersActivity.class);
+                                        intent.putExtra("FROM", "TRACKER");
+                                        startActivity(intent);
+                                    }
                                     Log.e("Two", "Two");
                                 } else {
                                     boTV.setTextColor(getResources().getColor(R.color.primary_green));
