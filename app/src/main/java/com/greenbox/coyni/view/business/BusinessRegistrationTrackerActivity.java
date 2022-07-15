@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.util.TypedValue;
@@ -552,7 +553,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                                 objMyApplication.setBeneficialOwnersResponse(finalBOResp);
                                 if (boAPICallFrom.equals("INCOMPLETE")) {
                                     Log.e("One", "One");
-                                    if (!AdditionalBeneficialOwnersActivity.isActivityVisible){
+                                    if (!AdditionalBeneficialOwnersActivity.isActivityVisible) {
                                         Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AdditionalBeneficialOwnersActivity.class);
                                         intent.putExtra("FROM", "TRACKER");
                                         startActivity(intent);
@@ -641,7 +642,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 //                Utils.hideKeypad(this);
             if (!addBusiness || isAddBusinessCalled || isAddDbaCalled || isTrackerCall) {
                 showProgressDialog();
-                businessIdentityVerificationViewModel.getBusinessTracker();
+                new Handler().postDelayed(() -> businessIdentityVerificationViewModel.getBusinessTracker(), 1000);
+
             } else {
                 //caIncompleteLL.set
                 if (!addDBA) {

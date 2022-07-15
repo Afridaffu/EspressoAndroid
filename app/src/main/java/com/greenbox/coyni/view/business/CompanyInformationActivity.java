@@ -15,6 +15,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -1711,8 +1712,18 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         if (selectedPage == 0) {
             if (isNew)
                 confirmationAlert();
-            else
+            else {
+                if (from.equals("EDIT")) {
+                    try {
+                        if (ReviewApplicationActivity.reviewApplicationActivity != null)
+                            ReviewApplicationActivity.reviewApplicationActivity.finish();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 super.onBackPressed();
+            }
+
         } else if (selectedPage == 1) {
             close.setVisibility(VISIBLE);
             backIV.setVisibility(GONE);

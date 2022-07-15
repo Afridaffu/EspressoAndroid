@@ -335,7 +335,7 @@ public class DBAInfoDetails extends BaseActivity {
                                 }
                             }
                             try {
-                                bindImage(objMyApplication.getMyProfile().getData().getImage(), dbaInfoResp);
+                                bindImage();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -357,7 +357,7 @@ public class DBAInfoDetails extends BaseActivity {
                     if (profile.getStatus().equalsIgnoreCase("SUCCESS")) {
                         try {
                             objMyApplication.setMyProfile(profile);
-                            bindImage(profile.getData().getImage(), objMyApplication.getDbaInfoResp());
+                            bindImage();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -378,7 +378,7 @@ public class DBAInfoDetails extends BaseActivity {
                             try {
                                 dashboardViewModel.meProfile();
                                 if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT)
-                                    loginViewModel.postChangeAccount(objMyApplication.getOldLoginUserId());
+                                    loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                                 Utils.showCustomToast(DBAInfoDetails.this, imageResponse.getData().getMessage(), R.drawable.ic_custom_tick, "");
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -408,6 +408,7 @@ public class DBAInfoDetails extends BaseActivity {
                                 if (btResp.getData() != null) {
                                     objMyApplication.setBusinessUserID(String.valueOf(btResp.getData().getBusinessUserId()));
                                     objMyApplication.setOwnerImage(btResp.getData().getOwnerImage());
+                                    bindImage();
                                 }
                             }
                         }
@@ -423,7 +424,7 @@ public class DBAInfoDetails extends BaseActivity {
 
     }
 
-    private void bindImage(String imageString, DBAInfoResp dbaInfoResp) {
+    private void bindImage() {
         try {
             dba_userProfileIV.setVisibility(View.VISIBLE);
             if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {

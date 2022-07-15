@@ -1697,7 +1697,7 @@ public class TransactionDetailsActivity extends BaseActivity {
         }
 
         if (objData.getWithdrawAmount() != null) {
-            withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+            withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").replace("USD","").trim()));
         }
 
         if (objData.getStatus() != null) {
