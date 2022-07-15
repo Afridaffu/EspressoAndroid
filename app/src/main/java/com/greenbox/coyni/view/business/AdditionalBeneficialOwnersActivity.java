@@ -58,6 +58,8 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
     boolean isValidateEnabled = false, isPostSuccess = false;
     Long mLastClickTime = 0L;
     boolean hasDrafts = false;
+    public static boolean isActivityVisible = false;
+    public static AdditionalBeneficialOwnersActivity additionalBeneficialOwnersActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,8 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
     private void initFields() {
 
         try {
+            isActivityVisible = true;
+            additionalBeneficialOwnersActivity = this;
             objMyApplication = (MyApplication) getApplicationContext();
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             setKeyboardVisibilityListener(AdditionalBeneficialOwnersActivity.this);
@@ -201,7 +205,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
                             startActivity(new Intent(AdditionalBeneficialOwnersActivity.this, AddBeneficialOwnerActivity.class)
                                     .putExtra("FROM", "ADD_BO")
                                     .putExtra("ID", boIdResp.getData().getId()));
-                            finish();
+//                            finish();
                         } else {
 
                         }
@@ -417,4 +421,9 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
         boDescTV.setHighlightColor(Color.TRANSPARENT);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isActivityVisible = false;
+    }
 }
