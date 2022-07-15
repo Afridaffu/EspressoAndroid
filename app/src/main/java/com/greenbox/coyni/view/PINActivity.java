@@ -182,7 +182,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     || getIntent().getStringExtra("screen").equals("Withdraw")
                     || getIntent().getStringExtra("screen").equals("Pay"))
                     || getIntent().getStringExtra("screen").equals("Notifications")
-                    || getIntent().getStringExtra("screen").equals("Buy")
+                    || getIntent().getStringExtra("screen").equalsIgnoreCase("Buy")
                     || getIntent().getStringExtra("screen").equals("Paid")
                     || getIntent().getStringExtra("screen").equals("ChangePassword")) {
                 imgBack.setImageResource(R.drawable.ic_close);

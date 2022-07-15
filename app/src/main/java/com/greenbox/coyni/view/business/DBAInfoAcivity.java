@@ -173,8 +173,17 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         if (selectedPage == 0) {
             if (isAddDBA)
                 confirmationAlert();
-            else
+            else {
+                if (getIntent().getStringExtra("FROM").equals("EDIT")) {
+                    try {
+                        if (ReviewApplicationActivity.reviewApplicationActivity != null)
+                            ReviewApplicationActivity.reviewApplicationActivity.finish();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 super.onBackPressed();
+            }
         } else if (selectedPage == 1) {
             closeIV.setVisibility(VISIBLE);
             backIV.setVisibility(GONE);
