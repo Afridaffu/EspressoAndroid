@@ -283,7 +283,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     case paid_order:
                         if (token.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase()))
                             ControlMethod(PAID_ORDER_TOKEN);
-                            paidOrderToken(transactionDetails.getData());
+                        paidOrderToken(transactionDetails.getData());
                         break;
                     case refund:
 //                        if (received.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
@@ -331,12 +331,16 @@ public class TransactionDetailsActivity extends BaseActivity {
 
         dashboardViewModel.getCancelBuyTokenResponseMutableLiveData().observe(this, cancelBuyTokenResponse -> {
             try {
-//                progressDialog.dismiss();
                 dismissDialog();
                 if (cancelBuyTokenResponse != null && cancelBuyTokenResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                     Utils.showCustomToast(TransactionDetailsActivity.this, "Transaction cancelled successfully.", R.drawable.ic_custom_tick, "");
-                    //progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
                     dashboardViewModel.getTransactionDetails(strGbxTxnIdType, txnType, txnSubType);
+                } else {
+                    if (!cancelBuyTokenResponse.getError().getErrorDescription().equals("")) {
+                        Utils.displayAlert(cancelBuyTokenResponse.getError().getErrorDescription(), TransactionDetailsActivity.this, "", cancelBuyTokenResponse.getError().getFieldErrors().get(0));
+                    } else {
+                        Utils.displayAlert(cancelBuyTokenResponse.getError().getFieldErrors().get(0), TransactionDetailsActivity.this, "", "");
+                    }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -591,7 +595,7 @@ public class TransactionDetailsActivity extends BaseActivity {
 //            else
 //                mDbaName.setText(paidOrderData.getDbaName());
 //        }
-        if (paidOrderData.getDbaName() != null){
+        if (paidOrderData.getDbaName() != null) {
             mDbaName.setText(paidOrderData.getDbaName());
         }
 
@@ -602,7 +606,7 @@ public class TransactionDetailsActivity extends BaseActivity {
 //                mCustomerServiceEmail.setText(paidOrderData.getCustomerServiceMail());
 //            }
 //        }
-        if (paidOrderData.getCustomerServiceMail() != null){
+        if (paidOrderData.getCustomerServiceMail() != null) {
             mCustomerServiceEmail.setText(paidOrderData.getCustomerServiceMail());
         }
 
@@ -804,7 +808,6 @@ public class TransactionDetailsActivity extends BaseActivity {
             }
         });
     }
-
 
 
     private void payRequest(TransactionData objData) {
@@ -2361,7 +2364,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
-                 case REFUND_SENT: {
+                case REFUND_SENT: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
