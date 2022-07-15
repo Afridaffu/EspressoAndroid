@@ -414,7 +414,11 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
         try {
             imgProfile.setVisibility(View.GONE);
             userNameTV.setVisibility(View.VISIBLE);
-            String imageString = objMyApplication.getMyProfile().getData().getImage();
+            String imageString = "";
+            if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT)
+                imageString = objMyApplication.getOwnerImage().trim();
+            else
+                imageString = objMyApplication.getMyProfile().getData().getImage();
             String imageTextNew = "";
             if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                     && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
@@ -476,7 +480,11 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
         try {
             saveProfileIV.setVisibility(View.GONE);
             saveProfileTitle.setVisibility(View.VISIBLE);
-            String imageString = objMyApplication.getMyProfile().getData().getImage();
+            String imageString = "";
+            if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT)
+                imageString = objMyApplication.getOwnerImage().trim();
+            else
+                imageString = objMyApplication.getMyProfile().getData().getImage();
             String imageTextNew = "";
             if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                     && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
