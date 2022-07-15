@@ -12,13 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
-import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.TransactionDetailsActivity;
-
-import java.util.List;
 
 public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyViewHolder> {
     LatestTxnResponse latestTxns;
@@ -28,7 +24,7 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView txnDescrip, txnDescripExtention, amountTV, dateTV, statusTV, balanceTV;
         LinearLayout statusLL;
-        public View gapView,descriptionView;
+        public View gapView, descriptionView;
 
         public MyViewHolder(View view) {
             super(view);
@@ -67,17 +63,25 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
             try {
                 if (data.length > 1) {
                     holder.txnDescripExtention.setVisibility(View.VISIBLE);
-                    holder.txnDescrip.setText(data[0]);
+                    if (data[0].length() > 21) {
+                        holder.txnDescrip.setText(data[0].substring(0, 20) + "...");
+                    } else {
+                        holder.txnDescrip.setText(data[0]);
+                    }
                     holder.txnDescripExtention.setText("**" + data[1]);
                     holder.txnDescrip.setVisibility(View.VISIBLE);
                     if (holder.gapView.getVisibility() == View.VISIBLE)
-                    holder.gapView.setVisibility(View.GONE);
+                        holder.gapView.setVisibility(View.GONE);
                 } else {
-                    holder.txnDescrip.setText(objData.getTxnDescription());
+                    if (objData.getTxnDescription().length() > 23)
+                        holder.txnDescrip.setText(objData.getTxnDescription().substring(0, 22) + "...");
+                    else {
+                        holder.txnDescrip.setText(objData.getTxnDescription());
+                    }
                     holder.txnDescripExtention.setVisibility(View.GONE);
                     holder.descriptionView.setVisibility(View.VISIBLE);
                     if (holder.gapView.getVisibility() == View.GONE)
-                    holder.gapView.setVisibility(View.VISIBLE);
+                        holder.gapView.setVisibility(View.VISIBLE);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -115,10 +119,10 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                 holder.amountTV.setTextColor(mContext.getResources().getColor(R.color.active_green));
             }
 
-            if(strSubtype.equalsIgnoreCase("Sent")){
+            if (strSubtype.equalsIgnoreCase("Sent")) {
                 holder.amountTV.setText("-" + Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()).split(" ")[0]);
                 holder.amountTV.setTextColor(mContext.getResources().getColor(R.color.black));
-            }else if(strSubtype.equalsIgnoreCase("Received")){
+            } else if (strSubtype.equalsIgnoreCase("Received")) {
                 holder.amountTV.setText("+" + Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()).split(" ")[0]);
                 holder.amountTV.setTextColor(mContext.getResources().getColor(R.color.active_green));
             }
