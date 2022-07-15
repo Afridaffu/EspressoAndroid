@@ -184,11 +184,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 
                     }
 
-//                    if (Utils.doubleParsing(editable.toString().replace(",", "")) > 0) {
-//                        disableButtons(false);
-//                    } else {
-//                        disableButtons(true);
-//                    }
                     if (validation()) {
                         disableButtons(false);
                     } else {
@@ -389,43 +384,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-//    public void setFaceLock() {
-//        try {
-//            isFaceLock = false;
-//            String value = dbHandler.getFacePinLock();
-//            if (value != null && value.equals("true")) {
-//                isFaceLock = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isFaceLock = false;
-//                objMyApplication.setLocalBiometric(false);
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    public void setTouchId() {
-//        try {
-//            isTouchId = false;
-//            String value = dbHandler.getThumbPinLock();
-//            if (value != null && value.equals("true")) {
-//                isTouchId = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isTouchId = false;
-////                objMyApplication.setLocalBiometric(false);
-//                if (!isFaceLock) {
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     private void initialization() {
         try {
             setKeyboardVisibilityListener(PayRequestActivity.this);
@@ -562,16 +520,17 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                 tvCurrency.setVisibility(View.VISIBLE);
                                 payRequestET.setGravity(Gravity.CENTER_VERTICAL);
                             }
+                            if (validation()) {
+                                disableButtons(false);
+                            } else {
+                                disableButtons(true);
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             });
-//            SetFaceLock();
-//            SetTouchId();
-//            setFaceLock();
-//            setTouchId();
             objMyApplication.initializeDBHandler(PayRequestActivity.this);
             isFaceLock = objMyApplication.setFaceLock();
             isTouchId = objMyApplication.setTouchId();
@@ -852,7 +811,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
         try {
             String strPay = payRequestET.getText().toString().trim().replace("\"", "");
             if (Utils.doubleParsing(strPay.replace(",", "")) == 0.0) {
-                //Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
                 tvError.setText("Amount should be greater than zero.");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
@@ -862,7 +820,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
                 value = false;
-//            } else if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
             } else if (!strLimit.equals("") && !strLimit.equals("unlimited") && !strLimit.equals("no limit") && Utils.doubleParsing(strPay.replace(",", "")) > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
                 tvError.setText("Amount entered exceeds transaction limit.");
                 tvError.setVisibility(View.VISIBLE);
@@ -881,10 +838,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     private Boolean payValidation() {
         Boolean value = true;
         try {
-//            if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
-//                Utils.displayAlert("Amount entered exceeds transaction limit.", PayRequestActivity.this, "Oops!", "");
-//                value = false;
-//            } else
+            cynValue = Utils.doubleParsing(payRequestET.getText().toString().trim().replace(",", ""));
             if (cynValue > avaBal) {
                 displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
@@ -1025,26 +979,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params1.setMargins(0, 0, 0, 25);
                 tvCurrency.setLayoutParams(params1);
-
             }
-//            if (editable.length() > 12) {
-//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-//                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
-//                //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-//            } else if (editable.length() > 8) {
-//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-//                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-//                //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-//            } else if (editable.length() > 5) {
-//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-//                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-//                //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-//            } else {
-//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlengthValue)));
-//                payRequestET.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, fontSize));
-//                //tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
-//            }
-            //payRequestET.setFilters(FilterArray);
             payRequestET.setSelection(payRequestET.getText().length());
         } catch (Exception ex) {
             ex.printStackTrace();
