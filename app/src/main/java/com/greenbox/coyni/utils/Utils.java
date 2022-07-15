@@ -2753,7 +2753,7 @@ public class Utils {
     }
 
     public static Double doubleParsing(String value) {
-        return Double.parseDouble(value.replaceAll(",", ""));
+        return Double.parseDouble(value.replaceAll(",", "").replaceAll("$","").replaceAll("USD",""));
     }
 
     public static String newFormatPhoneNumber(String phoneNumber) {
