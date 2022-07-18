@@ -710,4 +710,10 @@
     <string name="please_try_after">Looks like we are having an issue, please try after sometime.</string>
     <string name="action_required_msg_SSN">Social Security number verification.</string>
     <string name="action_required_msg_upload">The coyni team requires you to upload your documents within 30 days to further verify you.</string>
+
+    <string name="user_pressed_back">User pressed back</string>
+    <string name="scan_canceled">Scan canceled</string>
+    <string name="enter_manually">Enter card manually</string>
+    <string name="permission_denied">Camera permission denied</string>
+
 </resources>

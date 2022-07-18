@@ -155,23 +155,25 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:orientation="horizontal"
-                        android:visibility="visible">
+                        android:visibility="visible"
+                        android:gravity="top">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
                             android:contentDescription="@string/this_is_web_icon"
-                            android:src="@drawable/dba_web_icon" />
+                            android:src="@drawable/dba_web_icon"
+                            android:layout_marginTop="@dimen/_4sdp"/>
 
                         <TextView
                             android:id="@+id/websiteTV"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_3sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:gravity="center" />
 
                     </LinearLayout>
 
