@@ -16,8 +16,14 @@ buildscript {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
 
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.30-M1"
     }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.plugin.serialization' version "1.5.31"
+    id 'org.jetbrains.dokka' version '1.5.0'
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
 allprojects {
@@ -26,7 +32,63 @@ allprojects {
         jcenter()
         maven { url 'https://jitpack.io' }
         maven { url 'https://maven.microblink.com' }
+
+        mavenLocal()
+        mavenCentral()
+        google()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
+
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        toolVersion '8.29'
+    }
+
+    configurations {
+        javadocDeps
+        kotlinlint
+    }
+
+    dependencies {
+        kotlinlint("com.pinterest:ktlint:0.41.0") {
+            attributes {
+                attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling, Bundling.EXTERNAL))
+            }
+        }
+    }
+
+
+    task checkJavaStyle(type: Checkstyle) {
+        showViolations = true
+        configFile file("../settings/checkstyle.xml")
+        source 'src/main/java'
+        include '**/*.java'
+        exclude '**/gen/**'
+        exclude '**/R.java'
+        exclude '**/BuildConfig.java'
+
+        // empty classpath
+        classpath = files()
+    }
+
+    task ktlint(type: JavaExec, group: "verification") {
+        description = "Check Kotlin code style."
+        main = "com.pinterest.ktlint.Main"
+        classpath = configurations.kotlinlint
+        args "src/**/*.kt"
+        // to generate report in checkstyle format prepend following args:
+        // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
+        // see https://github.com/pinterest/ktlint#usage for more
+    }
+
+    task ktlintFormat(type: JavaExec, group: "formatting") {
+        description = "Fix Kotlin code style deviations."
+        main = "com.pinterest.ktlint.Main"
+        classpath = configurations.kotlinlint
+        args "-F", "src/**/*.kt"
+    }
+
 }
 
 task clean(type: Delete) {

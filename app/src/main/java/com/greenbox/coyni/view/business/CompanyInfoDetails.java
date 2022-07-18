@@ -95,6 +95,10 @@ public class CompanyInfoDetails extends BaseActivity {
 //            }
 //        });
         if (myApplication.getDbaOwnerId() == null || myApplication.getDbaOwnerId() == 0) {
+            emailIconIV.setVisibility(View.VISIBLE);
+            phoneIconIV.setVisibility(View.VISIBLE);
+            emailLL.setEnabled(true);
+            phoneLL.setEnabled(true);
             emailLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -107,6 +111,11 @@ public class CompanyInfoDetails extends BaseActivity {
                     startActivity(new Intent(CompanyInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "CompanyInfo").putExtra("action", "EditPhoneCompany").putExtra("value", companyPhone));
                 }
             });
+        }else{
+            emailIconIV.setVisibility(View.GONE);
+            phoneIconIV.setVisibility(View.GONE);
+            emailLL.setEnabled(false);
+            phoneLL.setEnabled(false);
         }
     }
 

@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.Service;
@@ -42,6 +43,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.getbouncer.cardscan.ui.CardScanSheet;
+import com.getbouncer.cardscan.ui.CardScanSheetResult;
+import com.getbouncer.cardscan.ui.ScannedCard;
+import com.getbouncer.scan.ui.CancellationReason;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -77,6 +82,7 @@ import com.microblink.blinkcard.entities.recognizers.blinkcard.BlinkCardRecogniz
 import com.microblink.blinkcard.uisettings.ActivityRunner;
 import com.microblink.blinkcard.uisettings.BlinkCardUISettings;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -85,6 +91,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
+
+import kotlin.Unit;
 
 public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     String strPublicKey = "";
@@ -121,12 +129,15 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     IdentityPagerAdapter identityPagerAdapter;
     static AutoScrollViewPager viewPager;
     int pagerPosition = 0, diffMonths = -1;
-
+    private static final String API_KEY = "qOJ_fF-WLDMbG05iBq5wvwiTNTmM2qIn";
+    CardScanSheet sheet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
+            sheet = CardScanSheet.create(this, API_KEY, this::handleScanResult);
+
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_addcard);
@@ -179,6 +190,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             textWatchers();
             focusWatchers();
             initObserver();
+
+            CardScanSheet.prepareScan(this, API_KEY, true, () -> null);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -451,12 +464,17 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 public void onClick(View view) {
                     if (Utils.isKeyboardVisible)
                         Utils.hideKeypad(AddCardActivity.this);
-                    if (!isLicense) {
-                        startScanning();
-                    } else {
-                        Utils.hideKeypad(AddCardActivity.this, view);
-                        Utils.displayAlert("License has expired", AddCardActivity.this, "", "");
-                    }
+                    sheet.present(
+                            /* enableEnterCardManually */ true,
+                            /* enableExpiryExtraction */ false,
+                            /* enableNameExtraction */ false
+                    );
+//                    if (!isLicense) {
+//                        startScanning();
+//                    } else {
+//                        Utils.hideKeypad(AddCardActivity.this, view);
+//                        Utils.displayAlert("License has expired", AddCardActivity.this, "", "");
+//                    }
                 }
             });
 
@@ -2053,4 +2071,64 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
         Utils.isKeyboardVisible = visible;
     }
 
+    private Unit handleScanResult(final CardScanSheetResult result) {
+        if (result instanceof CardScanSheetResult.Completed) {
+//            cardScanned(((CardScanSheetResult.Completed) result).getScannedCard());
+            isScan = true;
+            etCardNumber.setText(((CardScanSheetResult.Completed) result).getScannedCard().getPan());
+            etCardNumber.setSelection();
+            etCardNumber.removeError();
+            etCardNumber.requestCNETFocus();
+            cardErrorLL.setVisibility(GONE);
+        } else if (result instanceof CardScanSheetResult.Canceled) {
+//            userCanceled(((CardScanSheetResult.Canceled) result).getReason());
+        } else if (result instanceof CardScanSheetResult.Failed) {
+//            analyzerFailure(((CardScanSheetResult.Failed) result).getError());
+        }
+
+        return Unit.INSTANCE;
+    }
+
+    private void cardScanned(@NotNull final ScannedCard scanResult) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        StringBuilder message = new StringBuilder();
+        message.append(scanResult.getPan());
+        if (scanResult.getCardholderName() != null) {
+            message.append("\nName: ");
+            message.append(scanResult.getCardholderName());
+        }
+        if (scanResult.getExpiryMonth() != null && scanResult.getExpiryYear() != null) {
+            message.append(
+                    String.format("\nExpiry: %s/%s",
+                            scanResult.getExpiryMonth(),
+                            scanResult.getExpiryYear())
+            );
+        }
+        if (scanResult.getErrorString() != null) {
+            message.append("\nError: ");
+            message.append(scanResult.getErrorString());
+        }
+        builder.setMessage(message);
+        builder.show();
+    }
+
+    private void userCanceled(@NotNull final CancellationReason reason) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (reason instanceof CancellationReason.Back) {
+            builder.setMessage(R.string.user_pressed_back);
+        } else if (reason instanceof CancellationReason.Closed) {
+            builder.setMessage(R.string.scan_canceled);
+        } else if (reason instanceof CancellationReason.CameraPermissionDenied) {
+            builder.setMessage(R.string.permission_denied);
+        } else if (reason instanceof CancellationReason.UserCannotScan) {
+            builder.setMessage(R.string.enter_manually);
+        }
+        builder.show();
+    }
+
+    private void analyzerFailure(@NotNull final Throwable reason) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(reason.getMessage());
+        builder.show();
+    }
 }

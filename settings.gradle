@@ -1,3 +1,10 @@
 rootProject.name = "Coyni"
 include ':app'
 include ':WheelPicker'
+include ':scan-ui'
+include ':cardscan-ui'
+include ':scan-framework'
+include ':scan-camera'
+include ':tensorflow-lite'
+include ':scan-camerax'
+include ':scan-payment'

@@ -357,6 +357,8 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     dismissDialog();
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
+                            if (addPayDialog != null && addPayDialog.isShowing())
+                                addPayDialog.dismiss();
                             dashboardViewModel.mePaymentMethods();
                             displaySuccess();
                         }
