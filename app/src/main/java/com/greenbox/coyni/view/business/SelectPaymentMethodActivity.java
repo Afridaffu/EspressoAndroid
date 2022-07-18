@@ -72,7 +72,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
     String strCurrent = "", strSignOn = "", strScreen = "", strOnPauseScreen = "", strMenu = "";
     SignOnData signOnData;
     Dialog dialog, pDialog;
-    TextView tvBankError, tvDCardError, tvSignetError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvSignetCount, tvSignetMsg;
+    TextView tvBankError, tvDCardError, tvSignetError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvSignetCount, tvSignetMsg, tvSignetCS;
     TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvSignetHead, tvErrorHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgSignetLogo, imgSignetArrow, imgLogo;
     CardView cvNext, cvTryAgain, cvDone;
@@ -459,6 +459,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             tvSignetHead = findViewById(R.id.tvSignetHead);
             tvSignetCount = findViewById(R.id.tvSignetCount);
             tvSignetMsg = findViewById(R.id.tvSignetMsg);
+            tvSignetCS = findViewById(R.id.tvSignetCS);
             layoutDCard = findViewById(R.id.layoutBDCard);
             layoutSignet = findViewById(R.id.layoutSignet);
             cvNext = findViewById(R.id.cvNext);
@@ -467,6 +468,15 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             imgLogo = findViewById(R.id.imgLogo);
 
             paymentMethods();
+            if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
+                layoutDCard.setVisibility(View.GONE);
+                tvSignetMsg.setVisibility(View.GONE);
+                tvSignetCS.setVisibility(VISIBLE);
+            } else {
+                layoutDCard.setVisibility(VISIBLE);
+                tvSignetMsg.setVisibility(VISIBLE);
+                tvSignetCS.setVisibility(View.GONE);
+            }
 
             lyBPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -515,11 +525,13 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                            strCurrent = "signet";
-                            strOnPauseScreen = "";
-                            Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
-                            startActivityForResult(i, 2);
+                        if (!strMenu.equals("buy") && !strCurrent.equals("notokens")) {
+                            if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                                strCurrent = "signet";
+                                strOnPauseScreen = "";
+                                Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
+                                startActivityForResult(i, 2);
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -634,6 +646,12 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
                 imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
 //                imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
+                if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
+                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
+                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
+                    imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
+                    imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
+                }
             }
 //            }
         } catch (Exception ex) {

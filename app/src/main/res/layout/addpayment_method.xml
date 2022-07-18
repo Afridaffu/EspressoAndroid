@@ -299,6 +299,7 @@
                         android:textSize="@dimen/_9sdp" />
 
                     <TextView
+                        android:id="@+id/tvSignetCS"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_bold"

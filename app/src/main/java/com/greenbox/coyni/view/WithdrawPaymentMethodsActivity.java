@@ -161,6 +161,9 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 if (strCurrent.equals("signet")) {
 //                    isSignet = true;
                     //ControlMethod("addbpayment");
+                    if (addPayDialog != null && addPayDialog.isShowing()) {
+                        addPayDialog.dismiss();
+                    }
                     if (signetList != null && signetList.size() > 0) {
                         isSignet = true;
                         ControlMethod("addbpayment");
@@ -357,8 +360,9 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     dismissDialog();
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
-                            if (addPayDialog != null && addPayDialog.isShowing())
+                            if (addPayDialog != null && addPayDialog.isShowing()) {
                                 addPayDialog.dismiss();
+                            }
                             dashboardViewModel.mePaymentMethods();
                             displaySuccess();
                         }
@@ -1817,8 +1821,8 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                             strCurrent = "externalBank";
                             showExternalBank();
                         } else if (strType.equals("signet")) {
-//                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-//                            startActivityForResult(i, 4);
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                            startActivityForResult(i, 4);
                         } else {
                             strCurrent = "debit";
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);

@@ -52,6 +52,7 @@ public class AccountLimitsActivity extends BaseActivity {
         payRequestTranLimit = findViewById(R.id.tvPayRequestTransactionLimit);
 
         //Business Account Limits....
+        businessAccountLimitsSv = findViewById(R.id.Merchant_AccountLimitsSV);
         business_AccountLimitsLL = findViewById(R.id.Business_AccountLimitsLL);
         b_monthlyProcessingVolume = (TextView) findViewById(R.id.TvMonthlyProcessingVolume);
         b_highTicketLimit = (TextView) findViewById(R.id.TVHighTicketLimit);
@@ -66,11 +67,13 @@ public class AccountLimitsActivity extends BaseActivity {
             showProgressDialog();
             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 personalAccountLimitsSv.setVisibility(View.VISIBLE);
-                business_AccountLimitsLL.setVisibility(View.GONE);
+//                business_AccountLimitsLL.setVisibility(View.GONE);
+                businessAccountLimitsSv.setVisibility(View.GONE);
                 accountLimitsViewModel.meAccountLimits(Utils.userTypeCust);
             } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT
                     || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-                business_AccountLimitsLL.setVisibility(View.VISIBLE);
+//                business_AccountLimitsLL.setVisibility(View.VISIBLE);
+                businessAccountLimitsSv.setVisibility(View.VISIBLE);
                 personalAccountLimitsSv.setVisibility(View.GONE);
                 accountLimitsViewModel.meAccountLimits(Utils.userTypeBusiness);
             }
