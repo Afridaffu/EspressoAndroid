@@ -154,36 +154,36 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                         saveFace("true");
                         saveThumb("false");
                         Utils.showCustomToast(GiftCardBindingLayoutActivity.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-//                                try {
-//                                    Intent d = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
-//                                    d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                    startActivity(d);
-//                                } catch (Exception ex) {
-//                                    ex.printStackTrace();
-//                                }
-                                dashboardNavigation();
-                            }
-                        }, 2000);
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+////                                try {
+////                                    Intent d = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
+////                                    d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+////                                    startActivity(d);
+////                                } catch (Exception ex) {
+////                                    ex.printStackTrace();
+////                                }
+//                                dashboardNavigation();
+//                            }
+//                        }, 2000);
                     } else if (enableType.equals("TOUCH")) {
                         saveFace("false");
                         saveThumb("true");
                         Utils.showCustomToast(GiftCardBindingLayoutActivity.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-//                                try {
-//                                    Intent d = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
-//                                    d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                    startActivity(d);
-//                                } catch (Exception ex) {
-//                                    ex.printStackTrace();
-//                                }
-                                dashboardNavigation();
-                            }
-                        }, 2000);
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+////                                try {
+////                                    Intent d = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
+////                                    d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+////                                    startActivity(d);
+////                                } catch (Exception ex) {
+////                                    ex.printStackTrace();
+////                                }
+//                                dashboardNavigation();
+//                            }
+//                        }, 2000);
                     }
                     objMyApplication.setBiometric(true);
                 }
@@ -893,22 +893,6 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                         if (Utils.getIsBiometric() && (Utils.getIsFaceEnabled() || Utils.getIsTouchEnabled())) {
                             Utils.checkAuthentication(GiftCardBindingLayoutActivity.this, CODE_AUTHENTICATION);
                         }
-
-//                        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
-//                        if (!fingerprintManager.isHardwareDetected()) {
-//                            Log.e("Not support", "Not support");
-//                        } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-//                            final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
-//                            enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-//                                    BIOMETRIC_STRONG);
-//                            startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
-//                        } else {
-//                            pDialog = Utils.showProgressDialog(GiftCardBindingLayoutActivity.this);
-//                            BiometricRequest biometricRequest = new BiometricRequest();
-//                            biometricRequest.setBiometricEnabled(true);
-//                            biometricRequest.setDeviceId(Utils.getDeviceID());
-//                            coyniViewModel.saveBiometric(biometricRequest);
-//                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -468,7 +468,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             imgLogo = findViewById(R.id.imgLogo);
 
             paymentMethods();
-            if (strMenu.equals("buy")) {
+            if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
                 layoutDCard.setVisibility(View.GONE);
                 tvSignetMsg.setVisibility(View.GONE);
                 tvSignetCS.setVisibility(VISIBLE);
@@ -525,7 +525,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (!strMenu.equals("buy")) {
+                        if (!strMenu.equals("buy") && !strCurrent.equals("notokens")) {
                             if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
                                 strCurrent = "signet";
                                 strOnPauseScreen = "";
@@ -646,7 +646,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
                 imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
 //                imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
-                if (strMenu.equals("buy")) {
+                if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
                     tvSignetHead.setTextColor(getColor(R.color.light_gray));
                     tvSignetCount.setTextColor(getColor(R.color.light_gray));
                     imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);

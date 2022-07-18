@@ -161,6 +161,9 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 if (strCurrent.equals("signet")) {
 //                    isSignet = true;
                     //ControlMethod("addbpayment");
+                    if (addPayDialog != null && addPayDialog.isShowing()) {
+                        addPayDialog.dismiss();
+                    }
                     if (signetList != null && signetList.size() > 0) {
                         isSignet = true;
                         ControlMethod("addbpayment");
