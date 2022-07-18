@@ -12,7 +12,7 @@
         android:id="@+id/editPhoneSV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/topLL"
@@ -46,12 +46,6 @@
                 android:text="Edit Phone Number"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_16ssp" />
-
-            <!--            <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneUpdateET-->
-            <!--                android:id="@+id/currentPhoneET"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="@dimen/_32sdp" />-->
 
             <LinearLayout
                 android:id="@+id/currentPhoneErrorLL"
@@ -143,7 +137,7 @@
         android:layout_alignParentTop="true"
         android:background="#f2f4f5"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -193,7 +187,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"
                 android:paddingStart="@dimen/_10sdp"
-                android:paddingEnd="@dimen/_10sdp" />
+                android:paddingEnd="@dimen/_10sdp"
+                android:visibility="gone" />
 
             <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneUpdateET
                 android:id="@+id/b_newPhoneET"

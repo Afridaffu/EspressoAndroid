@@ -20,24 +20,25 @@
             android:id="@+id/alBackbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_43sdp"
-            android:padding="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_13sdp"
-            android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:src="@drawable/ic_back" />
+            android:layout_marginTop="@dimen/_43sdp"
+            android:orientation="horizontal"
+            android:padding="@dimen/_8sdp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:src="@drawable/ic_back" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_12sdp"
             android:fontFamily="@font/opensans_bold"
             android:text="@string/account_limits"
-            android:layout_marginStart="@dimen/_21sdp"
             android:textColor="@color/black"
             android:textSize="@dimen/_16ssp" />
 
@@ -47,13 +48,14 @@
         android:id="@+id/Personal_AccountLimitsSV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -125,7 +127,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
 
 
             <LinearLayout
@@ -235,8 +236,8 @@
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:paddingTop="@dimen/_8sdp"
-                        android:visibility="gone"
-                        android:paddingBottom="@dimen/_10sdp">
+                        android:paddingBottom="@dimen/_10sdp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -296,9 +297,9 @@
                 android:layout_marginStart="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_11sdp"
                 android:layout_marginEnd="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_2sdp">
+                app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -407,22 +408,25 @@
         </LinearLayout>
     </ScrollView>
 
-
+    <ScrollView
+        android:id="@+id/Merchant_AccountLimitsSV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/Business_AccountLimitsLL"
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/_11sdp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_11sdp"
             android:orientation="vertical">
-
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_11sdp"
-                app:cardBackgroundColor="@color/white"
                 android:layout_marginBottom="@dimen/_5sdp"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
@@ -462,8 +466,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
                             android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
                             android:text="Monthly Processing Volume"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
@@ -486,8 +490,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
                             android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
                             android:text="High Ticket Limit"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
@@ -533,8 +537,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
                             android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
                             android:text="Bank Account"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
@@ -604,9 +608,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:fontFamily="@font/opensans_regular"
                             android:text="Bank Account"
-                            android:layout_weight="1"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
 
@@ -628,8 +632,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
                             android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
                             android:text="Instant Pay"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
@@ -647,7 +651,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_18sdp"
-                        android:layout_marginBottom="@dimen/_24sdp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -672,14 +675,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_15sdp"
-                        android:visibility="gone"
-                        android:orientation="horizontal">
+                        android:layout_marginBottom="@dimen/_24sdp"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
                             android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
                             android:text="Signet Account"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
@@ -696,5 +700,6 @@
 
             </androidx.cardview.widget.CardView>
         </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

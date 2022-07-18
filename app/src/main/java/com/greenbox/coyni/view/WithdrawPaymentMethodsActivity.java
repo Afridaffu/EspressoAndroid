@@ -1815,8 +1815,8 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                             strCurrent = "externalBank";
                             showExternalBank();
                         } else if (strType.equals("signet")) {
-//                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-//                            startActivityForResult(i, 4);
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                            startActivityForResult(i, 4);
                         } else {
                             strCurrent = "debit";
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
