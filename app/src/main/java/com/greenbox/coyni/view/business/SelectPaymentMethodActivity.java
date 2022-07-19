@@ -238,7 +238,12 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 ControlMethod("addpayment");
                 if (strScreen != null && !strScreen.equals("addpay")) {
                     //strCurrent = "addpayment";
-                    strCurrent = "notokens";
+                    String strSub = "";
+                    if (getIntent().getStringExtra("subtype") != null) {
+                        strSub = getIntent().getStringExtra("subtype");
+                    }
+                    if (strSub.equals(""))
+                        strCurrent = "notokens";
                 }
             }
             addPayment();
