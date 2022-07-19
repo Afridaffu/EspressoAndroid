@@ -805,6 +805,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                             } else {
                                 Intent i = new Intent(WithdrawTokenActivity.this, SelectPaymentMethodActivity.class);
                                 i.putExtra("screen", "withdraw");
+                                i.putExtra("subtype", "add");
                                 startActivityForResult(i, 3);
                             }
                         } catch (Exception ex) {
@@ -911,7 +912,8 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     signetWalletId = objData.getAccountNumber();
                 }
                 strBankId = String.valueOf(objData.getId());
-                obj.setTransactionSubType(Integer.parseInt(Utils.bankType));
+//                obj.setTransactionSubType(Integer.parseInt(Utils.bankType));
+                obj.setTransactionSubType(Integer.parseInt(strSubType));
                 lyBDetails.setVisibility(View.VISIBLE);
                 lyCDetails.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, lyBDetails.getId());

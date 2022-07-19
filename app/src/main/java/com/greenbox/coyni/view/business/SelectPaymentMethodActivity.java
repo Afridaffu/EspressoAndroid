@@ -238,7 +238,12 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 ControlMethod("addpayment");
                 if (strScreen != null && !strScreen.equals("addpay")) {
                     //strCurrent = "addpayment";
-                    strCurrent = "notokens";
+                    String strSub = "";
+                    if (getIntent().getStringExtra("subtype") != null) {
+                        strSub = getIntent().getStringExtra("subtype");
+                    }
+                    if (strSub.equals(""))
+                        strCurrent = "notokens";
                 }
             }
             addPayment();
@@ -630,7 +635,11 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
             }
             if (paymentMethodsResponse.getData().getSignetCount() >= paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                tvSignetError.setVisibility(View.VISIBLE);
+                if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
+                    tvSignetError.setVisibility(View.GONE);
+                } else {
+                    tvSignetError.setVisibility(View.VISIBLE);
+                }
                 tvSignetHead.setTextColor(getColor(R.color.light_gray));
                 tvSignetCount.setTextColor(getColor(R.color.light_gray));
                 tvSignetMsg.setTextColor(getColor(R.color.light_gray));
