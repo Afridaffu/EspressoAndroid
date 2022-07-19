@@ -87,9 +87,9 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public TextInputLayout dbanameTIL, dbaemailTIL, businessTypeTIL, timezoneTIL;
     TextInputEditText dbanameET, dbaemailET, businessTypeET, timeZoneET;
     CompanyOutLineBoxPhoneNumberEditText dbaPhoneOET;
-    ImageView closeIV, backIV, eCommerceIV, retailIV;
+    ImageView backIV, eCommerceIV, retailIV;
     public WebsiteOutlineEditText websiteOET;
-    public LinearLayout dbanameLL, dbaemailLL, customerphonenumLL, eCommerceLL, retailLL, dbaFillingUploadedLL, dbaFillingLL;
+    public LinearLayout dbanameLL, dbaemailLL, customerphonenumLL, eCommerceLL, retailLL, dbaFillingUploadedLL, dbaFillingLL, closeIV;
     public VolumeEditText mpvOET, highTicketOET, avgTicketOET;
     public TextView dbanameTV, dbaemailTV, customernumTV, dbaFillinguploadTV, dbaFillingUpdatedOnTV;
     public CardView dbaNextCV, addressNextCV;
@@ -127,6 +127,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     private static final int PICK_IMAGE_REQUEST = 4;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
     DBAInfoAcivity myActivity;
+    String prevDBAName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,17 +162,17 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     protected void onDestroy() {
         try {
             super.onDestroy();
-//            if (!isPostSuccess && !isAddDBA)
-//                dbaInfoAPICall(prepareRequest());
+            if (!isPostSuccess && !isAddDBA)
+                dbaInfoAPICall(prepareRequest());
 
-            if (!isPostSuccess && !isAddDBA) {
-                if (isAddDBAAPICalled) {
-                    if (dbanameET.getText().toString().trim().length() > 0)
-                        dbaInfoAPICall(prepareRequest());
-                } else {
-                    dbaInfoAPICall(prepareRequest());
-                }
-            }
+//            if (!isPostSuccess && !isAddDBA) {
+//                if (isAddDBAAPICalled) {
+//                    if (dbanameET.getText().toString().trim().length() > 0)
+//                        dbaInfoAPICall(prepareRequest());
+//                } else {
+//                    dbaInfoAPICall(prepareRequest());
+//                }
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -602,7 +603,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         if (dbaInfoUpdateResp.getStatus().toLowerCase().toString().equals("success")) {
                             closeIV.setVisibility(GONE);
                             backIV.setVisibility(VISIBLE);
-
+                            prevDBAName = dbanameET.getText().toString().trim();
                             if (selectedPage == 0) {
                                 viewPager.setCurrentItem(1);
                                 closeIV.setVisibility(GONE);
@@ -735,6 +736,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 LogUtils.d(TAG, "identityImageResponse " + identityImageResponse);
                 if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                     Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+                    objMyApplication.setOldLoginUserId(objMyApplication.getLoginUserId());
+                    objMyApplication.setLoginUserId(identityImageResponse.getData().getUserId());
                     BusinessRegistrationTrackerActivity.isAddDbaCalled = true;
                     isAddDBAAPICalled = true;
                     isAddDBA = false;
@@ -1460,6 +1463,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         dbanameET.setText(cir.getName());
                         dbanameET.setSelection(cir.getName().length());
                         isdbaName = true;
+                        prevDBAName = cir.getName();
                     }
 
                     if (cir.getEmail() != null && !cir.getEmail().equals("")) {
@@ -1511,6 +1515,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             } else if (type.equalsIgnoreCase("DIFF")) {
                 isCopyCompanyInfo = false;
                 dbaFillingLL.setVisibility(VISIBLE);
+                prevDBAName = "";
             } else if (getIntent().getStringExtra("TYPE").equalsIgnoreCase("EXIST")) {
                 if (objMyApplication.getDbaInfoResp() != null && objMyApplication.getDbaInfoResp().getStatus().equalsIgnoreCase("SUCCESS")) {
                     DBAInfoResp.Data cir = objMyApplication.getDbaInfoResp().getData();
@@ -1520,6 +1525,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         dbanameET.setText(cir.getName());
                         dbanameET.setSelection(cir.getName().length());
                         isdbaName = true;
+                        prevDBAName = cir.getName();
                     }
 
                     if (cir.getEmail() != null && !cir.getEmail().equals("")) {
@@ -1704,6 +1710,9 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             //Name
             if (dbanameET.getText().toString().trim().length() > 0)
                 dbaInfoRequest.setName(dbanameET.getText().toString().trim());
+            else
+                dbaInfoRequest.setName(prevDBAName);
+
             //Email
             if (Utils.isValidEmail(dbaemailET.getText().toString().trim()))
                 dbaInfoRequest.setEmail(dbaemailET.getText().toString().trim());

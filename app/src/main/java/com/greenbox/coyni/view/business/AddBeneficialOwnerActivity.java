@@ -1890,6 +1890,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             }
 
         } else if (selectedPage == 1) {
+//            isCloseOrBackPressed = false;
             closeIV.setVisibility(VISIBLE);
             backIV.setVisibility(GONE);
             viewPager.setCurrentItem(0);

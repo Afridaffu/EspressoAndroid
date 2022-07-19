@@ -82,7 +82,7 @@ import okhttp3.RequestBody;
 
 public class CompanyInformationActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     public CardView basicNextCV, addressNextCV;
-    ImageView close, backIV;
+    ImageView backIV;
     CompanyOutLineBoxPhoneNumberEditText compphoneNumberET;
     TextInputEditText companynameET, companyemailET, timeZoneET, businessET;
     public TextInputLayout companynametil, companyemailtil, businessTIL, timezoneTIL;
@@ -100,7 +100,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     //Address
     TextInputLayout companyaddresstil, companyaddress2til, citytil, statetil, zipcodetil, countryTIL;
     TextInputEditText companyaddressET, companyaddress2ET, cityET, stateET, zipcodeET;
-    LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, stateErrorLL, zipcodeErrorLL;
+    LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, stateErrorLL, zipcodeErrorLL, close;
     TextView address1ErrorTV, address2ErrorTV, cityErrorTV, stateErrorTV, zipcodeErrorTV;
     public boolean isCompanyAdress1 = false, isCity = false, isState = false, isZipcode = false, isAddressNextEnabled = false;
     ImageView statedropdownIV;
@@ -133,6 +133,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     private boolean isApiCalled = false;
     private boolean isNewCompanyFlag = false;
     private boolean isNew = false;
+    private String prevCompanyName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -532,6 +533,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                     companynameET.setText(cir.getName());
                                     iscompanyName = true;
                                     companynameET.setSelection(cir.getName().length());
+                                    prevCompanyName = cir.getName();
                                 }
 
                                 if (cir.getEmail() != null && !cir.getEmail().equals("")) {
@@ -695,7 +697,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         if (companyInfoResponse.getStatus().toLowerCase().toString().equals("success")) {
                             close.setVisibility(GONE);
                             backIV.setVisibility(VISIBLE);
-
+                            prevCompanyName = companynameET.getText().toString().trim();
                             if (selectedPage == 0) {
                                 viewPager.setCurrentItem(1);
                                 close.setVisibility(GONE);
@@ -1650,6 +1652,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             //name
             if (companynameET.getText().toString().trim().length() > 0)
                 companyInfoRequest.setName(companynameET.getText().toString().trim());
+            else
+                companyInfoRequest.setName(prevCompanyName);
             //Email
             if (Utils.isValidEmail(companyemailET.getText().toString().trim()))
                 companyInfoRequest.setEmail(companyemailET.getText().toString().trim());
@@ -1702,14 +1706,17 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     protected void onDestroy() {
         try {
             super.onDestroy();
-            if (!isPostSuccess && !isNew) {
-                if (isNewCompanyFlag) {
-                    if (companynameET.getText().toString().trim().length() > 0)
-                        companyInfoAPICall(prepareRequest());
-                } else {
-                    companyInfoAPICall(prepareRequest());
-                }
-            }
+            if (!isPostSuccess && !isNew)
+                companyInfoAPICall(prepareRequest());
+
+//            if (!isPostSuccess && !isNew) {
+//                if (isNewCompanyFlag) {
+//                    if (companynameET.getText().toString().trim().length() > 0)
+//                        companyInfoAPICall(prepareRequest());
+//                } else {
+//                    companyInfoAPICall(prepareRequest());
+//                }
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

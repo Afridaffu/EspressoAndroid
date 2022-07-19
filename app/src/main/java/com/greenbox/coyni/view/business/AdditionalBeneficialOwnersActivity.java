@@ -100,12 +100,16 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
             backIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (getIntent().getStringExtra("FROM").equals("REVIEW")) {
+//                    if (getIntent().getStringExtra("FROM").equals("REVIEW")) {
+                    try {
                         if (ReviewApplicationActivity.reviewApplicationActivity != null)
                             ReviewApplicationActivity.reviewApplicationActivity.finish();
-                        finish();
-                    } else
-                        finish();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    finish();
+//                    } else
+//                        finish();
 
 
                 }
