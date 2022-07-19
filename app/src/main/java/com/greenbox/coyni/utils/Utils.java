@@ -647,6 +647,7 @@ public class Utils {
             return null;
         }
     }
+
     public static String convertDate(String date) {
         String strDate = "";
         try {
@@ -729,7 +730,7 @@ public class Utils {
             Double amt = Utils.doubleParsing(amount.replaceAll(",", ""));
             NumberFormat format = DecimalFormat.getCurrencyInstance(Locale.US);
             format.setMaximumFractionDigits(2);
-            strValue = format.format(amt).replace("$", "");
+            strValue = format.format(amt).replaceAll("$", "").replaceAll("USD", "").replace("CYN", "");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -2753,7 +2754,7 @@ public class Utils {
     }
 
     public static Double doubleParsing(String value) {
-        return Double.parseDouble(value.replaceAll(",", "").replaceAll("$","").replaceAll("USD",""));
+        return Double.parseDouble(value.replaceAll(",", "").replaceAll("$", "").replaceAll("USD", ""));
     }
 
     public static String newFormatPhoneNumber(String phoneNumber) {
@@ -2767,14 +2768,14 @@ public class Utils {
         if (phoneNumber.length() != 10) {
             return phoneNumber;
         }
-        return  phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
+        return phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
     }
 
-    public static void setTextSize(TextView tv1, String text,float textSize) {
-        if(tv1 == null) {
+    public static void setTextSize(TextView tv1, String text, float textSize) {
+        if (tv1 == null) {
             return;
         }
-        if(text != null && text.length() > 0) {
+        if (text != null && text.length() > 0) {
             float maxTextSize = textSize;
             if (text.length() > 6) {
                 maxTextSize = maxTextSize / 2 - (text.length() / 2);

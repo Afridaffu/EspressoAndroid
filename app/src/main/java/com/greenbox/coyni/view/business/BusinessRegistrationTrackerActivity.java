@@ -221,7 +221,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 public void onClick(View view) {
                     if (addBusiness) {
                         showProgressDialog();
-                        loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
+                        loginViewModel.postChangeAccount(objMyApplication.getOldLoginUserId());
                     } else {
                         Intent dashboardIntent = new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class);
                         dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -405,6 +405,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             LogUtils.d("btResp", "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
+                            objMyApplication.setLoginUserId(btResp.getData().getUserId());
                             isAddBusinessCalled = false;
                             isAddDbaCalled = false;
                             finish();
