@@ -993,7 +993,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             String strPay = Utils.convertBigDecimalUSD((etAmount.getText().toString().trim().replace("\"", "")).replace(",", ""));
             if ((Utils.doubleParsing(strPay.replace(",", "")) < cynValidation)) {
 //                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
-                setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", WithdrawTokenActivity.this, tvError, 17);
+                Utils.setErrorSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", WithdrawTokenActivity.this, tvError, 17);
                 isMinimumError = true;
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
@@ -1848,7 +1848,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         if (tvError.getText().toString().trim().contains("Minimum Amount")) {
 //                            tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                             isMinimumError = true;
-                            setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", WithdrawTokenActivity.this, tvError, 17);
+                            Utils.setErrorSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", WithdrawTokenActivity.this, tvError, 17);
                         } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
                             tvError.setText("Amount entered exceeds available balance");
                         } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
@@ -1871,7 +1871,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         lyBalance.setVisibility(View.GONE);
                         if (tvError.getText().toString().trim().contains("Minimum Amount")) {
 //                            tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
-                            setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", WithdrawTokenActivity.this, tvError, 17);
+                            Utils.setErrorSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", WithdrawTokenActivity.this, tvError, 17);
                         } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
                             tvError.setText("Amount entered exceeds available balance");
                         } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
@@ -1891,20 +1891,6 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    public static void setSpannableText(String text, Context context, TextView spannableTV, int start) {
-
-        SpannableString ss = new SpannableString(text);
-
-        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
-        ss.setSpan(new RelativeSizeSpan(1f), start, ss.length(), 0);
-        ss.setSpan(bss, start, ss.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(context.getColor(R.color.error_red)), start, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableTV.setText(ss);
-        spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
-        spannableTV.setHighlightColor(Color.TRANSPARENT);
     }
 
     private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {

@@ -2783,4 +2783,19 @@ public class Utils {
             tv1.setText(text);
         }
     }
+
+    public static void setErrorSpannableText(String text, Context context, TextView spannableTV, int start) {
+
+        SpannableString ss = new SpannableString(text);
+
+        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+        ss.setSpan(new RelativeSizeSpan(1f), start, ss.length(), 0);
+        ss.setSpan(bss, start, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(context.getColor(R.color.error_red)), start, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableTV.setText(ss);
+        spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
+        spannableTV.setHighlightColor(Color.TRANSPARENT);
+    }
+
 }
