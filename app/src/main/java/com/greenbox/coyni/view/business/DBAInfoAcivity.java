@@ -161,8 +161,17 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     protected void onDestroy() {
         try {
             super.onDestroy();
-            if (!isPostSuccess && !isAddDBA)
-                dbaInfoAPICall(prepareRequest());
+//            if (!isPostSuccess && !isAddDBA)
+//                dbaInfoAPICall(prepareRequest());
+
+            if (!isPostSuccess && !isAddDBA) {
+                if (isAddDBAAPICalled) {
+                    if (dbanameET.getText().toString().trim().length() > 0)
+                        dbaInfoAPICall(prepareRequest());
+                } else {
+                    dbaInfoAPICall(prepareRequest());
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

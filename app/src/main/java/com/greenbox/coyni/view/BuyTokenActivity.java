@@ -1002,13 +1002,13 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //            }
             if (tvCYN.getVisibility() == View.VISIBLE && Utils.doubleParsing(strPay.replace(",", "")) < cynValidation) {
 //                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
-                setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", BuyTokenActivity.this, tvError, 17);
+                Utils.setErrorSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", BuyTokenActivity.this, tvError, 17);
                 isMinimumError = true;
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
             } else if (tvCYN.getVisibility() == View.GONE && Utils.doubleParsing(strPay.replace(",", "")) < usdValidation) {
 //                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
-                setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD", BuyTokenActivity.this, tvError, 17);
+                Utils.setErrorSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD", BuyTokenActivity.this, tvError, 17);
                 isMinimumError = true;
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
@@ -1922,20 +1922,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         }
 
         return selectedCard;
-    }
-
-    public static void setSpannableText(String text, Context context, TextView spannableTV, int start) {
-
-        SpannableString ss = new SpannableString(text);
-
-        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
-        ss.setSpan(new RelativeSizeSpan(1f), start, ss.length(), 0);
-        ss.setSpan(bss, start, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(context.getColor(R.color.error_red)), start, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        spannableTV.setText(ss);
-        spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
-        spannableTV.setHighlightColor(Color.TRANSPARENT);
     }
 
     private void setToken() {

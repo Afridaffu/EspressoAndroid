@@ -663,6 +663,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
                     if (identityImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+                        objMyApplication.setOldLoginUserId(objMyApplication.getLoginUserId());
+                        objMyApplication.setLoginUserId(identityImageResponse.getData().getUserId());
+
                         isNewCompanyFlag = true;
                         isNew = false;
                         BusinessRegistrationTrackerActivity.isAddBusinessCalled = true;
@@ -1700,7 +1703,12 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         try {
             super.onDestroy();
             if (!isPostSuccess && !isNew) {
-                companyInfoAPICall(prepareRequest());
+                if (isNewCompanyFlag) {
+                    if (companynameET.getText().toString().trim().length() > 0)
+                        companyInfoAPICall(prepareRequest());
+                } else {
+                    companyInfoAPICall(prepareRequest());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
