@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -66,9 +67,9 @@ public class PDFWebViewActivity extends BaseActivity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-//                dismissDialog();
-//                String myUrl = getIntent().getStringExtra("URL").replace("&", "%26");
-//                showProgressDialog();
+                dismissDialog();
+                String myUrl = getIntent().getStringExtra("URL").replace("&", "%26");
+                showProgressDialog();
 //                webView.loadUrl("javascript:showPDF('" + myUrl + "')");
 
                 try {
