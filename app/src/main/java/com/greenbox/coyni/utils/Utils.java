@@ -730,7 +730,8 @@ public class Utils {
             Double amt = Utils.doubleParsing(amount.replaceAll(",", ""));
             NumberFormat format = DecimalFormat.getCurrencyInstance(Locale.US);
             format.setMaximumFractionDigits(2);
-            strValue = format.format(amt).replaceAll("$", "").replaceAll("USD", "").replace("CYN", "");
+//            strValue = format.format(amt).replaceAll("$", "").replaceAll("USD", "").replace("CYN", "");
+            strValue = format.format(amt).replace("$", "").replace("USD", "").replace("CYN", "");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

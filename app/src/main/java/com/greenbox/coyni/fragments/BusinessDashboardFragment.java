@@ -1021,119 +1021,122 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void showBatchPayouts(List<BatchPayoutListItems> listItems) {
-        if (listItems != null && listItems.size() > 0) {
-            batchNoTransaction.setVisibility(View.GONE);
-            Collections.sort(listItems, Collections.reverseOrder());
-            int i = 0;
-            boolean isOpen = false, isPaid = false;
-            while (i < listItems.size()) {
-                if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
-                    String amount = listItems.get(i).getTotalAmount();
-                    String amt = Utils.convertBigDecimalUSDC((amount));
-                    Utils.setTextSize(nextPayoutAmountTV, amt, 48);
+        try {
+            if (listItems != null && listItems.size() > 0) {
+                batchNoTransaction.setVisibility(View.GONE);
+                Collections.sort(listItems, Collections.reverseOrder());
+                int i = 0;
+                boolean isOpen = false, isPaid = false;
+                while (i < listItems.size()) {
+                    if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
+                        String amount = listItems.get(i).getTotalAmount();
+                        String amt = Utils.convertBigDecimalUSDC((amount));
+                        Utils.setTextSize(nextPayoutAmountTV, amt, 48);
 
-                    if (Utils.doubleParsing(amt.replaceAll(",", "")) <= 0) {
-                        mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                        mCvBatchNow.setClickable(false);
-                    } else {
-                        mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                        mCvBatchNow.setClickable(true);
-//                        Utils.setTextSize(nextPayoutAmountTV,"1,000.00");
-                    }
-                    String date = listItems.get(i).getCreatedAt();
-                    if (date.contains(".")) {
-                        String res = date.substring(0, date.lastIndexOf("."));
-                        String pstDate = Utils.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy", "PST");
-
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
-                        Date newDate = Utils.simpleDate(pstDate);
-                        newDate.setHours(23);
-                        newDate.setMinutes(59);
-
-                        String convertedDateTime = Utils.convertPrefZoneTimeFromPST(dateFormat.format(newDate), "MM/dd/yyyy @ hh:mma", "MM/dd/yyyy @ hh:mma", myApplication.getStrPreference());
-                        nxtPayoutDatenTimeTV.setText(convertedDateTime.toLowerCase());
-
-                        setSpannableTextView();
-
-                    } else {
-                        Log.d("date format", date);
-                    }
-
-
-                    isOpen = true;
-                } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
-                    String amount = Utils.convertBigDecimalUSDC((listItems.get(i).getTotalAmount()));
-                    Utils.setTextSize(lastPayoutAmountTV, amount, 48);
-                    String date1 = listItems.get(i).getUpdatedAt();
-                    if (date1 != null && date1.contains(".")) {
-                        String res = date1.substring(0, date1.lastIndexOf("."));
-                        lastPayoutDate.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
-                    } else {
-//                        lastPayoutDate.setText("N/A");
-                    }
-                    isPaid = true;
-                }
-                if (isPaid && isOpen) {
-                    break;
-                } else {
-                    i++;
-                }
-            }
-
-            LinearLayout payoutsList = mCurrentView.findViewById(R.id.payoutsLayoutLL);
-            payoutsList.removeAllViews();
-            int j = 0, paidItems = 0;
-            while (j < listItems.size() && paidItems < 5) {
-                batchView.setVisibility(View.GONE);
-                View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
-                if (listItems.get(j).getStatus().equalsIgnoreCase(Utils.PAID) ||
-                        listItems.get(j).getStatus().equalsIgnoreCase(Utils.INPROGRESS) ||
-                        listItems.get(j).getStatus().equalsIgnoreCase(Utils.MERCHANT_TRANSACTION_FAILED)) {
-                    TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
-                    TextView payoutManualTV = xmlView.findViewById(R.id.payoutManualTV);
-                    String listDate = listItems.get(j).getUpdatedAt();
-                    if (listDate != null && listDate.contains(".")) {
-                        String listD = listDate.substring(0, listDate.lastIndexOf("."));
-                        payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
-                    } else {
-//                        payoutDate.setText("N/A");
-                    }
-                    try {
-                        String type = listItems.get(j).getProcessType();
-                        if (type != null && type.equalsIgnoreCase(Utils.processType)) {
-                            payoutManualTV.setVisibility(View.VISIBLE);
+                        if (Utils.doubleParsing(amt.replaceAll(",", "")) <= 0) {
+                            mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                            mCvBatchNow.setClickable(false);
                         } else {
-                            payoutManualTV.setVisibility(View.GONE);
+                            mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                            mCvBatchNow.setClickable(true);
+//                        Utils.setTextSize(nextPayoutAmountTV,"1,000.00");
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        String date = listItems.get(i).getCreatedAt();
+                        if (date.contains(".")) {
+                            String res = date.substring(0, date.lastIndexOf("."));
+                            String pstDate = Utils.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy", "PST");
+
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
+                            Date newDate = Utils.simpleDate(pstDate);
+                            newDate.setHours(23);
+                            newDate.setMinutes(59);
+
+                            String convertedDateTime = Utils.convertPrefZoneTimeFromPST(dateFormat.format(newDate), "MM/dd/yyyy @ hh:mma", "MM/dd/yyyy @ hh:mma", myApplication.getStrPreference());
+                            nxtPayoutDatenTimeTV.setText(convertedDateTime.toLowerCase());
+
+                            setSpannableTextView();
+
+                        } else {
+                            Log.d("date format", date);
+                        }
+
+
+                        isOpen = true;
+                    } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
+                        String amount = Utils.convertBigDecimalUSDC((listItems.get(i).getTotalAmount()));
+                        Utils.setTextSize(lastPayoutAmountTV, amount, 48);
+                        String date1 = listItems.get(i).getUpdatedAt();
+                        if (date1 != null && date1.contains(".")) {
+                            String res = date1.substring(0, date1.lastIndexOf("."));
+                            lastPayoutDate.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
+                        } else {
+//                        lastPayoutDate.setText("N/A");
+                        }
+                        isPaid = true;
                     }
-                    TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
-                    totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(j).getTotalAmount()));
-                    payoutsList.addView(xmlView);
-                    paidItems++;
-                } else {
-                    Log.d(TAG, "open and inprogress Batch Payouts");
-
+                    if (isPaid && isOpen) {
+                        break;
+                    } else {
+                        i++;
+                    }
                 }
-                j++;
-            }
 
-            if (paidItems == 0) {
+                LinearLayout payoutsList = mCurrentView.findViewById(R.id.payoutsLayoutLL);
+                payoutsList.removeAllViews();
+                int j = 0, paidItems = 0;
+                while (j < listItems.size() && paidItems < 5) {
+                    batchView.setVisibility(View.GONE);
+                    View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
+                    if (listItems.get(j).getStatus().equalsIgnoreCase(Utils.PAID) ||
+                            listItems.get(j).getStatus().equalsIgnoreCase(Utils.INPROGRESS) ||
+                            listItems.get(j).getStatus().equalsIgnoreCase(Utils.MERCHANT_TRANSACTION_FAILED)) {
+                        TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
+                        TextView payoutManualTV = xmlView.findViewById(R.id.payoutManualTV);
+                        String listDate = listItems.get(j).getUpdatedAt();
+                        if (listDate != null && listDate.contains(".")) {
+                            String listD = listDate.substring(0, listDate.lastIndexOf("."));
+                            payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
+                        } else {
+//                        payoutDate.setText("N/A");
+                        }
+                        try {
+                            String type = listItems.get(j).getProcessType();
+                            if (type != null && type.equalsIgnoreCase(Utils.processType)) {
+                                payoutManualTV.setVisibility(View.VISIBLE);
+                            } else {
+                                payoutManualTV.setVisibility(View.GONE);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
+                        totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(j).getTotalAmount()));
+                        payoutsList.addView(xmlView);
+                        paidItems++;
+                    } else {
+                        Log.d(TAG, "open and inprogress Batch Payouts");
+
+                    }
+                    j++;
+                }
+
+                if (paidItems == 0) {
+                    batchView.setVisibility(View.VISIBLE);
+                }
+            } else {
+                setSpannableTextView();
+                batchNoTransaction.setVisibility(View.VISIBLE);
                 batchView.setVisibility(View.VISIBLE);
+                mPayoutHistory.setVisibility(View.GONE);
+                tv_PayoutNoHistory.setVisibility(View.VISIBLE);
+                mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                mCvBatchNow.setClickable(false);
+
             }
-        } else {
-            setSpannableTextView();
-            batchNoTransaction.setVisibility(View.VISIBLE);
-            batchView.setVisibility(View.VISIBLE);
-            mPayoutHistory.setVisibility(View.GONE);
-            tv_PayoutNoHistory.setVisibility(View.VISIBLE);
-            mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-            mCvBatchNow.setClickable(false);
-
+            Log.d(TAG, "No Batch Payouts for this user");
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        Log.d(TAG, "No Batch Payouts for this user");
-
     }
 
     private void setSpannableTextView() {

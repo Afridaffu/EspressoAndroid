@@ -1697,7 +1697,7 @@ public class TransactionDetailsActivity extends BaseActivity {
         }
 
         if (objData.getWithdrawAmount() != null) {
-            withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").replace("USD","").trim()));
+            withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").replace("USD", "").trim()));
         }
 
         if (objData.getStatus() != null) {
@@ -1730,15 +1730,15 @@ public class TransactionDetailsActivity extends BaseActivity {
 
 
         if (objData.getWithdrawAmount() != null) {
-            withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+            withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").replace("USD", "").trim()));
         }
 
         if (objData.getProcessingFee() != null) {
-            withBankProcessingFee.setText("" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()));
+            withBankProcessingFee.setText("" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").replace("USD", "").trim()));
         }
 
         if (objData.getTotalAmount() != null) {
-            withBankTotal.setText("" + Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()));
+            withBankTotal.setText("" + Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").replace("USD", "").trim()));
         }
 
         if (objData.getAccountBalance() != null) {
@@ -1802,8 +1802,15 @@ public class TransactionDetailsActivity extends BaseActivity {
             }
         });
 
-        if (withBankDescription.getVisibility() == View.VISIBLE) {
+//        if (withBankDescription.getVisibility() == View.VISIBLE) {
+//            withBankDescription.setVisibility(View.GONE);
+//        }
+
+        if (objData.getRemarks() != null && !objData.getRemarks().equals("")) {
+            withBankDescription.setText("\"" + objData.getRemarks() + "\"");
+        } else {
             withBankDescription.setVisibility(View.GONE);
+
         }
 
     }
