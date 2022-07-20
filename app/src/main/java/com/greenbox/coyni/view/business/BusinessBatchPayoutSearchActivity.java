@@ -300,7 +300,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                 if (!batchFilter.getUpdatedToDate().isEmpty() && !batchFilter.getUpdatedFromDate().isEmpty()) {
 
                     String strFromDate = Utils.convertPreferenceZoneToUtcDateTime(batchFilter.getUpdatedFromDate() + " 00:00:00", "MM-dd-yyyy HH:mm:ss", "yyyy-MM-dd HH:mm:ss", objMyApplication.getStrPreference());
-                    String strToDate = Utils.convertPreferenceZoneToUtcDateTime(batchFilter.getUpdatedToDate() + " 59:59:59", "MM-dd-yyyy HH:mm:ss", "yyyy-MM-dd HH:mm:ss", objMyApplication.getStrPreference());
+                    String strToDate = Utils.convertPreferenceZoneToUtcDateTime(batchFilter.getUpdatedToDate() + " 23:59:59", "MM-dd-yyyy HH:mm:ss", "yyyy-MM-dd HH:mm:ss", objMyApplication.getStrPreference());
                     listRequest.setFromDate(strFromDate);
                     listRequest.setToDate(strToDate);
                 }
