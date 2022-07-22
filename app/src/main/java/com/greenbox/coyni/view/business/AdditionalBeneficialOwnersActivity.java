@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -179,7 +180,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
             businessIdentityVerificationViewModel.getBeneficialOwnersResponse().observe(this, new Observer<BOResp>() {
                 @Override
                 public void onChanged(BOResp boResp) {
-
+                    dismissDialog();
                     if (boResp != null) {
                         if (boResp.getStatus().toLowerCase().toString().equals("success")) {
                             objMyApplication.setBeneficialOwnersResponse(boResp);
@@ -369,7 +370,9 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
         try {
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
-            businessIdentityVerificationViewModel.getBeneficialOwners();
+            showProgressDialog();
+            new Handler().postDelayed(() -> businessIdentityVerificationViewModel.getBeneficialOwners(), 1500);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

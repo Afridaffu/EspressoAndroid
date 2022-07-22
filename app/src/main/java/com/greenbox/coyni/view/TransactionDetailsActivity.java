@@ -449,8 +449,8 @@ public class TransactionDetailsActivity extends BaseActivity {
 //                depositTo.setText(Html.fromHtml("<u>" + depositTO + "</u>"));
 //        }
         if (reserveData.getDepositTo() != null) {
-            if (reserveData.getDepositTo().length() > 10) {
-                depositTo.setText(reserveData.getDepositTo().substring(0, 10) + "...");
+            if (reserveData.getDepositTo().length() > 14) {
+                depositTo.setText(reserveData.getDepositTo().substring(0, 14) + "...");
                 depositTo.setPaintFlags(depositTo.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
             } else {
@@ -1047,8 +1047,8 @@ public class TransactionDetailsActivity extends BaseActivity {
         }
 
         if (objData.getDepositId() != null) {
-            if (objData.getDepositId().length() > 10) {
-                depositIDTV.setText(objData.getDepositId().substring(0, 10) + "...");
+            if (objData.getDepositId().length() > 14) {
+                depositIDTV.setText(objData.getDepositId().substring(0, 14) + "...");
             } else {
                 depositIDTV.setText(objData.getDepositId());
             }
@@ -1180,8 +1180,8 @@ public class TransactionDetailsActivity extends BaseActivity {
         }
 
         if (objData.getDepositId() != null) {
-            if (objData.getDepositId().length() > 10) {
-                depositIDTV.setText(objData.getDepositId().substring(0, 10) + "...");
+            if (objData.getDepositId().length() > 14) {
+                depositIDTV.setText(objData.getDepositId().substring(0, 14) + "...");
             } else {
                 depositIDTV.setText(objData.getDepositId());
             }
@@ -1337,8 +1337,8 @@ public class TransactionDetailsActivity extends BaseActivity {
         }
 
         if (objData.getWithdrawId() != null) {
-            if (objData.getWithdrawId().length() > 10) {
-                withId.setText(objData.getWithdrawId().substring(0, 10) + "...");
+            if (objData.getWithdrawId().length() > 14) {
+                withId.setText(objData.getWithdrawId().substring(0, 14) + "...");
             } else {
                 withId.setText(objData.getWithdrawId());
             }
@@ -1448,8 +1448,8 @@ public class TransactionDetailsActivity extends BaseActivity {
         }
 
         if (objData.getWithdrawalId() != null) {
-            if (objData.getWithdrawalId().length() > 10) {
-                withWithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
+            if (objData.getWithdrawalId().length() > 14) {
+                withWithdrawalId.setText(objData.getWithdrawalId().substring(0, 14) + "...");
             } else {
                 withWithdrawalId.setText(objData.getWithdrawalId());
             }
@@ -1615,8 +1615,8 @@ public class TransactionDetailsActivity extends BaseActivity {
             withBankAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
 
         if (objData.getWithdrawalId() != null) {
-            if (objData.getWithdrawalId().length() > 10) {
-                withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
+            if (objData.getWithdrawalId().length() > 14) {
+                withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, 14) + "...");
             } else {
                 withBankWithdrawalId.setText(objData.getWithdrawalId());
             }
@@ -1746,8 +1746,8 @@ public class TransactionDetailsActivity extends BaseActivity {
         }
 
         if (objData.getWithdrawalId() != null) {
-            if (objData.getWithdrawalId().length() > 10) {
-                withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
+            if (objData.getWithdrawalId().length() > 14) {
+                withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, 14) + "...");
             } else {
                 withBankWithdrawalId.setText(objData.getWithdrawalId());
             }
@@ -1935,8 +1935,8 @@ public class TransactionDetailsActivity extends BaseActivity {
 
 
             if (businessPayoutData.getDepositTo() != null) {
-                if (businessPayoutData.getDepositTo().length() > 10) {
-                    depositID.setText(businessPayoutData.getDepositTo().substring(0, 10) + "...");
+                if (businessPayoutData.getDepositTo().length() > 14) {
+                    depositID.setText(businessPayoutData.getDepositTo().substring(0, 14) + "...");
                     depositID.setPaintFlags(depositID.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
                 } else {
@@ -2032,8 +2032,8 @@ public class TransactionDetailsActivity extends BaseActivity {
             }
 
             if (failedData.getAchReferenceId() != null) {
-                if (failedData.getWithdrawId().length() > 10) {
-                    achWithTV.setText(failedData.getWithdrawId().substring(0, 10) + "...");
+                if (failedData.getWithdrawId().length() > 14) {
+                    achWithTV.setText(failedData.getWithdrawId().substring(0, 14) + "...");
                 } else {
                     achWithTV.setText(failedData.getWithdrawId());
                 }
@@ -2155,8 +2155,8 @@ public class TransactionDetailsActivity extends BaseActivity {
             reasonFailed.setVisibility(View.GONE);
 
             if (cancelledData.getAchReferenceId() != null) {
-                if (cancelledData.getWithdrawId().length() > 10) {
-                    achWithTV.setText(cancelledData.getWithdrawId().substring(0, 10) + "...");
+                if (cancelledData.getWithdrawId().length() > 14) {
+                    achWithTV.setText(cancelledData.getWithdrawId().substring(0, 14) + "...");
                 } else {
                     achWithTV.setText(cancelledData.getWithdrawId());
                 }
@@ -2404,6 +2404,11 @@ public class TransactionDetailsActivity extends BaseActivity {
 
             TextView tvNo = dialog.findViewById(R.id.tvNo);
             TextView tvYes = dialog.findViewById(R.id.tvYes);
+            TextView cancelDescTV = dialog.findViewById(R.id.cancelDescTV);
+            if (txnType == 2)
+                cancelDescTV.setText("Are you sure you want to cancel this transaction? If you do, you will not receive any coyni tokens.");
+            else
+                cancelDescTV.setText("Are you sure you want to cancel this transaction? If you do, you will not receive any amount.");
 
             tvNo.setOnClickListener(v -> dialog.dismiss());
             tvYes.setOnClickListener(v -> {

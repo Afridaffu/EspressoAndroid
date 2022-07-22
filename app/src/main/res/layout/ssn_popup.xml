@@ -70,7 +70,7 @@
 
         <LinearLayout
             android:id="@+id/ssnLL"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
@@ -79,7 +79,7 @@
 
             <TextView
                 android:id="@+id/ssnTV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="SSN"

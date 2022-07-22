@@ -281,7 +281,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
                         DownloadDocumentData data = downloadDocumentResponse.getData();
                         if (data != null) {
                             if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
-                                launchDocumentUrl(data.getDownloadUrl().replace("&", "%26"));
+                                launchDocumentUrl(data.getDownloadUrl());
                             } else {
                                 Utils.displayAlert(getString(R.string.unable_to_get_document), MerchantsAgrementActivity.this, "", "");
                             }
@@ -300,15 +300,15 @@ public class MerchantsAgrementActivity extends BaseActivity {
 //        Uri uri = Uri.parse(url);
 //        intent.setDataAndType(uri, "application/pdf");
 //        startActivity(intent);
-
-        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + url);
+        String urlNew = Uri.encode(url);
+        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + urlNew);
 
     }
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.e("onConfigurationChanged","onConfigurationChanged");
+        Log.e("onConfigurationChanged", "onConfigurationChanged");
     }
 }
 
