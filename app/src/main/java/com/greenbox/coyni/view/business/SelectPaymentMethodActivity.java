@@ -170,9 +170,10 @@ public class SelectPaymentMethodActivity extends BaseActivity {
 //                    if (strScreen.equals("withdraw")) {
 //                        onBackPressed();
 //                    } else
-                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
-                        onBackPressed();
-                    } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+//                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+//                        onBackPressed();
+//                    } else
+                    if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                         if (!objMyApplication.getCardSave()) {
                             isDeCredit = true;
                             ControlMethod("addpayment");
@@ -187,13 +188,17 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     onBackPressed();
                 }
             } else if (requestCode == 2) {
-                if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
-                    onBackPressed();
-                } else {
-                    if (objMyApplication.getSignet()) {
-                        objMyApplication.setSignet(false);
-                        getPaymentMethods();
-                    }
+//                if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+//                    onBackPressed();
+//                } else {
+//                    if (objMyApplication.getSignet()) {
+//                        objMyApplication.setSignet(false);
+//                        getPaymentMethods();
+//                    }
+//                }
+                if (objMyApplication.getSignet()) {
+                    objMyApplication.setSignet(false);
+                    getPaymentMethods();
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);

@@ -54,40 +54,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!--            <LinearLayout-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:background="@drawable/backgrndbtmcornrs"-->
-            <!--                android:orientation="vertical"-->
-            <!--                android:paddingLeft="@dimen/_21sdp"-->
-            <!--                android:paddingTop="@dimen/_40sdp"-->
-            <!--                android:paddingRight="@dimen/_21sdp">-->
-
-            <!--                <LinearLayout-->
-            <!--                    android:id="@+id/lyWithdrawClose"-->
-            <!--                    android:layout_width="30dp"-->
-            <!--                    android:layout_height="30dp"-->
-            <!--                    android:gravity="center_vertical"-->
-            <!--                    android:orientation="horizontal">-->
-
-            <!--                    <ImageView-->
-            <!--                        android:layout_width="wrap_content"-->
-            <!--                        android:layout_height="wrap_content"-->
-            <!--                        android:background="@color/white"-->
-            <!--                        android:src="@drawable/ic_back" />-->
-            <!--                </LinearLayout>-->
-
-            <!--                <TextView-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:layout_marginTop="@dimen/_14sdp"-->
-            <!--                    android:layout_marginBottom="@dimen/_11sdp"-->
-            <!--                    android:fontFamily="@font/opensans_bold"-->
-            <!--                    android:text="Withdraw Token"-->
-            <!--                    android:textColor="@color/black"-->
-            <!--                    android:textSize="@dimen/_16ssp" />-->
-            <!--            </LinearLayout>-->
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -134,27 +134,29 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             } else if (requestCode == 3) {
                 if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                     //Modified on 21 Jun 2022 -
-//                    if (cardList != null && cardList.size() > 0) {
-//                        isDeCredit = true;
-//                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-//                            ControlMethod("addpayment");
-//                        } else {
-//                            ControlMethod("addbpayment");
-//                        }
-//                    } else {
-//                        ControlMethod("withdrawmethod");
-//                        selectWithdrawMethod();
-//                        strScreen = "withdrawmethod";
-//                        strCurrent = "";
-//                    }
-                    isDeCredit = true;
-                    if (addPayDialog != null && addPayDialog.isShowing()) {
-                        addPayDialog.dismiss();
+                    if (!objMyApplication.getCardSave() && cardList != null && cardList.size() > 0) {
+                        isDeCredit = true;
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            ControlMethod("addpayment");
+                        } else {
+                            ControlMethod("addbpayment");
+                        }
+                        strCurrent = "";
+                    } else {
+                        objMyApplication.setCardSave(false);
+                        ControlMethod("withdrawmethod");
+                        selectWithdrawMethod();
+                        strScreen = "withdrawmethod";
+                        strCurrent = "";
                     }
-                    ControlMethod("withdrawmethod");
-                    selectWithdrawMethod();
-                    strScreen = "withdrawmethod";
-                    strCurrent = "";
+//                    isDeCredit = true;
+//                    if (addPayDialog != null && addPayDialog.isShowing()) {
+//                        addPayDialog.dismiss();
+//                    }
+//                    ControlMethod("withdrawmethod");
+//                    selectWithdrawMethod();
+//                    strScreen = "withdrawmethod";
+//                    strCurrent = "";
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
@@ -176,6 +178,16 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     getPaymentMethods();
                 }
             } else if (requestCode == 5) {
+                getPaymentMethods();
+            } else if (requestCode == 6) {
+                isDeCredit = true;
+                if (addPayDialog != null && addPayDialog.isShowing()) {
+                    addPayDialog.dismiss();
+                }
+                ControlMethod("withdrawmethod");
+                selectWithdrawMethod();
+                strScreen = "withdrawmethod";
+                strCurrent = "";
                 getPaymentMethods();
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -1790,11 +1802,6 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             Window window = addPayDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
-//            WindowManager.LayoutParams wlp = window.getAttributes();
-//
-//            wlp.gravity = Gravity.BOTTOM;
-//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            window.setAttributes(wlp);
             addPayDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             addPayDialog.setCanceledOnTouchOutside(false);
             addPayDialog.show();
@@ -1827,7 +1834,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                             strCurrent = "debit";
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "debit");
-                            startActivityForResult(i, 3);
+                            startActivityForResult(i, 6);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
