@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/et_bg_gray"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <RelativeLayout

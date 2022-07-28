@@ -102,7 +102,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     MyApplication objMyApplication;
     public ScrollView dbaBasicSL, addressSL;
     private boolean addDBAClick = false;
-    private boolean isAddDBA = false;
+    private boolean isAddDBA = false, addBusiness = false;
     private boolean isAddDBAAPICalled = false;
     private int companyID = 0;
 
@@ -162,7 +162,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     protected void onDestroy() {
         try {
             super.onDestroy();
-            if (!isPostSuccess && !isAddDBA)
+            if (!isPostSuccess && !isAddDBA && !addBusiness)
                 dbaInfoAPICall(prepareRequest());
 
 //            if (!isPostSuccess && !isAddDBA) {
@@ -181,7 +181,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     @Override
     public void onBackPressed() {
         if (selectedPage == 0) {
-            if (isAddDBA)
+            if (isAddDBA || addBusiness)
                 confirmationAlert();
             else {
                 if (getIntent().getStringExtra("FROM").equals("EDIT")) {
@@ -221,6 +221,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             type = getIntent().getStringExtra("TYPE");
+            addBusiness = getIntent().getBooleanExtra(Utils.ADD_BUSINESS, false);
             businessIdentityVerificationViewModel.getBusinessType();
 //            businessIdentityVerificationViewModel.getDBAInfo();
 
@@ -604,6 +605,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             closeIV.setVisibility(GONE);
                             backIV.setVisibility(VISIBLE);
                             prevDBAName = dbanameET.getText().toString().trim();
+                            addBusiness = false;
                             if (selectedPage == 0) {
                                 viewPager.setCurrentItem(1);
                                 closeIV.setVisibility(GONE);
@@ -741,6 +743,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     BusinessRegistrationTrackerActivity.isAddDbaCalled = true;
                     isAddDBAAPICalled = true;
                     isAddDBA = false;
+                    addBusiness = false;
                     if (selectedPage == 1) {
                         businessIdentityVerificationViewModel.postDBAInfo(prepareRequest());
                     } else {

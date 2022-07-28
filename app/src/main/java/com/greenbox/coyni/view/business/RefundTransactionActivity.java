@@ -744,9 +744,12 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                         cKey.disableButton();
                     }
+                    refundET.setSelection(refundET.getText().length());
+                    refundET.setTextDirection(View.TEXT_DIRECTION_LTR);
                 } else if (editable.toString().equals(".")) {
                     refundET.setText("");
                 } else if (editable.length() == 0) {
+                    refundET.setTextDirection(View.TEXT_DIRECTION_RTL);
                     refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65);
                     refundET.setHint("0.00");
                     tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);

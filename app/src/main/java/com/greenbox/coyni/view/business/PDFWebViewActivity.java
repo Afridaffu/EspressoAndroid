@@ -42,36 +42,14 @@ public class PDFWebViewActivity extends BaseActivity {
         webView = (WebView) findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-//        webSettings.setDomStorageEnabled(true);
-//        webSettings.setLoadWithOverviewMode(true);
-//        webSettings.setUseWideViewPort(true);
-//        webSettings.setBuiltInZoomControls(true);
-//        webSettings.setDisplayZoomControls(false);
-//        webSettings.setSupportZoom(true);
-//        webSettings.setDefaultTextEncodingName("utf-8");
         webView.invalidate();
         webView.setWebChromeClient(new WebChromeClient());
         webView.setVerticalScrollBarEnabled(true);
         showProgressDialog();
 
-//        webView.setWebChromeClient(new WebChromeClient() {
-//            @Override
-//            public boolean onJsAlert(WebView view, final String url, String message, JsResult result) {
-//                enableText.setText("Enabled");
-//                enableText.setVisibility(View.VISIBLE);
-//                result.cancel();
-//                return true;
-//            }
-//        });
-
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                dismissDialog();
-                String myUrl = getIntent().getStringExtra("URL").replace("&", "%26");
-                showProgressDialog();
-//                webView.loadUrl("javascript:showPDF('" + myUrl + "')");
-
                 try {
                     if (view.getTitle().equals("")) {
                         view.reload();
@@ -83,8 +61,6 @@ public class PDFWebViewActivity extends BaseActivity {
                 }
             }
         });
-
-//        webView.loadUrl("file:///android_asset/pdfViewerScript.html");
 
         canceledIV.setOnClickListener(new View.OnClickListener() {
             @Override

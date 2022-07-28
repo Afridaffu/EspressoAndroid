@@ -382,6 +382,13 @@ public class BusinessDashboardActivity extends BaseActivity {
             });
 
             new FetchData(BusinessDashboardActivity.this).execute();
+
+            if (getIntent().getBooleanExtra("Token", false)) {
+                selectedTab = Tabs.ACCOUNT;
+                setSelectedTab(false, true, false, false);
+                LogUtils.d(TAG, "AccountTab-Redirected");
+                pushFragment(new BusinessAccountFragment());
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
