@@ -140,6 +140,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
                 intent.putExtra("FROM", "TRACKER");
                 intent.putExtra("TYPE", "DIFF");
+                intent.putExtra(Utils.ADD_BUSINESS, addBusiness);
                 startActivity(intent);
             });
 
@@ -148,6 +149,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
                 intent.putExtra("FROM", "TRACKER");
                 intent.putExtra("TYPE", "SAME");
+                intent.putExtra(Utils.ADD_BUSINESS, addBusiness);
                 startActivity(intent);
             });
 
@@ -221,7 +223,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 public void onClick(View view) {
                     if (addBusiness) {
                         showProgressDialog();
-                        loginViewModel.postChangeAccount(objMyApplication.getOldLoginUserId());
+                        if (objMyApplication.getOldLoginUserId() != 0)
+                            loginViewModel.postChangeAccount(objMyApplication.getOldLoginUserId());
+                        else
+                            loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                     } else {
                         Intent dashboardIntent = new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class);
                         dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -639,8 +644,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
     protected void onResume() {
         try {
             super.onResume();
-//            if (Utils.isKeyboardVisible)
-//                Utils.hideKeypad(this);
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(this);
             if (!addBusiness || isAddBusinessCalled || isAddDbaCalled || isTrackerCall) {
                 showProgressDialog();
                 new Handler().postDelayed(() -> businessIdentityVerificationViewModel.getBusinessTracker(), 1000);

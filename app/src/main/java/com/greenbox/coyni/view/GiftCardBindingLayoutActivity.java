@@ -298,7 +298,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    dashboardNavigation();
+                    dashboardNavigation("");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -394,7 +394,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                             objMyApplication.getCheckOutModel().setCheckOutFlag(true);
                             startActivity(new Intent(GiftCardBindingLayoutActivity.this, CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         } else {
-                            dashboardNavigation();
+                            dashboardNavigation("Token");
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -469,7 +469,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             doneCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dashboardNavigation();
+                    dashboardNavigation("Token");
                 }
             });
         } catch (Exception ex) {
@@ -542,7 +542,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dashboardNavigation();
+                    dashboardNavigation("Token");
                 }
             });
             layoutReference.setOnClickListener(new View.OnClickListener() {
@@ -597,7 +597,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             doneCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dashboardNavigation();
+                    dashboardNavigation("");
                 }
             });
 
@@ -668,7 +668,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         doneCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dashboardNavigation();
+                dashboardNavigation("");
             }
         });
 
@@ -736,7 +736,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         doneCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dashboardNavigation();
+                dashboardNavigation("");
             }
         });
 
@@ -835,7 +835,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             doneCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dashboardNavigation();
+                    dashboardNavigation("");
                 }
             });
         } catch (Exception ex) {
@@ -947,13 +947,16 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
 
     }
 
-    private void dashboardNavigation() {
+    private void dashboardNavigation(String redirectTo) {
         try {
             Intent i;
             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 i = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
             } else {
-                i = new Intent(GiftCardBindingLayoutActivity.this, BusinessDashboardActivity.class);
+                if (redirectTo.equalsIgnoreCase("Token"))
+                    i = new Intent(GiftCardBindingLayoutActivity.this, BusinessDashboardActivity.class).putExtra("Token", true);
+                else
+                    i = new Intent(GiftCardBindingLayoutActivity.this, BusinessDashboardActivity.class);
             }
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
