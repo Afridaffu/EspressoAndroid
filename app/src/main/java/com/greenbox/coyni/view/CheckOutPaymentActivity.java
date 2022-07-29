@@ -558,16 +558,16 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
 
         if (userAmount > availableBalance) {
             if (myApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
+                displayAlert(getString(R.string.insufficient_funds_message), getString(R.string.oops));
             } else if (myApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                displayMerchantAlert(getString(R.string.buy_token_message), CheckOutPaymentActivity.this, "coyni");
+                displayMerchantAlert(getString(R.string.buy_token_message), CheckOutPaymentActivity.this, getString(R.string.oops));
             }
         } else if (Utils.doubleParsing(strPay.replace(",", "")) == 0.0) {
-            displayAlertNew("Amount should be greater than zero.", CheckOutPaymentActivity.this, "Oops!");
+            displayAlertNew(getString(R.string.amount_greater_zero), CheckOutPaymentActivity.this, getString(R.string.oops));
         } else if ((Utils.doubleParsing(strPay.replace(",", "")) < minimumLimit)) {
-            displayAlertNew("Minimum Amount is " + Utils.USNumberFormat(minimumLimit) + " CYN", CheckOutPaymentActivity.this, "Oops!");
+            displayAlertNew(getString(R.string.minimum_amount) + Utils.USNumberFormat(minimumLimit) + " CYN", CheckOutPaymentActivity.this, getString(R.string.oops));
         } else if (Utils.doubleParsing(strPay.replace(",", "")) > transactionLimit) {
-            displayAlertNew("Amount exceeds transaction limit.", CheckOutPaymentActivity.this, "Oops!");
+            displayAlertNew(getString(R.string.amount_exceed_message), CheckOutPaymentActivity.this, getString(R.string.oops));
         } else {
             value = true;
         }
