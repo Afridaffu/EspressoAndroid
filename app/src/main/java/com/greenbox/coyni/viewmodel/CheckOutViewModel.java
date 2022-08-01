@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.model.check_out_transactions.CancelOrderRequest;
+import com.greenbox.coyni.model.check_out_transactions.CancelOrderResponse;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayRequest;
@@ -28,6 +30,7 @@ public class CheckOutViewModel extends AndroidViewModel {
    private MutableLiveData<OrderInfoResponse> orderInfoResponseMutableLiveData = new MutableLiveData<>();
    private MutableLiveData<OrderPayResponse> orderPayResponseMutableLiveData = new MutableLiveData<>();
    private MutableLiveData<ScanQrCodeResp> scanQrCodeRespMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<CancelOrderResponse> cancelOrderResponseMutableLiveData = new MutableLiveData<>();
 
     public CheckOutViewModel(@NonNull Application application) {
         super(application);
@@ -47,6 +50,14 @@ public class CheckOutViewModel extends AndroidViewModel {
 
     public void setOrderPayResponseMutableLiveData(MutableLiveData<OrderPayResponse> orderPayResponseMutableLiveData) {
         this.orderPayResponseMutableLiveData = orderPayResponseMutableLiveData;
+    }
+
+    public MutableLiveData<ScanQrCodeResp> getScanQrCodeRespMutableLiveData() {
+        return scanQrCodeRespMutableLiveData;
+    }
+
+    public MutableLiveData<CancelOrderResponse> getCancelOrderResponseMutableLiveData() {
+        return cancelOrderResponseMutableLiveData;
     }
 
     public void getOrderInfo(OrderInfoRequest request) {
@@ -127,6 +138,33 @@ public class CheckOutViewModel extends AndroidViewModel {
             @Override
             public void onFailure(Call<ScanQrCodeResp> call, Throwable t) {
                 scanQrCodeRespMutableLiveData.setValue(null);
+            }
+        });
+    }
+
+    public void orderCancel(CancelOrderRequest request) {
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<CancelOrderResponse> mCall = apiService.orderCancel(request);
+        mCall.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<CancelOrderResponse> call, @NonNull Response<CancelOrderResponse> response) {
+                if (response.isSuccessful()) {
+                    CancelOrderResponse cancelOrderResponse = response.body();
+                    cancelOrderResponseMutableLiveData.setValue(cancelOrderResponse);
+                } else {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<CancelOrderResponse>() {
+                    }.getType();
+                    CancelOrderResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                    if (errorResponse != null) {
+                        cancelOrderResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CancelOrderResponse> call, @NonNull Throwable t) {
+                cancelOrderResponseMutableLiveData.setValue(null);
             }
         });
     }

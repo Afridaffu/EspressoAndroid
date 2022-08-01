@@ -2,6 +2,7 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BaseResponse;
 import com.greenbox.coyni.model.BatchNow.BatchNowPaymentRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
@@ -60,6 +61,8 @@ import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
 import com.greenbox.coyni.model.cards.business.BusinessCardRequest;
 import com.greenbox.coyni.model.cards.business.BusinessCardResponse;
+import com.greenbox.coyni.model.check_out_transactions.CancelOrderRequest;
+import com.greenbox.coyni.model.check_out_transactions.CancelOrderResponse;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayRequest;
@@ -699,6 +702,9 @@ public interface ApiService {
 
     @POST("/api/v2/checkout/scanQRCode")
     Call<ScanQrCodeResp> scanQrCode(@Body ScanQRRequest string);
+
+    @POST("/api/v2/checkout/cancel-order")
+    Call<CancelOrderResponse> orderCancel(@Body CancelOrderRequest request);
 
 }
 

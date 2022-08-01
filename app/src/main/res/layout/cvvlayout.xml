@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/opensans_semibold"
-        android:text="Please confirm CVV to continue"
+        android:text="Please confirm CVV/CVC to continue"
         android:textColor="@color/primary_black"
         android:layout_marginLeft="@dimen/_20sdp"
         android:textSize="@dimen/_12ssp" />

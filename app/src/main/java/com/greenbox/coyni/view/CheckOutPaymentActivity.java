@@ -36,6 +36,8 @@ import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
+import com.greenbox.coyni.model.check_out_transactions.CancelOrderRequest;
+import com.greenbox.coyni.model.check_out_transactions.CancelOrderResponse;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
@@ -332,6 +334,22 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             }
         });
 
+        checkOutViewModel.getCancelOrderResponseMutableLiveData().observe(this, new Observer<CancelOrderResponse>() {
+            @Override
+            public void onChanged(CancelOrderResponse cancelOrderResponse) {
+                if (cancelOrderResponse != null) {
+                    if (cancelOrderResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
+                            myApplication.setCheckOutModel(null);
+                        }
+                        CheckOutPaymentActivity.super.onBackPressed();
+                    } else {
+                        Utils.displayAlert(cancelOrderResponse.getError().getErrorDescription(), CheckOutPaymentActivity.this, getString(R.string.oops), "");
+                    }
+                }
+            }
+        });
+
         checkOutViewModel.getOrderPayResponseMutableLiveData().observe(this, new Observer<OrderPayResponse>() {
             @Override
             public void onChanged(OrderPayResponse orderPayResponse) {
@@ -477,55 +495,24 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             @Override
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(getString(R.string.yes))) {
-                    if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
-                        myApplication.setCheckOutModel(null);
-                    }
-                    CheckOutPaymentActivity.super.onBackPressed();
+//                    if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
+//                        myApplication.setCheckOutModel(null);
+//                    }
+//                    CheckOutPaymentActivity.super.onBackPressed();
+                    cancelOrderCall();
                 } else if (action.equalsIgnoreCase(getString(R.string.no))) {
-                    customConfirmationDialog.dismiss();
+
                 }
             }
         });
         customConfirmationDialog.show();
     }
 
-
-//    private void setFaceLock() {
-//        try {
-//            isFaceLock = false;
-//            String value = dbHandler.getFacePinLock();
-//            if (value != null && value.equals("true")) {
-//                isFaceLock = true;
-//                myApplication.setLocalBiometric(true);
-//            } else {
-//                isFaceLock = false;
-//                myApplication.setLocalBiometric(false);
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    private void setTouchId() {
-//        try {
-//            isTouchId = false;
-//            String value = dbHandler.getThumbPinLock();
-//            if (value != null && value.equals("true")) {
-//                isTouchId = true;
-//                myApplication.setLocalBiometric(true);
-//            } else {
-//                isTouchId = false;
-////                myApplication.setLocalBiometric(false);
-//                if (!isFaceLock) {
-//                    myApplication.setLocalBiometric(false);
-//                }
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
+    private void cancelOrderCall() {
+        CancelOrderRequest request = new CancelOrderRequest();
+        request.setEncryptedToken(myApplication.getCheckOutModel().getEncryptedToken());
+        checkOutViewModel.orderCancel(request);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
