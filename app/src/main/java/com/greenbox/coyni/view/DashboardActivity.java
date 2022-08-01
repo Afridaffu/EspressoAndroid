@@ -44,6 +44,11 @@ import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlByUser;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlGlobalResp;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlRespByUser;
+import com.greenbox.coyni.model.featurecontrols.FeatureData;
+import com.greenbox.coyni.model.featurecontrols.PermissionResponseList;
 import com.greenbox.coyni.model.identity_verification.LatestTransactionsRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.notification.Notifications;
@@ -210,16 +215,20 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                            showQuickAction(DashboardActivity.this);
-                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
-                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                            Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
+                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                                showQuickAction(DashboardActivity.this);
+                            } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                                    objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                                    objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                                Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), DashboardActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -499,18 +508,10 @@ public class DashboardActivity extends BaseActivity {
             @Override
             public void onChanged(Profile profile) {
                 if (profile != null) {
-                    //                    progressDialog.dismiss();
                     objMyApplication.setMyProfile(profile);
                     identityVerificationViewModel.getStatusTracker();
                     objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                     strName = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-                    //                    if (strName != null && strName.length() > 21) {
-                    //                        tvUserName.setText( strName.substring(0, 21) + "...");
-                    //                        tvUserNameSmall.setText( strName.substring(0, 21) + "...");
-                    //                    } else {
-                    //                        tvUserName.setText( strName);
-                    //                        tvUserNameSmall.setText( strName);
-                    //                    }
                     if (objMyApplication.getStrUserName().length() > 20) {
                         tvUserName.setText(getString(R.string.hi_text) + strName.substring(0, 20));
                         tvUserNameSmall.setText(getString(R.string.hi_text) + strName.substring(0, 20));
@@ -518,7 +519,6 @@ public class DashboardActivity extends BaseActivity {
                         tvUserName.setText(getString(R.string.hi_text) + strName);
                         tvUserNameSmall.setText(getString(R.string.hi_text) + strName);
                     }
-//                    bindImage();
                     Utils.setUserEmail(DashboardActivity.this, profile.getData().getEmail());
                 }
                 new FetchData(DashboardActivity.this).execute();
@@ -622,10 +622,10 @@ public class DashboardActivity extends BaseActivity {
             }
         });
 
-        try {
-            dashboardViewModel.getGetUserLatestTxns().observe(this, new Observer<LatestTxnResponse>() {
-                @Override
-                public void onChanged(LatestTxnResponse latestTxnResponse) {
+        dashboardViewModel.getGetUserLatestTxns().observe(this, new Observer<LatestTxnResponse>() {
+            @Override
+            public void onChanged(LatestTxnResponse latestTxnResponse) {
+                try {
                     latestTxnRefresh.setRefreshing(false);
                     if (latestTxnResponse != null && latestTxnResponse.getStatus().equalsIgnoreCase("success")) {
                         cvHeaderRL.setVisibility(View.VISIBLE);
@@ -675,194 +675,175 @@ public class DashboardActivity extends BaseActivity {
                         }
 
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
-                @Override
-                public void onChanged(SignOn signOn) {
-                    try {
-                        if (signOn != null) {
-                            if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                                objMyApplication.setSignOnData(signOn.getData());
-                                objMyApplication.setStrSignOnError("");
-                            } else {
-                                objMyApplication.setSignOnData(null);
-                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                            }
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            dashboardViewModel.getPreferenceMutableLiveData().observe(this, new Observer<Preferences>() {
-                @Override
-                public void onChanged(Preferences preferences) {
-
-                    try {
-                        if (preferences != null) {
-                            if (preferences.getData().getTimeZone() == 0) {
-                                objMyApplication.setTempTimezone(getString(R.string.PST));
-                                objMyApplication.setTempTimezoneID(0);
-                                objMyApplication.setStrPreference("PST");
-                            } else if (preferences.getData().getTimeZone() == 1) {
-                                objMyApplication.setTempTimezone(getString(R.string.MST));
-                                objMyApplication.setTempTimezoneID(1);
-                                objMyApplication.setStrPreference("America/Denver");
-                            } else if (preferences.getData().getTimeZone() == 2) {
-                                objMyApplication.setTempTimezone(getString(R.string.CST));
-                                objMyApplication.setTempTimezoneID(2);
-                                objMyApplication.setStrPreference("CST");
-                            } else if (preferences.getData().getTimeZone() == 3) {
-                                objMyApplication.setTempTimezone(getString(R.string.EST));
-                                objMyApplication.setTempTimezoneID(3);
-                                objMyApplication.setStrPreference("America/New_York");
-                            } else if (preferences.getData().getTimeZone() == 4) {
-                                objMyApplication.setTempTimezone(getString(R.string.HST));
-                                objMyApplication.setTempTimezoneID(4);
-                                objMyApplication.setStrPreference("HST");
-                            } else if (preferences.getData().getTimeZone() == 5) {
-                                objMyApplication.setTempTimezone(getString(R.string.AST));
-                                objMyApplication.setTempTimezoneID(5);
-                                objMyApplication.setStrPreference("AST");
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
-                @Override
-                public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
-                    if (paymentMethodsResponse != null) {
-                        //                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
-                        PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(paymentMethodsResponse);
-                        objMyApplication.setPaymentMethodsResponse(objResponse);
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            notificationsViewModel.getNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
-                @Override
-                public void onChanged(Notifications notifications) {
-//
-                    if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
-                        globalCount = 0;
-                        for (int i = 0; i < notifications.getData().getItems().size(); i++) {
-                            if (!notifications.getData().getItems().get(i).isRead()) {
-                                globalCount++;
-                            }
-                        }
-                        notificationsViewModel.getReceivedNotifications();
-                        Log.e("count notif", globalCount + "");
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            notificationsViewModel.getReceivedNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
-                @Override
-                public void onChanged(Notifications notifications) {
-
-                    try {
-                        if (notifications != null) {
-                            if (notifications.getStatus().equalsIgnoreCase("success")) {
-                                List<NotificationsDataItems> localData = notifications.getData().getItems();
-                                for (int i = 0; i < localData.size(); i++) {
-                                    if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
-                                            localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
-                                        globalCount++;
-                                    }
-                                }
-
-                                if (globalCount > 0) {
-                                    countCV.setVisibility(View.VISIBLE);
-                                    countTV.setText(globalCount + "");
-                                } else {
-                                    countCV.setVisibility(View.GONE);
-                                }
-
-                                Log.e("count total", globalCount + "");
-                            } else {
-                                if (globalCount > 0) {
-                                    countCV.setVisibility(View.VISIBLE);
-                                    countTV.setText(globalCount + "");
-                                } else {
-                                    countCV.setVisibility(View.GONE);
-                                }
-                            }
+        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+            @Override
+            public void onChanged(SignOn signOn) {
+                try {
+                    if (signOn != null) {
+                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+                            objMyApplication.setSignOnData(signOn.getData());
+                            objMyApplication.setStrSignOnError("");
                         } else {
-                            Utils.displayAlert(getString(R.string.something_went_wrong), DashboardActivity.this, "", "");
+                            objMyApplication.setSignOnData(null);
+                            objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
                         }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
+
+        dashboardViewModel.getPreferenceMutableLiveData().observe(this, new Observer<Preferences>() {
+            @Override
+            public void onChanged(Preferences preferences) {
+                try {
+                    if (preferences != null) {
+                        if (preferences.getData().getTimeZone() == 0) {
+                            objMyApplication.setTempTimezone(getString(R.string.PST));
+                            objMyApplication.setTempTimezoneID(0);
+                            objMyApplication.setStrPreference("PST");
+                        } else if (preferences.getData().getTimeZone() == 1) {
+                            objMyApplication.setTempTimezone(getString(R.string.MST));
+                            objMyApplication.setTempTimezoneID(1);
+                            objMyApplication.setStrPreference("America/Denver");
+                        } else if (preferences.getData().getTimeZone() == 2) {
+                            objMyApplication.setTempTimezone(getString(R.string.CST));
+                            objMyApplication.setTempTimezoneID(2);
+                            objMyApplication.setStrPreference("CST");
+                        } else if (preferences.getData().getTimeZone() == 3) {
+                            objMyApplication.setTempTimezone(getString(R.string.EST));
+                            objMyApplication.setTempTimezoneID(3);
+                            objMyApplication.setStrPreference("America/New_York");
+                        } else if (preferences.getData().getTimeZone() == 4) {
+                            objMyApplication.setTempTimezone(getString(R.string.HST));
+                            objMyApplication.setTempTimezoneID(4);
+                            objMyApplication.setStrPreference("HST");
+                        } else if (preferences.getData().getTimeZone() == 5) {
+                            objMyApplication.setTempTimezone(getString(R.string.AST));
+                            objMyApplication.setTempTimezoneID(5);
+                            objMyApplication.setStrPreference("AST");
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
+                if (paymentMethodsResponse != null) {
+                    PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(paymentMethodsResponse);
+                    objMyApplication.setPaymentMethodsResponse(objResponse);
+                }
+            }
+        });
+
+        notificationsViewModel.getNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+            @Override
+            public void onChanged(Notifications notifications) {
+                if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
+                    globalCount = 0;
+                    for (int i = 0; i < notifications.getData().getItems().size(); i++) {
+                        if (!notifications.getData().getItems().get(i).isRead()) {
+                            globalCount++;
+                        }
+                    }
+                    notificationsViewModel.getReceivedNotifications();
+                    Log.e("count notif", globalCount + "");
+                }
+            }
+        });
+
+        notificationsViewModel.getReceivedNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+            @Override
+            public void onChanged(Notifications notifications) {
+
+                try {
+                    if (notifications != null) {
+                        if (notifications.getStatus().equalsIgnoreCase("success")) {
+                            List<NotificationsDataItems> localData = notifications.getData().getItems();
+                            for (int i = 0; i < localData.size(); i++) {
+                                if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
+                                        localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
+                                    globalCount++;
+                                }
+                            }
+
+                            if (globalCount > 0) {
+                                countCV.setVisibility(View.VISIBLE);
+                                countTV.setText(globalCount + "");
+                            } else {
+                                countCV.setVisibility(View.GONE);
+                            }
+
+                            Log.e("count total", globalCount + "");
+                        } else {
+                            if (globalCount > 0) {
+                                countCV.setVisibility(View.VISIBLE);
+                                countTV.setText(globalCount + "");
+                            } else {
+                                countCV.setVisibility(View.GONE);
+                            }
+                        }
+                    } else {
+                        Utils.displayAlert(getString(R.string.something_went_wrong), DashboardActivity.this, "", "");
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        dashboardViewModel.getFeatureControlRespByUserMutableLiveData().observe(this, new Observer<FeatureControlRespByUser>() {
+            @Override
+            public void onChanged(FeatureControlRespByUser featureControlRespByUser) {
+                try {
+                    FeatureData obj = new FeatureData();
+                    if (featureControlRespByUser != null && featureControlRespByUser.getData() != null) {
+                        obj = featureControlRespByUser.getData().getData();
+                        if (obj != null && obj.getPermissionResponseList() != null && obj.getPermissionResponseList().size() > 0) {
+                            featureControlsPermission(obj.getPermissionResponseList(), "user");
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        dashboardViewModel.getFeatureControlGlobalRespMutableLiveData().observe(this, new Observer<FeatureControlGlobalResp>() {
+            @Override
+            public void onChanged(FeatureControlGlobalResp featureControlGlobalResp) {
+                try {
+                    FeatureData obj = new FeatureData();
+                    if (featureControlGlobalResp != null && featureControlGlobalResp.getData() != null) {
+                        obj = featureControlGlobalResp.getData();
+                        if (obj != null && obj.getPermissionResponseList() != null && obj.getPermissionResponseList().size() > 0) {
+                            featureControlsPermission(obj.getPermissionResponseList(), "global");
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
     }
-
-    //Shiva Changes
-//    private void SetDB() {
-//        try {
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
-//            dsUserDetails.moveToFirst();
-//            if (dsUserDetails.getCount() > 0) {
-//                strFirstUser = dsUserDetails.getString(1);
-//            }
-//        } catch (Exception ex) {
-//            if (ex.getMessage().toString().contains("no such table")) {
-//                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
-//                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
-//            }
-//        }
-//    }
-
-    //SHIVA Changes
 
     private void SetDB() {
         strFirstUser = databaseHandler.getTableUserDetails();
     }
-//    private void saveFirstUser() {
-//        try {
-//            if (strFirstUser.equals("")) {
-//                strFirstUser = objMyApplication.getStrEmail();
-//            }
-//            mydatabase.execSQL("Delete from tblUserDetails");
-//            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + strFirstUser.toLowerCase() + "')");
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
 
     private void saveFirstUser() {
         try {
@@ -949,9 +930,10 @@ public class DashboardActivity extends BaseActivity {
                 dashboardViewModel.mePaymentMethods();
                 WalletRequest walletRequest = new WalletRequest();
                 walletRequest.setWalletType(Utils.TOKEN);
-//                walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
                 businessDashboardViewModel.meMerchantWallet(walletRequest);
                 notificationsViewModel.getNotifications();
+                dashboardViewModel.getFeatureControlByUser(objMyApplication.getLoginUserId());
+                dashboardViewModel.getFeatureControlGlobal(getString(R.string.portalType));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -1184,6 +1166,74 @@ public class DashboardActivity extends BaseActivity {
         transactionType.add(Utils.paidInvoice);
         transactionType.add(Utils.businessPayout);
         return transactionType;
+    }
+
+    private void featureControlsPermission(List<PermissionResponseList> permissionResponseList, String strFrom) {
+        try {
+            FeatureControlByUser featureControlByUser = new FeatureControlByUser();
+            if (permissionResponseList != null && permissionResponseList.size() > 0) {
+                for (int i = 0; i < permissionResponseList.size(); i++) {
+                    switch (permissionResponseList.get(i).getFeatureName().toLowerCase()) {
+                        case Utils.buyBankEnable:
+                            featureControlByUser.setBuyBank(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.buyDebitEnable:
+                            featureControlByUser.setBuyDebit(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.buyCreditEnable:
+                            featureControlByUser.setBuyCredit(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.buySignetEnable:
+                            featureControlByUser.setBuySignet(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.withBankEnable:
+                            featureControlByUser.setWithBank(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.withInstantEnable:
+                            featureControlByUser.setWithInstant(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.withGiftEnable:
+                            featureControlByUser.setWithGift(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.withSignetEnable:
+                            featureControlByUser.setWithSignet(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.allControlsEnable:
+                            featureControlByUser.setAllControls(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.saleOrderEnable:
+                            featureControlByUser.setSaleOrder(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.payBankEnable:
+                            featureControlByUser.setPayBank(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.payCreditEnable:
+                            featureControlByUser.setPayCredit(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.payDebitEnable:
+                            featureControlByUser.setPayDebit(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.paySignetEnable:
+                            featureControlByUser.setPaySignet(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.payEnable:
+                            featureControlByUser.setPay(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.requestEnable:
+                            featureControlByUser.setRequest(permissionResponseList.get(i).getPermission());
+                            break;
+                    }
+                }
+                if (strFrom.equals("user")) {
+                    objMyApplication.setFeatureControlByUser(featureControlByUser);
+                } else {
+                    objMyApplication.setFeatureControlGlobal(featureControlByUser);
+                }
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 

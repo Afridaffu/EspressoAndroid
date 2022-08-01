@@ -338,13 +338,18 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
-                            MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_PAY, MatomoConstants.CUSTOMER_PAY_CLICKED);
-                            convertDecimal();
-                            if (payValidation()) {
-                                isPayClick = true;
-                                pDialog = Utils.showProgressDialog(PayRequestActivity.this);
-                                cynValue = Utils.doubleParsing(payRequestET.getText().toString().trim().replace(",", ""));
-                                calculateFee(Utils.USNumberFormat(cynValue));
+                            if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()
+                                    && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
+                                MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_PAY, MatomoConstants.CUSTOMER_PAY_CLICKED);
+                                convertDecimal();
+                                if (payValidation()) {
+                                    isPayClick = true;
+                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
+                                    cynValue = Utils.doubleParsing(payRequestET.getText().toString().trim().replace(",", ""));
+                                    calculateFee(Utils.USNumberFormat(cynValue));
+                                }
+                            } else {
+                                Utils.displayAlert(getString(R.string.errormsg), PayRequestActivity.this, "", "");
                             }
                         }
                     } catch (Exception ex) {
@@ -361,15 +366,20 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                     return;
                                 }
                                 mLastClickTime = SystemClock.elapsedRealtime();
-                                convertDecimal();
-                                if (requestValidation()) {
-                                    if (Utils.doubleParsing(payRequestET.getText().toString().replace(",", "")) > 0) {
-                                        MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_REQUEST, MatomoConstants.CUSTOMER_REQUEST_CLICKED);
-                                        requestPreview();
-                                    } else {
-                                        disableButtons(true);
-                                    }
+                                if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()
+                                        && objMyApplication.getFeatureControlByUser().getRequest() != null && objMyApplication.getFeatureControlByUser().getRequest()) {
+                                    convertDecimal();
+                                    if (requestValidation()) {
+                                        if (Utils.doubleParsing(payRequestET.getText().toString().replace(",", "")) > 0) {
+                                            MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_REQUEST, MatomoConstants.CUSTOMER_REQUEST_CLICKED);
+                                            requestPreview();
+                                        } else {
+                                            disableButtons(true);
+                                        }
 
+                                    }
+                                } else {
+                                    Utils.displayAlert(getString(R.string.errormsg), PayRequestActivity.this, "", "");
                                 }
                             }
                         }

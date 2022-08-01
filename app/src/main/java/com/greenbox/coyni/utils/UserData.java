@@ -14,6 +14,9 @@ import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlByUser;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlGlobalResp;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlRespByUser;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.login.LoginResponse;
@@ -59,7 +62,7 @@ public class UserData {
     private PaymentMethodsResponse paymentMethodsResponse;
     //    WalletResponse walletResponse;
     private String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
-    private int timezoneID = 0, tempTimezoneID = 0, loginUserId,oldLoginUserID, accountType, dbaOwnerId = 0;
+    private int timezoneID = 0, tempTimezoneID = 0, loginUserId, oldLoginUserID, accountType, dbaOwnerId = 0;
     private LoginResponse loginResponse;
     private TransactionList transactionList;
     private PaymentsList selectedCard, prevSelectedCard;
@@ -99,6 +102,8 @@ public class UserData {
     private String businessUserID = "";
     private String ownerImage = "";
     private List<BatchPayoutListItems> batchPayList = new ArrayList<>();
+    private FeatureControlByUser featureControlByUser;
+    private FeatureControlByUser featureControlGlobal;
 
     public OrderPayResponse getOrderPayResponse() {
         return orderPayResponse;
@@ -742,5 +747,21 @@ public class UserData {
 
     public void setBatchPayList(List<BatchPayoutListItems> batchPayList) {
         this.batchPayList = batchPayList;
+    }
+
+    public FeatureControlByUser getFeatureControlByUser() {
+        return featureControlByUser;
+    }
+
+    public void setFeatureControlByUser(FeatureControlByUser featureControlByUser) {
+        this.featureControlByUser = featureControlByUser;
+    }
+
+    public FeatureControlByUser getFeatureControlGlobal() {
+        return featureControlGlobal;
+    }
+
+    public void setFeatureControlGlobal(FeatureControlByUser featureControlGlobal) {
+        this.featureControlGlobal = featureControlGlobal;
     }
 }

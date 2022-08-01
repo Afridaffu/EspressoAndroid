@@ -1685,30 +1685,32 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 if (action.equalsIgnoreCase("payTransaction")) {
                     if (!isAuthenticationCalled) {
                         isAuthenticationCalled = true;
-                        if (payValidation()) {
-                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
-//                                if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
-                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
-                                    Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()
+                                && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
+                            if (payValidation()) {
+                                if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
+                                    if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
+                                        Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                    } else {
+                                        startActivity(new Intent(ScanActivity.this, PINActivity.class)
+                                                .putExtra("TYPE", "ENTER")
+                                                .putExtra("screen", "Paid")
+                                                .putExtra(Utils.wallet, strScanWallet)
+                                                .putExtra(Utils.amount, strQRAmount.replace(",", "").trim()));
+
+                                    }
                                 } else {
-//                                    payTransaction();
                                     startActivity(new Intent(ScanActivity.this, PINActivity.class)
                                             .putExtra("TYPE", "ENTER")
                                             .putExtra("screen", "Paid")
                                             .putExtra(Utils.wallet, strScanWallet)
                                             .putExtra(Utils.amount, strQRAmount.replace(",", "").trim()));
-
                                 }
-                            } else {
-//                                payTransaction();
-                                startActivity(new Intent(ScanActivity.this, PINActivity.class)
-                                        .putExtra("TYPE", "ENTER")
-                                        .putExtra("screen", "Paid")
-                                        .putExtra(Utils.wallet, strScanWallet)
-                                        .putExtra(Utils.amount, strQRAmount.replace(",", "").trim()));
-                            }
-                            slideActionEnabled = false;
+                                slideActionEnabled = false;
 
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), ScanActivity.this, "", "");
                         }
                     }
                     LogUtils.v("Scan", "onDialog Clicked " + action);

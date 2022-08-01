@@ -441,6 +441,24 @@ public class Utils {
 
     public static boolean isDeploymentPopup = false;
 
+    public static final String buyBankEnable = "token account.buy tokens.external bank account";
+    public static final String buyDebitEnable = "token account.buy tokens.debit card";
+    public static final String buyCreditEnable = "token account.buy token.credit card";
+    public static final String buySignetEnable = "token account.buy token.signet account";
+    public static final String withBankEnable = "token account.withdrawals.external bank account";
+    public static final String withInstantEnable = "token account.withdrawals.instant pay";
+    public static final String withGiftEnable = "token account.withdrawals.gift card";
+    public static final String withSignetEnable = "token account.withdrawals.signet account";
+    public static final String saleOrderEnable = "token account.sale orders.token";
+    public static final String payEnable = "token account.pay/request.pay";
+    public static final String requestEnable = "token account.pay/request.request";
+    public static final String payBankEnable = "token account.payment methods.external bank account";
+    public static final String payDebitEnable = "token account.payment methods.debit card";
+    public static final String payCreditEnable = "token account.payment methods.credit card";
+    public static final String paySignetEnable = "token account.payment methods.signet account";
+    public static final String allControlsEnable = "token account.all controls";
+
+
     public static String getStrLang() {
         return strLang;
     }
