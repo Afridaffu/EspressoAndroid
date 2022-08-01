@@ -685,7 +685,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 return value = false;
             } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT && etCVV.getText().toString().equals("")) {
                 etCVV.requestFocus();
-                Utils.displayAlert("CVV is required", AddCardActivity.this, "", "");
+                Utils.displayAlert("CVV/CVC is required", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getValid()) {
 //                Utils.displayAlert("Invalid request! Please check the card and try again.", AddCardActivity.this, "", "");

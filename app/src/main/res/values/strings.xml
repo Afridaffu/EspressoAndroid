@@ -715,6 +715,59 @@
     <string name="scan_canceled">Scan canceled</string>
     <string name="enter_manually">Enter card manually</string>
     <string name="permission_denied">Camera permission denied</string>
+
+    <string name="name_on_bank_account">Name on Bank Account</string>
+    <string name="to_manually_verify_please_provide_your_bank_account_information">To manually verify, please provide your bank account information.</string>
+    <string name="manual_bank_account_verification">Manual Bank Account Verification</string>
+    <string name="routing_number">Routing Number</string>
+    <string name="biling_address_line_1">Biling Address Line 1</string>
+    <string name="checking_account_number">Checking Account Number</string>
+    <string name="confirm_account_number">Confirm Account Number</string>
+    <string name="biling_address_line_2_optional">Biling Address Line 2(Optional)</string>
+
+    <string name="thank_you_please_allow_a_few_minutes_for_the_coyni_purchase_to_be_reflected_in_your_token_account_learn_more">Thank you, please allow a few minutes for the coyni purchase to be reflected in your token account. Learn More</string>
+    <string name="view_transaction">View Transaction</string>
+    <string name="this_transaction_will_appear_on_your_statement_as_descriptor">This transaction will appear on your statement as [descriptor].</string>
+    <string name="transaction_pending">Transaction Pending</string>
+
+    <string name="read_agree_text">Please take time to read then agree to the coyni’s </string>
+    <string name="read_accept_text">By clicking this box, I acknowledge I have read and agree to the </string>
+    <string name="bank_account_verification_failed">Bank Account Verification Failed</string>
+    <string name="manual_verification">Manual Verification</string>
+    <string name="transaction_processing">Transaction Processing</string>
+    <string name="please_do_not_close_this_window">Please do not close this window</string>
+    <string name="purchase_complete">Purchase Complete</string>
+
+
+    <string name="transaction_failed">Transaction Failed</string>
+    <string name="image">Image</string>
+    <string name="we_were_unable_to_complete_your_transaction_due_to_the_reason">We were unable to complete your transaction due to the reason:</string>
+    <string name="e1234_verification_failed">[E1234 - Verification Failed]</string>
+    <string name="please_try__again">Please try again.</string>
+    <string name="account_information">Account Information</string>
+    <string name="vt">VT</string>
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="debit_card">Debit Card</string>
+    <string name="transfer_tokens">Transfer Tokens</string>
+    <string name="transfer_to_personal_business_account">Transfer to personal/business account</string>
+    <string name="transfer_funds">Transfer Funds</string>
+    <string name="transferring_to">Transferring To</string>
+    <string name="personal_token_account">Personal Token Account</string>
+    <string name="need_to_buy_some_stuff">Need to buy some stuff</string>
+    <string name="_0_00">0.00</string>
+    <string name="available_balance_text">Available Balance:</string>
+    <string name="cyn_text">CYN</string>
+    <string name="amount_error">Amount should be greater than zero.</string>
+    <string name="add_note_text">Add Note (Maximum 120 characters)</string>
+    <string name="add_note_maximum_120_characters">Add Note (Maximum 120 characters )</string>
+    <string name="transferring_from">Transferring From</string>
+    <string name="insufficient_funds_message">Seems like insufficient tokens available in your account. Please follow the prompts below to buy token.</string>
+    <string name="amount_greater_zero">Amount should be greater than zero.</string>
+    <string name="minimum_amount">"Minimum Amount is "</string>
+    <string name="amount_exceed_message">Amount exceeds transaction limit.</string>
+    <string name="oops">Oops!</string>
+
     <string name="portalType">Customer</string>
     <string name="noFeature">Feature not available</string>
     <string name="errormsg">"We're sorry but this feature is not available in your coyni account. If this is an error, please contact the coyni customer support team."</string>
