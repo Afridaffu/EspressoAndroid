@@ -207,55 +207,57 @@ public class BusinessDashboardActivity extends BaseActivity {
 //                reviewErrorMsgDialog.show();
             } else {
                 try {
-                    LogUtils.d(TAG, "onQuickMenuTabSelected");
-                    Dialog dialog = new Dialog(BusinessDashboardActivity.this);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.getWindow().setBackgroundDrawableResource(R.color.mb_transparent);
-                    dialog.setContentView(R.layout.activity_business_quick_action);
-                    Window window = dialog.getWindow();
-                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    WindowManager.LayoutParams wl = window.getAttributes();
-                    wl.gravity = Gravity.BOTTOM;
-                    wl.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                    window.setAttributes(wl);
-                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                    dialog.setCanceledOnTouchOutside(true);
-                    dialog.show();
-                    LinearLayout buyTokenLL = dialog.findViewById(R.id.buy_TokenLL);
-                    LinearLayout widthdrawtoLL = dialog.findViewById(R.id.widthdrawtoLL);
-                    LinearLayout receivePaymentLL = dialog.findViewById(R.id.receive_PaymentLL);
-                    LinearLayout llScan = dialog.findViewById(R.id.llScan);
+                    if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()) {
+                        LogUtils.d(TAG, "onQuickMenuTabSelected");
+                        Dialog dialog = new Dialog(BusinessDashboardActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.getWindow().setBackgroundDrawableResource(R.color.mb_transparent);
+                        dialog.setContentView(R.layout.activity_business_quick_action);
+                        Window window = dialog.getWindow();
+                        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                        WindowManager.LayoutParams wl = window.getAttributes();
+                        wl.gravity = Gravity.BOTTOM;
+                        wl.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                        window.setAttributes(wl);
+                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.show();
+                        LinearLayout buyTokenLL = dialog.findViewById(R.id.buy_TokenLL);
+                        LinearLayout widthdrawtoLL = dialog.findViewById(R.id.widthdrawtoLL);
+                        LinearLayout receivePaymentLL = dialog.findViewById(R.id.receive_PaymentLL);
+                        LinearLayout llScan = dialog.findViewById(R.id.llScan);
 
-                    buyTokenLL.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                            launchBuyTokens();
-                        }
-                    });
-                    widthdrawtoLL.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                            startActivity(new Intent(BusinessDashboardActivity.this, WithdrawPaymentMethodsActivity.class));
-                        }
-                    });
-                    receivePaymentLL.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                            startActivity(new Intent(BusinessDashboardActivity.this, BusinessReceivePaymentActivity.class));
-                        }
-                    });
-                    llScan.setAlpha(0.5f);
-                    llScan.setEnabled(false);
-                    llScan.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-//                            dialog.dismiss();
-//                            startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
-                        }
-                    });
+                        buyTokenLL.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                launchBuyTokens();
+                            }
+                        });
+                        widthdrawtoLL.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                startActivity(new Intent(BusinessDashboardActivity.this, WithdrawPaymentMethodsActivity.class));
+                            }
+                        });
+                        receivePaymentLL.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                startActivity(new Intent(BusinessDashboardActivity.this, BusinessReceivePaymentActivity.class));
+                            }
+                        });
+                        llScan.setAlpha(0.5f);
+                        llScan.setEnabled(false);
+                        llScan.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                            }
+                        });
+                    } else {
+                        Utils.displayAlert(getString(R.string.errormsg), BusinessDashboardActivity.this, "", "");
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -265,10 +267,6 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     public void launchBuyTokens() {
         try {
-//            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
-//                return;
-//            }
-//            mLastClickTimeQA = SystemClock.elapsedRealtime();
             Intent i = new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class);
             i.putExtra("screen", "dashboard");
             i.putExtra("menuitem", "buy");

@@ -501,11 +501,13 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-//                            ControlMethod("externalBank");
-//                            strCurrent = "externalBank";
-//                            strOnPauseScreen = "externalBank";
-                            showExternalBank();
+                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getPayBank()) {
+                            if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
+                                showExternalBank();
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), BuyTokenPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -517,11 +519,16 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
-                            strCurrent = "debit";
-                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "debit");
-                            startActivityForResult(i, 3);
+                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
+                            if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                                strCurrent = "debit";
+                                Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
+                                i.putExtra("card", "debit");
+                                startActivityForResult(i, 3);
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), BuyTokenPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -533,11 +540,16 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
-                            strCurrent = "credit";
-                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "credit");
-                            startActivityForResult(i, 3);
+                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getPayCredit()) {
+                            if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
+                                strCurrent = "credit";
+                                Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
+                                i.putExtra("card", "credit");
+                                startActivityForResult(i, 3);
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), BuyTokenPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -545,46 +557,6 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 }
             });
 
-//            lyExternalClose.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    ControlMethod("addpayment");
-//                    strCurrent = "addpayment";
-//                }
-//            });
-//
-//            cvNext.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    try {
-//                        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
-//                            isBank = true;
-//                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, WebViewActivity.class);
-//                            i.putExtra("signon", signOnData);
-//                            startActivityForResult(i, 1);
-//                        } else {
-//                            Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "", "");
-//                        }
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            });
-//
-//            tvLearnMore.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                        return;
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    try {
-//                        Utils.populateLearnMore(BuyTokenPaymentMethodsActivity.this);
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            });
             numberOfAccounts();
         } catch (Exception ex) {
             ex.printStackTrace();

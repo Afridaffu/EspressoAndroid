@@ -215,11 +215,11 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()) {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
                             if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                                 showQuickAction(DashboardActivity.this);
                             } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||

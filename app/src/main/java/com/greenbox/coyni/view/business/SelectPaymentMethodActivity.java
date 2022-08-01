@@ -50,6 +50,7 @@ import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BuyTokenActivity;
+import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.WebViewActivity;
@@ -503,11 +504,13 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-//                            ControlMethod("externalBank");
-//                            strCurrent = "externalBank";
-//                            strOnPauseScreen = "externalBank";
-                            showExternalBank();
+                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getPayBank()) {
+                            if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
+                                showExternalBank();
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), SelectPaymentMethodActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -519,11 +522,16 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
-                            strCurrent = "debit";
-                            Intent i = new Intent(SelectPaymentMethodActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "debit");
-                            startActivityForResult(i, 3);
+                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
+                            if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                                strCurrent = "debit";
+                                Intent i = new Intent(SelectPaymentMethodActivity.this, AddCardActivity.class);
+                                i.putExtra("card", "debit");
+                                startActivityForResult(i, 3);
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), SelectPaymentMethodActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -535,13 +543,18 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (!strMenu.equals("buy") && !strCurrent.equals("notokens")) {
-                            if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                                strCurrent = "signet";
-                                strOnPauseScreen = "";
-                                Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
-                                startActivityForResult(i, 2);
+                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
+                            if (!strMenu.equals("buy") && !strCurrent.equals("notokens")) {
+                                if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                                    strCurrent = "signet";
+                                    strOnPauseScreen = "";
+                                    Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
+                                    startActivityForResult(i, 2);
+                                }
                             }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), SelectPaymentMethodActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

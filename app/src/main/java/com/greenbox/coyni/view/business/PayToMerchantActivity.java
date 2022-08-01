@@ -979,7 +979,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             }
             mLastClickTime = SystemClock.elapsedRealtime();
             if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()
-                    && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
+                    && objMyApplication.getFeatureControlByUser().getSaleOrder() != null && objMyApplication.getFeatureControlByUser().getSaleOrder()) {
                 convertDecimal();
 
                 if (payValidation()) {
