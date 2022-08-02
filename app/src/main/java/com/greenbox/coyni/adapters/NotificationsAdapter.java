@@ -254,7 +254,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
 
                                 ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
                             } else {
-                                Utils.displayAlert("Amount exceeds available balance\nAvailable: " + objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + " CYN", (Activity) mContext, "", "");
+                                Utils.displayAlert("Amount exceeds available balance\nAvailable: " + Utils.convertBigDecimalUSD(String.valueOf(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount())) + " CYN", (Activity) mContext, "", "");
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
