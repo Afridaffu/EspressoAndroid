@@ -75,6 +75,8 @@ import com.greenbox.coyni.model.coynipin.StepUpResponse;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.coyniusers.CoyniUsers;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlGlobalResp;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlRespByUser;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
@@ -705,6 +707,12 @@ public interface ApiService {
 
     @POST("/api/v2/checkout/cancel-order")
     Call<CancelOrderResponse> orderCancel(@Body CancelOrderRequest request);
+
+    @GET("api/v2/feature/controls/customer/{customerId}")
+    Call<FeatureControlRespByUser> featureControlByUser(@Path("customerId") int customerId);
+
+    @GET("api/v2/feature/controls/{portalType}")
+    Call<FeatureControlGlobalResp> featureControlGlobal(@Path("portalType") String portalType);
 
 }
 

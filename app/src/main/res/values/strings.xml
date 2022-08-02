@@ -768,4 +768,7 @@
     <string name="amount_exceed_message">Amount exceeds transaction limit.</string>
     <string name="oops">Oops!</string>
 
+    <string name="portalType">Customer</string>
+    <string name="noFeature">Feature not available</string>
+    <string name="errormsg">"We're sorry but this feature is not available in your coyni account. If this is an error, please contact the coyni customer support team."</string>
 </resources>

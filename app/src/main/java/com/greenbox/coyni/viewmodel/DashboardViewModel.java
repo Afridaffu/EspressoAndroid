@@ -17,6 +17,8 @@ import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.activtity_log.ActivityLogResp;
 import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlGlobalResp;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlRespByUser;
 import com.greenbox.coyni.model.identity_verification.LatestTransactionsRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -72,6 +74,8 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<DownloadImageResponse> downloadUrlResponse = new MutableLiveData<>();
     private MutableLiveData<DownloadDocumentResponse> downloadDocumentResponse = new MutableLiveData<>();
     private MutableLiveData<ActivityLogResp> activityLogRespMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<FeatureControlRespByUser> featureControlRespByUserMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<FeatureControlGlobalResp> featureControlGlobalRespMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<LatestTxnResponse> getGetUserLatestTxns() {
         return getUserLatestTxns;
@@ -141,10 +145,6 @@ public class DashboardViewModel extends AndroidViewModel {
         return profileMutableLiveData;
     }
 
-//    public MutableLiveData<WalletResponse> getWalletResponseMutableLiveData() {
-//        return walletResponseMutableLiveData;
-//    }
-
     public MutableLiveData<Preferences> getPreferenceMutableLiveData() {
         return preferenceMutableLiveData;
     }
@@ -167,6 +167,14 @@ public class DashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<RefundDataResponce> getRefundProcessMutableLiveData() {
         return refundProcessMutableLiveData;
+    }
+
+    public MutableLiveData<FeatureControlRespByUser> getFeatureControlRespByUserMutableLiveData() {
+        return featureControlRespByUserMutableLiveData;
+    }
+
+    public MutableLiveData<FeatureControlGlobalResp> getFeatureControlGlobalRespMutableLiveData() {
+        return featureControlGlobalRespMutableLiveData;
     }
 
     public void meProfile() {
@@ -984,6 +992,84 @@ public class DashboardViewModel extends AndroidViewModel {
                 activityLogRespMutableLiveData.setValue(null);
             }
         });
+    }
+
+    public void getFeatureControlByUser(int customerId) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<FeatureControlRespByUser> mCall = apiService.featureControlByUser(customerId);
+            mCall.enqueue(new Callback<FeatureControlRespByUser>() {
+                @Override
+                public void onResponse(Call<FeatureControlRespByUser> call, Response<FeatureControlRespByUser> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            FeatureControlRespByUser obj = response.body();
+                            featureControlRespByUserMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<FeatureControlRespByUser>() {
+                            }.getType();
+                            FeatureControlRespByUser errorResponse = null;
+                            try {
+                                errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            featureControlRespByUserMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        featureControlRespByUserMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<FeatureControlRespByUser> call, Throwable t) {
+                    featureControlRespByUserMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getFeatureControlGlobal(String portalType) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<FeatureControlGlobalResp> mCall = apiService.featureControlGlobal(portalType);
+            mCall.enqueue(new Callback<FeatureControlGlobalResp>() {
+                @Override
+                public void onResponse(Call<FeatureControlGlobalResp> call, Response<FeatureControlGlobalResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            FeatureControlGlobalResp obj = response.body();
+                            featureControlGlobalRespMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<FeatureControlRespByUser>() {
+                            }.getType();
+                            FeatureControlGlobalResp errorResponse = null;
+                            try {
+                                errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            featureControlGlobalRespMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        featureControlGlobalRespMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<FeatureControlGlobalResp> call, Throwable t) {
+                    featureControlGlobalRespMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 

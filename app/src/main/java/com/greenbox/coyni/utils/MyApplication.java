@@ -13,6 +13,9 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlByUser;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlGlobalResp;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlRespByUser;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.IdentityVerificationBindingLayoutActivity;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
@@ -672,10 +675,6 @@ public class MyApplication extends Application {
         mCurrentUserData.setAccountType(accountType);
     }
 
-//    public WalletResponseData getWalletResponseData() {
-//        return mCurrentUserData.getWalletResponseData();
-//    }
-
     public void setWalletResponseData(WalletResponseData walletResponseData) {
         if (walletResponseData.getWalletNames().size() > 0) {
             if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
@@ -945,6 +944,22 @@ public class MyApplication extends Application {
 
     public void setBatchPayList(List<BatchPayoutListItems> batchPayList) {
         mCurrentUserData.setBatchPayList(batchPayList);
+    }
+
+    public FeatureControlByUser getFeatureControlByUser() {
+        return mCurrentUserData.getFeatureControlByUser();
+    }
+
+    public void setFeatureControlByUser(FeatureControlByUser featureControlByUser) {
+        mCurrentUserData.setFeatureControlByUser(featureControlByUser);
+    }
+
+    public FeatureControlByUser getFeatureControlGlobal() {
+        return mCurrentUserData.getFeatureControlGlobal();
+    }
+
+    public void setFeatureControlGlobal(FeatureControlByUser featureControlGlobal) {
+        mCurrentUserData.setFeatureControlGlobal(featureControlGlobal);
     }
 
 }

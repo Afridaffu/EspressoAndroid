@@ -252,8 +252,6 @@ public class BusinessDashboardActivity extends BaseActivity {
                     llScan.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                            dialog.dismiss();
-//                            startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
                         }
                     });
                 } catch (Exception ex) {
@@ -265,10 +263,6 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     public void launchBuyTokens() {
         try {
-//            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
-//                return;
-//            }
-//            mLastClickTimeQA = SystemClock.elapsedRealtime();
             Intent i = new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class);
             i.putExtra("screen", "dashboard");
             i.putExtra("menuitem", "buy");

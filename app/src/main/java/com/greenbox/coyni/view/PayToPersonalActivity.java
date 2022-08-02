@@ -66,7 +66,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     Double pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0, total = 0.0, cynValue = 0.0, avaBal = 0.0;
     String strUserName = "", strAddress = "";
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
-    Boolean isAuthenticationCalled = false, isPayCalled = false;
+    Boolean isAuthenticationCalled = false, isPayCalled = false, isPermisson = false;
     TextView tvCurrency, tvAmount, tvCYN, tvBalance, tv_lable_verify;
     AnimatedGradientTextView tvLable;
     MotionLayout paySlideToConfirm;
@@ -94,7 +94,6 @@ public class PayToPersonalActivity extends AppCompatActivity {
             case RESULT_OK:
             case 235: {
                 try {
-//                    payTransaction();
                     pDialog = Utils.showProgressDialog(PayToPersonalActivity.this);
                     BiometricTokenRequest request = new BiometricTokenRequest();
                     request.setDeviceId(Utils.getDeviceID());
@@ -122,43 +121,6 @@ public class PayToPersonalActivity extends AppCompatActivity {
         }
     }
 
-//    public void setFaceLock() {
-//        try {
-//            isFaceLock = false;
-//            String value = dbHandler.getFacePinLock();
-//            if (value != null && value.equals("true")) {
-//                isFaceLock = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isFaceLock = false;
-//                objMyApplication.setLocalBiometric(false);
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    public void setTouchId() {
-//        try {
-//            isTouchId = false;
-//            String value = dbHandler.getThumbPinLock();
-//            if (value != null && value.equals("true")) {
-//                isTouchId = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isTouchId = false;
-////                objMyApplication.setLocalBiometric(false);
-//                if (!isFaceLock) {
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     private void initialization() {
         try {
             objMyApplication = (MyApplication) getApplicationContext();
@@ -178,6 +140,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             paySlideToConfirm = findViewById(R.id.paySlideToConfirm);
             imgConvert = findViewById(R.id.imgConvert);
             isPayCalled = false;
+            isPermisson = false;
             cvLock = findViewById(R.id.im_lock_);
             im_lock = findViewById(R.id.im_lock);
             tvBalance.setText("Available: " + Utils.USNumberFormat(objMyApplication.getGBTBalance()) + "CYN");
@@ -215,20 +178,27 @@ public class PayToPersonalActivity extends AppCompatActivity {
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
                     try {
                         if (progress > Utils.slidePercentage) {
-                            cvLock.setAlpha(1.0f);
-                            motionLayout.setTransition(R.id.middle, R.id.end);
-                            motionLayout.transitionToState(motionLayout.getEndState());
-                            paySlideToConfirm.setInteractionEnabled(false);
-//                            tvLable.setText("Verifying");
-//                            tvLable.setVisibility(View.GONE);
-//                            tv_lable_verify.setVisibility(View.VISIBLE);
-                            if (!isPayCalled) {
-                                tvLable.setText("Verifying");
-                                isPayCalled = true;
-                                if (payValidation()) {
-                                    pDialog = Utils.showProgressDialog(PayToPersonalActivity.this);
-                                    cynValue = Utils.doubleParsing(tvAmount.getText().toString().trim().replace(",", ""));
-                                    calculateFee(Utils.USNumberFormat(cynValue));
+                            if (objMyApplication.getFeatureControlGlobal().getPay() != null && objMyApplication.getFeatureControlGlobal().getPay()
+                                    && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
+                                cvLock.setAlpha(1.0f);
+                                motionLayout.setTransition(R.id.middle, R.id.end);
+                                motionLayout.transitionToState(motionLayout.getEndState());
+                                paySlideToConfirm.setInteractionEnabled(false);
+                                if (!isPayCalled) {
+                                    tvLable.setText("Verifying");
+                                    isPayCalled = true;
+                                    if (payValidation()) {
+                                        pDialog = Utils.showProgressDialog(PayToPersonalActivity.this);
+                                        cynValue = Utils.doubleParsing(tvAmount.getText().toString().trim().replace(",", ""));
+                                        calculateFee(Utils.USNumberFormat(cynValue));
+                                    }
+                                }
+                            } else {
+                                if (!isPermisson) {
+                                    isPermisson = true;
+                                    changeSlideState();
+                                    cvLock.setAlpha(0f);
+                                    Utils.displayAlert(getString(R.string.errormsg), PayToPersonalActivity.this, "", "");
                                 }
                             }
                         }
@@ -271,8 +241,6 @@ public class PayToPersonalActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             });
-//            setFaceLock();
-//            setTouchId();
 
             objMyApplication.initializeDBHandler(PayToPersonalActivity.this);
             isFaceLock = objMyApplication.setFaceLock();

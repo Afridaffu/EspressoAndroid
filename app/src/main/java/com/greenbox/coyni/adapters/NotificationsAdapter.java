@@ -29,6 +29,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.swipelayout.RecyclerSwipeAdapter;
 import com.greenbox.coyni.utils.swipelayout.SwipeLayout;
 import com.greenbox.coyni.view.NotificationsActivity;
+import com.greenbox.coyni.view.PayRequestActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,12 +60,6 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
     @Override
     public void onBindViewHolder(@NonNull NotificationsAdapter.MyViewHolder holder, int position) {
         try {
-//            holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-//            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
-//            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
-//            holder.tvNotifDate.setPadding(40, 30, 0, 0);
-//            holder.swipeLayout.close();
-
             if (notifications.get(position).getType().equals("Notification")) {
                 holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
                 holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
@@ -243,18 +238,22 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
                             Log.e("payLL", "payLL");
+                            if (objMyApplication.getFeatureControlGlobal().getPay() != null && objMyApplication.getFeatureControlGlobal().getPay()
+                                    && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
+                                if (notifications.get(position).getAmount() <= objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount()) {
+                                    ((NotificationsActivity) mContext).selectedRow = position + "";
 
-                            if (notifications.get(position).getAmount() <= objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount()) {
-                                ((NotificationsActivity) mContext).selectedRow = position + "";
+                                    TransferPayRequest request = new TransferPayRequest();
+                                    request.setTokens(Utils.convertTwoDecimal(notifications.get(position).getAmount().toString()));
+                                    request.setRemarks(notifications.get(position).getRemarks());
+                                    request.setRecipientWalletId(notifications.get(position).getRequesterWalletId());
 
-                                TransferPayRequest request = new TransferPayRequest();
-                                request.setTokens(Utils.convertTwoDecimal(notifications.get(position).getAmount().toString()));
-                                request.setRemarks(notifications.get(position).getRemarks());
-                                request.setRecipientWalletId(notifications.get(position).getRequesterWalletId());
-
-                                ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
+                                    ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
+                                } else {
+                                    Utils.displayAlert("Amount exceeds available balance\nAvailable: " + objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + " CYN", (Activity) mContext, "", "");
+                                }
                             } else {
-                                Utils.displayAlert("Amount exceeds available balance\nAvailable: " + Utils.convertBigDecimalUSD(String.valueOf(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount())) + " CYN", (Activity) mContext, "", "");
+                                Utils.displayAlert(mContext.getString(R.string.errormsg), ((NotificationsActivity) mContext), "", "");
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -296,15 +295,20 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
                             Log.e("remindLL", "remindLL");
-                            ((NotificationsActivity) mContext).selectedRow = position + "";
+                            if (objMyApplication.getFeatureControlGlobal().getRequest() != null && objMyApplication.getFeatureControlGlobal().getRequest()
+                                    && objMyApplication.getFeatureControlByUser().getRequest() != null && objMyApplication.getFeatureControlByUser().getRequest()) {
+                                ((NotificationsActivity) mContext).selectedRow = position + "";
 
-                            StatusRequest statusRequest = new StatusRequest();
-                            statusRequest.setId(notifications.get(position).getId());
-                            statusRequest.setStatus("Remind");
-                            statusRequest.setRemarks("");
-                            ((NotificationsActivity) mContext).updatedStatus = "Remind";
+                                StatusRequest statusRequest = new StatusRequest();
+                                statusRequest.setId(notifications.get(position).getId());
+                                statusRequest.setStatus("Remind");
+                                statusRequest.setRemarks("");
+                                ((NotificationsActivity) mContext).updatedStatus = "Remind";
 
-                            ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                                ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                            } else {
+                                Utils.displayAlert(mContext.getString(R.string.errormsg), ((NotificationsActivity) mContext), "", "");
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -384,15 +388,20 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
                             Log.e("remindLL", "remindLL");
-                            ((NotificationsActivity) mContext).selectedRow = position + "";
+                            if (objMyApplication.getFeatureControlGlobal().getRequest() != null && objMyApplication.getFeatureControlGlobal().getRequest()
+                                    && objMyApplication.getFeatureControlByUser().getRequest() != null && objMyApplication.getFeatureControlByUser().getRequest()) {
+                                ((NotificationsActivity) mContext).selectedRow = position + "";
 
-                            StatusRequest statusRequest = new StatusRequest();
-                            statusRequest.setId(notifications.get(position).getId());
-                            statusRequest.setStatus("Remind");
-                            statusRequest.setRemarks("");
-                            ((NotificationsActivity) mContext).updatedStatus = "Remind";
+                                StatusRequest statusRequest = new StatusRequest();
+                                statusRequest.setId(notifications.get(position).getId());
+                                statusRequest.setStatus("Remind");
+                                statusRequest.setRemarks("");
+                                ((NotificationsActivity) mContext).updatedStatus = "Remind";
 
-                            ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                                ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                            } else {
+                                Utils.displayAlert(mContext.getString(R.string.errormsg), ((NotificationsActivity) mContext), "", "");
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

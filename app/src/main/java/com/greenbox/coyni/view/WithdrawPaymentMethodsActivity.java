@@ -1068,10 +1068,15 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        MatomoUtility.getInstance().trackEvent(MatomoConstants.GIFT_CARD, MatomoConstants.GIFT_CARD_CLICKED);
-                        strCurrent = "";
-                        strScreen = "";
-                        startActivity(new Intent(WithdrawPaymentMethodsActivity.this, GiftCardActivity.class));
+                        if (objMyApplication.getFeatureControlGlobal().getWithBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getWithBank() && objMyApplication.getFeatureControlByUser().getWithBank()) {
+                            MatomoUtility.getInstance().trackEvent(MatomoConstants.GIFT_CARD, MatomoConstants.GIFT_CARD_CLICKED);
+                            strCurrent = "";
+                            strScreen = "";
+                            startActivity(new Intent(WithdrawPaymentMethodsActivity.this, GiftCardActivity.class));
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

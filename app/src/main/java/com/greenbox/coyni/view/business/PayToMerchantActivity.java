@@ -62,6 +62,7 @@ import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.GiftCardBindingLayoutActivity;
 import com.greenbox.coyni.view.PINActivity;
+import com.greenbox.coyni.view.PayToPersonalActivity;
 import com.greenbox.coyni.view.WithdrawTokenActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
@@ -977,25 +978,19 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 return;
             }
             mLastClickTime = SystemClock.elapsedRealtime();
-            convertDecimal();
+            if (objMyApplication.getFeatureControlGlobal().getSaleOrder() != null && objMyApplication.getFeatureControlGlobal().getSaleOrder()
+                    && objMyApplication.getFeatureControlByUser().getSaleOrder() != null && objMyApplication.getFeatureControlByUser().getSaleOrder()) {
+                convertDecimal();
 
-            if (payValidation()) {
-                isPayClick = true;
-                pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
-                cynValue = Utils.doubleParsing(payET.getText().toString().trim().replace(",", ""));
-                calculateFee(Utils.USNumberFormat(cynValue));
+                if (payValidation()) {
+                    isPayClick = true;
+                    pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
+                    cynValue = Utils.doubleParsing(payET.getText().toString().trim().replace(",", ""));
+                    calculateFee(Utils.USNumberFormat(cynValue));
+                }
+            } else {
+                Utils.displayAlert(getString(R.string.errormsg), PayToMerchantActivity.this, "", "");
             }
-//                                if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-//                                    isPayClick = true;
-//                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
-//                                    cynValue = Utils.doubleParsing(payRequestET.getText().toString().trim().replace(",", ""));
-//                                    calculateFee(Utils.USNumberFormat(cynValue));
-//                                } else {
-//                                    objMyApplication.setStrScreen("payRequest");
-//                                    Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
-//                                    i.putExtra("screen", "payRequest");
-//                                    startActivity(i);
-//                                }
         }
     }
 
