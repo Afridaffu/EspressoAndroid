@@ -418,9 +418,14 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                            ControlMethod("externalBank");
-                            strCurrent = "externalBank";
+                        if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
+                            if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
+                                ControlMethod("externalBank");
+                                strCurrent = "externalBank";
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), BusinessPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -432,10 +437,15 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                            strCurrent = "signet";
-                            Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-                            startActivityForResult(i, 2);
+                        if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
+                            if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                                strCurrent = "signet";
+                                Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                                startActivityForResult(i, 2);
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), BusinessPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -447,12 +457,16 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-//                        if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
-                        if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
-                            strCurrent = "debit";
-                            Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "debit");
-                            startActivityForResult(i, 3);
+                        if (objMyApplication.getFeatureControlGlobal().getPayDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayDebit() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
+                            if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                                strCurrent = "debit";
+                                Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddCardActivity.class);
+                                i.putExtra("card", "debit");
+                                startActivityForResult(i, 3);
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), BusinessPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

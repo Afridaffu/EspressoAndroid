@@ -185,12 +185,6 @@ public class PaymentMethodsActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         try {
-//            if (extBankDialog != null) {
-//                extBankDialog.dismiss();
-//            }
-//            if (dialog != null) {
-//                dialog.dismiss();
-//            }
             if (!isBankSuccess) {
                 if (strCurrent.equals("firstError")) {
                     displayError();
@@ -441,10 +435,13 @@ public class PaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-//                            ControlMethod("externalBank");
-//                            strCurrent = "externalBank";
-                            showExternalBank("");
+                        if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
+                            if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
+                                showExternalBank("");
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), PaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -456,11 +453,16 @@ public class PaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
-                            strCurrent = "debit";
-                            Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "debit");
-                            startActivityForResult(i, 3);
+                        if (objMyApplication.getFeatureControlGlobal().getPayDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayDebit() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
+                            if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                                strCurrent = "debit";
+                                Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
+                                i.putExtra("card", "debit");
+                                startActivityForResult(i, 3);
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), PaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -472,11 +474,16 @@ public class PaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
-                            strCurrent = "credit";
-                            Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "credit");
-                            startActivityForResult(i, 3);
+                        if (objMyApplication.getFeatureControlGlobal().getPayCredit() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayCredit() && objMyApplication.getFeatureControlByUser().getPayCredit()) {
+                            if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
+                                strCurrent = "credit";
+                                Intent i = new Intent(PaymentMethodsActivity.this, AddCardActivity.class);
+                                i.putExtra("card", "credit");
+                                startActivityForResult(i, 3);
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), PaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -484,51 +491,6 @@ public class PaymentMethodsActivity extends BaseActivity {
                 }
             });
 
-//            lyExternalClose.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    ControlMethod("addpayment");
-//                    strCurrent = "addpayment";
-//                }
-//            });
-//
-//            cvNext.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    try {
-//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                            return;
-//                        }
-//                        mLastClickTime = SystemClock.elapsedRealtime();
-//
-//                        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
-//                            isBank = true;
-//                            Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
-//                            i.putExtra("signon", signOnData);
-//                            startActivityForResult(i, 1);
-//                        } else {
-//                            Utils.displayAlert(strSignOn, PaymentMethodsActivity.this, "", "");
-//                        }
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            });
-//
-//            tvLearnMore.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                        return;
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    try {
-//                        Utils.populateLearnMore(PaymentMethodsActivity.this);
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            });
             numberOfAccounts();
         } catch (
                 Exception ex) {
