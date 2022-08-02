@@ -338,7 +338,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
-                            if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()
+                            if (objMyApplication.getFeatureControlGlobal().getPay() != null && objMyApplication.getFeatureControlGlobal().getPay()
                                     && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
                                 MatomoUtility.getInstance().trackEvent(MatomoConstants.CUSTOMER_PAY, MatomoConstants.CUSTOMER_PAY_CLICKED);
                                 convertDecimal();
@@ -366,7 +366,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                     return;
                                 }
                                 mLastClickTime = SystemClock.elapsedRealtime();
-                                if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()
+                                if (objMyApplication.getFeatureControlGlobal().getRequest() != null && objMyApplication.getFeatureControlGlobal().getRequest()
                                         && objMyApplication.getFeatureControlByUser().getRequest() != null && objMyApplication.getFeatureControlByUser().getRequest()) {
                                     convertDecimal();
                                     if (requestValidation()) {

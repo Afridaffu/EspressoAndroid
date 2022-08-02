@@ -96,8 +96,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                 switch (strScreen) {
                     case "selectpay":
                     case "buytoken": {
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                && (!objMyApplication.getFeatureControlGlobal().getAllControls() || !objMyApplication.getFeatureControlByUser().getBuyBank())) {
+                        if (objMyApplication.getFeatureControlGlobal().getBuyBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                && (!objMyApplication.getFeatureControlGlobal().getBuyBank() || !objMyApplication.getFeatureControlByUser().getBuyBank())) {
                             holder.layoutError.setVisibility(View.VISIBLE);
                             holder.imgPayMethod.setAlpha(0.5f);
                             holder.tvError.setText(mContext.getString(R.string.noFeature));
@@ -114,9 +114,10 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     }
                     break;
                     case "withdrawtoken":
-                    case "wdrawtoken": {
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                && (!objMyApplication.getFeatureControlGlobal().getAllControls() || !objMyApplication.getFeatureControlByUser().getWithBank())) {
+                    case "wdrawtoken":
+                    case "withdraw": {
+                        if (objMyApplication.getFeatureControlGlobal().getWithBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                && (!objMyApplication.getFeatureControlGlobal().getWithBank() || !objMyApplication.getFeatureControlByUser().getWithBank())) {
                             holder.layoutError.setVisibility(View.VISIBLE);
                             holder.imgPayMethod.setAlpha(0.5f);
                             holder.tvError.setText(mContext.getString(R.string.noFeature));
@@ -168,8 +169,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                 switch (strScreen) {
                     case "selectpay":
                     case "buytoken": {
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                && (!objMyApplication.getFeatureControlGlobal().getAllControls() || !objMyApplication.getFeatureControlByUser().getBuySignet())) {
+                        if (objMyApplication.getFeatureControlGlobal().getBuySignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                && (!objMyApplication.getFeatureControlGlobal().getBuySignet() || !objMyApplication.getFeatureControlByUser().getBuySignet())) {
                             holder.layoutError.setVisibility(View.VISIBLE);
                             holder.imgPayMethod.setAlpha(0.5f);
                             holder.tvError.setText(mContext.getString(R.string.noFeature));
@@ -186,9 +187,10 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     }
                     break;
                     case "withdrawtoken":
-                    case "wdrawtoken": {
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                && (!objMyApplication.getFeatureControlGlobal().getAllControls() || !objMyApplication.getFeatureControlByUser().getWithSignet())) {
+                    case "wdrawtoken":
+                    case "withdraw": {
+                        if (objMyApplication.getFeatureControlGlobal().getWithSignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                && (!objMyApplication.getFeatureControlGlobal().getWithSignet() || !objMyApplication.getFeatureControlByUser().getWithSignet())) {
                             holder.layoutError.setVisibility(View.VISIBLE);
                             holder.imgPayMethod.setAlpha(0.5f);
                             holder.tvError.setText(mContext.getString(R.string.noFeature));
@@ -239,8 +241,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     case "selectpay":
                     case "buytoken": {
                         if (objData.getCardType().toLowerCase().equals("debit")) {
-                            if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                    && (!objMyApplication.getFeatureControlGlobal().getAllControls() || !objMyApplication.getFeatureControlByUser().getBuyDebit())) {
+                            if (objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                    && (!objMyApplication.getFeatureControlGlobal().getBuyDebit() || !objMyApplication.getFeatureControlByUser().getBuyDebit())) {
                                 holder.layoutError.setVisibility(View.VISIBLE);
                                 holder.imgPayMethod.setAlpha(0.5f);
                                 holder.tvError.setText(mContext.getString(R.string.noFeature));
@@ -255,8 +257,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 }
                             }
                         } else {
-                            if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                    && (!objMyApplication.getFeatureControlGlobal().getAllControls() || !objMyApplication.getFeatureControlByUser().getBuyCredit())) {
+                            if (objMyApplication.getFeatureControlGlobal().getBuyCredit() != null && objMyApplication.getFeatureControlByUser() != null
+                                    && (!objMyApplication.getFeatureControlGlobal().getBuyCredit() || !objMyApplication.getFeatureControlByUser().getBuyCredit())) {
                                 holder.layoutError.setVisibility(View.VISIBLE);
                                 holder.imgPayMethod.setAlpha(0.5f);
                                 holder.tvError.setText(mContext.getString(R.string.noFeature));
@@ -275,9 +277,10 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     }
                     break;
                     case "withdrawtoken":
-                    case "wdrawtoken": {
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                && (!objMyApplication.getFeatureControlGlobal().getAllControls() || !objMyApplication.getFeatureControlByUser().getWithSignet())) {
+                    case "wdrawtoken":
+                    case "withdraw": {
+                        if (objMyApplication.getFeatureControlGlobal().getWithSignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                && (!objMyApplication.getFeatureControlGlobal().getWithSignet() || !objMyApplication.getFeatureControlByUser().getWithSignet())) {
                             holder.layoutError.setVisibility(View.VISIBLE);
                             holder.imgPayMethod.setImageResource(R.drawable.ic_bank_account_inactive);
                             holder.tvError.setText(mContext.getString(R.string.noFeature));
@@ -337,8 +340,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 objMyApplication.setSelectedCard(objData);
 //                                if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
                                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                                    if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                            && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getBuyBank()) {
+                                    if (objMyApplication.getFeatureControlGlobal().getBuyBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getBuyBank() && objMyApplication.getFeatureControlByUser().getBuyBank()) {
                                         if (!objData.getRelink()) {
                                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                                                 ((BuyTokenPaymentMethodsActivity) mContext).bindSelectedBank();
@@ -354,8 +357,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                         }
                                     }
                                 } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
-                                    if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                            && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getBuySignet()) {
+                                    if (objMyApplication.getFeatureControlGlobal().getBuySignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getBuySignet() && objMyApplication.getFeatureControlByUser().getBuySignet()) {
                                         if (!objData.getRelink()) {
                                             ((SelectPaymentMethodActivity) mContext).bindSelectedBank();
                                         } else {
@@ -364,8 +367,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                     }
                                 } else {
                                     if (objData.getCardType().toLowerCase().equals("debit")) {
-                                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getBuyDebit()) {
+                                        if (objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                                && objMyApplication.getFeatureControlGlobal().getBuyDebit() && objMyApplication.getFeatureControlByUser().getBuyDebit()) {
                                             if (!objData.getExpired()) {
                                                 ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
                                             } else {
@@ -373,8 +376,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                             }
                                         }
                                     } else {
-                                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getBuyCredit()) {
+                                        if (objMyApplication.getFeatureControlGlobal().getBuyCredit() != null && objMyApplication.getFeatureControlByUser() != null
+                                                && objMyApplication.getFeatureControlGlobal().getBuyCredit() && objMyApplication.getFeatureControlByUser().getBuyCredit()) {
                                             if (!objData.getExpired()) {
                                                 ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
                                             } else {
@@ -393,15 +396,23 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                 objMyApplication.setSelectedCard(objData);
                                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                                    if (!objData.getRelink()) {
-                                        ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdrawtoken");
-                                    } else {
-                                        ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                    if (objMyApplication.getFeatureControlGlobal().getWithBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getWithBank() && objMyApplication.getFeatureControlByUser().getWithBank()) {
+                                        if (!objData.getRelink()) {
+                                            ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdrawtoken");
+                                        } else {
+                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                        }
                                     }
-                                } else if (!objData.getExpired()) {
-                                    ((WithdrawPaymentMethodsActivity) mContext).bindSelectedCard("withdrawtoken");
                                 } else {
-                                    ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                    if (objMyApplication.getFeatureControlGlobal().getWithInstant() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getWithInstant() && objMyApplication.getFeatureControlByUser().getWithInstant()) {
+                                        if (!objData.getExpired()) {
+                                            ((WithdrawPaymentMethodsActivity) mContext).bindSelectedCard("withdrawtoken");
+                                        } else {
+                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                        }
+                                    }
                                 }
                                 break;
                             case "buytoken":
@@ -411,8 +422,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
 //                                    objMyApplication.setSelectedCard(objData);
 //                                    notifyDataSetChanged();
                                     if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getBuyBank()) {
+                                        if (objMyApplication.getFeatureControlGlobal().getBuyBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                                && objMyApplication.getFeatureControlGlobal().getBuyBank() && objMyApplication.getFeatureControlByUser().getBuyBank()) {
                                             objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                             objMyApplication.setSelectedCard(objData);
                                             notifyDataSetChanged();
@@ -423,8 +434,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                             }
                                         }
                                     } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
-                                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getBuySignet()) {
+                                        if (objMyApplication.getFeatureControlGlobal().getBuySignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                                && objMyApplication.getFeatureControlGlobal().getBuySignet() && objMyApplication.getFeatureControlByUser().getBuySignet()) {
                                             objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                             objMyApplication.setSelectedCard(objData);
                                             notifyDataSetChanged();
@@ -436,8 +447,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                         }
                                     } else {
                                         if (objData.getCardType().toLowerCase().equals("debit")) {
-                                            if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                                    && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getBuyDebit()) {
+                                            if (objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                                    && objMyApplication.getFeatureControlGlobal().getBuyDebit() && objMyApplication.getFeatureControlByUser().getBuyDebit()) {
                                                 objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                                 objMyApplication.setSelectedCard(objData);
                                                 notifyDataSetChanged();
@@ -448,8 +459,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                                 }
                                             }
                                         } else {
-                                            if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                                    && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getBuyCredit()) {
+                                            if (objMyApplication.getFeatureControlGlobal().getBuyCredit() != null && objMyApplication.getFeatureControlByUser() != null
+                                                    && objMyApplication.getFeatureControlGlobal().getBuyCredit() && objMyApplication.getFeatureControlByUser().getBuyCredit()) {
                                                 objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                                 objMyApplication.setSelectedCard(objData);
                                                 notifyDataSetChanged();
@@ -475,33 +486,66 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                 objMyApplication.setSelectedCard(objData);
                                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                                    if (!objData.getRelink()) {
-                                        ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdraw");
-                                    } else {
-                                        ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                    if (objMyApplication.getFeatureControlGlobal().getWithBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getWithBank() && objMyApplication.getFeatureControlByUser().getWithBank()) {
+                                        if (!objData.getRelink()) {
+                                            ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdraw");
+                                        } else {
+                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                        }
                                     }
-                                } else if (!objData.getExpired()) {
-                                    ((WithdrawPaymentMethodsActivity) mContext).bindSelectedCard("withdraw");
                                 } else {
-                                    ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                    if (objMyApplication.getFeatureControlGlobal().getWithInstant() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getWithInstant() && objMyApplication.getFeatureControlByUser().getWithInstant()) {
+                                        if (!objData.getExpired()) {
+                                            ((WithdrawPaymentMethodsActivity) mContext).bindSelectedCard("withdraw");
+                                        } else {
+                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                        }
+                                    }
                                 }
                                 break;
                             case "wdrawtoken":
                                 if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
-                                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                                    objMyApplication.setSelectedCard(objData);
-                                    notifyDataSetChanged();
-                                    if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
-                                        if (!objData.getRelink()) {
-                                            ((WithdrawTokenActivity) mContext).bindSelectedBank(objData);
-                                        } else {
-                                            ((WithdrawTokenActivity) mContext).expiry();
+//                                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+//                                    objMyApplication.setSelectedCard(objData);
+//                                    notifyDataSetChanged();
+//                                    if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                                    if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                        if (objMyApplication.getFeatureControlGlobal().getWithBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                                && objMyApplication.getFeatureControlGlobal().getWithBank() && objMyApplication.getFeatureControlByUser().getWithBank()) {
+                                            objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                                            objMyApplication.setSelectedCard(objData);
+                                            notifyDataSetChanged();
+                                            if (!objData.getRelink()) {
+                                                ((WithdrawTokenActivity) mContext).bindSelectedBank(objData);
+                                            } else {
+                                                ((WithdrawTokenActivity) mContext).expiry();
+                                            }
+                                        }
+                                    } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                                        if (objMyApplication.getFeatureControlGlobal().getWithSignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                                && objMyApplication.getFeatureControlGlobal().getWithSignet() && objMyApplication.getFeatureControlByUser().getWithSignet()) {
+                                            objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                                            objMyApplication.setSelectedCard(objData);
+                                            notifyDataSetChanged();
+                                            if (!objData.getRelink()) {
+                                                ((WithdrawTokenActivity) mContext).bindSelectedBank(objData);
+                                            } else {
+                                                ((WithdrawTokenActivity) mContext).expiry();
+                                            }
                                         }
                                     } else {
-                                        if (!objData.getExpired()) {
-                                            ((WithdrawTokenActivity) mContext).bindSelectedCard(objData);
-                                        } else {
-                                            ((WithdrawTokenActivity) mContext).expiry();
+                                        if (objMyApplication.getFeatureControlGlobal().getWithInstant() != null && objMyApplication.getFeatureControlByUser() != null
+                                                && objMyApplication.getFeatureControlGlobal().getWithInstant() && objMyApplication.getFeatureControlByUser().getWithInstant()) {
+                                            objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                                            objMyApplication.setSelectedCard(objData);
+                                            notifyDataSetChanged();
+                                            if (!objData.getExpired()) {
+                                                ((WithdrawTokenActivity) mContext).bindSelectedCard(objData);
+                                            } else {
+                                                ((WithdrawTokenActivity) mContext).expiry();
+                                            }
                                         }
                                     }
                                 }

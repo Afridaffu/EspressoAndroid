@@ -501,8 +501,8 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getPayBank()) {
+                        if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
                                 showExternalBank();
                             }
@@ -519,8 +519,8 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
+                        if (objMyApplication.getFeatureControlGlobal().getPayDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayDebit() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
                             if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
                                 strCurrent = "debit";
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
@@ -540,8 +540,8 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getPayCredit()) {
+                        if (objMyApplication.getFeatureControlGlobal().getPayCredit() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayCredit() && objMyApplication.getFeatureControlByUser().getPayCredit()) {
                             if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
                                 strCurrent = "credit";
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);

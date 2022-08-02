@@ -219,16 +219,12 @@ public class DashboardActivity extends BaseActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()) {
-                            if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                                showQuickAction(DashboardActivity.this);
-                            } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                                    objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
-                                    objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                                Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
-                            }
-                        } else {
-                            Utils.displayAlert(getString(R.string.errormsg), DashboardActivity.this, "", "");
+                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                            showQuickAction(DashboardActivity.this);
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                            Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

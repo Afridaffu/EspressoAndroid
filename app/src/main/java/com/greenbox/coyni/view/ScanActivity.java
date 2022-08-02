@@ -1685,7 +1685,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 if (action.equalsIgnoreCase("payTransaction")) {
                     if (!isAuthenticationCalled) {
                         isAuthenticationCalled = true;
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()
+                        if (objMyApplication.getFeatureControlGlobal().getPay() != null && objMyApplication.getFeatureControlGlobal().getPay()
                                 && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
                             if (payValidation()) {
                                 if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {

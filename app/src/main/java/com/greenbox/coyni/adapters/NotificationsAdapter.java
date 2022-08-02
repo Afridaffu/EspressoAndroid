@@ -238,7 +238,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
                             Log.e("payLL", "payLL");
-                            if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()
+                            if (objMyApplication.getFeatureControlGlobal().getPay() != null && objMyApplication.getFeatureControlGlobal().getPay()
                                     && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
                                 if (notifications.get(position).getAmount() <= objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount()) {
                                     ((NotificationsActivity) mContext).selectedRow = position + "";
@@ -295,7 +295,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
                             Log.e("remindLL", "remindLL");
-                            if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()
+                            if (objMyApplication.getFeatureControlGlobal().getRequest() != null && objMyApplication.getFeatureControlGlobal().getRequest()
                                     && objMyApplication.getFeatureControlByUser().getRequest() != null && objMyApplication.getFeatureControlByUser().getRequest()) {
                                 ((NotificationsActivity) mContext).selectedRow = position + "";
 
@@ -388,7 +388,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
                             Log.e("remindLL", "remindLL");
-                            if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()
+                            if (objMyApplication.getFeatureControlGlobal().getRequest() != null && objMyApplication.getFeatureControlGlobal().getRequest()
                                     && objMyApplication.getFeatureControlByUser().getRequest() != null && objMyApplication.getFeatureControlByUser().getRequest()) {
                                 ((NotificationsActivity) mContext).selectedRow = position + "";
 

@@ -178,7 +178,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
                     try {
                         if (progress > Utils.slidePercentage) {
-                            if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlGlobal().getAllControls()
+                            if (objMyApplication.getFeatureControlGlobal().getPay() != null && objMyApplication.getFeatureControlGlobal().getPay()
                                     && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
                                 cvLock.setAlpha(1.0f);
                                 motionLayout.setTransition(R.id.middle, R.id.end);

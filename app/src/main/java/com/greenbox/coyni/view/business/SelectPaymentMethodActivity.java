@@ -504,8 +504,8 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getPayBank()) {
+                        if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
                                 showExternalBank();
                             }
@@ -522,8 +522,8 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
+                        if (objMyApplication.getFeatureControlGlobal().getPayDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayDebit() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
                             if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
                                 strCurrent = "debit";
                                 Intent i = new Intent(SelectPaymentMethodActivity.this, AddCardActivity.class);
@@ -543,8 +543,8 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (objMyApplication.getFeatureControlGlobal().getAllControls() != null && objMyApplication.getFeatureControlByUser() != null
-                                && objMyApplication.getFeatureControlGlobal().getAllControls() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
+                        if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
                             if (!strMenu.equals("buy") && !strCurrent.equals("notokens")) {
                                 if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
                                     strCurrent = "signet";
@@ -562,46 +562,6 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 }
             });
 
-//            lyExternalClose.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    ControlMethod("addpayment");
-//                    strCurrent = "addpayment";
-//                }
-//            });
-//
-//            cvNext.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    try {
-//                        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
-//                            isBank = true;
-//                            Intent i = new Intent(SelectPaymentMethodActivity.this, WebViewActivity.class);
-//                            i.putExtra("signon", signOnData);
-//                            startActivityForResult(i, 1);
-//                        } else {
-//                            Utils.displayAlert(strSignOn, SelectPaymentMethodActivity.this, "", "");
-//                        }
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            });
-//
-//            tvLearnMore.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    try {
-//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                            return;
-//                        }
-//                        mLastClickTime = SystemClock.elapsedRealtime();
-//                        Utils.populateLearnMore(SelectPaymentMethodActivity.this);
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            });
             numberOfAccounts();
         } catch (Exception ex) {
             ex.printStackTrace();
