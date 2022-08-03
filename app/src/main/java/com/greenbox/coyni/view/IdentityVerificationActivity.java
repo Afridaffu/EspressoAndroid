@@ -212,10 +212,12 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
     private void setToDateWheelPicker(TextInputEditText dobET) {
         try {
 //            Utils.hideKeypad(IdentityVerificationActivity.this);
-            long years = 568025136000L;
+            long years = 568025136000L, century = 3155760000000L;
             picker = new DatePicker(IdentityVerificationActivity.this);
             Date maxDate = new Date(System.currentTimeMillis() - years);
+            Date minDate = new Date(System.currentTimeMillis() - century);
             picker.getPickerView().setMaxDate(maxDate);
+            picker.getPickerView().setMinDate(minDate);
             if (!dateOfBirth.equals("")) {
                 picker.getPickerView().setDate(Integer.parseInt(dateOfBirth.split("-")[0]),
                         Integer.parseInt(dateOfBirth.split("-")[1]) - 1,
