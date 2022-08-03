@@ -40,6 +40,11 @@ import com.greenbox.coyni.fragments.UnderReviewFragment;
 import com.greenbox.coyni.fragments.VerificationFailedFragment;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlByUser;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlGlobalResp;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlRespByUser;
+import com.greenbox.coyni.model.featurecontrols.FeatureData;
+import com.greenbox.coyni.model.featurecontrols.PermissionResponseList;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.NotificationsDataItems;
@@ -67,6 +72,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     private BusinessDashboardViewModel businessDashboardViewModel;
     private CustomerProfileViewModel customerProfileViewModel;
     private NotificationsViewModel notificationsViewModel;
+    private DashboardViewModel dashboardViewModel;
     private MyApplication objMyApplication;
     private Tabs selectedTab = Tabs.DASHBOARD;
     private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile, mIvMenu, mIvUserIcon;
@@ -351,6 +357,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
             mUserIconRelativeLayout = findViewById(R.id.rl_user_icon_layout);
             mIvUserIcon = findViewById(R.id.iv_user_icon);
@@ -507,69 +514,96 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
-        try {
-            notificationsViewModel.getNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
-                @Override
-                public void onChanged(Notifications notifications) {
+        notificationsViewModel.getNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+            @Override
+            public void onChanged(Notifications notifications) {
 //
-                    if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
-                        notificationCount = 0;
-                        for (int i = 0; i < notifications.getData().getItems().size(); i++) {
-                            if (!notifications.getData().getItems().get(i).isRead()) {
-                                notificationCount++;
-                            }
+                if (notifications != null && notifications.getStatus().equalsIgnoreCase("success")) {
+                    notificationCount = 0;
+                    for (int i = 0; i < notifications.getData().getItems().size(); i++) {
+                        if (!notifications.getData().getItems().get(i).isRead()) {
+                            notificationCount++;
                         }
-                        notificationsViewModel.getReceivedNotifications();
-                        Log.e("count notif", notificationCount + "");
                     }
+                    notificationsViewModel.getReceivedNotifications();
+                    Log.e("count notif", notificationCount + "");
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            notificationsViewModel.getReceivedNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
-                @Override
-                public void onChanged(Notifications notifications) {
-
-                    try {
-                        if (notifications != null) {
-                            if (notifications.getStatus().equalsIgnoreCase("success")) {
-                                List<NotificationsDataItems> localData = notifications.getData().getItems();
-                                for (int i = 0; i < localData.size(); i++) {
-                                    if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
-                                            localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
-                                        notificationCount++;
-                                    }
+        notificationsViewModel.getReceivedNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
+            @Override
+            public void onChanged(Notifications notifications) {
+                try {
+                    if (notifications != null) {
+                        if (notifications.getStatus().equalsIgnoreCase("success")) {
+                            List<NotificationsDataItems> localData = notifications.getData().getItems();
+                            for (int i = 0; i < localData.size(); i++) {
+                                if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
+                                        localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
+                                    notificationCount++;
                                 }
+                            }
 
-                                if (notificationCount > 0) {
-                                    countCV.setVisibility(View.VISIBLE);
-                                    countTV.setText(notificationCount + "");
-                                } else {
-                                    countCV.setVisibility(View.GONE);
-                                }
-
-                                Log.e("count total", notificationCount + "");
+                            if (notificationCount > 0) {
+                                countCV.setVisibility(View.VISIBLE);
+                                countTV.setText(notificationCount + "");
                             } else {
-                                if (notificationCount > 0) {
-                                    countCV.setVisibility(View.VISIBLE);
-                                    countTV.setText(notificationCount + "");
-                                } else {
-                                    countCV.setVisibility(View.GONE);
-                                }
+                                countCV.setVisibility(View.GONE);
+                            }
+
+                            Log.e("count total", notificationCount + "");
+                        } else {
+                            if (notificationCount > 0) {
+                                countCV.setVisibility(View.VISIBLE);
+                                countTV.setText(notificationCount + "");
+                            } else {
+                                countCV.setVisibility(View.GONE);
                             }
                         }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
+
+        dashboardViewModel.getFeatureControlRespByUserMutableLiveData().observe(this, new Observer<FeatureControlRespByUser>() {
+            @Override
+            public void onChanged(FeatureControlRespByUser featureControlRespByUser) {
+                try {
+                    FeatureData obj = new FeatureData();
+                    if (featureControlRespByUser != null && featureControlRespByUser.getData() != null) {
+                        obj = featureControlRespByUser.getData().getData();
+                        if (obj != null && obj.getPermissionResponseList() != null && obj.getPermissionResponseList().size() > 0) {
+                            featureControlsPermission(obj.getPermissionResponseList(), "user");
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        dashboardViewModel.getFeatureControlGlobalRespMutableLiveData().observe(this, new Observer<FeatureControlGlobalResp>() {
+            @Override
+            public void onChanged(FeatureControlGlobalResp featureControlGlobalResp) {
+                try {
+                    FeatureData obj = new FeatureData();
+                    if (featureControlGlobalResp != null && featureControlGlobalResp.getData() != null) {
+                        obj = featureControlGlobalResp.getData();
+                        if (obj != null && obj.getPermissionResponseList() != null && obj.getPermissionResponseList().size() > 0) {
+                            featureControlsPermission(obj.getPermissionResponseList(), "global");
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+
     }
 
     private void checkLoadFragment(Profile profile) {
@@ -692,6 +726,8 @@ public class BusinessDashboardActivity extends BaseActivity {
             try {
                 customerProfileViewModel.meSignOn();
                 businessDashboardViewModel.meBusinessPaymentMethods();
+                dashboardViewModel.getFeatureControlByUser(objMyApplication.getLoginUserId());
+                dashboardViewModel.getFeatureControlGlobal(getString(R.string.portalType));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -725,6 +761,74 @@ public class BusinessDashboardActivity extends BaseActivity {
                             //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
                         }
                     });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void featureControlsPermission(List<PermissionResponseList> permissionResponseList, String strFrom) {
+        try {
+            FeatureControlByUser featureControlByUser = new FeatureControlByUser();
+            if (permissionResponseList != null && permissionResponseList.size() > 0) {
+                for (int i = 0; i < permissionResponseList.size(); i++) {
+                    switch (permissionResponseList.get(i).getFeatureName().toLowerCase()) {
+                        case Utils.buyBankEnable:
+                            featureControlByUser.setBuyBank(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.buyDebitEnable:
+                            featureControlByUser.setBuyDebit(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.buyCreditEnable:
+                            featureControlByUser.setBuyCredit(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.buySignetEnable:
+                            featureControlByUser.setBuySignet(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.withBankEnable:
+                            featureControlByUser.setWithBank(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.withInstantEnable:
+                            featureControlByUser.setWithInstant(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.withGiftEnable:
+                            featureControlByUser.setWithGift(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.withSignetEnable:
+                            featureControlByUser.setWithSignet(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.allControlsEnable:
+                            featureControlByUser.setAllControls(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.saleOrderEnable:
+                            featureControlByUser.setSaleOrder(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.payBankEnable:
+                            featureControlByUser.setPayBank(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.payCreditEnable:
+                            featureControlByUser.setPayCredit(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.payDebitEnable:
+                            featureControlByUser.setPayDebit(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.paySignetEnable:
+                            featureControlByUser.setPaySignet(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.payEnable:
+                            featureControlByUser.setPay(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.requestEnable:
+                            featureControlByUser.setRequest(permissionResponseList.get(i).getPermission());
+                            break;
+                    }
+                }
+                if (strFrom.equals("user")) {
+                    objMyApplication.setFeatureControlByUser(featureControlByUser);
+                } else {
+                    objMyApplication.setFeatureControlGlobal(featureControlByUser);
+                }
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

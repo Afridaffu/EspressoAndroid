@@ -179,34 +179,93 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (strScreen.equals("customer")) {
                             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                                if (!objData.getRelink()) {
-                                    ((PaymentMethodsActivity) mContext).deleteBank(mContext, objData);
+                                if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                        && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
+                                    if (!objData.getRelink()) {
+                                        ((PaymentMethodsActivity) mContext).deleteBank(mContext, objData);
+                                    } else {
+                                        ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+                                    }
                                 } else {
-                                    ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+                                    Utils.displayAlert(mContext.getString(R.string.errormsg), ((PaymentMethodsActivity) mContext), "", "");
                                 }
-                            } else if (!objData.getExpired()) {
-                                objMyApplication.setSelectedCard(objData);
-                                ((PaymentMethodsActivity) mContext).editCard();
                             } else {
-                                objMyApplication.setSelectedCard(objData);
-                                ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+                                if (objData.getCardType().toLowerCase().equals("debit")) {
+                                    if (objMyApplication.getFeatureControlGlobal().getPayDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getPayDebit() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
+                                        if (!objData.getExpired()) {
+                                            objMyApplication.setSelectedCard(objData);
+                                            ((PaymentMethodsActivity) mContext).editCard();
+                                        } else {
+                                            objMyApplication.setSelectedCard(objData);
+                                            ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+                                        }
+                                    } else {
+                                        Utils.displayAlert(mContext.getString(R.string.errormsg), ((PaymentMethodsActivity) mContext), "", "");
+                                    }
+                                } else {
+                                    if (objMyApplication.getFeatureControlGlobal().getPayCredit() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getPayCredit() && objMyApplication.getFeatureControlByUser().getPayCredit()) {
+                                        if (!objData.getExpired()) {
+                                            objMyApplication.setSelectedCard(objData);
+                                            ((PaymentMethodsActivity) mContext).editCard();
+                                        } else {
+                                            objMyApplication.setSelectedCard(objData);
+                                            ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+                                        }
+                                    } else {
+                                        Utils.displayAlert(mContext.getString(R.string.errormsg), ((PaymentMethodsActivity) mContext), "", "");
+                                    }
+                                }
                             }
                         } else {
 //                            if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
                             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                                if (!objData.getRelink()) {
-                                    ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
+                                if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                        && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
+                                    if (!objData.getRelink()) {
+                                        ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
+                                    } else {
+                                        ((BusinessPaymentMethodsActivity) mContext).expiry(objData);
+                                    }
                                 } else {
-                                    ((BusinessPaymentMethodsActivity) mContext).expiry(objData);
+                                    Utils.displayAlert(mContext.getString(R.string.errormsg), ((BusinessPaymentMethodsActivity) mContext), "", "");
                                 }
                             } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
-                                ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
-                            } else if (!objData.getExpired()) {
-                                objMyApplication.setSelectedCard(objData);
-                                ((BusinessPaymentMethodsActivity) mContext).editCard();
+                                if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                        && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
+                                    ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
+                                } else {
+                                    Utils.displayAlert(mContext.getString(R.string.errormsg), ((PaymentMethodsActivity) mContext), "", "");
+                                }
                             } else {
-                                objMyApplication.setSelectedCard(objData);
-                                ((BusinessPaymentMethodsActivity) mContext).expiry(objData);
+                                if (objData.getCardType().toLowerCase().equals("debit")) {
+                                    if (objMyApplication.getFeatureControlGlobal().getPayDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getPayDebit() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
+                                        if (!objData.getExpired()) {
+                                            objMyApplication.setSelectedCard(objData);
+                                            ((BusinessPaymentMethodsActivity) mContext).editCard();
+                                        } else {
+                                            objMyApplication.setSelectedCard(objData);
+                                            ((BusinessPaymentMethodsActivity) mContext).expiry(objData);
+                                        }
+                                    } else {
+                                        Utils.displayAlert(mContext.getString(R.string.errormsg), ((BusinessPaymentMethodsActivity) mContext), "", "");
+                                    }
+                                } else {
+                                    if (objMyApplication.getFeatureControlGlobal().getPayCredit() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getPayCredit() && objMyApplication.getFeatureControlByUser().getPayCredit()) {
+                                        if (!objData.getExpired()) {
+                                            objMyApplication.setSelectedCard(objData);
+                                            ((BusinessPaymentMethodsActivity) mContext).editCard();
+                                        } else {
+                                            objMyApplication.setSelectedCard(objData);
+                                            ((BusinessPaymentMethodsActivity) mContext).expiry(objData);
+                                        }
+                                    } else {
+                                        Utils.displayAlert(mContext.getString(R.string.errormsg), ((BusinessPaymentMethodsActivity) mContext), "", "");
+                                    }
+                                }
                             }
                         }
                     } catch (Exception ex) {

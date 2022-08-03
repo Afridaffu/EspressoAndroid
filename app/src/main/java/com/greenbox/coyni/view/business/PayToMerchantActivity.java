@@ -41,6 +41,8 @@ import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlRespByUser;
+import com.greenbox.coyni.model.featurecontrols.FeatureData;
 import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
@@ -89,7 +91,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     TransactionLimitResponse objResponse;
     float fontSize, dollarFont;
     WalletInfo cynWallet;
-    Boolean isFaceLock = false, isTouchId = false;
+    Boolean isFaceLock = false, isTouchId = false, isSaleOrder = true;
     String strWalletId = "", strLimit = "", recipientAddress = "";
     Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     Double usdValue = 0.0, cynValue = 0.0, cynValidation = 0.0, avaBal = 0.0;
@@ -396,7 +398,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 details = userDetails;
                 paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
                 businessIdentityVerificationViewModel.getBusinessType();
-
+                dashboardViewModel.getFeatureControlByUser(userDetails.getData().getUserId());
             } else {
                 if (userDetails.getError() != null && userDetails.getError().getErrorDescription() != null) {
                     Utils.displayAlert(userDetails.getError().getErrorDescription(), this, "Oops", "");
@@ -441,7 +443,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                     if (pDialog != null) {
                         pDialog.dismiss();
                     }
-//                    Utils.setStrToken("");
                     objMyApplication.clearStrToken();
                     objMyApplication.setPaidOrderResp(paidOrderResp);
                     if (paidOrderResp.getStatus().equalsIgnoreCase("success")) {
@@ -466,7 +467,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             if (biometricTokenResponse != null) {
                 if (biometricTokenResponse.getStatus().equalsIgnoreCase("success")) {
                     if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-//                        Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                     }
                     payTransaction();
@@ -474,11 +474,11 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             }
         });
 
-        try {
-            businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void onChanged(BusinessTypeResp businessTypeResp) {
+        businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onChanged(BusinessTypeResp businessTypeResp) {
+                try {
                     if (businessTypeResp != null && businessTypeResp.getStatus().equalsIgnoreCase("SUCCESS")) {
                         for (int i = 0; i < businessTypeResp.getData().size(); i++) {
                             try {
@@ -497,11 +497,12 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                             }
                         }
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
+
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
@@ -528,6 +529,27 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        });
+
+        dashboardViewModel.getFeatureControlRespByUserMutableLiveData().observe(this, new Observer<FeatureControlRespByUser>() {
+            @Override
+            public void onChanged(FeatureControlRespByUser featureControlRespByUser) {
+                try {
+                    FeatureData obj = new FeatureData();
+                    if (featureControlRespByUser != null && featureControlRespByUser.getData() != null) {
+                        obj = featureControlRespByUser.getData().getData();
+                        if (obj != null && obj.getPermissionResponseList() != null && obj.getPermissionResponseList().size() > 0) {
+                            for (int i = 0; i < obj.getPermissionResponseList().size(); i++) {
+                                if (obj.getPermissionResponseList().get(i).getFeatureName().toLowerCase().equals(Utils.saleOrderEnable)) {
+                                    isSaleOrder = obj.getPermissionResponseList().get(i).getPermission();
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -978,10 +1000,8 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 return;
             }
             mLastClickTime = SystemClock.elapsedRealtime();
-            if (objMyApplication.getFeatureControlGlobal().getSaleOrder() != null && objMyApplication.getFeatureControlGlobal().getSaleOrder()
-                    && objMyApplication.getFeatureControlByUser().getSaleOrder() != null && objMyApplication.getFeatureControlByUser().getSaleOrder()) {
+            if (isSaleOrder) {
                 convertDecimal();
-
                 if (payValidation()) {
                     isPayClick = true;
                     pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);

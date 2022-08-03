@@ -529,10 +529,13 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-//                            ControlMethod("externalBank");
-//                            strCurrent = "externalBank";
-                            showExternalBank();
+                        if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
+                            if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
+                                showExternalBank();
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -544,11 +547,16 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
-                            strCurrent = "debit";
-                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "debit");
-                            startActivityForResult(i, 3);
+                        if (objMyApplication.getFeatureControlGlobal().getPayDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayDebit() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
+                            if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                                strCurrent = "debit";
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
+                                i.putExtra("card", "debit");
+                                startActivityForResult(i, 3);
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -560,11 +568,16 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
-                            strCurrent = "credit";
-                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "credit");
-                            startActivityForResult(i, 3);
+                        if (objMyApplication.getFeatureControlGlobal().getPayCredit() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayCredit() && objMyApplication.getFeatureControlByUser().getPayCredit()) {
+                            if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
+                                strCurrent = "credit";
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
+                                i.putExtra("card", "credit");
+                                startActivityForResult(i, 3);
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -738,10 +751,13 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-//                            ControlMethod("externalBank");
-//                            strCurrent = "externalBank";
-                            showExternalBank();
+                        if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
+                            if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
+                                showExternalBank();
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -753,11 +769,16 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
-                            strCurrent = "debit";
-                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "debit");
-                            startActivityForResult(i, 3);
+                        if (objMyApplication.getFeatureControlGlobal().getPayDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayDebit() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
+                            if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                                strCurrent = "debit";
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
+                                i.putExtra("card", "debit");
+                                startActivityForResult(i, 3);
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -769,10 +790,15 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                            strCurrent = "signet";
-                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-                            startActivityForResult(i, 4);
+                        if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
+                            if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                                strCurrent = "signet";
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                                startActivityForResult(i, 4);
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1003,6 +1029,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             RelativeLayout lyGiftCard = findViewById(R.id.lyGiftCard);
             RelativeLayout lySignet = findViewById(R.id.lySignet);
             View viewSignet = findViewById(R.id.viewSignet);
+            LinearLayout layoutError = findViewById(R.id.layoutError);
+            LinearLayout lyGCInfo = findViewById(R.id.lyGCInfo);
+            ImageView imgGCardLogo = findViewById(R.id.imgGCardLogo);
+            ImageView imgGCArrow = findViewById(R.id.imgGCArrow);
 
             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                 lySignet.setVisibility(VISIBLE);
@@ -1010,6 +1040,14 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             } else {
                 lySignet.setVisibility(View.GONE);
                 viewSignet.setVisibility(View.GONE);
+            }
+
+            if (objMyApplication.getFeatureControlGlobal().getWithGift() != null && objMyApplication.getFeatureControlByUser() != null
+                    && (!objMyApplication.getFeatureControlGlobal().getWithGift() || objMyApplication.getFeatureControlByUser().getWithGift())) {
+                lyGCInfo.setAlpha(0.5f);
+                imgGCardLogo.setAlpha(0.5f);
+                imgGCArrow.setAlpha(0.5f);
+                layoutError.setVisibility(VISIBLE);
             }
 
             lySelBack.setOnClickListener(new View.OnClickListener() {
@@ -1029,9 +1067,6 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         if (bankList != null && bankList.size() > 0) {
                             selectPayMethod(bankList);
                         } else {
-//                            ControlMethod("withdrawpay");
-//                            withdrawPaymentMethod("bank");
-//                            strScreen = "withdrawpay";
                             showAddPayment("bank");
                         }
                     } catch (Exception ex) {
@@ -1052,9 +1087,6 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         if (cardList != null && cardList.size() > 0) {
                             selectPayMethod(cardList);
                         } else {
-//                            ControlMethod("withdrawpay");
-//                            withdrawPaymentMethod("card");
-//                            strScreen = "withdrawpay";
                             mLastClickTime = 0L;
                             showAddPayment("card");
                         }
@@ -1068,14 +1100,12 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (objMyApplication.getFeatureControlGlobal().getWithBank() != null && objMyApplication.getFeatureControlByUser() != null
-                                && objMyApplication.getFeatureControlGlobal().getWithBank() && objMyApplication.getFeatureControlByUser().getWithBank()) {
+                        if (objMyApplication.getFeatureControlGlobal().getWithGift() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getWithGift() && objMyApplication.getFeatureControlByUser().getWithGift()) {
                             MatomoUtility.getInstance().trackEvent(MatomoConstants.GIFT_CARD, MatomoConstants.GIFT_CARD_CLICKED);
                             strCurrent = "";
                             strScreen = "";
                             startActivity(new Intent(WithdrawPaymentMethodsActivity.this, GiftCardActivity.class));
-                        } else {
-                            Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1091,9 +1121,6 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         if (signetList != null && signetList.size() > 0) {
                             selectPayMethod(signetList);
                         } else {
-//                            strCurrent = "signet";
-//                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-//                            startActivityForResult(i, 4);
                             strCurrent = "signet";
                             showAddPayment("signet");
                         }
@@ -1146,54 +1173,22 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 public void onClick(View view) {
                     try {
                         if (strPay.equals("bank")) {
-//                            ControlMethod("externalBank");
-//                            strCurrent = "externalBank";
-//                            strOnPauseScreen = "externalBank";
-//                            LinearLayout lyExternalClose = findViewById(R.id.lyExternalClose);
-//                            TextView tvLearnMore = findViewById(R.id.tvLearnMore);
-//                            cvNext = findViewById(R.id.cvNext);
-//                            cvNext.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-//                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                                        return;
-//                                    }
-//                                    mLastClickTime = SystemClock.elapsedRealtime();
-//                                    if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
-//                                        isBank = true;
-//                                        Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
-//                                        i.putExtra("signon", signOnData);
-//                                        startActivityForResult(i, 1);
-//                                    } else {
-//                                        Utils.displayAlert(strSignOn, WithdrawPaymentMethodsActivity.this, "", "");
-//                                    }
-//                                }
-//                            });
-//                            lyExternalClose.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-//                                    strCurrent = "";
-//                                    ControlMethod("withdrawpay");
-//                                    withdrawPaymentMethod("bank");
-//                                    strScreen = "withdrawpay";
-//                                }
-//                            });
-//                            tvLearnMore.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-//                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                                        return;
-//                                    }
-//                                    mLastClickTime = SystemClock.elapsedRealtime();
-//                                    Utils.populateLearnMore(WithdrawPaymentMethodsActivity.this);
-//                                }
-//                            });
-                            showExternalBank();
+                            if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                    && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
+                                showExternalBank();
+                            } else {
+                                Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
+                            }
                         } else {
-                            strCurrent = "debit";
-                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "debit");
-                            startActivityForResult(i, 3);
+                            if (objMyApplication.getFeatureControlGlobal().getPayDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                    && objMyApplication.getFeatureControlGlobal().getPayDebit() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
+                                strCurrent = "debit";
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
+                                i.putExtra("card", "debit");
+                                startActivityForResult(i, 3);
+                            } else {
+                                Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1596,8 +1591,6 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             cvTryAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    ControlMethod("externalBank");
-//                    strCurrent = "externalBank";
                     showExternalBank();
                 }
             });
