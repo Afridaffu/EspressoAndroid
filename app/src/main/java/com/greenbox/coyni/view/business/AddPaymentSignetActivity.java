@@ -279,17 +279,17 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                 try {
                     if (!b) {
                         etWalletId.setHint("");
-                        if (etWalletId.getText().toString().trim().length() > 1) {
+                        if (etWalletId.getText().toString().trim().length() > 16) {
                             isWallet = true;
                             walletErrorLL.setVisibility(GONE);
                             etlWalletId.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.primary_black));
-                        } else if (etWalletId.getText().toString().trim().length() == 1) {
+                        } else if (etWalletId.getText().toString().trim().length() < 16) {
                             isWallet = false;
                             etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState(AddPaymentSignetActivity.this));
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.error_red));
                             walletErrorLL.setVisibility(VISIBLE);
-                            walletErrorTV.setText("Minimum 2 Characters Required");
+                            walletErrorTV.setText("Signet Wallet ID length should be minimum 16 characters.");
                         } else {
                             isWallet = false;
                             etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));

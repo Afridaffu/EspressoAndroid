@@ -1,22 +1,22 @@
 package com.greenbox.coyni.model.featurecontrols;
 
 public class FeatureControlByUser {
-    private Boolean isSaleOrder;
-    private Boolean isBuySignet;
-    private Boolean isBuyBank;
-    private Boolean isBuyDebit;
-    private Boolean isBuyCredit;
-    private Boolean isWithGift;
-    private Boolean isWithBank;
-    private Boolean isWithInstant;
-    private Boolean isWithSignet;
-    private Boolean isPaySignet;
-    private Boolean isPayBank;
-    private Boolean isPayCredit;
-    private Boolean isPayDebit;
-    private Boolean isPay;
-    private Boolean isRequest;
-    private Boolean isAllControls;
+    private Boolean isSaleOrder = true;
+    private Boolean isBuySignet = true;
+    private Boolean isBuyBank = true;
+    private Boolean isBuyDebit = true;
+    private Boolean isBuyCredit = true;
+    private Boolean isWithGift = true;
+    private Boolean isWithBank = true;
+    private Boolean isWithInstant = true;
+    private Boolean isWithSignet = true;
+    private Boolean isPaySignet = true;
+    private Boolean isPayBank = true;
+    private Boolean isPayCredit = true;
+    private Boolean isPayDebit = true;
+    private Boolean isPay = true;
+    private Boolean isRequest = true;
+    private Boolean isAllControls = true;
 
     public Boolean getSaleOrder() {
         return isSaleOrder;

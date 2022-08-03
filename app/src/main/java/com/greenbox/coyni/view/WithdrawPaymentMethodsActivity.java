@@ -1823,16 +1823,31 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (strType.equals("bank")) {
-                            strCurrent = "externalBank";
-                            showExternalBank();
+                            if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                    && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
+                                strCurrent = "externalBank";
+                                showExternalBank();
+                            } else {
+                                Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
+                            }
                         } else if (strType.equals("signet")) {
-                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-                            startActivityForResult(i, 4);
+                            if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                    && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                                startActivityForResult(i, 4);
+                            } else {
+                                Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
+                            }
                         } else {
-                            strCurrent = "debit";
-                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "debit");
-                            startActivityForResult(i, 6);
+                            if (objMyApplication.getFeatureControlGlobal().getPayDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                    && objMyApplication.getFeatureControlGlobal().getPayDebit() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
+                                strCurrent = "debit";
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
+                                i.putExtra("card", "debit");
+                                startActivityForResult(i, 6);
+                            } else {
+                                Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

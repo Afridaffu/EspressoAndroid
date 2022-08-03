@@ -581,12 +581,16 @@ public class BusinessDashboardActivity extends BaseActivity {
             public void onChanged(FeatureControlRespByUser featureControlRespByUser) {
                 try {
                     FeatureData obj = new FeatureData();
+                    FeatureControlByUser featureControlByUser = new FeatureControlByUser();
                     if (featureControlRespByUser != null && featureControlRespByUser.getData() != null) {
                         obj = featureControlRespByUser.getData().getData();
                         if (obj != null && obj.getPermissionResponseList() != null && obj.getPermissionResponseList().size() > 0) {
-                            featureControlsPermission(obj.getPermissionResponseList(), "user");
+                            featureControlsPermission(obj.getPermissionResponseList(), featureControlByUser);
                         }
                     }
+
+                    objMyApplication.setFeatureControlByUser(featureControlByUser);
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -598,12 +602,14 @@ public class BusinessDashboardActivity extends BaseActivity {
             public void onChanged(FeatureControlGlobalResp featureControlGlobalResp) {
                 try {
                     FeatureData obj = new FeatureData();
+                    FeatureControlByUser featureControlByUser = new FeatureControlByUser();
                     if (featureControlGlobalResp != null && featureControlGlobalResp.getData() != null) {
                         obj = featureControlGlobalResp.getData();
                         if (obj != null && obj.getPermissionResponseList() != null && obj.getPermissionResponseList().size() > 0) {
-                            featureControlsPermission(obj.getPermissionResponseList(), "global");
+                            featureControlsPermission(obj.getPermissionResponseList(), featureControlByUser);
                         }
                     }
+                    objMyApplication.setFeatureControlGlobal(featureControlByUser);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -733,7 +739,11 @@ public class BusinessDashboardActivity extends BaseActivity {
             try {
                 customerProfileViewModel.meSignOn();
                 businessDashboardViewModel.meBusinessPaymentMethods();
-                dashboardViewModel.getFeatureControlByUser(objMyApplication.getLoginUserId());
+                if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+                    dashboardViewModel.getFeatureControlByUser(Integer.parseInt(objMyApplication.getBusinessUserID()));
+                } else {
+                    dashboardViewModel.getFeatureControlByUser(objMyApplication.getLoginUserId());
+                }
                 dashboardViewModel.getFeatureControlGlobal(getString(R.string.portalType));
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -773,9 +783,9 @@ public class BusinessDashboardActivity extends BaseActivity {
         }
     }
 
-    private void featureControlsPermission(List<PermissionResponseList> permissionResponseList, String strFrom) {
+    private void featureControlsPermission(List<PermissionResponseList> permissionResponseList, FeatureControlByUser featureControlByUser) {
         try {
-            FeatureControlByUser featureControlByUser = new FeatureControlByUser();
+
             if (permissionResponseList != null && permissionResponseList.size() > 0) {
                 for (int i = 0; i < permissionResponseList.size(); i++) {
                     switch (permissionResponseList.get(i).getFeatureName().toLowerCase()) {
@@ -829,11 +839,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                             break;
                     }
                 }
-                if (strFrom.equals("user")) {
-                    objMyApplication.setFeatureControlByUser(featureControlByUser);
-                } else {
-                    objMyApplication.setFeatureControlGlobal(featureControlByUser);
-                }
+
             }
 
         } catch (Exception ex) {

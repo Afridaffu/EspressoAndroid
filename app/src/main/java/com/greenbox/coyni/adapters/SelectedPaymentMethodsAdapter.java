@@ -240,7 +240,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                 switch (strScreen) {
                     case "selectpay":
                     case "buytoken":
-                    case "withdraw":{
+                    case "withdraw": {
                         if (objData.getCardType().toLowerCase().equals("debit")) {
                             if (objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
                                     && (!objMyApplication.getFeatureControlGlobal().getBuyDebit() || !objMyApplication.getFeatureControlByUser().getBuyDebit())) {
@@ -398,6 +398,15 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                     if (objMyApplication.getFeatureControlGlobal().getWithBank() != null && objMyApplication.getFeatureControlByUser() != null
                                             && objMyApplication.getFeatureControlGlobal().getWithBank() && objMyApplication.getFeatureControlByUser().getWithBank()) {
+                                        if (!objData.getRelink()) {
+                                            ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdrawtoken");
+                                        } else {
+                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                        }
+                                    }
+                                } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                                    if (objMyApplication.getFeatureControlGlobal().getWithSignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getWithSignet() && objMyApplication.getFeatureControlByUser().getWithSignet()) {
                                         if (!objData.getRelink()) {
                                             ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdrawtoken");
                                         } else {
