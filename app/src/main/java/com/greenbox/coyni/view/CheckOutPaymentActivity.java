@@ -44,6 +44,8 @@ import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
 import com.greenbox.coyni.model.check_out_transactions.ScanQRRequest;
+import com.greenbox.coyni.model.featurecontrols.FeatureControlRespByUser;
+import com.greenbox.coyni.model.featurecontrols.FeatureData;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.utils.CheckOutConstants;
@@ -57,12 +59,14 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CheckOutViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 public class CheckOutPaymentActivity extends AppCompatActivity {
 
     private BusinessDashboardViewModel businessDashboardViewModel;
     private BuyTokenViewModel buyTokenViewModel;
     private CheckOutViewModel checkOutViewModel;
+    DashboardViewModel dashboardViewModel;
     private MyApplication myApplication;
     private TextView mTokenBalance, mUserName, errorText,
             tvCurrency, tv_lable_verify, tv_lable;
@@ -74,7 +78,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private DatabaseHandler dbHandler;
     private CardView im_lock_;
     private Dialog pDialog;
-    private boolean isAuthenticationCalled = false, isFaceLock = false, isTouchId = false;
+    private boolean isAuthenticationCalled = false, isFaceLock = false, isTouchId = false,isSaleOrder = true;
     private static final int CODE_AUTHENTICATION_VERIFICATION = 251;
     private String requestToken;
     private ImageView merchantImage;
@@ -101,6 +105,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
         checkOutViewModel = new ViewModelProvider(this).get(CheckOutViewModel.class);
         buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
+        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         myApplication = (MyApplication) getApplicationContext();
         dbHandler = DatabaseHandler.getInstance(CheckOutPaymentActivity.this);
         coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
@@ -372,6 +377,27 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                     finish();
                 } else {
                     Utils.displayAlert("something went wrong", CheckOutPaymentActivity.this, "", "");
+                }
+            }
+        });
+
+        dashboardViewModel.getFeatureControlRespByUserMutableLiveData().observe(this, new Observer<FeatureControlRespByUser>() {
+            @Override
+            public void onChanged(FeatureControlRespByUser featureControlRespByUser) {
+                try {
+                    FeatureData obj = new FeatureData();
+                    if (featureControlRespByUser != null && featureControlRespByUser.getData() != null) {
+                        obj = featureControlRespByUser.getData().getData();
+                        if (obj != null && obj.getPermissionResponseList() != null && obj.getPermissionResponseList().size() > 0) {
+                            for (int i = 0; i < obj.getPermissionResponseList().size(); i++) {
+                                if (obj.getPermissionResponseList().get(i).getFeatureName().toLowerCase().equals(Utils.saleOrderEnable)) {
+                                    isSaleOrder = obj.getPermissionResponseList().get(i).getPermission();
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });

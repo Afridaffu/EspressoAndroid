@@ -101,11 +101,17 @@ public class BusinessDashboardActivity extends BaseActivity {
             enableDisableTabView();
             removeFragment();
             showProgressDialog();
-            mDashboardViewModel.meProfile();
+//            mDashboardViewModel.meProfile();
             firebaseToken();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mDashboardViewModel.meProfile();
     }
 
     public void onDashboardTabSelected(View view) {
@@ -382,7 +388,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             });
 
-            new FetchData(BusinessDashboardActivity.this).execute();
+//            new FetchData(BusinessDashboardActivity.this).execute();
 
             if (getIntent().getBooleanExtra("Token", false)) {
                 selectedTab = Tabs.ACCOUNT;
@@ -495,6 +501,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                         checkLoadFragment(profile);
                         Utils.setUserEmail(BusinessDashboardActivity.this, profile.getData().getEmail());
                     }
+                    new FetchData(BusinessDashboardActivity.this).execute();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

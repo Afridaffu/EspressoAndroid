@@ -236,7 +236,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                                         && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
                                     ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
                                 } else {
-                                    Utils.displayAlert(mContext.getString(R.string.errormsg), ((PaymentMethodsActivity) mContext), "", "");
+                                    Utils.displayAlert(mContext.getString(R.string.errormsg), ((BusinessPaymentMethodsActivity) mContext), "", "");
                                 }
                             } else {
                                 if (objData.getCardType().toLowerCase().equals("debit")) {

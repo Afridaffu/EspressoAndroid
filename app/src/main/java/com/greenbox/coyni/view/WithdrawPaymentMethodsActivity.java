@@ -1043,7 +1043,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             }
 
             if (objMyApplication.getFeatureControlGlobal().getWithGift() != null && objMyApplication.getFeatureControlByUser() != null
-                    && (!objMyApplication.getFeatureControlGlobal().getWithGift() || objMyApplication.getFeatureControlByUser().getWithGift())) {
+                    && (!objMyApplication.getFeatureControlGlobal().getWithGift() || !objMyApplication.getFeatureControlByUser().getWithGift())) {
                 lyGCInfo.setAlpha(0.5f);
                 imgGCardLogo.setAlpha(0.5f);
                 imgGCArrow.setAlpha(0.5f);
