@@ -39,7 +39,6 @@ import com.greenbox.coyni.fragments.GetStartedFragment;
 import com.greenbox.coyni.fragments.UnderReviewFragment;
 import com.greenbox.coyni.fragments.VerificationFailedFragment;
 import com.greenbox.coyni.model.bank.SignOn;
-import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.featurecontrols.FeatureControlByUser;
 import com.greenbox.coyni.model.featurecontrols.FeatureControlGlobalResp;
 import com.greenbox.coyni.model.featurecontrols.FeatureControlRespByUser;
@@ -56,9 +55,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
-import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.NotificationsActivity;
-import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -101,7 +98,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             enableDisableTabView();
             removeFragment();
             showProgressDialog();
-//            mDashboardViewModel.meProfile();
+            mDashboardViewModel.meProfile();
             firebaseToken();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -111,7 +108,8 @@ public class BusinessDashboardActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mDashboardViewModel.meProfile();
+        new FetchData(BusinessDashboardActivity.this).execute();
+//        mDashboardViewModel.meProfile();
     }
 
     public void onDashboardTabSelected(View view) {
@@ -501,7 +499,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                         checkLoadFragment(profile);
                         Utils.setUserEmail(BusinessDashboardActivity.this, profile.getData().getEmail());
                     }
-                    new FetchData(BusinessDashboardActivity.this).execute();
+//                    new FetchData(BusinessDashboardActivity.this).execute();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -615,7 +613,6 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
-
 
     }
 
