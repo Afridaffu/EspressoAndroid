@@ -141,7 +141,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_addcard);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             addCardActivity = this;
             identityPagerAdapter = new IdentityPagerAdapter();
             viewPager = findViewById(R.id.view_pager);

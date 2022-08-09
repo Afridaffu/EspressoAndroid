@@ -264,13 +264,13 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     Log.e("onPageScrolled", "onPageScrolled " + position + " " + positionOffset + " " + positionOffsetPixels);
 
                     if (position == 0) {
-//                        companynameET.requestFocus();
-//                        if (!Utils.isKeyboardVisible)
-//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                        companynameET.requestFocus();
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
                     } else if (position == 1) {
-//                        companyaddressET.requestFocus();
-//                        if (!Utils.isKeyboardVisible)
-//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                        companyaddressET.requestFocus();
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
                     } else if (position == 2) {
 //                        if (Utils.isKeyboardVisible)
 //                            Utils.hideKeypad(CompanyInformationActivity.this);
@@ -289,8 +289,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         divider1.setBackgroundResource(R.drawable.button_background1);
                         divider2.setBackgroundResource(R.drawable.button_background1);
                         companynameET.requestFocus();
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
 
                         enableOrDisableNext();
                     } else if (position == 1) {
@@ -300,8 +300,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         divider1.setBackgroundResource(R.drawable.button_background);
                         divider2.setBackgroundResource(R.drawable.button_background1);
                         companyaddressET.requestFocus();
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
                         enableOrDisableAddressNext();
                     } else if (position == 2) {
                         if (Utils.isKeyboardVisible)

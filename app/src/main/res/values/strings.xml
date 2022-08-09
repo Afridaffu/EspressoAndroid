@@ -243,7 +243,7 @@
     <string name="when_you_send_or_receive_money">When you send or receive money from a source \noutside the coyni environment, it can take up to \na few minutes to complete those requests. \nTransactions made within the coyni environment \n(token to token transactions) happen instantly. \nHere is some information on specific transaction \ntypes that you might encounter:</string>
     <string name="bank_accounts"><b>Bank Accounts:</b> All Bank account transactions \ntypically take up to 3 business days to process. </string>
     <string name="add_bank_account">Add Bank Account</string>
-    <string name="coyni_uses_fiserv">coyni uses Fiserv to verify bank account \ninformation. Fiserv may also check you \nbalance(s) to ensure that you have enough \nfunds to cover requested transactions. By \nclicking below you agree to link your bank \naccount.</string>
+    <string name="coyni_uses_fiserv">coyni uses Fiserv to verify bank account information. Fiserv may also check you balance(s) to ensure that you have enough funds to cover requested transactions. By clicking below you agree to link your bank account.</string>
     <string name="i_m_ready">I’m Ready</string>
     <string name="your_bank_account_has_been_successfully">Your bank account has been successfully \nauthorized and added to your merchant \napplication.</string>
     <string name="wells_fargo">Wells Fargo</string>
@@ -499,7 +499,7 @@
     <string name="set_amount">Set Amount</string>
     <string name="clear_amount">Clear Amount</string>
     <string name="additional_action_required">Additional Action Required</string>
-    <string name="identity_review_cancel_message">Thank you for your submission to the coyni review team. No additional information needed at this time. Please check back here for updates. If you wish to cancel your merchant application click here</string>
+    <string name="identity_review_cancel_message">Thank you for your submission to the coyni review team. No additional information needed at this time. Please check back here for updates.</string>
     <string name="cancel_application">Cancel Application</string>
     <string name="cancel_application_message">Are you sure to cancel your merchant application?</string>
     <string name="today_current_batch">Today(Current batch)</string>
@@ -542,7 +542,7 @@
     <string name="in_progress">In progress</string>
     <string name="insufficient_funds">Insufficient Funds</string>
     <string name="merchant_insufficient_funds">Insufficient funds in your Merchant \nBalance and your Business Token Account \nto cover this refund. Please add tokens to \ncontinue. </string>
-    <string name="insufficient_funds_note">Would you like to use your Business \nToken account to cover the difference for \nthis refund</string>
+    <string name="insufficient_funds_note">Would you like to use your Business \nToken account to cover the difference for \nthis refund ?</string>
     <string name="refund_preview">Refund Preview </string>
     <string name="total">Total </string>
     <string name="business_tokenaccount">Business Token Account </string>

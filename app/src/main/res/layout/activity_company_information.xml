@@ -497,7 +497,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
