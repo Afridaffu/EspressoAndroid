@@ -7,7 +7,8 @@
     android:background="@drawable/ssn_popup_bg">
 
     <LinearLayout
-        android:layout_width="@dimen/_95sdp"
+        android:id="@+id/popupLL"
+        android:layout_width="@dimen/_80sdp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp">
@@ -24,12 +25,11 @@
                 android:id="@+id/typeTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_weight="1"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="EIN/TIN"
+                android:layout_weight="1"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
+                android:textSize="@dimen/_11ssp" />
 
             <ImageView
                 android:id="@+id/dropdownIV"
@@ -61,7 +61,7 @@
                 android:fontFamily="@font/opensans_semibold"
                 android:text="EIN/TIN"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
+                android:textSize="@dimen/_11ssp" />
 
 
         </LinearLayout>

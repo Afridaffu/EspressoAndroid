@@ -27,8 +27,7 @@ import com.journeyapps.barcodescanner.Util;
 
 public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
     public static TextView ssnType;
-    private LinearLayout hintHolder, ssnDDLL;
-    private RelativeLayout weightRL;
+    private LinearLayout hintHolder, ssnDDLL, weightRL;
     private MaskEditText ssnET, einET;
     private Context mContext;
     public String FROM = "";
@@ -228,7 +227,15 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                 TextView typeTV = customView.findViewById(R.id.typeTV);
                 LinearLayout einLL = customView.findViewById(R.id.einLL);
                 LinearLayout ssnLL = customView.findViewById(R.id.ssnLL);
+                LinearLayout popupLL = customView.findViewById(R.id.popupLL);
                 typeTV.setText(ssnType.getText().toString());
+
+//                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+//                        LayoutParams.MATCH_PARENT,
+//                        LayoutParams.MATCH_PARENT,
+//                        (float) 1.9
+//                );
+//                popupLL.setLayoutParams(param);
 
                 if (ssnType.getText().toString().equals("SSN")) {
                     ssnLL.setVisibility(GONE);
@@ -254,12 +261,12 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                             comAct.isSSN = false;
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                             comAct.enableOrDisableNext();
-                            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                                    LayoutParams.MATCH_PARENT,
-                                    LayoutParams.MATCH_PARENT,
-                                    (float) 2
-                            );
-                            weightRL.setLayoutParams(param);
+//                            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+//                                    LayoutParams.MATCH_PARENT,
+//                                    LayoutParams.MATCH_PARENT,
+//                                    (float) 1.9
+//                            );
+//                            weightRL.setLayoutParams(param);
                             comAct.setUI_IdentificationType();
                             if(!Utils.isKeyboardVisible)
                                 Utils.shwForcedKeypad(mContext);
@@ -283,12 +290,12 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                             comAct.isSSN = false;
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                             comAct.enableOrDisableNext();
-                            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                                    LayoutParams.MATCH_PARENT,
-                                    LayoutParams.MATCH_PARENT,
-                                    (float) 1.4
-                            );
-                            weightRL.setLayoutParams(param);
+//                            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+//                                    LayoutParams.MATCH_PARENT,
+//                                    LayoutParams.MATCH_PARENT,
+//                                    (float) 1.9
+//                            );
+//                            weightRL.setLayoutParams(param);
                             comAct.setUI_IdentificationType();
                             if(!Utils.isKeyboardVisible)
                                 Utils.shwForcedKeypad(mContext);
@@ -377,19 +384,19 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
         if (text.equals("SSN")) {
             ssnET.setVisibility(VISIBLE);
             einET.setVisibility(GONE);
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                    LayoutParams.MATCH_PARENT,
-                    LayoutParams.MATCH_PARENT,
-                    (float) 2);
-            weightRL.setLayoutParams(param);
+//            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+//                    LayoutParams.MATCH_PARENT,
+//                    LayoutParams.MATCH_PARENT,
+//                    (float) 2);
+//            weightRL.setLayoutParams(param);
         } else {
             ssnET.setVisibility(GONE);
             einET.setVisibility(VISIBLE);
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                    LayoutParams.MATCH_PARENT,
-                    LayoutParams.MATCH_PARENT,
-                    (float) 1.4);
-            weightRL.setLayoutParams(param);
+//            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+//                    LayoutParams.MATCH_PARENT,
+//                    LayoutParams.MATCH_PARENT,
+//                    (float) 1.4);
+//            weightRL.setLayoutParams(param);
 
         }
 
@@ -399,27 +406,6 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
     public String getSSNTypeText() {
         return ssnType.getText().toString();
     }
-
-    public void setDefaultET() {
-        CompanyInformationActivity comAct = (CompanyInformationActivity) mContext;
-        ssnType.setText("SSN");
-        ssnET.setVisibility(VISIBLE);
-        einET.setVisibility(GONE);
-        ssnET.setText("");
-        einET.setText("");
-        comAct.ssnErrorLL.setVisibility(GONE);
-        comAct.isSSN = false;
-        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
-        comAct.enableOrDisableNext();
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT,
-                LayoutParams.MATCH_PARENT,
-                (float) 2
-        );
-        weightRL.setLayoutParams(param);
-        comAct.setUI_IdentificationType();
-    }
-
 
     public String getUnmaskedText() {
         if (ssnType.getText().toString().equals("SSN")) {

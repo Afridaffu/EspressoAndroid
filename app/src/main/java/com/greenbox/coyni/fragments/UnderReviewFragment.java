@@ -77,30 +77,30 @@ public class UnderReviewFragment extends BaseFragment {
 //        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
         ((BusinessDashboardActivity) getActivity()).showUserData();
 
-        String message = getString(R.string.identity_review_cancel_message);
-        message += " ";
-        SpannableString spannableString = new SpannableString(message);
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                    return;
-                }
-                mLastClickTimeQA = SystemClock.elapsedRealtime();
-                showCancelApplicationDialog();
-            }
-
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(true);
-            }
-        };
-        spannableString.setSpan(clickableSpan, message.length() - 11, message.length() - 1,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mTvIdentityReviewCancelMessage.setText(spannableString);
-        mTvIdentityReviewCancelMessage.setMovementMethod(LinkMovementMethod.getInstance());
-        mTvIdentityReviewCancelMessage.setHighlightColor(Color.TRANSPARENT);
+//        String message = getString(R.string.identity_review_cancel_message);
+//        message += " ";
+//        SpannableString spannableString = new SpannableString(message);
+//        ClickableSpan clickableSpan = new ClickableSpan() {
+//            @Override
+//            public void onClick(View textView) {
+//                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+//                    return;
+//                }
+//                mLastClickTimeQA = SystemClock.elapsedRealtime();
+//                showCancelApplicationDialog();
+//            }
+//
+//            @Override
+//            public void updateDrawState(TextPaint ds) {
+//                super.updateDrawState(ds);
+//                ds.setUnderlineText(true);
+//            }
+//        };
+//        spannableString.setSpan(clickableSpan, message.length() - 11, message.length() - 1,
+//                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        mTvIdentityReviewCancelMessage.setText(spannableString);
+//        mTvIdentityReviewCancelMessage.setMovementMethod(LinkMovementMethod.getInstance());
+//        mTvIdentityReviewCancelMessage.setHighlightColor(Color.TRANSPARENT);
 
         mIvNotifications.setOnClickListener(new View.OnClickListener() {
             @Override

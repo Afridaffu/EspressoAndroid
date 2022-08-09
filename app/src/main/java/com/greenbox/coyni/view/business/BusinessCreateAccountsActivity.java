@@ -196,7 +196,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                     userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
                 }
                 if (userName != null && userName.length() > 20) {
-                    userNameTV.setText( Utils.capitalize(userName).substring(0, 20) + " ");
+                    userNameTV.setText(Utils.capitalize(userName).substring(0, 20) + " ");
                 } else {
                     userNameTV.setText(Utils.capitalize(userName));
                 }
@@ -210,7 +210,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 } else {
                     userShortInfoTV.setVisibility(View.VISIBLE);
                     imgProfile.setVisibility(View.GONE);
-                    String userName = firstName.substring(0, 1).toUpperCase() + lastName.substring(0,1).toUpperCase();
+                    String userName = firstName.substring(0, 1).toUpperCase() + lastName.substring(0, 1).toUpperCase();
                     userShortInfoTV.setText(userName);
                 }
             }
@@ -302,7 +302,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
-                openNewAccount();
+//                openNewAccount();
+                addDBA(id);
             }
         });
         profilesListView.setAdapter(profilesListAdapter);
@@ -325,10 +326,14 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     public void addDBA(int companyId) {
         LogUtils.d(TAG, "addDBA" + companyId);
         if (companyId != 0) {
-            showProgressDialog();
-            identityVerificationViewModel.getPostAddDBABusiness(companyId);
-        } else {
-
+//            showProgressDialog();
+//            identityVerificationViewModel.getPostAddDBABusiness(companyId);
+            Intent inAddDba = new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class);
+            inAddDba.putExtra(Utils.ADD_BUSINESS, true);
+            inAddDba.putExtra(Utils.ADD_DBA, true);
+            inAddDba.putExtra(Utils.NEW_DBA, true);
+            inAddDba.putExtra(Utils.COMPANY_ID, companyId);
+            startActivity(inAddDba);
         }
     }
 
@@ -466,7 +471,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         listView.requestLayout();
     }
 
-    public void openNewAccount(){
+    public void openNewAccount() {
         Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class);
         for (ProfilesResponse.Profiles profile : profilesList) {
             if (profile.getAccountType().equals(Utils.PERSONAL)) {
