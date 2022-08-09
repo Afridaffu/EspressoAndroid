@@ -39,7 +39,6 @@ import com.greenbox.coyni.fragments.GetStartedFragment;
 import com.greenbox.coyni.fragments.UnderReviewFragment;
 import com.greenbox.coyni.fragments.VerificationFailedFragment;
 import com.greenbox.coyni.model.bank.SignOn;
-import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.featurecontrols.FeatureControlByUser;
 import com.greenbox.coyni.model.featurecontrols.FeatureControlGlobalResp;
 import com.greenbox.coyni.model.featurecontrols.FeatureControlRespByUser;
@@ -56,9 +55,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
-import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.NotificationsActivity;
-import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -72,7 +69,6 @@ public class BusinessDashboardActivity extends BaseActivity {
     private BusinessDashboardViewModel businessDashboardViewModel;
     private CustomerProfileViewModel customerProfileViewModel;
     private NotificationsViewModel notificationsViewModel;
-    private DashboardViewModel dashboardViewModel;
     private MyApplication objMyApplication;
     private Tabs selectedTab = Tabs.DASHBOARD;
     private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile, mIvMenu, mIvUserIcon;
@@ -101,7 +97,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             enableDisableTabView();
             removeFragment();
             showProgressDialog();
-//            mDashboardViewModel.meProfile();
+            mDashboardViewModel.meProfile();
             firebaseToken();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -111,7 +107,8 @@ public class BusinessDashboardActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mDashboardViewModel.meProfile();
+        new FetchData(BusinessDashboardActivity.this).execute();
+//        mDashboardViewModel.meProfile();
     }
 
     public void onDashboardTabSelected(View view) {
@@ -363,7 +360,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
-            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
             mUserIconRelativeLayout = findViewById(R.id.rl_user_icon_layout);
             mIvUserIcon = findViewById(R.id.iv_user_icon);
@@ -501,7 +497,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                         checkLoadFragment(profile);
                         Utils.setUserEmail(BusinessDashboardActivity.this, profile.getData().getEmail());
                     }
-                    new FetchData(BusinessDashboardActivity.this).execute();
+//                    new FetchData(BusinessDashboardActivity.this).execute();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -576,7 +572,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
-        dashboardViewModel.getFeatureControlRespByUserMutableLiveData().observe(this, new Observer<FeatureControlRespByUser>() {
+        mDashboardViewModel.getFeatureControlRespByUserMutableLiveData().observe(this, new Observer<FeatureControlRespByUser>() {
             @Override
             public void onChanged(FeatureControlRespByUser featureControlRespByUser) {
                 try {
@@ -597,7 +593,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
-        dashboardViewModel.getFeatureControlGlobalRespMutableLiveData().observe(this, new Observer<FeatureControlGlobalResp>() {
+        mDashboardViewModel.getFeatureControlGlobalRespMutableLiveData().observe(this, new Observer<FeatureControlGlobalResp>() {
             @Override
             public void onChanged(FeatureControlGlobalResp featureControlGlobalResp) {
                 try {
@@ -615,7 +611,6 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
-
 
     }
 
@@ -740,11 +735,11 @@ public class BusinessDashboardActivity extends BaseActivity {
                 customerProfileViewModel.meSignOn();
                 businessDashboardViewModel.meBusinessPaymentMethods();
                 if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-                    dashboardViewModel.getFeatureControlByUser(Integer.parseInt(objMyApplication.getBusinessUserID()));
+                    mDashboardViewModel.getFeatureControlByUser(Integer.parseInt(objMyApplication.getBusinessUserID()));
                 } else {
-                    dashboardViewModel.getFeatureControlByUser(objMyApplication.getLoginUserId());
+                    mDashboardViewModel.getFeatureControlByUser(objMyApplication.getLoginUserId());
                 }
-                dashboardViewModel.getFeatureControlGlobal(getString(R.string.portalType));
+                mDashboardViewModel.getFeatureControlGlobal(getString(R.string.portalType));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
