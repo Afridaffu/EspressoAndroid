@@ -69,7 +69,6 @@ public class BusinessDashboardActivity extends BaseActivity {
     private BusinessDashboardViewModel businessDashboardViewModel;
     private CustomerProfileViewModel customerProfileViewModel;
     private NotificationsViewModel notificationsViewModel;
-    private DashboardViewModel dashboardViewModel;
     private MyApplication objMyApplication;
     private Tabs selectedTab = Tabs.DASHBOARD;
     private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile, mIvMenu, mIvUserIcon;
@@ -361,7 +360,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
-            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
             mUserIconRelativeLayout = findViewById(R.id.rl_user_icon_layout);
             mIvUserIcon = findViewById(R.id.iv_user_icon);
@@ -574,7 +572,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
-        dashboardViewModel.getFeatureControlRespByUserMutableLiveData().observe(this, new Observer<FeatureControlRespByUser>() {
+        mDashboardViewModel.getFeatureControlRespByUserMutableLiveData().observe(this, new Observer<FeatureControlRespByUser>() {
             @Override
             public void onChanged(FeatureControlRespByUser featureControlRespByUser) {
                 try {
@@ -595,7 +593,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
-        dashboardViewModel.getFeatureControlGlobalRespMutableLiveData().observe(this, new Observer<FeatureControlGlobalResp>() {
+        mDashboardViewModel.getFeatureControlGlobalRespMutableLiveData().observe(this, new Observer<FeatureControlGlobalResp>() {
             @Override
             public void onChanged(FeatureControlGlobalResp featureControlGlobalResp) {
                 try {
@@ -737,11 +735,11 @@ public class BusinessDashboardActivity extends BaseActivity {
                 customerProfileViewModel.meSignOn();
                 businessDashboardViewModel.meBusinessPaymentMethods();
                 if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-                    dashboardViewModel.getFeatureControlByUser(Integer.parseInt(objMyApplication.getBusinessUserID()));
+                    mDashboardViewModel.getFeatureControlByUser(Integer.parseInt(objMyApplication.getBusinessUserID()));
                 } else {
-                    dashboardViewModel.getFeatureControlByUser(objMyApplication.getLoginUserId());
+                    mDashboardViewModel.getFeatureControlByUser(objMyApplication.getLoginUserId());
                 }
-                dashboardViewModel.getFeatureControlGlobal(getString(R.string.portalType));
+                mDashboardViewModel.getFeatureControlGlobal(getString(R.string.portalType));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
