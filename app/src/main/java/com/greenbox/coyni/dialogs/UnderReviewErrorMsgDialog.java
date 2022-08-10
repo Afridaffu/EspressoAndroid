@@ -67,6 +67,7 @@ public class UnderReviewErrorMsgDialog extends BaseDialog {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(Utils.mondayURL));
                     context.startActivity(i);
+                    dismiss();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -79,7 +80,6 @@ public class UnderReviewErrorMsgDialog extends BaseDialog {
 //                ds.setUnderlineText(true);
             }
         };
-
         ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("customer support."), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         ss.setSpan(new UnderlineSpan(), strMessage.indexOf("customer support."), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         ss.setSpan(clickableSpan, strMessage.length() - 17, strMessage.length(), 0);
