@@ -429,6 +429,7 @@ public class Utils {
     public static final int mAgmt = 2;
 
     public static Class<?> launchedActivity = OnboardActivity.class;
+    public static final String NOTIFICATION_ACTION = "com.coyni.notification_received";
 
     //Cards
     public static final String MASTERCARD = "MASTERCARD";

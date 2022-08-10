@@ -56,11 +56,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 );
             }
             if (Build.VERSION.SDK_INT >= 26) {
-//            if (Utils.getStrAuth() == null || Utils.getStrAuth().equals("")) {
-//                notificationDialog(remoteMessage);
-//            } else {
-//                Log.d("Token", "Notification Receive");
-//            }
+            if (Utils.getStrAuth() == null || Utils.getStrAuth().equals("")) {
+
+            } else {
+                Log.d("Token", "Notification Receive");
+                sendBroadcast(new Intent().setAction(Utils.NOTIFICATION_ACTION));
+            }
 
                 notificationDialog(remoteMessage);
             }

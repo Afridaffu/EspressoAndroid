@@ -33,9 +33,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.bank.SignOn;
@@ -43,7 +40,6 @@ import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
-import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.model.featurecontrols.FeatureControlByUser;
 import com.greenbox.coyni.model.featurecontrols.FeatureControlGlobalResp;
 import com.greenbox.coyni.model.featurecontrols.FeatureControlRespByUser;
@@ -57,13 +53,12 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
-import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
-import com.greenbox.coyni.view.business.PayToMerchantActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -148,6 +143,12 @@ public class DashboardActivity extends BaseActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void onNotificationUpdate() {
+        super.onNotificationUpdate();
+        fetchTransactions();
     }
 
     private void initialization() {
@@ -388,22 +389,7 @@ public class DashboardActivity extends BaseActivity {
                     try {
 //                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
 //                                && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
-                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
-                            LatestTransactionsRequest request = new LatestTransactionsRequest();
-//                            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
-//                                request.setUserId(objMyApplication.getMyProfile().getData().getId());
-//                            }
-                            request.setTransactionType(getDefaultTransactionTypes());
-                            dashboardViewModel.getLatestTxns(request);
-
-                            WalletRequest walletRequest = new WalletRequest();
-                            walletRequest.setWalletType(Utils.TOKEN);
-//                            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
-                            businessDashboardViewModel.meMerchantWallet(walletRequest);
-                            transactionsNSV.smoothScrollTo(0, 0);
-                        } else {
-                            latestTxnRefresh.setRefreshing(false);
-                        }
+                       fetchTransactions();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -495,6 +481,20 @@ public class DashboardActivity extends BaseActivity {
 
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void fetchTransactions() {
+        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
+            LatestTransactionsRequest request = new LatestTransactionsRequest();
+            request.setTransactionType(getDefaultTransactionTypes());
+            dashboardViewModel.getLatestTxns(request);
+            WalletRequest walletRequest = new WalletRequest();
+            walletRequest.setWalletType(Utils.TOKEN);
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+            transactionsNSV.smoothScrollTo(0, 0);
+        } else {
+            latestTxnRefresh.setRefreshing(false);
         }
     }
 

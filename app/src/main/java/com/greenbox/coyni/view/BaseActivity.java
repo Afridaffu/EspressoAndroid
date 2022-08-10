@@ -1,7 +1,10 @@
 package com.greenbox.coyni.view;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Window;
@@ -22,6 +25,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     public final String TAG = getClass().getName();
     private Dialog dialog;
     private MyApplication myApplication;
+    private BroadcastReceiver mReceiver;
+    private IntentFilter mIntentFilter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,6 +35,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         Utils.launchedActivity = getClass();
         myApplication = (MyApplication) getApplicationContext();
         //getIntentData(getIntent());
+
+        createReceiver();
     }
 
     @Override
@@ -38,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         LogUtils.v(TAG, "onNewIntent called");
         //getIntentData(intent);
         setIntent(intent);
-
+        createReceiver();
     }
 
     @Override
@@ -48,6 +55,20 @@ public abstract class BaseActivity extends AppCompatActivity {
             LogUtils.v(TAG, "Launching the checkout flow");
             launchCheckout();
         }
+        registerReceiver(mReceiver, mIntentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+        }
+        mReceiver = null;
+        super.onPause();
+    }
+
+    public void onNotificationUpdate() {
+
     }
 
     public void showProgressDialog() {
@@ -147,6 +168,18 @@ public abstract class BaseActivity extends AppCompatActivity {
             startActivity(new Intent(BaseActivity.this, CheckOutPaymentActivity.class));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void createReceiver() {
+        mIntentFilter = new IntentFilter(Utils.NOTIFICATION_ACTION);
+        if (mReceiver == null) {
+            mReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    onNotificationUpdate();
+                }
+            };
         }
     }
 
