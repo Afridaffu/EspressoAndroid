@@ -114,7 +114,6 @@ public class DashboardActivity extends BaseActivity {
             setContentView(R.layout.activity_dashboard);
             initialization();
             initObserver();
-            firebaseToken();
 
             if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
                 showProgressDialog("connecting...");
@@ -1124,33 +1123,6 @@ public class DashboardActivity extends BaseActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    private void firebaseToken() {
-        try {
-            FirebaseMessaging.getInstance().getToken()
-                    .addOnCompleteListener(new OnCompleteListener<String>() {
-                        @Override
-                        public void onComplete(@NonNull Task<String> task) {
-                            if (!task.isSuccessful()) {
-                                Log.w("", "Fetching FCM registration token failed", task.getException());
-                                return;
-                            }
-
-                            // Get new FCM registration token
-                            String token = task.getResult();
-
-                            // Log and toast
-                            //String msg = getString(R.string.msg_token_fmt, token);
-                            Log.d("Token", "Token - " + token);
-//                            Toast.makeText(DashboardActivity.this, token, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-
     }
 
     private ArrayList<Integer> getDefaultTransactionTypes() {

@@ -75,6 +75,7 @@ import com.greenbox.coyni.model.coynipin.StepUpResponse;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.coyniusers.CoyniUsers;
+import com.greenbox.coyni.model.deviceintialize.DeviceInitializeResponse;
 import com.greenbox.coyni.model.featurecontrols.FeatureControlGlobalResp;
 import com.greenbox.coyni.model.featurecontrols.FeatureControlRespByUser;
 import com.greenbox.coyni.model.fee.Fees;
@@ -713,6 +714,9 @@ public interface ApiService {
 
     @GET("api/v2/feature/controls/{portalType}")
     Call<FeatureControlGlobalResp> featureControlGlobal(@Path("portalType") String portalType);
+
+    @POST("api/v2/user/intialize/device")
+    Call<DeviceInitializeResponse> initializedevice(@Query("fcmToken") String fcmToken);
 
 }
 
