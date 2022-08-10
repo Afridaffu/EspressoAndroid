@@ -94,7 +94,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setTicker("Coyni")
+                .setTicker("coyni")
                 .setContentTitle(remoteMessage.getNotification().getTitle())
                 .setContentIntent(resultPendingIntent)
                 .setContentText(remoteMessage.getNotification().getBody())
