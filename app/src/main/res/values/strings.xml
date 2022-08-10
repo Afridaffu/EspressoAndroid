@@ -677,7 +677,7 @@
     <string name="reserve_conditions">reserve conditions.</string>
     <string name="reason">Enter the reason of decline here.(Maximum 120 characters)</string>
     <string name="hi_text">Hi!\u0020</string>
-    <string name="not_available_description">We’re sorry but this feature currently is not available, please wait until we finish your identity verification.</string>
+    <string name="not_available_description">We’re sorry but this feature currently is not available, please wait until we finish your identity verification. If this is an error,</string>
     <string name="application_declined">Application Declined</string>
     <string name="please_click_the_upload_button_below_to_proceed">Please click the “Upload” button below to proceed.</string>
     <string name="canceled_text">Application Canceled</string>
@@ -771,4 +771,5 @@
     <string name="portalType">Customer</string>
     <string name="noFeature">Feature not available</string>
     <string name="errormsg">"We're sorry but this feature is not available in your coyni account. If this is an error, please contact the coyni customer support team."</string>
+    <string name="please_contact_the_coyni_customer_support">please contact the coyni customer support.</string>
 </resources>
