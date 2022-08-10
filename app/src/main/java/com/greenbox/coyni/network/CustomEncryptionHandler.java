@@ -46,6 +46,7 @@ public class CustomEncryptionHandler implements Interceptor {
     private final String KEY_CLIENT = "client";
     private final String CLIENT = "android";
     private final String VERSION = "1.4";
+    private final String PLATFORM_TYPE = "Android";
     private final String KEY_PROTOCOL_VERSION = "X-ProtocolVersion";
     private final String KEY_REFERER = "Referer";
     private final String KEY_ACCEPT = "Accept";
@@ -55,6 +56,7 @@ public class CustomEncryptionHandler implements Interceptor {
     private final String KEY_REQUEST_ID = "X-REQUESTID";
     private final String KEY_SKIP_DECRYPTION = "SkipDecryption";
     private final String KEY_CONTENT_TYPE = "Content-Type";
+    private final String KEY_PLATFORM_TYPE = "platform-type";
 
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
@@ -73,6 +75,7 @@ public class CustomEncryptionHandler implements Interceptor {
         requestBuild.header(KEY_APP_VERSION, "Android : " + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")");
         requestBuild.header(KEY_ACCEPT_LANGUAGE, "en-US");
         requestBuild.header(KEY_REQUEST_ID, randomReqId);
+        requestBuild.header(KEY_PLATFORM_TYPE, PLATFORM_TYPE);
         // TODO Check this tag is required or not
         requestBuild.header("Requested-portal", "customer");
 
@@ -100,22 +103,22 @@ public class CustomEncryptionHandler implements Interceptor {
 //            if (ArrayUtils.contains(errorCodes, response.code())) {
 //                Utils.deploymentErrorDialog();
 //            } else {
-                String errorResponse = response.peekBody(2048).string();
-                if (!Utils.isValidJson(errorResponse)) {
+            String errorResponse = response.peekBody(2048).string();
+            if (!Utils.isValidJson(errorResponse)) {
+                response = response.newBuilder()
+                        .body(ResponseBody.create(getCustomError(), mediaType))
+                        .build();
+            } else {
+                Gson gson = new Gson();
+                AbstractResponse resp = gson.fromJson(errorResponse, AbstractResponse.class);
+                if (resp != null && resp.getError() != null
+                        && resp.getError().getErrorDescription().equalsIgnoreCase(Utils.ACCESS_TOKEN_EXPIRED)) {
                     response = response.newBuilder()
-                            .body(ResponseBody.create(getCustomError(), mediaType))
+                            .body(ResponseBody.create("", mediaType))
                             .build();
-                } else {
-                    Gson gson = new Gson();
-                    AbstractResponse resp = gson.fromJson(errorResponse, AbstractResponse.class);
-                    if (resp != null && resp.getError() != null
-                            && resp.getError().getErrorDescription().equalsIgnoreCase(Utils.ACCESS_TOKEN_EXPIRED)) {
-                        response = response.newBuilder()
-                                .body(ResponseBody.create("", mediaType))
-                                .build();
-                        launchLogin(MyApplication.getContext());
-                    }
+                    launchLogin(MyApplication.getContext());
                 }
+            }
 //            }
 
         }

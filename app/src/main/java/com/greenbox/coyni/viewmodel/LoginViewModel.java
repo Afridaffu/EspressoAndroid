@@ -14,6 +14,7 @@ import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.EmailRequest;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
+import com.greenbox.coyni.model.deviceintialize.DeviceInitializeResponse;
 import com.greenbox.coyni.model.forgotpassword.EmailValidateResponse;
 import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
 import com.greenbox.coyni.model.forgotpassword.ManagePasswordResponse;
@@ -88,6 +89,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<UpdateResendOTPResponse> updateResendOTPMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<LoginResponse> authenticatePasswordResponse = new MutableLiveData<>();
     private MutableLiveData<LogoutResponse> logoutLiveData = new MutableLiveData<>();
+    private MutableLiveData<DeviceInitializeResponse> deviceInitializeResponseMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<LoginResponse> getAuthenticatePasswordResponse() {
         return authenticatePasswordResponse;
@@ -187,6 +189,10 @@ public class LoginViewModel extends AndroidViewModel {
 
     public MutableLiveData<LogoutResponse> getLogoutLiveData() {
         return logoutLiveData;
+    }
+
+    public MutableLiveData<DeviceInitializeResponse> getDeviceInitializeResponseMutableLiveData() {
+        return deviceInitializeResponseMutableLiveData;
     }
 
     public void smsotpresend(SMSResend resend) {
@@ -922,6 +928,38 @@ public class LoginViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
 
+    }
+
+    public void initializeDevice(String token) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<DeviceInitializeResponse> mCall = apiService.initializedevice(token);
+            mCall.enqueue(new Callback<DeviceInitializeResponse>() {
+                @Override
+                public void onResponse(Call<DeviceInitializeResponse> call, Response<DeviceInitializeResponse> response) {
+                    if (response.isSuccessful()) {
+                        DeviceInitializeResponse obj = response.body();
+                        deviceInitializeResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<DeviceInitializeResponse>() {
+                        }.getType();
+                        DeviceInitializeResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            deviceInitializeResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DeviceInitializeResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    deviceInitializeResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

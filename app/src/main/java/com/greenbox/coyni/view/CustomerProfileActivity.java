@@ -40,6 +40,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
@@ -540,6 +541,7 @@ public class CustomerProfileActivity extends BaseActivity {
         objMyApplication.clearUserData();
         dropAllTables();
         displayImageUtility.clearCache();
+        FirebaseMessaging.getInstance().deleteToken();
         Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);

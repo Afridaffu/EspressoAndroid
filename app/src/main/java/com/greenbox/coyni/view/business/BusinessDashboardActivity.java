@@ -98,7 +98,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             removeFragment();
             showProgressDialog();
             mDashboardViewModel.meProfile();
-            firebaseToken();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -750,31 +749,6 @@ public class BusinessDashboardActivity extends BaseActivity {
         protected void onPostExecute(Boolean list) {
             super.onPostExecute(list);
 
-        }
-    }
-
-    private void firebaseToken() {
-        try {
-            FirebaseMessaging.getInstance().getToken()
-                    .addOnCompleteListener(new OnCompleteListener<String>() {
-                        @Override
-                        public void onComplete(@NonNull Task<String> task) {
-                            if (!task.isSuccessful()) {
-                                Log.w("", "Fetching FCM registration token failed", task.getException());
-                                return;
-                            }
-
-                            // Get new FCM registration token
-                            String token = task.getResult();
-
-                            // Log and toast
-//                            String msg = getString(R.string.msg_token_fmt, token);
-//                            Log.d("", msg);
-                            //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 
