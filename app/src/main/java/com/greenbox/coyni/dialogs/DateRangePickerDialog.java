@@ -77,10 +77,10 @@ public class DateRangePickerDialog extends BaseDialog {
     private void setSelectedDate() {
         calendarPicker.showDayOfWeekTitle(true);
         calendarPicker.setMode(CalendarPicker.SelectionMode.RANGE);
-        Calendar startDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        Date backwardDate = new Date(startDate.getTime().getTime() - 31556952000L);
+//        Calendar startDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+//        Date backwardDate = new Date(startDate.getTime().getTime() - 31556952000L);
         Calendar endDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        calendarPicker.setRangeDate(backwardDate, endDate.getTime());
+//        calendarPicker.setRangeDate(backwardDate, endDate.getTime());
         calendarPicker.scrollToDate(endDate.getTime());
 
 

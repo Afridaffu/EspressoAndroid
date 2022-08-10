@@ -47,12 +47,14 @@
             android:lineHeight="@dimen/_26sdp"
             android:text="@string/not_available_description"
             android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="@dimen/_12ssp"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/tvMessage2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_16sdp"
             android:fontFamily="@font/opensans_semibold"
             android:lineHeight="@dimen/_26sdp"
             android:text="ewrtyuiodfghjkjhgfdsdyuiuytrdfghiugfd"

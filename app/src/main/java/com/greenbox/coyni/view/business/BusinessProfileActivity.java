@@ -77,7 +77,7 @@ public class BusinessProfileActivity extends BaseActivity {
     private MyApplication myApplication;
     private Boolean isSwitchEnabled = false;
     private CoyniViewModel coyniViewModel;
-    private ImageView profileImage;
+    private ImageView profileImage,imgQRCode;
     private TextView profileText, account_status, account_id, userFullname, b_tvBMSetting;
     private Dialog enablePopup;
     private DatabaseHandler dbHandler;
@@ -130,6 +130,7 @@ public class BusinessProfileActivity extends BaseActivity {
             beneficialOwnersLL = findViewById(R.id.beneficialOwnersLL);
             switchOffLL = findViewById(R.id.switchOff);
             profileImage = findViewById(R.id.b_profileIV);
+            imgQRCode = findViewById(R.id.imgQRCode);
             profileText = findViewById(R.id.b_imageTextTV);
             account_status = findViewById(R.id.b_tvACStatus);
             statusDot = findViewById(R.id.b_statusDotCV);
@@ -414,7 +415,26 @@ public class BusinessProfileActivity extends BaseActivity {
                 }
             });
 
-            business_userProfileCV.setOnClickListener(new View.OnClickListener() {
+//            business_userProfileCV.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    try {
+//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                            return;
+//                        }
+//                        mLastClickTime = SystemClock.elapsedRealtime();
+//
+//                        if (isAccountVerified()) {
+//                            startActivity(new Intent(BusinessProfileActivity.this, BusinessReceivePaymentActivity.class));
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            });
+
+            imgQRCode.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {

@@ -458,6 +458,7 @@ public class Utils {
     public static final String paySignetEnable = "token account.payment methods.signet account";
     public static final String allControlsEnable = "token account.all controls";
 
+    public static final long centuryTimeInMillis = 3155760000000L;
 
     public static String getStrLang() {
         return strLang;
