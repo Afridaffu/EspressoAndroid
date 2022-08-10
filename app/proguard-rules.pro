@@ -29,3 +29,4 @@
 }
 #Need to discuss , Customer Action Required Docs upload not working in release if we didn't add below line.
 -keep class okhttp3.** { *; }
+-keep class com.google.firebase.** { *; }
