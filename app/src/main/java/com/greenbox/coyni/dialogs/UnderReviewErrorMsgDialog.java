@@ -74,9 +74,9 @@ public class UnderReviewErrorMsgDialog extends BaseDialog {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
+//                super.updateDrawState(ds);
 //                ds.setColor(Color.parseColor("#00a6a2"));
-                ds.setUnderlineText(true);
+//                ds.setUnderlineText(true);
             }
         };
 
@@ -84,6 +84,8 @@ public class UnderReviewErrorMsgDialog extends BaseDialog {
         ss.setSpan(new UnderlineSpan(), strMessage.indexOf("customer support."), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         ss.setSpan(clickableSpan, strMessage.length() - 17, strMessage.length(), 0);
         tvMessage.setMovementMethod(LinkMovementMethod.getInstance());
+        tvMessage.setHighlightColor(Color.TRANSPARENT);
+
         tvMessage.setText(ss);
 
     }
