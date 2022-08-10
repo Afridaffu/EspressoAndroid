@@ -3,15 +3,13 @@ package com.greenbox.coyni.dialogs;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
@@ -22,15 +20,15 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.utils.CustomTypefaceSpan;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.BuyTokenActivity;
 
-public class UnderReviewErrorMsgDialog extends BaseDialog{
+public class UnderReviewErrorMsgDialog extends BaseDialog {
 
     private CardView okCV;
     private Context context;
     private TextView tvMessage;
+    Long mLastClickTime = 0L;
+
 
     public UnderReviewErrorMsgDialog(@NonNull Context context) {
         super(context);
@@ -62,10 +60,10 @@ public class UnderReviewErrorMsgDialog extends BaseDialog{
             @Override
             public void onClick(@NonNull View view) {
                 try {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                        return;
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime();
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(Utils.mondayURL));
                     context.startActivity(i);
@@ -77,14 +75,15 @@ public class UnderReviewErrorMsgDialog extends BaseDialog{
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
-                ds.setColor(Color.parseColor("#00a6a2"));
+//                ds.setColor(Color.parseColor("#00a6a2"));
                 ds.setUnderlineText(true);
             }
         };
+
         ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("customer support."), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         ss.setSpan(new UnderlineSpan(), strMessage.indexOf("customer support."), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(clickableSpan, strMessage.length() - 10, strMessage.length() - 1, 0);
-
+        ss.setSpan(clickableSpan, strMessage.length() - 17, strMessage.length(), 0);
+        tvMessage.setMovementMethod(LinkMovementMethod.getInstance());
         tvMessage.setText(ss);
 
     }
