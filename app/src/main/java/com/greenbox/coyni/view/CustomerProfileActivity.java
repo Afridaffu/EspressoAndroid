@@ -3,7 +3,6 @@ package com.greenbox.coyni.view;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -11,7 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.hardware.fingerprint.FingerprintManager;
@@ -39,9 +37,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.dialogs.UnderReviewErrorMsgDialog;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
@@ -231,6 +229,8 @@ public class CustomerProfileActivity extends BaseActivity {
                                 objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
                                 objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
 //                            Utils.showCustomToast(CustomerProfileActivity.this, getString(R.string.complete_idve), 0, "");
+                            UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(CustomerProfileActivity.this);
+                            reviewErrorMsgDialog.show();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -528,7 +528,7 @@ public class CustomerProfileActivity extends BaseActivity {
                 }
             });
 
-            enableDisableSettings();
+//            enableDisableSettings();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1429,6 +1429,6 @@ public class CustomerProfileActivity extends BaseActivity {
                 isEnable = true;
             }
         }
-        disableLayout(cpPaymentMethodsLL, isEnable);
+//        disableLayout(cpPaymentMethodsLL, isEnable);
     }
 }
