@@ -110,6 +110,14 @@ public class BusinessDashboardActivity extends BaseActivity {
 //        mDashboardViewModel.meProfile();
     }
 
+    @Override
+    public void onNotificationUpdate() {
+        super.onNotificationUpdate();
+        if(mCurrentFragment != null) {
+            mCurrentFragment.onNotificationUpdate();
+        }
+    }
+
     public void onDashboardTabSelected(View view) {
         try {
             if (selectedTab != Tabs.DASHBOARD) {
