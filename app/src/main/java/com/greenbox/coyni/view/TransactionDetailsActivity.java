@@ -58,7 +58,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     Integer txnSubType;
     String txnId = "";
     Dialog progressDialog;
-    CardView cancelTxnCV;
+    CardView cancelTxnCV,cv_activity_log;
     TextView successadd, purchaseTime, activity_log_tv;
     RecyclerView recyclerView;
     private String gbxID, txnTypeStr, txnSubTypeStr;
@@ -123,7 +123,6 @@ public class TransactionDetailsActivity extends BaseActivity {
     private void initialization() {
         try {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-            recyclerView = findViewById(R.id.recycler_view);
             objMyApplication = (MyApplication) getApplicationContext();
             if (getIntent().getStringExtra(Utils.gbxTxnIdType) != null && !getIntent().getStringExtra(Utils.gbxTxnIdType).equals("")) {
                 strGbxTxnIdType = getIntent().getStringExtra(Utils.gbxTxnIdType);
@@ -359,7 +358,14 @@ public class TransactionDetailsActivity extends BaseActivity {
                             recyclerView.setItemAnimator(new DefaultItemAnimator());
                             recyclerView.setAdapter(activityListAdater);
                             activity_log_tv.setVisibility(View.VISIBLE);
+                            cv_activity_log.setVisibility(View.VISIBLE);
+                        } else {
+                            activity_log_tv.setVisibility(View.GONE);
+                            cv_activity_log.setVisibility(View.GONE);
                         }
+                    } else {
+                        activity_log_tv.setVisibility(View.GONE);
+                        cv_activity_log.setVisibility(View.GONE);
                     }
                 }
             }
@@ -418,6 +424,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     status.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
+            getActivityLogAPICall();
         }
 
         if (reserveData.getReleasedDate() != null) {
@@ -561,6 +568,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     mPaidStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
+            getActivityLogAPICall();
         }
 
         if (paidOrderData.getCreatedDate() != null) {
@@ -722,6 +730,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     break;
                 }
             }
+            getActivityLogAPICall();
         }
         if (refundsentdata.getRefundAmount() != null) {
             refundamounttv.setText(Utils.convertTwoDecimal(refundsentdata.getRefundAmount().replace("CYN", "").trim()));
@@ -902,6 +911,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                         completed.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
                 }
+                getActivityLogAPICall();
             }
 
             lyPRClose.setOnClickListener(view -> onBackPressed());
@@ -918,7 +928,6 @@ public class TransactionDetailsActivity extends BaseActivity {
         ImageView refIdIV, depositIDIV, cardBrandIV;
         LinearLayout depositID, referenceID;
         CardView card_view_activity_log;
-//        TextView activity_log_tv;
 
         headerTV = findViewById(R.id.headTV);
         amount = findViewById(R.id.tvAmount);
@@ -935,8 +944,6 @@ public class TransactionDetailsActivity extends BaseActivity {
         name = findViewById(R.id.cardHoldernameTV);
         purchaseTime = findViewById(R.id.purchaseTime);
         cardNumber = findViewById(R.id.cardnumTV);
-        card_view_activity_log = findViewById(R.id.cv_activity_log);
-        activity_log_tv = findViewById(R.id.activity_log_tv);
         expiryDate = findViewById(R.id.expdateTV);
         successadd = findViewById(R.id.message_tv);
         depositIDTV = findViewById(R.id.depositid);
@@ -959,8 +966,6 @@ public class TransactionDetailsActivity extends BaseActivity {
                 case Utils.transCompleted:
                     status.setTextColor(getResources().getColor(R.color.completed_status));
                     status.setBackgroundResource(R.drawable.txn_completed_bg);
-                    card_view_activity_log.setVisibility(View.VISIBLE);
-                    getActivityLogAPICall();
                     break;
                 case Utils.transinprogress:
                     status.setTextColor(getResources().getColor(R.color.inprogress_status));
@@ -975,6 +980,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     status.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
+            getActivityLogAPICall();
         }
 
         if (objData.getCreatedDate() != null) {
@@ -1089,8 +1095,6 @@ public class TransactionDetailsActivity extends BaseActivity {
         descriptorLL = findViewById(R.id.descriptorLL);
 
         successadd = findViewById(R.id.message_tv);
-        activityLog = findViewById(R.id.cv_activity_log);
-        heading_activity = findViewById(R.id.tv_activity_log);
 
 
         if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
@@ -1108,9 +1112,6 @@ public class TransactionDetailsActivity extends BaseActivity {
                 case Utils.transCompleted:
                     status.setTextColor(getResources().getColor(R.color.completed_status));
                     status.setBackgroundResource(R.drawable.txn_completed_bg);
-                    heading_activity.setVisibility(View.VISIBLE);
-                    activityLog.setVisibility(View.VISIBLE);
-                    getActivityLogAPICall();
                     break;
                 case Utils.transinprogress:
                     status.setTextColor(getResources().getColor(R.color.inprogress_status));
@@ -1134,6 +1135,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                 }
                 break;
             }
+            getActivityLogAPICall();
         }
 
         if (objData.getCreatedDate() != null) {
@@ -1289,6 +1291,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     status.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
+            getActivityLogAPICall();
         }
 
         if (objData.getGiftCardName() != null) {
@@ -1420,6 +1423,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     withStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
+            getActivityLogAPICall();
         }
 
         if (objData.getCreatedDate() != null) {
@@ -1563,7 +1567,6 @@ public class TransactionDetailsActivity extends BaseActivity {
                 case Utils.transCompleted:
                     withBankStatus.setTextColor(getResources().getColor(R.color.completed_status));
                     withBankStatus.setBackgroundResource(R.drawable.txn_completed_bg);
-                    getActivityLogAPICall();
                     break;
                 case Utils.transinprogress:
                 case Utils.transInProgress:
@@ -1584,6 +1587,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     withBankStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                 }
             }
+            getActivityLogAPICall();
         }
 
         if (objData.getCreatedDate() != null) {
@@ -1722,6 +1726,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     withBankStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
+            getActivityLogAPICall();
         }
 
         if (objData.getCreatedDate() != null) {
@@ -1864,6 +1869,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                         statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
                 }
+                getActivityLogAPICall();
             }
 
             if (businessPayoutData.getCreatedDate() != null) {
@@ -2004,6 +2010,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                         statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
                 }
+                getActivityLogAPICall();
             }
 
             if (failedData.getCreatedDate() != null) {
@@ -2128,6 +2135,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                         statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
                 }
+                getActivityLogAPICall();
             }
 
 
@@ -2202,9 +2210,11 @@ public class TransactionDetailsActivity extends BaseActivity {
 
     private void ControlMethod(String methodToShow) {
         try {
+            View view = null;
             switch (methodToShow) {
                 case PAY_REQUEST: {
-                    findViewById(R.id.payrequest).setVisibility(View.VISIBLE);
+                    view = findViewById(R.id.payrequest);
+                    view.setVisibility(View.VISIBLE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
@@ -2220,7 +2230,8 @@ public class TransactionDetailsActivity extends BaseActivity {
                 break;
                 case BUY_TOKEN: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
-                    findViewById(R.id.buytokenCD).setVisibility(View.VISIBLE);
+                    view = findViewById(R.id.buytokenCD);
+                    view.setVisibility(View.VISIBLE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
@@ -2236,7 +2247,8 @@ public class TransactionDetailsActivity extends BaseActivity {
                 case BUY_BANK: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
-                    findViewById(R.id.buytokenBank).setVisibility(View.VISIBLE);
+                    view = findViewById(R.id.buytokenBank);
+                    view.setVisibility(View.VISIBLE);
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
@@ -2255,7 +2267,8 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
-                    findViewById(R.id.buyTokenSignet).setVisibility(View.VISIBLE);
+                    view = findViewById(R.id.buyTokenSignet);
+                    view.setVisibility(View.VISIBLE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
@@ -2267,7 +2280,8 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
-                    findViewById(R.id.withdrawGift).setVisibility(View.VISIBLE);
+                    view = findViewById(R.id.withdrawGift);
+                    view.setVisibility(View.VISIBLE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
@@ -2283,7 +2297,8 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
-                    findViewById(R.id.withdrawInstant).setVisibility(View.VISIBLE);
+                    view = findViewById(R.id.withdrawInstant);
+                    view.setVisibility(View.VISIBLE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
@@ -2300,7 +2315,8 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
-                    findViewById(R.id.withdrawBank).setVisibility(View.VISIBLE);
+                    view = findViewById(R.id.withdrawBank);
+                    view.setVisibility(View.VISIBLE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
@@ -2317,7 +2333,8 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
-                    findViewById(R.id.businessPayout).setVisibility(View.VISIBLE);
+                    view = findViewById(R.id.businessPayout);
+                    view.setVisibility(View.VISIBLE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
@@ -2334,7 +2351,8 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
-                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.VISIBLE);
+                    view = findViewById(R.id.failedWithdrawBankAcc);
+                    view.setVisibility(View.VISIBLE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
@@ -2351,7 +2369,8 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
-                    findViewById(R.id.paidOrderToken).setVisibility(View.VISIBLE);
+                    view = findViewById(R.id.paidOrderToken);
+                    view.setVisibility(View.VISIBLE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
@@ -2367,7 +2386,8 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
-                    findViewById(R.id.reserve_release_details).setVisibility(View.VISIBLE);
+                    view = findViewById(R.id.reserve_release_details);
+                    view.setVisibility(View.VISIBLE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
@@ -2382,10 +2402,16 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
-                    findViewById(R.id.reserve_release_details).setVisibility(View.VISIBLE);
+                    view = findViewById(R.id.reserve_release_details);
+                    view.setVisibility(View.VISIBLE);
                     findViewById(R.id.TTDrefund).setVisibility(View.VISIBLE);
                 }
                 break;
+            }
+            if(view != null) {
+                recyclerView = view.findViewById(R.id.recycler_view);
+                activity_log_tv = view.findViewById(R.id.activity_log_tv);
+                cv_activity_log = view.findViewById(R.id.cv_activity_log);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
