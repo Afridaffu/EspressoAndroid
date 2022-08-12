@@ -30,6 +30,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     PendingIntent resultPendingIntent;
     MyApplication objMyApplication;
 
+    @SuppressLint("WrongConstant")
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         try {
@@ -51,9 +52,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 }
                 dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-                resultPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, dashboardIntent,
-                        PendingIntent.FLAG_CANCEL_CURRENT
-                );
+//                resultPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, dashboardIntent,
+//                        PendingIntent.FLAG_CANCEL_CURRENT
+//                );
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    resultPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, dashboardIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+                } else {
+                    resultPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, dashboardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                }
             }
             if (Build.VERSION.SDK_INT >= 26) {
             if (Utils.getStrAuth() == null || Utils.getStrAuth().equals("")) {

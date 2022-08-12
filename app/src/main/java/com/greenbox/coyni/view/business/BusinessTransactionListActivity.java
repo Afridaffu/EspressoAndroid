@@ -1513,11 +1513,11 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 
 
         com.greenbox.coyni.utils.verticalcalendar.CalendarPicker calendarPicker = dialog.findViewById(R.id.calendar_view);
-        Calendar startDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        Date backwardDate = new Date(startDate.getTime().getTime() - 31556952000L);
+//        Calendar startDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+//        Date backwardDate = new Date(startDate.getTime().getTime() - 31556952000L);
         Calendar endDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-//        endDate.add(Calendar.MONTH, 12); // Add 6 months ahead from current date
-        calendarPicker.setRangeDate(backwardDate, endDate.getTime());
+////        endDate.add(Calendar.MONTH, 12); // Add 6 months ahead from current date
+//        calendarPicker.setRangeDate(backwardDate, endDate.getTime());
         calendarPicker.showDayOfWeekTitle(true);
         calendarPicker.setMode(com.greenbox.coyni.utils.verticalcalendar.CalendarPicker.SelectionMode.RANGE);
         calendarPicker.scrollToDate(endDate.getTime());

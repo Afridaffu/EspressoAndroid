@@ -191,7 +191,8 @@
                         android:text="@string/identity_review_cancel_message"
                         android:textAlignment="center"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_10ssp" />
+                        android:textSize="@dimen/_10ssp"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 
