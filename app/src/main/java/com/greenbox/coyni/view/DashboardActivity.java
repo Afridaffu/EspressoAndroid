@@ -33,6 +33,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.bank.SignOn;
@@ -63,6 +66,7 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -81,6 +85,7 @@ public class DashboardActivity extends BaseActivity {
     CustomerProfileViewModel customerProfileViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
     public NotificationsViewModel notificationsViewModel;
+    private LoginViewModel loginViewModel;
     TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV,
             welcomeCoyniTV, buyTokenWelcomeCoyniTV, contactUSTV, idVeriStatus, actionRequiredMsgTV, actionTV;
     MyApplication objMyApplication;
@@ -92,11 +97,9 @@ public class DashboardActivity extends BaseActivity {
     Long mLastClickTime = 0L, mLastClickTimeQA = 0L;
     RecyclerView txnRV;
     SwipeRefreshLayout latestTxnRefresh;
-    String strName = "", strFirstUser = "";
+    String strName = "", strFirstUser = "", strFCMToken = "";
     ConstraintLayout cvProfileSmall, cvProfile;
-    SQLiteDatabase mydatabase;
     DatabaseHandler databaseHandler;
-    Cursor dsUserDetails;
     int globalCount = 0;
 
     @Override
@@ -113,7 +116,7 @@ public class DashboardActivity extends BaseActivity {
             if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
                 showProgressDialog("connecting...");
             }
-
+            firebaseToken();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -148,6 +151,7 @@ public class DashboardActivity extends BaseActivity {
     @Override
     public void onNotificationUpdate() {
         super.onNotificationUpdate();
+        latestTxnRefresh.setRefreshing(true);
         fetchTransactions();
     }
 
@@ -205,6 +209,7 @@ public class DashboardActivity extends BaseActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             databaseHandler = DatabaseHandler.getInstance(DashboardActivity.this);
             SetDB();
             if (strFirstUser == null || strFirstUser.equals("")) {
@@ -389,7 +394,7 @@ public class DashboardActivity extends BaseActivity {
                     try {
 //                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
 //                                && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
-                       fetchTransactions();
+                        fetchTransactions();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -492,6 +497,7 @@ public class DashboardActivity extends BaseActivity {
             WalletRequest walletRequest = new WalletRequest();
             walletRequest.setWalletType(Utils.TOKEN);
             businessDashboardViewModel.meMerchantWallet(walletRequest);
+            notificationsViewModel.getNotifications();
             transactionsNSV.smoothScrollTo(0, 0);
         } else {
             latestTxnRefresh.setRefreshing(false);
@@ -929,6 +935,9 @@ public class DashboardActivity extends BaseActivity {
                 notificationsViewModel.getNotifications();
                 dashboardViewModel.getFeatureControlByUser(objMyApplication.getLoginUserId());
                 dashboardViewModel.getFeatureControlGlobal(getString(R.string.portalType));
+                if (!strFCMToken.equals("")) {
+                    loginViewModel.initializeDevice(strFCMToken);
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -1204,5 +1213,25 @@ public class DashboardActivity extends BaseActivity {
         }
     }
 
+    private void firebaseToken() {
+        try {
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+
+                            // Get new FCM registration token
+                            strFCMToken = task.getResult();
+                            Log.d("Token", "Token - " + strFCMToken);
+                        }
+                    });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
 }

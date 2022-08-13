@@ -3,8 +3,6 @@ package com.greenbox.coyni.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,17 +28,13 @@ import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTransactionsRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
-import com.greenbox.coyni.model.notification.Notifications;
-import com.greenbox.coyni.model.notification.NotificationsDataItems;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
-import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessTransactionListActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
-import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,16 +83,7 @@ public class BusinessAccountFragment extends BaseFragment {
         latestTxnRefresh.setColorSchemeColors(getResources().getColor(R.color.primary_green, null));
         latestTxnRefresh.setOnRefreshListener(() -> {
             try {
-                LatestTransactionsRequest request = new LatestTransactionsRequest();
-//                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
-//                    request.setUserId(objMyApplication.getMyProfile().getData().getId());
-//                }
-                request.setTransactionType(getDefaultTransactionTypes());
-                request.setMerchantTokenTransactions(true);
-                ((BusinessDashboardActivity) getActivity()).showProgressDialog();
-                dashboardViewModel.getLatestTxns(request);
-                transactionsNSV.smoothScrollTo(0, 0);
-                latestTxnRefresh.setRefreshing(false);
+                fetchTransactions();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -129,7 +113,6 @@ public class BusinessAccountFragment extends BaseFragment {
     }
 
     private void showUserData() {
-//        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
         ((BusinessDashboardActivity) getActivity()).showUserData();
     }
 
@@ -196,12 +179,8 @@ public class BusinessAccountFragment extends BaseFragment {
         if (Utils.checkInternet(requireContext().getApplicationContext())) {
             WalletRequest walletRequest = new WalletRequest();
             walletRequest.setWalletType(Utils.TOKEN);
-//            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
             businessDashboardViewModel.meMerchantWallet(walletRequest);
             LatestTransactionsRequest request = new LatestTransactionsRequest();
-//            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
-//                request.setUserId(objMyApplication.getMyProfile().getData().getId());
-//            }
             request.setTransactionType(getDefaultTransactionTypes());
             request.setMerchantTokenTransactions(true);
 
@@ -213,8 +192,14 @@ public class BusinessAccountFragment extends BaseFragment {
         }
     }
 
-    public void getLatestTxns(LatestTxnResponse daata) {
+    @Override
+    public void onNotificationUpdate() {
+//        super.onNotificationUpdate();
+        latestTxnRefresh.setRefreshing(true);
+        fetchTransactions();
+    }
 
+    public void getLatestTxns(LatestTxnResponse daata) {
         try {
             transactionsNSV.setVisibility(View.VISIBLE);
 
@@ -256,6 +241,20 @@ public class BusinessAccountFragment extends BaseFragment {
         transactionType.add(Utils.businessPayout);
         transactionType.add(Utils.reserveRelease);
         return transactionType;
+    }
+
+    private void fetchTransactions() {
+        try {
+            LatestTransactionsRequest request = new LatestTransactionsRequest();
+            request.setTransactionType(getDefaultTransactionTypes());
+            request.setMerchantTokenTransactions(true);
+            ((BusinessDashboardActivity) getActivity()).showProgressDialog();
+            dashboardViewModel.getLatestTxns(request);
+            transactionsNSV.smoothScrollTo(0, 0);
+            latestTxnRefresh.setRefreshing(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

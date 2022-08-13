@@ -18,11 +18,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
@@ -38,7 +42,7 @@ public class EnableAuthID extends BaseActivity {
     private CardView enableFaceCV, enableTouchCV, successGetStartedCV, businessGetStartedCV;
     private TextView notNowSuccessTV, dontRemindTouchTV, dontRemindFace, tvEnableFace, tvDisableTouch;
     private RelativeLayout faceIDRL, touchIDRL, successRL, businessSuccessRL;
-    private String enableType, enableTypeCopy, strScreen = "";
+    private String enableType, enableTypeCopy, strScreen = "", strFCMToken = "";
     private int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     private DatabaseHandler dbHandler;
     private ImageView succesCloseIV;
@@ -127,8 +131,6 @@ public class EnableAuthID extends BaseActivity {
             }
 
             isBiometric = Utils.getIsBiometric();
-//            setFaceLock();
-//            setTouchId();
             objMyApplication.initializeDBHandler(EnableAuthID.this);
             isFaceLock = objMyApplication.setFaceLock();
             isTouchId = objMyApplication.setTouchId();
@@ -137,23 +139,13 @@ public class EnableAuthID extends BaseActivity {
             } else {
                 objMyApplication.setLocalBiometric(false);
             }
-
+            //firebaseToken();
             initObserver();
             enableFaceCV.setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-
-//                if ((isFaceLock || isTouchId) && Utils.checkAuthentication(EnableAuthID.this)) {
-//                    if (isBiometric && ((isTouchId && Utils.isFingerPrint(EnableAuthID.this)) || (isFaceLock))) {
-//                        Utils.checkAuthentication(EnableAuthID.this, CODE_AUTHENTICATION_VERIFICATION);
-//                    } else {
-//                        startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
-//                    }
-//                } else {
-//                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
-//                }
 
                 if (isBiometric && (Utils.getIsFaceEnabled() || Utils.getIsTouchEnabled()) && Utils.checkAuthentication(EnableAuthID.this)) {
                     Utils.checkAuthentication(EnableAuthID.this, CODE_AUTHENTICATION_VERIFICATION);
@@ -372,7 +364,6 @@ public class EnableAuthID extends BaseActivity {
                                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
                                             launchDashboard();
                                         } else {
-                                            //                                        successRL.setVisibility(View.VISIBLE);
                                             enableType = "SUCCESS";
                                             showSuccessLayout();
                                         }
@@ -394,7 +385,6 @@ public class EnableAuthID extends BaseActivity {
                                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
                                             launchDashboard();
                                         } else {
-                                            //                                        successRL.setVisibility(View.VISIBLE);
                                             enableType = "SUCCESS";
                                             showSuccessLayout();
                                         }
@@ -528,12 +518,19 @@ public class EnableAuthID extends BaseActivity {
     }
 
     private void showSuccessLayout() {
-        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-            successRL.setVisibility(View.VISIBLE);
-            businessSuccessRL.setVisibility(View.GONE);
-        } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-            successRL.setVisibility(View.GONE);
-            businessSuccessRL.setVisibility(View.VISIBLE);
+        try {
+            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                successRL.setVisibility(View.VISIBLE);
+                businessSuccessRL.setVisibility(View.GONE);
+            } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+                successRL.setVisibility(View.GONE);
+                businessSuccessRL.setVisibility(View.VISIBLE);
+            }
+//            if (!strFCMToken.equals("")) {
+//                loginViewModel.initializeDevice(strFCMToken);
+//            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -547,40 +544,25 @@ public class EnableAuthID extends BaseActivity {
         }
     }
 
-//    public void setFaceLock() {
+//    private void firebaseToken() {
 //        try {
-//            isFaceLock = false;
-//            String value = dbHandler.getFacePinLock();
-//            if (value != null && value.equals("true")) {
-//                isFaceLock = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isFaceLock = false;
-//                objMyApplication.setLocalBiometric(false);
-//            }
+//            FirebaseMessaging.getInstance().getToken()
+//                    .addOnCompleteListener(new OnCompleteListener<String>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<String> task) {
+//                            if (!task.isSuccessful()) {
+//                                Log.w("", "Fetching FCM registration token failed", task.getException());
+//                                return;
+//                            }
 //
+//                            // Get new FCM registration token
+//                            strFCMToken = task.getResult();
+//                            Log.d("Token", "Token - " + strFCMToken);
+//                        }
+//                    });
 //        } catch (Exception ex) {
 //            ex.printStackTrace();
 //        }
 //    }
-//
-//    public void setTouchId() {
-//        try {
-//            isTouchId = false;
-//            String value = dbHandler.getThumbPinLock();
-//            if (value != null && value.equals("true")) {
-//                isTouchId = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isTouchId = false;
-////                objMyApplication.setLocalBiometric(false);
-//                if (!isFaceLock) {
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
+
 }

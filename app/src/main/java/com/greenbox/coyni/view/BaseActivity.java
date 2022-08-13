@@ -35,8 +35,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         Utils.launchedActivity = getClass();
         myApplication = (MyApplication) getApplicationContext();
         //getIntentData(getIntent());
-
-        createReceiver();
     }
 
     @Override
@@ -45,7 +43,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         LogUtils.v(TAG, "onNewIntent called");
         //getIntentData(intent);
         setIntent(intent);
-        createReceiver();
     }
 
     @Override
@@ -55,12 +52,15 @@ public abstract class BaseActivity extends AppCompatActivity {
             LogUtils.v(TAG, "Launching the checkout flow");
             launchCheckout();
         }
+        createReceiver();
+        LogUtils.e("BNR Test", "BNR registerReceiver");
         registerReceiver(mReceiver, mIntentFilter);
     }
 
     @Override
     protected void onPause() {
         if (mReceiver != null) {
+            LogUtils.e("BNR Test", "BNR unregisterReceiver");
             unregisterReceiver(mReceiver);
         }
         mReceiver = null;
@@ -173,14 +173,12 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void createReceiver() {
         mIntentFilter = new IntentFilter(Utils.NOTIFICATION_ACTION);
-        if (mReceiver == null) {
-            mReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    onNotificationUpdate();
-                }
-            };
-        }
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                onNotificationUpdate();
+            }
+        };
     }
 
 }

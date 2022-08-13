@@ -60,6 +60,7 @@ import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import java.util.List;
@@ -73,13 +74,14 @@ public class BusinessDashboardActivity extends BaseActivity {
     private Tabs selectedTab = Tabs.DASHBOARD;
     private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile, mIvMenu, mIvUserIcon;
     private TextView mTvDashboard, mTvAccount, mTvTransactions, mTvProfile, countTV, mTvUserName, mTvUserIconText;
-    private String userName = "", firstName = "", lastName = "";
+    private String userName = "", firstName = "", lastName = "", strFCMToken = "";
     private CardView countCV;
     private RelativeLayout notificationsRL, mUserIconRelativeLayout;
 
     private enum Tabs {DASHBOARD, ACCOUNT, TRANSACTIONS, PROFILE}
 
     private DashboardViewModel mDashboardViewModel;
+    private LoginViewModel loginViewModel;
     private BaseFragment mCurrentFragment;
     Long mLastClickTimeQA = 0L;
     private boolean isTabsEnabled = false;
@@ -94,6 +96,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             setContentView(R.layout.activity_business_dashboard);
             initialization();
             initObserver();
+            firebaseToken();
             enableDisableTabView();
             removeFragment();
             showProgressDialog();
@@ -107,13 +110,12 @@ public class BusinessDashboardActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         new FetchData(BusinessDashboardActivity.this).execute();
-//        mDashboardViewModel.meProfile();
     }
 
     @Override
     public void onNotificationUpdate() {
         super.onNotificationUpdate();
-        if(mCurrentFragment != null) {
+        if (mCurrentFragment != null) {
             mCurrentFragment.onNotificationUpdate();
         }
     }
@@ -367,6 +369,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
             mUserIconRelativeLayout = findViewById(R.id.rl_user_icon_layout);
             mIvUserIcon = findViewById(R.id.iv_user_icon);
@@ -819,6 +822,30 @@ public class BusinessDashboardActivity extends BaseActivity {
 
             }
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void firebaseToken() {
+        try {
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+
+                            // Get new FCM registration token
+                            strFCMToken = task.getResult();
+                            Log.d("Token", "Token - " + strFCMToken);
+                            if (!strFCMToken.equals("")) {
+                                loginViewModel.initializeDevice(strFCMToken);
+                            }
+                        }
+                    });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
