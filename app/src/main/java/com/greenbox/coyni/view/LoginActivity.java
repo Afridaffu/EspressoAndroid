@@ -37,11 +37,8 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.BuildConfig;
@@ -77,7 +74,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
     private CardView cvNext;
     private LinearLayout layoutEmailError, layoutPwdError, layoutClose;
     private TextView tvEmailError, tvPwdError, forgotpwd, tvRetEmail;
-    private String strEmail = "", strPwd = "", strMsg = "", strToken = "", strFirstUser = "", strFCMToken = "";
+    private String strEmail = "", strPwd = "", strMsg = "", strToken = "", strFirstUser = "";
     private LoginViewModel loginViewModel;
     private Boolean isFaceLock = false, isTouchId = false, isPwdEye = false, isExpiry = false;
     private ImageView loginBGIV, endIconIV, coyniLogoIV;
@@ -106,7 +103,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             }
             initialization();
             initObserver();
-            firebaseToken();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -690,9 +686,9 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                     objMyApplication.setBusinessUserID(String.valueOf(login.getData().getBusinessUserId()));
                                     objMyApplication.setOwnerImage(login.getData().getOwnerImage());
                                 }
-                                if (!strFCMToken.equals("")) {
-                                    loginViewModel.initializeDevice(strFCMToken);
-                                }
+//                                if (!strFCMToken.equals("")) {
+//                                    loginViewModel.initializeDevice(strFCMToken);
+//                                }
                                 if (login.getData().getPasswordExpired()) {
                                     isExpiry = true;
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
@@ -1082,27 +1078,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.e("new Config", newConfig.toString());
-    }
-
-    private void firebaseToken() {
-        try {
-            FirebaseMessaging.getInstance().getToken()
-                    .addOnCompleteListener(new OnCompleteListener<String>() {
-                        @Override
-                        public void onComplete(@NonNull Task<String> task) {
-                            if (!task.isSuccessful()) {
-                                Log.w("", "Fetching FCM registration token failed", task.getException());
-                                return;
-                            }
-
-                            // Get new FCM registration token
-                            strFCMToken = task.getResult();
-                            Log.d("Token", "Token - " + strFCMToken);
-                        }
-                    });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
 }

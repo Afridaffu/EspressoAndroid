@@ -95,9 +95,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
     Date startDateD = null;
     Date endDateD = null;
     public static BusinessTransactionListActivity transactionListActivity;
-
     boolean isSwipeToRefresh = false;
-//    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,42 +145,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 @Override
                 public void onRefresh() {
                     try {
-                        noMoreTransactionTV.setVisibility(View.GONE);
-
-                        isSwipeToRefresh = true;
-                        globalPending.clear();
-                        globalPosted.clear();
-                        transactionType.clear();
-                        transactionSubType.clear();
-                        txnStatus.clear();
-                        currentPage = 0;
-                        strFromDate = "";
-                        strToDate = "";
-                        strStartAmount = strStartAmountTemp = "";
-                        strEndAmount = strEndAmountTemp = "";
-                        startDateD = null;
-                        endDateD = null;
-                        startDateLong = 0L;
-                        endDateLong = 0L;
-                        strSelectedDate = "";
-                        filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
-
-                        TransactionListRequest transactionListRequest = new TransactionListRequest();
-                        transactionListRequest.setTransactionType(getDefaultTransactionTypes());
-                        transactionListRequest.setMerchantTokenTransactions(true);
-                        transactionListRequest.setPageNo(String.valueOf(currentPage));
-                        transactionListRequest.setWalletCategory(Utils.walletCategory);
-                        transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-
-                        transactionsAPI(transactionListRequest);
-                        objMyApplication.initializeTransactionSearch();
-                        objMyApplication.setTransactionListSearch(transactionListRequest);
-
-
-                        if (searchET.getText().length() > 0 && !searchET.getText().equals("")) {
-                            searchET.setText("");
-                        }
-
+                        fetchTransactions();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -464,6 +427,13 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onNotificationUpdate() {
+        super.onNotificationUpdate();
+        swipeRefreshLayout.setRefreshing(true);
+        fetchTransactions();
     }
 
     public void showFiltersPopup() {
@@ -1736,4 +1706,46 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         Utils.isKeyboardVisible = visible;
     }
 
+
+    private void fetchTransactions() {
+        try {
+            noMoreTransactionTV.setVisibility(View.GONE);
+
+            isSwipeToRefresh = true;
+            globalPending.clear();
+            globalPosted.clear();
+            transactionType.clear();
+            transactionSubType.clear();
+            txnStatus.clear();
+            currentPage = 0;
+            strFromDate = "";
+            strToDate = "";
+            strStartAmount = strStartAmountTemp = "";
+            strEndAmount = strEndAmountTemp = "";
+            startDateD = null;
+            endDateD = null;
+            startDateLong = 0L;
+            endDateLong = 0L;
+            strSelectedDate = "";
+            filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+
+            TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setTransactionType(getDefaultTransactionTypes());
+            transactionListRequest.setMerchantTokenTransactions(true);
+            transactionListRequest.setPageNo(String.valueOf(currentPage));
+            transactionListRequest.setWalletCategory(Utils.walletCategory);
+            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+
+            transactionsAPI(transactionListRequest);
+            objMyApplication.initializeTransactionSearch();
+            objMyApplication.setTransactionListSearch(transactionListRequest);
+
+
+            if (searchET.getText().length() > 0 && !searchET.getText().equals("")) {
+                searchET.setText("");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

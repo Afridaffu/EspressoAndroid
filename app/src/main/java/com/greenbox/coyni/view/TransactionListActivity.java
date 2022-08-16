@@ -154,40 +154,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                 @Override
                 public void onRefresh() {
                     try {
-                        noMoreTransactionTV.setVisibility(View.GONE);
-
-                        isSwipeToRefresh = true;
-                        globalPending.clear();
-                        globalPosted.clear();
-                        transactionType.clear();
-                        transactionSubType.clear();
-                        txnStatus.clear();
-                        currentPage = 0;
-                        strFromDate = "";
-                        strToDate = "";
-                        strStartAmount = strStartAmountTemp = "";
-                        strEndAmount = strEndAmountTemp = "";
-                        startDateD = null;
-                        endDateD = null;
-                        startDateLong = 0L;
-                        endDateLong = 0L;
-                        strSelectedDate = "";
-                        filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
-
-                        TransactionListRequest transactionListRequest = new TransactionListRequest();
-                        transactionListRequest.setTransactionType(getDefaultTransactionTypes());
-                        transactionListRequest.setPageNo(String.valueOf(currentPage));
-                        transactionListRequest.setWalletCategory(Utils.walletCategory);
-                        transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-
-                        transactionsAPI(transactionListRequest);
-                        objMyApplication.initializeTransactionSearch();
-                        objMyApplication.setTransactionListSearch(transactionListRequest);
-
-                        if (searchET.getText().length() > 0 && !searchET.getText().equals("")) {
-                            searchET.setText("");
-                        }
-
+                        fetchTransactions();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -470,6 +437,13 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onNotificationUpdate() {
+        super.onNotificationUpdate();
+        swipeRefreshLayout.setRefreshing(true);
+        fetchTransactions();
     }
 
     public void showFiltersPopup() {
@@ -1706,4 +1680,44 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
         Utils.isKeyboardVisible = visible;
     }
 
+
+    private void fetchTransactions() {
+        try {
+            noMoreTransactionTV.setVisibility(View.GONE);
+
+            isSwipeToRefresh = true;
+            globalPending.clear();
+            globalPosted.clear();
+            transactionType.clear();
+            transactionSubType.clear();
+            txnStatus.clear();
+            currentPage = 0;
+            strFromDate = "";
+            strToDate = "";
+            strStartAmount = strStartAmountTemp = "";
+            strEndAmount = strEndAmountTemp = "";
+            startDateD = null;
+            endDateD = null;
+            startDateLong = 0L;
+            endDateLong = 0L;
+            strSelectedDate = "";
+            filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+
+            TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setTransactionType(getDefaultTransactionTypes());
+            transactionListRequest.setPageNo(String.valueOf(currentPage));
+            transactionListRequest.setWalletCategory(Utils.walletCategory);
+            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+
+            transactionsAPI(transactionListRequest);
+            objMyApplication.initializeTransactionSearch();
+            objMyApplication.setTransactionListSearch(transactionListRequest);
+
+            if (searchET.getText().length() > 0 && !searchET.getText().equals("")) {
+                searchET.setText("");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

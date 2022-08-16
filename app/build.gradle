@@ -55,11 +55,11 @@ android {
 
     productFlavors {
         uat {
-            buildConfigField 'String', 'URL_PRODUCTION', '\"https://api.coyni.com/\"'
+            buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-beta.coyni.com\"'
             buildConfigField 'String', 'Referer', '\"https://members.coyni.com\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
             buildConfigField 'String', 'MATOMO_SERVER', '\"https://qa-analytics.coyni.com\"'
-            buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'true'
+            buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
         }
         sat {
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-stg.coyni.com/\"'
@@ -189,7 +189,7 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
 
     //Firebase
-    implementation platform('com.google.firebase:firebase-bom:28.4.1')
+    implementation platform('com.google.firebase:firebase-bom:30.3.2')
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-analytics'
     //End
