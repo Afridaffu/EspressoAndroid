@@ -24,6 +24,8 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 
+import java.util.Random;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     PendingIntent resultPendingIntent;
@@ -91,7 +93,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(resultPendingIntent)
                 .setContentText(remoteMessage.getNotification().getBody())
                 .setContentInfo("Information");
-        notificationManager.notify(1, notificationBuilder.build());
+        notificationManager.notify(getNotificationId(), notificationBuilder.build());
+    }
+
+    private static int getNotificationId() {
+        Random rnd = new Random();
+        return 100 + rnd.nextInt(9000);
     }
 
 }
