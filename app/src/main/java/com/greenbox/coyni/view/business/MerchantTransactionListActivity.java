@@ -1,11 +1,17 @@
 package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -27,6 +33,7 @@ import com.greenbox.coyni.adapters.OnItemClickListener;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.dialogs.MerchantTransactionsFilterDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
@@ -43,7 +50,7 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MerchantTransactionListActivity extends BaseActivity implements TextWatcher {
+public class MerchantTransactionListActivity extends BaseActivity implements TextWatcher, OnKeyboardVisibilityListener {
     private TransactionListPendingAdapter transactionListPendingAdapter;
     private MerchantTransactionListPostedNewAdapter transactionListPostedAdapter;
     private Long mLastClickTime = 0L;
@@ -185,7 +192,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                 globalPending.clear();
                 globalPosted.clear();
                 getTransactions(filterTransactionList);
-            }else {
+            } else {
                 loadData();
             }
             dismissDialog();
@@ -204,6 +211,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     }
 
     private void initFields() {
+        setKeyboardVisibilityListener(this);
         bottomCorners = findViewById(R.id.bottom_corners);
         closeBtn = findViewById(R.id.closeBtnIV);
         filterIV = findViewById(R.id.filtericonIV);
@@ -408,4 +416,36 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         });
         filterDialog.show();
     }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
+    }
+
 }

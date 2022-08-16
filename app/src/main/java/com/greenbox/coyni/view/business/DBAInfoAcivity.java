@@ -740,6 +740,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                     objMyApplication.setOldLoginUserId(objMyApplication.getLoginUserId());
                     objMyApplication.setLoginUserId(identityImageResponse.getData().getUserId());
+                    objMyApplication.setAccountType(Utils.BUSINESS_ACCOUNT);
                     BusinessRegistrationTrackerActivity.isAddDbaCalled = true;
                     isAddDBAAPICalled = true;
                     isAddDBA = false;

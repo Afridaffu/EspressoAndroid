@@ -1,15 +1,20 @@
 package com.greenbox.coyni.view.business;
 
 import android.app.Dialog;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -32,6 +37,7 @@ import com.google.android.material.chip.Chip;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedNewAdapter;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
@@ -56,7 +62,7 @@ import java.util.TimeZone;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 
-public class BusinessTransactionListActivity extends BaseActivity implements TextWatcher {
+public class BusinessTransactionListActivity extends BaseActivity implements TextWatcher, OnKeyboardVisibilityListener {
     TransactionListPendingAdapter transactionListPendingAdapter;
     TransactionListPostedNewAdapter transactionListPostedAdapter;
     Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
@@ -84,7 +90,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
     private ArrayList<Integer> tempTransactionSubType = new ArrayList<Integer>();
     private ArrayList<Integer> tempTxnStatus = new ArrayList<Integer>();
 
-    public String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "", tempStrSelectedDate = "";
+    public String strStartAmount = "", strEndAmount = "", strStartAmountTemp = "", strEndAmountTemp = "", strFromDate = "", strToDate = "", strSelectedDate = "", tempStrSelectedDate = "";
     public long startDateLong = 0L, endDateLong = 0L, tempStartDateLong = 0L, tempEndDateLong = 0L;
     Date startDateD = null;
     Date endDateD = null;
@@ -101,6 +107,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_transaction_list);
         MatomoUtility.getInstance().trackScreen(MatomoConstants.TOKEN_TRANSACTIONS_SCREEN);
+        setKeyboardVisibilityListener(this);
         try {
             transactionListActivity = this;
             closeBtn = findViewById(R.id.closeBtnIV);
@@ -151,8 +158,8 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                         currentPage = 0;
                         strFromDate = "";
                         strToDate = "";
-                        strStartAmount = "";
-                        strEndAmount = "";
+                        strStartAmount = strStartAmountTemp = "";
+                        strEndAmount = strEndAmountTemp = "";
                         startDateD = null;
                         endDateD = null;
                         startDateLong = 0L;
@@ -634,11 +641,30 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 }
             }
 //
+//            if (!strStartAmount.trim().equals("")) {
+//                InputFilter[] FilterArray = new InputFilter[1];
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                transAmountStartET.setFilters(FilterArray);
+//                transAmountStartET.setText(strStartAmount);
+//            }
+//
+//            if (!strEndAmount.trim().equals("")) {
+//                InputFilter[] FilterArray = new InputFilter[1];
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                transAmountEndET.setFilters(FilterArray);
+//                transAmountEndET.setText(strEndAmount);
+//            }
+
             if (!strStartAmount.trim().equals("")) {
                 InputFilter[] FilterArray = new InputFilter[1];
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 transAmountStartET.setFilters(FilterArray);
                 transAmountStartET.setText(strStartAmount);
+            } else if (!strStartAmountTemp.trim().equals("")) {
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                transAmountStartET.setFilters(FilterArray);
+                transAmountStartET.setText(strStartAmountTemp);
             }
 
             if (!strEndAmount.trim().equals("")) {
@@ -646,6 +672,11 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 transAmountEndET.setFilters(FilterArray);
                 transAmountEndET.setText(strEndAmount);
+            } else if (!strEndAmountTemp.trim().equals("")) {
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                transAmountEndET.setFilters(FilterArray);
+                transAmountEndET.setText(strEndAmountTemp);
             }
 
             if (!strSelectedDate.equals("")) {
@@ -674,13 +705,15 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 return;
             }
             mLastClickTimeFilters = SystemClock.elapsedRealtime();
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(this);
             transactionType.clear();
             transactionSubType.clear();
             txnStatus.clear();
             strFromDate = "";
             strToDate = "";
-            strStartAmount = "";
-            strEndAmount = "";
+            strStartAmount = strStartAmountTemp = "";
+            strEndAmount = strEndAmountTemp = "";
             startDateD = null;
             endDateD = null;
             startDateLong = 0L;
@@ -1373,6 +1406,17 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                     filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
                 }
 
+                if (!strStartAmount.equals(""))
+                    strStartAmountTemp = strStartAmount;
+                else
+                    strStartAmountTemp = "";
+
+                if (!strEndAmount.equals(""))
+                    strEndAmountTemp = strEndAmount;
+                else
+                    strEndAmountTemp = "";
+
+
                 if (!transAmountStartET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
                     Double startAmount = Utils.doubleParsing(transAmountStartET.getText().toString().replace(",", "").trim());
                     Double endAmount = Utils.doubleParsing(transAmountEndET.getText().toString().replace(",", "").trim());
@@ -1660,4 +1704,36 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 
         return transactionType;
     }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
+    }
+
 }
