@@ -241,6 +241,8 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 return;
             }
             mLastClickTimeFilters = SystemClock.elapsedRealtime();
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(context);
             if (transactionType != null) {
                 transactionType.clear();
             }
