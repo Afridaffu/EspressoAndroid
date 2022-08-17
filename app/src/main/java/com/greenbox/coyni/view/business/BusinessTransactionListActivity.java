@@ -1232,6 +1232,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 
                 if (transAmountStartET.getText().toString().equals("")) {
                     transAmountStartET.setText("0.00");
+                    strStartAmount = "0.00";
                 }
 
                 if (!hasFocus) {
@@ -1253,6 +1254,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                         }
                         if (transAmountStartET.getText().toString().equals("")) {
                             transAmountStartET.setText("0.00");
+                            strStartAmount = "0.00";
                         }
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
@@ -1285,6 +1287,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                     transAmountEndET.clearFocus();
                     if (transAmountStartET.getText().toString().equals("")) {
                         transAmountStartET.setText("0.00");
+                        strStartAmount =  "0.00";
                     }
                 }
                 return false;

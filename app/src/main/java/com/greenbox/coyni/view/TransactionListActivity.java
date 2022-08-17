@@ -1211,6 +1211,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
 
                 if (transAmountStartET.getText().toString().equals("")) {
                     transAmountStartET.setText("0.00");
+                    strStartAmount = "0.00";
                 }
 
                 if (!hasFocus) {
@@ -1232,6 +1233,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                         }
                         if (transAmountStartET.getText().toString().equals("")) {
                             transAmountStartET.setText("0.00");
+                            strStartAmount = "0.00";
                         }
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
@@ -1264,6 +1266,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                     transAmountEndET.clearFocus();
                     if (transAmountStartET.getText().toString().equals("")) {
                         transAmountStartET.setText("0.00");
+                        strStartAmount = "0.00";
                     }
                 }
                 return false;
