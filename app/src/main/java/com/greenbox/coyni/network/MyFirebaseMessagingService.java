@@ -22,6 +22,7 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.DashboardActivity;
+import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 
 import java.util.Random;
@@ -39,11 +40,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             objMyApplication = (MyApplication) getApplicationContext();
             if (remoteMessage.getNotification() != null) {
                 LogUtils.d("", "Message Notification Body: " + remoteMessage.getNotification().getBody());
-                Intent dashboardIntent = new Intent(getApplicationContext(), DashboardActivity.class);
-                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-                    dashboardIntent = new Intent(getApplicationContext(), BusinessDashboardActivity.class);
-                }
+                Intent dashboardIntent = new Intent(getApplicationContext(), OnboardActivity.class);
+//                Intent dashboardIntent = new Intent(getApplicationContext(), DashboardActivity.class);
+//                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+//                    dashboardIntent = new Intent(getApplicationContext(), BusinessDashboardActivity.class);
+//                }
                 dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                dashboardIntent.setAction(Intent.ACTION_MAIN);
+                dashboardIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                dashboardIntent.putExtra("pushnotification", "yes");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     resultPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, dashboardIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                 } else {
@@ -87,7 +92,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(getColor(R.color.primary_green))
                 .setTicker("coyni")
                 .setContentTitle(remoteMessage.getNotification().getTitle())
                 .setContentIntent(resultPendingIntent)

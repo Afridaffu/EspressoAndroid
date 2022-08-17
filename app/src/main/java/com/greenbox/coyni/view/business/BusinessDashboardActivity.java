@@ -86,6 +86,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     Long mLastClickTimeQA = 0L;
     private boolean isTabsEnabled = false;
     int notificationCount = 0;
+    private DisplayImageUtility displayImageUtility;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,6 +102,20 @@ public class BusinessDashboardActivity extends BaseActivity {
             removeFragment();
             showProgressDialog();
             mDashboardViewModel.meProfile();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        try {
+            objMyApplication.setStrRetrEmail("");
+            objMyApplication.clearUserData();
+            displayImageUtility.clearCache();
+            Utils.setStrAuth("");
+            finish();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -347,12 +362,9 @@ public class BusinessDashboardActivity extends BaseActivity {
         try {
 
             // fix for reloading dashboard on new DBA Creation
-            try {
-                BusinessRegistrationTrackerActivity.isAddBusinessCalled = false;
-                BusinessRegistrationTrackerActivity.isAddDbaCalled = false;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            BusinessRegistrationTrackerActivity.isAddBusinessCalled = false;
+            BusinessRegistrationTrackerActivity.isAddDbaCalled = false;
+
             // fix for reloading dashboard on new DBA Creation
 
             mIvDashboard = findViewById(R.id.iv_dashboard_icon);
@@ -370,7 +382,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-
+            displayImageUtility = DisplayImageUtility.getInstance(this);
             mUserIconRelativeLayout = findViewById(R.id.rl_user_icon_layout);
             mIvUserIcon = findViewById(R.id.iv_user_icon);
             mTvUserName = findViewById(R.id.tv_user_name);

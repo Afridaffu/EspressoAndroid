@@ -101,6 +101,7 @@ public class DashboardActivity extends BaseActivity {
     ConstraintLayout cvProfileSmall, cvProfile;
     DatabaseHandler databaseHandler;
     int globalCount = 0;
+    private DisplayImageUtility displayImageUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +118,20 @@ public class DashboardActivity extends BaseActivity {
                 showProgressDialog("connecting...");
             }
             firebaseToken();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        try {
+            objMyApplication.setStrRetrEmail("");
+            objMyApplication.clearUserData();
+            displayImageUtility.clearCache();
+            Utils.setStrAuth("");
+            finish();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -204,6 +219,7 @@ public class DashboardActivity extends BaseActivity {
             countCV = findViewById(R.id.countCV);
 
             objMyApplication = (MyApplication) getApplicationContext();
+            displayImageUtility = DisplayImageUtility.getInstance(this);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
