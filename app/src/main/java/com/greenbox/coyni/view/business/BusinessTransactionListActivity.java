@@ -95,7 +95,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
     Date startDateD = null;
     Date endDateD = null;
     public static BusinessTransactionListActivity transactionListActivity;
-    boolean isSwipeToRefresh = false;
+    boolean isSwipeToRefresh = false, isApplyClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -625,7 +625,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 //                transAmountEndET.setText(strEndAmount);
 //            }
 
-            if (!strStartAmount.trim().equals("")) {
+            if (!strStartAmount.trim().equals("") && isApplyClicked) {
                 InputFilter[] FilterArray = new InputFilter[1];
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 transAmountStartET.setFilters(FilterArray);
@@ -637,7 +637,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 transAmountStartET.setText(strStartAmountTemp);
             }
 
-            if (!strEndAmount.trim().equals("")) {
+            if (!strEndAmount.trim().equals("") && isApplyClicked) {
                 InputFilter[] FilterArray = new InputFilter[1];
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 transAmountEndET.setFilters(FilterArray);
@@ -652,6 +652,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
             if (!strSelectedDate.equals("")) {
                 getDateFromPickerET.setText(strSelectedDate);
             }
+            isApplyClicked = false;
         } else {
             transactionType.clear();
             transactionSubType.clear();
@@ -1287,7 +1288,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                     transAmountEndET.clearFocus();
                     if (transAmountStartET.getText().toString().equals("")) {
                         transAmountStartET.setText("0.00");
-                        strStartAmount =  "0.00";
+                        strStartAmount = "0.00";
                     }
                 }
                 return false;
@@ -1414,7 +1415,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                     dialog.dismiss();
 //
                 }
-
+                isApplyClicked = true;
             }
         });
 

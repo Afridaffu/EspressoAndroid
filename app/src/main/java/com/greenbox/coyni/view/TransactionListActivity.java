@@ -102,7 +102,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
     Date endDateD = null;
     public static TransactionListActivity transactionListActivity;
 
-    boolean isSwipeToRefresh = false;
+    boolean isSwipeToRefresh = false, isApplyClicked = false;
 
 //    ProgressDialog progressDialog;
 
@@ -621,7 +621,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                 }
             }
 
-            if (!strStartAmount.trim().equals("")) {
+            if (!strStartAmount.trim().equals("") && isApplyClicked) {
                 InputFilter[] FilterArray = new InputFilter[1];
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 transAmountStartET.setFilters(FilterArray);
@@ -633,7 +633,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                 transAmountStartET.setText(strStartAmountTemp);
             }
 
-            if (!strEndAmount.trim().equals("")) {
+            if (!strEndAmount.trim().equals("") && isApplyClicked) {
                 InputFilter[] FilterArray = new InputFilter[1];
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                 transAmountEndET.setFilters(FilterArray);
@@ -649,6 +649,8 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
             if (!strSelectedDate.equals("")) {
                 getDateFromPickerET.setText(strSelectedDate);
             }
+
+            isApplyClicked = false;
         } else {
             transactionType.clear();
             transactionSubType.clear();
@@ -1389,6 +1391,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
 
                 }
 
+                isApplyClicked = true;
             }
         });
 
