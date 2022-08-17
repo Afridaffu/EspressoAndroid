@@ -83,7 +83,7 @@
 
                 <action android:name="android.intent.action.VIEW" />
 
-                <data android:scheme="coynitest.com" />
+                <data android:scheme="coyni" />
             </intent-filter>
         </activity>
         <activity
