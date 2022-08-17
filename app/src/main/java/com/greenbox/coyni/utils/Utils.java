@@ -84,6 +84,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.tracker.TrackerItem;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
+import com.greenbox.coyni.view.CustomerProfileActivity;
 import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.OnboardActivity;
@@ -2819,5 +2820,4 @@ public class Utils {
         spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
         spannableTV.setHighlightColor(Color.TRANSPARENT);
     }
-
 }

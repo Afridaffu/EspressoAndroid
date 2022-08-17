@@ -538,15 +538,20 @@ public class CustomerProfileActivity extends BaseActivity {
     }
 
     private void onLogoutSuccess() {
-        isLoggedOut = true;
-        objMyApplication.setStrRetrEmail("");
-        objMyApplication.clearUserData();
-        dropAllTables();
-        displayImageUtility.clearCache();
-        FirebaseMessaging.getInstance().deleteToken();
-        Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
+        try {
+            isLoggedOut = true;
+            objMyApplication.setStrRetrEmail("");
+            objMyApplication.clearUserData();
+            dropAllTables();
+            displayImageUtility.clearCache();
+            FirebaseMessaging.getInstance().deleteToken();
+            Utils.setStrAuth("");
+            Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void displayQRCode() {
@@ -764,25 +769,11 @@ public class CustomerProfileActivity extends BaseActivity {
 
     private void dropAllTables() {
         try {
-//            enableBiometric(false);
-
             dbHandler.clearAllTables();
-
             SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
             editor.apply();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void enableBiometric(Boolean value) {
-        try {
-            BiometricRequest biometricRequest = new BiometricRequest();
-            biometricRequest.setBiometricEnabled(value);
-            biometricRequest.setDeviceId(Utils.getDeviceID());
-            coyniViewModel.saveBiometric(biometricRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
