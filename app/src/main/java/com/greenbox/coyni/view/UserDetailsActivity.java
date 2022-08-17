@@ -268,25 +268,30 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
 
-                    try {
-                        authenticateType = "ADDRESS";
+                    if (myApplicationObj.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                        Utils.showCustomToast(UserDetailsActivity.this, getString(R.string.complete_idve), 0, "");
+                    } else {
+                        try {
+                            authenticateType = "ADDRESS";
 
-                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
-                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
-                                Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
+                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
+                                    Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                } else {
+                                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                            .putExtra("TYPE", "ENTER")
+                                            .putExtra("screen", "EditAddress"));
+                                }
                             } else {
                                 startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
                                         .putExtra("screen", "EditAddress"));
                             }
-                        } else {
-                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("screen", "EditAddress"));
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+
 
                 }
             });

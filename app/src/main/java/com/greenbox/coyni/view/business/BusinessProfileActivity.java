@@ -77,7 +77,7 @@ public class BusinessProfileActivity extends BaseActivity {
     private MyApplication myApplication;
     private Boolean isSwitchEnabled = false;
     private CoyniViewModel coyniViewModel;
-    private ImageView profileImage,imgQRCode;
+    private ImageView profileImage, imgQRCode;
     private TextView profileText, account_status, account_id, userFullname, b_tvBMSetting;
     private Dialog enablePopup;
     private DatabaseHandler dbHandler;
@@ -719,7 +719,7 @@ public class BusinessProfileActivity extends BaseActivity {
                     if (profile != null) {
                         myApplication.setMyProfile(profile);
                         bindImage(profile.getData().getImage());
-
+                        myApplication.setAccountType(profile.getData().getAccountType());
                         if (profile.getData().getAccountStatus() != null) {
                             try {
                                 if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
