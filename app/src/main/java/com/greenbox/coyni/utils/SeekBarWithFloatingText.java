@@ -18,9 +18,10 @@ import android.widget.TextView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.merchant_activity.Earning;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 public class SeekBarWithFloatingText extends RelativeLayout {
 

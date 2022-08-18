@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.zxing.common.StringUtils;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.activtity_log.ActivityLogResp;
 import com.greenbox.coyni.model.preferences.BaseProfile;
@@ -16,6 +17,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.MyViewHolder> {
 
@@ -42,8 +44,23 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.createdTime.setText(myApplication.convertZoneDateTime(respList.getData().get(position).getCreatedAt(),dateAndTime,requiredFormat).toLowerCase());
-        holder.messageTv.setText(respList.getData().get(position).getMessage());
+        holder.createdTime.setText(myApplication.convertZoneDateTime(respList.getData().get(position).getCreatedAt(), dateAndTime, requiredFormat).toLowerCase());
+//        String str = " Chargeback case 124 created. <a href='api/v2/transactions/token/info/BUT38D6F83274A5F2C9C775B6AAE2C825/2?txnSubType=3'>Reference ID BUT38D6F83274A5F2C9C775B6AAE2C825</a>";
+        String str = respList.getData().get(position).getMessage();
+
+        if (str.contains("</a>")) {
+            String firstText = str.split("<a")[0];
+            String secondText = "Reference ID " + str.split("<a")[1].split("Reference ID")[1].replace("</a>", "");
+            holder.messageTv.setText(firstText.trim() + " " + secondText.trim());
+        } else {
+            holder.messageTv.setText(str);
+        }
+
+        if (respList.getData().get(position).getTxnType() != null && respList.getData().get(position).getTxnSubType() != null) {
+            holder.type.setText("Purchase");
+        } else {
+            holder.type.setText("ChargeBack");
+        }
     }
 
     @Override
