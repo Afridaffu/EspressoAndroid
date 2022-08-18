@@ -19,7 +19,7 @@
             android:layout_above="@+id/bottomLL"
             android:orientation="vertical">
 
-            <com.greenbox.coyni.intro_slider.AutoScrollViewPager
+            <com.coyni.mapp.intro_slider.AutoScrollViewPager
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

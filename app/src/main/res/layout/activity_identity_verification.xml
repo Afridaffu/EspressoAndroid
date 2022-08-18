@@ -78,7 +78,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16sdp" />
 
-            <com.greenbox.coyni.intro_slider.AutoScrollViewPager
+            <com.coyni.mapp.intro_slider.AutoScrollViewPager
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -779,7 +779,7 @@
 
                 </ScrollView>
 
-            </com.greenbox.coyni.intro_slider.AutoScrollViewPager>
+            </com.coyni.mapp.intro_slider.AutoScrollViewPager>
 
 
         </LinearLayout>

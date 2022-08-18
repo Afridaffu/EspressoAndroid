@@ -127,7 +127,7 @@
                             android:layout_marginTop="@dimen/_12sdp"
                             android:background="@drawable/disable_bg" />
 
-                        <com.greenbox.coyni.utils.outline_et.EditCardNumberET
+                        <com.coyni.mapp.utils.outline_et.EditCardNumberET
                             android:id="@+id/etlCard"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
@@ -148,7 +148,7 @@
                         app:boxStrokeColor="@color/primary_green"
                         app:hintTextColor="@color/primary_green">
 
-                        <com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText
+                        <com.coyni.mapp.utils.MaskEditText.widget.MaskEditText
                             android:id="@+id/etExpiry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

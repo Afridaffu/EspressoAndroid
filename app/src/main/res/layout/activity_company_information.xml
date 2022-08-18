@@ -79,7 +79,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/_16ssp" />
 
-    <com.greenbox.coyni.intro_slider.OneDirectionViewPager
+    <com.coyni.mapp.intro_slider.OneDirectionViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -223,7 +223,7 @@
                         android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
 
-                <com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText
+                <com.coyni.mapp.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText
                     android:id="@+id/CompanyphoneNumberOET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -309,7 +309,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.greenbox.coyni.utils.outline_et.SSNOutlineBoxNumberEditText
+                <com.coyni.mapp.utils.outline_et.SSNOutlineBoxNumberEditText
                     android:id="@+id/ssnOutLineBoxET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1145,6 +1145,6 @@
 
         </RelativeLayout>
 
-    </com.greenbox.coyni.intro_slider.OneDirectionViewPager>
+    </com.coyni.mapp.intro_slider.OneDirectionViewPager>
 
 </LinearLayout>

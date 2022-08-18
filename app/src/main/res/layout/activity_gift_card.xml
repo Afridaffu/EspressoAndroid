@@ -130,7 +130,7 @@
                 android:background="@drawable/fullradius_list_items"
                 android:orientation="vertical">
 
-                <com.greenbox.coyni.utils.ExpandableHeightRecyclerView
+                <com.coyni.mapp.utils.ExpandableHeightRecyclerView
                     android:id="@+id/brandsGV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

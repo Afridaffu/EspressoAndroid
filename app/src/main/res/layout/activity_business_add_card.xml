@@ -155,7 +155,7 @@
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
-                <com.greenbox.coyni.utils.outline_et.CardNumberEditText
+                <com.coyni.mapp.utils.outline_et.CardNumberEditText
                     android:id="@+id/b_etlCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -264,7 +264,7 @@
                         app:errorIconDrawable="@null"
                         app:hintTextColor="@color/primary_green">
 
-                        <com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText
+                        <com.coyni.mapp.utils.MaskEditText.widget.MaskEditText
                             android:id="@+id/b_etExpiry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

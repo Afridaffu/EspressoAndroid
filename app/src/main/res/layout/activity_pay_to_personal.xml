@@ -387,7 +387,7 @@
                     app:layout_constraintTop_toTopOf="@+id/im_lock"
                     android:visibility="gone"/>
 
-                <com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView
+                <com.coyni.mapp.utils.CustomeTextView.AnimatedGradientTextView
                     android:id="@+id/tvLable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

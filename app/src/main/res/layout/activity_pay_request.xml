@@ -365,7 +365,7 @@
                 android:textSize="@dimen/_12ssp" />
         </LinearLayout>
 
-        <com.greenbox.coyni.utils.keyboards.PayRequestCustomKeyboard
+        <com.coyni.mapp.utils.keyboards.PayRequestCustomKeyboard
             android:id="@+id/payReqCK"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

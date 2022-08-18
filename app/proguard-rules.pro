@@ -24,7 +24,7 @@
 #    public protected private *;
 #}
 
--keep public class com.greenbox.coyni.model.** {
+-keep public class com.coyni.mapp.model.** {
     *;
 }
 #Need to discuss , Customer Action Required Docs upload not working in release if we didn't add below line.

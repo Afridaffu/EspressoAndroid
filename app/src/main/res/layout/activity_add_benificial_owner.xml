@@ -69,7 +69,7 @@
     </LinearLayout>
 
 
-    <com.greenbox.coyni.intro_slider.AutoScrollViewPager
+    <com.coyni.mapp.intro_slider.AutoScrollViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -319,7 +319,7 @@
                     <!--                    </com.google.android.material.textfield.TextInputLayout>-->
 
 
-                    <com.greenbox.coyni.utils.outline_et.SSNBOEditText
+                    <com.coyni.mapp.utils.outline_et.SSNBOEditText
                         android:id="@+id/ssnOutLineBoxET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -940,6 +940,6 @@
             </ScrollView>
         </RelativeLayout>
 
-    </com.greenbox.coyni.intro_slider.AutoScrollViewPager>
+    </com.coyni.mapp.intro_slider.AutoScrollViewPager>
 
 </LinearLayout>

@@ -264,7 +264,7 @@
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
-            <com.greenbox.coyni.utils.keyboards.CustomKeyboard
+            <com.coyni.mapp.utils.keyboards.CustomKeyboard
                 android:id="@+id/ckb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

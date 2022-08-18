@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable name="businessDashboard"
-            type="com.greenbox.coyni.viewmodel.CreateBusinessAccountViewModel"/>
+            type="com.coyni.mapp.viewmodel.CreateBusinessAccountViewModel"/>
     </data>
     <ScrollView
         android:layout_width="match_parent"

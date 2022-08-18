@@ -830,7 +830,7 @@
                                 android:textSize="@dimen/_12ssp"
                                 android:visibility="visible" />
 
-                            <com.greenbox.coyni.utils.SeekBarWithFloatingText
+                            <com.coyni.mapp.utils.SeekBarWithFloatingText
                                 android:id="@+id/sb_today_volume"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

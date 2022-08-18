@@ -72,7 +72,7 @@
                     android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneUpdateET
+            <com.coyni.mapp.utils.outline_et.OutLineBoxPhoneUpdateET
                 android:id="@+id/newPhoneET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -181,7 +181,7 @@
             android:background="@drawable/round_corner"
             android:orientation="vertical">
 
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneUpdateET
+            <com.coyni.mapp.utils.outline_et.OutLineBoxPhoneUpdateET
                 android:id="@+id/currentPhoneET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -190,7 +190,7 @@
                 android:paddingEnd="@dimen/_10sdp"
                 android:visibility="gone" />
 
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneUpdateET
+            <com.coyni.mapp.utils.outline_et.OutLineBoxPhoneUpdateET
                 android:id="@+id/b_newPhoneET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

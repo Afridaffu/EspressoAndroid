@@ -37,7 +37,7 @@
 
         </LinearLayout>
 
-        <com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText
+        <com.coyni.mapp.utils.MaskEditText.widget.MaskEditText
             android:id="@+id/pnET"
             android:layout_width="match_parent"
             android:layout_height="55dp"

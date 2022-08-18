@@ -63,7 +63,7 @@
 
         </LinearLayout>
 
-        <com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText
+        <com.coyni.mapp.utils.MaskEditText.widget.MaskEditText
             android:id="@+id/ssnET"
             android:layout_width="match_parent"
             android:layout_height="55dp"
@@ -86,7 +86,7 @@
             android:textSize="@dimen/_12ssp"
             app:mask="___-__-____" />
 
-        <com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText
+        <com.coyni.mapp.utils.MaskEditText.widget.MaskEditText
             android:id="@+id/einET"
             android:layout_width="match_parent"
             android:layout_height="55dp"

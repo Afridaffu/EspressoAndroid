@@ -116,7 +116,7 @@
         android:layout_marginEnd="@dimen/_21sdp"
         android:background="@color/light_gray" />
 
-    <com.greenbox.coyni.utils.keyboards.CustomKeyboard
+    <com.coyni.mapp.utils.keyboards.CustomKeyboard
         android:id="@+id/customKeyBoard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

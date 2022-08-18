@@ -285,7 +285,7 @@
                         android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
 
-                <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText
+                <com.coyni.mapp.utils.outline_et.OutLineBoxPhoneNumberEditText
                     android:id="@+id/phoneNoET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
