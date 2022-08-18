@@ -8,7 +8,7 @@
 
     >
 
-    <com.greenbox.coyni.custom_camera.SquareCameraPreview
+    <com.coyni.mapp.custom_camera.SquareCameraPreview
         android:id="@+id/camera_preview_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

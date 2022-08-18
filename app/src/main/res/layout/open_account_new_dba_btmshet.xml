@@ -91,7 +91,7 @@
         android:layout_marginBottom="@dimen/_2sdp"
         app:cardCornerRadius="@dimen/_10sdp">
 
-        <com.greenbox.coyni.utils.ExpandableHeightRecyclerView
+        <com.coyni.mapp.utils.ExpandableHeightRecyclerView
             android:id="@+id/transactionListPendingRV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

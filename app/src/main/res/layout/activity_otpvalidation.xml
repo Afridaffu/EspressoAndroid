@@ -53,7 +53,7 @@
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
-            <com.greenbox.coyni.utils.otpview.PinView
+            <com.coyni.mapp.utils.otpview.PinView
                 android:id="@+id/otpPV"
                 style="@style/PinWidget.PinView"
                 android:layout_width="wrap_content"

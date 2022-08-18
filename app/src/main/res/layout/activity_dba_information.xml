@@ -70,7 +70,7 @@
         android:textSize="@dimen/_16ssp" />
 
 
-    <com.greenbox.coyni.intro_slider.AutoScrollViewPager
+    <com.coyni.mapp.intro_slider.AutoScrollViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -212,7 +212,7 @@
                         android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
 
-                <com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText
+                <com.coyni.mapp.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText
                     android:id="@+id/dbaPhoneOET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -357,7 +357,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <com.greenbox.coyni.utils.outline_et.WebsiteOutlineEditText
+                <com.coyni.mapp.utils.outline_et.WebsiteOutlineEditText
                     android:id="@+id/websiteOET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -388,19 +388,19 @@
                 </LinearLayout>
 
 
-                <com.greenbox.coyni.utils.outline_et.VolumeEditText
+                <com.coyni.mapp.utils.outline_et.VolumeEditText
                     android:id="@+id/mpvOET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp" />
 
-                <com.greenbox.coyni.utils.outline_et.VolumeEditText
+                <com.coyni.mapp.utils.outline_et.VolumeEditText
                     android:id="@+id/highTicketOET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp" />
 
-                <com.greenbox.coyni.utils.outline_et.VolumeEditText
+                <com.coyni.mapp.utils.outline_et.VolumeEditText
                     android:id="@+id/avgTicketOET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -999,7 +999,7 @@
 
         </ScrollView>
 
-    </com.greenbox.coyni.intro_slider.AutoScrollViewPager>
+    </com.coyni.mapp.intro_slider.AutoScrollViewPager>
 
 
 </LinearLayout>

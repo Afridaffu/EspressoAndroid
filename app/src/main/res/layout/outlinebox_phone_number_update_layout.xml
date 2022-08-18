@@ -15,7 +15,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText
+        <com.coyni.mapp.utils.MaskEditText.widget.MaskEditText
             android:id="@+id/pnET"
             android:layout_width="match_parent"
             android:layout_height="55dp"

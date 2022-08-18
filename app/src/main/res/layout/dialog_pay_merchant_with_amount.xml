@@ -270,7 +270,7 @@
                 app:layout_constraintStart_toEndOf="@+id/im_lock"
                 app:layout_constraintTop_toTopOf="@+id/im_lock" />
 
-            <com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView
+            <com.coyni.mapp.utils.CustomeTextView.AnimatedGradientTextView
                 android:id="@+id/tv_lable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -28,7 +28,7 @@
             android:visibility="visible" />
 
 
-        <com.greenbox.coyni.utils.swipelayout.SwipeLayout
+        <com.coyni.mapp.utils.swipelayout.SwipeLayout
             android:id="@+id/swipeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -244,7 +244,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-        </com.greenbox.coyni.utils.swipelayout.SwipeLayout>
+        </com.coyni.mapp.utils.swipelayout.SwipeLayout>
 
     </LinearLayout>
 

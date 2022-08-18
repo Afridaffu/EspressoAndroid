@@ -75,7 +75,7 @@
 
         </LinearLayout>
 
-        <com.greenbox.coyni.intro_slider.AutoScrollViewPager
+        <com.coyni.mapp.intro_slider.AutoScrollViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -167,7 +167,7 @@
                                 android:textSize="@dimen/_10ssp" />
                         </LinearLayout>
 
-                        <com.greenbox.coyni.utils.outline_et.CardNumberEditText
+                        <com.coyni.mapp.utils.outline_et.CardNumberEditText
                             android:id="@+id/etlCard"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -227,7 +227,7 @@
                                     app:errorIconDrawable="@null"
                                     app:hintTextColor="@color/primary_green">
 
-                                    <com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText
+                                    <com.coyni.mapp.utils.MaskEditText.widget.MaskEditText
                                         android:id="@+id/etExpiry"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -793,7 +793,7 @@
                 </ScrollView>
             </RelativeLayout>
 
-        </com.greenbox.coyni.intro_slider.AutoScrollViewPager>
+        </com.coyni.mapp.intro_slider.AutoScrollViewPager>
 
     </LinearLayout>
 </LinearLayout>

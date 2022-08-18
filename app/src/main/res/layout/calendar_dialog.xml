@@ -136,7 +136,7 @@
 
     </LinearLayout>
 
-    <com.greenbox.coyni.utils.verticalcalendar.CalendarPicker
+    <com.coyni.mapp.utils.verticalcalendar.CalendarPicker
         android:id="@+id/calendar_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
