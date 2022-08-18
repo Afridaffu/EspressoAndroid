@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "196946032287",
-    "project_id": "coyni-38769",
-    "storage_bucket": "coyni-38769.appspot.com"
+    "project_number": "15886969173",
+    "project_id": "coyni-208f1",
+    "storage_bucket": "coyni-208f1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:196946032287:android:ec29c23ba2e382f96a14aa",
+        "mobilesdk_app_id": "1:15886969173:android:04b0922a778deace3367dc",
         "android_client_info": {
           "package_name": "com.coyni.mapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "196946032287-u6v3acjd9tbm7nh9p7ftvgibulieu4ct.apps.googleusercontent.com",
+          "client_id": "15886969173-lmlns99btp307jkb0b6l4k53df25p8kp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDu_Asvqp_rx9kNK0DvzU8r24RnP04_ChA"
+          "current_key": "AIzaSyDJhxMuHPTVJUQoM0zFikfuLq7vyUFeVfs"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "196946032287-u6v3acjd9tbm7nh9p7ftvgibulieu4ct.apps.googleusercontent.com",
+              "client_id": "15886969173-lmlns99btp307jkb0b6l4k53df25p8kp.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
