@@ -81,23 +81,8 @@ public class OnboardActivity extends BaseActivity {
             objMyApplication = (MyApplication) getApplicationContext();
             objMyApplication.setIsLoggedIn(false);
             getVersionName();
-//            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
-//                if (Utils.isFingerPrint(OnboardActivity.this)) {
-//                    Utils.setIsTouchEnabled(true);
-//                    Utils.setIsFaceEnabled(false);
-//                } else {
-//                    Utils.setIsTouchEnabled(false);
-//                    Utils.setIsFaceEnabled(true);
-//                }
-//            } else {
-//                Utils.setIsTouchEnabled(false);
-//                Utils.setIsFaceEnabled(false);
-//            }
-
             setDB();
             setToken();
-//            setFaceLock();
-//            setTouchId();
             objMyApplication.initializeDBHandler(OnboardActivity.this);
             isFaceLock = objMyApplication.setFaceLock();
             isTouchId = objMyApplication.setTouchId();
@@ -125,7 +110,6 @@ public class OnboardActivity extends BaseActivity {
             }
 
             CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
-
             if (Utils.getStrAuth() != null && !Utils.getStrAuth().equals("")) {
                 Intent dashboardIntent = new Intent(OnboardActivity.this, DashboardActivity.class);
                 if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {

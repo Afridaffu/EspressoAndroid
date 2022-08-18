@@ -862,14 +862,19 @@ public class BusinessProfileActivity extends BaseActivity {
     }
 
     private void onLogoutSuccess() {
-        isLoggedOut = true;
-        myApplication.setStrRetrEmail("");
-        myApplication.clearUserData();
-        dropAllTables();
-        displayImageUtility.clearCache();
-        Intent i = new Intent(BusinessProfileActivity.this, OnboardActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
+        try {
+            isLoggedOut = true;
+            myApplication.setStrRetrEmail("");
+            myApplication.clearUserData();
+            dropAllTables();
+            displayImageUtility.clearCache();
+            Utils.setStrAuth("");
+            Intent i = new Intent(BusinessProfileActivity.this, OnboardActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void bindImage(String imageString) {

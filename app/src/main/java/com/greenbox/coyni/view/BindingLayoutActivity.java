@@ -138,6 +138,7 @@ public class BindingLayoutActivity extends BaseActivity {
                 try {
                     objMyApplication.setStrRetrEmail("");
                     dropAllTables();
+                    Utils.setStrAuth("");
                     Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
@@ -319,12 +320,17 @@ public class BindingLayoutActivity extends BaseActivity {
     }
 
     private void onLogoutSuccess() {
-        objMyApplication.setStrRetrEmail("");
-        dropAllTables();
-        overridePendingTransition(0, 0);
-        Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
-        overridePendingTransition(0, 0);
+        try {
+            objMyApplication.setStrRetrEmail("");
+            dropAllTables();
+            overridePendingTransition(0, 0);
+            Utils.setStrAuth("");
+            Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+            overridePendingTransition(0, 0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

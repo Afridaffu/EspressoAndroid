@@ -364,6 +364,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                         try {
 //                                            launchDashboard();
                                             dbHandler.clearAllTables();
+                                            Utils.setStrAuth("");
                                             Intent i = new Intent(PINActivity.this, OnboardActivity.class);
                                             objMyApplication.setStrRetrEmail("");
 //                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);

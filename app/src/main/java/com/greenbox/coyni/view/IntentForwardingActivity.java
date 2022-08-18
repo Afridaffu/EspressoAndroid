@@ -30,15 +30,20 @@ public class IntentForwardingActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-        getIntentData(intent);
-        intent.setClass(this, OnboardActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        finish();
-        startActivity(intent);
+        try {
+            getIntentData(intent);
+            Utils.setStrAuth("");
+            intent.setClass(this, OnboardActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            finish();
+            startActivity(intent);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void getIntentData(Intent intent) {
-        if(intent == null) {
+        if (intent == null) {
             return;
         }
         CheckOutModel checkOutModel = new CheckOutModel();

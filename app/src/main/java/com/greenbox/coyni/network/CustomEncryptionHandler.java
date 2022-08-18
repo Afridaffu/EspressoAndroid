@@ -180,6 +180,7 @@ public class CustomEncryptionHandler implements Interceptor {
     }
 
     private void launchLogin(Context context) {
+        Utils.setStrAuth("");
         Intent i = new Intent(context, OnboardActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(i);

@@ -89,9 +89,9 @@ public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
 //                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                        startActivity(i);
 //                    } else {
-                        Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, DashboardActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
+                    Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, DashboardActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
 //                    }
                 }
             });
@@ -238,13 +238,18 @@ public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
     }
 
     private void onLogoutSuccess() {
-        objMyApplication.setStrRetrEmail("");
-        objMyApplication.clearUserData();
-        dropAllTables();
-        displayImageUtility.clearCache();
-        Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, OnboardActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
+        try {
+            objMyApplication.setStrRetrEmail("");
+            objMyApplication.clearUserData();
+            dropAllTables();
+            displayImageUtility.clearCache();
+            Utils.setStrAuth("");
+            Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, OnboardActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void dropAllTables() {
