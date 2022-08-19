@@ -560,6 +560,8 @@ public class Utils {
     }
 
     public static void shwForcedKeypad(Context context) {
+        Activity  activity = (Activity) context;
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
@@ -590,6 +592,8 @@ public class Utils {
 
     public static void hideKeypad(Context context) {
         try {
+            Activity  activity = (Activity) context;
+            activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         } catch (Exception ex) {
