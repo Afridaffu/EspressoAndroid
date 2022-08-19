@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.coyni.mapp.view.DashboardActivity;
+import com.coyni.mapp.view.business.BusinessDashboardActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.coyni.mapp.R;
@@ -38,11 +40,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             objMyApplication = (MyApplication) getApplicationContext();
             if (remoteMessage.getNotification() != null) {
                 LogUtils.d("", "Message Notification Body: " + remoteMessage.getNotification().getBody());
-                Intent dashboardIntent = new Intent(getApplicationContext(), OnboardActivity.class);
-//                Intent dashboardIntent = new Intent(getApplicationContext(), DashboardActivity.class);
-//                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-//                    dashboardIntent = new Intent(getApplicationContext(), BusinessDashboardActivity.class);
-//                }
+//                Intent dashboardIntent = new Intent(getApplicationContext(), OnboardActivity.class);
+                Intent dashboardIntent = new Intent(getApplicationContext(), DashboardActivity.class);
+                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+                    dashboardIntent = new Intent(getApplicationContext(), BusinessDashboardActivity.class);
+                }
                 dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 dashboardIntent.setAction(Intent.ACTION_MAIN);
                 dashboardIntent.addCategory(Intent.CATEGORY_LAUNCHER);
