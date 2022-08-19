@@ -107,38 +107,38 @@ public class OnboardActivity extends BaseActivity {
             }
 
             CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
-            if (Utils.getStrAuth() != null && !Utils.getStrAuth().equals("")) {
-                Intent dashboardIntent = new Intent(OnboardActivity.this, DashboardActivity.class);
-                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-                    dashboardIntent = new Intent(OnboardActivity.this, BusinessDashboardActivity.class);
-                }
-                dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(dashboardIntent);
-            } else {
-                if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
-                    if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
-                        layoutOnBoarding.setVisibility(View.GONE);
-                        layoutAuth.setVisibility(View.VISIBLE);
-                        Utils.checkAuthentication(OnboardActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                    } else {
-                        FaceIdDisabled_BottomSheet faceIdDisable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
-                        faceIdDisable_bottomSheet.show(getSupportFragmentManager(), faceIdDisable_bottomSheet.getTag());
-                    }
+//            if (Utils.getStrAuth() != null && !Utils.getStrAuth().equals("")) {
+//                Intent dashboardIntent = new Intent(OnboardActivity.this, DashboardActivity.class);
+//                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+//                    dashboardIntent = new Intent(OnboardActivity.this, BusinessDashboardActivity.class);
+//                }
+//                dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(dashboardIntent);
+//            } else {
+            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
+                if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
+                    layoutOnBoarding.setVisibility(View.GONE);
+                    layoutAuth.setVisibility(View.VISIBLE);
+                    Utils.checkAuthentication(OnboardActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                 } else {
-                    if (checkOutModel != null && checkOutModel.isCheckOutFlag()) {
-                        startActivity(new Intent(OnboardActivity.this, LoginActivity.class));
-                        finish();
-                    } else if (strFirstUser.equals("")) {
-                        layoutOnBoarding.setVisibility(View.VISIBLE);
-                        layoutAuth.setVisibility(View.GONE);
-                    } else {
-                        Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
-                        i.putExtra("auth", "cancel");
-                        startActivity(i);
-                        finish();
-                    }
+                    FaceIdDisabled_BottomSheet faceIdDisable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
+                    faceIdDisable_bottomSheet.show(getSupportFragmentManager(), faceIdDisable_bottomSheet.getTag());
+                }
+            } else {
+                if (checkOutModel != null && checkOutModel.isCheckOutFlag()) {
+                    startActivity(new Intent(OnboardActivity.this, LoginActivity.class));
+                    finish();
+                } else if (strFirstUser.equals("")) {
+                    layoutOnBoarding.setVisibility(View.VISIBLE);
+                    layoutAuth.setVisibility(View.GONE);
+                } else {
+                    Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
+                    i.putExtra("auth", "cancel");
+                    startActivity(i);
+                    finish();
                 }
             }
+//            }
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 
