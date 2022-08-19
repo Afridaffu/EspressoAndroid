@@ -53,7 +53,7 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
         if (respList.getData().get(position).getTxnType() != null && respList.getData().get(position).getTxnSubType() != null) {
             holder.type.setText("Purchase");
         } else {
-            holder.type.setText("ChargeBack");
+            holder.type.setText("Chargeback");
         }
     }
 
