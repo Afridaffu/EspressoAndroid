@@ -18,7 +18,9 @@ import android.widget.TextView;
 import com.coyni.mapp.R;
 import com.coyni.mapp.model.merchant_activity.Earning;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SeekBarWithFloatingText extends RelativeLayout {

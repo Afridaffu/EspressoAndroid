@@ -254,77 +254,6 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             close = findViewById(R.id.closeIV);
             backIV = findViewById(R.id.backIV);
 
-            companyInforamtionPager = new CompanyInforamtionPager();
-            viewPager = findViewById(R.id.view_pager);
-            viewPager.setAllowedSwipeDirection(SwipeDirection.NONE);
-            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    Log.e("onPageScrolled", "onPageScrolled " + position + " " + positionOffset + " " + positionOffsetPixels);
-
-                    if (position == 0) {
-                        companynameET.requestFocus();
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
-                    } else if (position == 1) {
-                        companyaddressET.requestFocus();
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
-                    } else if (position == 2) {
-//                        if (Utils.isKeyboardVisible)
-//                            Utils.hideKeypad(CompanyInformationActivity.this);
-                    }
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    Log.e("onPageSelected", position + "");
-                    selectedPage = position;
-                    if (position == 0) {
-
-                        close.setVisibility(VISIBLE);
-                        backIV.setVisibility(GONE);
-                        divider0.setBackgroundResource(R.drawable.button_background);
-                        divider1.setBackgroundResource(R.drawable.button_background1);
-                        divider2.setBackgroundResource(R.drawable.button_background1);
-                        companynameET.requestFocus();
-//                        if (!Utils.isKeyboardVisible)
-//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
-
-                        enableOrDisableNext();
-                    } else if (position == 1) {
-                        close.setVisibility(GONE);
-                        backIV.setVisibility(VISIBLE);
-                        divider0.setBackgroundResource(R.drawable.button_background1);
-                        divider1.setBackgroundResource(R.drawable.button_background);
-                        divider2.setBackgroundResource(R.drawable.button_background1);
-                        companyaddressET.requestFocus();
-//                        if (!Utils.isKeyboardVisible)
-//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
-                        enableOrDisableAddressNext();
-                    } else if (position == 2) {
-                        if (Utils.isKeyboardVisible)
-                            Utils.hideKeypad(CompanyInformationActivity.this);
-                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                        close.setVisibility(GONE);
-                        backIV.setVisibility(VISIBLE);
-                        divider0.setBackgroundResource(R.drawable.button_background1);
-                        divider1.setBackgroundResource(R.drawable.button_background1);
-                        divider2.setBackgroundResource(R.drawable.button_background);
-
-                        enableOrDisableDocsDone();
-
-                    }
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-                    Log.e("onPageScrollStateChanged", state + "");
-                }
-            });
-            viewPager.setAdapter(companyInforamtionPager);
-            viewPager.setOffscreenPageLimit(2);
-
             companynametil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
             companyemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
             businessTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
@@ -494,6 +423,128 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     }
                 }
             });
+
+            companyInforamtionPager = new CompanyInforamtionPager();
+            viewPager = findViewById(R.id.view_pager);
+            viewPager.setAllowedSwipeDirection(SwipeDirection.NONE);
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                int SCROLLING_RIGHT = 0;
+                int SCROLLING_LEFT = 1;
+                int SCROLLING_UNDETERMINED = 2;
+                int currentScrollDirection = 2;
+                boolean isYesOrNo = false;
+
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                    Log.e("onPageScrolled", "onPageScrolled " + position + " " + positionOffset + " " + positionOffsetPixels);
+
+                    if (isScrollDirectionUndetermined()) {
+                        setScrollingDirection(positionOffset);
+                    }
+                    if (position == 0) {
+//                        companynameET.requestFocus();
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                    } else if (position == 1) {
+//                        companyaddressET.requestFocus();
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                    } else if (position == 2) {
+
+//                        if (Utils.isKeyboardVisible)
+//                            Utils.hideKeypad(CompanyInformationActivity.this);
+                    }
+
+//                    if (isScrollingRight() && selectedPage == 1) {
+//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//                        if (Utils.isKeyboardVisible)
+//                            Utils.hideKeypad(CompanyInformationActivity.this);
+//                    }
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    Log.e("onPageSelected", position + "");
+                    selectedPage = position;
+                    if (position == 0) {
+
+                        close.setVisibility(VISIBLE);
+                        backIV.setVisibility(GONE);
+                        divider0.setBackgroundResource(R.drawable.button_background);
+                        divider1.setBackgroundResource(R.drawable.button_background1);
+                        divider2.setBackgroundResource(R.drawable.button_background1);
+                        companynameET.requestFocus();
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+
+                        enableOrDisableNext();
+                    } else if (position == 1) {
+                        close.setVisibility(GONE);
+                        backIV.setVisibility(VISIBLE);
+                        divider0.setBackgroundResource(R.drawable.button_background1);
+                        divider1.setBackgroundResource(R.drawable.button_background);
+                        divider2.setBackgroundResource(R.drawable.button_background1);
+                        companyaddressET.requestFocus();
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                        enableOrDisableAddressNext();
+                    } else if (position == 2) {
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(CompanyInformationActivity.this);
+                        close.setVisibility(GONE);
+                        backIV.setVisibility(VISIBLE);
+                        divider0.setBackgroundResource(R.drawable.button_background1);
+                        divider1.setBackgroundResource(R.drawable.button_background1);
+                        divider2.setBackgroundResource(R.drawable.button_background);
+
+                        enableOrDisableDocsDone();
+
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    Log.e("onPageScrollStateChanged", state + "");
+
+                    if (state == 0) {
+                        if (selectedPage == 0) {
+                            companynameET.requestFocus();
+                            if (!Utils.isKeyboardVisible)
+                                Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                        } else if (selectedPage == 1) {
+                            companyaddressET.requestFocus();
+                            if (!Utils.isKeyboardVisible)
+                                Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                        } else if (selectedPage == 2) {
+                            if (Utils.isKeyboardVisible)
+                                Utils.hideKeypad(CompanyInformationActivity.this);
+                        }
+                    }
+                }
+
+                private void setScrollingDirection(float positionOffset) {
+                    if ((1 - positionOffset) >= 0.5) {
+                        this.currentScrollDirection = SCROLLING_RIGHT;
+                    } else if ((1 - positionOffset) <= 0.5) {
+                        this.currentScrollDirection = SCROLLING_LEFT;
+                    }
+                }
+
+                private boolean isScrollDirectionUndetermined() {
+                    return currentScrollDirection == SCROLLING_UNDETERMINED;
+                }
+
+                private boolean isScrollingRight() {
+                    return currentScrollDirection == SCROLLING_RIGHT;
+                }
+
+                private boolean isScrollingLeft() {
+                    return currentScrollDirection == SCROLLING_LEFT;
+                }
+            });
+            viewPager.setAdapter(companyInforamtionPager);
+            viewPager.setOffscreenPageLimit(2);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1724,9 +1775,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     @Override
     public void onBackPressed() {
         if (selectedPage == 0) {
-            if (isNew)
+            if (isNew) {
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
                 confirmationAlert();
-            else {
+            } else {
                 if (from.equals("EDIT")) {
                     try {
                         if (ReviewApplicationActivity.reviewApplicationActivity != null)

@@ -80,6 +80,7 @@ import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.NotificationsViewModel;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -550,6 +551,13 @@ public class BusinessDashboardFragment extends BaseFragment {
                             userData.setEarningList(merchantActivityResp.getData().getEarnings());
 
                             mSbTodayVolume.setEnabled(true);
+                            //SeekBar Graph changes uncomment to enable
+//                            if (userData.getEarningList() != null) {
+//                                for (int i = 0; i < userData.getEarningList().size(); i++) {
+//                                    userData.getEarningList().get(i).setKey(convertUtcHoursToPreferredZone(userData.getEarningList().get(i).getKey()));
+//                                }
+//                            }
+
                             if (merchantActivityResp.getData().getEarnings() != null && merchantActivityResp.getData().getEarnings().size() > 0)
                                 mSbTodayVolume.setProgressWithText(merchantActivityResp.getData().getEarnings().get(merchantActivityResp.getData().getEarnings().size() - 1).getKey(), userData.getEarningList());
                             else
@@ -1314,5 +1322,25 @@ public class BusinessDashboardFragment extends BaseFragment {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(previousMonthLastDate());
+    }
+
+    private int convertUtcHoursToPreferredZone(int keyTime) {
+        Date datee = new Date();
+        try {
+            Log.e("keyTime and zone", keyTime + " " + myApplication.getStrPreference());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date newDate = new Date(System.currentTimeMillis());
+            newDate.setHours(keyTime);
+            newDate.setMinutes(0);
+            String pstDate = Utils.convertZoneDateTime(dateFormat.format(newDate), "yyyy-MM-dd HH:mm", "yyyy-MM-dd HH:mm", myApplication.getStrPreference());
+            Log.e("keyTime date", pstDate);
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            datee = spf.parse(pstDate);
+            Log.e("keyTime date", datee.getHours() + "");
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return datee.getHours();
     }
 }

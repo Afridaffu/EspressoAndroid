@@ -48,7 +48,7 @@ public class UserData {
 
     private AgreementsPdf agreementsPdf;
     private RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
-    private String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "PST", strInvite = "", strScreen = "";
+    private String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "CST", strInvite = "", strScreen = "";
     private Profile myProfile = new Profile();
     private UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     private UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();

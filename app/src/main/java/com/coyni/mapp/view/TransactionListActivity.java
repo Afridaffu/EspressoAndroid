@@ -97,7 +97,6 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
     public long startDateLong = 0L, endDateLong = 0L, tempStartDateLong = 0L, tempEndDateLong = 0L;
     Date startDateD = null;
     Date endDateD = null;
-    public static TransactionListActivity transactionListActivity;
 
     boolean isSwipeToRefresh = false, isApplyClicked = false;
 
@@ -113,7 +112,6 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
         MatomoUtility.getInstance().trackScreen(MatomoConstants.CUSTOMER_TRANSACTIONS_SCREEN);
         setKeyboardVisibilityListener(this);
         try {
-            transactionListActivity = this;
             closeBtn = findViewById(R.id.closeBtnIV);
             filterIV = findViewById(R.id.filterIconIV);
 
@@ -529,6 +527,14 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
 
                         case Utils.paidInvoice:
                             transTypePI.setChecked(true);
+                            break;
+
+                        case Utils.failedWithdraw:
+                            transSubTypeFW.setChecked(true);
+                            break;
+
+                        case Utils.cancelledWithdraw:
+                            transSubTypeCW.setChecked(true);
                             break;
 
 
@@ -1024,11 +1030,11 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    tempTransactionSubType.add(Utils.failedWithdraw);
+                    tempTransactionType.add(Utils.failedWithdraw);
                 } else {
-                    for (int i = 0; i < tempTransactionSubType.size(); i++) {
-                        if (tempTransactionSubType.get(i) == Utils.failedWithdraw) {
-                            tempTransactionSubType.remove(i);
+                    for (int i = 0; i < tempTransactionType.size(); i++) {
+                        if (tempTransactionType.get(i) == Utils.failedWithdraw) {
+                            tempTransactionType.remove(i);
                             break;
                         }
                     }
@@ -1041,11 +1047,11 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    tempTransactionSubType.add(Utils.cancelledWithdraw);
+                    tempTransactionType.add(Utils.cancelledWithdraw);
                 } else {
-                    for (int i = 0; i < tempTransactionSubType.size(); i++) {
-                        if (tempTransactionSubType.get(i) == Utils.cancelledWithdraw) {
-                            tempTransactionSubType.remove(i);
+                    for (int i = 0; i < tempTransactionType.size(); i++) {
+                        if (tempTransactionType.get(i) == Utils.cancelledWithdraw) {
+                            tempTransactionType.remove(i);
                             break;
                         }
                     }
