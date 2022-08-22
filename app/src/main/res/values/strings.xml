@@ -57,6 +57,7 @@
     <string name="account">Account</string>
     <string name="account_limits">Account Limits</string>
     <string name="account_agree">Agreements</string>
+    <string name="get_help">Get Help</string>
     <string name="security">Security</string>
     <string name="security_resetpin">"Reset PIN Code "</string>
     <string name="security_faceid">Face ID Setting</string>

@@ -271,6 +271,7 @@ public class Utils {
     public static String[] for_Declined = {"RT01", "RT02"};
     public static String[] for_Error = {"GN05", "GS01", "GS02", "GS03", "GS04", "RT04"};
     public static String mondayURL = "https://monday.com/";
+    public static String helpURL = "https://forms.monday.com/forms/embed/574096202882f845863fd5a5c2b1d61d?r=use1";
     //    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+snkD6Sg0i3pdsBePQmRcpamT/Ss440879LzJVQJPWxAfslvVBaD7a11tGNrPOa59hRSx/Wr2JvEEZnMft6MClh2FHjehVH4TvbUH4Q5J8t9Fl59vCYSiHWl7wqEaSYJxkA5wI6VGC0+PVgcojfn3zlz04mza0I2zHWOHbIvl2z4WUw3lDmiV729HggfZJYSleNctEmFHscHKdTBIlJ2uhQm1uA==";
 //    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+skkD6XebOu1kYPMIy3HJXuIErNxvYkSdOTdpwY0Pn49l1koS9o2CfCe9Fa01YifNtCgXc37XRU5Di4z/Sspcjs9qrHOS0RFiGtmr5BaQcKjpuy/r5ukCVuNMHEK++HZYlahdIqFxGLjSll50XTn3j+YZFvIMd7CcXCmx9UP+zkdtcr5ib3+AyVdC/w5JKAMVRuNpN6PEGC02woYfYHB/uJmBZw==";
 //    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+smkG6e3GUWZyfYVqd79iVH7r6ZTsAAIna1uwZpVc86X6m0Bzjc8ut7V9K68Yzb4Khc1TVrsMgFpVsfwwBpFIqWAKSmjf+rMxdY7uHkkJfitfKGg8NOO1Cu2L+Qx4epOpghSkMw/c9Q7ORSIacDj0moI1AoPyVTzSehuNWGx17g3iQXD7E4HznTwkU2H0I9Zst23aWvZbiBQGVCZ9ChQvM3at2A==";

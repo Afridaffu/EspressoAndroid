@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.hardware.fingerprint.FingerprintManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
@@ -75,7 +76,7 @@ public class CustomerProfileActivity extends BaseActivity {
     MyApplication objMyApplication;
     CardView cvLogout;
     ConstraintLayout userProfile;
-    LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn, cpPreferencesLL;
+    LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL,cpHelpLL, cpChangePasswordLL, switchOff, switchOn, cpPreferencesLL;
     Long mLastClickTime = 0L, mLastClickTimeShare = 0L;
     QRGEncoder qrgEncoder;
     Bitmap bitmap;
@@ -136,6 +137,7 @@ public class CustomerProfileActivity extends BaseActivity {
             cpResetPin = findViewById(R.id.cpResetPin);
             cpAccountLimitsLL = findViewById(R.id.cpAccountLimitsLL);
             cpAgreementsLL = findViewById(R.id.cpAgreementsLL);
+            cpHelpLL = findViewById(R.id.cpHelpLL);
             cpChangePasswordLL = findViewById(R.id.cpChangePassword);
             tvBMSetting = findViewById(R.id.tvBMSetting);
             userProfile = findViewById(R.id.linearLayout);
@@ -364,6 +366,19 @@ public class CustomerProfileActivity extends BaseActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     startActivity(new Intent(CustomerProfileActivity.this, AgreementsActivity.class));
+                }
+            });
+
+            cpHelpLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(Utils.helpURL));
+                    startActivity(i);
                 }
             });
 

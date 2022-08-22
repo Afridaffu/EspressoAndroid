@@ -31,15 +31,15 @@
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_13sdp"
-                    android:padding="@dimen/_8sdp"
                     android:layout_marginTop="@dimen/_43sdp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_8sdp">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_back"
-                        android:contentDescription="@string/back_button"/>
+                        android:contentDescription="@string/back_button"
+                        android:src="@drawable/ic_back" />
 
                 </LinearLayout>
 
@@ -152,8 +152,8 @@
                                     android:id="@+id/b_profileIV"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:scaleType="fitXY"
                                     android:contentDescription="@string/profile_image"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/acct_profile"
                                     android:visibility="visible" />
 
@@ -177,14 +177,14 @@
                             android:id="@+id/imgQRCode"
                             android:layout_width="@dimen/_23sdp"
                             android:layout_height="@dimen/_23sdp"
+                            android:contentDescription="@string/qr_code"
                             android:src="@drawable/ic_qr_code"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias=".80"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.9"
-                            android:contentDescription="@string/qr_code"/>
+                            app:layout_constraintVertical_bias="0.9" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -242,25 +242,25 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/white"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="@string/setting_userdetails"
-                                    android:layout_weight="1"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/setting_userdetails"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_12ssp" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:contentDescription="@string/arrow_right"
-                                    android:src="@drawable/ic_rightarrow" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/arrow_right"
+                                android:src="@drawable/ic_rightarrow" />
 
                         </LinearLayout>
 
@@ -307,8 +307,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/white"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -338,8 +338,8 @@
                             android:id="@+id/DBAInformationLL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -369,8 +369,8 @@
                             android:id="@+id/beneficialOwnersLL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -400,8 +400,8 @@
                             android:id="@+id/teamLL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -431,8 +431,8 @@
                             android:id="@+id/paymentMethodsLL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -462,8 +462,8 @@
                             android:id="@+id/PreferencesLL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -493,17 +493,17 @@
                             android:id="@+id/feesLL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:text="@string/fees"
-                                android:layout_weight="1"
                                 android:textColor="@drawable/text_enable_disable"
                                 android:textSize="@dimen/_12ssp" />
 
@@ -524,17 +524,17 @@
                             android:id="@+id/cpAccountLimitsLL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:text="@string/account_limits"
-                                android:layout_weight="1"
                                 android:textColor="@drawable/text_enable_disable"
                                 android:textSize="@dimen/_12ssp" />
 
@@ -555,17 +555,17 @@
                             android:id="@+id/cpAgreementsLL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:text="@string/account_agree"
-                                android:layout_weight="1"
                                 android:textColor="@drawable/text_enable_disable"
                                 android:textSize="@dimen/_12ssp" />
 
@@ -576,6 +576,42 @@
                                 android:src="@drawable/ic_right_arrow_ed" />
 
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/viewcolor" />
+
+                        <LinearLayout
+                            android:id="@+id/cpHelpLL"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/_16sdp"
+                            android:paddingBottom="@dimen/_16sdp">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="@string/get_help"
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/_12ssp" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerInParent="true"
+                                    android:src="@drawable/ic_rightarrow" />
+
+                            </RelativeLayout>
+                        </LinearLayout>
+
 
                         <View
                             android:layout_width="match_parent"
@@ -620,8 +656,8 @@
                             android:id="@+id/businessResetPin"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -633,8 +669,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
                                     android:layout_alignParentStart="true"
+                                    android:fontFamily="@font/opensans_semibold"
                                     android:text="@string/security_resetpin"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_12ssp" />
@@ -753,8 +789,8 @@
                             android:id="@+id/b_cpChangePassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
                             android:gravity="center"
+                            android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
