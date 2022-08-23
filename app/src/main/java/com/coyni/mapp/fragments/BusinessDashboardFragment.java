@@ -706,7 +706,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     private void updateUIAfterWalletBalance() {
         Double merchantBalance = getMerchantBalance();
         merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(merchantBalance)));
-        if (merchantBalance != null && merchantBalance == 0.00) {
+        Double tokenBalance = myApplication.getCurrentUserData().getTokenGBTBalance();
+        if (tokenBalance != null && tokenBalance == 0.00) {
             businessIdentityVerificationViewModel.getDBAInfo();
         } else {
             monthlyVolumeViewLl.setVisibility(View.GONE);
