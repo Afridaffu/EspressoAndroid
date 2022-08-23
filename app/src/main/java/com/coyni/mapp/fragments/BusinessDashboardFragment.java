@@ -971,7 +971,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
                             rangeDates = (RangeDates) value;
                             if (rangeDates != null) {
-                                mTicketsLayout.setVisibility(View.GONE);
+                                mTicketsLayout.setVisibility(View.VISIBLE);
                                 mSbTodayVolume.setVisibility(View.GONE);
                                 String fromDate = rangeDates.getUpdatedFromDate() + startTime;
                                 String toDate = rangeDates.getUpdatedToDate().trim() + endTime;

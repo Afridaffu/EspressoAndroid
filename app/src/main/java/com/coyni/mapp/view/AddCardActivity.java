@@ -73,12 +73,12 @@ import com.coyni.mapp.utils.encryption.EncryptRequest;
 import com.coyni.mapp.utils.keyboards.CustomKeyboard;
 import com.coyni.mapp.utils.outline_et.CardNumberEditText;
 import com.coyni.mapp.viewmodel.PaymentMethodsViewModel;
-import com.microblink.blinkcard.MicroblinkSDK;
-import com.microblink.blinkcard.entities.recognizers.Recognizer;
-import com.microblink.blinkcard.entities.recognizers.RecognizerBundle;
-import com.microblink.blinkcard.entities.recognizers.blinkcard.BlinkCardRecognizer;
-import com.microblink.blinkcard.uisettings.ActivityRunner;
-import com.microblink.blinkcard.uisettings.BlinkCardUISettings;
+//import com.microblink.blinkcard.MicroblinkSDK;
+//import com.microblink.blinkcard.entities.recognizers.Recognizer;
+//import com.microblink.blinkcard.entities.recognizers.RecognizerBundle;
+//import com.microblink.blinkcard.entities.recognizers.blinkcard.BlinkCardRecognizer;
+//import com.microblink.blinkcard.uisettings.ActivityRunner;
+//import com.microblink.blinkcard.uisettings.BlinkCardUISettings;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -120,8 +120,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false, isInvalid = false;
     public Boolean isCard = false, isScan = false, isCardClear = false, isLicense = false;
     TextView tvError;
-    private BlinkCardRecognizer mRecognizer;
-    private RecognizerBundle mRecognizerBundle;
+//    private BlinkCardRecognizer mRecognizer;
+//    private RecognizerBundle mRecognizerBundle;
     CustomKeyboard ctKey;
 
     IdentityPagerAdapter identityPagerAdapter;
@@ -262,19 +262,19 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             etName.requestFocus();
             etCardNumber.setFrom("ADD_CARD");
 //            etName.setHint("Name on Card");
-            try {
-                MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
-                mRecognizer = new BlinkCardRecognizer();
-                mRecognizer.setExtractCvv(false);
-                mRecognizer.setExtractIban(false);
-                // bundle recognizers into RecognizerBundle
-                mRecognizerBundle = new RecognizerBundle(mRecognizer);
-            } catch (Exception ex) {
-                if (ex.toString().toLowerCase().contains("invalidlicencekeyexception")) {
-                    isLicense = true;
-                }
-                ex.printStackTrace();
-            }
+//            try {
+//                MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
+//                mRecognizer = new BlinkCardRecognizer();
+//                mRecognizer.setExtractCvv(false);
+//                mRecognizer.setExtractIban(false);
+//                // bundle recognizers into RecognizerBundle
+//                mRecognizerBundle = new RecognizerBundle(mRecognizer);
+//            } catch (Exception ex) {
+//                if (ex.toString().toLowerCase().contains("invalidlicencekeyexception")) {
+//                    isLicense = true;
+//                }
+//                ex.printStackTrace();
+//            }
             etAddress1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etAddress2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
@@ -1969,40 +1969,40 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     }
 
     // method within MyActivity from previous step
-    public void startScanning() {
-        // Settings for BlinkCardActivity
-        BlinkCardUISettings settings = new BlinkCardUISettings(mRecognizerBundle);
-        // tweak settings as you wish
-        // Start activity
-        ActivityRunner.startActivityForResult(this, 123, settings);
-    }
+//    public void startScanning() {
+//        // Settings for BlinkCardActivity
+//        BlinkCardUISettings settings = new BlinkCardUISettings(mRecognizerBundle);
+//        // tweak settings as you wish
+//        // Start activity
+//        ActivityRunner.startActivityForResult(this, 123, settings);
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 123) {
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                // load the data into all recognizers bundled within your RecognizerBundle
-                mRecognizerBundle.loadFromIntent(data);
-                // now every recognizer object that was bundled within RecognizerBundle
-                // has been updated with results obtained during scanning session
-                // you can get the result by invoking getResult on recognizer
-                BlinkCardRecognizer.Result result = mRecognizer.getResult();
-                if (result.getResultState() == Recognizer.Result.State.Valid) {
-                    // result is valid, you can use it however you wish
-                    Log.e("number", result.getCardNumber());
-                    Log.e("owner", result.getOwner());
-                    Log.e("number", result.getExpiryDate().toString());
-                    result.getCardNumber();
-                    isScan = true;
-                    etCardNumber.setText(result.getCardNumber());
-                    etCardNumber.setSelection();
-                    etCardNumber.removeError();
-                    etCardNumber.requestCNETFocus();
-                    cardErrorLL.setVisibility(GONE);
-                }
-            }
+//            if (resultCode == Activity.RESULT_OK && data != null) {
+//                // load the data into all recognizers bundled within your RecognizerBundle
+//                mRecognizerBundle.loadFromIntent(data);
+//                // now every recognizer object that was bundled within RecognizerBundle
+//                // has been updated with results obtained during scanning session
+//                // you can get the result by invoking getResult on recognizer
+//                BlinkCardRecognizer.Result result = mRecognizer.getResult();
+//                if (result.getResultState() == Recognizer.Result.State.Valid) {
+//                    // result is valid, you can use it however you wish
+//                    Log.e("number", result.getCardNumber());
+//                    Log.e("owner", result.getOwner());
+//                    Log.e("number", result.getExpiryDate().toString());
+//                    result.getCardNumber();
+//                    isScan = true;
+//                    etCardNumber.setText(result.getCardNumber());
+//                    etCardNumber.setSelection();
+//                    etCardNumber.removeError();
+//                    etCardNumber.requestCNETFocus();
+//                    cardErrorLL.setVisibility(GONE);
+//                }
+//            }
         }
     }
 
