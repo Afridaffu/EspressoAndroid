@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.hardware.fingerprint.FingerprintManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -64,7 +65,7 @@ public class BusinessProfileActivity extends BaseActivity {
 
     private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL,
             paymentMethodsLL, cpagreeementsLL, companyinfoLL, dbainfoLL, accountlimitsLL,
-            businessResetPin, preferencesLL, beneficialOwnersLL;
+            businessResetPin, preferencesLL, beneficialOwnersLL, cpHelpLL;
     private ConstraintLayout userProfileCL;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     static String strToken = "", userName;
@@ -126,6 +127,7 @@ public class BusinessProfileActivity extends BaseActivity {
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             companyinfoLL = findViewById(R.id.companyInformationLL);
             cpagreeementsLL = findViewById(R.id.cpAgreementsLL);
+            cpHelpLL = findViewById(R.id.cpHelpLL);
             preferencesLL = findViewById(R.id.PreferencesLL);
             beneficialOwnersLL = findViewById(R.id.beneficialOwnersLL);
             switchOffLL = findViewById(R.id.switchOff);
@@ -211,6 +213,23 @@ public class BusinessProfileActivity extends BaseActivity {
                         MatomoUtility.getInstance().trackEvent(MatomoConstants.BUSINESS_AGREEMENTS, MatomoConstants.BUSINESS_AGREEMENTS_CLICKED);
                         Intent intent = new Intent(BusinessProfileActivity.this, AgreementsActivity.class);
                         startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            cpHelpLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(Utils.helpURL));
+                        startActivity(i);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

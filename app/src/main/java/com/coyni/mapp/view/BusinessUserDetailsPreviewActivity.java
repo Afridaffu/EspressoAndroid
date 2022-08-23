@@ -328,7 +328,7 @@ public class BusinessUserDetailsPreviewActivity extends BaseActivity implements 
             if (getIntent().getStringExtra("title") != null && getIntent().getStringExtra("title").equalsIgnoreCase("PHONE")) {
                 String phne_number = profile.getData().getPhoneNumber().split(" ")[1];
                 phne_number = "(" + phne_number.substring(0, 3) + ") " + phne_number.substring(3, 6) + "-" + phne_number.substring(6, 10);
-
+                phoneFormat = phne_number;
                 value.setText(phne_number);
             }
 
