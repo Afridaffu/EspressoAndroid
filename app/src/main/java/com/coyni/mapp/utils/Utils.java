@@ -121,6 +121,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
+    public static boolean QA_SKIP_ENCRYPTION = false;
+    public static final String SKIP_ENCRYPTION = "skip_encryption";
     public static final String COMPANY_ID = "companyId";
     public static final String IS_TRACKER = "is_Tracker";
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;

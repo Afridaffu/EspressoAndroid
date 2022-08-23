@@ -55,6 +55,9 @@ public class IntentForwardingActivity extends AppCompatActivity {
                 if (s.equalsIgnoreCase(CheckOutConstants.REQUEST_TOKEN)) {
                     checkOutModel.setEncryptedToken(uri.getQueryParameter(s));
                 }
+                if(s.equalsIgnoreCase(Utils.SKIP_ENCRYPTION)) {
+                    Utils.QA_SKIP_ENCRYPTION = true;
+                }
             }
             MyApplication objMyApplication = (MyApplication) getApplicationContext();
             objMyApplication.setCheckOutModel(checkOutModel);

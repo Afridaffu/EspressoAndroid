@@ -77,7 +77,7 @@ public class CustomEncryptionHandler implements Interceptor {
         // TODO Check this tag is required or not
         requestBuild.header("Requested-portal", "customer");
 
-        if (BuildConfig.SKIP_ENCRYPTION) {
+        if (BuildConfig.SKIP_ENCRYPTION || Utils.QA_SKIP_ENCRYPTION) {
             requestBuild.header(KEY_SKIP_DECRYPTION, "true");
             requestBuild.header(KEY_CONTENT_TYPE, APPLICATION_JSON);
         } else {
@@ -85,7 +85,8 @@ public class CustomEncryptionHandler implements Interceptor {
         }
 
         Response response = null;
-        if (BuildConfig.SKIP_ENCRYPTION || !ArrayUtils.contains(methodsAllowed, method)
+        if (BuildConfig.SKIP_ENCRYPTION || Utils.QA_SKIP_ENCRYPTION
+                || !ArrayUtils.contains(methodsAllowed, method)
                 || requestBody instanceof MultipartBody) {
             response = chain.proceed(requestBuild.build());
         } else {
