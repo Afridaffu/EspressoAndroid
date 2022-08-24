@@ -276,7 +276,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                 try {
                     if (!b) {
                         etWalletId.setHint("");
-                        if (etWalletId.getText().toString().trim().length() > 16) {
+                        if (etWalletId.getText().toString().trim().length() >= 16) {
                             isWallet = true;
                             walletErrorLL.setVisibility(GONE);
                             etlWalletId.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
