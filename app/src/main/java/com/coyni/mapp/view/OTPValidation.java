@@ -120,9 +120,9 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             SmsRetriever.getClient(this).startSmsUserConsent(null);
 
             IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
-            registerReceiver(smsVerificationReceiver, intentFilter);
+//            registerReceiver(smsVerificationReceiver, intentFilter);
+            registerReceiver(smsVerificationReceiver, intentFilter, SmsRetriever.SEND_PERMISSION, null);
 
-//            setKeyboardVisibilityListener(this);
             layoutType = "OTP";
             OTP_TYPE = getIntent().getStringExtra("OTP_TYPE");
             MOBILE = getIntent().getStringExtra("MOBILE");
