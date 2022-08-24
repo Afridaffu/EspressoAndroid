@@ -565,19 +565,19 @@ public class DashboardActivity extends BaseActivity {
 
                         if (trackerResponse.getData().isPaymentModeAdded()) {
                             welcomeCoyniCV.setVisibility(View.GONE);
-                            underReviewCV.setVisibility(View.GONE);
-                            additionalActionCV.setVisibility(View.GONE);
-                            buyTokensCV.setVisibility(View.GONE);
                             noTxnTV.setVisibility(View.GONE);
 //                            dashboardViewModel.getLatestTxns();
                         } else {
                             welcomeCoyniCV.setVisibility(View.VISIBLE);
-                            underReviewCV.setVisibility(View.GONE);
-                            additionalActionCV.setVisibility(View.GONE);
-                            buyTokensCV.setVisibility(View.GONE);
                             txnRV.setVisibility(View.GONE);
                             noTxnTV.setVisibility(View.VISIBLE);
                         }
+
+                        if (underReviewCV.getVisibility() != View.VISIBLE)
+                            underReviewCV.setVisibility(View.GONE);
+                        additionalActionCV.setVisibility(View.GONE);
+                        buyTokensCV.setVisibility(View.GONE);
+
                         LatestTransactionsRequest request = new LatestTransactionsRequest();
 //                        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
 //                            request.setUserId(objMyApplication.getMyProfile().getData().getId());
@@ -649,7 +649,8 @@ public class DashboardActivity extends BaseActivity {
                         transactionsNSV.setVisibility(View.VISIBLE);
 
                         welcomeCoyniCV.setVisibility(View.GONE);
-                        underReviewCV.setVisibility(View.GONE);
+                        if (underReviewCV.getVisibility() != View.VISIBLE)
+                            underReviewCV.setVisibility(View.GONE);
                         additionalActionCV.setVisibility(View.GONE);
 
                         if (latestTxnResponse.getData().size() == 0) {
@@ -858,7 +859,7 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void showUnderReviewData() {
-        if(objMyApplication.getMyProfile() != null &&
+        if (objMyApplication.getMyProfile() != null &&
                 objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
             cvHeaderRL.setVisibility(View.VISIBLE);
             cvSmallHeaderRL.setVisibility(View.GONE);
@@ -870,7 +871,7 @@ public class DashboardActivity extends BaseActivity {
             additionalActionCV.setVisibility(View.GONE);
             buyTokensCV.setVisibility(View.GONE);
             tvUserStatusUpdate.setText(R.string.customer_under_review);
-            if(objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
+            if (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
                     && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE")) {
                 tvUserStatusUpdate.setText(R.string.under_review_dispute);
             }
