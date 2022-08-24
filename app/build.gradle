@@ -170,9 +170,9 @@ dependencies {
 
     implementation 'com.github.matomo-org:matomo-sdk-android:4.1.4'
 
-    implementation('com.microblink:blinkcard:2.5.0@aar') {
-        transitive = true
-    }
+//    implementation('com.microblink:blinkcard:2.5.0@aar') {
+//        transitive = true
+//    }
 
     implementation 'org.apache.httpcomponents:httpcore:4.4.10'
     implementation 'org.apache.httpcomponents:httpclient:4.5.6'
