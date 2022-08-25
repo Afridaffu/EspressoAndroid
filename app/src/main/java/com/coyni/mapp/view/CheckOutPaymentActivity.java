@@ -334,16 +334,17 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         checkOutViewModel.getCancelOrderResponseMutableLiveData().observe(this, new Observer<CancelOrderResponse>() {
             @Override
             public void onChanged(CancelOrderResponse cancelOrderResponse) {
-                if (cancelOrderResponse != null) {
-                    if (cancelOrderResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
-                            myApplication.setCheckOutModel(null);
-                        }
-                        CheckOutPaymentActivity.super.onBackPressed();
-                    } else {
-                        Utils.displayAlert(cancelOrderResponse.getError().getErrorDescription(), CheckOutPaymentActivity.this, getString(R.string.oops), "");
-                    }
+//                if (cancelOrderResponse != null) {
+//                    if (cancelOrderResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+////                        CheckOutPaymentActivity.super.onBackPressed();
+//                    } else {
+////                        Utils.displayAlert(cancelOrderResponse.getError().getErrorDescription(), CheckOutPaymentActivity.this, getString(R.string.oops), "");
+//                    }
+//                }
+                if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
+                    myApplication.setCheckOutModel(null);
                 }
+                finish();
             }
         });
 
