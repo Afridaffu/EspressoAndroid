@@ -47,12 +47,12 @@ public class IntentForwardingActivity extends AppCompatActivity {
         MyApplication objMyApplication = (MyApplication) getApplicationContext();
         Uri uri = intent.getData();
         if (uri != null && uri.isAbsolute()) {
-            if (uri.getScheme().equals("coyni")
-                    && uri.getHost().equalsIgnoreCase("paidOrder")) {
-                if (uri.getQueryParameterNames().contains("encryptedToken")) {
+            if (uri.getScheme().equals(Utils.URI_COYNI)
+                    && uri.getHost().equalsIgnoreCase(Utils.URI_PAID_ORDER)) {
+                if (uri.getQueryParameterNames().contains(Utils.URI_ENCRYPTED_TOKEN)) {
                     CheckOutModel checkOutModel = new CheckOutModel();
                     checkOutModel.setCheckOutFlag(true);
-                    checkOutModel.setEncryptedToken(uri.getQueryParameter("encryptedToken"));
+                    checkOutModel.setEncryptedToken(uri.getQueryParameter(Utils.URI_ENCRYPTED_TOKEN));
                     objMyApplication.setCheckOutModel(checkOutModel);
                 }
                 if (uri.getQueryParameterNames().contains(Utils.SKIP_ENCRYPTION)) {
