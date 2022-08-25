@@ -8,11 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.coyni.mapp.model.check_out_transactions.CheckOutModel;
-import com.coyni.mapp.utils.CheckOutConstants;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
-
-import java.util.Set;
 
 public class IntentForwardingActivity extends AppCompatActivity {
 
@@ -46,18 +43,22 @@ public class IntentForwardingActivity extends AppCompatActivity {
         if (intent == null) {
             return;
         }
-        CheckOutModel checkOutModel = new CheckOutModel();
+
+        MyApplication objMyApplication = (MyApplication) getApplicationContext();
         Uri uri = intent.getData();
         if (uri != null && uri.isAbsolute()) {
-            Set<String> queryParams = uri.getQueryParameterNames();
-            checkOutModel.setCheckOutFlag(true);
-            for (String s : queryParams) {
-                if (s.equalsIgnoreCase(CheckOutConstants.REQUEST_TOKEN)) {
-                    checkOutModel.setEncryptedToken(uri.getQueryParameter(s));
+            if (uri.getScheme().equals(Utils.URI_COYNI)
+                    && uri.getHost().equalsIgnoreCase(Utils.URI_PAID_ORDER)) {
+                if (uri.getQueryParameterNames().contains(Utils.URI_ENCRYPTED_TOKEN)) {
+                    CheckOutModel checkOutModel = new CheckOutModel();
+                    checkOutModel.setCheckOutFlag(true);
+                    checkOutModel.setEncryptedToken(uri.getQueryParameter(Utils.URI_ENCRYPTED_TOKEN));
+                    objMyApplication.setCheckOutModel(checkOutModel);
+                }
+                if (uri.getQueryParameterNames().contains(Utils.SKIP_ENCRYPTION)) {
+                    Utils.QA_SKIP_ENCRYPTION = true;
                 }
             }
-            MyApplication objMyApplication = (MyApplication) getApplicationContext();
-            objMyApplication.setCheckOutModel(checkOutModel);
         }
     }
 }

@@ -31,9 +31,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.LatestTxnAdapter;
 import com.coyni.mapp.model.bank.SignOn;
@@ -65,6 +62,9 @@ import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.IdentityVerificationViewModel;
 import com.coyni.mapp.viewmodel.LoginViewModel;
 import com.coyni.mapp.viewmodel.NotificationsViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -84,7 +84,8 @@ public class DashboardActivity extends BaseActivity {
     public NotificationsViewModel notificationsViewModel;
     private LoginViewModel loginViewModel;
     TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV,
-            welcomeCoyniTV, buyTokenWelcomeCoyniTV, contactUSTV, idVeriStatus, actionRequiredMsgTV, actionTV;
+            welcomeCoyniTV, buyTokenWelcomeCoyniTV, contactUSTV, idVeriStatus, actionRequiredMsgTV,
+            actionTV, tvUserStatusUpdate;
     MyApplication objMyApplication;
     Dialog dialog;
     RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL;
@@ -178,8 +179,7 @@ public class DashboardActivity extends BaseActivity {
             imgProfile = findViewById(R.id.imgProfile);
             contactUSTV = findViewById(R.id.contactUSTV);
             idVeriStatus = findViewById(R.id.idVeriStatus);
-            idVeriStatus.setText(getString(R.string.declined_text));
-
+            tvUserStatusUpdate = findViewById(R.id.tv_user_status_update);
 
             newUserGetStartedCV = findViewById(R.id.newUserGetStartedCV);
 
@@ -215,6 +215,7 @@ public class DashboardActivity extends BaseActivity {
             countTV = findViewById(R.id.countTV);
             countCV = findViewById(R.id.countCV);
 
+            idVeriStatus.setText(getString(R.string.declined_text));
             objMyApplication = (MyApplication) getApplicationContext();
             displayImageUtility = DisplayImageUtility.getInstance(this);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -564,19 +565,19 @@ public class DashboardActivity extends BaseActivity {
 
                         if (trackerResponse.getData().isPaymentModeAdded()) {
                             welcomeCoyniCV.setVisibility(View.GONE);
-                            underReviewCV.setVisibility(View.GONE);
-                            additionalActionCV.setVisibility(View.GONE);
-                            buyTokensCV.setVisibility(View.GONE);
                             noTxnTV.setVisibility(View.GONE);
 //                            dashboardViewModel.getLatestTxns();
                         } else {
                             welcomeCoyniCV.setVisibility(View.VISIBLE);
-                            underReviewCV.setVisibility(View.GONE);
-                            additionalActionCV.setVisibility(View.GONE);
-                            buyTokensCV.setVisibility(View.GONE);
                             txnRV.setVisibility(View.GONE);
                             noTxnTV.setVisibility(View.VISIBLE);
                         }
+
+                        if (underReviewCV.getVisibility() != View.VISIBLE)
+                            underReviewCV.setVisibility(View.GONE);
+                        additionalActionCV.setVisibility(View.GONE);
+                        buyTokensCV.setVisibility(View.GONE);
+
                         LatestTransactionsRequest request = new LatestTransactionsRequest();
 //                        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
 //                            request.setUserId(objMyApplication.getMyProfile().getData().getId());
@@ -648,7 +649,8 @@ public class DashboardActivity extends BaseActivity {
                         transactionsNSV.setVisibility(View.VISIBLE);
 
                         welcomeCoyniCV.setVisibility(View.GONE);
-                        underReviewCV.setVisibility(View.GONE);
+                        if (underReviewCV.getVisibility() != View.VISIBLE)
+                            underReviewCV.setVisibility(View.GONE);
                         additionalActionCV.setVisibility(View.GONE);
 
                         if (latestTxnResponse.getData().size() == 0) {
@@ -689,6 +691,7 @@ public class DashboardActivity extends BaseActivity {
                         }
 
                     }
+                    showUnderReviewData();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -853,6 +856,26 @@ public class DashboardActivity extends BaseActivity {
             }
         });
 
+    }
+
+    private void showUnderReviewData() {
+        if (objMyApplication.getMyProfile() != null &&
+                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
+            cvHeaderRL.setVisibility(View.VISIBLE);
+            cvSmallHeaderRL.setVisibility(View.GONE);
+            getStartedCV.setVisibility(View.GONE);
+            transactionsNSV.setVisibility(View.VISIBLE);
+
+            welcomeCoyniCV.setVisibility(View.GONE);
+            underReviewCV.setVisibility(View.VISIBLE);
+            additionalActionCV.setVisibility(View.GONE);
+            buyTokensCV.setVisibility(View.GONE);
+            tvUserStatusUpdate.setText(R.string.customer_under_review);
+            if (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
+                    && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE")) {
+                tvUserStatusUpdate.setText(R.string.under_review_dispute);
+            }
+        }
     }
 
     private void SetDB() {
