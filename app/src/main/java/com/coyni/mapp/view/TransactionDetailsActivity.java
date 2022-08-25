@@ -2462,6 +2462,8 @@ public class TransactionDetailsActivity extends BaseActivity {
             if (txnId != null && !txnId.equals("")) {
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     dashboardViewModel.getActivityLog(txnId, "c");
+                } else {
+                    dashboardViewModel.getActivityLog(txnId, "m");
                 }
             }
         }

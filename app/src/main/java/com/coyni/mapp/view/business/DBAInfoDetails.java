@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.R;
 import com.coyni.mapp.model.DBAInfo.BusinessType;
+import com.coyni.mapp.model.DBAInfo.BusinessTypeResp;
 import com.coyni.mapp.model.DBAInfo.DBAInfoResp;
 import com.coyni.mapp.model.profile.AddBusinessUserResponse;
 import com.coyni.mapp.model.profile.ImageResponse;
@@ -102,7 +103,13 @@ public class DBAInfoDetails extends BaseActivity {
             dba_userProfileIV = findViewById(R.id.dba_userProfileIV);
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-            responce = objMyApplication.getBusinessTypeResp().getData();
+//            responce = objMyApplication.getBusinessTypeResp().getData();
+            if (objMyApplication.getBusinessTypeResp() != null && objMyApplication.getBusinessTypeResp().getData() != null && objMyApplication.getBusinessTypeResp().getData().size() > 0) {
+                responce = objMyApplication.getBusinessTypeResp().getData();
+                bindBusinessType();
+            } else {
+                businessIdentityVerificationViewModel.getBusinessType();
+            }
             editProfileIV = findViewById(R.id.dba_editProfileIV);
             editEmail = findViewById(R.id.editEmailDBALL);
             editPhone = findViewById(R.id.editPhoneNumDBALL);
@@ -148,16 +155,16 @@ public class DBAInfoDetails extends BaseActivity {
                 }
             });
 
-            for (int i = 0; i < responce.size(); i++) {
-                try {
-                    if (bType.trim().equals(responce.get(i).getKey().toLowerCase().trim())) {
-                        businessType.setText(responce.get(i).getValue());
-                        break;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+//            for (int i = 0; i < responce.size(); i++) {
+//                try {
+//                    if (bType.trim().equals(responce.get(i).getKey().toLowerCase().trim())) {
+//                        businessType.setText(responce.get(i).getValue());
+//                        break;
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -413,6 +420,19 @@ public class DBAInfoDetails extends BaseActivity {
                 }
             });
 
+            businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+                @Override
+                public void onChanged(BusinessTypeResp businessTypeResp) {
+                    try {
+                        objMyApplication.setBusinessTypeResp(businessTypeResp);
+                        responce = businessTypeResp.getData();
+                        bindBusinessType();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -630,6 +650,23 @@ public class DBAInfoDetails extends BaseActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void bindBusinessType() {
+        try {
+            for (int i = 0; i < responce.size(); i++) {
+                try {
+                    if (bType.toLowerCase().trim().equals(responce.get(i).getKey().toLowerCase().trim())) {
+                        businessType.setText(responce.get(i).getValue());
+                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }

@@ -276,12 +276,12 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                 try {
                     if (!b) {
                         etWalletId.setHint("");
-                        if (etWalletId.getText().toString().trim().length() > 16) {
+                        if (etWalletId.getText().toString().trim().length() >= 16) {
                             isWallet = true;
                             walletErrorLL.setVisibility(GONE);
                             etlWalletId.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.primary_black));
-                        } else if (etWalletId.getText().toString().trim().length() < 16) {
+                        } else if (etWalletId.getText().toString().trim().length() > 0 && etWalletId.getText().toString().trim().length() < 16) {
                             isWallet = false;
                             etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState(AddPaymentSignetActivity.this));
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.error_red));
@@ -813,7 +813,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
 //            lp.dimAmount = 0.7f;
 //            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 //            preDialog.getWindow().setAttributes(lp);
-            preDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            preDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             preDialog.setCancelable(false);
             preDialog.show();
