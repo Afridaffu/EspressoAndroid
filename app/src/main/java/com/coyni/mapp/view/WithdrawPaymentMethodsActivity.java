@@ -156,15 +156,20 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     if (addPayDialog != null && addPayDialog.isShowing()) {
                         addPayDialog.dismiss();
                     }
-                    if (signetList != null && signetList.size() > 0) {
-                        isSignet = true;
-                        ControlMethod("addbpayment");
-                    } else {
-                        ControlMethod("withdrawmethod");
-                        selectWithdrawMethod();
-                        strScreen = "withdrawmethod";
-                        strCurrent = "";
-                    }
+//                    if (signetList != null && signetList.size() > 0) {
+//                        isSignet = true;
+//                        ControlMethod("addbpayment");
+//                    } else {
+//                        ControlMethod("withdrawmethod");
+//                        selectWithdrawMethod();
+//                        strScreen = "withdrawmethod";
+//                        strCurrent = "";
+//                    }
+//Modified on 25 Aug 2022
+                    ControlMethod("withdrawmethod");
+                    selectWithdrawMethod();
+                    strScreen = "withdrawmethod";
+                    strCurrent = "";
                     getPaymentMethods();
                 }
             } else if (requestCode == 5) {
