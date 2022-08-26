@@ -56,7 +56,7 @@ public class UserData {
     private List<States> listStates = new ArrayList<>();
     private LatestTxnResponse listLatestTxn;
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
-    private Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false;
+    private Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false, isBankSave = false;
     private PaymentMethodsResponse paymentMethodsResponse;
     //    WalletResponse walletResponse;
     private String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
@@ -293,6 +293,14 @@ public class UserData {
 
     public void setSignet(Boolean signet) {
         isSignet = signet;
+    }
+
+    public Boolean getBankSave() {
+        return isBankSave;
+    }
+
+    public void setBankSave(Boolean bankSave) {
+        isBankSave = bankSave;
     }
 
     public PaymentMethodsResponse getPaymentMethodsResponse() {

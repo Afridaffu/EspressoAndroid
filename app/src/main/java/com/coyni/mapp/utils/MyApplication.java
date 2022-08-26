@@ -652,6 +652,14 @@ public class MyApplication extends Application {
         mCurrentUserData.setCardSave(cardSave);
     }
 
+    public Boolean getBankSave() {
+        return mCurrentUserData.getBankSave();
+    }
+
+    public void setBankSave(Boolean bankSave) {
+        mCurrentUserData.setBankSave(bankSave);
+    }
+
     public int getAccountType() {
         return mCurrentUserData.getAccountType();
     }

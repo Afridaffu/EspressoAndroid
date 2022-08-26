@@ -772,6 +772,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 public void onClick(View v) {
                     isBankSuccess = false;
                     if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+                        objMyApplication.setBankSave(true);
                         onBackPressed();
                     } else if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         ControlMethod("paymentMethods");

@@ -112,6 +112,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try {
             if (requestCode == 1 && data == null) {
+                objMyApplication.setBankSave(false);
                 if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
                     Utils.displayAlert("Bank integration has been cancelled", WithdrawPaymentMethodsActivity.this, "", "");
                 } else {
