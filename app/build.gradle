@@ -7,10 +7,10 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         config {
-            keyAlias 'alias_name'
-            keyPassword 'Coyni@1'
-            storeFile file('../app/keystore.jks')
-            storePassword 'Coyni@1'
+            keyAlias 'coyni_alias'
+            keyPassword 'coyni@1'
+            storeFile file('../coyni_v2_keystore.jks')
+            storePassword 'coyni@1'
         }
 //        releaseSigningConfig {
 //            storeFile rootProject.file("app/keystore.jks")
