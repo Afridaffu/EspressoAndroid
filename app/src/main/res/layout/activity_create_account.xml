@@ -27,12 +27,21 @@
             android:layout_marginTop="@dimen/_45sdp"
             android:orientation="vertical">
 
-            <ImageView
+            <LinearLayout
                 android:id="@+id/createAccountCloseIV"
-                android:layout_width="@dimen/_13sdp"
-                android:layout_height="@dimen/_13sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_14sdp"
-                android:src="@drawable/ic_x" />
+                android:padding="@dimen/_5sdp">
+
+                <ImageView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_13sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:src="@drawable/ic_x" />
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="match_parent"

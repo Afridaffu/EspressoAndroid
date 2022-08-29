@@ -52,7 +52,7 @@ public class ConfirmPasswordActivity extends BaseActivity implements OnKeyboardV
     Boolean isCPwdEye = false;
     private Pattern strong;
     private static final String STRONG_PATTERN =
-            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%*!?]).{8,})";
+            "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&'()*+,-./:;<=>?@^_`{|}~]).{8,})";
     LoginViewModel loginViewModel;
     Dialog dialog;
     MyApplication objMyApplication;
@@ -107,7 +107,7 @@ public class ConfirmPasswordActivity extends BaseActivity implements OnKeyboardV
             backBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(Utils.isKeyboardVisible)
+                    if (Utils.isKeyboardVisible)
                         Utils.hideKeypad(ConfirmPasswordActivity.this);
                     finish();
                 }
