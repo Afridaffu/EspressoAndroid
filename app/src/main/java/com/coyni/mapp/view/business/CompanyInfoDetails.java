@@ -59,17 +59,7 @@ public class CompanyInfoDetails extends BaseActivity {
         emailIconIV = (ImageView) findViewById(R.id.emailIconIV);
         phoneIconIV = (ImageView) findViewById(R.id.phoneIconIV);
         myApplication = (MyApplication) getApplicationContext();
-        if (myApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-            emailIconIV.setVisibility(View.GONE);
-            phoneIconIV.setVisibility(View.GONE);
-            emailLL.setEnabled(false);
-            phoneLL.setEnabled(false);
-        } else {
-            emailIconIV.setVisibility(View.VISIBLE);
-            phoneIconIV.setVisibility(View.VISIBLE);
-            emailLL.setEnabled(true);
-            phoneLL.setEnabled(true);
-        }
+
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 
         closeLL.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +84,7 @@ public class CompanyInfoDetails extends BaseActivity {
 //                e.printStackTrace();
 //            }
 //        });
-        if (myApplication.getDbaOwnerId() == null || myApplication.getDbaOwnerId() == 0) {
+        if (myApplication.getAccountType() != Utils.SHARED_ACCOUNT) {
             emailIconIV.setVisibility(View.VISIBLE);
             phoneIconIV.setVisibility(View.VISIBLE);
             emailLL.setEnabled(true);
