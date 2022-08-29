@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -47,6 +48,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.view.business.RefundTransactionActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -90,7 +92,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     private View stregnthOne, stregnthTwo, stregnthThree;
     private Pattern strong, medium;
     LinearLayout layoutClose;
-    ImageView createAccountCloseIV;
+    LinearLayout createAccountCloseIV;
     private int accountType = Utils.PERSONAL_ACCOUNT;
 
     //    !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
@@ -289,7 +291,19 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 }
             });
 
-            createAccountCloseIV.setOnClickListener(view -> onBackPressed());
+            createAccountCloseIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(CreateAccountActivity.this);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            onBackPressed();
+                        }
+                    }, 200);
+                }
+            });
 
             passwordTIL.setEndIconOnClickListener(new View.OnClickListener() {
                 @Override
