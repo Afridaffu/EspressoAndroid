@@ -53,14 +53,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             launchCheckout();
         }
         createReceiver();
-        LogUtils.e("BNR Test", "BNR registerReceiver");
         registerReceiver(mReceiver, mIntentFilter);
     }
 
     @Override
     protected void onPause() {
         if (mReceiver != null) {
-            LogUtils.e("BNR Test", "BNR unregisterReceiver");
             unregisterReceiver(mReceiver);
         }
         mReceiver = null;
@@ -117,12 +115,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void handleCheckoutFlow(String accountStatus, int accountType) {
-        if (accountType == Utils.PERSONAL_ACCOUNT
-                && accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-            launchCheckoutFlow();
-        } else if (accountType == Utils.BUSINESS_ACCOUNT) {
-//            myApplication.setCheckOutModel(new CheckOutModel());
-//            Utils.displayAlertNew(getString(R.string.merchant_shared_message), BaseActivity.this, "coyni");
+        if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
             launchCheckoutFlow();
         } else {
             myApplication.setCheckOutModel(new CheckOutModel());
@@ -135,7 +128,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             CheckOutModel checkOutModel = myApplication.getCheckOutModel();
             if (checkOutModel.isCheckOutFlag()) {
                 dismissDialog();
-
                 if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                         && myApplication.getMyProfile().getData().getAccountStatus() != null) {
                     handleCheckoutFlow(myApplication.getMyProfile().getData().getAccountStatus(), myApplication.getMyProfile().getData().getAccountType());
@@ -143,22 +135,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                         && myApplication.getLoginResponse().getData().getAccountStatus() != null) {
                     handleCheckoutFlow(myApplication.getLoginResponse().getData().getAccountStatus(), myApplication.getLoginResponse().getData().getAccountType());
                 }
-
-
-//                if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-//                        && myApplication.getMyProfile().getData().getAccountStatus() != null) {
-//                    if (myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-//                        launchCheckoutFlow(checkOutModel);
-//                    } else {
-//                        myApplication.setCheckOutModel(new CheckOutModel());
-//                        Utils.displayAlertNew(getString(R.string.please_use_active_account), BaseActivity.this, "coyni");
-//                    }
-//                } else if (myApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-//                    launchCheckoutFlow(checkOutModel);
-//                } else {
-//                    myApplication.setCheckOutModel(new CheckOutModel());
-//                    Utils.displayAlertNew(getString(R.string.please_use_active_account), BaseActivity.this, "coyni");
-//                }
             }
         }
     }
