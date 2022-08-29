@@ -121,8 +121,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                 && accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
             launchCheckoutFlow();
         } else if (accountType == Utils.BUSINESS_ACCOUNT) {
-            myApplication.setCheckOutModel(new CheckOutModel());
-            Utils.displayAlertNew(getString(R.string.merchant_shared_message), BaseActivity.this, "coyni");
+//            myApplication.setCheckOutModel(new CheckOutModel());
+//            Utils.displayAlertNew(getString(R.string.merchant_shared_message), BaseActivity.this, "coyni");
+            launchCheckoutFlow();
         } else {
             myApplication.setCheckOutModel(new CheckOutModel());
             Utils.displayAlertNew(getString(R.string.please_use_active_account), BaseActivity.this, "coyni");
