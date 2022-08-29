@@ -17,6 +17,9 @@
     <string name="faceiddisable">We’ve detected a change to this device. Please Log in and go to your profile setting to set up the Face ID.</string>
     <string name="touchiddisable">We’ve detected a change to this device. Please Log in and go to your profile setting to set up the Touch ID.</string>
     <string name="title_activity_customer_profile_active">CustomerProfileActive</string>
+
+    <string name="password_allow_characters">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^\&amp;*()_+={}[]|\;:,.?/</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
