@@ -121,6 +121,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             if (myApplication.getCheckOutModel().getEncryptedToken() != null && !myApplication.getCheckOutModel().getEncryptedToken().equals("")) {
                 requestToken = myApplication.getCheckOutModel().getEncryptedToken();
 //                checkOutViewModel.scanQRCode(requestToken);
+                TransactionLimitAPICall();
                 orderInfoAPICall(requestToken);
             }
         }
@@ -284,7 +285,6 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                     if (orderInfoResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         if (orderInfoResponse.getData() != null && orderInfoResponse.getData().isCheckoutUser()) {
                             initUserData(orderInfoResponse);
-                            TransactionLimitAPICall();
                             if (orderInfoResponse.getData().getOrderId() != null) {
                                 ScanQRRequest request = new ScanQRRequest();
                                 request.setOrderId(orderInfoResponse.getData().getOrderId());
