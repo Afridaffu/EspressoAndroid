@@ -158,6 +158,12 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             if (objMyApplication.getCardSave()) {
                 objMyApplication.setCardSave(false);
                 isPayment = true;
+            } else if (objMyApplication.getSignet()) {
+                objMyApplication.setSignet(false);
+                isPayment = true;
+            } else if (objMyApplication.getBankSave()) {
+                objMyApplication.setBankSave(false);
+                isPayment = true;
             }
         } else {
             switch (resultCode) {

@@ -50,6 +50,8 @@ import com.coyni.mapp.utils.DisplayImageUtility;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.view.business.BusinessDashboardActivity;
+import com.coyni.mapp.view.business.VerificationFailedActivity;
 import com.coyni.mapp.viewmodel.BusinessDashboardViewModel;
 import com.coyni.mapp.viewmodel.BuyTokenViewModel;
 import com.coyni.mapp.viewmodel.CheckOutViewModel;
@@ -714,6 +716,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 displayAlertDialog.dismiss();
+//                launchDashboard();
 //                changeSlideState();
             }
         });
@@ -722,7 +725,11 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
 //                changeSlideState();
+                CancelOrderRequest request = new CancelOrderRequest();
+                request.setEncryptedToken(myApplication.getCheckOutModel().getEncryptedToken());
+                checkOutViewModel.orderCancel(request);
                 myApplication.setCheckOutModel(null);
+                launchDashboard();
                 finish();
             }
         });
@@ -741,6 +748,12 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
 
         displayAlertDialog.setCanceledOnTouchOutside(true);
         displayAlertDialog.show();
+    }
+
+    private void launchDashboard() {
+        Intent dashboardIntent = new Intent(CheckOutPaymentActivity.this, BusinessDashboardActivity.class);
+        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(dashboardIntent);
     }
 
 

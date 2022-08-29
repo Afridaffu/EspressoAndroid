@@ -259,6 +259,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 if (objMyApplication.getCardSave()) {
                     objMyApplication.setCardSave(false);
                     isPayment = true;
+                } else if (objMyApplication.getBankSave()) {
+                    objMyApplication.setBankSave(false);
+                    isPayment = true;
                 }
             } else {
                 switch (resultCode) {
@@ -1402,7 +1405,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 //            window.setAttributes(wlp);
 
-            prevDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            prevDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
@@ -1799,7 +1802,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 //            window.setAttributes(wlp);
 
-            prevDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            prevDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 

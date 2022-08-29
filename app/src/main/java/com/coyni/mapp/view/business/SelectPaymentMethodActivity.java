@@ -167,7 +167,9 @@ public class SelectPaymentMethodActivity extends BaseActivity {
 //                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
 //                        onBackPressed();
 //                    } else
-                    if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                    if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
+                        onBackPressed();
+                    } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                         if (!objMyApplication.getCardSave()) {
                             isDeCredit = true;
                             ControlMethod("addpayment");
@@ -190,7 +192,9 @@ public class SelectPaymentMethodActivity extends BaseActivity {
 //                        getPaymentMethods();
 //                    }
 //                }
-                if (objMyApplication.getSignet()) {
+                if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
+                    onBackPressed();
+                } else if (objMyApplication.getSignet()) {
                     objMyApplication.setSignet(false);
                     getPaymentMethods();
                 }
@@ -768,6 +772,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 public void onClick(View v) {
                     isBankSuccess = false;
                     if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+                        objMyApplication.setBankSave(true);
                         onBackPressed();
                     } else if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         ControlMethod("paymentMethods");
