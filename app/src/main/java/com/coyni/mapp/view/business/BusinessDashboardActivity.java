@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.view.ScanActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -280,11 +281,13 @@ public class BusinessDashboardActivity extends BaseActivity {
                             startActivity(new Intent(BusinessDashboardActivity.this, BusinessReceivePaymentActivity.class));
                         }
                     });
-                    llScan.setAlpha(0.5f);
-                    llScan.setEnabled(false);
+//                    llScan.setAlpha(0.5f);
+//                    llScan.setEnabled(false);
                     llScan.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            dialog.dismiss();
+                            startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
                         }
                     });
                 } catch (Exception ex) {
