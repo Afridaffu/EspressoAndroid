@@ -18,9 +18,7 @@
     <string name="touchiddisable">We’ve detected a change to this device. Please Log in and go to your profile setting to set up the Touch ID.</string>
     <string name="title_activity_customer_profile_active">CustomerProfileActive</string>
 
-    <string name="password_allow_characters">abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^\&amp;*()_+={}[]|\;:,.?/</string>
-
-    <!-- Strings used for fragments for navigation -->
+     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
@@ -777,4 +775,6 @@
     <string name="noFeature">Feature not available</string>
     <string name="errormsg">"We're sorry but this feature is not available in your coyni account. If this is an error, please contact the coyni customer support team."</string>
     <string name="please_contact_the_coyni_customer_support">We’re sorry but this feature currently is not available, please wait until we finish your identity verification. If this is an error, please contact the coyni customer support.</string>
+
+    <string name="password_characters">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?&amp;</string>
 </resources>
