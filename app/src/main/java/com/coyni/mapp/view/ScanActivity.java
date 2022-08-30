@@ -692,8 +692,10 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                     e.printStackTrace();
                                 }
                             }
-                        } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT &&
-                                (userDetails.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || userDetails.getData().getAccountType() == Utils.SHARED_ACCOUNT)) {
+                        }
+//                        else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT &&
+//                                (userDetails.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || userDetails.getData().getAccountType() == Utils.SHARED_ACCOUNT)) {
+                        else if ((userDetails.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || userDetails.getData().getAccountType() == Utils.SHARED_ACCOUNT)) {
                             if (strQRAmount.equals("")) {
                                 try {
                                     Intent i = new Intent(ScanActivity.this, PayToMerchantActivity.class);
@@ -721,15 +723,16 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                        } else if ((objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT && (userDetails.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || userDetails.getData().getAccountType() == Utils.SHARED_ACCOUNT)) ||
-                                (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT && (userDetails.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || userDetails.getData().getAccountType() == Utils.SHARED_ACCOUNT))) {
-                            //ERROR MESSAGE DIsPLAY
-                            try {
-                                displayAlert("Sorry, we detected this is a Merchant account address, switch to your personal account to complete the transaction. ", "Invalid QR code");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
                         }
+//                        else if ((objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT && (userDetails.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || userDetails.getData().getAccountType() == Utils.SHARED_ACCOUNT)) ||
+//                                (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT && (userDetails.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || userDetails.getData().getAccountType() == Utils.SHARED_ACCOUNT))) {
+//                            //ERROR MESSAGE DIsPLAY
+//                            try {
+//                                displayAlert("Sorry, we detected this is a Merchant account address, switch to your personal account to complete the transaction. ", "Invalid QR code");
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
                     } else {
                         displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
                     }
