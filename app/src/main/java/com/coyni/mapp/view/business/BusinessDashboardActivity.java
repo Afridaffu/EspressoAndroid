@@ -738,9 +738,9 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             } else {
                 if (userName.length() == 21) {
+                    mTvUserName.setText("Hi! " + Utils.capitalize(userName).substring(0, 20) + "...");
+                } else if (userName.length() > 21) {
                     mTvUserName.setText("Hi! " + Utils.capitalize(userName).substring(0, 21) + "...");
-                } else if (userName.length() > 22) {
-                    mTvUserName.setText("Hi! " + Utils.capitalize(userName).substring(0, 22) + "...");
                 } else {
                     mTvUserName.setText("Hi! " + Utils.capitalize(userName));
                 }

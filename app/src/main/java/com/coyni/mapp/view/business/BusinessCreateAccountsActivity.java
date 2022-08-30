@@ -224,9 +224,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                     }
                 } else {
                     if (userName.length() == 21) {
-                        userNameTV.setText(Utils.capitalize(userName).substring(0, 22) + "...");
-                    } else if (userName.length() > 22) {
-                        userNameTV.setText(Utils.capitalize(userName).substring(0, 22) + "...");
+                        userNameTV.setText(Utils.capitalize(userName).substring(0, 20) + "...");
+                    } else if (userName.length() > 21) {
+                        userNameTV.setText(Utils.capitalize(userName).substring(0, 21) + "...");
                     } else {
                         userNameTV.setText(Utils.capitalize(userName));
                     }
