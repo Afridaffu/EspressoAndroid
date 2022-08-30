@@ -46,7 +46,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     Integer txnSubType;
     String txnId = "";
     Dialog progressDialog;
-    CardView cancelTxnCV,cv_activity_log;
+    CardView cancelTxnCV, cv_activity_log;
     TextView successadd, purchaseTime, activity_log_tv;
     RecyclerView recyclerView;
     private String gbxID, txnTypeStr, txnSubTypeStr;
@@ -582,7 +582,7 @@ public class TransactionDetailsActivity extends BaseActivity {
         }
 
         if (paidOrderData.getMerchantId() != null) {
-            mMerchantAccountID.setText(paidOrderData.getMerchantId());
+            mMerchantAccountID.setText("M - " + paidOrderData.getMerchantId());
         }
 
 //        if (paidOrderData.getDbaName() != null) {
@@ -2396,7 +2396,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                 }
                 break;
             }
-            if(view != null) {
+            if (view != null) {
                 recyclerView = view.findViewById(R.id.recycler_view);
                 activity_log_tv = view.findViewById(R.id.activity_log_tv);
                 cv_activity_log = view.findViewById(R.id.cv_activity_log);
