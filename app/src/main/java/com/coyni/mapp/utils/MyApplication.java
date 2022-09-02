@@ -892,7 +892,7 @@ public class MyApplication extends Application {
         try {
             if (objResponse != null && objResponse.getData() != null && objResponse.getData().getData() != null && objResponse.getData().getData().size() > 0) {
                 for (int i = 0; i < objResponse.getData().getData().size(); i++) {
-                    if (!objResponse.getData().getData().get(i).getPaymentMethod().equalsIgnoreCase("bank")) {
+                    if (!objResponse.getData().getData().get(i).getPaymentMethod().equalsIgnoreCase("bank") && !objResponse.getData().getData().get(i).getPaymentMethod().equalsIgnoreCase("signet")) {
                         listData.add(objResponse.getData().getData().get(i));
                     }
                 }

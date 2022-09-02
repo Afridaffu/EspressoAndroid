@@ -381,9 +381,9 @@ public class BusinessProfileActivity extends BaseActivity {
                     }
                 } else {
                     if (fullname.length() == 21) {
+                        userFullname.setText(Utils.capitalize(fullname).substring(0, 20) + "...");
+                    } else if (fullname.length() > 21) {
                         userFullname.setText(Utils.capitalize(fullname).substring(0, 21) + "...");
-                    } else if (fullname.length() > 22) {
-                        userFullname.setText(Utils.capitalize(fullname).substring(0, 22) + "...");
                     } else {
                         userFullname.setText(Utils.capitalize(fullname));
                     }

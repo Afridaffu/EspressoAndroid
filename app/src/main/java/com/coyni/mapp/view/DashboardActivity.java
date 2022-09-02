@@ -427,8 +427,8 @@ public class DashboardActivity extends BaseActivity {
                     } else {
                         if (strName.length() == 21) {
                             tvUserName.setText(getString(R.string.hi_text) + strName.substring(0, 20) + "...");
-                        } else if (strName.length() > 22) {
-                            tvUserName.setText(getString(R.string.hi_text) + strName.substring(0, 22) + "...");
+                        } else if (strName.length() > 21) {
+                            tvUserName.setText(getString(R.string.hi_text) + strName.substring(0, 21) + "...");
                         } else {
                             tvUserName.setText(getString(R.string.hi_text) + strName);
                         }

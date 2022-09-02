@@ -512,7 +512,7 @@ public class CustomerProfileActivity extends BaseActivity {
                     if (objMyApplication.getStrUserName().length() == 21) {
                         customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20) + "...");
                     } else if (objMyApplication.getStrUserName().length() > 21) {
-                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20) + "...");
+                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 21) + "...");
                     } else {
                         customerNameTV.setText(objMyApplication.getStrUserName());
                     }
