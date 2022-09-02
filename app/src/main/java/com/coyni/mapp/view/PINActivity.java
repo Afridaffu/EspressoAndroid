@@ -384,10 +384,15 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     @Override
                                     public void run() {
                                         try {
+                                            //Comment below to stop re-direction to login screen
                                             objMyApplication.setStrRetrEmail("");
                                             Intent i = new Intent(PINActivity.this, LoginActivity.class);
                                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(i);
+
+                                            //UnComment below to stop re-direction to login screen
+//                                            finish();
+
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }
