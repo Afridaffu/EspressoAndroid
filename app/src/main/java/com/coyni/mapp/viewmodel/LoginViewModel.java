@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.coyni.mapp.model.coynipin.StepUpOTPResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.coyni.mapp.model.APIError;
@@ -85,6 +86,8 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<LoginResponse> authenticatePasswordResponse = new MutableLiveData<>();
     private MutableLiveData<LogoutResponse> logoutLiveData = new MutableLiveData<>();
     private MutableLiveData<DeviceInitializeResponse> deviceInitializeResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<StepUpOTPResponse> stepUpEmailOTPResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<StepUpOTPResponse> stepUpPhoneOTPResponseMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<LoginResponse> getAuthenticatePasswordResponse() {
         return authenticatePasswordResponse;
@@ -188,6 +191,14 @@ public class LoginViewModel extends AndroidViewModel {
 
     public MutableLiveData<DeviceInitializeResponse> getDeviceInitializeResponseMutableLiveData() {
         return deviceInitializeResponseMutableLiveData;
+    }
+
+    public MutableLiveData<StepUpOTPResponse> getStepUpEmailOTPResponseMutableLiveData() {
+        return stepUpEmailOTPResponseMutableLiveData;
+    }
+
+    public MutableLiveData<StepUpOTPResponse> getStepUpPhoneOTPResponseMutableLiveData() {
+        return stepUpPhoneOTPResponseMutableLiveData;
     }
 
     public void smsotpresend(SMSResend resend) {
@@ -950,6 +961,70 @@ public class LoginViewModel extends AndroidViewModel {
                 public void onFailure(Call<DeviceInitializeResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     deviceInitializeResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void stepUpEmailOTP(SmsRequest smsRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<StepUpOTPResponse> mCall = apiService.stepUpEmailOTP(smsRequest);
+            mCall.enqueue(new Callback<StepUpOTPResponse>() {
+                @Override
+                public void onResponse(Call<StepUpOTPResponse> call, Response<StepUpOTPResponse> response) {
+                    if (response.isSuccessful()) {
+                        StepUpOTPResponse obj = response.body();
+                        stepUpEmailOTPResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<StepUpOTPResponse>() {
+                        }.getType();
+                        StepUpOTPResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            stepUpEmailOTPResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<StepUpOTPResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    stepUpEmailOTPResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void stepUpPhoneOTP(SmsRequest smsRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<StepUpOTPResponse> mCall = apiService.stepUpPhoneOTP(smsRequest);
+            mCall.enqueue(new Callback<StepUpOTPResponse>() {
+                @Override
+                public void onResponse(Call<StepUpOTPResponse> call, Response<StepUpOTPResponse> response) {
+                    if (response.isSuccessful()) {
+                        StepUpOTPResponse obj = response.body();
+                        stepUpPhoneOTPResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<StepUpOTPResponse>() {
+                        }.getType();
+                        StepUpOTPResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            stepUpPhoneOTPResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<StepUpOTPResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    stepUpPhoneOTPResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

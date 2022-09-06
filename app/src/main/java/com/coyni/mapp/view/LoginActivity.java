@@ -804,6 +804,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                             i.putExtra("OTP_TYPE", "MOBILE");
                             i.putExtra("MOBILE", loginResponse.getData().getPhoneNumber());
                             i.putExtra("EMAIL", loginResponse.getData().getEmail());
+                            i.putExtra("screenName", "login");
                             i.putExtra("MASK_MOBILE", Utils.convertToUSFormat(loginResponse.getData().getPhoneNumber()));
                             startActivity(i);
                         } else {

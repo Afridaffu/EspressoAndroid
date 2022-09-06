@@ -23,6 +23,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.view.business.BusinessProfileActivity;
 import com.google.gson.Gson;
 import com.coyni.mapp.R;
 import com.coyni.mapp.model.EmailRequest;
@@ -362,14 +363,28 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     @Override
                                     public void run() {
                                         try {
-//                                            launchDashboard();
-                                            dbHandler.clearAllTables();
-                                            Utils.setStrAuth("");
-                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
-                                            objMyApplication.setStrRetrEmail("");
-//                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
-                                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            startActivity(i);
+                                            if (getIntent().getStringExtra("screenFrom") != null && getIntent().getStringExtra("screenFrom").equals("login")) {
+                                                launchDashboard();
+                                            } else if (getIntent().getStringExtra("screenFrom") != null && getIntent().getStringExtra("screenFrom").equals("ResetPIN")) {
+                                                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                                                    Intent i = new Intent(PINActivity.this, CustomerProfileActivity.class);
+                                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                    startActivity(i);
+                                                } else {
+                                                    Intent i = new Intent(PINActivity.this, BusinessProfileActivity.class);
+                                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                    startActivity(i);
+                                                }
+                                            } else {
+                                                finish();
+                                            }
+//                                            dbHandler.clearAllTables();
+//                                            Utils.setStrAuth("");
+//                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
+//                                            objMyApplication.setStrRetrEmail("");
+////                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
+//                                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                            startActivity(i);
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }
@@ -384,10 +399,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     @Override
                                     public void run() {
                                         try {
-                                            objMyApplication.setStrRetrEmail("");
-                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
-                                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            startActivity(i);
+//                                            objMyApplication.setStrRetrEmail("");
+//                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
+//                                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                            startActivity(i);
+                                            finish();
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }
@@ -395,9 +411,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 }, 2000);
 
                             } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login_SET_PIN")) {
-                                Intent i = new Intent(PINActivity.this, LoginActivity.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(i);
+//                                Intent i = new Intent(PINActivity.this, LoginActivity.class);
+//                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                startActivity(i);
+                                launchDashboard();
                             } else {
                                 if (Utils.checkBiometric(PINActivity.this)) {
                                     if (Utils.checkAuthentication(PINActivity.this)) {
@@ -627,31 +644,28 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        try {
-            loginViewModel.getEmailresendMutableLiveData().observe(this, new Observer<EmailResendResponse>() {
-                @Override
-                public void onChanged(EmailResendResponse emailResponse) {
-                    if (emailResponse != null) {
-                        if (emailResponse.getStatus().toLowerCase().toString().equals("success")) {
-                            Intent i = new Intent(PINActivity.this, OTPValidation.class);
-                            i.putExtra("OTP_TYPE", "EMAIL");
-                            i.putExtra("EMAIL", Utils.getUserEmail(PINActivity.this));
-                            i.putExtra("screen", "ForgotPin");
-                            startActivity(i);
-                        } else {
-                            String message = getString(R.string.something_went_wrong);
-                            if (emailResponse.getError().getFieldErrors().size() > 0) {
-                                message = emailResponse.getError().getFieldErrors().get(0);
-                            }
-                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), PINActivity.this, "", message);
+        loginViewModel.getEmailresendMutableLiveData().observe(this, new Observer<EmailResendResponse>() {
+            @Override
+            public void onChanged(EmailResendResponse emailResponse) {
+                if (emailResponse != null) {
+                    if (emailResponse.getStatus().toLowerCase().toString().equals("success")) {
+                        Intent i = new Intent(PINActivity.this, OTPValidation.class);
+                        i.putExtra("OTP_TYPE", "EMAIL");
+                        i.putExtra("EMAIL", Utils.getUserEmail(PINActivity.this));
+                        i.putExtra("screen", "ForgotPin");
+                        i.putExtra("screenFrom", getIntent().getStringExtra("screen"));
+                        startActivity(i);
+                    } else {
+                        String message = getString(R.string.something_went_wrong);
+                        if (emailResponse.getError().getFieldErrors().size() > 0) {
+                            message = emailResponse.getError().getFieldErrors().get(0);
                         }
+                        Utils.displayAlert(emailResponse.getError().getErrorDescription(), PINActivity.this, "", message);
                     }
-
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+            }
+        });
 
     }
 
@@ -1090,26 +1104,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             }
         }.start();
     }
-
-//    private void SetDontRemind() {
-//        try {
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsDontRemind = mydatabase.rawQuery("Select * from tblDontRemind", null);
-//            dsDontRemind.moveToFirst();
-//            if (dsDontRemind.getCount() > 0) {
-//                if (dsDontRemind.getString(1).equals("true")) {
-//                    isDontRemind = true;
-//                } else {
-//                    isDontRemind = false;
-//                }
-//            }
-//        } catch (Exception ex) {
-//            if (ex.getMessage().toString().contains("no such table")) {
-//                mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
-//                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
-//            }
-//        }
-//    }
 
     private void SetDontRemind() {
         String value = dbHandler.getTableDontRemind();

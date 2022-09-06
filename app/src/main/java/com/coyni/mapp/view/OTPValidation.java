@@ -41,6 +41,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.model.coynipin.StepUpOTPResponse;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
@@ -327,7 +328,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             otpValidationCloseIV.setOnClickListener(view -> {
                 if (isBackEnabled)
                     finish();
-                if (Utils.isKeyboardVisible){
+                if (Utils.isKeyboardVisible) {
                     Utils.hideKeypad(OTPValidation.this);
                 }
             });
@@ -344,13 +345,28 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         if (charSequence.length() == 0) {
                             otpPV.setLineColor(getResources().getColor(R.color.line_colors));
                         } else {
-                            if (strScreen != null && !strScreen.equals("") && (strScreen.equals("ForgotPwd") || strScreen.equals("ForgotPin"))) {
+//                            if (strScreen != null && !strScreen.equals("") && (strScreen.equals("ForgotPwd") || strScreen.equals("ForgotPin"))) {
+                            if (strScreen != null && !strScreen.equals("") && strScreen.equals("ForgotPwd")) {
                                 if (charSequence.length() == 6) {
                                     Utils.hideKeypad(OTPValidation.this);
                                     SmsRequest smsRequest = new SmsRequest();
                                     smsRequest.setEmail(EMAIL.trim());
                                     smsRequest.setOtp(charSequence.toString().trim());
                                     loginViewModel.emailotpValidate(smsRequest);
+                                    isBackEnabled = false;
+                                }
+                            } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("ForgotPin")) {
+                                if (charSequence.length() == 6) {
+                                    Utils.hideKeypad(OTPValidation.this);
+                                    SmsRequest smsRequest = new SmsRequest();
+                                    smsRequest.setEmail(EMAIL.trim());
+                                    smsRequest.setOtp(charSequence.toString().trim());
+                                    if (getIntent().getStringExtra("screenFrom") != null && getIntent().getStringExtra("screenFrom").equals("login")) {
+                                        loginViewModel.stepUpEmailOTP(smsRequest);
+                                    } else {
+                                        loginViewModel.emailotpValidate(smsRequest);
+                                    }
+
                                     isBackEnabled = false;
                                 }
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("retEmail")) {
@@ -421,7 +437,8 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                         SmsRequest smsRequest = new SmsRequest();
                                         smsRequest.setEmail(EMAIL.trim());
                                         smsRequest.setOtp(charSequence.toString().trim());
-                                        loginViewModel.smsotpLoginValidate(smsRequest);
+//                                        loginViewModel.smsotpLoginValidate(smsRequest);
+                                        loginViewModel.stepUpPhoneOTP(smsRequest);
                                     }
                                 }
                             } else {
@@ -495,15 +512,6 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                     startActivity(i);
                 }
             });
-//            layoutMain.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//                        Utils.hideKeypad(OTPValidation.this);
-//                    }
-//                    return false;
-//                }
-//            });
 
             initObserver();
         } catch (Exception ex) {
@@ -609,9 +617,6 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             @Override
             public void onChanged(SMSValidate smsValidate) {
                 try {
-//                    if (dialog != null) {
-//                        dialog.dismiss();
-//                    }
                     if (smsValidate != null) {
                         if (smsValidate.getStatus().toLowerCase().equals("error")) {
                             otpPV.setLineColor(getResources().getColor(R.color.error_red));
@@ -707,7 +712,8 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                                     break;
                                                 case "ForgotPin":
                                                     startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE")
-                                                            .putExtra("screen", getIntent().getStringExtra("screen")));
+                                                            .putExtra("screen", getIntent().getStringExtra("screen"))
+                                                            .putExtra("screenFrom", getIntent().getStringExtra("screenFrom")));
                                                     break;
                                             }
                                             finish();
@@ -1070,6 +1076,75 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            }
+        });
+
+        loginViewModel.getStepUpEmailOTPResponseMutableLiveData().observe(this, new Observer<StepUpOTPResponse>() {
+            @Override
+            public void onChanged(StepUpOTPResponse stepUpOTPResponse) {
+                if (stepUpOTPResponse != null) {
+                    if (!stepUpOTPResponse.getStatus().toLowerCase().equals("error")) {
+                        otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                        shakeAnimateUpDown();
+                        Utils.setStrAuth(stepUpOTPResponse.getData().getJwtToken());
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    if (strScreen != null && !strScreen.equals("")) {
+                                        switch (strScreen) {
+                                            case "ForgotPin":
+                                                startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE")
+                                                        .putExtra("screen", getIntent().getStringExtra("screen"))
+                                                        .putExtra("screenFrom", getIntent().getStringExtra("screenFrom")));
+                                                break;
+                                        }
+                                        finish();
+                                    }
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        }, Utils.duration);
+                    } else {
+                        otpPV.setLineColor(getResources().getColor(R.color.error_red));
+                        shakeAnimateLeftRight();
+                    }
+                }
+            }
+        });
+
+        loginViewModel.getStepUpPhoneOTPResponseMutableLiveData().observe(this, new Observer<StepUpOTPResponse>() {
+            @Override
+            public void onChanged(StepUpOTPResponse stepUpOTPResponse) {
+                if (stepUpOTPResponse != null) {
+                    if (!stepUpOTPResponse.getStatus().toLowerCase().equals("error")) {
+                        if (strScreen != null && !strScreen.equals("") && strScreen.equals("login_SET_PIN")) {
+                            otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                            shakeAnimateUpDown();
+                            Utils.setStrAuth(stepUpOTPResponse.getData().getJwtToken());
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                                        secureAccountRL.setVisibility(View.VISIBLE);
+                                        layoutMain.setClickable(false);
+                                        layoutMain.setEnabled(false);
+                                        layoutType = "SECURE";
+                                        layoutEntry.setVisibility(View.GONE);
+                                        layoutFailure.setVisibility(View.GONE);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            }, Utils.duration);
+                        }
+                    } else {
+                        otpPV.setLineColor(getResources().getColor(R.color.error_red));
+                        shakeAnimateLeftRight();
+                    }
                 }
             }
         });

@@ -70,6 +70,7 @@ import com.coyni.mapp.model.check_out_transactions.ScanQRRequest;
 import com.coyni.mapp.model.check_out_transactions.ScanQrCodeResp;
 import com.coyni.mapp.model.coynipin.PINRegisterResponse;
 import com.coyni.mapp.model.coynipin.RegisterRequest;
+import com.coyni.mapp.model.coynipin.StepUpOTPResponse;
 import com.coyni.mapp.model.coynipin.StepUpResponse;
 import com.coyni.mapp.model.coynipin.ValidateRequest;
 import com.coyni.mapp.model.coynipin.ValidateResponse;
@@ -714,6 +715,12 @@ public interface ApiService {
 
     @POST("api/v2/user/intialize/device")
     Call<DeviceInitializeResponse> initializedevice(@Query("fcmToken") String fcmToken);
+
+    @POST("api/v2/user/stepup/email")
+    Call<StepUpOTPResponse> stepUpEmailOTP(@Body SmsRequest request);
+
+    @POST("api/v2/user/stepup/phone")
+    Call<StepUpOTPResponse> stepUpPhoneOTP(@Body SmsRequest request);
 
 }
 

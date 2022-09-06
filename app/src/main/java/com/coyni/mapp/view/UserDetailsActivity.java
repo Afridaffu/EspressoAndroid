@@ -841,44 +841,50 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     }
 
     private void setDefaultAccountData() {
-        if (filterList == null) {
-            return;
-        }
-
-        for (ProfilesResponse.Profiles c : filterList) {
-            if (c.getId() == accountTypeId) {
-                if (c.getAccountType().equals(Utils.PERSONAL)) {
-                    selectedName = c.getFullName();
-                } else {
-                    selectedName = c.getDbaName();
-                }
-                business_defaultaccountET.setText(selectedName);
+        try {
+            if (filterList == null) {
+                return;
             }
-        }
 
-        accountsData = new AccountsData(filterList);
+            for (ProfilesResponse.Profiles c : filterList) {
+                if (c.getId() == accountTypeId) {
+                    if (c.getAccountType().equals(Utils.PERSONAL)) {
+                        selectedName = c.getFullName();
+                    } else {
+                        selectedName = c.getDbaName();
+                    }
+                    business_defaultaccountET.setText(selectedName);
+                } else if (c.getAccountType().equals(Utils.SHARED) && filterList.size() == 1) {
+                    business_defaultaccountET.setText(c.getFullName());
+                }
+            }
 
-        accountsData.removeSharedAccounts();
-        accountsData.removeDeclinedPersonalAccount();
+            accountsData = new AccountsData(filterList);
+
+            accountsData.removeSharedAccounts();
+            accountsData.removeDeclinedPersonalAccount();
 
 
-        if (accountsData.getGroupData().size() > 1) {
-            business_defaultaccountET.setEnabled(true);
-            enableOrDisableAccount(false);
-        } else if (accountsData.getGroupData().size() == 1) {
-            BaseProfile groupProfile = accountsData.getGroupData().get(0);
-            ArrayList<ProfilesResponse.Profiles> profilesList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(groupProfile.getId());
-            if (groupProfile.getAccountType().equalsIgnoreCase(Utils.PERSONAL)
-                    || profilesList == null || profilesList.size() <= 1) {
-                business_defaultaccountET.setEnabled(false);
-                enableOrDisableAccount(true);
-            } else {
+            if (accountsData.getGroupData().size() > 1) {
                 business_defaultaccountET.setEnabled(true);
                 enableOrDisableAccount(false);
+            } else if (accountsData.getGroupData().size() == 1) {
+                BaseProfile groupProfile = accountsData.getGroupData().get(0);
+                ArrayList<ProfilesResponse.Profiles> profilesList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(groupProfile.getId());
+                if (groupProfile.getAccountType().equalsIgnoreCase(Utils.PERSONAL)
+                        || profilesList == null || profilesList.size() <= 1) {
+                    business_defaultaccountET.setEnabled(false);
+                    enableOrDisableAccount(true);
+                } else {
+                    business_defaultaccountET.setEnabled(true);
+                    enableOrDisableAccount(false);
+                }
+            } else {
+                business_defaultaccountET.setEnabled(false);
+                enableOrDisableAccount(true);
             }
-        } else {
-            business_defaultaccountET.setEnabled(false);
-            enableOrDisableAccount(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
