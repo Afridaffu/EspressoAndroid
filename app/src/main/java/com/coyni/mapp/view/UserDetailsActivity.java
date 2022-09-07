@@ -1,11 +1,5 @@
 package com.coyni.mapp.view;
 
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -25,7 +19,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
-
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -36,20 +29,19 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.coyni.mapp.R;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.BusinessProfileRecyclerAdapter;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
 import com.coyni.mapp.model.APIError;
@@ -70,6 +62,11 @@ import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.viewmodel.CustomerProfileViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
@@ -845,20 +842,25 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             if (filterList == null) {
                 return;
             }
-
-            for (ProfilesResponse.Profiles c : filterList) {
-                if (c.getId() == accountTypeId) {
-                    if (c.getAccountType().equals(Utils.PERSONAL)) {
-                        selectedName = c.getFullName();
-                    } else {
-                        selectedName = c.getDbaName();
+            if (filterList.size() == 1 && filterList.get(0).getAccountType().equals(Utils.SHARED)) {
+                business_defaultaccountET.setText(filterList.get(0).getFullName());
+            } else {
+                for (ProfilesResponse.Profiles c : filterList) {
+                    if (c.getId() == accountTypeId) {
+                        if (c.getAccountType().equals(Utils.PERSONAL) || c.getAccountType().equals(Utils.SHARED)) {
+                            selectedName = c.getFullName();
+                        } else {
+                            selectedName = c.getDbaName();
+                        }
+                        business_defaultaccountET.setText(selectedName);
                     }
-                    business_defaultaccountET.setText(selectedName);
-                } else if (c.getAccountType().equals(Utils.SHARED) && filterList.size() == 1) {
-                    business_defaultaccountET.setText(c.getFullName());
+//                else if (c.getAccountType().equals(Utils.SHARED)) {
+//                    business_defaultaccountET.setText(c.getFullName());
+//                }
                 }
             }
 
+            
             accountsData = new AccountsData(filterList);
 
             accountsData.removeSharedAccounts();
