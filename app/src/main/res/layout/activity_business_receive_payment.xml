@@ -11,9 +11,9 @@
         android:id="@+id/layoutHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:background="@drawable/bottomradius"
         android:orientation="vertical"
-        android:layout_alignParentTop="true"
         android:paddingStart="@dimen/_11sdp"
         android:paddingEnd="@dimen/_1sdp"
         android:visibility="visible">
@@ -22,27 +22,29 @@
             android:id="@+id/receivePaymentLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_45sdp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="@dimen/_10sdp">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_close" />
         </LinearLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginStart="@dimen/_10sdp"
-            android:text="Receive Payment"
-            android:textSize="@dimen/_16ssp"
-            android:fontFamily="@font/opensans_bold"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginBottom="@dimen/_11sdp"
-            android:textColor="@color/black"/>
+            android:fontFamily="@font/opensans_bold"
+            android:text="Receive Payment"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16ssp" />
 
     </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -107,10 +109,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/cvProfile"
-                        android:layout_marginTop="@dimen/_6sdp"
-                        android:fontFamily="@font/opensans_semibold"
                         android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_marginTop="@dimen/_6sdp"
                         android:layout_marginEnd="@dimen/_3sdp"
+                        android:fontFamily="@font/opensans_semibold"
                         android:textAlignment="center"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_14ssp" />
@@ -123,8 +125,8 @@
                         android:layout_marginStart="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_11sdp"
-                        android:visibility="gone"
-                        android:background="@color/viewcolor" />
+                        android:background="@color/viewcolor"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/messageQr"
@@ -164,8 +166,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/qrViewRL"
                         android:layout_marginTop="@dimen/_9sdp"
-                        android:gravity="center"
                         android:layout_marginBottom="-20dp"
+                        android:gravity="center"
                         android:orientation="horizontal"
                         android:visibility="gone">
 
