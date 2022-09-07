@@ -192,32 +192,6 @@ public class EnableAuthID extends BaseActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
 
-//                    if (Utils.checkAuthentication(EnableAuthID.this)) {
-//                        if (isBiometric && ((Utils.isFingerPrint(EnableAuthID.this)) || (isFaceLock))) {
-//                            Utils.checkAuthentication(EnableAuthID.this, CODE_AUTHENTICATION_VERIFICATION);
-//                        } else {
-//                            FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
-//                            if (!fingerprintManager.isHardwareDetected()) {
-//                                Log.e("Not support", "Not support");
-//                            } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-//                                final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
-//                                enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-//                                        BIOMETRIC_STRONG);
-//                                startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
-//                            }
-//                        }
-//                    } else {
-//                        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
-//                        if (!fingerprintManager.isHardwareDetected()) {
-//                            Log.e("Not support", "Not support");
-//                        } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-//                            final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
-//                            enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-//                                    BIOMETRIC_STRONG);
-//                            startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
-//                        }
-//                    }
-
                     if (isBiometric && (Utils.getIsFaceEnabled() || Utils.getIsTouchEnabled()) && Utils.checkAuthentication(EnableAuthID.this)) {
                         Utils.checkAuthentication(EnableAuthID.this, CODE_AUTHENTICATION_VERIFICATION);
                     } else {
@@ -238,7 +212,8 @@ public class EnableAuthID extends BaseActivity {
 
             layoutNotnow.setOnClickListener(view -> {
                 try {
-                    if (strScreen.equals("login")) {
+//                    if (strScreen.equals("login")) {
+                    if (strScreen.equals("login") || strScreen.equals("login_SET_PIN")) {
                         launchDashboard();
                     } else {
                         faceIDRL.setVisibility(View.GONE);
@@ -253,7 +228,8 @@ public class EnableAuthID extends BaseActivity {
 
             layoutNotnowFace.setOnClickListener(view -> {
                 try {
-                    if (strScreen.equals("login")) {
+//                    if (strScreen.equals("login")) {
+                    if (strScreen.equals("login") || strScreen.equals("login_SET_PIN")) {
                         launchDashboard();
                     } else {
                         faceIDRL.setVisibility(View.GONE);
@@ -269,17 +245,6 @@ public class EnableAuthID extends BaseActivity {
             succesCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    if (enableTypeCopy.equals("TOUCH")) {
-//                        faceIDRL.setVisibility(View.GONE);
-//                        touchIDRL.setVisibility(View.VISIBLE);
-//                        successRL.setVisibility(View.GONE);
-//                        businessSuccessRL.setVisibility(View.GONE);
-//                    } else {
-//                        faceIDRL.setVisibility(View.VISIBLE);
-//                        touchIDRL.setVisibility(View.GONE);
-//                        successRL.setVisibility(View.GONE);
-//                        businessSuccessRL.setVisibility(View.GONE);
-//                    }
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
@@ -357,7 +322,8 @@ public class EnableAuthID extends BaseActivity {
                                     try {
                                         faceIDRL.setVisibility(View.GONE);
                                         touchIDRL.setVisibility(View.GONE);
-                                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
+//                                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
+                                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") || getIntent().getStringExtra("screen").equals("login_SET_PIN"))) {
                                             launchDashboard();
                                         } else {
                                             enableType = "SUCCESS";
@@ -378,7 +344,7 @@ public class EnableAuthID extends BaseActivity {
                                     try {
                                         faceIDRL.setVisibility(View.GONE);
                                         touchIDRL.setVisibility(View.GONE);
-                                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
+                                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") || getIntent().getStringExtra("screen").equals("login_SET_PIN"))) {
                                             launchDashboard();
                                         } else {
                                             enableType = "SUCCESS";
@@ -522,9 +488,6 @@ public class EnableAuthID extends BaseActivity {
                 successRL.setVisibility(View.GONE);
                 businessSuccessRL.setVisibility(View.VISIBLE);
             }
-//            if (!strFCMToken.equals("")) {
-//                loginViewModel.initializeDevice(strFCMToken);
-//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
