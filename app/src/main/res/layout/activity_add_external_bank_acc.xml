@@ -71,7 +71,8 @@
                     android:fontFamily="@font/opensans_regular"
                     android:text="@string/learn_more"
                     android:textColor="@color/primary_green"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_12ssp"
+                    android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
 

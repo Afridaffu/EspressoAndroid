@@ -15,6 +15,7 @@ import com.coyni.mapp.model.buytoken.BuyTokenRequest;
 import com.coyni.mapp.model.buytoken.BuyTokenResponse;
 import com.coyni.mapp.model.check_out_transactions.OrderPayResponse;
 import com.coyni.mapp.model.featurecontrols.FeatureControlByUser;
+import com.coyni.mapp.model.fee.Fees;
 import com.coyni.mapp.model.giftcard.BrandsResponse;
 import com.coyni.mapp.model.identity_verification.LatestTxnResponse;
 import com.coyni.mapp.model.login.LoginResponse;
@@ -50,6 +51,7 @@ public class UserData {
     private RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
     private String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "CST", strInvite = "", strScreen = "";
     private Profile myProfile = new Profile();
+    private Fees fees = new Fees();
     private UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     private UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
     private UserDetails userDetails;
@@ -769,5 +771,13 @@ public class UserData {
 
     public void setFeatureControlGlobal(FeatureControlByUser featureControlGlobal) {
         this.featureControlGlobal = featureControlGlobal;
+    }
+
+    public Fees getFees() {
+        return fees;
+    }
+
+    public void setFees(Fees fees) {
+        this.fees = fees;
     }
 }

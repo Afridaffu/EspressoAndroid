@@ -83,6 +83,7 @@ FeesActivity extends BaseActivity {
                 dismissDialog();
                 try {
                     if (fees.getStatus().equalsIgnoreCase("SUCCESS")) {
+                        objMyApplication.setFees(fees);
 
                         try {
                             //withdrawal
