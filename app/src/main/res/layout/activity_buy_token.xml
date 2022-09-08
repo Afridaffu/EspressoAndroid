@@ -164,6 +164,21 @@
                         android:textColor="@color/xdark_gray"
                         android:textSize="@dimen/_9ssp"></TextView>
 
+                    <TextView
+                        android:id="@+id/tvFeePer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvLimit"
+                        android:layout_marginLeft="@dimen/_12sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_toLeftOf="@+id/imgArrow"
+                        android:layout_toRightOf="@+id/imgBankIcon"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text=""
+                        android:textColor="@color/xdark_gray"
+                        android:textSize="@dimen/_9ssp"></TextView>
+
                     <ImageView
                         android:id="@+id/imgArrow"
                         android:layout_width="wrap_content"
