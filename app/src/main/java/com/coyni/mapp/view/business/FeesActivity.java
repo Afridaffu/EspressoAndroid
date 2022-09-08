@@ -94,7 +94,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getWithdrawalBankFeeInPercent() != null) {
-                                tvEBAPer.setText(fees.getData().getWithdrawalBankFeeInPercent().split("\\.")[0] + "%");
+                                tvEBAPer.setText(Utils.convertBigDecimalUSDC((fees.getData().getWithdrawalBankFeeInPercent()))+"%");
                             } else {
                                 tvEBAPer.setText("");
                             }
@@ -106,7 +106,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getWithdrawalInstantFeeInPercent() != null) {
-                                instantPayPerTV.setText(fees.getData().getWithdrawalInstantFeeInPercent().split("\\.")[0] + "%");
+                                instantPayPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalInstantFeeInPercent())+"%");
                             } else {
                                 instantPayPerTV.setText("");
                             }
@@ -118,7 +118,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getWithdrawalSignetFeeInPercent() != null) {
-                                signetAccPerTV.setText(fees.getData().getWithdrawalSignetFeeInPercent().split("\\.")[0] + "%");
+                                signetAccPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalSignetFeeInPercent()) + "%");
                             } else {
                                 signetAccPerTV.setText("");
                             }
@@ -130,7 +130,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getWithdrawalGiftcardFeeInPercent() != null) {
-                                giftCardPerTV.setText(fees.getData().getWithdrawalGiftcardFeeInPercent().split("\\.")[0] + "%");
+                                giftCardPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalGiftcardFeeInPercent())+ "%");
                             } else {
                                 giftCardPerTV.setText("");
                             }
@@ -142,7 +142,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getWithdrawalFailedBankFeeInPercent() != null) {
-                                fdwPerTV.setText(fees.getData().getWithdrawalFailedBankFeeInPercent().split("\\.")[0] + "%");
+                                fdwPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalFailedBankFeeInPercent()) + "%");
                             } else {
                                 fdwPerTV.setText("");
                             }
@@ -156,7 +156,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getBuyTokenBankFeeInPercent() != null) {
-                                buyTokenEBAPerTV.setText(fees.getData().getBuyTokenBankFeeInPercent().split("\\.")[0] + "%");
+                                buyTokenEBAPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenBankFeeInPercent()) + "%");
                             } else {
                                 buyTokenEBAPerTV.setText("");
                             }
@@ -168,7 +168,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getBuyTokenSignetFeeInPercent() != null) {
-                                buytokenSignetPerTV.setText(fees.getData().getBuyTokenSignetFeeInPercent().split("\\.")[0] + "%");
+                                buytokenSignetPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenSignetFeeInPercent()) + "%");
                             } else {
                                 buytokenSignetPerTV.setText("");
                             }
@@ -181,7 +181,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getMonthlyServiceFeeInPercent() != null) {
-                                monthlyFeePerTV.setText(fees.getData().getMonthlyServiceFeeInPercent().split("\\.")[0] + "%");
+                                monthlyFeePerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getMonthlyServiceFeeInPercent()) + "%");
                             } else {
                                 monthlyFeePerTV.setText("");
                             }
@@ -194,7 +194,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getTransactionSaleOrderTokenFeeInPercent() != null) {
-                                salesOrderPerTV.setText(fees.getData().getTransactionSaleOrderTokenFeeInPercent().split("\\.")[0] + "%");
+                                salesOrderPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInPercent()) + "%");
                             } else {
                                 salesOrderPerTV.setText("");
                             }
@@ -206,7 +206,7 @@ FeesActivity extends BaseActivity {
                             }
 
                             if (fees.getData().getTransactionSaleOrderTokenFeeInPercent() != null) {
-                                refundPerTV.setText(fees.getData().getTransactionRefundFeeInPercent().split("\\.")[0] + "%");
+                                refundPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getTransactionRefundFeeInPercent()) + "%");
                             } else {
                                 refundPerTV.setText("");
                             }

@@ -545,6 +545,50 @@ public class DashboardViewModel extends AndroidViewModel {
 
     }
 
+    public void preferences(Boolean isShared, String businessUserId) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<Preferences> mCall = null;
+            if (isShared)
+                mCall = apiService.mePreferencesShared(businessUserId);
+            else
+                mCall = apiService.mePreferences();
+
+            mCall.enqueue(new Callback<Preferences>() {
+                @Override
+                public void onResponse(Call<Preferences> call, Response<Preferences> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            Preferences obj = response.body();
+                            preferenceMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<Preferences>() {
+                            }.getType();
+                            Preferences errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                preferenceMutableLiveData.setValue(errorResponse);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Preferences> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+
     public void mePreferences(MyApplication myApplicationObj) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
