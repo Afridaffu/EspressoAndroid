@@ -127,6 +127,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     DashboardViewModel dashboardViewModel;
     TextView tvWalletAddress, tvName;
     boolean isTorchOn = true, isQRScan = false, isOnResumeCamera = false, isSaleOrder = true;
+    boolean isSlideActionClicked = false;
     ImageView toglebtn1;
     String strWallet = "", strScanWallet = "", strQRAmount = "", strLimit = "";
     Dialog dialog;
@@ -976,6 +977,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                                 }
                                             } else {
                                                 displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+                                                objMyApplication.setCheckOutModel(null);
                                             }
                                         } catch (Exception e) {
                                             e.printStackTrace();
@@ -1269,8 +1271,12 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 
         try {
             if (ContextCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                mcodeScanner.stopPreview();
-                scannerLayout.setVisibility(View.GONE);
+                if (mcodeScanner != null && mcodeScanner.isPreviewActive()) {
+                    mcodeScanner.stopPreview();
+                }
+                if (scannerLayout.getVisibility() == View.VISIBLE) {
+                    scannerLayout.setVisibility(View.GONE);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1329,6 +1335,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 //                            mcodeScanner.stopPreview();
 //                            scannerLayout.setVisibility(View.GONE);
                         displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+                        objMyApplication.setCheckOutModel(null);
                     }
                     e.printStackTrace();
                 }
@@ -1346,6 +1353,12 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 request.setMobileToken(objMyApplication.getStrMobileToken());
                 request.setActionType(Utils.paidActionType);
                 coyniViewModel.biometricToken(request);
+                if (mcodeScanner != null && mcodeScanner.isPreviewActive()) {
+                    mcodeScanner.stopPreview();
+                }
+                if (scannerLayout.getVisibility() == View.VISIBLE) {
+                    scannerLayout.setVisibility(View.GONE);
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -1663,6 +1676,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, Double balance, String btypeValue) {
         isQRScan = false;
         isOnResumeCamera = true;
+        isSlideActionClicked = false;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             mcodeScanner.stopPreview();
         }
@@ -1676,6 +1690,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                         isAuthenticationCalled = true;
                         if (isSaleOrder) {
                             if (payValidation()) {
+                                isSlideActionClicked = true;
                                 if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
                                     if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
                                         Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
@@ -1712,7 +1727,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             public void onDismiss(DialogInterface dialogInterface) {
                 isAuthenticationCalled = false;
                 isOnResumeCamera = false;
-                if (!slideActionEnabled && ContextCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                if (!isSlideActionClicked && !slideActionEnabled && ContextCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     mcodeScanner.startPreview();
                     scannerLayout.setVisibility(View.VISIBLE);
                 } else {
