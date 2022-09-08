@@ -1317,8 +1317,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             request.setBankId(strBankId);
             request.setCardId(strCardId);
             request.setCvc(strCvv);
-//            request.setTokens(Utils.convertBigDecimalUSD(String.valueOf(total)));
-            request.setTokens(Utils.convertBigDecimalUSD(String.valueOf(cynValue)));
+            request.setTokens(Utils.convertBigDecimalUSD(String.valueOf(total)));
+//            request.setTokens(Utils.convertBigDecimalUSD(String.valueOf(cynValue)));
             request.setTxnSubType(strSubType);
             objMyApplication.setBuyRequest(request);
         } catch (Exception ex) {
