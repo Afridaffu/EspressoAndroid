@@ -1,11 +1,5 @@
 package com.coyni.mapp.view;
 
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -25,7 +19,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
-
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -36,20 +29,19 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.coyni.mapp.R;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.BusinessProfileRecyclerAdapter;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
 import com.coyni.mapp.model.APIError;
@@ -70,6 +62,11 @@ import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.viewmodel.CustomerProfileViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
@@ -98,6 +95,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     private ExpandableListView profilesListView;
     private Long mLastClickTime = 0L;
     public String state = "";
+    private boolean isSharedPreference = false;
     private AccountsData accountsData;
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
@@ -152,7 +150,10 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             initFields();
             initObservers();
             showProgressDialog();
-            dashboardViewModel.mePreferences(myApplicationObj);
+
+            //dashboardViewModel.mePreferences(myApplicationObj);
+            isSharedPreference = false;
+            dashboardViewModel.preferences(false, null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -684,38 +685,47 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             public void onChanged(Preferences preferences) {
                 try {
                     if (preferences != null) {
-                        myApplicationObj.setTimezoneID(preferences.getData().getTimeZone());
-                        if (preferences.getData().getTimeZone() == 0) {
-                            myApplicationObj.setTempTimezone(getString(R.string.PST));
-                            myApplicationObj.setTempTimezoneID(0);
-                            myApplicationObj.setStrPreference("PST");
-                        } else if (preferences.getData().getTimeZone() == 1) {
-                            myApplicationObj.setTempTimezone(getString(R.string.MST));
-                            myApplicationObj.setTempTimezoneID(1);
-                            myApplicationObj.setStrPreference("America/Denver");
-                        } else if (preferences.getData().getTimeZone() == 2) {
-                            myApplicationObj.setTempTimezone(getString(R.string.CST));
-                            myApplicationObj.setTempTimezoneID(2);
-                            myApplicationObj.setStrPreference("CST");
-                        } else if (preferences.getData().getTimeZone() == 3) {
-                            myApplicationObj.setTempTimezone(getString(R.string.EST));
-                            myApplicationObj.setTempTimezoneID(3);
-                            myApplicationObj.setStrPreference("America/New_York");
-                        } else if (preferences.getData().getTimeZone() == 4) {
-                            myApplicationObj.setTempTimezone(getString(R.string.HST));
-                            myApplicationObj.setTempTimezoneID(4);
-                            myApplicationObj.setStrPreference("HST");
-                        } else if (preferences.getData().getTimeZone() == 5) {
-                            myApplicationObj.setTempTimezone(getString(R.string.AST));
-                            myApplicationObj.setTempTimezoneID(5);
-                            myApplicationObj.setStrPreference("AST");
+                            if (!isSharedPreference) {
+                                dashboardViewModel.getProfiles();
+                                if (preferences.getData().getPreferredAccount() != null && !preferences.getData().getPreferredAccount().trim().equals("")) {
+                                    accountTypeId = Integer.parseInt(preferences.getData().getPreferredAccount());
+                                    preferredId = accountTypeId;
+                                }
+                            }
+                            if ((!isSharedPreference && myApplicationObj.getAccountType() != Utils.SHARED_ACCOUNT)
+                                    || (isSharedPreference && myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT)) {
+                                myApplicationObj.setTimezoneID(preferences.getData().getTimeZone());
+                                if (preferences.getData().getTimeZone() == 0) {
+                                    myApplicationObj.setTempTimezone(getString(R.string.PST));
+                                    myApplicationObj.setTempTimezoneID(0);
+                                    myApplicationObj.setStrPreference("PST");
+                                } else if (preferences.getData().getTimeZone() == 1) {
+                                    myApplicationObj.setTempTimezone(getString(R.string.MST));
+                                    myApplicationObj.setTempTimezoneID(1);
+                                    myApplicationObj.setStrPreference("America/Denver");
+                                } else if (preferences.getData().getTimeZone() == 2) {
+                                    myApplicationObj.setTempTimezone(getString(R.string.CST));
+                                    myApplicationObj.setTempTimezoneID(2);
+                                    myApplicationObj.setStrPreference("CST");
+                                } else if (preferences.getData().getTimeZone() == 3) {
+                                    myApplicationObj.setTempTimezone(getString(R.string.EST));
+                                    myApplicationObj.setTempTimezoneID(3);
+                                    myApplicationObj.setStrPreference("America/New_York");
+                                } else if (preferences.getData().getTimeZone() == 4) {
+                                    myApplicationObj.setTempTimezone(getString(R.string.HST));
+                                    myApplicationObj.setTempTimezoneID(4);
+                                    myApplicationObj.setStrPreference("HST");
+                                } else if (preferences.getData().getTimeZone() == 5) {
+                                    myApplicationObj.setTempTimezone(getString(R.string.AST));
+                                    myApplicationObj.setTempTimezoneID(5);
+                                    myApplicationObj.setStrPreference("AST");
+                                }
+                            } else if(myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT){
+                                isSharedPreference = true;
+                                dashboardViewModel.preferences(isSharedPreference, myApplicationObj.getBusinessUserID());
+                            }
                         }
-                    }
-                    dashboardViewModel.getProfiles();
-                    if (preferences.getData().getPreferredAccount() != null && !preferences.getData().getPreferredAccount().trim().equals("")) {
-                        accountTypeId = Integer.parseInt(preferences.getData().getPreferredAccount());
-                        preferredId = accountTypeId;
-                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
