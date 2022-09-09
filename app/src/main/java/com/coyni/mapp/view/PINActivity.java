@@ -364,7 +364,28 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     public void run() {
                                         try {
                                             if (getIntent().getStringExtra("screenFrom") != null && getIntent().getStringExtra("screenFrom").equals("login")) {
-                                                launchDashboard();
+//                                                launchDashboard();
+                                                if (Utils.checkBiometric(PINActivity.this)) {
+                                                    if (Utils.checkAuthentication(PINActivity.this)) {
+                                                        if (Utils.isFingerPrint(PINActivity.this)) {
+                                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                    .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                    .putExtra("screen", getIntent().getStringExtra("screen")));
+                                                        } else {
+                                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                    .putExtra("ENABLE_TYPE", "FACE")
+                                                                    .putExtra("screen", getIntent().getStringExtra("screen")));
+                                                        }
+                                                    } else {
+                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                .putExtra("ENABLE_TYPE", "SUCCESS")
+                                                                .putExtra("screen", getIntent().getStringExtra("screen")));
+                                                    }
+                                                } else {
+                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                            .putExtra("ENABLE_TYPE", "TOUCH")
+                                                            .putExtra("screen", getIntent().getStringExtra("screen")));
+                                                }
                                             } else if (getIntent().getStringExtra("screenFrom") != null && getIntent().getStringExtra("screenFrom").equals("ResetPIN")) {
                                                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                                                     Intent i = new Intent(PINActivity.this, CustomerProfileActivity.class);
