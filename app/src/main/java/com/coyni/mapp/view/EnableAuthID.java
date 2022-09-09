@@ -89,7 +89,7 @@ public class EnableAuthID extends BaseActivity {
             }
             switch (enableType) {
                 case "TOUCH":
-                    if (strScreen.equals("login")) {
+                    if (strScreen.equals("login") || strScreen.equalsIgnoreCase("ForgotPIN")) {
                         tvDisableTouch.setText("Enable Touch ID");
                         dontRemindTouchTV.setVisibility(View.VISIBLE);
                         layoutNotnow.setBackgroundResource(R.drawable.shape_green_round_rect_core);
@@ -104,7 +104,7 @@ public class EnableAuthID extends BaseActivity {
                     businessSuccessRL.setVisibility(View.GONE);
                     break;
                 case "FACE":
-                    if (strScreen.equals("login")) {
+                    if (strScreen.equals("login") || strScreen.equalsIgnoreCase("ForgotPIN")) {
                         tvEnableFace.setText("Enable Face ID");
                         dontRemindFace.setVisibility(View.VISIBLE);
                         layoutNotnowFace.setBackgroundResource(R.drawable.shape_green_round_rect_core);
@@ -152,7 +152,7 @@ public class EnableAuthID extends BaseActivity {
 
             dontRemindFace.setOnClickListener(view -> {
                 try {
-                    if (strScreen.equals("login")) {
+                    if (strScreen.equals("login") || strScreen.equalsIgnoreCase("ForgotPIN")) {
                         saveDontRemind("true");
                         launchDashboard();
                     } else {
@@ -170,7 +170,7 @@ public class EnableAuthID extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (strScreen.equals("login")) {
+                        if (strScreen.equals("login") || strScreen.equalsIgnoreCase("ForgotPIN")) {
                             saveDontRemind("true");
                             launchDashboard();
                         } else {
@@ -213,7 +213,7 @@ public class EnableAuthID extends BaseActivity {
             layoutNotnow.setOnClickListener(view -> {
                 try {
 //                    if (strScreen.equals("login")) {
-                    if (strScreen.equals("login") || strScreen.equals("login_SET_PIN")) {
+                    if (strScreen.equals("login") || strScreen.equals("login_SET_PIN") || strScreen.equalsIgnoreCase("ForgotPIN")) {
                         launchDashboard();
                     } else {
                         faceIDRL.setVisibility(View.GONE);
@@ -229,7 +229,7 @@ public class EnableAuthID extends BaseActivity {
             layoutNotnowFace.setOnClickListener(view -> {
                 try {
 //                    if (strScreen.equals("login")) {
-                    if (strScreen.equals("login") || strScreen.equals("login_SET_PIN")) {
+                    if (strScreen.equals("login") || strScreen.equals("login_SET_PIN") || strScreen.equalsIgnoreCase("ForgotPIN")) {
                         launchDashboard();
                     } else {
                         faceIDRL.setVisibility(View.GONE);
@@ -299,7 +299,6 @@ public class EnableAuthID extends BaseActivity {
     }
 
     public void initObserver() {
-
         coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
             @Override
             public void onChanged(BiometricResponse biometricResponse) {
@@ -323,7 +322,9 @@ public class EnableAuthID extends BaseActivity {
                                         faceIDRL.setVisibility(View.GONE);
                                         touchIDRL.setVisibility(View.GONE);
 //                                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
-                                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") || getIntent().getStringExtra("screen").equals("login_SET_PIN"))) {
+                                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login")
+                                                || getIntent().getStringExtra("screen").equals("login_SET_PIN")
+                                                || getIntent().getStringExtra("screen").equalsIgnoreCase("ForgotPIN"))) {
                                             launchDashboard();
                                         } else {
                                             enableType = "SUCCESS";
@@ -344,8 +345,9 @@ public class EnableAuthID extends BaseActivity {
                                     try {
                                         faceIDRL.setVisibility(View.GONE);
                                         touchIDRL.setVisibility(View.GONE);
-//                                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
-                                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") || getIntent().getStringExtra("screen").equals("login_SET_PIN"))) {
+                                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login")
+                                                || getIntent().getStringExtra("screen").equals("login_SET_PIN")
+                                                || getIntent().getStringExtra("screen").equalsIgnoreCase("ForgotPIN"))) {
                                             launchDashboard();
                                         } else {
                                             enableType = "SUCCESS";

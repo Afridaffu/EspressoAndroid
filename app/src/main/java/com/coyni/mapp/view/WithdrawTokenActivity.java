@@ -1584,10 +1584,12 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             }
             String strMessage = "";
             if (!strBankId.equals("")) {
-                strMessage = "We are processing  your request, please allow a 3-5 business days for your coyni bank withdrawal to be reflected in your bank account. Learn More";
+//                strMessage = "We are processing  your request, please allow a 3-5 business days for your coyni bank withdrawal to be reflected in your bank account. Learn More";
+                strMessage = "We are processing  your request, please allow a 3-5 business days for your coyni bank withdrawal to be reflected in your bank account.";
             }
             if (!strCardId.equals("")) {
-                strMessage = "We are processing your request, please allow a few minutes for your coyni instant withdrawal to be reflected in your bank account. Learn More";
+//                strMessage = "We are processing your request, please allow a few minutes for your coyni instant withdrawal to be reflected in your bank account. Learn More";
+                strMessage = "We are processing your request, please allow a few minutes for your coyni instant withdrawal to be reflected in your bank account.";
             }
             SpannableString ss = new SpannableString(strMessage);
             ClickableSpan clickableSpan = new ClickableSpan() {
@@ -1611,9 +1613,9 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     ds.setUnderlineText(true);
                 }
             };
-            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(clickableSpan, strMessage.length() - 10, strMessage.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            ss.setSpan(clickableSpan, strMessage.length() - 10, strMessage.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             tvDescription.setText(ss);
 
