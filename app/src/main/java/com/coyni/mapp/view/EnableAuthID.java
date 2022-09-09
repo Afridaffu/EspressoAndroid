@@ -344,6 +344,7 @@ public class EnableAuthID extends BaseActivity {
                                     try {
                                         faceIDRL.setVisibility(View.GONE);
                                         touchIDRL.setVisibility(View.GONE);
+//                                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login")) {
                                         if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") || getIntent().getStringExtra("screen").equals("login_SET_PIN"))) {
                                             launchDashboard();
                                         } else {
