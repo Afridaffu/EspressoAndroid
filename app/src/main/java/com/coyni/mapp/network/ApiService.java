@@ -432,7 +432,10 @@ public interface ApiService {
     @POST("api/v2/corda/fee")
     Call<TransferFeeResponse> transferFee(@Body TransferFeeRequest request);
 
-    @POST("api/v2/node/buyTokens")
+//    @POST("api/v2/node/buyTokens")
+//    Call<BuyTokenResponse> buyTokens(@Body BuyTokenRequest request);
+
+    @POST("api/v2/node/buy-tokens")
     Call<BuyTokenResponse> buyTokens(@Body BuyTokenRequest request);
 
 //    @POST("api/v2/node/buyTokens/{requestToken}")
