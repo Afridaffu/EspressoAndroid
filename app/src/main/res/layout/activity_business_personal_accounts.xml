@@ -132,7 +132,8 @@
                 android:layout_marginEnd="@dimen/_6sdp"
                 android:layout_marginBottom="@dimen/_7sdp"
                 android:src="@drawable/ic_custom_tick"
-                app:tint="@color/primary_green" />
+                app:tint="@color/primary_green"
+                android:visibility="gone"/>
         </LinearLayout>
     </LinearLayout>
 

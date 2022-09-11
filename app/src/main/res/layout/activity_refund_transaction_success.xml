@@ -194,7 +194,8 @@
                     android:gravity="left"
                     android:text="@string/learn"
                     android:textColor="@color/primary_green"
-                    android:textSize="@dimen/_10sdp" />
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone"/>
             </LinearLayout>
 
         </LinearLayout>

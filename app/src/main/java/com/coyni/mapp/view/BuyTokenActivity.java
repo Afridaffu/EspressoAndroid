@@ -576,6 +576,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 ctKey.disableButton();
                             }
                         }
+
                         String feeString = "Fees: ";
 
                         if (feeInAmount != 0 && feeInPercentage != 0)
@@ -851,6 +852,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             } else {
                 Utils.displayAlert(getString(R.string.internet), BuyTokenActivity.this, "", "");
             }
+
+            calculateFee("10");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1027,11 +1030,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
 //            } else if (tvCYN.getVisibility() == View.GONE && Utils.doubleParsing(strPay.replace(",", "")) < usdValidation) {
-                //new change
             } else if (tvCYN.getVisibility() == View.GONE && Utils.doubleParsing(strPay.replace(",", "")) < cynValidation) {
 //                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
 //                Utils.setErrorSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD", BuyTokenActivity.this, tvError, 17);
-                //new change
                 Utils.setErrorSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", BuyTokenActivity.this, tvError, 17);
                 isMinimumError = true;
                 tvError.setVisibility(View.VISIBLE);
@@ -1226,9 +1227,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //                usdValue = Utils.doubleParsing(etAmount.getText().toString().trim().replace(",", ""));
                 usdValue = Utils.doubleParsing(Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", "")));
 //                cynValue = usdValue * (1 - (feeInPercentage / 100)) - feeInAmount;
-                Double calValue = usdValue * (1 - (feeInPercentage / 100)) - feeInAmount;
-//                cynValue = Utils.doubleParsing(Utils.convertBigDecimalUSD(String.valueOf(calValue)));
-                cynValue = Utils.doubleParsing(Utils.convertBigDecimalUSD(String.valueOf(usdValue)));
+//                Double calValue = usdValue * (1 - (feeInPercentage / 100)) - feeInAmount;
+                Double calValue = usdValue;
+                cynValue = Utils.doubleParsing(Utils.convertBigDecimalUSD(String.valueOf(calValue)));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1242,10 +1243,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //                cynValue = Utils.doubleParsing(etAmount.getText().toString().trim().replace(",", ""));
                 cynValue = Utils.doubleParsing(Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", "")));
 //                usdValue = (cynValue + feeInAmount) / (1 - (feeInPercentage / 100));
-                Double calValue = (cynValue + feeInAmount) / (1 - (feeInPercentage / 100));
-//                usdValue = Utils.doubleParsing(Utils.convertBigDecimalUSD(String.valueOf(calValue)));
-                //new change
-                usdValue = Utils.doubleParsing(Utils.convertBigDecimalUSD(String.valueOf(cynValue)));
+//                Double calValue = (cynValue + feeInAmount) / (1 - (feeInPercentage / 100));
+                Double calValue = cynValue;
+                usdValue = Utils.doubleParsing(Utils.convertBigDecimalUSD(String.valueOf(calValue)));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1317,8 +1317,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             request.setBankId(strBankId);
             request.setCardId(strCardId);
             request.setCvc(strCvv);
-            request.setTokens(Utils.convertBigDecimalUSD(String.valueOf(total)));
-//            request.setTokens(Utils.convertBigDecimalUSD(String.valueOf(cynValue)));
+//            request.setTokens(Utils.convertBigDecimalUSD(String.valueOf(total)));
+            request.setTokens(Utils.convertBigDecimalUSD(String.valueOf(Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", "")))));
+
             request.setTxnSubType(strSubType);
             objMyApplication.setBuyRequest(request);
         } catch (Exception ex) {
@@ -1375,11 +1376,13 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             if (objMyApplication.getSelectedButTokenType().toLowerCase().contains("bank")) {
                 tvHeading.setText("Transaction Pending");
                 imgLogo.setImageResource(R.drawable.ic_hourglass_pending_icon);
-                strMessage = "We submitted your request, please allow a 3-5 business days for your coyni purchase to be reflected in your token account. Learn More";
+//                strMessage = "We submitted your request, please allow a 3-5 business days for your coyni purchase to be reflected in your token account. Learn More";
+                strMessage = "We submitted your request, please allow a 3-5 business days for your coyni purchase to be reflected in your token account.";
             } else {
                 tvHeading.setText("Transaction In Progress");
                 imgLogo.setImageResource(R.drawable.ic_in_progress_icon);
-                strMessage = "We are processing your request, please allow a few minutes for your coyni debit/credit card purchase to be reflected in your token account. Learn More";
+//                strMessage = "We are processing your request, please allow a few minutes for your coyni debit/credit card purchase to be reflected in your token account. Learn More";
+                strMessage = "We are processing your request, please allow a few minutes for your coyni debit/credit card purchase to be reflected in your token account.";
             }
 
             SpannableString ss = new SpannableString(strMessage);
@@ -1404,9 +1407,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     ds.setUnderlineText(true);
                 }
             };
-            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(clickableSpan, strMessage.length() - 10, strMessage.length() - 1, 0);
+//            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            ss.setSpan(clickableSpan, strMessage.length() - 10, strMessage.length() - 1, 0);
 
             tvDescription.setText(ss);
             tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
