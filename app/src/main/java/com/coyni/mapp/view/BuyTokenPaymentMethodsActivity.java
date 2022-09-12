@@ -376,10 +376,15 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
         paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
             @Override
             public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
-                pDialog.dismiss();
-                if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
-                    Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
-                    getPaymentMethods();
+                try {
+//                pDialog.dismiss();
+                    dismissDialog();
+                    if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
+                        Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                        getPaymentMethods();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -387,10 +392,15 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
         paymentMethodsViewModel.getCardDeleteResponseMutableLiveData().observe(this, new Observer<CardDeleteResponse>() {
             @Override
             public void onChanged(CardDeleteResponse cardDeleteResponse) {
-                pDialog.dismiss();
-                if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
-                    Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
-                    getPaymentMethods();
+                try {
+//                pDialog.dismiss();
+                    dismissDialog();
+                    if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
+                        Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
+                        getPaymentMethods();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });

@@ -45,6 +45,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.coyni.mapp.model.bank.BankDeleteResponseData;
+import com.coyni.mapp.model.cards.CardDeleteResponse;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.coyni.mapp.R;
@@ -752,6 +754,36 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                             Utils.displayAlert(biometricTokenResponse.getError().getFieldErrors().get(0), BuyTokenActivity.this, "", "");
                         }
                     }
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getCardDeleteResponseMutableLiveData().observe(this, new Observer<CardDeleteResponse>() {
+            @Override
+            public void onChanged(CardDeleteResponse cardDeleteResponse) {
+                try {
+                    pDialog.dismiss();
+                    if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
+                        Utils.showCustomToast(BuyTokenActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
+                        dashboardViewModel.mePaymentMethods();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
+            @Override
+            public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
+                try {
+                    pDialog.dismiss();
+                    if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
+                        Utils.showCustomToast(BuyTokenActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                        dashboardViewModel.mePaymentMethods();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -1787,7 +1819,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 public void onClick(View v) {
                     dialog.dismiss();
                     pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
                     } else {
                         paymentMethodsViewModel.deleteCards(objPayment.getId());
@@ -1936,7 +1968,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     }
 
     public PaymentsList rollbackSelectedCard() {
-        if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")) {
+        if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank") || objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("signet")) {
             if (objMyApplication.getSelectedCard().getRelink()) {
                 selectedCard = objMyApplication.getPrevSelectedCard();
                 objMyApplication.setSelectedCard(selectedCard);

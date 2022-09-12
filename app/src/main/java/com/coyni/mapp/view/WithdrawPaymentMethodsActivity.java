@@ -70,7 +70,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
     List<PaymentsList> cardList;
     List<PaymentsList> signetList;
     Dialog payDialog, addPayDialog, extBankDialog;
-    String strSignOn = "", strCurrent = "", strScreen = "", strOnPauseScreen = "";
+    String strSignOn = "", strCurrent = "", strScreen = "", strOnPauseScreen = "", strPayment = "";
     SignOnData signOnData;
     Dialog dialog, pDialog, cvvDialog;
     LinearLayout lyAPayClose, lyExternalClose, lyBPayClose;
@@ -443,7 +443,11 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 //pDialog.dismiss();
                 dismissDialog();
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
-                    Utils.showCustomToast(WithdrawPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                    if (strPayment.equals("bank")) {
+                        Utils.showCustomToast(WithdrawPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                    } else {
+                        Utils.showCustomToast(WithdrawPaymentMethodsActivity.this, "Signet has been removed.", R.drawable.ic_custom_tick, "");
+                    }
                     getPaymentMethods();
                 }
             }
@@ -1442,6 +1446,19 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
+                } else if (objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
+                    if (payDialog != null && payDialog.isShowing()) {
+                        payDialog.dismiss();
+                    }
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
+                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                    tvAccount.setVisibility(View.GONE);
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvBankName.setText(objPayment.getAccountNumber());
+                    }
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);
                     layoutBank.setVisibility(View.GONE);
@@ -1470,6 +1487,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             tvNo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     dialog.dismiss();
                 }
             });
@@ -1479,8 +1497,9 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     dialog.dismiss();
                     //pDialog = Utils.showProgressDialog(WithdrawPaymentMethodsActivity.this);
                     showProgressDialog();
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
+                        strPayment = objPayment.getPaymentMethod().toLowerCase();
                     } else {
                         paymentMethodsViewModel.deleteCards(objPayment.getId());
                     }

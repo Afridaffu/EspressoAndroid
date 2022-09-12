@@ -410,7 +410,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                         if (!objData.getRelink()) {
                                             ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdrawtoken");
                                         } else {
-                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+//                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                            ((WithdrawPaymentMethodsActivity) mContext).deleteBank(objData);
                                         }
                                     }
                                 } else {
@@ -541,7 +542,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                             if (!objData.getRelink()) {
                                                 ((WithdrawTokenActivity) mContext).bindSelectedBank(objData);
                                             } else {
-                                                ((WithdrawTokenActivity) mContext).expiry();
+//                                                ((WithdrawTokenActivity) mContext).expiry();
+                                                ((WithdrawTokenActivity) mContext).deleteBank(objData);
                                             }
                                         }
                                     } else {
