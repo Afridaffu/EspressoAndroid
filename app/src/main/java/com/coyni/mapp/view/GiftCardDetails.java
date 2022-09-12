@@ -85,9 +85,8 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
     TextInputEditText firstNameET, lastNameET, emailET, amountET;
     TextInputLayout firstNameTIL, lastNameTIL, emailTIL, amountTIL;
     public LinearLayout emailErrorLL, firstNameErrorLL, lastNameErrorLL, giftCardDetailsLL, amountErrorLL;
-    public TextView emailErrorTV, firstNameErrorTV, lastNameErrorTV, amountErrorTV, brandNameTV, brandDescTV, viewAllTV;
+    public TextView emailErrorTV, firstNameErrorTV, lastNameErrorTV, amountErrorTV, brandNameTV, brandDescTV, viewAllTV, tvFeePer;
     ImageView brandIV, amountDDICon;
-    boolean isView = false;
     GiftCardsViewModel giftCardsViewModel;
     BuyTokenViewModel buyTokenViewModel;
     CoyniViewModel coyniViewModel;
@@ -96,7 +95,6 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
     Brand objBrand;
     Dialog pDialog;
     Double fee = 0.0, min = 0.0, max = 0.0, maxValue = 0.0, minValue = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
-    ;
     List<Items> listAmounts = new ArrayList<>();
     String amountETString = "", amount = "", strLimit = "", strBrandDesc = "";
     public String selectedFixedAmount = "";
@@ -124,8 +122,6 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
         try {
             super.onCreate(savedInstanceState);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_gift_card_details);
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -172,6 +168,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
             amountDDICon = findViewById(R.id.amountDDICon);
             purchaseCV = findViewById(R.id.purchaseCV);
             amountRL = findViewById(R.id.amountRL);
+            tvFeePer = findViewById(R.id.tvFeePer);
 
             giftCardsViewModel = new ViewModelProvider(this).get(GiftCardsViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
@@ -403,6 +400,22 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                         feeInAmount = transferFeeResponse.getData().getFeeInAmount();
                         feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
                     }
+
+                    String feeString = "Fees: ";
+
+                    if (feeInAmount != 0 && feeInPercentage != 0)
+                        feeString = feeString + "$" + Utils.convertTwoDecimalPoints(feeInAmount) + " + " + Utils.convertTwoDecimalPoints(feeInPercentage) + "%";
+
+                    else if (feeInAmount != 0 && feeInPercentage == 0)
+                        feeString = feeString + "$" + Utils.convertTwoDecimalPoints(feeInAmount);
+
+                    else if (feeInAmount == 0 && feeInPercentage != 0)
+                        feeString = feeString + Utils.convertTwoDecimalPoints(feeInPercentage) + "%";
+
+                    if (!feeString.equals("Fees: "))
+                        tvFeePer.setText(feeString);
+                    else
+                        tvFeePer.setVisibility(View.GONE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -557,8 +570,8 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
 //                                        amountErrorLL.setVisibility(VISIBLE);
 //                                        amountErrorTV.setText("Amount entered exceeds weekly limit");
 //                                    } else {
-                                        isAmount = true;
-                                        amountErrorLL.setVisibility(GONE);
+                                    isAmount = true;
+                                    amountErrorLL.setVisibility(GONE);
 //                                    }
                                 }
                             }
