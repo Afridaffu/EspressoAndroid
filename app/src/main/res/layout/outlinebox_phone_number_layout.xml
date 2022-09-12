@@ -45,10 +45,10 @@
         <com.coyni.mapp.utils.MaskEditText.widget.MaskEditText
             android:id="@+id/pnET"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:inputType="number|textNoSuggestions"
-            android:padding="14dp"
+            android:padding="@dimen/_14sdp"
             android:hint="Phone Number"
             android:background="@android:color/transparent"
             android:textColor="@color/primary_black"
