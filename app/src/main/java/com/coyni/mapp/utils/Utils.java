@@ -2253,7 +2253,7 @@ public class Utils {
         String strDate = "";
         try {
             DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern(format)
-                    .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+//                    .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
                     .toFormatter()
                     .withZone(ZoneId.of(zoneId, ZoneId.SHORT_IDS));
             ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
