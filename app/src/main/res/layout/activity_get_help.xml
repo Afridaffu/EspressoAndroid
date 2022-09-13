@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="@dimen/_21sdp"
+    android:layout_marginTop="@dimen/_40sdp"
+    tools:context=".view.GetHelpActivity">
+
+    <ImageView
+        android:id="@+id/IVBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:contentDescription="@string/back_button"
+        android:paddingStart="0dp"
+        android:paddingEnd="@dimen/_5sdp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_16ssp"
+        android:text="@string/need_help_with_coyni"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:fontFamily="@font/opensans_bold"
+        android:textColor="@color/black"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/our_support_team_is_here_for_you"
+        android:fontFamily="@font/opensans_regular"
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_12ssp"
+        android:layout_marginTop="@dimen/_5sdp"
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_support_guy_graphic"
+        android:contentDescription="@string/support"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/get_help_description"
+        android:fontFamily="@font/opensans_regular"
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_12ssp"
+        android:lineSpacingExtra="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        />
+
+    <TextView
+        android:id="@+id/procedureForSupportTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:fontFamily="@font/opensans_bold"
+        android:textSize="@dimen/_12ssp"
+        android:textColor="@color/primary_black"/>
+
+
+
+
+
+
+
+
+
+</LinearLayout>
+</layout>

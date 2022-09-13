@@ -13,9 +13,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
-<!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />-->
-
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" /> <!-- <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" /> -->
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.any" />
     <uses-feature
@@ -49,7 +47,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.coyni.mapp.view.OnboardActivity"
+            android:name=".GetHelpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OnboardActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:launchMode="singleTop"
@@ -63,7 +64,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.coyni.mapp.view.IntentForwardingActivity"
+            android:name=".IntentForwardingActivity"
             android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
@@ -76,45 +77,45 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.coyni.mapp.view.LoginActivity"
+            android:name=".LoginActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.CheckOutPaymentActivity"
+            android:name=".CheckOutPaymentActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.coyni.mapp.view.GetHelpWebViewActivity"
+            android:name=".GetHelpWebViewActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.RefundTransactionSuccessActivity"
-            android:exported="false"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name="com.coyni.mapp.view.business.MerchantTransactionDetailsActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name="com.coyni.mapp.view.business.PayToMerchantActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name="com.coyni.mapp.view.business.BusinessTransactionListActivity"
+            android:name=".business.RefundTransactionSuccessActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.AddNewTeamMemberActivity"
+            android:name=".business.MerchantTransactionDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".business.PayToMerchantActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".business.BusinessTransactionListActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".business.AddNewTeamMemberActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -122,135 +123,135 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.business.PayingDBAFilterActivity"
+            android:name=".business.PayingDBAFilterActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.AdditionalInformationRequiredActivity"
+            android:name=".business.AdditionalInformationRequiredActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.EditEmail"
+            android:name=".business.EditEmail"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.BenificialOwnerDetails"
+            android:name=".business.BenificialOwnerDetails"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.ChangeEmail"
+            android:name=".business.ChangeEmail"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.EditTeamMember"
+            android:name=".business.EditTeamMember"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.business.TeamMemberActivity"
+            android:name=".business.TeamMemberActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.coyni.mapp.view.business.BusinessPaymentMethodsActivity"
+            android:name=".business.BusinessPaymentMethodsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.DBAInfoDetails"
-            android:exported="false"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name="com.coyni.mapp.view.business.VerificationFailedActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name="com.coyni.mapp.view.business.CompanyInfoDetails"
+            android:name=".business.DBAInfoDetails"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.TeamActivity"
+            android:name=".business.VerificationFailedActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".business.CompanyInfoDetails"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".business.TeamActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.coyni.mapp.view.business.FeesActivity"
+            android:name=".business.FeesActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.BusinessProfileActivity"
+            android:name=".business.BusinessProfileActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.AddPaymentSignetActivity"
+            android:name=".business.AddPaymentSignetActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.business.TransactionsFilterActivity"
+            android:name=".business.TransactionsFilterActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.BankAccoutAddedSuccessfullyActivity"
+            android:name=".business.BankAccoutAddedSuccessfullyActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.PayToPersonalActivity"
+            android:name=".PayToPersonalActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.PayRequestActivity"
+            android:name=".PayRequestActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.coyni.mapp.view.AddRecipientActivity"
+            android:name=".AddRecipientActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.GiftCardBindingLayoutActivity"
+            android:name=".GiftCardBindingLayoutActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.GiftCardDetails"
+            android:name=".GiftCardDetails"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -258,54 +259,54 @@
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.GiftCardActivity"
+            android:name=".GiftCardActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.NotificationsActivity"
+            android:name=".NotificationsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.WithdrawTokenActivity"
+            android:name=".WithdrawTokenActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.WithdrawPaymentMethodsActivity"
+            android:name=".WithdrawPaymentMethodsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.AccountsActivity"
+            android:name=".AccountsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.BuyTokenPaymentMethodsActivity"
+            android:name=".BuyTokenPaymentMethodsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.TransactionDetailsActivity"
+            android:name=".TransactionDetailsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.EditCardActivity"
+            android:name=".EditCardActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -313,7 +314,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.BuyTokenActivity"
+            android:name=".BuyTokenActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -325,14 +326,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.TransactionListActivity"
+            android:name=".TransactionListActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.AddCardActivity"
+            android:name=".AddCardActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -340,26 +341,26 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.WebViewActivity"
+            android:name=".WebViewActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.PaymentMethodsActivity"
+            android:name=".PaymentMethodsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.PreferencesActivity"
+            android:name=".PreferencesActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.ScanActivity"
+            android:name=".ScanActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -367,12 +368,12 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.coyni.mapp.view.PdfViewAgreementsActivity"
+            android:name=".PdfViewAgreementsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.coyni.mapp.view.ConfirmPasswordActivity"
+            android:name=".ConfirmPasswordActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -380,22 +381,14 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.IdVeAdditionalActionActivity"
+            android:name=".IdVeAdditionalActionActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.UserDetailsActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name="com.coyni.mapp.view.EditPhoneActivity"
+            android:name=".UserDetailsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -403,7 +396,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.EditAddressActivity"
+            android:name=".EditPhoneActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -411,7 +404,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.EditEmailActivity"
+            android:name=".EditAddressActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -419,7 +412,15 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.EnableAuthID"
+            android:name=".EditEmailActivity"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".EnableAuthID"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -427,90 +428,90 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.coyni.mapp.view.CustomerProfileActivity"
+            android:name=".CustomerProfileActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.AccountLimitsActivity"
+            android:name=".AccountLimitsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.BindingLayoutActivity"
+            android:name=".BindingLayoutActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.RetrieveEmailActivity"
+            android:name=".RetrieveEmailActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.PINActivity"
+            android:name=".PINActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.coyni.mapp.view.OTPValidation"
+            android:name=".OTPValidation"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.CreateAccountActivity"
+            android:name=".CreateAccountActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.business.SignatureActivity"
+            android:name=".business.SignatureActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.AccountTypeActivity"
+            android:name=".AccountTypeActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.CreatePasswordActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name="com.coyni.mapp.view.ForgotPasswordActivity"
+            android:name=".CreatePasswordActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.ValidatePinActivity"
+            android:name=".ForgotPasswordActivity"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ValidatePinActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.BusinessDashboardActivity"
+            android:name=".business.BusinessDashboardActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.DashboardActivity"
+            android:name=".DashboardActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -518,14 +519,14 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.coyni.mapp.view.IdentityVerificationActivity"
+            android:name=".IdentityVerificationActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.AgreementsActivity"
+            android:name=".AgreementsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -542,158 +543,158 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.DashboardAddBenifitialOwnersActivity"
+            android:name=".business.DashboardAddBenifitialOwnersActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.IdentityVerificationBindingLayoutActivity"
+            android:name=".IdentityVerificationBindingLayoutActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" /> <!-- //Business -->
         <activity
-            android:name="com.coyni.mapp.view.business.BusinessRegistrationTrackerActivity"
+            android:name=".business.BusinessRegistrationTrackerActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.coyni.mapp.view.business.CompanyInformationActivity"
+            android:name=".business.CompanyInformationActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.business.DBAInfoAcivity"
+            android:name=".business.DBAInfoAcivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.business.ReviewApplicationActivity"
+            android:name=".business.ReviewApplicationActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.coyni.mapp.view.business.DBAinfoBtmSheetActivity"
+            android:name=".business.DBAinfoBtmSheetActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.AddBeneficialOwnerActivity"
+            android:name=".business.AddBeneficialOwnerActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.coyni.mapp.view.business.BenificialMaillingAddressActivity"
+            android:name=".business.BenificialMaillingAddressActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.BusinessBatchPayoutSearchActivity"
+            android:name=".business.BusinessBatchPayoutSearchActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.SignupMaillingAddresActivity"
+            android:name=".business.SignupMaillingAddresActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.AddBankAccount"
+            android:name=".business.AddBankAccount"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.MerchantsAgrementActivity"
+            android:name=".business.MerchantsAgrementActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.AdditionalBeneficialOwnersActivity"
+            android:name=".business.AdditionalBeneficialOwnersActivity"
             android:configChanges="uiMode"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:finishOnTaskLaunch="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.SelectWithdrawMethodActivity"
+            android:name=".business.SelectWithdrawMethodActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.SelectPaymentMethodActivity"
+            android:name=".business.SelectPaymentMethodActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.ReserveDetailsActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name="com.coyni.mapp.view.business.ReserveReleasesActivity"
+            android:name=".business.ReserveDetailsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.OpenNewAccount"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name="com.coyni.mapp.view.business.AddPersonalAccount"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name="com.coyni.mapp.view.business.MerchantProfile"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name="com.coyni.mapp.view.BusinessUserDetailsPreviewActivity"
+            android:name=".business.ReserveReleasesActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.ApplicationCancelledActivity"
+            android:name=".business.OpenNewAccount"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.BusinessReceivePaymentActivity"
+            android:name=".business.AddPersonalAccount"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".business.MerchantProfile"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".BusinessUserDetailsPreviewActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.MerchantTransactionListActivity"
+            android:name=".business.ApplicationCancelledActivity"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".BusinessReceivePaymentActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.RefundTransactionActivity"
+            android:name=".business.MerchantTransactionListActivity"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".business.RefundTransactionActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -701,78 +702,77 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.coyni.mapp.view.business.TransactionDetailsFailedActivity"
+            android:name=".business.TransactionDetailsFailedActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.BusinessCreateAccountsActivity"
+            android:name=".business.BusinessCreateAccountsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.BusinessAddNewAccountActivity"
+            android:name=".business.BusinessAddNewAccountActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.BusinessApplicationApprovedActivity"
+            android:name=".business.BusinessApplicationApprovedActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.BusinessAddNewBusinessAccountActivity"
+            android:name=".business.BusinessAddNewBusinessAccountActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.WebViewShowFileActivity"
+            android:name=".business.WebViewShowFileActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.MerchantSettingsBeneficialOwnersActivity"
+            android:name=".business.MerchantSettingsBeneficialOwnersActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.BusinessAdditionalActionRequiredActivity"
+            android:name=".business.BusinessAdditionalActionRequiredActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="com.coyni.mapp.view.business.BusinessBatchPayoutIdDetailsActivity"
+            android:name=".business.BusinessBatchPayoutIdDetailsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.business.PayoutDetailsTransactionList"
+            android:name=".business.PayoutDetailsTransactionList"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name="com.coyni.mapp.view.AdditionalActionUploadActivity"
+            android:name=".AdditionalActionUploadActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
         <activity
-            android:name="com.coyni.mapp.view.business.PDFWebViewActivity"
+            android:name=".business.PDFWebViewActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />

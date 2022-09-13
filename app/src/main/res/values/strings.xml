@@ -18,7 +18,7 @@
     <string name="touchiddisable">We’ve detected a change to this device. Please Log in and go to your profile setting to set up the Touch ID.</string>
     <string name="title_activity_customer_profile_active">CustomerProfileActive</string>
 
-     <!-- Strings used for fragments for navigation -->
+    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
@@ -777,4 +777,7 @@
     <string name="please_contact_the_coyni_customer_support">We’re sorry but this feature currently is not available, please wait until we finish your identity verification. If this is an error, please contact the coyni customer support.</string>
 
     <string name="password_characters">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?&amp;</string>
+    <string name="get_help_description">Send an email to our support team at support@coyni.com for any question, issues, or feedback. Please include the following to expedite our response:</string>
+    <string name="our_support_team_is_here_for_you">Our support team is here for you.</string>
+    <string name="need_help_with_coyni">Need help with coyni?</string>
 </resources>
