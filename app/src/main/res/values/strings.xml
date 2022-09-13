@@ -777,4 +777,5 @@
     <string name="please_contact_the_coyni_customer_support">We’re sorry but this feature currently is not available, please wait until we finish your identity verification. If this is an error, please contact the coyni customer support.</string>
 
     <string name="password_characters">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?&amp;</string>
+    <string name="confirm_routing_number">Confirm Routing Number</string>
 </resources>
