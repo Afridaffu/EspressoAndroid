@@ -46,11 +46,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+<!--        <activity-->
+<!--            android:name=".view.business.AddManualBankAccount"-->
+<!--            android:exported="false"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />-->
         <activity
-            android:name=".AddManualBankAccount"
-            android:exported="false" />
-        <activity
-            android:name="com.coyni.mapp.view.OnboardActivity"
+            android:name=".view.business.AddManualBankAccount"
             android:configChanges="uiMode"
             android:exported="true"
             android:launchMode="singleTop"
@@ -93,29 +95,34 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".RefundTransactionSuccessActivity"
+            android:name=".view.business.RefundTransactionSuccessActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".MerchantTransactionDetailsActivity"
+            android:name=".view.business.MerchantTransactionDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".PayToMerchantActivity"
+            android:name=".view.business.BusinessRegistrationTrackerActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".BusinessTransactionListActivity"
+            android:name=".view.business.PayToMerchantActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.business.BusinessTransactionListActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".AddNewTeamMemberActivity"
+            android:name=".view.business.AddNewTeamMemberActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -123,104 +130,104 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".PayingDBAFilterActivity"
+            android:name=".view.business.PayingDBAFilterActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".AdditionalInformationRequiredActivity"
+            android:name=".view.business.AdditionalInformationRequiredActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".EditEmail"
+            android:name=".view.business.EditEmail"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".BenificialOwnerDetails"
+            android:name=".view.business.BenificialOwnerDetails"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".ChangeEmail"
+            android:name=".view.business.ChangeEmail"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".EditTeamMember"
+            android:name=".view.business.EditTeamMember"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".TeamMemberActivity"
+            android:name=".view.business.TeamMemberActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".BusinessPaymentMethodsActivity"
+            android:name=".view.business.BusinessPaymentMethodsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".DBAInfoDetails"
-            android:exported="false"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".VerificationFailedActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".CompanyInfoDetails"
+            android:name=".view.business.DBAInfoDetails"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".TeamActivity"
+            android:name=".view.business.VerificationFailedActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.business.CompanyInfoDetails"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.business.TeamActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".FeesActivity"
+            android:name=".view.business.FeesActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".BusinessProfileActivity"
+            android:name=".view.business.BusinessProfileActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".AddPaymentSignetActivity"
+            android:name=".view.business.AddPaymentSignetActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".TransactionsFilterActivity"
+            android:name=".view.business.TransactionsFilterActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".BankAccoutAddedSuccessfullyActivity"
+            android:name=".view.business.BankAccoutAddedSuccessfullyActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
@@ -476,7 +483,7 @@
             android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".SignatureActivity"
+            android:name=".view.business.SignatureActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name="com.coyni.mapp.view.AccountTypeActivity"
@@ -505,7 +512,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".BusinessDashboardActivity"
+            android:name=".view.business.BusinessDashboardActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -543,7 +550,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".DashboardAddBenifitialOwnersActivity"
+            android:name=".view.business.DashboardAddBenifitialOwnersActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -553,115 +560,115 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" /> <!-- //Business -->
+<!--        <activity-->
+<!--            android:name=".view.business.RefundTransactionSuccessActivity"-->
+<!--            android:exported="false"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"-->
+<!--            android:windowSoftInputMode="stateAlwaysHidden" />-->
         <activity
-            android:name=".BusinessRegistrationTrackerActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".CompanyInformationActivity"
+            android:name=".view.business.CompanyInformationActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".DBAInfoAcivity"
+            android:name=".view.business.DBAInfoAcivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ReviewApplicationActivity"
+            android:name=".view.business.ReviewApplicationActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".DBAinfoBtmSheetActivity"
+            android:name=".view.business.DBAinfoBtmSheetActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".AddBeneficialOwnerActivity"
+            android:name=".view.business.AddBeneficialOwnerActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".BenificialMaillingAddressActivity"
+            android:name=".view.business.BenificialMaillingAddressActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".BusinessBatchPayoutSearchActivity"
+            android:name=".view.business.BusinessBatchPayoutSearchActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".SignupMaillingAddresActivity"
+            android:name=".view.business.SignupMaillingAddresActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".AddBankAccount"
+            android:name=".view.business.AddBankAccount"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".MerchantsAgrementActivity"
+            android:name=".view.business.MerchantsAgrementActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".AdditionalBeneficialOwnersActivity"
+            android:name=".view.business.AdditionalBeneficialOwnersActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:finishOnTaskLaunch="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".SelectWithdrawMethodActivity"
+            android:name=".view.business.SelectWithdrawMethodActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".SelectPaymentMethodActivity"
+            android:name=".view.business.SelectPaymentMethodActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".ReserveDetailsActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".ReserveReleasesActivity"
+            android:name=".view.business.ReserveDetailsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".OpenNewAccount"
+            android:name=".view.business.ReserveReleasesActivity"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.business.OpenNewAccount"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".AddPersonalAccount"
+            android:name=".view.business.AddPersonalAccount"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".MerchantProfile"
+            android:name=".view.business.MerchantProfile"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -674,7 +681,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".ApplicationCancelledActivity"
+            android:name=".view.business.ApplicationCancelledActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -687,14 +694,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".MerchantTransactionListActivity"
+            android:name=".view.business.MerchantTransactionListActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".RefundTransactionActivity"
+            android:name=".view.business.RefundTransactionActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -702,64 +709,64 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".TransactionDetailsFailedActivity"
+            android:name=".view.business.TransactionDetailsFailedActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".BusinessCreateAccountsActivity"
+            android:name=".view.business.BusinessCreateAccountsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".BusinessAddNewAccountActivity"
+            android:name=".view.business.BusinessAddNewAccountActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".BusinessApplicationApprovedActivity"
+            android:name=".view.business.BusinessApplicationApprovedActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".BusinessAddNewBusinessAccountActivity"
+            android:name=".view.business.BusinessAddNewBusinessAccountActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".WebViewShowFileActivity"
+            android:name=".view.business.WebViewShowFileActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".MerchantSettingsBeneficialOwnersActivity"
+            android:name=".view.business.MerchantSettingsBeneficialOwnersActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".BusinessAdditionalActionRequiredActivity"
+            android:name=".view.business.BusinessAdditionalActionRequiredActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".BusinessBatchPayoutIdDetailsActivity"
+            android:name=".view.business.BusinessBatchPayoutIdDetailsActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".PayoutDetailsTransactionList"
+            android:name=".view.business.PayoutDetailsTransactionList"
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTop"
@@ -772,7 +779,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".PDFWebViewActivity"
+            android:name=".view.business.PDFWebViewActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />

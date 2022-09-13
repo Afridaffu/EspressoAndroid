@@ -778,4 +778,5 @@
 
     <string name="password_characters">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?&amp;</string>
     <string name="confirm_routing_number">Confirm Routing Number</string>
+    <string name="please_provide_your_bank_account_information_find_your_account_numbers">Please provide your bank account information. Find your account numbers</string>
 </resources>
