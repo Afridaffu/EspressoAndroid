@@ -46,13 +46,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-<!--        <activity-->
-<!--            android:name=".view.business.AddManualBankAccount"-->
-<!--            android:exported="false"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />-->
         <activity
-            android:name=".view.business.AddManualBankAccount"
+            android:name="com.coyni.mapp.view.OnboardActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:launchMode="singleTop"
@@ -778,6 +773,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
+            android:name=".view.business.AddManualBankAccount"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"  />
+
         <activity
             android:name=".view.business.PDFWebViewActivity"
             android:exported="false"

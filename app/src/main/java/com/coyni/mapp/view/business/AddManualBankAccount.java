@@ -1,17 +1,11 @@
 package com.coyni.mapp.view.business;
 
 
-import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
-import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextWatcher;
@@ -20,6 +14,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,7 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import com.coyni.mapp.R;
-import com.coyni.mapp.utils.CustomTypefaceSpan;
+import com.coyni.mapp.dialogs.ManualAccountNumbersFullPage;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
@@ -36,11 +31,12 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class AddManualBankAccount extends BaseActivity {
 
-    private TextView descriptionTV, nameOnBankErrorTV, routingNumberErrorTV, confirmRoutingNumberErrorTV, checkAccNumberErrorTV,confirmAccNumberErrorTV;
+    private TextView descriptionTV, nameOnBankErrorTV, routingNumberErrorTV, confirmRoutingNumberErrorTV, checkAccNumberErrorTV, confirmAccNumberErrorTV;
     private TextInputLayout nameOnBankTIL, routingNumberTIL, confirmRoutingNumberTIL, checkAccNumberTIL, confirmAccNumberTIL;
     private TextInputEditText nameOnBankET, routingNumberET, confirmRoutingNumberET, checkAccNumberET, confirmAccNumberET;
     private LinearLayout backLL, nameOnBankErrorLL, routingNumberErrorLL, confirmRoutingNumberErrorLL, checkAccNumberErrorLL, confirmAccNumberErrorLL;
-    public boolean isName = false, isRoutNum = false, isRoutNumCon = false, isaccountNum = false, isConfirm = false, isAddEnabled = false;
+    private ImageView endIconIV,endIcon2IV;
+    public boolean isName = false, isRoutNum = false, isConfRoutNum = false, isaccountNum = false, isConfirm = false, isAddEnabled = false;
     public static int focusedID = 0;
     private Long mLastClickTime = 0L;
     private MyApplication objMyApplication;
@@ -81,6 +77,8 @@ public class AddManualBankAccount extends BaseActivity {
         confirmAccNumberErrorLL = findViewById(R.id.confirmAccNumberErrorLL);
         confirmAccNumberErrorTV = findViewById(R.id.confirmAccNumberErrorTV);
         addCV = findViewById(R.id.addCV);
+        endIconIV = findViewById(R.id.endIcon1IV);
+        endIcon2IV = findViewById(R.id.endIcon2IV);
 
         backLL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,32 +123,61 @@ public class AddManualBankAccount extends BaseActivity {
             routingNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                    if (i2 - i1 > 1) {
+                        routingNumberET.setText(charSequence);
+                        routingNumberET.setSelection(charSequence.toString().length());
+                    }
                 }
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
-                        if (charSequence.length() == 5) {
+                        if (routingNumberET.getText().toString().trim().length() > 1
+                                && routingNumberET.getText().toString().trim().equals(confirmRoutingNumberET.getText().toString().trim())) {
                             isRoutNum = true;
-                            routingNumberErrorLL.setVisibility(View.GONE);
-                            if (routingNumberET.hasFocus())
-                                Utils.setUpperHintColor(routingNumberTIL, getResources().getColor(R.color.primary_black));
-                        } else if (charSequence.length() < 5 && charSequence.length() > 0) {
+                            routingNumberTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+                            routingNumberTIL.setHint("Routing Number");
+                            Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_green));
+                            confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                            confirmRoutingNumberTIL.setHint("Confirm Routing Number");
+                            Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_black));
+
+                        } else {
                             isRoutNum = false;
-                            routingNumberErrorLL.setVisibility(View.GONE);
-                        } else if (charSequence.length() == 0) {
-                            isRoutNum = false;
+                            if (confirmAccNumberET.getText().toString().trim().length() > 0) {
+                                routingNumberTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+                                Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_green));
+                                confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                                confirmRoutingNumberTIL.setHint("Routing Number doesn’t match");
+                                Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.error_red));
+                            } else if (confirmAccNumberET.getText().toString().trim().length() == 0) {
+                                confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                                confirmRoutingNumberTIL.setHint("Confirm Routing Number");
+                                Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.light_gray));
+                                routingNumberTIL.setHint("Routing Number");
+                                if (confirmAccNumberErrorLL.getVisibility() == View.VISIBLE) {
+                                    confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                                }
+                            }
                         }
                         enableOrDisableNext();
-                    } catch (Resources.NotFoundException e) {
-                        e.printStackTrace();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
 
                 @Override
-                public void afterTextChanged(Editable editable) {
-
+                public void afterTextChanged(Editable s) {
+                    try {
+                        if (s.length() > 0 && s.toString().trim().length() == 0) {
+                            routingNumberET.setText("");
+                        } else if (s.length() > 0 && s.toString().contains(" ")) {
+                            routingNumberET.setText(s.toString().trim());
+                            routingNumberET.setSelection(s.toString().trim().length());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -167,26 +194,27 @@ public class AddManualBankAccount extends BaseActivity {
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
                         if (i2 > 2) {
-                            if (charSequence != null && charSequence.length() < 51) {
-                                isRoutNumCon = true;
+                            if (charSequence != null && charSequence.length() < 9) {
+                                isConfRoutNum = true;
                             }
                         }
-                        if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 14) {
-                            isRoutNumCon = true;
+                        if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 9) {
+                            isConfRoutNum = true;
                             confirmAccNumberErrorLL.setVisibility(View.GONE);
                             confirmRoutingNumberTIL.setHint("Confirm Routing Number");
                             confirmRoutingNumberTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(confirmRoutingNumberTIL, getResources().getColor(R.color.primary_green));
                         } else if (routingNumberET.getText().toString().trim().equals(confirmRoutingNumberET.getText().toString().trim())) {
-                            isRoutNumCon = true;
+                            isConfRoutNum = true;
                             confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                            routingNumberTIL.setHint("Checking Routing Number");
+                            routingNumberTIL.setHint("Routing Number");
                             Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_black));
                             confirmRoutingNumberTIL.setBoxStrokeColor(getColor(R.color.primary_green));
                             confirmRoutingNumberTIL.setHint("Confirm Routing Number");
                             Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_green));
+                            endIconIV.setVisibility(View.VISIBLE);
                         } else {
-                            isRoutNumCon = false;
+                            isConfRoutNum = false;
                         }
                         enableOrDisableNext();
                     } catch (Exception ex) {
@@ -221,9 +249,9 @@ public class AddManualBankAccount extends BaseActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
-                        if (checkAccNumberET.getText().toString().trim().length() > 1 && checkAccNumberET.getText().toString().trim().equals(confirmAccNumberET.getText().toString().trim())) {
+                        if (checkAccNumberET.getText().toString().trim().length() > 4
+                                && checkAccNumberET.getText().toString().trim().equals(confirmAccNumberET.getText().toString().trim())) {
                             isaccountNum = true;
-
                             checkAccNumberTIL.setBoxStrokeColor(getColor(R.color.primary_green));
                             checkAccNumberTIL.setHint("Checking Account Number");
                             Utils.setUpperHintColor(checkAccNumberTIL, getColor(R.color.primary_green));
@@ -288,7 +316,7 @@ public class AddManualBankAccount extends BaseActivity {
                                 isConfirm = true;
                             }
                         }
-                        if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 14) {
+                        if (charSequence.toString().trim().length() > 4 && charSequence.toString().trim().length() < 17) {
                             isConfirm = true;
                             confirmAccNumberErrorLL.setVisibility(View.GONE);
                             confirmAccNumberTIL.setHint("Confirm Account Number");
@@ -302,6 +330,7 @@ public class AddManualBankAccount extends BaseActivity {
                             confirmAccNumberTIL.setBoxStrokeColor(getColor(R.color.primary_green));
                             confirmAccNumberTIL.setHint("Confirm Account Number");
                             Utils.setUpperHintColor(confirmAccNumberTIL, getColor(R.color.primary_green));
+                            endIcon2IV.setVisibility(View.VISIBLE);
                         } else {
                             isConfirm = false;
                         }
@@ -371,31 +400,37 @@ public class AddManualBankAccount extends BaseActivity {
             routingNumberET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
-                    if (!b) {
-                        routingNumberET.setHint("");
-                        if (routingNumberET.getText().toString().trim().length() > 1) {
+                    try {
+                        if (b) {
+                            if (!Utils.isKeyboardVisible)
+                                Utils.shwForcedKeypad(AddManualBankAccount.this);
+                            routingNumberTIL.setHint("Routing Number");
+                            routingNumberTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_green));
                             routingNumberErrorLL.setVisibility(View.GONE);
-                            routingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_black));
-
-                        } else if (routingNumberET.getText().toString().trim().length() < 5 && routingNumberET.getText().toString().trim().length() > 0) {
-                            routingNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.error_red));
-                            routingNumberErrorLL.setVisibility(View.VISIBLE);
-                            routingNumberErrorTV.setText("Minimum 2 Digits Required");
-
                         } else {
-                            routingNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.light_gray));
-                            routingNumberErrorLL.setVisibility(View.VISIBLE);
-                            routingNumberErrorTV.setText("Field Required");
+                            routingNumberET.setHint("");
+                            if (routingNumberET.getText().toString().trim().length() == 0) {
+                                routingNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                                Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.light_gray));
+                                routingNumberErrorLL.setVisibility(View.VISIBLE);
+                                routingNumberErrorTV.setText("Field Required");
+                            } else if (routingNumberET.getText().toString().trim().equals(confirmRoutingNumberET.getText().toString().trim())) {
+                                routingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                                confirmAccNumberTIL.setHint("Confirm Routing Number");
+                                Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_black));
+                            } else if (routingNumberET.getText().toString().length() > 0 && confirmRoutingNumberET.getText().toString().length() > 0 &&
+                                    !routingNumberET.getText().toString().trim().equals(confirmRoutingNumberET.getText().toString().trim())) {
+                                routingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                                Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_black));
+                                confirmAccNumberTIL.setHint("Routing Number doesn’t match");
+                            } else {
+                                routingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                                Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_black));
+                            }
                         }
-                    } else {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(AddManualBankAccount.this);
-                        routingNumberTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_green));
-                        routingNumberErrorLL.setVisibility(View.GONE);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });
@@ -408,23 +443,24 @@ public class AddManualBankAccount extends BaseActivity {
                             Utils.shwForcedKeypad(AddManualBankAccount.this);
                         confirmRoutingNumberTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_green));
-                        confirmRoutingNumberTIL.setHint("Confirm Account Number");
-                        confirmAccNumberErrorLL.setVisibility(View.GONE);
+                        confirmRoutingNumberTIL.setHint("Confirm Routing Number");
+                        confirmRoutingNumberErrorLL.setVisibility(View.GONE);
                     } else {
-                        confirmAccNumberET.setHint("");
-                        if (confirmAccNumberET.getText().toString().trim().length() == 0) {
+                        confirmRoutingNumberET.setHint("");
+                        if (confirmRoutingNumberET.getText().toString().trim().length() == 0) {
                             confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.light_gray));
-                            confirmAccNumberErrorLL.setVisibility(View.VISIBLE);
-                            confirmAccNumberErrorTV.setText("Field Required");
-                        } else if (checkAccNumberET.getText().toString().trim().equals(confirmAccNumberET.getText().toString().trim())) {
+                            confirmRoutingNumberErrorLL.setVisibility(View.VISIBLE);
+                            confirmRoutingNumberErrorTV.setText("Field Required");
+                        } else if (routingNumberET.getText().toString().trim().equals(confirmRoutingNumberET.getText().toString().trim())) {
                             confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_black));
-                            confirmRoutingNumberTIL.setHint("Confirm Account Number");
-                        } else if (checkAccNumberET.getText().toString().length() > 0 && confirmAccNumberET.getText().toString().length() > 0 && !checkAccNumberET.getText().toString().trim().equals(confirmAccNumberET.getText().toString().trim())) {
+                            confirmRoutingNumberTIL.setHint("Confirm Routing Number");
+                            endIconIV.setVisibility(View.VISIBLE);
+                        } else if (routingNumberET.getText().toString().length() > 0 && confirmRoutingNumberET.getText().toString().length() > 0 && !routingNumberET.getText().toString().trim().equals(confirmAccNumberET.getText().toString().trim())) {
                             confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.error_red));
-                            confirmRoutingNumberTIL.setHint("Account Number doesn’t match");
+                            confirmRoutingNumberTIL.setHint("Routing doesn’t match");
                         } else {
                             confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_black));
@@ -456,7 +492,7 @@ public class AddManualBankAccount extends BaseActivity {
                                 checkAccNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 confirmAccNumberTIL.setHint("Confirm Account Number");
                                 Utils.setUpperHintColor(checkAccNumberTIL, getColor(R.color.primary_black));
-                            } else if (checkAccNumberET.getText().toString().length() > 0 && confirmAccNumberET.getText().toString().length() > 0 && !checkAccNumberET.getText().toString().trim().equals(confirmAccNumberET.getText().toString().trim())) {
+                            } else if (checkAccNumberET.getText().toString().length() > 4 && confirmAccNumberET.getText().toString().length() > 4 && !checkAccNumberET.getText().toString().trim().equals(confirmAccNumberET.getText().toString().trim())) {
                                 checkAccNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(checkAccNumberTIL, getColor(R.color.primary_black));
                                 confirmAccNumberTIL.setHint("Account Number doesn’t match");
@@ -492,7 +528,9 @@ public class AddManualBankAccount extends BaseActivity {
                             confirmAccNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(confirmAccNumberTIL, getColor(R.color.primary_black));
                             confirmAccNumberTIL.setHint("Confirm Account Number");
-                        } else if (checkAccNumberET.getText().toString().length() > 0 && confirmAccNumberET.getText().toString().length() > 0 && !checkAccNumberET.getText().toString().trim().equals(confirmAccNumberET.getText().toString().trim())) {
+                            endIcon2IV.setVisibility(View.VISIBLE);
+                        } else if (checkAccNumberET.getText().toString().length() > 4 && confirmAccNumberET.getText().toString().length() > 4
+                                && !checkAccNumberET.getText().toString().trim().equals(confirmAccNumberET.getText().toString().trim())) {
                             confirmAccNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(confirmAccNumberTIL, getColor(R.color.error_red));
                             confirmAccNumberTIL.setHint("Account Number doesn’t match");
@@ -512,14 +550,13 @@ public class AddManualBankAccount extends BaseActivity {
 
     private void enableOrDisableNext() {
         try {
-//            if (isName && isRoutNum && isaccountNum && isConfirm) {
-            isAddEnabled = true;
-            addCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-//
-//            } else {
-//                isAddEnabled = false;
-//                binding.addCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-//            }
+            if (isName  && isConfRoutNum && isConfirm) {
+                isAddEnabled = true;
+                addCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+            } else {
+                isAddEnabled = false;
+                addCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -538,9 +575,9 @@ public class AddManualBankAccount extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(Utils.mondayURL));
-                    startActivity(i);
+                    ManualAccountNumbersFullPage showImgDialog = new ManualAccountNumbersFullPage(AddManualBankAccount.this);
+                    showImgDialog.show();
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
