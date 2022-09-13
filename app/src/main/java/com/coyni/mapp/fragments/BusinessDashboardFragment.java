@@ -1344,4 +1344,10 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
         return datee.getHours();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((BusinessDashboardActivity) getActivity()).notificationsAPICall();
+    }
 }
