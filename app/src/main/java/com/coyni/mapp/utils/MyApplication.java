@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.coyni.mapp.model.fee.Fees;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.coyni.mapp.model.BusinessBatchPayout.BatchPayoutListItems;
@@ -944,4 +945,11 @@ public class MyApplication extends Application {
         mCurrentUserData.setFeatureControlGlobal(featureControlGlobal);
     }
 
+    public Fees getFees() {
+        return mCurrentUserData.getFees();
+    }
+
+    public void setFees(Fees fees) {
+        mCurrentUserData.setFees(fees);
+    }
 }
