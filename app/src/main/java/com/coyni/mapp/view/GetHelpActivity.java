@@ -77,9 +77,9 @@ public class GetHelpActivity extends BaseActivity {
                     //intent.putExtra(Intent.EXTRA_EMAIL, "shivas@ideyalabs.com");
                     intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"ravim@ideyalabs.com"});
 //                    intent.putExtra(Intent.EXTRA_SUBJECT, "Test Subject");
-                    if (intent.resolveActivity(getPackageManager()) != null) {
+//                    if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivity(intent);
-                    }
+//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
