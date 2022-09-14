@@ -41,15 +41,8 @@ public class GetHelpActivity extends BaseActivity {
         supportTv = findViewById(R.id.text_support_tv);
         supportDescClick = findViewById(R.id.support_text_click);
         ivBackButton = findViewById(R.id.IVBack);
-
-
         spannableText();
         ivBackButton.setOnClickListener(view -> finish());
-
-
-
-
-
     }
 
     private void spannableText() {
