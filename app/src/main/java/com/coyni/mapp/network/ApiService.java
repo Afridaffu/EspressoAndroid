@@ -180,6 +180,7 @@ import com.coyni.mapp.model.users.User;
 import com.coyni.mapp.model.users.UserData;
 import com.coyni.mapp.model.users.UserPreferenceModel;
 import com.coyni.mapp.model.wallet.UserDetails;
+import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
 import com.coyni.mapp.model.withdraw.WithdrawRequest;
 import com.coyni.mapp.model.withdraw.WithdrawResponse;
 
@@ -325,8 +326,8 @@ public interface ApiService {
     @GET("api/v2/profile/me/profile-accounts")
     Call<ProfilesResponse> getProfiles();
 
-    @POST("api/v2/fiserv/signon")
-    Call<SignOn> meSignOn();
+//    @POST("api/v2/fiserv/signon")
+//    Call<SignOn> meSignOn();
 
     @POST("api/v2/user/update/otp/resend")
     Call<UpdateResendOTPResponse> updateOtpResend(@Body UpdateResendRequest request);
@@ -344,8 +345,8 @@ public interface ApiService {
     Call<TransactionList> meTransactionList(@Body TransactionListRequest request);
 
 
-    @POST("api/v2/fiserv/sync-account")
-    Call<SyncAccount> meSyncAccount();
+//    @POST("api/v2/fiserv/sync-account")
+//    Call<SyncAccount> meSyncAccount();
 
     @GET("api/v2/encryption/publickey")
     Call<PublicKeyResponse> getPublicKey(@Query("userId") int userId);
@@ -724,6 +725,9 @@ public interface ApiService {
 
     @POST("api/v2/user/stepup/phone")
     Call<StepUpOTPResponse> stepUpPhoneOTP(@Body SmsRequest request);
+
+    @POST("api/v2/user/start")
+    Call<WebSocketUrlResponse> webSocketUrl();
 
 }
 

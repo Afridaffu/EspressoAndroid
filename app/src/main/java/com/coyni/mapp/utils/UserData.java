@@ -38,6 +38,7 @@ import com.coyni.mapp.model.transaction.TransactionList;
 import com.coyni.mapp.model.transaction.TransactionListRequest;
 import com.coyni.mapp.model.transferfee.TransferFeeResponse;
 import com.coyni.mapp.model.wallet.UserDetails;
+import com.coyni.mapp.model.websocket.WebSocketUrlResponseData;
 import com.coyni.mapp.model.withdraw.WithdrawRequest;
 import com.coyni.mapp.model.withdraw.WithdrawResponse;
 
@@ -104,6 +105,7 @@ public class UserData {
     private List<BatchPayoutListItems> batchPayList = new ArrayList<>();
     private FeatureControlByUser featureControlByUser;
     private FeatureControlByUser featureControlGlobal;
+    private WebSocketUrlResponseData webSocketUrlResponse;
 
     public OrderPayResponse getOrderPayResponse() {
         return orderPayResponse;
@@ -779,5 +781,13 @@ public class UserData {
 
     public void setFees(Fees fees) {
         this.fees = fees;
+    }
+
+    public WebSocketUrlResponseData getWebSocketUrlResponse() {
+        return webSocketUrlResponse;
+    }
+
+    public void setWebSocketUrlResponse(WebSocketUrlResponseData webSocketUrlResponse) {
+        this.webSocketUrlResponse = webSocketUrlResponse;
     }
 }
