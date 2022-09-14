@@ -516,7 +516,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                             userPreferenceModel.setLocalCurrency(0);
                             userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
                             userPreferenceModel.setPreferredAccount(accountTypeId);
-                            customerProfileViewModel.updatePreferences(userPreferenceModel, myApplicationObj);
+                            customerProfileViewModel.updateDefaultAccount(userPreferenceModel);
                             dialog.dismiss();
 
                         }
@@ -685,46 +685,46 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             public void onChanged(Preferences preferences) {
                 try {
                     if (preferences != null) {
-                            if (!isSharedPreference) {
-                                dashboardViewModel.getProfiles();
-                                if (preferences.getData().getPreferredAccount() != null && !preferences.getData().getPreferredAccount().trim().equals("")) {
-                                    accountTypeId = Integer.parseInt(preferences.getData().getPreferredAccount());
-                                    preferredId = accountTypeId;
-                                }
-                            }
-                            if ((!isSharedPreference && myApplicationObj.getAccountType() != Utils.SHARED_ACCOUNT)
-                                    || (isSharedPreference && myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT)) {
-                                myApplicationObj.setTimezoneID(preferences.getData().getTimeZone());
-                                if (preferences.getData().getTimeZone() == 0) {
-                                    myApplicationObj.setTempTimezone(getString(R.string.PST));
-                                    myApplicationObj.setTempTimezoneID(0);
-                                    myApplicationObj.setStrPreference("PST");
-                                } else if (preferences.getData().getTimeZone() == 1) {
-                                    myApplicationObj.setTempTimezone(getString(R.string.MST));
-                                    myApplicationObj.setTempTimezoneID(1);
-                                    myApplicationObj.setStrPreference("America/Denver");
-                                } else if (preferences.getData().getTimeZone() == 2) {
-                                    myApplicationObj.setTempTimezone(getString(R.string.CST));
-                                    myApplicationObj.setTempTimezoneID(2);
-                                    myApplicationObj.setStrPreference("CST");
-                                } else if (preferences.getData().getTimeZone() == 3) {
-                                    myApplicationObj.setTempTimezone(getString(R.string.EST));
-                                    myApplicationObj.setTempTimezoneID(3);
-                                    myApplicationObj.setStrPreference("America/New_York");
-                                } else if (preferences.getData().getTimeZone() == 4) {
-                                    myApplicationObj.setTempTimezone(getString(R.string.HST));
-                                    myApplicationObj.setTempTimezoneID(4);
-                                    myApplicationObj.setStrPreference("HST");
-                                } else if (preferences.getData().getTimeZone() == 5) {
-                                    myApplicationObj.setTempTimezone(getString(R.string.AST));
-                                    myApplicationObj.setTempTimezoneID(5);
-                                    myApplicationObj.setStrPreference("AST");
-                                }
-                            } else if(myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT){
-                                isSharedPreference = true;
-                                dashboardViewModel.preferences(isSharedPreference, myApplicationObj.getBusinessUserID());
+                        if (!isSharedPreference) {
+                            dashboardViewModel.getProfiles();
+                            if (preferences.getData().getPreferredAccount() != null && !preferences.getData().getPreferredAccount().trim().equals("")) {
+                                accountTypeId = Integer.parseInt(preferences.getData().getPreferredAccount());
+                                preferredId = accountTypeId;
                             }
                         }
+                        if ((!isSharedPreference && myApplicationObj.getAccountType() != Utils.SHARED_ACCOUNT)
+                                || (isSharedPreference && myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT)) {
+                            myApplicationObj.setTimezoneID(preferences.getData().getTimeZone());
+                            if (preferences.getData().getTimeZone() == 0) {
+                                myApplicationObj.setTempTimezone(getString(R.string.PST));
+                                myApplicationObj.setTempTimezoneID(0);
+                                myApplicationObj.setStrPreference("PST");
+                            } else if (preferences.getData().getTimeZone() == 1) {
+                                myApplicationObj.setTempTimezone(getString(R.string.MST));
+                                myApplicationObj.setTempTimezoneID(1);
+                                myApplicationObj.setStrPreference("America/Denver");
+                            } else if (preferences.getData().getTimeZone() == 2) {
+                                myApplicationObj.setTempTimezone(getString(R.string.CST));
+                                myApplicationObj.setTempTimezoneID(2);
+                                myApplicationObj.setStrPreference("CST");
+                            } else if (preferences.getData().getTimeZone() == 3) {
+                                myApplicationObj.setTempTimezone(getString(R.string.EST));
+                                myApplicationObj.setTempTimezoneID(3);
+                                myApplicationObj.setStrPreference("America/New_York");
+                            } else if (preferences.getData().getTimeZone() == 4) {
+                                myApplicationObj.setTempTimezone(getString(R.string.HST));
+                                myApplicationObj.setTempTimezoneID(4);
+                                myApplicationObj.setStrPreference("HST");
+                            } else if (preferences.getData().getTimeZone() == 5) {
+                                myApplicationObj.setTempTimezone(getString(R.string.AST));
+                                myApplicationObj.setTempTimezoneID(5);
+                                myApplicationObj.setStrPreference("AST");
+                            }
+                        } else if (myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
+                            isSharedPreference = true;
+                            dashboardViewModel.preferences(isSharedPreference, myApplicationObj.getBusinessUserID());
+                        }
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -856,9 +856,9 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 return;
             }
 
-            if(filterList.size()==1 && filterList.get(0).getAccountType().equals(Utils.SHARED)){
+            if (filterList.size() == 1 && filterList.get(0).getAccountType().equals(Utils.SHARED)) {
                 business_defaultaccountET.setText(filterList.get(0).getFullName());
-            }else {
+            } else {
                 for (ProfilesResponse.Profiles c : filterList) {
                     if (c.getId() == accountTypeId) {
                         if (c.getAccountType().equals(Utils.PERSONAL) || c.getAccountType().equals(Utils.SHARED)) {
