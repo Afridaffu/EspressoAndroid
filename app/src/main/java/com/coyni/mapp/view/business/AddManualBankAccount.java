@@ -272,48 +272,46 @@ public class AddManualBankAccount extends BaseActivity {
 
                     if (getCurrentFocus().getId() == routingNumberET.getId()) {
 
-                        if (routingNumberET.getText().toString().length() == 0) {
-                            passwordTIL.setHint("Password");
-                            confPasswordTIL.setHint("Confirm Password");
+                        if (routingNumberET.getText().toString().length() == 9) {
+                            routingNumberTIL.setHint("Routing Number");
+                            confirmRoutingNumberTIL.setHint("Confirm Routing Number");
 
-//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                            if (confirmPasswordET.getText().toString().trim().length() == 0)
-                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
+//                            confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                            if (confirmRoutingNumberET.getText().toString().trim().length() == 0)
+                                Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.light_gray));
                             else {
-                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
-                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                                Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_black));
+                                confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             }
 
-                        } else if (routingNumberET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            isConfirmPassword = true;
-
-                            passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                            passwordTIL.setHint("Password");
-                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
-
-                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                            confPasswordTIL.setHint("Confirm Password");
-                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+                        } else if (routingNumberET.getText().toString().trim().length() > 0 &&
+                                routingNumberET.getText().toString().trim().equals(confirmRoutingNumberET.getText().toString().trim())) {
+                            isConfRoutNum = true;
+                            routingNumberTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+                            routingNumberTIL.setHint("Routing Number");
+                            Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_green));
+                            confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                            confirmRoutingNumberTIL.setHint("Confirm Routing Number");
+                            Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_black));
 
                         } else {
-                            isConfirmPassword = false;
+                            isConfRoutNum = false;
 
-                            if (confirmPasswordET.getText().toString().trim().length() > 0) {
-                                passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
+                            if (confirmRoutingNumberET.getText().toString().trim().length() > 0) {
+                                routingNumberTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+                                Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_green));
+                                confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                                confirmRoutingNumberTIL.setHint("Routing Number doesn’t match");
+                                Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.error_red));
+                            } else if (confirmRoutingNumberET.getText().toString().trim().length() == 0) {
+                                confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                                confirmRoutingNumberTIL.setHint("Confirm Routing Number");
+                                Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.light_gray));
 
-                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                                confPasswordTIL.setHint("Password doesn’t match");
-                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
-                            } else if (confirmPasswordET.getText().toString().trim().length() == 0) {
-                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                                confPasswordTIL.setHint("Confirm Password");
-                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
+                                routingNumberTIL.setHint("Routing Number");
 
-                                passwordTIL.setHint("Password");
-
-                                if (confPassErrorLL.getVisibility() == VISIBLE) {
-                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                                if (confirmAccNumberErrorLL.getVisibility() == VISIBLE) {
+                                    confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 }
                             }
                         }
@@ -336,60 +334,49 @@ public class AddManualBankAccount extends BaseActivity {
                 }
             });
 
-            confirmPasswordET.addTextChangedListener(new TextWatcher() {
+            confirmRoutingNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (i2 - i1 > 1) {
-                        confirmPasswordET.setText(charSequence);
-                        confirmPasswordET.setSelection(charSequence.toString().length());
+                        confirmRoutingNumberET.setText(charSequence);
+                        confirmRoutingNumberET.setSelection(charSequence.toString().length());
                     }
                 }
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                    if (getCurrentFocus().getId() == confirmPasswordET.getId()) {
+                    if (getCurrentFocus().getId() == confirmRoutingNumberET.getId()) {
 
-                        if (confirmPasswordET.getText().toString().length() == 0) {
-                            passwordTIL.setHint("Password");
-                            confPasswordTIL.setHint("Confirm Password");
-                            if (routingNumberET.getText().toString().trim().length() > 0) {
-                                if (strong.matcher(routingNumberET.getText().toString().trim()).matches()) {
-                                    passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-                                } else {
-                                    passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                                }
+                        if (confirmRoutingNumberET.getText().toString().length() == 0) {
+                            routingNumberTIL.setHint("Routing Number");
+                            confirmRoutingNumberTIL.setHint("Confirm Routing Number");
+                           if (confirmRoutingNumberET.getText().toString().trim().length()  == 9 && routingNumberET.getText().toString().trim().equals(confirmRoutingNumberET.getText().toString().trim())) {
+                                isConfRoutNum = true;
+                                routingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                                routingNumberTIL.setHint("Routing Number");
+                                Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_black));
+                                confirmRoutingNumberTIL.setBoxStrokeColor(getColor(R.color.primary_green));
+                                confirmRoutingNumberTIL.setHint("Confirm Routing Number");
+                                Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_green));
+
+                            } else {
+                                isConfRoutNum = false;
+//                            confirmRoutingNumberTIL.setHint("Password doesn’t match");
                             }
-                        } else if (routingNumberET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim()) &&
-                                strong.matcher(routingNumberET.getText().toString().trim()).matches()) {
-                            isConfirmPassword = true;
-
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                            passwordTIL.setHint("Password");
-                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-
-                            confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                            confPasswordTIL.setHint("Confirm Password");
-                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
-
-                        } else {
-                            isConfirmPassword = false;
-//                            confPasswordTIL.setHint("Password doesn’t match");
                         }
-                        enableOrDisableNext();
                     }
-
+                    enableOrDisableNext();
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
                         if (s.length() > 0 && s.toString().trim().length() == 0) {
-                            confirmPasswordET.setText("");
+                            confirmRoutingNumberET.setText("");
                         } else if (s.length() > 0 && s.toString().contains(" ")) {
-                            confirmPasswordET.setText(s.toString().trim());
-                            confirmPasswordET.setSelection(s.toString().trim().length());
+                            confirmRoutingNumberET.setText(s.toString().trim());
+                            confirmRoutingNumberET.setSelection(s.toString().trim().length());
                         }
 
                     } catch (Exception ex) {
@@ -397,8 +384,7 @@ public class AddManualBankAccount extends BaseActivity {
                     }
                 }
             });
-            
-            
+
 
             checkAccNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -586,7 +572,7 @@ public class AddManualBankAccount extends BaseActivity {
                                 Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.error_red));
                                 routingNumberErrorLL.setVisibility(View.VISIBLE);
                                 routingNumberErrorTV.setText("Enter valid Routing Number");
-                            } else if (routingNumberET.getText().toString().length() == 9 && confirmRoutingNumberET.getText().toString().length() == 9 &&
+                            } else if (routingNumberET.getText().toString().length() >= 0 && confirmRoutingNumberET.getText().toString().length() >=0 &&
                                     !routingNumberET.getText().toString().trim().equals(confirmRoutingNumberET.getText().toString().trim())) {
                                 routingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_black));
@@ -626,7 +612,7 @@ public class AddManualBankAccount extends BaseActivity {
                             Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_black));
                             confirmRoutingNumberTIL.setHint("Confirm Routing Number");
                             endIconIV.setVisibility(View.VISIBLE);
-                        } else if (routingNumberET.getText().toString().length() == 9 && confirmRoutingNumberET.getText().toString().length() < 9
+                        } else if (routingNumberET.getText().toString().length() == 9 && confirmRoutingNumberET.getText().toString().length() == 9
                                 && !routingNumberET.getText().toString().trim().equals(confirmRoutingNumberET.getText().toString().trim())) {
                             confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.error_red));
