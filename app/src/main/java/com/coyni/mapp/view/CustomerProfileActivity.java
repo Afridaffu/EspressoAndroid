@@ -376,9 +376,10 @@ public class CustomerProfileActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(Utils.helpURL));
-                    startActivity(i);
+//                    Intent i = new Intent(Intent.ACTION_VIEW);
+//                    i.setData(Uri.parse(Utils.helpURL));
+//                    startActivity(i);
+                    startActivity(new Intent(CustomerProfileActivity.this,GetHelpActivity.class));
                 }
             });
 
