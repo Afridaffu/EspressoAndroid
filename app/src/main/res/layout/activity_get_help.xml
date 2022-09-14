@@ -1,75 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
-    android:layout_marginHorizontal="@dimen/_21sdp"
-    android:layout_marginTop="@dimen/_40sdp"
     tools:context=".view.GetHelpActivity">
 
-    <ImageView
-        android:id="@+id/IVBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_back"
-        android:paddingTop="@dimen/_5sdp"
-        android:paddingBottom="@dimen/_5sdp"
-        android:contentDescription="@string/back_button"
-        android:paddingStart="0dp"
-        android:paddingEnd="@dimen/_5sdp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/_16ssp"
-        android:text="@string/need_help_with_coyni"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:fontFamily="@font/opensans_bold"
-        android:textColor="@color/black"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/our_support_team_is_here_for_you"
-        android:fontFamily="@font/opensans_regular"
-        android:textColor="@color/primary_black"
-        android:textSize="@dimen/_12ssp"
-        android:layout_marginTop="@dimen/_5sdp"
-        />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_support_guy_graphic"
-        android:contentDescription="@string/support"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/get_help_description"
-        android:fontFamily="@font/opensans_regular"
-        android:textColor="@color/primary_black"
-        android:textSize="@dimen/_12ssp"
-        android:lineSpacingExtra="@dimen/_2sdp"
-        android:layout_marginTop="@dimen/_5sdp"
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/procedureForSupportTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:fontFamily="@font/opensans_bold"
-        android:textSize="@dimen/_12ssp"
-        android:textColor="@color/primary_black"/>
+            <ImageView
+                android:id="@+id/IVBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/back_button"
+                android:paddingStart="0dp"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingEnd="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:src="@drawable/ic_back" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:text="@string/need_help_with_coyni"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16ssp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="@string/our_support_team_is_here_for_you"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/support"
+                android:src="@drawable/ic_support_guy_graphic" />
 
+            <TextView
+                android:id="@+id/support_text_click"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:lineSpacingExtra="@dimen/_2sdp"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
 
+            <TextView
+                android:id="@+id/text_support_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+        </LinearLayout>
 
-
+    </ScrollView>
 
 
 </LinearLayout>
-</layout>

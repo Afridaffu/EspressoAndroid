@@ -780,4 +780,5 @@
     <string name="get_help_description">Send an email to our support team at support@coyni.com for any question, issues, or feedback. Please include the following to expedite our response:</string>
     <string name="our_support_team_is_here_for_you">Our support team is here for you.</string>
     <string name="need_help_with_coyni">Need help with coyni?</string>
+    <string name="support_text">&#x2022; Name\n&#x2022; coyni email\n&#x2022;  Account ID number (located in your user details) \n&#x2022; A detailed description of your question, feedback, or issue</string>
 </resources>
