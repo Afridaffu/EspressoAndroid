@@ -50,6 +50,7 @@ import com.coyni.mapp.view.AgreementsActivity;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.BusinessReceivePaymentActivity;
 import com.coyni.mapp.view.ConfirmPasswordActivity;
+import com.coyni.mapp.view.GetHelpActivity;
 import com.coyni.mapp.view.OnboardActivity;
 import com.coyni.mapp.view.PINActivity;
 import com.coyni.mapp.view.PreferencesActivity;
@@ -227,9 +228,10 @@ public class BusinessProfileActivity extends BaseActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(Utils.helpURL));
-                        startActivity(i);
+//                        Intent i = new Intent(Intent.ACTION_VIEW);
+//                        i.setData(Uri.parse(Utils.helpURL));
+//                        startActivity(i);
+                        startActivity(new Intent(BusinessProfileActivity.this, GetHelpActivity.class));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -613,6 +615,7 @@ public class BusinessProfileActivity extends BaseActivity {
         disableLayout(feesLL, isEnable);
         disableLayout(accountlimitsLL, isEnable);
         disableLayout(cpagreeementsLL, isEnable);
+        disableLayout(cpHelpLL,isEnable);
     }
 
     public void setToken() {
