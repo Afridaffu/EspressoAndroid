@@ -503,7 +503,6 @@
                               android:layout_marginTop="@dimen/_4sdp"
                               android:layout_gravity="right|center"
                               android:fontFamily="@font/opensans_semibold"
-                              android:text="...4545"
                               android:textColor="@color/primary_black"
                               android:textSize="@dimen/_11ssp" />
                       </LinearLayout>

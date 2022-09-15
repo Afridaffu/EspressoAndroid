@@ -42,7 +42,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="160.00"
                 android:fontFamily="@font/opensans_bold"
                 android:textColor="@color/primary_green"
                 android:textSize="@dimen/_35ssp"/>
@@ -117,7 +116,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hgj34239274"
                 android:textSize="@dimen/_9ssp"
                 android:textColor="@color/primary_black"
                 android:fontFamily="@font/opensans_semibold"/>

@@ -110,7 +110,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/opensans_bold"
-                        android:text="6435.21 CYN"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_16ssp" />
 
@@ -144,7 +143,6 @@
                             android:background="@drawable/fill_grn_color_smallradius"
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center"
-                            android:text="@string/completed"
                             android:textColor="@color/active_green"
                             android:textSize="@dimen/_7ssp" />
                     </LinearLayout>
@@ -378,7 +376,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/opensans_bold"
-                        android:text="6435.21 CYN"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_16ssp" />
 

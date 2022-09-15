@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_select_bank"></ImageView>
+                android:src="@drawable/ic_select_bank"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                         android:singleLine="true"
                         android:text="Bank of America"
                         android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp"></TextView>
+                        android:textSize="@dimen/_12ssp"/>
 
                     <TextView
                         android:id="@+id/tvAccount"
@@ -98,9 +98,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.2"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="••••5359"
                         android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp"></TextView>
+                        android:textSize="@dimen/_11ssp"/>
 
                     <ImageView
                         android:id="@+id/imgBankTick"
@@ -146,7 +145,6 @@
                         android:layout_toRightOf="@+id/tvCardName"
                         android:fontFamily="@font/opensans_semibold"
                         android:gravity="left"
-                        android:text="••••5359"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp" />
 
@@ -192,7 +190,7 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="There’s a issue with your payment"
                         android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10ssp"></TextView>
+                        android:textSize="@dimen/_10ssp"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -202,7 +200,7 @@
                 android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="1dp"
-                android:background="@color/viewcolor"></View>
+                android:background="@color/viewcolor"/>
         </RelativeLayout>
 
     </com.coyni.mapp.utils.swipelayout.SwipeLayout>
