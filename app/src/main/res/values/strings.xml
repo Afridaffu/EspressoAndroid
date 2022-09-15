@@ -781,4 +781,8 @@
     <string name="please_provide_your_bank_account_information_find_your_account_numbers">Please provide your bank account information. Find your account numbers</string>
     <string name="where_to_find_my_account_information">Where to find my account information?</string>
     <string name="account_numbers">You can find your routing and account numbers at the bottom of your checks or displayed in your online banking account. On checks, the routing number is typically left of your account number.</string>
+    <string name="get_help_description">Send an email to our support team at support@coyni.com for any question, issues, or feedback. Please include the following to expedite our response:</string>
+    <string name="our_support_team_is_here_for_you">Our support team is here for you.</string>
+    <string name="need_help_with_coyni">Need help with coyni?</string>
+    <string name="support_text">&#x2022; Name\n&#x2022; coyni email\n&#x2022;  Account ID number (located in your user details) \n&#x2022; A detailed description of your question, feedback, or issue</string>
 </resources>

@@ -22,7 +22,6 @@
             android:fontFamily="@font/opensans_bold"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
-            android:text="May 8,2021"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_10ssp"
             android:visibility="visible" />
@@ -98,8 +97,9 @@
                             android:id="@+id/readStatusCV"
                             android:layout_width="@dimen/_6sdp"
                             android:layout_height="@dimen/_6sdp"
-                            android:layout_gravity="center"
+                            android:layout_gravity="top"
                             android:layout_marginRight="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
                             app:cardBackgroundColor="@color/primary_color"
                             app:cardCornerRadius="5dp" />
 
@@ -111,7 +111,6 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center_vertical"
-                            android:text="May 8,2021"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp"
                             android:visibility="visible" />
@@ -122,7 +121,6 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="center_vertical"
-                            android:text="May 8,2021"
                             android:textColor="@color/light_gray"
                             android:textSize="@dimen/_8ssp"
                             android:visibility="visible" />
@@ -136,7 +134,6 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_regular"
                         android:gravity="center_vertical"
-                        android:text="May 8,2021"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_11ssp"
                         android:visibility="visible" />

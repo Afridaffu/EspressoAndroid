@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_12sdp"
-        android:src="@drawable/ic_bankactive"></ImageView>
+        android:src="@drawable/ic_bankactive"/>
 
     <TextView
         android:id="@+id/tvBankHead"
@@ -25,7 +25,7 @@
         android:fontFamily="@font/opensans_semibold"
         android:text="Bank Account"
         android:textColor="@color/white"
-        android:textSize="@dimen/_11ssp"></TextView>
+        android:textSize="@dimen/_11ssp"/>
 
     <TextView
         android:id="@+id/tvBankExpire"
@@ -37,7 +37,7 @@
         android:fontFamily="@font/opensans_semibold"
         android:text="Issue"
         android:textColor="@color/error"
-        android:textSize="@dimen/_11ssp"></TextView>
+        android:textSize="@dimen/_11ssp"/>
 
     <LinearLayout
         android:id="@+id/layoutBank"
@@ -57,7 +57,7 @@
             android:fontFamily="@font/opensans_semibold"
             android:text="Bank of America"
             android:textColor="@color/white"
-            android:textSize="@dimen/_12ssp"></TextView>
+            android:textSize="@dimen/_12ssp"/>
 
         <TextView
             android:id="@+id/tvAccNumber"
@@ -65,9 +65,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.4"
             android:fontFamily="@font/opensans_semibold"
-            android:text="••••5359"
             android:textColor="@color/white"
-            android:textSize="@dimen/_11ssp"></TextView>
+            android:textSize="@dimen/_11ssp"/>
     </LinearLayout>
 
     <TextView
@@ -80,9 +79,8 @@
         android:layout_toRightOf="@+id/imgBankIcon"
         android:fontFamily="@font/opensans_semibold"
         android:gravity="center_vertical"
-        android:text="4538 32••••2338"
         android:textColor="@color/white"
         android:textSize="@dimen/_16ssp"
-        android:visibility="gone"></TextView>
+        android:visibility="gone"/>
 
 </RelativeLayout>

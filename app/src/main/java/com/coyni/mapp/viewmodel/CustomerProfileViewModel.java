@@ -143,14 +143,96 @@ public class CustomerProfileViewModel extends AndroidViewModel {
         }
     }
 
-    public void updatePreferences(UserPreferenceModel request, MyApplication myApplicationObj) {
+    public void updatePreferences(UserPreferenceModel request, int accountType) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<UserPreference> mCall = null;
-            if (myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT)
+            if (accountType == Utils.SHARED_ACCOUNT)
                 mCall = apiService.meUpdatePreferences_Shared(request);
             else
                 mCall = apiService.meUpdatePreferences(request);
+            if (mCall != null) {
+                mCall.enqueue(new Callback<UserPreference>() {
+                    @Override
+                    public void onResponse(Call<UserPreference> call, Response<UserPreference> response) {
+                        try {
+                            if (response.isSuccessful()) {
+                                UserPreference obj = response.body();
+                                userPreferenceMutableLiveData.setValue(obj);
+                            } else {
+                                Gson gson = new Gson();
+                                Type type = new TypeToken<UserPreference>() {
+                                }.getType();
+                                UserPreference errorResponse = gson.fromJson(response.errorBody().string(), type);
+                                userPreferenceMutableLiveData.setValue(errorResponse);
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            apiErrorMutableLiveData.setValue(null);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserPreference> call, Throwable t) {
+                        Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                });
+            } else {
+//                Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updateTimeZoneShared(UserPreferenceModel request,int userID) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UserPreference> mCall = apiService.updateTimeZoneShared(String.valueOf(userID), request);
+
+            if (mCall != null) {
+                mCall.enqueue(new Callback<UserPreference>() {
+                    @Override
+                    public void onResponse(Call<UserPreference> call, Response<UserPreference> response) {
+                        try {
+                            if (response.isSuccessful()) {
+                                UserPreference obj = response.body();
+                                userPreferenceMutableLiveData.setValue(obj);
+                            } else {
+                                Gson gson = new Gson();
+                                Type type = new TypeToken<UserPreference>() {
+                                }.getType();
+                                UserPreference errorResponse = gson.fromJson(response.errorBody().string(), type);
+                                userPreferenceMutableLiveData.setValue(errorResponse);
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            apiErrorMutableLiveData.setValue(null);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserPreference> call, Throwable t) {
+                        Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                });
+            } else {
+//                Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    public void updateDefaultAccount(UserPreferenceModel request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UserPreference> mCall = null;
+
+            mCall = apiService.meUpdatePreferences(request);
             if (mCall != null) {
                 mCall.enqueue(new Callback<UserPreference>() {
                     @Override

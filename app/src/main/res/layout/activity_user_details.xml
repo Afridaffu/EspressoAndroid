@@ -105,7 +105,6 @@
                             android:background="@color/profile_gray"
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center"
-                            android:text="VT"
                             android:textColor="@color/primary_green"
                             android:textSize="@dimen/_20sdp"
                             android:visibility="visible" />

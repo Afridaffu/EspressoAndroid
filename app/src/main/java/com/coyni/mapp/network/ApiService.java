@@ -319,6 +319,9 @@ public interface ApiService {
     @POST("api/v2/business/preferences")
     Call<UserPreference> meUpdatePreferences_Shared(@Body UserPreferenceModel request);
 
+    @POST("api/v2/admin/{id}/preferences")
+    Call<UserPreference> updateTimeZoneShared(@Path("id") String id, @Body UserPreferenceModel request);
+
     @PATCH("api/v2/profile/me/update-address")
     Call<User> meUpdateAddress(@Body UserData request);
 

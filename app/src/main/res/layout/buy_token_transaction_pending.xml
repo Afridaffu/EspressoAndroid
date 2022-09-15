@@ -46,7 +46,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_90sdp"
                     android:fontFamily="@font/opensans_bold"
-                    android:text="159.40"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_35ssp"
 
@@ -93,7 +92,6 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="right"
-                    android:text="SND34239274DANN"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_11ssp" />
 
@@ -127,7 +125,6 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="right"
-                    android:text="1,000.00 CYN"
                     android:textColor="@color/black" />
             </LinearLayout>
 

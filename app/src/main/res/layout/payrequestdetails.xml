@@ -92,15 +92,6 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/amountTV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_bold"
-                                android:text="0.00"
-                                android:textColor="@color/primary_color"
-                                android:textSize="@dimen/_24ssp" />
-
-                            <TextView
                                 android:id="@+id/cyn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -118,7 +109,6 @@
                             android:layout_marginTop="@dimen/_6sdp"
                             android:fontFamily="@font/opensans_regular"
                             android:gravity="center"
-                            android:text="“”"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_10ssp" />
 
@@ -154,7 +144,6 @@
                                 android:background="@drawable/fill_grn_color_smallradius"
                                 android:fontFamily="@font/opensans_bold"
                                 android:gravity="center"
-                                android:text="Completed"
                                 android:textColor="@color/active_green"
                                 android:textSize="@dimen/_7ssp" />
                         </LinearLayout>

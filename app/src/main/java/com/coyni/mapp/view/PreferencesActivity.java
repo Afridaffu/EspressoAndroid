@@ -106,7 +106,10 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
             userPreferenceModel.setPreferredAccount(preferredId);
         }
         isTimeZone = true;
-        customerProfileViewModel.updatePreferences(userPreferenceModel, myApplicationObj);
+//        if (myApplicationObj.getAccountType() != Utils.SHARED_ACCOUNT)
+        customerProfileViewModel.updatePreferences(userPreferenceModel, myApplicationObj.getAccountType());
+//        else
+//            customerProfileViewModel.updateTimeZoneShared(userPreferenceModel);
     }
 
     public void initFields() {
@@ -206,7 +209,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                             //userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
                             userPreferenceModel.setPreferredAccount(accountTypeId);
                             isTimeZone = false;
-                            customerProfileViewModel.updatePreferences(userPreferenceModel, myApplicationObj);
+                            customerProfileViewModel.updateDefaultAccount(userPreferenceModel);
                             dialog.dismiss();
 
                         }
@@ -397,7 +400,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
     }
 
     private void setDefaultAccountData() {
-        if(filterList == null) {
+        if (filterList == null) {
             return;
         }
 
@@ -418,10 +421,10 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
         accountsData.removeDeclinedPersonalAccount();
 
 
-        if(accountsData.getGroupData().size() > 1) {
+        if (accountsData.getGroupData().size() > 1) {
             accountET.setEnabled(true);
             enableOrDisableAccount(false);
-        } else if(accountsData.getGroupData().size() == 1) {
+        } else if (accountsData.getGroupData().size() == 1) {
             BaseProfile groupProfile = accountsData.getGroupData().get(0);
             ArrayList<ProfilesResponse.Profiles> profilesList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(groupProfile.getId());
             if (groupProfile.getAccountType().equalsIgnoreCase(Utils.PERSONAL)
@@ -566,11 +569,11 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
         listView.requestLayout();
     }
 
-    private void enableOrDisableAccount(boolean enable){
-        if(enable){
+    private void enableOrDisableAccount(boolean enable) {
+        if (enable) {
             accountDDIV.setVisibility(View.GONE);
             accountDisableView.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             accountDDIV.setVisibility(View.VISIBLE);
             accountDisableView.setVisibility(View.GONE);
         }
