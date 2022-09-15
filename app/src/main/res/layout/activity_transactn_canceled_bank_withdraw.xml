@@ -76,7 +76,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/_100_00"
                             android:textSize="@dimen/_24ssp"
                             android:fontFamily="@font/opensans_bold"
                             android:textColor="@color/primary_color"
@@ -132,7 +131,6 @@
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center"
                             android:layout_marginTop="@dimen/_6sdp"
-                            android:text="Completed"
                             android:textColor="@color/active_green"
                             android:textSize="@dimen/_7ssp" />
 
@@ -143,8 +141,7 @@
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/_10sdp"
                         android:paddingTop="@dimen/_8sdp"
-                        android:paddingLeft="@dimen/_11sdp"
-                        >
+                        android:paddingLeft="@dimen/_11sdp">
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -159,7 +156,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginRight="@dimen/_11sdp"
-                            android:text="07/27/2020 10:36:14"
                             android:textSize="@dimen/_11ssp"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/primary_black"
@@ -194,7 +190,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="1d3hsM734h…"
                                 android:textSize="@dimen/_11ssp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textColor="@color/text_color"
@@ -266,7 +261,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="874jeM734h…"
                                 android:textSize="@dimen/_11ssp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:textColor="@color/text_color"
@@ -302,7 +296,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/_1d3hsm734h"
                             android:textSize="@dimen/_11ssp"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/primary_color"
@@ -334,7 +327,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginRight="@dimen/_11sdp"
-                            android:text="100.00 CYN"
                             android:textSize="@dimen/_11ssp"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/primary_black"
@@ -363,7 +355,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginRight="@dimen/_11sdp"
-                            android:text="1.00 CYN"
                             android:textSize="@dimen/_11ssp"
                             android:fontFamily="@font/opensans_semibold"
                             android:textColor="@color/primary_black"
@@ -395,7 +386,6 @@
                             android:layout_marginBottom="@dimen/_9sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="right"
-                            android:text="101.00 CYN"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>

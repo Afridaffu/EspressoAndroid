@@ -117,7 +117,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="@string/avail_bal"
                     android:textColor="@color/dark_gray"
                     android:layout_marginStart="@dimen/_2sdp"
                     android:textSize="@dimen/_9ssp" />
