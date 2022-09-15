@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,6 +20,18 @@ import com.coyni.mapp.model.check_out_transactions.CheckOutModel;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
+import okio.ByteString;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -156,6 +169,69 @@ public abstract class BaseActivity extends AppCompatActivity {
                 onNotificationUpdate();
             }
         };
+    }
+
+    public void startWebSocket() {
+        try {
+            String serverUrl = myApplication.getWebSocketUrlResponse().getWebsocketUrl();
+            OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.MILLISECONDS).build();
+            Request request = new Request.Builder().url(serverUrl).build();
+            EchoWebSocketListener listener = new EchoWebSocketListener();
+            WebSocket webSocket = client.newWebSocket(request, listener);
+            client.dispatcher().executorService().shutdown();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private final class EchoWebSocketListener extends WebSocketListener {
+        private static final int CLOSE_STATUS = 1000;
+
+        @Override
+        public void onOpen(WebSocket webSocket, Response response) {
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("authorization", Utils.getStrAuth());
+                webSocket.send(jsonObject.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onMessage(WebSocket webSocket, String message) {
+            Log.e("Receive Message: ", message);
+            try {
+                JSONObject obj = new JSONObject(message);
+                if (obj.getString("eventType").equals("TXN_STATUS") && obj.getString("txnStatus").toLowerCase().equals("completed")) {
+                    sendBroadcast(new Intent().setAction(Utils.NOTIFICATION_ACTION));
+                    webSocket.close(CLOSE_STATUS, null);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onMessage(WebSocket webSocket, ByteString bytes) {
+            Log.e("Receive Bytes : ", bytes.hex());
+        }
+
+        @Override
+        public void onClosing(WebSocket webSocket, int code, String reason) {
+            webSocket.close(CLOSE_STATUS, null);
+            Log.e("Closing Socket : ", code + " / " + reason);
+        }
+
+        @Override
+        public void onFailure(WebSocket webSocket, Throwable throwable, Response response) {
+            try {
+                webSocket.close(CLOSE_STATUS, null);
+                Log.e("Error : ", throwable.getMessage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
 }

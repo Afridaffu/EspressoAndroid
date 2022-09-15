@@ -84,8 +84,8 @@ public class AddBankAccount extends BaseActivity {
                 if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
                     Utils.displayAlert("Bank integration has been cancelled", AddBankAccount.this, "", "");
                 } else {
-                    showProgressDialog();
-                    customerProfileViewModel.meSyncAccount();
+//                    showProgressDialog();
+//                    customerProfileViewModel.meSyncAccount();
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -101,17 +101,17 @@ public class AddBankAccount extends BaseActivity {
             objMyApplication = (MyApplication) getApplicationContext();
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-            if (Utils.checkInternet(AddBankAccount.this)) {
-//                if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
-                    showProgressDialog();
-                    customerProfileViewModel.meSignOn();
-//                } else {
-//                    strSignOn = objMyApplication.getStrSignOnError();
-//                    signOnData = objMyApplication.getSignOnData();
-//                }
-            } else {
-                Utils.displayAlert(getString(R.string.internet), AddBankAccount.this, "", "");
-            }
+//            if (Utils.checkInternet(AddBankAccount.this)) {
+////                if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
+//                    showProgressDialog();
+//                    customerProfileViewModel.meSignOn();
+////                } else {
+////                    strSignOn = objMyApplication.getStrSignOnError();
+////                    signOnData = objMyApplication.getSignOnData();
+////                }
+//            } else {
+//                Utils.displayAlert(getString(R.string.internet), AddBankAccount.this, "", "");
+//            }
 
             ControlMethod("externalBank");
             strScreen = "externalBank";
@@ -122,37 +122,37 @@ public class AddBankAccount extends BaseActivity {
     }
 
     private void initObserver() {
-        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
-            @Override
-            public void onChanged(SignOn signOn) {
-                try {
-                    dismissDialog();
-                    if (signOn != null) {
-                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                            objMyApplication.setSignOnData(signOn.getData());
-                            signOnData = signOn.getData();
-                            objMyApplication.setStrSignOnError("");
-                            strSignOn = "";
-                            if (objMyApplication.getResolveUrl()) {
-                                objMyApplication.callResolveFlow(AddBankAccount.this, strSignOn, signOnData);
-                            }
-                        } else {
-                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
-                                objMyApplication.setResolveUrl(true);
-                                customerProfileViewModel.meSignOn();
-                            } else {
-                                objMyApplication.setSignOnData(null);
-                                signOnData = null;
-                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                                strSignOn = signOn.getError().getErrorDescription();
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+//            @Override
+//            public void onChanged(SignOn signOn) {
+//                try {
+//                    dismissDialog();
+//                    if (signOn != null) {
+//                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+//                            objMyApplication.setSignOnData(signOn.getData());
+//                            signOnData = signOn.getData();
+//                            objMyApplication.setStrSignOnError("");
+//                            strSignOn = "";
+//                            if (objMyApplication.getResolveUrl()) {
+//                                objMyApplication.callResolveFlow(AddBankAccount.this, strSignOn, signOnData);
+//                            }
+//                        } else {
+//                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+//                                objMyApplication.setResolveUrl(true);
+//                                customerProfileViewModel.meSignOn();
+//                            } else {
+//                                objMyApplication.setSignOnData(null);
+//                                signOnData = null;
+//                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+//                                strSignOn = signOn.getError().getErrorDescription();
+//                            }
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         customerProfileViewModel.getApiErrorMutableLiveData().observe(AddBankAccount.this, new Observer<APIError>() {
             @Override
@@ -162,7 +162,7 @@ public class AddBankAccount extends BaseActivity {
                     if (apiError != null) {
                         if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
                             objMyApplication.setResolveUrl(true);
-                            customerProfileViewModel.meSignOn();
+                            //customerProfileViewModel.meSignOn();
                         } else if (!isBank) {
                             if (!apiError.getError().getErrorDescription().equals("")) {
                                 Utils.displayAlert(apiError.getError().getErrorDescription(), AddBankAccount.this, "", apiError.getError().getFieldErrors().get(0));
@@ -186,20 +186,20 @@ public class AddBankAccount extends BaseActivity {
             }
         });
 
-        customerProfileViewModel.getSyncAccountMutableLiveData().observe(AddBankAccount.this, new Observer<SyncAccount>() {
-            @Override
-            public void onChanged(SyncAccount syncAccount) {
-                try {
-                    if (syncAccount != null) {
-                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
-                            customerProfileViewModel.meBanks();
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//        customerProfileViewModel.getSyncAccountMutableLiveData().observe(AddBankAccount.this, new Observer<SyncAccount>() {
+//            @Override
+//            public void onChanged(SyncAccount syncAccount) {
+//                try {
+//                    if (syncAccount != null) {
+//                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+//                            customerProfileViewModel.meBanks();
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         customerProfileViewModel.getBankResponseMutableLiveData().observe(this, new Observer<BankResponse>() {
             @Override
