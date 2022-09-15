@@ -185,6 +185,7 @@ public class BusinessAccountFragment extends BaseFragment {
             request.setMerchantTokenTransactions(true);
 
             dashboardViewModel.getLatestTxns(request);
+            ((BusinessDashboardActivity) getActivity()).notificationsAPICall();
             ((BusinessDashboardActivity) getActivity()).showProgressDialog();
             transactionsNSV.smoothScrollTo(0, 0);
         } else {
