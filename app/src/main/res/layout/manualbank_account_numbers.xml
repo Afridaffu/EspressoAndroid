@@ -18,7 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_36sdp"
                 android:padding="@dimen/_5sdp"
                 android:src="@drawable/ic_back" />
 
@@ -28,7 +28,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_6sdp"
                 android:layout_marginTop="@dimen/_14sdp"
-                android:layout_marginBottom="@dimen/_9sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="@string/where_to_find_my_account_information"
                 android:textColor="@color/black"
@@ -39,17 +38,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:src="@drawable/ic_success_icon" />
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:src="@drawable/ic_bank_account_numbers_graphic" />
 
             <TextView
                 android:id="@+id/descriptionTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_regular"
                 android:text="@string/account_numbers"
                 android:textColor="@color/primary_black"
-                android:layout_marginTop="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_30sdp"
                 android:textSize="@dimen/_12ssp" />
         </LinearLayout>
 </LinearLayout>

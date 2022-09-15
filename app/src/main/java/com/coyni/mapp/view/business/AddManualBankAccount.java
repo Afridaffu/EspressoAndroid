@@ -115,7 +115,6 @@ public class AddManualBankAccount extends BaseActivity {
                     } else {
                         isName = false;
                     }
-
                     if (nameOnBankET.getText().toString().contains("  ")) {
                         nameOnBankET.setText(nameOnBankET.getText().toString().replace("  ", " "));
                         nameOnBankET.setSelection(nameOnBankET.getText().length());
@@ -152,6 +151,7 @@ public class AddManualBankAccount extends BaseActivity {
                             Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_green));
                             confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             confirmRoutingNumberTIL.setHint("Confirm Routing Number");
+                            Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_black));
 
                         } else {
                             if (confirmRoutingNumberET.getText().toString().trim().length() > 0) {
@@ -398,14 +398,14 @@ public class AddManualBankAccount extends BaseActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
-                        if (charSequence.toString().trim().length() == 17) {
+                        if (charSequence.toString().trim().length() == 17 ) {
                             isaccountNum = true;
                             checkAccNumberTIL.setBoxStrokeColor(getColor(R.color.primary_green));
                             checkAccNumberTIL.setHint("Checking Account Number");
                             Utils.setUpperHintColor(checkAccNumberTIL, getColor(R.color.primary_green));
                             confirmAccNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             confirmAccNumberTIL.setHint("Confirm Account Number");
-//                            Utils.setUpperHintColor(confirmAccNumberTIL, getColor(R.color.primary_black));
+                            Utils.setUpperHintColor(confirmAccNumberTIL, getColor(R.color.primary_black));
 
                         } else {
                             if (confirmAccNumberET.getText().toString().trim().length() > 0) {
