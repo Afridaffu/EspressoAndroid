@@ -16,16 +16,23 @@ import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.R;
 import com.coyni.mapp.dialogs.ManualAccountNumbersFullPage;
+import com.coyni.mapp.model.bank.ManualBankRequest;
+import com.coyni.mapp.model.bank.ManualBankResponse;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.view.AddCardActivity;
 import com.coyni.mapp.view.BaseActivity;
+import com.coyni.mapp.viewmodel.PaymentMethodsViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -41,64 +48,115 @@ public class AddManualBankAccount extends BaseActivity {
     private Long mLastClickTime = 0L;
     private MyApplication objMyApplication;
     private CardView addCV;
+    PaymentMethodsViewModel paymentMethodsViewModel;
+    String strScreen = "";
+    RelativeLayout lyAddBank, layoutLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_manual_bank_account);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_add_manual_bank_account);
 
-        initfields();
-        textWatchers();
-        focusWatchers();
-
+            initfields();
+            initObserver();
+            textWatchers();
+            focusWatchers();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void initfields() {
-        setSpannableText();
-        backLL = findViewById(R.id.backLL);
-        nameOnBankErrorTV = findViewById(R.id.nameOnBankErrorTV);
-        nameOnBankTIL = findViewById(R.id.nameOnBankTIL);
-        nameOnBankET = findViewById(R.id.nameOnBankET);
-        nameOnBankErrorLL = findViewById(R.id.nameOnBankErrorLL);
-        routingNumberTIL = findViewById(R.id.routingNumberTIL);
-        routingNumberET = findViewById(R.id.routingNumberET);
-        routingNumberErrorLL = findViewById(R.id.routingNumberErrorLL);
-        routingNumberErrorTV = findViewById(R.id.routingNumberErrorTV);
-        confirmRoutingNumberTIL = findViewById(R.id.confirmRoutingNumberTIL);
-        confirmRoutingNumberET = findViewById(R.id.confirmRoutingNumberET);
-        confirmRoutingNumberErrorLL = findViewById(R.id.confirmRoutingNumberErrorLL);
-        confirmRoutingNumberErrorTV = findViewById(R.id.confirmRoutingNumberErrorTV);
-        checkAccNumberTIL = findViewById(R.id.checkAccNumberTIL);
-        checkAccNumberET = findViewById(R.id.checkAccNumberET);
-        checkAccNumberErrorLL = findViewById(R.id.checkAccNumberErrorLL);
-        checkAccNumberErrorTV = findViewById(R.id.checkAccNumberErrorTV);
-        confirmAccNumberTIL = findViewById(R.id.confirmAccNumberTIL);
-        confirmAccNumberET = findViewById(R.id.confirmAccNumberET);
-        confirmAccNumberErrorLL = findViewById(R.id.confirmAccNumberErrorLL);
-        confirmAccNumberErrorTV = findViewById(R.id.confirmAccNumberErrorTV);
-        addCV = findViewById(R.id.addCV);
-        endIconIV = findViewById(R.id.endIcon1IV);
-        endIcon2IV = findViewById(R.id.endIcon2IV);
-
-        backLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
+        try {
+            objMyApplication = (MyApplication) getApplicationContext();
+            paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
+            setSpannableText();
+            if (getIntent().getStringExtra("screen") != null && !getIntent().getStringExtra("screen").equals("")) {
+                strScreen = getIntent().getStringExtra("screen");
             }
-        });
+            lyAddBank = findViewById(R.id.lyAddBank);
+            layoutLoader = findViewById(R.id.layoutLoader);
+            backLL = findViewById(R.id.backLL);
+            nameOnBankErrorTV = findViewById(R.id.nameOnBankErrorTV);
+            nameOnBankTIL = findViewById(R.id.nameOnBankTIL);
+            nameOnBankET = findViewById(R.id.nameOnBankET);
+            nameOnBankErrorLL = findViewById(R.id.nameOnBankErrorLL);
+            routingNumberTIL = findViewById(R.id.routingNumberTIL);
+            routingNumberET = findViewById(R.id.routingNumberET);
+            routingNumberErrorLL = findViewById(R.id.routingNumberErrorLL);
+            routingNumberErrorTV = findViewById(R.id.routingNumberErrorTV);
+            confirmRoutingNumberTIL = findViewById(R.id.confirmRoutingNumberTIL);
+            confirmRoutingNumberET = findViewById(R.id.confirmRoutingNumberET);
+            confirmRoutingNumberErrorLL = findViewById(R.id.confirmRoutingNumberErrorLL);
+            confirmRoutingNumberErrorTV = findViewById(R.id.confirmRoutingNumberErrorTV);
+            checkAccNumberTIL = findViewById(R.id.checkAccNumberTIL);
+            checkAccNumberET = findViewById(R.id.checkAccNumberET);
+            checkAccNumberErrorLL = findViewById(R.id.checkAccNumberErrorLL);
+            checkAccNumberErrorTV = findViewById(R.id.checkAccNumberErrorTV);
+            confirmAccNumberTIL = findViewById(R.id.confirmAccNumberTIL);
+            confirmAccNumberET = findViewById(R.id.confirmAccNumberET);
+            confirmAccNumberErrorLL = findViewById(R.id.confirmAccNumberErrorLL);
+            confirmAccNumberErrorTV = findViewById(R.id.confirmAccNumberErrorTV);
+            addCV = findViewById(R.id.addCV);
+            endIconIV = findViewById(R.id.endIcon1IV);
+            endIcon2IV = findViewById(R.id.endIcon2IV);
 
-        addCV.setOnClickListener(new View.OnClickListener() {
+            backLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                }
+            });
+
+            addCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (isAddEnabled) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            if (Utils.isKeyboardVisible)
+                                Utils.hideKeypad(AddManualBankAccount.this);
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            if (strScreen.equals("pay")) {
+                                lyAddBank.setVisibility(View.GONE);
+                                layoutLoader.setVisibility(View.VISIBLE);
+                            }
+                            ManualBankRequest request = new ManualBankRequest();
+                            request.setAccountName(nameOnBankET.getText().toString());
+                            request.setRoutingNumber(routingNumberET.getText().toString());
+                            request.setAccountNumber(checkAccNumberET.getText().toString());
+                            paymentMethodsViewModel.saveManualBank(request);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void initObserver() {
+        paymentMethodsViewModel.getManualBankResponseMutableLiveData().observe(this, new Observer<ManualBankResponse>() {
             @Override
-            public void onClick(View view) {
-                //Api call tracker update
-
+            public void onChanged(ManualBankResponse manualBankResponse) {
+                if (manualBankResponse != null) {
+                    if (manualBankResponse.getStatus().toLowerCase().equals("success")) {
+                        if (strScreen.equals("pay")) {
+                            layoutLoader.setVisibility(View.GONE);
+                        }
+                    }
+                }
             }
         });
     }
 
     private void textWatchers() {
         try {
-
             nameOnBankET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -398,7 +456,7 @@ public class AddManualBankAccount extends BaseActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
-                        if (charSequence.toString().trim().length() == 17 ) {
+                        if (charSequence.toString().trim().length() == 17) {
                             isaccountNum = true;
                             checkAccNumberTIL.setBoxStrokeColor(getColor(R.color.primary_green));
                             checkAccNumberTIL.setHint("Checking Account Number");
@@ -574,12 +632,12 @@ public class AddManualBankAccount extends BaseActivity {
                                 routingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 confirmRoutingNumberTIL.setHint("Confirm Routing Number");
                                 Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_black));
-                            }else if (routingNumberET.getText().toString().trim().length() < 9) {
+                            } else if (routingNumberET.getText().toString().trim().length() < 9) {
                                 routingNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.error_red));
                                 routingNumberErrorLL.setVisibility(View.VISIBLE);
                                 routingNumberErrorTV.setText("Enter valid Routing Number");
-                            } else if (routingNumberET.getText().toString().length() >= 0 && confirmRoutingNumberET.getText().toString().length() >=0 &&
+                            } else if (routingNumberET.getText().toString().length() >= 0 && confirmRoutingNumberET.getText().toString().length() >= 0 &&
                                     !routingNumberET.getText().toString().trim().equals(confirmRoutingNumberET.getText().toString().trim())) {
                                 routingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_black));
@@ -657,7 +715,7 @@ public class AddManualBankAccount extends BaseActivity {
                                 checkAccNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 confirmAccNumberTIL.setHint("Confirm Account Number");
                                 Utils.setUpperHintColor(checkAccNumberTIL, getColor(R.color.primary_black));
-                            }else if (checkAccNumberET.getText().toString().trim().length() < 17) {
+                            } else if (checkAccNumberET.getText().toString().trim().length() < 17) {
                                 checkAccNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(checkAccNumberTIL, getColor(R.color.error_red));
                                 checkAccNumberErrorLL.setVisibility(View.VISIBLE);
@@ -721,7 +779,6 @@ public class AddManualBankAccount extends BaseActivity {
         }
     }
 
-
     private void enableOrDisableNext() {
         try {
             if (isName && isRoutNum && isConfRoutNum && isaccountNum && isConfirm) {
@@ -737,39 +794,40 @@ public class AddManualBankAccount extends BaseActivity {
     }
 
     public void setSpannableText() {
-        descriptionTV = findViewById(R.id.descriptionTV);
+        try {
+            descriptionTV = findViewById(R.id.descriptionTV);
 
-        String strMessage = getResources().getString(R.string.please_provide_your_bank_account_information_find_your_account_numbers);
-        SpannableString ss = new SpannableString(strMessage);
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(@NonNull View view) {
-                try {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
+            String strMessage = getResources().getString(R.string.please_provide_your_bank_account_information_find_your_account_numbers);
+            SpannableString ss = new SpannableString(strMessage);
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(@NonNull View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        ManualAccountNumbersFullPage showImgDialog = new ManualAccountNumbersFullPage(AddManualBankAccount.this);
+                        showImgDialog.show();
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    ManualAccountNumbersFullPage showImgDialog = new ManualAccountNumbersFullPage(AddManualBankAccount.this);
-                    showImgDialog.show();
-
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
 
-            @Override
-            public void updateDrawState(TextPaint ds) {
-            }
-        };
-        ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Find your account numbers"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Find your account numbers"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(clickableSpan, strMessage.length() - 24, strMessage.length()-1, 0);
-        descriptionTV.setMovementMethod(LinkMovementMethod.getInstance());
-        descriptionTV.setHighlightColor(Color.TRANSPARENT);
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                }
+            };
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Find your account numbers"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Find your account numbers"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(clickableSpan, strMessage.length() - 24, strMessage.length() - 1, 0);
+            descriptionTV.setMovementMethod(LinkMovementMethod.getInstance());
+            descriptionTV.setHighlightColor(Color.TRANSPARENT);
 
-        descriptionTV.setText(ss);
-
-
+            descriptionTV.setText(ss);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
-
 }
