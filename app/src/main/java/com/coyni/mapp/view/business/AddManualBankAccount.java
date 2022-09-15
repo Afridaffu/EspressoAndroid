@@ -91,6 +91,7 @@ public class AddManualBankAccount extends BaseActivity {
             @Override
             public void onClick(View view) {
                 //Api call tracker update
+
             }
         });
     }
@@ -140,18 +141,20 @@ public class AddManualBankAccount extends BaseActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
-                        if (routingNumberET.getText().toString().trim().length() == 9
-                                && routingNumberET.getText().toString().trim().equals(confirmRoutingNumberET.getText().toString().trim())) {
+                        if (charSequence != null && charSequence.length() == 9) {
+                            isRoutNum = true;
+                        }
+                        if (routingNumberET.getText().toString().trim().length() == 9) {
                             isRoutNum = true;
                             routingNumberTIL.setBoxStrokeColor(getColor(R.color.primary_green));
                             routingNumberTIL.setHint("Routing Number");
                             Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_green));
                             confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             confirmRoutingNumberTIL.setHint("Confirm Routing Number");
-                            Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_black));
 
                         } else {
-                            if (confirmRoutingNumberET.getText().toString().trim().length() > 0 ) {
+                            if (confirmRoutingNumberET.getText().toString().trim().length() > 0) {
                                 routingNumberTIL.setBoxStrokeColor(getColor(R.color.primary_green));
                                 Utils.setUpperHintColor(routingNumberTIL, getColor(R.color.primary_green));
                                 confirmRoutingNumberTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
