@@ -746,6 +746,10 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
+//        notificationsViewModel.getNotifications();
+    }
+
+    public void notificationsAPICall() {
         notificationsViewModel.getNotifications();
     }
 
