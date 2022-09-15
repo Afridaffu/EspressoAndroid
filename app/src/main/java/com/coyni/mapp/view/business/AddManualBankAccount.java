@@ -31,7 +31,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class AddManualBankAccount extends BaseActivity {
 
-    private TextView descriptionTV, nameOnBankErrorTV, routingNumberErrorTV, confirmRoutingNumberErrorTV, checkAccNumberErrorTV, confirmAccNumberErrorTV;
+    private TextView descriptionTV, nameOnBankErrorTV, routingNumberErrorTV, confirmRoutingNumberErrorTV, checkAccNumberErrorTV, confirmAccNumberErrorTV,headingTV;
     private TextInputLayout nameOnBankTIL, routingNumberTIL, confirmRoutingNumberTIL, checkAccNumberTIL, confirmAccNumberTIL;
     private TextInputEditText nameOnBankET, routingNumberET, confirmRoutingNumberET, checkAccNumberET, confirmAccNumberET;
     private LinearLayout nameOnBankErrorLL, routingNumberErrorLL, confirmRoutingNumberErrorLL, checkAccNumberErrorLL, confirmAccNumberErrorLL;
@@ -50,6 +50,12 @@ public class AddManualBankAccount extends BaseActivity {
         initfields();
         textWatchers();
         focusWatchers();
+
+        if(getIntent().getStringExtra("FROM").equalsIgnoreCase("Resubmit")){
+            headingTV.setText(R.string.resubmit);
+        } else if(getIntent().getStringExtra("FROM").equalsIgnoreCase("Edit")){
+            headingTV.setText(R.string.resubmit);
+        }
 
     }
 
@@ -79,6 +85,7 @@ public class AddManualBankAccount extends BaseActivity {
         addCV = findViewById(R.id.addCV);
         endIconIV = findViewById(R.id.endIcon1IV);
         endIcon2IV = findViewById(R.id.endIcon2IV);
+        headingTV = findViewById(R.id.headingTV);
 
         backLL.setOnClickListener(new View.OnClickListener() {
             @Override
