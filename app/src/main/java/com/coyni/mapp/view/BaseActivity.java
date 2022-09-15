@@ -205,6 +205,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 JSONObject obj = new JSONObject(message);
                 if (obj.getString("eventType").equals("TXN_STATUS") && obj.getString("txnStatus").toLowerCase().equals("completed")) {
                     sendBroadcast(new Intent().setAction(Utils.NOTIFICATION_ACTION));
+                    webSocket.close(CLOSE_STATUS, null);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -225,6 +226,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         @Override
         public void onFailure(WebSocket webSocket, Throwable throwable, Response response) {
             try {
+                webSocket.close(CLOSE_STATUS, null);
                 Log.e("Error : ", throwable.getMessage());
             } catch (Exception ex) {
                 ex.printStackTrace();
