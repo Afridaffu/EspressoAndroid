@@ -698,24 +698,24 @@ public class DashboardActivity extends BaseActivity {
             }
         });
 
-        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
-            @Override
-            public void onChanged(SignOn signOn) {
-                try {
-                    if (signOn != null) {
-                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                            objMyApplication.setSignOnData(signOn.getData());
-                            objMyApplication.setStrSignOnError("");
-                        } else {
-                            objMyApplication.setSignOnData(null);
-                            objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+//            @Override
+//            public void onChanged(SignOn signOn) {
+//                try {
+//                    if (signOn != null) {
+//                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+//                            objMyApplication.setSignOnData(signOn.getData());
+//                            objMyApplication.setStrSignOnError("");
+//                        } else {
+//                            objMyApplication.setSignOnData(null);
+//                            objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         dashboardViewModel.getPreferenceMutableLiveData().observe(this, new Observer<Preferences>() {
             @Override
@@ -963,7 +963,7 @@ public class DashboardActivity extends BaseActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                customerProfileViewModel.meSignOn();
+                //customerProfileViewModel.meSignOn();
                 dashboardViewModel.mePaymentMethods();
                 WalletRequest walletRequest = new WalletRequest();
                 walletRequest.setWalletType(Utils.TOKEN);

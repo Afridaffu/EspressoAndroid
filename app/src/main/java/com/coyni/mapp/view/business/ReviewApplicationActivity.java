@@ -381,7 +381,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         summaryViewModel = new ViewModelProvider(this).get(BusinessApplicationSummaryViewModel.class);
 
         customerProfileViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(CustomerProfileViewModel.class);
-        customerProfileViewModel.meSignOn();
+        //customerProfileViewModel.meSignOn();
 
         CloseLL.setOnClickListener(view -> finish());
 
@@ -440,37 +440,37 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             }
         });
 
-        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
-            @Override
-            public void onChanged(SignOn signOn) {
-                try {
-                    dismissDialog();
-                    if (signOn != null) {
-                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                            objMyApplication.setSignOnData(signOn.getData());
-                            signOnData = signOn.getData();
-                            objMyApplication.setStrSignOnError("");
-                            strSignOn = "";
-                            if (objMyApplication.getResolveUrl()) {
-                                objMyApplication.callResolveFlow(ReviewApplicationActivity.this, strSignOn, signOnData);
-                            }
-                        } else {
-                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
-                                objMyApplication.setResolveUrl(true);
-                                customerProfileViewModel.meSignOn();
-                            } else {
-                                objMyApplication.setSignOnData(null);
-                                signOnData = null;
-                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                                strSignOn = signOn.getError().getErrorDescription();
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+//            @Override
+//            public void onChanged(SignOn signOn) {
+//                try {
+//                    dismissDialog();
+//                    if (signOn != null) {
+//                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+//                            objMyApplication.setSignOnData(signOn.getData());
+//                            signOnData = signOn.getData();
+//                            objMyApplication.setStrSignOnError("");
+//                            strSignOn = "";
+//                            if (objMyApplication.getResolveUrl()) {
+//                                objMyApplication.callResolveFlow(ReviewApplicationActivity.this, strSignOn, signOnData);
+//                            }
+//                        } else {
+//                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+//                                objMyApplication.setResolveUrl(true);
+//                                customerProfileViewModel.meSignOn();
+//                            } else {
+//                                objMyApplication.setSignOnData(null);
+//                                signOnData = null;
+//                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+//                                strSignOn = signOn.getError().getErrorDescription();
+//                            }
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         summaryViewModel.getSummaryMutableLiveData().observe(this, new Observer<ApplicationSummaryModelResponse>() {
             @Override
@@ -924,22 +924,22 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             }
         });
 
-        customerProfileViewModel.getSyncAccountMutableLiveData().observe(this, new Observer<SyncAccount>() {
-            @Override
-            public void onChanged(SyncAccount syncAccount) {
-                try {
-                    if (syncLoader != null)
-                        syncLoader.dismiss();
-                    if (syncAccount != null) {
-                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
-                            summaryViewModel.getApplicationSummaryData();
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//        customerProfileViewModel.getSyncAccountMutableLiveData().observe(this, new Observer<SyncAccount>() {
+//            @Override
+//            public void onChanged(SyncAccount syncAccount) {
+//                try {
+//                    if (syncLoader != null)
+//                        syncLoader.dismiss();
+//                    if (syncAccount != null) {
+//                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+//                            summaryViewModel.getApplicationSummaryData();
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         customerProfileViewModel.getApiErrorMutableLiveData().observe(ReviewApplicationActivity.this, new Observer<APIError>() {
             @Override
@@ -950,7 +950,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
                             Log.e("setResolveUrl", "252 setResolveUrl");
                             objMyApplication.setResolveUrl(true);
-                            customerProfileViewModel.meSignOn();
+                            //customerProfileViewModel.meSignOn();
                         } else if (!isBank) {
                             if (!apiError.getError().getErrorDescription().equals("")) {
                                 Utils.displayAlert(apiError.getError().getErrorDescription(), ReviewApplicationActivity.this, "", apiError.getError().getFieldErrors().get(0));
@@ -1181,8 +1181,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
 //                Utils.displayAlert("Bank integration has been cancelled", ReviewApplicationActivity.this, "", "");
             } else {
-                syncLoader = Utils.showProgressDialog(ReviewApplicationActivity.this);
-                customerProfileViewModel.meSyncAccount();
+//                syncLoader = Utils.showProgressDialog(ReviewApplicationActivity.this);
+//                customerProfileViewModel.meSyncAccount();
             }
         }
     }
