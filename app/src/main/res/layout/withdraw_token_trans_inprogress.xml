@@ -41,7 +41,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:fontFamily="@font/opensans_bold"
-            android:text="159.40"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_35ssp" />
 
@@ -87,7 +86,6 @@
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="right"
                     android:singleLine="true"
-                    android:text="SND34239274DANN"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
 

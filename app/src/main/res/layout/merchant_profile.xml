@@ -102,8 +102,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_bold"
                             android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp"
-                            tools:text="123.999" />
+                            android:textSize="@dimen/_12ssp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -148,8 +147,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_add_circle"
-                    />
+                    android:src="@drawable/ic_add_circle"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -163,8 +161,5 @@
             </LinearLayout>
 
         </LinearLayout>
-
-
-
 
 </LinearLayout>

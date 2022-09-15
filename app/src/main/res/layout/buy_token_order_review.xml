@@ -36,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_bold"
-            android:text="159.40"
             android:textColor="@color/primary_color"
             android:textSize="@dimen/_35ssp" />
 
@@ -98,7 +97,6 @@
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="right"
                 android:singleLine="true"
-                android:text="••••5359"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11sdp" />
         </LinearLayout>
@@ -116,7 +114,7 @@
                 android:id="@+id/imgCardType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_visa1"></ImageView>
+                android:src="@drawable/ic_visa1"/>
 
             <TextView
                 android:id="@+id/tvPayMethod"
@@ -124,7 +122,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text=" ••••5359"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11sdp" />
         </LinearLayout>
@@ -154,7 +151,6 @@
             android:layout_weight="1"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="right"
-            android:text="159.40 USD"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
     </LinearLayout>
@@ -181,7 +177,6 @@
             android:layout_weight="1"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="right"
-            android:text="0.60 USD"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
     </LinearLayout>
@@ -208,7 +203,6 @@
             android:layout_weight="1"
             android:fontFamily="@font/opensans_bold"
             android:gravity="right"
-            android:text="160.00 USD"
             android:textColor="@color/primary_color" />
     </LinearLayout>
 

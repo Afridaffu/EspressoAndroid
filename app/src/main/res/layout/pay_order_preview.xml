@@ -145,7 +145,6 @@
             android:layout_weight="1"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="right"
-            android:text="1.00 CYN"
             android:textColor="@color/primary_black"
             android:textFontWeight="1"
             android:textSize="@dimen/_11ssp" />
@@ -176,7 +175,6 @@
             android:layout_weight="1"
             android:fontFamily="@font/opensans_bold"
             android:gravity="right"
-            android:text="161.00 CYN"
             android:textColor="@color/primary_color"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>

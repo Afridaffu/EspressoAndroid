@@ -266,7 +266,6 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
                                 android:gravity="center"
-                                android:text=" 12345.00"
                                 android:textColor="@color/balance"
                                 android:textSize="@dimen/_12ssp"
                                 android:visibility="visible" />
@@ -277,7 +276,7 @@
                                 android:fontFamily="@font/opensans_bold"
                                 android:text=" CYN"
                                 android:textColor="@color/balance"
-                                android:textSize="@dimen/_9ssp"></TextView>
+                                android:textSize="@dimen/_9ssp"/>
 
                         </LinearLayout>
 
