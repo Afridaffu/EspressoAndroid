@@ -30,6 +30,7 @@
                 android:src="@drawable/ic_x"
                 android:visibility="visible" />
         </LinearLayout>
+
         <ImageView
             android:id="@+id/backIV"
             android:layout_width="wrap_content"
@@ -312,7 +313,8 @@
                         android:id="@+id/eCommerceLL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/eCommerceIV"
