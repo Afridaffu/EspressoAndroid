@@ -37,6 +37,7 @@ import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentsList;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.coyni.mapp.viewmodel.CustomerProfileViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.PaymentMethodsViewModel;
@@ -432,7 +433,10 @@ public class PaymentMethodsActivity extends BaseActivity {
                         if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                                showExternalBank("");
+                                //showExternalBank("");
+                                Intent i = new Intent(PaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("screen", "pay");
+                                startActivityForResult(i, 4);
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), PaymentMethodsActivity.this, "", "");

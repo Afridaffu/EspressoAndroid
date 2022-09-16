@@ -128,6 +128,7 @@ public class AddManualBankAccount extends BaseActivity {
                             request.setAccountName(nameOnBankET.getText().toString());
                             request.setRoutingNumber(routingNumberET.getText().toString());
                             request.setAccountNumber(checkAccNumberET.getText().toString());
+                            request.setGiactReq(true);
                             paymentMethodsViewModel.saveManualBank(request);
                         }
                     } catch (Exception ex) {
