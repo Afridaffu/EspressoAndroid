@@ -413,8 +413,10 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                         if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                                ControlMethod("externalBank");
+//                                ControlMethod("externalBank");
                                 strCurrent = "externalBank";
+                                startActivity(new Intent(BusinessPaymentMethodsActivity.this, AddManualBankAccount.class).putExtra("From","ExternalBank"));
+
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), BusinessPaymentMethodsActivity.this, "", "");
@@ -657,8 +659,10 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
             cvTryAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ControlMethod("externalBank");
                     strCurrent = "externalBank";
+                    startActivity(new Intent(BusinessPaymentMethodsActivity.this, AddManualBankAccount.class).putExtra("From","ExternalBank"));
+
+//                  ControlMethod("externalBank");
                 }
             });
         } catch (Exception ex) {

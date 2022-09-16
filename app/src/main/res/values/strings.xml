@@ -789,4 +789,5 @@
     <string name="please_resubmit_a_bank_account"><u>Please Resubmit a Bank Account</u></string>
     <string name="edit_underline"><u>Edit</u></string>
     <string name="resubmit">Resubmit Bank Account</string>
+    <string name="bank_account_added">Bank Account Added</string>
 </resources>
