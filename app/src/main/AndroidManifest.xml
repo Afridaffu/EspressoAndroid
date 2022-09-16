@@ -48,9 +48,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ManualBankVerficationSucessFailedActivity"
-            android:exported="false" />
-        <activity
             android:name="com.coyni.mapp.view.OnboardActivity"
             android:configChanges="uiMode"
             android:exported="true"
