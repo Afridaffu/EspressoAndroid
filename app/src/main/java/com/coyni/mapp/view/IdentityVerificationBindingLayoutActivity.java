@@ -105,9 +105,14 @@ public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
             contactUSTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(Utils.mondayURL));
-                    startActivity(i);
+//                    Intent i = new Intent(Intent.ACTION_VIEW);
+//                    i.setData(Uri.parse(Utils.mondayURL));
+//                    startActivity(i);
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    startActivity(new Intent(IdentityVerificationBindingLayoutActivity.this,GetHelpActivity.class));
                 }
             });
 
