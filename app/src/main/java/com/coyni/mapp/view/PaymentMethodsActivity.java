@@ -132,6 +132,16 @@ public class PaymentMethodsActivity extends BaseActivity {
                     }
                     getPaymentMethods();
                 }
+            } else if (requestCode == 4) {
+                if (!objMyApplication.getBankSave()) {
+                    isDeCredit = true;
+                    ControlMethod("addpayment");
+                } else {
+                    objMyApplication.setBankSave(false);
+                    ControlMethod("paymentMethods");
+                    strCurrent = "paymentMethods";
+                }
+                getPaymentMethods();
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
@@ -293,9 +303,6 @@ public class PaymentMethodsActivity extends BaseActivity {
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
-//                if (dialog != null) {
-//                    dialog.dismiss();
-//                }
                 dismissDialog();
                 if (payMethodsResponse != null) {
 //                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
@@ -435,7 +442,7 @@ public class PaymentMethodsActivity extends BaseActivity {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
                                 //showExternalBank("");
                                 Intent i = new Intent(PaymentMethodsActivity.this, AddManualBankAccount.class);
-                                i.putExtra("screen", "pay");
+                                i.putExtra("From", "pay");
                                 startActivityForResult(i, 4);
                             }
                         } else {
