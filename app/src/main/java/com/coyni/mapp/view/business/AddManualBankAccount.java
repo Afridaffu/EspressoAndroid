@@ -56,7 +56,7 @@ public class AddManualBankAccount extends BaseActivity {
     private MyApplication objMyApplication;
     private CardView addCV;
     PaymentMethodsViewModel paymentMethodsViewModel;
-    String strScreen = "", strName = "";
+    String strScreen = "";
     RelativeLayout lyAddBank, layoutLoader;
     Dialog bankStatusDialog;
 
@@ -124,6 +124,19 @@ public class AddManualBankAccount extends BaseActivity {
                 headingTV.setText(R.string.resubmit);
                 strScreen = "";
             }
+            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                nameOnBankET.setText(objMyApplication.getStrUserName());
+                isName = true;
+            } else {
+                if (objMyApplication.getMyProfile() != null) {
+                    if (objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
+                        nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
+                    } else {
+                        nameOnBankET.setText(objMyApplication.getStrUserName());
+                    }
+                    isName = true;
+                }
+            }
 
             backLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,9 +185,9 @@ public class AddManualBankAccount extends BaseActivity {
                     if (manualBankResponse.getStatus().toLowerCase().equals("success")) {
                         if (strScreen.equals("pay")) {
                             layoutLoader.setVisibility(View.GONE);
-                            showSuccessFailure(manualBankResponse);
                         }
                     }
+                    showSuccessFailure(manualBankResponse);
                 }
             }
         });
@@ -757,12 +770,19 @@ public class AddManualBankAccount extends BaseActivity {
             TextView doneTV = bankStatusDialog.findViewById(R.id.doneTV);
             CardView validateCV = bankStatusDialog.findViewById(R.id.validateCV);
 
-            nameOnBankTV.setText(manualBankResponse.getData().getAccountName());
-            routingNumTV.setText(manualBankResponse.getData().getRoutingNumber());
-            accNumTV.setText(manualBankResponse.getData().getAccountNumber());
+//            nameOnBankTV.setText(manualBankResponse.getData().getAccountName());
+//            routingNumTV.setText(manualBankResponse.getData().getRoutingNumber());
+//            accNumTV.setText(manualBankResponse.getData().getAccountNumber());
             Window window = bankStatusDialog.getWindow();
-            if (!manualBankResponse.getData().getGiactFail()) {
-                imageIV.setImageResource(R.drawable.ic_success);
+            if (manualBankResponse.getData() != null && !manualBankResponse.getData().getGiactFail()) {
+                nameOnBankTV.setText(manualBankResponse.getData().getAccountName());
+                routingNumTV.setText(manualBankResponse.getData().getRoutingNumber());
+                if (manualBankResponse.getData().getAccountNumber() != null && manualBankResponse.getData().getAccountNumber().length() > 4) {
+                    accNumTV.setText("**** " + manualBankResponse.getData().getAccountNumber().substring(manualBankResponse.getData().getAccountNumber().length() - 4));
+                } else {
+                    accNumTV.setText(manualBankResponse.getData().getAccountNumber());
+                }
+                imageIV.setImageResource(R.drawable.ic_success_icon);
                 headerTV.setText(getString(R.string.bank_account_added));
                 bankNameTV.setText(manualBankResponse.getData().getBankName());
                 doneTV.setText(getString(R.string.done));
@@ -771,8 +791,7 @@ public class AddManualBankAccount extends BaseActivity {
                 statusTV.setTextColor(getColor(R.color.active_green));
                 statusTV.setBackgroundResource(R.drawable.bank_status_bg);
             } else {
-                strName = manualBankResponse.getData().getAccountName();
-                imageIV.setImageResource(R.drawable.ic_failure);
+                imageIV.setImageResource(R.drawable.ic_failed);
                 headerTV.setText(getString(R.string.bank_account_failed));
                 bankNameTV.setText("--");
                 doneTV.setText(getString(R.string.try_again));
@@ -780,6 +799,26 @@ public class AddManualBankAccount extends BaseActivity {
                 statusTV.setText("Declined");
                 statusTV.setTextColor(getColor(R.color.error));
                 statusTV.setBackgroundResource(R.drawable.bank_status_decline_bg);
+                if (manualBankResponse.getData() != null && manualBankResponse.getStatus().toLowerCase().equals("success")) {
+                    nameOnBankTV.setText(manualBankResponse.getData().getAccountName());
+                    routingNumTV.setText(manualBankResponse.getData().getRoutingNumber());
+                    if (manualBankResponse.getData().getAccountNumber() != null && manualBankResponse.getData().getAccountNumber().length() > 4) {
+                        accNumTV.setText("**** " + manualBankResponse.getData().getAccountNumber().substring(manualBankResponse.getData().getAccountNumber().length() - 4));
+                    } else {
+                        accNumTV.setText(manualBankResponse.getData().getAccountNumber());
+                    }
+                    errorDescriptnTV.setText("Bank verification failed due to error code: {" + manualBankResponse.getData().getAccountResponseCodeName() + " - " + manualBankResponse.getData().getAccountReponseCodeDescription() + "}. Please try again.");
+                } else {
+                    nameOnBankTV.setText(nameOnBankET.getText().toString());
+                    routingNumTV.setText(routingNumberET.getText().toString());
+                    accNumTV.setText(checkAccNumberET.getText().toString());
+                    if (checkAccNumberET.getText().toString() != null && checkAccNumberET.getText().toString().length() > 4) {
+                        accNumTV.setText("**** " + checkAccNumberET.getText().toString().substring(checkAccNumberET.getText().toString().length() - 4));
+                    } else {
+                        accNumTV.setText(checkAccNumberET.getText().toString());
+                    }
+                    errorDescriptnTV.setText("Bank verification failed due to error code: {" + manualBankResponse.getError().getErrorCode() + " - " + manualBankResponse.getError().getErrorDescription() + "}. Please try again.");
+                }
             }
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
@@ -809,10 +848,9 @@ public class AddManualBankAccount extends BaseActivity {
 //                            confirmRoutingNumberET.setText("");
 //                            checkAccNumberET.setText("");
 //                            confirmAccNumberET.setText("");
-                            Intent i = new Intent(AddManualBankAccount.this, AddManualBankAccount.class);
                             finish();
                             overridePendingTransition(0, 0);
-                            startActivity(i);
+                            startActivity(getIntent());
                             overridePendingTransition(0, 0);
                         }
 

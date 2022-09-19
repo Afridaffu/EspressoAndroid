@@ -85,7 +85,6 @@ public class BusinessProfileActivity extends BaseActivity {
     private DatabaseHandler dbHandler;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     boolean isLoggedOut = false;
-    //    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL;
     private Long mLastClickTime = 0L;
     private TextView tvVersion;
     private ScrollView profileSV;
