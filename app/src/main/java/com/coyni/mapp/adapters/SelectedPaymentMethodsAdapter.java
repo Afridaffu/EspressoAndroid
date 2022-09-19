@@ -39,7 +39,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
         public TextView tvBankName, tvAccount, tvError, tvCardName, tvCardNumber;
         public ImageView imgPayMethod, imgBankTick, imgCardTick, imgBankArrow, imgCardArrow;
         public LinearLayout layoutError, layoutBank, editLL, deleteLL;
-        public RelativeLayout layoutCard;
+        public RelativeLayout layoutCard,mainRL;
         SwipeLayout swipeLayout;
 
         public MyViewHolder(View view) {
@@ -57,6 +57,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
             layoutError = view.findViewById(R.id.layoutError);
             layoutBank = view.findViewById(R.id.layoutBank);
             layoutCard = view.findViewById(R.id.layoutCard);
+            mainRL = view.findViewById(R.id.mainRL);
             editLL = view.findViewById(R.id.editLL);
             deleteLL = view.findViewById(R.id.deleteLL);
             swipeLayout = view.findViewById(R.id.swipeLayout);
@@ -230,7 +231,6 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                     holder.tvAccount.setText("Signet Account " + objData.getAccountNumber());
                 }
             } else {
-
                 holder.layoutBank.setVisibility(View.GONE);
                 holder.layoutCard.setVisibility(View.VISIBLE);
                 holder.tvCardNumber.setText("****" + objData.getLastFour());
@@ -252,6 +252,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                     case "selectpay":
                     case "buytoken":
                     case "withdraw": {
+                        disableSwipe(holder);
                         if (objData.getCardType().toLowerCase().equals("debit")) {
                             if (objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
                                     && (!objMyApplication.getFeatureControlGlobal().getBuyDebit() || !objMyApplication.getFeatureControlByUser().getBuyDebit())) {
@@ -263,11 +264,11 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                             } else {
                                 if (!objData.getExpired()) {
                                     holder.layoutError.setVisibility(View.GONE);
-                                    disableSwipe(holder);
                                 } else {
                                     holder.layoutError.setVisibility(View.VISIBLE);
                                     holder.tvError.setText("Expired");
-                                    enableSwipe(holder);
+                                    if (strScreen.equalsIgnoreCase("selectpay"))
+                                        enableSwipe(holder);
                                 }
                             }
                         } else {
@@ -281,11 +282,11 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                             } else {
                                 if (!objData.getExpired()) {
                                     holder.layoutError.setVisibility(View.GONE);
-                                    disableSwipe(holder);
                                 } else {
                                     holder.layoutError.setVisibility(View.VISIBLE);
                                     holder.tvError.setText("Expired");
-                                    enableSwipe(holder);
+                                    if (strScreen.equalsIgnoreCase("selectpay"))
+                                        enableSwipe(holder);
                                 }
                             }
                         }
@@ -294,6 +295,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                     break;
                     case "withdrawtoken":
                     case "wdrawtoken": {
+                        disableSwipe(holder);
                         if (objMyApplication.getFeatureControlGlobal().getWithInstant() != null && objMyApplication.getFeatureControlByUser() != null
                                 && (!objMyApplication.getFeatureControlGlobal().getWithInstant() || !objMyApplication.getFeatureControlByUser().getWithInstant())) {
                             holder.layoutError.setVisibility(View.VISIBLE);
@@ -312,12 +314,6 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                     }
                     break;
                 }
-//                if (!objData.getExpired()) {
-//                    holder.layoutError.setVisibility(View.GONE);
-//                } else {
-//                    holder.layoutError.setVisibility(View.VISIBLE);
-//                    holder.tvError.setText("Expired");
-//                }
                 if (objData.getCardBrand() != null) {
                     switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {
                         case "VISA":
@@ -340,250 +336,251 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                 }
             }
 
-            holder.swipeLayout.setOnClickListener(new View.OnClickListener() {
+            holder.mainRL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!objData.getExpired()) {
-                        try {
-                            mItemManger.closeAllItems();
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
-                            objMyApplication.setSelectedButTokenType(objData.getPaymentMethod().toLowerCase());
-                            switch (strScreen) {
-                                case "selectpay":
-                                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                                    objMyApplication.setSelectedCard(objData);
+
+                    try {
+                        mItemManger.closeAllItems();
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        objMyApplication.setSelectedButTokenType(objData.getPaymentMethod().toLowerCase());
+                        switch (strScreen) {
+                            case "selectpay":
+                                objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                                objMyApplication.setSelectedCard(objData);
 //                                if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                                if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                    if (objMyApplication.getFeatureControlGlobal().getBuyBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getBuyBank() && objMyApplication.getFeatureControlByUser().getBuyBank()) {
+                                        if (!objData.getRelink()) {
+                                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                                                ((BuyTokenPaymentMethodsActivity) mContext).bindSelectedBank();
+                                            } else {
+                                                ((SelectPaymentMethodActivity) mContext).bindSelectedBank();
+                                            }
+                                        } else {
+                                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                                                ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+                                                ((BuyTokenPaymentMethodsActivity) mContext).deleteBank(objData);
+                                            } else {
+                                                ((SelectPaymentMethodActivity) mContext).expiry();
+                                            }
+                                        }
+                                    }
+                                } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                                    if (objMyApplication.getFeatureControlGlobal().getBuySignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getBuySignet() && objMyApplication.getFeatureControlByUser().getBuySignet()) {
+                                        if (!objData.getRelink()) {
+                                            ((SelectPaymentMethodActivity) mContext).bindSelectedBank();
+                                        } else {
+                                            ((SelectPaymentMethodActivity) mContext).deleteBank(objData);
+                                        }
+                                    }
+                                } else {
+                                    if (objData.getCardType().toLowerCase().equals("debit")) {
+                                        if (objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                                && objMyApplication.getFeatureControlGlobal().getBuyDebit() && objMyApplication.getFeatureControlByUser().getBuyDebit()) {
+                                            if (!objData.getExpired()) {
+                                                ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
+                                            } else {
+                                                ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+                                            }
+                                        }
+                                    } else {
+                                        if (objMyApplication.getFeatureControlGlobal().getBuyCredit() != null && objMyApplication.getFeatureControlByUser() != null
+                                                && objMyApplication.getFeatureControlGlobal().getBuyCredit() && objMyApplication.getFeatureControlByUser().getBuyCredit()) {
+                                            if (!objData.getExpired()) {
+                                                ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
+                                            } else {
+                                                ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+                                            }
+                                        }
+                                    }
+                                }
+//                                else if (!objData.getExpired()) {
+//                                    ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
+//                                } else {
+//                                    ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+//                                }
+                                break;
+                            case "withdrawtoken":
+                                objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                                objMyApplication.setSelectedCard(objData);
+                                if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                    if (objMyApplication.getFeatureControlGlobal().getWithBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getWithBank() && objMyApplication.getFeatureControlByUser().getWithBank()) {
+                                        if (!objData.getRelink()) {
+                                            ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdrawtoken");
+                                        } else {
+                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                        }
+                                    }
+                                } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                                    if (objMyApplication.getFeatureControlGlobal().getWithSignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getWithSignet() && objMyApplication.getFeatureControlByUser().getWithSignet()) {
+                                        if (!objData.getRelink()) {
+                                            ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdrawtoken");
+                                        } else {
+//                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                            ((WithdrawPaymentMethodsActivity) mContext).deleteBank(objData);
+                                        }
+                                    }
+                                } else {
+                                    if (objMyApplication.getFeatureControlGlobal().getWithInstant() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getWithInstant() && objMyApplication.getFeatureControlByUser().getWithInstant()) {
+                                        if (!objData.getExpired()) {
+                                            ((WithdrawPaymentMethodsActivity) mContext).bindSelectedCard("withdrawtoken");
+                                        } else {
+                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                        }
+                                    }
+                                }
+                                break;
+                            case "buytoken":
+                                if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
+                                    ((BuyTokenActivity) mContext).strType = objData.getPaymentMethod().toLowerCase();
+//                                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+//                                    objMyApplication.setSelectedCard(objData);
+//                                    notifyDataSetChanged();
                                     if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                         if (objMyApplication.getFeatureControlGlobal().getBuyBank() != null && objMyApplication.getFeatureControlByUser() != null
                                                 && objMyApplication.getFeatureControlGlobal().getBuyBank() && objMyApplication.getFeatureControlByUser().getBuyBank()) {
+                                            objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                                            objMyApplication.setSelectedCard(objData);
+                                            notifyDataSetChanged();
                                             if (!objData.getRelink()) {
-                                                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                                                    ((BuyTokenPaymentMethodsActivity) mContext).bindSelectedBank();
-                                                } else {
-                                                    ((SelectPaymentMethodActivity) mContext).bindSelectedBank();
-                                                }
+                                                ((BuyTokenActivity) mContext).bindSelectedBank(objData);
                                             } else {
-                                                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                                                    ((BuyTokenPaymentMethodsActivity) mContext).expiry();
-                                                } else {
-                                                    ((SelectPaymentMethodActivity) mContext).expiry();
-                                                }
+                                                ((BuyTokenActivity) mContext).expiry();
                                             }
                                         }
                                     } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
                                         if (objMyApplication.getFeatureControlGlobal().getBuySignet() != null && objMyApplication.getFeatureControlByUser() != null
                                                 && objMyApplication.getFeatureControlGlobal().getBuySignet() && objMyApplication.getFeatureControlByUser().getBuySignet()) {
+                                            objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                                            objMyApplication.setSelectedCard(objData);
+                                            notifyDataSetChanged();
                                             if (!objData.getRelink()) {
-                                                ((SelectPaymentMethodActivity) mContext).bindSelectedBank();
+                                                ((BuyTokenActivity) mContext).bindSelectedBank(objData);
                                             } else {
-                                                ((SelectPaymentMethodActivity) mContext).deleteBank(objData);
+                                                ((BuyTokenActivity) mContext).deleteBank(objData);
                                             }
                                         }
                                     } else {
                                         if (objData.getCardType().toLowerCase().equals("debit")) {
                                             if (objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
                                                     && objMyApplication.getFeatureControlGlobal().getBuyDebit() && objMyApplication.getFeatureControlByUser().getBuyDebit()) {
+                                                objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                                                objMyApplication.setSelectedCard(objData);
+                                                notifyDataSetChanged();
                                                 if (!objData.getExpired()) {
-                                                    ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
+                                                    ((BuyTokenActivity) mContext).displayCVV(objData);
                                                 } else {
-//                                                ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+                                                    ((BuyTokenActivity) mContext).expiry();
                                                 }
                                             }
                                         } else {
                                             if (objMyApplication.getFeatureControlGlobal().getBuyCredit() != null && objMyApplication.getFeatureControlByUser() != null
                                                     && objMyApplication.getFeatureControlGlobal().getBuyCredit() && objMyApplication.getFeatureControlByUser().getBuyCredit()) {
-                                                if (!objData.getExpired()) {
-                                                    ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
-                                                } else {
-//                                                ((BuyTokenPaymentMethodsActivity) mContext).expiry();
-                                                }
-                                            }
-                                        }
-                                    }
-//                                else if (!objData.getExpired()) {
-//                                    ((BuyTokenPaymentMethodsActivity) mContext).displayCVV();
-//                                } else {
-//                                    ((BuyTokenPaymentMethodsActivity) mContext).expiry();
-//                                }
-                                    break;
-                                case "withdrawtoken":
-                                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                                    objMyApplication.setSelectedCard(objData);
-                                    if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                                        if (objMyApplication.getFeatureControlGlobal().getWithBank() != null && objMyApplication.getFeatureControlByUser() != null
-                                                && objMyApplication.getFeatureControlGlobal().getWithBank() && objMyApplication.getFeatureControlByUser().getWithBank()) {
-                                            if (!objData.getRelink()) {
-                                                ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdrawtoken");
-                                            } else {
-                                                ((WithdrawPaymentMethodsActivity) mContext).expiry();
-                                            }
-                                        }
-                                    } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
-                                        if (objMyApplication.getFeatureControlGlobal().getWithSignet() != null && objMyApplication.getFeatureControlByUser() != null
-                                                && objMyApplication.getFeatureControlGlobal().getWithSignet() && objMyApplication.getFeatureControlByUser().getWithSignet()) {
-                                            if (!objData.getRelink()) {
-                                                ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdrawtoken");
-                                            } else {
-//                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
-                                                ((WithdrawPaymentMethodsActivity) mContext).deleteBank(objData);
-                                            }
-                                        }
-                                    } else {
-                                        if (objMyApplication.getFeatureControlGlobal().getWithInstant() != null && objMyApplication.getFeatureControlByUser() != null
-                                                && objMyApplication.getFeatureControlGlobal().getWithInstant() && objMyApplication.getFeatureControlByUser().getWithInstant()) {
-                                            if (!objData.getExpired()) {
-                                                ((WithdrawPaymentMethodsActivity) mContext).bindSelectedCard("withdrawtoken");
-                                            } else {
-                                                ((WithdrawPaymentMethodsActivity) mContext).expiry();
-                                            }
-                                        }
-                                    }
-                                    break;
-                                case "buytoken":
-                                    if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
-                                        ((BuyTokenActivity) mContext).strType = objData.getPaymentMethod().toLowerCase();
-//                                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-//                                    objMyApplication.setSelectedCard(objData);
-//                                    notifyDataSetChanged();
-                                        if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                                            if (objMyApplication.getFeatureControlGlobal().getBuyBank() != null && objMyApplication.getFeatureControlByUser() != null
-                                                    && objMyApplication.getFeatureControlGlobal().getBuyBank() && objMyApplication.getFeatureControlByUser().getBuyBank()) {
                                                 objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                                 objMyApplication.setSelectedCard(objData);
                                                 notifyDataSetChanged();
-                                                if (!objData.getRelink()) {
-                                                    ((BuyTokenActivity) mContext).bindSelectedBank(objData);
+                                                if (!objData.getExpired()) {
+                                                    ((BuyTokenActivity) mContext).displayCVV(objData);
                                                 } else {
                                                     ((BuyTokenActivity) mContext).expiry();
                                                 }
                                             }
-                                        } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
-                                            if (objMyApplication.getFeatureControlGlobal().getBuySignet() != null && objMyApplication.getFeatureControlByUser() != null
-                                                    && objMyApplication.getFeatureControlGlobal().getBuySignet() && objMyApplication.getFeatureControlByUser().getBuySignet()) {
-                                                objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                                                objMyApplication.setSelectedCard(objData);
-                                                notifyDataSetChanged();
-                                                if (!objData.getRelink()) {
-                                                    ((BuyTokenActivity) mContext).bindSelectedBank(objData);
-                                                } else {
-                                                    ((BuyTokenActivity) mContext).deleteBank(objData);
-                                                }
-                                            }
-                                        } else {
-                                            if (objData.getCardType().toLowerCase().equals("debit")) {
-                                                if (objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
-                                                        && objMyApplication.getFeatureControlGlobal().getBuyDebit() && objMyApplication.getFeatureControlByUser().getBuyDebit()) {
-                                                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                                                    objMyApplication.setSelectedCard(objData);
-                                                    notifyDataSetChanged();
-                                                    if (!objData.getExpired()) {
-                                                        ((BuyTokenActivity) mContext).displayCVV(objData);
-                                                    } else {
-                                                        ((BuyTokenActivity) mContext).expiry();
-                                                    }
-                                                }
-                                            } else {
-                                                if (objMyApplication.getFeatureControlGlobal().getBuyCredit() != null && objMyApplication.getFeatureControlByUser() != null
-                                                        && objMyApplication.getFeatureControlGlobal().getBuyCredit() && objMyApplication.getFeatureControlByUser().getBuyCredit()) {
-                                                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                                                    objMyApplication.setSelectedCard(objData);
-                                                    notifyDataSetChanged();
-                                                    if (!objData.getExpired()) {
-                                                        ((BuyTokenActivity) mContext).displayCVV(objData);
-                                                    } else {
-                                                        ((BuyTokenActivity) mContext).expiry();
-                                                    }
-                                                }
-                                            }
+                                        }
 
 //                                        if (!objData.getExpired()) {
 //                                            ((BuyTokenActivity) mContext).displayCVV(objData);
 //                                        } else {
 //                                            ((BuyTokenActivity) mContext).expiry();
 //                                        }
-                                        }
+                                    }
 
-                                        ((BuyTokenActivity) mContext).calculateFee("10");
-                                    }
-                                    break;
-                                case "withdraw":
-                                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                                    objMyApplication.setSelectedCard(objData);
-                                    if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                                        if (objMyApplication.getFeatureControlGlobal().getBuyBank() != null && objMyApplication.getFeatureControlByUser() != null
-                                                && objMyApplication.getFeatureControlGlobal().getBuyBank() && objMyApplication.getFeatureControlByUser().getBuyBank()) {
-                                            if (!objData.getRelink()) {
-                                                ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdraw");
-                                            } else {
-                                                ((WithdrawPaymentMethodsActivity) mContext).expiry();
-                                            }
-                                        }
-                                    } else {
-                                        if (objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
-                                                && objMyApplication.getFeatureControlGlobal().getBuyDebit() && objMyApplication.getFeatureControlByUser().getBuyDebit()) {
-                                            if (!objData.getExpired()) {
-                                                ((WithdrawPaymentMethodsActivity) mContext).bindSelectedCard("withdraw");
-                                            } else {
-                                                ((WithdrawPaymentMethodsActivity) mContext).expiry();
-                                            }
+                                    ((BuyTokenActivity) mContext).calculateFee("10");
+                                }
+                                break;
+                            case "withdraw":
+                                objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                                objMyApplication.setSelectedCard(objData);
+                                if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                    if (objMyApplication.getFeatureControlGlobal().getBuyBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getBuyBank() && objMyApplication.getFeatureControlByUser().getBuyBank()) {
+                                        if (!objData.getRelink()) {
+                                            ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdraw");
+                                        } else {
+                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
                                         }
                                     }
-                                    break;
-                                case "wdrawtoken":
-                                    if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
+                                } else {
+                                    if (objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                                            && objMyApplication.getFeatureControlGlobal().getBuyDebit() && objMyApplication.getFeatureControlByUser().getBuyDebit()) {
+                                        if (!objData.getExpired()) {
+                                            ((WithdrawPaymentMethodsActivity) mContext).bindSelectedCard("withdraw");
+                                        } else {
+                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                        }
+                                    }
+                                }
+                                break;
+                            case "wdrawtoken":
+                                if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
 //                                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
 //                                    objMyApplication.setSelectedCard(objData);
 //                                    notifyDataSetChanged();
 //                                    if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
-                                        if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                                            if (objMyApplication.getFeatureControlGlobal().getWithBank() != null && objMyApplication.getFeatureControlByUser() != null
-                                                    && objMyApplication.getFeatureControlGlobal().getWithBank() && objMyApplication.getFeatureControlByUser().getWithBank()) {
-                                                objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                                                objMyApplication.setSelectedCard(objData);
-                                                notifyDataSetChanged();
-                                                if (!objData.getRelink()) {
-                                                    ((WithdrawTokenActivity) mContext).bindSelectedBank(objData);
-                                                } else {
-                                                    ((WithdrawTokenActivity) mContext).expiry();
-                                                }
+                                    if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                        if (objMyApplication.getFeatureControlGlobal().getWithBank() != null && objMyApplication.getFeatureControlByUser() != null
+                                                && objMyApplication.getFeatureControlGlobal().getWithBank() && objMyApplication.getFeatureControlByUser().getWithBank()) {
+                                            objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                                            objMyApplication.setSelectedCard(objData);
+                                            notifyDataSetChanged();
+                                            if (!objData.getRelink()) {
+                                                ((WithdrawTokenActivity) mContext).bindSelectedBank(objData);
+                                            } else {
+                                                ((WithdrawTokenActivity) mContext).expiry();
                                             }
-                                        } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
-                                            if (objMyApplication.getFeatureControlGlobal().getWithSignet() != null && objMyApplication.getFeatureControlByUser() != null
-                                                    && objMyApplication.getFeatureControlGlobal().getWithSignet() && objMyApplication.getFeatureControlByUser().getWithSignet()) {
-                                                objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                                                objMyApplication.setSelectedCard(objData);
-                                                notifyDataSetChanged();
-                                                if (!objData.getRelink()) {
-                                                    ((WithdrawTokenActivity) mContext).bindSelectedBank(objData);
-                                                } else {
+                                        }
+                                    } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                                        if (objMyApplication.getFeatureControlGlobal().getWithSignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                                && objMyApplication.getFeatureControlGlobal().getWithSignet() && objMyApplication.getFeatureControlByUser().getWithSignet()) {
+                                            objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                                            objMyApplication.setSelectedCard(objData);
+                                            notifyDataSetChanged();
+                                            if (!objData.getRelink()) {
+                                                ((WithdrawTokenActivity) mContext).bindSelectedBank(objData);
+                                            } else {
 //                                                ((WithdrawTokenActivity) mContext).expiry();
-                                                    ((WithdrawTokenActivity) mContext).deleteBank(objData);
-                                                }
+                                                ((WithdrawTokenActivity) mContext).deleteBank(objData);
                                             }
-                                        } else {
-                                            if (objMyApplication.getFeatureControlGlobal().getWithInstant() != null && objMyApplication.getFeatureControlByUser() != null
-                                                    && objMyApplication.getFeatureControlGlobal().getWithInstant() && objMyApplication.getFeatureControlByUser().getWithInstant()) {
-                                                objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                                                objMyApplication.setSelectedCard(objData);
-                                                notifyDataSetChanged();
-                                                if (!objData.getExpired()) {
-                                                    ((WithdrawTokenActivity) mContext).bindSelectedCard(objData);
-                                                } else {
-                                                    ((WithdrawTokenActivity) mContext).expiry();
-                                                }
+                                        }
+                                    } else {
+                                        if (objMyApplication.getFeatureControlGlobal().getWithInstant() != null && objMyApplication.getFeatureControlByUser() != null
+                                                && objMyApplication.getFeatureControlGlobal().getWithInstant() && objMyApplication.getFeatureControlByUser().getWithInstant()) {
+                                            objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                                            objMyApplication.setSelectedCard(objData);
+                                            notifyDataSetChanged();
+                                            if (!objData.getExpired()) {
+                                                ((WithdrawTokenActivity) mContext).bindSelectedCard(objData);
+                                            } else {
+                                                ((WithdrawTokenActivity) mContext).expiry();
                                             }
                                         }
                                     }
-                                    break;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
+                                }
+                                break;
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
+
             });
 
             holder.deleteLL.setOnClickListener(new View.OnClickListener() {

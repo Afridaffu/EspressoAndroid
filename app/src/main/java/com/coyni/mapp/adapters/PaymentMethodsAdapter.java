@@ -69,7 +69,6 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
             if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equals("bank")) {
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.tvCardNumber.setVisibility(View.GONE);
-//                holder.imgBankIcon.setImageResource(R.drawable.ic_bankactive);
                 if (!objData.getRelink()) {
                     holder.tvBankExpire.setVisibility(View.GONE);
                     holder.layoutBack.setBackgroundResource(R.drawable.ic_activebank);
@@ -91,7 +90,6 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                 holder.tvBankHead.setText("Signet Account");
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.tvCardNumber.setVisibility(View.GONE);
-//                holder.imgBankIcon.setImageResource(R.drawable.ic_signetactive);
                 if (!objData.getRelink()) {
                     holder.tvBankExpire.setVisibility(View.GONE);
                     holder.layoutBack.setBackgroundResource(R.drawable.ic_activesignet);
@@ -177,11 +175,12 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                 if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                         && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
-                                    if (!objData.getRelink()) {
-                                        ((PaymentMethodsActivity) mContext).deleteBank(mContext, objData);
-                                    } else {
-                                        ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
-                                    }
+//                                    if (!objData.getRelink()) {
+//                                        ((PaymentMethodsActivity) mContext).deleteBank(mContext, objData);
+//                                    } else {
+//                                        ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+//                                    }
+                                    ((PaymentMethodsActivity) mContext).deleteBank(mContext, objData);
                                 } else {
                                     Utils.displayAlert(mContext.getString(R.string.errormsg), ((PaymentMethodsActivity) mContext), "", "");
                                 }
@@ -219,11 +218,12 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                 if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                         && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
-                                    if (!objData.getRelink()) {
-                                        ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
-                                    } else {
-                                        ((BusinessPaymentMethodsActivity) mContext).expiry(objData);
-                                    }
+//                                    if (!objData.getRelink()) {
+//                                        ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
+//                                    } else {
+//                                        ((BusinessPaymentMethodsActivity) mContext).expiry(objData);
+//                                    }
+                                    ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
                                 } else {
                                     Utils.displayAlert(mContext.getString(R.string.errormsg), ((BusinessPaymentMethodsActivity) mContext), "", "");
                                 }

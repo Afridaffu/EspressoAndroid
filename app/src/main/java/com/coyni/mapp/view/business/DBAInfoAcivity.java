@@ -95,7 +95,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public CardView dbaNextCV, addressNextCV;
     public static DBAInfoAcivity dbaInfoAcivity;
     public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isECommerce = false, isRetail = false,
-            isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false;
+            isWebsite = true, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false;
     ConstraintLayout businessTypeCL, timeZoneCL, stateCL;
     public View viewBarLeft, viewBarRight, pageOneView, pageTwoView;
     Long mLastClickTime = 0L, mLastClickTimeAddr = 0L;
@@ -458,8 +458,6 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
                 isWebsite = isValidUrl(websiteOET.getText().trim());
                 enableOrDisableNext();
-
-
             });
 
             retailLL.setOnClickListener(view -> {
@@ -539,9 +537,14 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             });
 
             //Default values enabled
-            eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
-            retailIV.setImageResource(R.drawable.ic_rb_unselected);
-            websiteOET.setHint("Website");
+//            eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
+//            retailIV.setImageResource(R.drawable.ic_rb_unselected);
+//            websiteOET.setHint("Website");
+            //Modified
+            retailIV.setImageResource(R.drawable.ic_rb_selected);
+            websiteOET.setHint("Website (Optional)");
+            //isWebsite = isValidUrl(websiteOET.getText().trim());
+            //end
             isECommerce = true;
             isRetail = false;
             identificationType = 9;

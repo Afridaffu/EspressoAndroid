@@ -161,6 +161,314 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/bank_information"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/at_gray"
+                            android:fontFamily="@font/opensans_bold"
+                            android:paddingStart="@dimen/_21sdp"
+                            android:paddingTop="@dimen/_5sdp"
+                            android:paddingEnd="@dimen/_21sdp"
+                            android:paddingBottom="@dimen/_5sdp"
+                            android:text="@string/bank_information"
+                            android:textColor="@color/primary_color"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_14sdp"
+                            android:background="@drawable/bg_light_border"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/editLL"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingTop="@dimen/_10sdp"
+                                android:visibility="gone">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="@dimen/_8sdp"
+                                        android:src="@drawable/ic_bankactive" />
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_3sdp"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_6sdp"
+                                            android:fontFamily="@font/opensans_regular"
+                                            android:text="Name on Bank Account"
+                                            android:textColor="@color/dark_grey"
+                                            android:textSize="@dimen/_10ssp" />
+
+                                        <TextView
+                                            android:id="@+id/nameOnAccTV"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_2sdp"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Jonathon Smith"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_11ssp" />
+
+
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:id="@+id/editTextTV"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_6sdp"
+                                        android:layout_marginEnd="@dimen/_21sdp"
+                                        android:fontFamily="@font/opensans_semibold"
+                                        android:text="@string/edit_underline"
+                                        android:textColor="@color/primary_green"
+                                        android:textSize="@dimen/_11ssp" />
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/routingNumLL"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_10sdp"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="@dimen/_8sdp"
+                                        android:src="@drawable/ic_bankactive"
+                                        android:visibility="invisible" />
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_3sdp"
+                                        android:layout_weight="1"
+                                        android:baselineAligned="false"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_6sdp"
+                                            android:fontFamily="@font/opensans_regular"
+                                            android:text="Routing Number"
+                                            android:textColor="@color/dark_grey"
+                                            android:textSize="@dimen/_10ssp" />
+
+                                        <TextView
+                                            android:id="@+id/routingNumTV"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_2sdp"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="123456789"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_11ssp" />
+
+
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:id="@+id/editText1TV"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_6sdp"
+                                        android:layout_marginEnd="@dimen/_21sdp"
+                                        android:fontFamily="@font/opensans_semibold"
+                                        android:text="Edit"
+                                        android:textColor="@color/primary_green"
+                                        android:textSize="@dimen/_9ssp"
+                                        android:visibility="invisible" />
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/accountNumLL"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_10sdp"
+                                    android:layout_marginBottom="@dimen/_12sdp"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="@dimen/_8sdp"
+                                        android:src="@drawable/ic_bankactive"
+                                        android:visibility="invisible" />
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_3sdp"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_6sdp"
+                                            android:fontFamily="@font/opensans_regular"
+                                            android:text="Account Number"
+                                            android:textColor="@color/dark_grey"
+                                            android:textSize="@dimen/_10ssp" />
+
+                                        <TextView
+                                            android:id="@+id/accNumberTV"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_2sdp"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="0001214124421"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_11ssp" />
+
+
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:id="@+id/editText2TV"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_6sdp"
+                                        android:layout_marginEnd="@dimen/_21sdp"
+                                        android:fontFamily="@font/opensans_semibold"
+                                        android:text="Edit"
+                                        android:textColor="@color/primary_green"
+                                        android:textSize="@dimen/_9ssp"
+                                        android:visibility="invisible" />
+
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/verificationFailLL"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingTop="@dimen/_10sdp"
+                                android:visibility="visible">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="@dimen/_8sdp"
+                                        android:src="@drawable/ic_bankactive" />
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="@dimen/_3sdp"
+                                            android:layout_weight="1"
+                                            android:orientation="horizontal"
+                                            android:paddingTop="@dimen/_7sdp">
+
+                                            <ImageView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginEnd="@dimen/_6sdp"
+                                                android:src="@drawable/ic_decline" />
+
+                                            <TextView
+                                                android:id="@+id/verifyFailedTV"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:fontFamily="@font/opensans_semibold"
+                                                android:text="Bank Verification Failed"
+                                                android:textColor="@color/error"
+                                                android:textSize="@dimen/_11ssp" />
+
+                                        </LinearLayout>
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="@dimen/_3sdp"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical"
+                                            android:paddingTop="@dimen/_7sdp">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:fontFamily="@font/opensans_regular"
+                                                android:text="We couldn’t verify your information due to "
+                                                android:textColor="@color/primary_black"
+                                                android:textSize="@dimen/_11ssp" />
+
+                                            <TextView
+                                                android:id="@+id/errorDescrptnTV"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:fontFamily="@font/opensans_semibold"
+                                                android:text="[error code description]."
+                                                android:layout_marginTop="@dimen/_4sdp"
+                                                android:textColor="@color/primary_black"
+                                                android:textSize="@dimen/_11ssp"
+                                                android:layout_marginBottom="@dimen/_15sdp"/>
+
+                                            <TextView
+                                                android:id="@+id/resubmitTV"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/please_resubmit_a_bank_account"
+                                                android:textColor="@color/primary_green"
+                                                android:textSize="@dimen/_11ssp"
+                                                android:fontFamily="@font/opensans_regular"
+                                                android:layout_marginBottom="@dimen/_15sdp"
+                                                />
+
+                                        </LinearLayout>
+
+
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/information_revision"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
