@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -10,15 +11,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/imageIV"
@@ -81,9 +82,9 @@
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/bank_status_bg"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="Approved"
                                 android:paddingStart="@dimen/_3sdp"
                                 android:paddingEnd="@dimen/_3sdp"
+                                android:text="Approved"
                                 android:textColor="@color/active_green"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -136,7 +137,6 @@
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -165,7 +165,6 @@
                                 android:text=""
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
-
 
                         </LinearLayout>
 
@@ -231,31 +230,31 @@
 
 
                 </LinearLayout>
-                </LinearLayout>
+            </LinearLayout>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/validateCV"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginHorizontal="@dimen/_21sdp"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    app:cardBackgroundColor="@color/primary_green"
-                    app:cardCornerRadius="@dimen/_21sdp">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/validateCV"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginHorizontal="@dimen/_21sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                app:cardBackgroundColor="@color/primary_green"
+                app:cardCornerRadius="@dimen/_21sdp">
 
-                    <TextView
-                        android:id="@+id/doneTextTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="@string/done"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_12ssp" />
+                <TextView
+                    android:id="@+id/doneTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="@string/done"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp" />
 
-                </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
 
-            </RelativeLayout>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

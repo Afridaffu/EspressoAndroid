@@ -231,7 +231,6 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                     holder.tvAccount.setText("Signet Account " + objData.getAccountNumber());
                 }
             } else {
-
                 holder.layoutBank.setVisibility(View.GONE);
                 holder.layoutCard.setVisibility(View.VISIBLE);
                 holder.tvCardNumber.setText("****" + objData.getLastFour());
@@ -315,12 +314,6 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                     }
                     break;
                 }
-//                if (!objData.getExpired()) {
-//                    holder.layoutError.setVisibility(View.GONE);
-//                } else {
-//                    holder.layoutError.setVisibility(View.VISIBLE);
-//                    holder.tvError.setText("Expired");
-//                }
                 if (objData.getCardBrand() != null) {
                     switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {
                         case "VISA":
@@ -370,7 +363,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                                             }
                                         } else {
                                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                                                ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+//                                                ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+                                                ((BuyTokenPaymentMethodsActivity) mContext).deleteBank(objData);
                                             } else {
                                                 ((SelectPaymentMethodActivity) mContext).expiry();
                                             }

@@ -36,6 +36,10 @@ import com.coyni.mapp.model.activtity_log.ActivityLogResp;
 import com.coyni.mapp.model.bank.BankDeleteResponseData;
 import com.coyni.mapp.model.bank.BankResponse;
 import com.coyni.mapp.model.bank.BanksResponseModel;
+import com.coyni.mapp.model.bank.ManualBankRequest;
+import com.coyni.mapp.model.bank.ManualBankResponse;
+import com.coyni.mapp.model.bank.SignOn;
+import com.coyni.mapp.model.bank.SyncAccount;
 import com.coyni.mapp.model.biometric.BiometricRequest;
 import com.coyni.mapp.model.biometric.BiometricResponse;
 import com.coyni.mapp.model.biometric.BiometricTokenRequest;
@@ -729,5 +733,8 @@ public interface ApiService {
 
     @POST("api/v2/user/start")
     Call<WebSocketUrlResponse> webSocketUrl();
+    @POST("api/v2/banks/manual")
+    Call<ManualBankResponse> addManualBank(@Body ManualBankRequest request);
+
 }
 

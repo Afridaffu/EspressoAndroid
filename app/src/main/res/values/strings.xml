@@ -790,4 +790,5 @@
     <string name="edit_underline"><u>Edit</u></string>
     <string name="resubmit">Resubmit Bank Account</string>
     <string name="bank_account_added">Bank Account Added</string>
+    <string name="bank_account_failed">Verification Failed</string>
 </resources>

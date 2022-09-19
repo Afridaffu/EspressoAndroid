@@ -1026,8 +1026,6 @@ public class Utils {
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         dialog.show();
-
-
     }
 
 
