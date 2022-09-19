@@ -126,7 +126,6 @@ public class AddManualBankAccount extends BaseActivity {
                         nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
                         Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
                         routingNumberET.requestFocus();
-
                     } else {
                         nameOnBankET.setText(objMyApplication.getStrUserName());
                     }
