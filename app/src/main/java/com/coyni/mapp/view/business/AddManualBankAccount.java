@@ -107,8 +107,6 @@ public class AddManualBankAccount extends BaseActivity {
             if (getIntent().getStringExtra("From").equalsIgnoreCase("pay")) {
                 headingTV.setText(R.string.add_bank_account);
                 strScreen = getIntent().getStringExtra("From");
-                Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
-                routingNumberET.requestFocus();
 
             } else if (getIntent().getStringExtra("FROM").equalsIgnoreCase("Resubmit")) {
                 headingTV.setText(R.string.resubmit);
@@ -126,6 +124,9 @@ public class AddManualBankAccount extends BaseActivity {
                 if (objMyApplication.getMyProfile() != null) {
                     if (objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
                         nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
+                        Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
+                        routingNumberET.requestFocus();
+
                     } else {
                         nameOnBankET.setText(objMyApplication.getStrUserName());
                     }
