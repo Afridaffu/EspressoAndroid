@@ -616,7 +616,7 @@ public class TransactionDetailsActivity extends BaseActivity {
             @Override
             public void onClick(@NonNull View view) {
                 try {
-                    startActivity(new Intent(TransactionDetailsActivity.this, GetHelpWebViewActivity.class));
+                    startActivity(new Intent(TransactionDetailsActivity.this, GetHelpActivity.class));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

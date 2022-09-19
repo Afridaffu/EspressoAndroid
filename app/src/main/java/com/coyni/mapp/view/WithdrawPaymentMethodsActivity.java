@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.google.android.material.textfield.TextInputEditText;
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
@@ -140,14 +141,6 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         strScreen = "withdrawmethod";
                         strCurrent = "";
                     }
-//                    isDeCredit = true;
-//                    if (addPayDialog != null && addPayDialog.isShowing()) {
-//                        addPayDialog.dismiss();
-//                    }
-//                    ControlMethod("withdrawmethod");
-//                    selectWithdrawMethod();
-//                    strScreen = "withdrawmethod";
-//                    strCurrent = "";
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
@@ -157,16 +150,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     if (addPayDialog != null && addPayDialog.isShowing()) {
                         addPayDialog.dismiss();
                     }
-//                    if (signetList != null && signetList.size() > 0) {
-//                        isSignet = true;
-//                        ControlMethod("addbpayment");
-//                    } else {
-//                        ControlMethod("withdrawmethod");
-//                        selectWithdrawMethod();
-//                        strScreen = "withdrawmethod";
-//                        strCurrent = "";
-//                    }
-//Modified on 25 Aug 2022
+                    //Modified on 25 Aug 2022
                     ControlMethod("withdrawmethod");
                     selectWithdrawMethod();
                     strScreen = "withdrawmethod";
@@ -184,6 +168,26 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 selectWithdrawMethod();
                 strScreen = "withdrawmethod";
                 strCurrent = "";
+                getPaymentMethods();
+            } else if (requestCode == 7) {
+                if (!objMyApplication.getBankSave()) {
+                    isDeCredit = true;
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        ControlMethod("addpayment");
+                    } else {
+                        ControlMethod("addbpayment");
+                    }
+                    strCurrent = "";
+                } else {
+                    if (addPayDialog != null && addPayDialog.isShowing()) {
+                        addPayDialog.dismiss();
+                    }
+                    objMyApplication.setBankSave(false);
+                    ControlMethod("withdrawmethod");
+                    selectWithdrawMethod();
+                    strScreen = "withdrawmethod";
+                    strCurrent = "";
+                }
                 getPaymentMethods();
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -532,7 +536,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                                showExternalBank();
+                                //showExternalBank();
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 7);
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
@@ -754,7 +761,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                                showExternalBank();
+                                //showExternalBank();
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 7);
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
@@ -1175,7 +1185,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         if (strPay.equals("bank")) {
                             if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                     && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
-                                showExternalBank();
+                                //showExternalBank();
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 7);
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
                             }
@@ -1841,7 +1854,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                             if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                     && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                                 strCurrent = "externalBank";
-                                showExternalBank();
+                                //showExternalBank();
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 7);
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
                             }
