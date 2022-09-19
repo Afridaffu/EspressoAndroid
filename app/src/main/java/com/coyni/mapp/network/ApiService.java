@@ -33,6 +33,7 @@ import com.coyni.mapp.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.coyni.mapp.model.actionRqrd.ActionRqrdResponse;
 import com.coyni.mapp.model.actionRqrd.SubmitActionRqrdResponse;
 import com.coyni.mapp.model.activtity_log.ActivityLogResp;
+import com.coyni.mapp.model.appupdate.AppUpdateResp;
 import com.coyni.mapp.model.bank.BankDeleteResponseData;
 import com.coyni.mapp.model.bank.BankResponse;
 import com.coyni.mapp.model.bank.BanksResponseModel;
