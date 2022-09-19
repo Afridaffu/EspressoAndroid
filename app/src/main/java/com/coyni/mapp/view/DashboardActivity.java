@@ -492,9 +492,14 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(Utils.mondayURL));
-                        startActivity(i);
+//                        Intent i = new Intent(Intent.ACTION_VIEW);
+//                        i.setData(Uri.parse(Utils.mondayURL));
+//                        startActivity(i);
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        startActivity(new Intent(DashboardActivity.this,GetHelpActivity.class));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

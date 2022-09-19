@@ -21,6 +21,8 @@ import androidx.cardview.widget.CardView;
 
 import com.coyni.mapp.R;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.view.CustomerProfileActivity;
+import com.coyni.mapp.view.GetHelpActivity;
 
 public class UnderReviewErrorMsgDialog extends BaseDialog {
 
@@ -64,10 +66,11 @@ public class UnderReviewErrorMsgDialog extends BaseDialog {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(Utils.mondayURL));
-                    context.startActivity(i);
+//                    Intent i = new Intent(Intent.ACTION_VIEW);
+//                    i.setData(Uri.parse(Utils.mondayURL));
+//                    context.startActivity(i);
                     dismiss();
+                    context.startActivity(new Intent(context, GetHelpActivity.class));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
