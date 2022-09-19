@@ -429,7 +429,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                                 //strCurrent = "externalBank";
                                 Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddManualBankAccount.class);
                                 i.putExtra("From", "pay");
-                                startActivityForResult(i, 4);
+                                startActivityForResult(i, 5);
 
                             }
                         } else {
