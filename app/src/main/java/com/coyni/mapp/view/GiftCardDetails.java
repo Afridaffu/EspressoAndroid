@@ -855,7 +855,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                             amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(amountTIL, getColor(R.color.primary_black));
 
-                            if (amountErrorLL.getVisibility() == VISIBLE) {
+                            if (amountErrorLL.getVisibility() == VISIBLE || !isAmount) {
                                 amountTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(amountTIL, getColor(R.color.error_red));
                             }

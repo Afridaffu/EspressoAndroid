@@ -623,14 +623,12 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
             holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
                 @Override
                 public void onStartOpen(SwipeLayout layout) {
-                    holder.swipeLayout.setClickable(false);
                     mItemManger.closeAllExcept(layout);
                 }
 
                 @Override
                 public void onOpen(SwipeLayout layout) {
                     try {
-                        holder.swipeLayout.setClickable(true);
                         objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                         objMyApplication.setSelectedCard(objData);
                     } catch (Exception ex) {
@@ -652,7 +650,6 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
 
                 @Override
                 public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
-                    holder.swipeLayout.setClickable(true);
                 }
             });
 

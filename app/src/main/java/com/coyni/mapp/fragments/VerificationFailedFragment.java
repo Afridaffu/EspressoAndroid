@@ -18,6 +18,8 @@ import com.coyni.mapp.R;
 import com.coyni.mapp.model.profile.Profile;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.view.CustomerProfileActivity;
+import com.coyni.mapp.view.GetHelpActivity;
 import com.coyni.mapp.view.NotificationsActivity;
 import com.coyni.mapp.view.business.BusinessDashboardActivity;
 
@@ -67,9 +69,10 @@ public class VerificationFailedFragment extends BaseFragment {
                 return;
             }
             mLastClickTimeQA = SystemClock.elapsedRealtime();
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(Utils.mondayURL));
-            startActivity(i);
+//            Intent i = new Intent(Intent.ACTION_VIEW);
+//            i.setData(Uri.parse(Utils.mondayURL));
+//            startActivity(i);
+            startActivity(new Intent(getActivity(), GetHelpActivity.class));
         });
 
         mIvNotifications.setOnClickListener(new View.OnClickListener() {
