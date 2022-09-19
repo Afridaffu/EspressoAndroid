@@ -23,7 +23,9 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
 import com.coyni.mapp.view.business.BusinessProfileActivity;
+import com.coyni.mapp.viewmodel.CustomerProfileViewModel;
 import com.google.gson.Gson;
 import com.coyni.mapp.R;
 import com.coyni.mapp.model.EmailRequest;
@@ -56,7 +58,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     private String passcode = "", strChoose = "", strConfirm = "", TYPE, strScreen = "";
     private TextView tvHead, tvForgot;
     private CoyniViewModel coyniViewModel;
-    private Dialog pDialog;
+    CustomerProfileViewModel customerProfileViewModel;
     private LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
     private MyApplication objMyApplication;
     private int mAccountType = Utils.PERSONAL_ACCOUNT;
@@ -97,6 +99,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             }
             strScreen = getIntent().getStringExtra("screen");
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+            customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             SetDontRemind();
             initObserver();
         } catch (Exception ex) {
@@ -586,7 +589,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         if (!stepUpResponse.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(stepUpResponse.getData().getJwtToken());
                             shakeAnimateUpDown();//new
-
+                            if (objMyApplication.getWebSocketUrlResponse() == null) {
+                                customerProfileViewModel.webSocketUrl();
+                            }
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -654,9 +659,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         buyTokenViewModel.getBuyTokResponseMutableLiveData().observe(this, new Observer<BuyTokenResponse>() {
             @Override
             public void onChanged(BuyTokenResponse buyTokenResponse) {
-                if (pDialog != null) {
-                    pDialog.dismiss();
-                }
                 if (buyTokenResponse != null) {
                     objMyApplication.clearStrToken();
                     objMyApplication.setBuyTokenResponse(buyTokenResponse);
@@ -709,6 +711,14 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             }
         });
 
+        customerProfileViewModel.getWebSocketUrlResponseMutableLiveData().observe(this, new Observer<WebSocketUrlResponse>() {
+            @Override
+            public void onChanged(WebSocketUrlResponse webSocketUrlResponse) {
+                if (webSocketUrlResponse != null) {
+                    objMyApplication.setWebSocketUrlResponse(webSocketUrlResponse.getData());
+                }
+            }
+        });
     }
 
     @Override

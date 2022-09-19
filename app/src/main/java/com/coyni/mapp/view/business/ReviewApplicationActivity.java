@@ -99,12 +99,11 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private TextView mCompanyNameTx, mBusinessEntityTx, mEINTx, mEmailTx, mPhoneNumberTx, mAddressTx, mArticleDateTx, mEINDateTx, mW9DateTx;
     private TextView mDbNameTx, mBusinessTypeTx, mTimeZoneTx, mWebsiteTx, mMonthlyProcVolumeTx, mHighTicketTx, mAverageTicketTx, mCustomerServiceEmailTx, mCustomerServicePhoneTx, mDbAddressLineTx, mDbFillingDateTx, mWebsiteHeadTX;
     private TextView mPrivacyVno, mTermsVno, mMerchantsVno;
-    private BankAccountsRecyclerAdapter accountsRecyclerAdapter;
     private List<BankAccount> bankBankAccounts = new ArrayList<>();
     private BenificialOwnersRecyclerAdapter benificialOwnersRecyclerAdapter;
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
-    private TextView noBanksTv, noBoTV, ssnEinTV;
+    private TextView noBanksTv, noBoTV, ssnEinTV,bankEditTV,tvName,tvRoutingNum,tvAccountNum;
     private LinearLayout banksLL, boLL, CloseLL, companyEditLL, websiteLL;
     private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL, llDBADocuments;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
@@ -180,13 +179,16 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         edit1 = findViewById(R.id.edit1);
         edit2 = findViewById(R.id.edit2TV);
         edit3 = findViewById(R.id.edit3TV);
+        bankEditTV = findViewById(R.id.bankEditTV);
+        tvAccountNum = findViewById(R.id.tvAccountNum);
+        tvName = findViewById(R.id.tvName);
+        tvRoutingNum = findViewById(R.id.tvRoutingNum);
         agreeCB = findViewById(R.id.agreeCB);
         submitCv = findViewById(R.id.submitCV);
         noBanksTv = findViewById(R.id.noBanksTV);
         noBoTV = findViewById(R.id.noBOTV);
         banksLL = findViewById(R.id.banksLL);
         boLL = findViewById(R.id.boLL);
-        bankRecyclerView = findViewById(R.id.banksRecycler);
         boRecyclerView = findViewById(R.id.boRecycler);
         uploadArticlesLL = findViewById(R.id.ll_upload_articles);
         uploadEINLL = findViewById(R.id.ll_upload_ein);
@@ -224,6 +226,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ReviewApplicationActivity.this, AdditionalBeneficialOwnersActivity.class);
+                intent.putExtra("FROM","REVIEW");
+                startActivity(intent);
+            }
+        });
+        bankEditTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ReviewApplicationActivity.this, AddManualBankAccount.class);
                 intent.putExtra("FROM","REVIEW");
                 startActivity(intent);
             }
@@ -733,13 +743,21 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 noBanksTv.setVisibility(View.GONE);
                                 bankBankAccounts = summaryModelResponse.getData().getBankaccount();
                                 Log.d("BankItems", bankBankAccounts.toString());
-                                LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
 
-                                accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankBankAccounts, ReviewApplicationActivity.this);
+                                if(bankBankAccounts.get(0).getAccountName() != null){
+                                    tvName.setText(bankBankAccounts.get(0).getAccountName());
+                                }
+                                if(bankBankAccounts.get(0).getRoutingNumber() != null) {
+                                    tvRoutingNum.setText(bankBankAccounts.get(0).getRoutingNumber());
+                                }
+                                if(bankBankAccounts.get(0).getAccountNumber() != null){
+                                    convert = bankBankAccounts.get(0).getAccountNumber().replaceAll("","");
+                                    String converted = convert.replaceAll("\\w(?=\\w{4})", "•");
+                                    tvAccountNum.setText(converted);
 
-                                bankRecyclerView.setNestedScrollingEnabled(false);
-                                bankRecyclerView.setLayoutManager(layoutManager);
-                                bankRecyclerView.setAdapter(accountsRecyclerAdapter);
+                                }
+
+
 
                             } else {
                                 banksLL.setVisibility(View.GONE);
