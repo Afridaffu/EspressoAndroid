@@ -3,6 +3,7 @@ package com.coyni.mapp.view.business;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -32,6 +33,7 @@ import com.coyni.mapp.R;
 import com.coyni.mapp.dialogs.ManualAccountNumbersFullPage;
 import com.coyni.mapp.model.bank.ManualBankRequest;
 import com.coyni.mapp.model.bank.ManualBankResponse;
+import com.coyni.mapp.model.summary.BankAccount;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
@@ -104,22 +106,34 @@ public class AddManualBankAccount extends BaseActivity {
             endIcon2IV = findViewById(R.id.endIcon2IV);
             headingTV = findViewById(R.id.headingTV);
 
-            if (getIntent().getStringExtra("From").equalsIgnoreCase("pay")) {
+            if (getIntent().getStringExtra("From") != null && (getIntent().getStringExtra("From").equalsIgnoreCase("pay")
+                    || getIntent().getStringExtra("From").equalsIgnoreCase("signUp")
+                    || getIntent().getStringExtra("From").equalsIgnoreCase("REVIEW"))) {
                 headingTV.setText(R.string.add_bank_account);
                 strScreen = getIntent().getStringExtra("From");
-
             } else if (getIntent().getStringExtra("FROM").equalsIgnoreCase("Resubmit")) {
+            } else if (getIntent().getStringExtra("From") != null && getIntent().getStringExtra("From").equalsIgnoreCase("Resubmit")) {
                 headingTV.setText(R.string.resubmit);
                 strScreen = "";
-            } else if (getIntent().getStringExtra("FROM").equalsIgnoreCase("Edit")) {
+            } else if (getIntent().getStringExtra("From") != null && getIntent().getStringExtra("From").equalsIgnoreCase("Edit")) {
                 headingTV.setText(R.string.resubmit);
-                strScreen = "";
-            } else if(getIntent().getStringExtra("FROM").equalsIgnoreCase("REVIEW")){
                 strScreen = "";
             }
-            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                nameOnBankET.setText(objMyApplication.getStrUserName());
+            if (getIntent().getSerializableExtra("bankObject") != null) {
+                BankAccount objBank = (BankAccount) getIntent().getSerializableExtra("bankObject");
+                nameOnBankET.setText(objBank.getAccountName());
+                routingNumberET.setText(objBank.getRoutingNumber());
+                confirmRoutingNumberET.setText(objBank.getRoutingNumber());
+                checkAccNumberET.setText(objBank.getAccountNumber());
+                confirmAccNumberET.setText(objBank.getAccountNumber());
+                endIconIV.setVisibility(View.VISIBLE);
+                endIcon2IV.setVisibility(View.VISIBLE);
                 isName = true;
+                isRoutNum = true;
+                isConfRoutNum = true;
+                isaccountNum = true;
+                isConfirm = true;
+                enableOrDisableNext();
             } else {
                 if (objMyApplication.getMyProfile() != null) {
                     if (objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
@@ -129,46 +143,59 @@ public class AddManualBankAccount extends BaseActivity {
                     } else {
                         nameOnBankET.setText(objMyApplication.getStrUserName());
                     }
-                    isName = true;
-                }
-            }
-
-            backLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onBackPressed();
-                }
-            });
-
-            addCV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        if (isAddEnabled) {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        nameOnBankET.setText(objMyApplication.getStrUserName());
+                        isName = true;
+                    } else {
+                        if (objMyApplication.getMyProfile() != null) {
+                            if (objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
+                                nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
+                            } else {
+                                nameOnBankET.setText(objMyApplication.getStrUserName());
                             }
-                            if (Utils.isKeyboardVisible)
-                                Utils.hideKeypad(AddManualBankAccount.this);
-                            mLastClickTime = SystemClock.elapsedRealtime();
-                            if (strScreen.equals("pay")) {
-                                lyAddBank.setVisibility(View.GONE);
-                                layoutLoader.setVisibility(View.VISIBLE);
-                            }
-                            ManualBankRequest request = new ManualBankRequest();
-                            request.setAccountName(nameOnBankET.getText().toString());
-                            request.setRoutingNumber(routingNumberET.getText().toString());
-                            request.setAccountNumber(checkAccNumberET.getText().toString());
-                            request.setGiactReq(true);
-                            paymentMethodsViewModel.saveManualBank(request);
+                            isName = true;
                         }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
                     }
                 }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
+                routingNumberET.requestFocus();
+
+                backLL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onBackPressed();
+                    }
+                });
+
+                addCV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            if (isAddEnabled) {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                if (Utils.isKeyboardVisible)
+                                    Utils.hideKeypad(AddManualBankAccount.this);
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                if (strScreen.equals("pay")) {
+                                    lyAddBank.setVisibility(View.GONE);
+                                    layoutLoader.setVisibility(View.VISIBLE);
+                                }
+                                ManualBankRequest request = new ManualBankRequest();
+                                request.setAccountName(nameOnBankET.getText().toString());
+                                request.setRoutingNumber(routingNumberET.getText().toString());
+                                request.setAccountNumber(checkAccNumberET.getText().toString());
+                                request.setGiactReq(true);
+                                paymentMethodsViewModel.saveManualBank(request);
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+            }
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -182,7 +209,11 @@ public class AddManualBankAccount extends BaseActivity {
                             layoutLoader.setVisibility(View.GONE);
                         }
                     }
-                    showSuccessFailure(manualBankResponse);
+                    if (strScreen.equals("pay")) {
+                        showSuccessFailure(manualBankResponse);
+                    } else if (strScreen.equals("signUp") || strScreen.equals("REVIEW")) {
+                        onBackPressed();
+                    }
                 }
             }
         });
@@ -218,9 +249,10 @@ public class AddManualBankAccount extends BaseActivity {
                 public void afterTextChanged(Editable s) {
 
                     try {
-                        if (s.toString().trim().length() == 0) {
-                            nameOnBankET.setText("");
-                        } else if (s.length() > 0 && s.toString().contains(" ")) {
+//                        if (s.toString().trim().length() == 0) {
+//                            nameOnBankET.setText("");
+//                        } else
+                        if (s.length() > 0 && s.toString().contains(" ")) {
                             nameOnBankET.setText(s.toString().trim());
                             nameOnBankET.setSelection(s.toString().trim().length());
                         }
@@ -810,7 +842,7 @@ public class AddManualBankAccount extends BaseActivity {
                     } else {
                         accNumTV.setText(manualBankResponse.getData().getAccountNumber());
                     }
-                    errorDescriptnTV.setText("Bank verification failed due to error code: {" + manualBankResponse.getData().getAccountResponseCodeName() + " - " + manualBankResponse.getData().getAccountReponseCodeDescription() + "}. Please try again.");
+                    errorDescriptnTV.setText("Bank verification failed due to error code: " + manualBankResponse.getData().getAccountResponseCodeName() + " - " + manualBankResponse.getData().getAccountReponseCodeDescription() + " Please try again.");
                 } else {
                     nameOnBankTV.setText(nameOnBankET.getText().toString());
                     routingNumTV.setText(routingNumberET.getText().toString());
@@ -820,7 +852,7 @@ public class AddManualBankAccount extends BaseActivity {
                     } else {
                         accNumTV.setText(checkAccNumberET.getText().toString());
                     }
-                    errorDescriptnTV.setText("Bank verification failed due to error code: {" + manualBankResponse.getError().getErrorCode() + " - " + manualBankResponse.getError().getErrorDescription() + "}. Please try again.");
+                    errorDescriptnTV.setText("Bank verification failed due to error code: " + manualBankResponse.getError().getErrorCode() + " - " + manualBankResponse.getError().getErrorDescription() + " Please try again.");
                 }
             }
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -838,7 +870,7 @@ public class AddManualBankAccount extends BaseActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if (!manualBankResponse.getData().getGiactFail()) {
+                        if (manualBankResponse.getData() != null && !manualBankResponse.getData().getGiactFail()) {
                             objMyApplication.setBankSave(true);
                             Intent i = new Intent();
                             setResult(RESULT_OK, i);

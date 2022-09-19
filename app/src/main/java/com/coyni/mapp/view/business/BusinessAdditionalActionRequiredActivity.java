@@ -173,7 +173,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class).putExtra("FROM", "Resubmit"));
+                startActivity(new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class).putExtra("From", "Resubmit"));
 
             }
         });
@@ -184,7 +184,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class).putExtra("FROM", "Edit"));
+                startActivity(new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class).putExtra("From", "Edit"));
 
             }
         });

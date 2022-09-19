@@ -103,7 +103,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private BenificialOwnersRecyclerAdapter benificialOwnersRecyclerAdapter;
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
-    private TextView noBanksTv, noBoTV, ssnEinTV,bankEditTV,tvName,tvRoutingNum,tvAccountNum;
+    private TextView noBanksTv, noBoTV, ssnEinTV, bankEditTV, tvName, tvRoutingNum, tvAccountNum;
     private LinearLayout banksLL, boLL, CloseLL, companyEditLL, websiteLL;
     private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL, llDBADocuments;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
@@ -136,6 +136,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private PaymentMethodsViewModel paymentMethodsViewModel;
     private TextView tosTV, prTv, spannableTV, httpHeader;
     private CompanyInfo cir;
+    private BankAccount objBank;
     Long mLastClickTimeQA = 0L;
     Long mLastClickTime = 0L;
     private String selectedAgreement = "";
@@ -226,7 +227,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ReviewApplicationActivity.this, AdditionalBeneficialOwnersActivity.class);
-                intent.putExtra("FROM","REVIEW");
+                intent.putExtra("FROM", "REVIEW");
                 startActivity(intent);
             }
         });
@@ -234,7 +235,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ReviewApplicationActivity.this, AddManualBankAccount.class);
-                intent.putExtra("FROM","REVIEW");
+                intent.putExtra("From", "REVIEW");
+                intent.putExtra("bankObject", objBank);
                 startActivity(intent);
             }
         });
@@ -743,20 +745,19 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 noBanksTv.setVisibility(View.GONE);
                                 bankBankAccounts = summaryModelResponse.getData().getBankaccount();
                                 Log.d("BankItems", bankBankAccounts.toString());
-
-                                if(bankBankAccounts.get(0).getAccountName() != null){
+                                objBank = bankBankAccounts.get(0);
+                                if (bankBankAccounts.get(0).getAccountName() != null) {
                                     tvName.setText(bankBankAccounts.get(0).getAccountName());
                                 }
-                                if(bankBankAccounts.get(0).getRoutingNumber() != null) {
+                                if (bankBankAccounts.get(0).getRoutingNumber() != null) {
                                     tvRoutingNum.setText(bankBankAccounts.get(0).getRoutingNumber());
                                 }
-                                if(bankBankAccounts.get(0).getAccountNumber() != null){
-                                    convert = bankBankAccounts.get(0).getAccountNumber().replaceAll("","");
+                                if (bankBankAccounts.get(0).getAccountNumber() != null) {
+                                    convert = bankBankAccounts.get(0).getAccountNumber().replaceAll("", "");
                                     String converted = convert.replaceAll("\\w(?=\\w{4})", "•");
                                     tvAccountNum.setText(converted);
 
                                 }
-
 
 
                             } else {

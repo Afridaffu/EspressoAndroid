@@ -200,7 +200,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
-                if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
+                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) || strScreen.equals("buytoken")) {
                     onBackPressed();
                 } else {
                     if (!objMyApplication.getBankSave()) {
