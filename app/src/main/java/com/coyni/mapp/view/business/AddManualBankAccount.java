@@ -62,22 +62,15 @@ public class AddManualBankAccount extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_manual_bank_account);
-
-        initfields();
-        textWatchers();
-        focusWatchers();
-
-
-        if(getIntent().getStringExtra("From").equalsIgnoreCase("ExternalBank")){
-
-        }else
-        if (getIntent().getStringExtra("FROM").equalsIgnoreCase("Resubmit")) {
-            headingTV.setText(R.string.resubmit);
-        } else if (getIntent().getStringExtra("FROM").equalsIgnoreCase("Edit")) {
-            headingTV.setText(R.string.resubmit);
-
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_add_manual_bank_account);
+            initfields();
+            initObserver();
+            textWatchers();
+            focusWatchers();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -121,6 +114,9 @@ public class AddManualBankAccount extends BaseActivity {
                 headingTV.setText(R.string.resubmit);
                 strScreen = "";
             } else if (getIntent().getStringExtra("FROM").equalsIgnoreCase("Edit")) {
+                headingTV.setText(R.string.resubmit);
+                strScreen = "";
+            } else if(getIntent().getStringExtra("FROM").equalsIgnoreCase("REVIEW")){
                 headingTV.setText(R.string.resubmit);
                 strScreen = "";
             }
