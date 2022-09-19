@@ -507,9 +507,10 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(Utils.mondayURL));
-                    startActivity(i);
+//                    Intent i = new Intent(Intent.ACTION_VIEW);
+//                    i.setData(Uri.parse(Utils.mondayURL));
+//                    startActivity(i);
+                    startActivity(new Intent(OTPValidation.this,GetHelpActivity.class));
                 }
             });
 

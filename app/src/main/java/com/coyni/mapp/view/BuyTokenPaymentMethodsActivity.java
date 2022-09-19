@@ -31,6 +31,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
+import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.google.android.material.textfield.TextInputEditText;
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
@@ -164,8 +166,8 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                         extBankDialog.dismiss();
                     }
 //                    dialog = Utils.showProgressDialog(this);
-                    showProgressDialog();
-                    customerProfileViewModel.meSyncAccount();
+//                    showProgressDialog();
+//                    customerProfileViewModel.meSyncAccount();
                 }
             } else if (requestCode == 3) {
                 if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
@@ -185,6 +187,18 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 } else {
                     onBackPressed();
                 }
+            } else if (requestCode == 4) {
+                if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+                    onBackPressed();
+                } else if (!objMyApplication.getBankSave()) {
+                    isDeCredit = true;
+                    ControlMethod("addpayment");
+                } else {
+                    objMyApplication.setBankSave(false);
+                    ControlMethod("paymentMethods");
+                    strCurrent = "paymentMethods";
+                }
+                getPaymentMethods();
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
@@ -201,16 +215,16 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-            if (Utils.checkInternet(BuyTokenPaymentMethodsActivity.this)) {
-                if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
-                    customerProfileViewModel.meSignOn();
-                } else {
-                    strSignOn = objMyApplication.getStrSignOnError();
-                    signOnData = objMyApplication.getSignOnData();
-                }
-            } else {
-                Utils.displayAlert(getString(R.string.internet), BuyTokenPaymentMethodsActivity.this, "", "");
-            }
+//            if (Utils.checkInternet(BuyTokenPaymentMethodsActivity.this)) {
+//                if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
+//                    customerProfileViewModel.meSignOn();
+//                } else {
+//                    strSignOn = objMyApplication.getStrSignOnError();
+//                    signOnData = objMyApplication.getSignOnData();
+//                }
+//            } else {
+//                Utils.displayAlert(getString(R.string.internet), BuyTokenPaymentMethodsActivity.this, "", "");
+//            }
 
             if (getIntent().getStringExtra("screen") != null) {
                 strScreen = getIntent().getStringExtra("screen");
@@ -226,47 +240,50 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
             }
             addPayment();
             paymentMethods();
+            if (objMyApplication.getWebSocketUrlResponse() == null) {
+                customerProfileViewModel.webSocketUrl();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     private void initObserver() {
-        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
-            @Override
-            public void onChanged(SignOn signOn) {
-                try {
-//                    if (dialog != null) {
-//                        dialog.dismiss();
+//        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+//            @Override
+//            public void onChanged(SignOn signOn) {
+//                try {
+////                    if (dialog != null) {
+////                        dialog.dismiss();
+////                    }
+//                    dismissDialog();
+//                    if (signOn != null) {
+//                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+//                            objMyApplication.setSignOnData(signOn.getData());
+//                            signOnData = signOn.getData();
+//                            objMyApplication.setStrSignOnError("");
+//                            strSignOn = "";
+//                            if (objMyApplication.getResolveUrl()) {
+//                                objMyApplication.callResolveFlow(BuyTokenPaymentMethodsActivity.this, strSignOn, signOnData);
+//                            }
+//                        } else {
+//                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+//                                Log.e("setResolveUrl", "228 setResolveUrl");
+//                                objMyApplication.setResolveUrl(true);
+//                                //customerProfileViewModel.meSignOn();
+//                            } else {
+//                                objMyApplication.setSignOnData(null);
+//                                signOnData = null;
+//                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+//                                strSignOn = signOn.getError().getErrorDescription();
+//                            }
+//                        }
 //                    }
-                    dismissDialog();
-                    if (signOn != null) {
-                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                            objMyApplication.setSignOnData(signOn.getData());
-                            signOnData = signOn.getData();
-                            objMyApplication.setStrSignOnError("");
-                            strSignOn = "";
-                            if (objMyApplication.getResolveUrl()) {
-                                objMyApplication.callResolveFlow(BuyTokenPaymentMethodsActivity.this, strSignOn, signOnData);
-                            }
-                        } else {
-                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
-                                Log.e("setResolveUrl", "228 setResolveUrl");
-                                objMyApplication.setResolveUrl(true);
-                                customerProfileViewModel.meSignOn();
-                            } else {
-                                objMyApplication.setSignOnData(null);
-                                signOnData = null;
-                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                                strSignOn = signOn.getError().getErrorDescription();
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         customerProfileViewModel.getApiErrorMutableLiveData().observe(BuyTokenPaymentMethodsActivity.this, new Observer<APIError>() {
             @Override
@@ -278,7 +295,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                         if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
                             Log.e("setResolveUrl", "252 setResolveUrl");
                             objMyApplication.setResolveUrl(true);
-                            customerProfileViewModel.meSignOn();
+                            //customerProfileViewModel.meSignOn();
                         } else if (!isBank) {
                             if (!apiError.getError().getErrorDescription().equals("")) {
                                 Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
@@ -302,37 +319,37 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
             }
         });
 
-        customerProfileViewModel.getSyncAccountMutableLiveData().observe(BuyTokenPaymentMethodsActivity.this, new Observer<SyncAccount>() {
-            @Override
-            public void onChanged(SyncAccount syncAccount) {
-                try {
-//                    dialog.dismiss();
-                    dismissDialog();
-                    if (syncAccount != null) {
-                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
-
-                            if (objMyApplication.getSelectedCard() != null) {
-                                //Added on 30-03-2022 - VT
-                                if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")) {
-                                    objMyApplication.getSelectedCard().setRelink(false);
-                                } else {
-                                    objMyApplication.getSelectedCard().setExpired(false);
-                                }
-                            }
-                            //Added on 30-03-2022 - VT
-                            dashboardViewModel.mePaymentMethods();
-                            displaySuccess();
-                        } else {
-//                        if (Arrays.asList(bob).contains("silly")) {
-//                            // true
+//        customerProfileViewModel.getSyncAccountMutableLiveData().observe(BuyTokenPaymentMethodsActivity.this, new Observer<SyncAccount>() {
+//            @Override
+//            public void onChanged(SyncAccount syncAccount) {
+//                try {
+////                    dialog.dismiss();
+//                    dismissDialog();
+//                    if (syncAccount != null) {
+//                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+//
+//                            if (objMyApplication.getSelectedCard() != null) {
+//                                //Added on 30-03-2022 - VT
+//                                if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")) {
+//                                    objMyApplication.getSelectedCard().setRelink(false);
+//                                } else {
+//                                    objMyApplication.getSelectedCard().setExpired(false);
+//                                }
+//                            }
+//                            //Added on 30-03-2022 - VT
+//                            dashboardViewModel.mePaymentMethods();
+//                            displaySuccess();
+//                        } else {
+////                        if (Arrays.asList(bob).contains("silly")) {
+////                            // true
+////                        }
 //                        }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
@@ -376,10 +393,15 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
         paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
             @Override
             public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
-                pDialog.dismiss();
-                if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
-                    Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
-                    getPaymentMethods();
+                try {
+//                pDialog.dismiss();
+                    dismissDialog();
+                    if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
+                        Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                        getPaymentMethods();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -387,10 +409,15 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
         paymentMethodsViewModel.getCardDeleteResponseMutableLiveData().observe(this, new Observer<CardDeleteResponse>() {
             @Override
             public void onChanged(CardDeleteResponse cardDeleteResponse) {
-                pDialog.dismiss();
-                if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
-                    Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
-                    getPaymentMethods();
+                try {
+//                pDialog.dismiss();
+                    dismissDialog();
+                    if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
+                        Utils.showCustomToast(BuyTokenPaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
+                        getPaymentMethods();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -410,6 +437,15 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                }
+            }
+        });
+
+        customerProfileViewModel.getWebSocketUrlResponseMutableLiveData().observe(this, new Observer<WebSocketUrlResponse>() {
+            @Override
+            public void onChanged(WebSocketUrlResponse webSocketUrlResponse) {
+                if (webSocketUrlResponse != null) {
+                    objMyApplication.setWebSocketUrlResponse(webSocketUrlResponse.getData());
                 }
             }
         });
@@ -499,7 +535,10 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                         if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                                showExternalBank();
+                                //showExternalBank();
+                                Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 4);
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), BuyTokenPaymentMethodsActivity.this, "", "");
@@ -861,7 +900,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                     tvMessage.setText("Seems like you have an issue with your bank account");
                     tvEdit.setText("Relink");
-                    customerProfileViewModel.meSignOn();
+                    //customerProfileViewModel.meSignOn();
                 } else {
                     tvMessage.setText("Seems like you have an issue with your card");
                     tvEdit.setText("Edit");

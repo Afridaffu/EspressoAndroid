@@ -74,7 +74,7 @@ public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
 
             objMyApplication = (MyApplication) getApplicationContext();
 
-            customerProfileViewModel.meSignOn();
+            //customerProfileViewModel.meSignOn();
 
             Log.d("objMyApplication", "objMyApplication" + objMyApplication.getAccountType());
 
@@ -105,9 +105,14 @@ public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
             contactUSTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(Utils.mondayURL));
-                    startActivity(i);
+//                    Intent i = new Intent(Intent.ACTION_VIEW);
+//                    i.setData(Uri.parse(Utils.mondayURL));
+//                    startActivity(i);
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    startActivity(new Intent(IdentityVerificationBindingLayoutActivity.this,GetHelpActivity.class));
                 }
             });
 
@@ -210,28 +215,24 @@ public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        try {
-            customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
-                @Override
-                public void onChanged(SignOn signOn) {
-                    try {
-                        if (signOn != null) {
-                            if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                                objMyApplication.setSignOnData(signOn.getData());
-                                objMyApplication.setStrSignOnError("");
-                            } else {
-                                objMyApplication.setSignOnData(null);
-                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                            }
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+//            @Override
+//            public void onChanged(SignOn signOn) {
+//                try {
+//                    if (signOn != null) {
+//                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+//                            objMyApplication.setSignOnData(signOn.getData());
+//                            objMyApplication.setStrSignOnError("");
+//                        } else {
+//                            objMyApplication.setSignOnData(null);
+//                            objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     private void onLogoutSuccess() {

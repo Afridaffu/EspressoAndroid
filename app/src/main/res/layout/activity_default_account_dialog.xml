@@ -41,7 +41,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/greenboxpos"
                     android:textSize="@dimen/_11ssp"
                     android:fontFamily="@font/opensans_semibold"
                     android:textColor="@color/primary_black"
@@ -85,7 +84,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="Jonathan Joestar"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp" />
         </LinearLayout>

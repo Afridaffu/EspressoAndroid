@@ -46,6 +46,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.coyni.mapp.model.bank.BankDeleteResponseData;
+import com.coyni.mapp.model.cards.CardDeleteResponse;
 import com.google.android.material.textfield.TextInputLayout;
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
@@ -87,7 +89,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
     MyApplication objMyApplication;
     PaymentsList selectedCard, prevSelectedCard;
     ImageView imgBankIcon, imgArrow, imgConvert;
-    TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN, etRemarks, tvAvailableBal;
+    TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN, etRemarks, tvAvailableBal, tvFeePer;
     RelativeLayout lyPayMethod;
     LinearLayout lyCDetails, lyWithdrawClose, lyBDetails, lyBalance;
     EditText etAmount, addNoteET;
@@ -102,7 +104,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
     Dialog pDialog;
-    String strLimit = "", strType = "", strBankId = "", strCardId = "", strSubType = "", strSignOn = "", signetWalletId = "";
+    String strLimit = "", strType = "", strBankId = "", strCardId = "", strSubType = "", strSignOn = "", signetWalletId = "", strPayment = "";
     Double maxValue = 0.0, dget = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
     SignOnData signOnData;
@@ -180,8 +182,8 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                             if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
                                 Utils.displayAlert("Bank integration has been cancelled", WithdrawTokenActivity.this, "", "");
                             } else {
-                                pDialog = Utils.showProgressDialog(this);
-                                customerProfileViewModel.meSyncAccount();
+//                                pDialog = Utils.showProgressDialog(this);
+//                                customerProfileViewModel.meSyncAccount();
                             }
                         }
                     } catch (Exception ex) {
@@ -328,6 +330,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             lyBDetails = findViewById(R.id.lyBDetails);
             lyBalance = findViewById(R.id.lyBalance);
             tvAvailableBal = findViewById(R.id.tvAvailableBal);
+            tvFeePer = findViewById(R.id.tvFeePer);
             ctKey = (CustomKeyboard) findViewById(R.id.ckb);
             ctKey.setKeyAction("Withdraw", this);
             ctKey.setScreenName("withdraw");
@@ -339,10 +342,6 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             etAmount.setShowSoftInputOnFocus(false);
             avaBal = objMyApplication.getGBTBalance();
             tvAvailableBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
-//            SetFaceLock();
-//            SetTouchId();
-//            setFaceLock();
-//            setTouchId();
             objMyApplication.initializeDBHandler(WithdrawTokenActivity.this);
             isFaceLock = objMyApplication.setFaceLock();
             isTouchId = objMyApplication.setTouchId();
@@ -485,6 +484,33 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         } else {
                             ctKey.disableButton();
                         }
+
+                        String feeString = "Fees: ";
+
+                        if (feeInAmount != 0 && feeInPercentage != 0)
+                            feeString = feeString + "$" + Utils.convertTwoDecimalPoints(feeInAmount) + " + " + Utils.convertTwoDecimalPoints(feeInPercentage) + "%";
+
+                        else if (feeInAmount != 0 && feeInPercentage == 0)
+                            feeString = feeString + "$" + Utils.convertTwoDecimalPoints(feeInAmount);
+
+                        else if (feeInAmount == 0 && feeInPercentage != 0)
+                            feeString = feeString + Utils.convertTwoDecimalPoints(feeInPercentage) + "%";
+
+                        if (!feeString.equals("Fees: ")) {
+                            tvFeePer.setVisibility(View.VISIBLE);
+                            tvFeePer.setText(feeString);
+                        } else
+                            tvFeePer.setVisibility(View.GONE);
+
+                        if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Utils.doubleParsing(etAmount.getText().toString().replace(",", "")) > 0) {
+                            isUSD = true;
+                            convertUSDValue();
+                            if (validation()) {
+                                ctKey.enableButton();
+                            } else {
+                                ctKey.disableButton();
+                            }
+                        }
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -552,52 +578,52 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             }
         });
 
-        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
-            @Override
-            public void onChanged(SignOn signOn) {
-                try {
-                    if (signOn != null) {
-                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                            objMyApplication.setSignOnData(signOn.getData());
-                            signOnData = signOn.getData();
-                            objMyApplication.setStrSignOnError("");
-                            strSignOn = "";
-                            if (objMyApplication.getResolveUrl()) {
-                                objMyApplication.callResolveFlow(WithdrawTokenActivity.this, strSignOn, signOnData);
-                            }
-                        } else {
-                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
-                                objMyApplication.setResolveUrl(true);
-                                customerProfileViewModel.meSignOn();
-                            } else {
-                                objMyApplication.setSignOnData(null);
-                                signOnData = null;
-                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                                strSignOn = signOn.getError().getErrorDescription();
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-
-        customerProfileViewModel.getSyncAccountMutableLiveData().observe(this, new Observer<SyncAccount>() {
-            @Override
-            public void onChanged(SyncAccount syncAccount) {
-                try {
-                    pDialog.dismiss();
-                    if (syncAccount != null) {
-                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
-                            dashboardViewModel.mePaymentMethods();
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+//            @Override
+//            public void onChanged(SignOn signOn) {
+//                try {
+//                    if (signOn != null) {
+//                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+//                            objMyApplication.setSignOnData(signOn.getData());
+//                            signOnData = signOn.getData();
+//                            objMyApplication.setStrSignOnError("");
+//                            strSignOn = "";
+//                            if (objMyApplication.getResolveUrl()) {
+//                                objMyApplication.callResolveFlow(WithdrawTokenActivity.this, strSignOn, signOnData);
+//                            }
+//                        } else {
+//                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+//                                objMyApplication.setResolveUrl(true);
+//                                customerProfileViewModel.meSignOn();
+//                            } else {
+//                                objMyApplication.setSignOnData(null);
+//                                signOnData = null;
+//                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+//                                strSignOn = signOn.getError().getErrorDescription();
+//                            }
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        customerProfileViewModel.getSyncAccountMutableLiveData().observe(this, new Observer<SyncAccount>() {
+//            @Override
+//            public void onChanged(SyncAccount syncAccount) {
+//                try {
+//                    pDialog.dismiss();
+//                    if (syncAccount != null) {
+//                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+//                            dashboardViewModel.mePaymentMethods();
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
@@ -647,6 +673,40 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                             Utils.displayAlert(biometricTokenResponse.getError().getFieldErrors().get(0), WithdrawTokenActivity.this, "", "");
                         }
                     }
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getCardDeleteResponseMutableLiveData().observe(this, new Observer<CardDeleteResponse>() {
+            @Override
+            public void onChanged(CardDeleteResponse cardDeleteResponse) {
+                try {
+                    pDialog.dismiss();
+                    if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
+                        Utils.showCustomToast(WithdrawTokenActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
+                        dashboardViewModel.mePaymentMethods();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
+            @Override
+            public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
+                try {
+                    pDialog.dismiss();
+                    if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
+                        if (strPayment.equals("bank")) {
+                            Utils.showCustomToast(WithdrawTokenActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                        } else {
+                            Utils.showCustomToast(WithdrawTokenActivity.this, "Signet has been removed.", R.drawable.ic_custom_tick, "");
+                        }
+                        dashboardViewModel.mePaymentMethods();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -816,15 +876,18 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             TransactionLimitRequest obj = new TransactionLimitRequest();
             obj.setTransactionType(Integer.parseInt(Utils.withdrawType));
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                     strType = "bank";
                     strSubType = Utils.bankType;
                     signetWalletId = "";
+                    imgBankIcon.setImageResource(R.drawable.ic_bankactive);
                 } else {
                     strType = "signet";
                     strSubType = Utils.signetType;
                     signetWalletId = objData.getAccountNumber();
+                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
                 }
                 strBankId = String.valueOf(objData.getId());
 //                obj.setTransactionSubType(Integer.parseInt(Utils.bankType));
@@ -832,7 +895,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 lyBDetails.setVisibility(View.VISIBLE);
                 lyCDetails.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
-                imgBankIcon.setImageResource(R.drawable.ic_bankactive);
+//                imgBankIcon.setImageResource(R.drawable.ic_bankactive);
                 if (objData.getBankName().length() > 15) {
                     tvBankName.setText(objData.getBankName().substring(0, 15) + "...");
                 } else {
@@ -877,8 +940,12 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             params.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
             params.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
             tvLimit.setLayoutParams(params);
+            params1.addRule(RelativeLayout.BELOW, tvLimit.getId());
+            params1.addRule(RelativeLayout.RIGHT_OF, imgBankIcon.getId());
+            params1.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
+            params1.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
+            tvFeePer.setLayoutParams(params1);
             if (Utils.checkInternet(WithdrawTokenActivity.this)) {
-//                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 } else {
@@ -887,6 +954,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             } else {
                 Utils.displayAlert(getString(R.string.internet), WithdrawTokenActivity.this, "", "");
             }
+            calculateFee("10");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1122,7 +1190,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                     tvMessage.setText("Seems like you have an issue with your bank account");
                     tvEdit.setText("Relink");
-                    customerProfileViewModel.meSignOn();
+                    //customerProfileViewModel.meSignOn();
                 } else {
                     tvMessage.setText("Seems like you have an issue with your card");
                     tvEdit.setText("Edit");
@@ -1211,6 +1279,19 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
+                } else if (objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
+                    if (payDialog != null && payDialog.isShowing()) {
+                        payDialog.dismiss();
+                    }
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
+                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                    tvAccount.setVisibility(View.GONE);
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvBankName.setText(objPayment.getAccountNumber());
+                    }
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);
                     layoutBank.setVisibility(View.GONE);
@@ -1247,8 +1328,9 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 public void onClick(View v) {
                     dialog.dismiss();
                     pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
+                        strPayment = objPayment.getPaymentMethod().toLowerCase();
                     } else {
                         paymentMethodsViewModel.deleteCards(objPayment.getId());
                     }
@@ -1844,7 +1926,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
     }
 
     public PaymentsList rollbackSelectedCard() {
-        if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")) {
+        if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank") || objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("signet")) {
             if (objMyApplication.getSelectedCard().getRelink()) {
                 selectedCard = objMyApplication.getPrevSelectedCard();
                 objMyApplication.setSelectedCard(selectedCard);

@@ -45,6 +45,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.coyni.mapp.model.bank.BankDeleteResponseData;
+import com.coyni.mapp.model.cards.CardDeleteResponse;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.coyni.mapp.R;
@@ -84,7 +86,7 @@ import com.coyni.mapp.viewmodel.PaymentMethodsViewModel;
 import java.util.Locale;
 
 
-public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
+public class BuyTokenActivity extends BaseActivity implements TextWatcher {
     MyApplication objMyApplication;
     PaymentsList selectedCard, objSelected, prevSelectedCard;
     ImageView imgBankIcon, imgArrow, imgConvert;
@@ -278,8 +280,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
                                     Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
                                 } else {
-                                    pDialog = Utils.showProgressDialog(this);
-                                    customerProfileViewModel.meSyncAccount();
+//                                    pDialog = Utils.showProgressDialog(this);
+//                                    customerProfileViewModel.meSyncAccount();
                                 }
                             }
                         } catch (Exception ex) {
@@ -588,9 +590,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         else if (feeInAmount == 0 && feeInPercentage != 0)
                             feeString = feeString + Utils.convertTwoDecimalPoints(feeInPercentage) + "%";
 
-                        if (!feeString.equals("Fees: "))
+                        if (!feeString.equals("Fees: ")) {
+                            tvFeePer.setVisibility(View.VISIBLE);
                             tvFeePer.setText(feeString);
-                        else
+                        } else
                             tvFeePer.setVisibility(View.GONE);
                     }
                 } catch (Exception ex) {
@@ -649,52 +652,52 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             }
         });
 
-        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
-            @Override
-            public void onChanged(SignOn signOn) {
-                try {
-                    if (signOn != null) {
-                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                            objMyApplication.setSignOnData(signOn.getData());
-                            signOnData = signOn.getData();
-                            objMyApplication.setStrSignOnError("");
-                            strSignOn = "";
-                            if (objMyApplication.getResolveUrl()) {
-                                objMyApplication.callResolveFlow(BuyTokenActivity.this, strSignOn, signOnData);
-                            }
-                        } else {
-                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
-                                objMyApplication.setResolveUrl(true);
-                                customerProfileViewModel.meSignOn();
-                            } else {
-                                objMyApplication.setSignOnData(null);
-                                signOnData = null;
-                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                                strSignOn = signOn.getError().getErrorDescription();
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+//            @Override
+//            public void onChanged(SignOn signOn) {
+//                try {
+//                    if (signOn != null) {
+//                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+//                            objMyApplication.setSignOnData(signOn.getData());
+//                            signOnData = signOn.getData();
+//                            objMyApplication.setStrSignOnError("");
+//                            strSignOn = "";
+//                            if (objMyApplication.getResolveUrl()) {
+//                                objMyApplication.callResolveFlow(BuyTokenActivity.this, strSignOn, signOnData);
+//                            }
+//                        } else {
+//                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+//                                objMyApplication.setResolveUrl(true);
+//                                //customerProfileViewModel.meSignOn();
+//                            } else {
+//                                objMyApplication.setSignOnData(null);
+//                                signOnData = null;
+//                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+//                                strSignOn = signOn.getError().getErrorDescription();
+//                            }
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
-        customerProfileViewModel.getSyncAccountMutableLiveData().observe(this, new Observer<SyncAccount>() {
-            @Override
-            public void onChanged(SyncAccount syncAccount) {
-                try {
-                    pDialog.dismiss();
-                    if (syncAccount != null) {
-                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
-                            dashboardViewModel.mePaymentMethods();
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//        customerProfileViewModel.getSyncAccountMutableLiveData().observe(this, new Observer<SyncAccount>() {
+//            @Override
+//            public void onChanged(SyncAccount syncAccount) {
+//                try {
+//                    pDialog.dismiss();
+//                    if (syncAccount != null) {
+//                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+//                            dashboardViewModel.mePaymentMethods();
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
@@ -752,6 +755,36 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                             Utils.displayAlert(biometricTokenResponse.getError().getFieldErrors().get(0), BuyTokenActivity.this, "", "");
                         }
                     }
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getCardDeleteResponseMutableLiveData().observe(this, new Observer<CardDeleteResponse>() {
+            @Override
+            public void onChanged(CardDeleteResponse cardDeleteResponse) {
+                try {
+                    pDialog.dismiss();
+                    if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
+                        Utils.showCustomToast(BuyTokenActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
+                        dashboardViewModel.mePaymentMethods();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
+            @Override
+            public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
+                try {
+                    pDialog.dismiss();
+                    if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
+                        Utils.showCustomToast(BuyTokenActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                        dashboardViewModel.mePaymentMethods();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -1450,10 +1483,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent i = new Intent(BuyTokenActivity.this, DashboardActivity.class);
-//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    startActivity(i);
                     try {
+                        startWebSocket();
                         if (objMyApplication.getStrScreen().equalsIgnoreCase(CheckOutConstants.FlowCheckOut)) {
                             objMyApplication.getCheckOutModel().setCheckOutFlag(true);
                             startActivity(new Intent(BuyTokenActivity.this, CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -1648,7 +1679,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                     tvMessage.setText("Seems like you have an issue with your bank account");
                     tvEdit.setText("Relink");
-                    customerProfileViewModel.meSignOn();
+                    //customerProfileViewModel.meSignOn();
                 } else {
                     tvMessage.setText("Seems like you have an issue with your card");
                     tvEdit.setText("Edit");
@@ -1787,7 +1818,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 public void onClick(View v) {
                     dialog.dismiss();
                     pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
                     } else {
                         paymentMethodsViewModel.deleteCards(objPayment.getId());
@@ -1936,7 +1967,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     }
 
     public PaymentsList rollbackSelectedCard() {
-        if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")) {
+        if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank") || objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("signet")) {
             if (objMyApplication.getSelectedCard().getRelink()) {
                 selectedCard = objMyApplication.getPrevSelectedCard();
                 objMyApplication.setSelectedCard(selectedCard);

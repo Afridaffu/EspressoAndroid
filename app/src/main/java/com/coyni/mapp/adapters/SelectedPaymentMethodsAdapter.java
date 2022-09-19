@@ -1,6 +1,7 @@
 package com.coyni.mapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,26 +17,30 @@ import com.coyni.mapp.R;
 import com.coyni.mapp.model.paymentmethods.PaymentsList;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.utils.swipelayout.RecyclerSwipeAdapter;
+import com.coyni.mapp.utils.swipelayout.SwipeLayout;
 import com.coyni.mapp.view.BuyTokenActivity;
 import com.coyni.mapp.view.BuyTokenPaymentMethodsActivity;
+import com.coyni.mapp.view.EditCardActivity;
 import com.coyni.mapp.view.WithdrawPaymentMethodsActivity;
 import com.coyni.mapp.view.WithdrawTokenActivity;
 import com.coyni.mapp.view.business.SelectPaymentMethodActivity;
 
 import java.util.List;
 
-public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<SelectedPaymentMethodsAdapter.MyViewHolder> {
+public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<SelectedPaymentMethodsAdapter.MyViewHolder> {
     List<PaymentsList> listPayments;
     Context mContext;
     MyApplication objMyApplication;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L, mLastClickTimeSwipe = 0L;
     String strScreen = "";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvBankName, tvAccount, tvError, tvCardName, tvCardNumber;
         public ImageView imgPayMethod, imgBankTick, imgCardTick, imgBankArrow, imgCardArrow;
-        public LinearLayout layoutError, layoutBank;
-        public RelativeLayout layoutCard;
+        public LinearLayout layoutError, layoutBank, editLL, deleteLL;
+        public RelativeLayout layoutCard,mainRL;
+        SwipeLayout swipeLayout;
 
         public MyViewHolder(View view) {
             super(view);
@@ -52,6 +57,10 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
             layoutError = view.findViewById(R.id.layoutError);
             layoutBank = view.findViewById(R.id.layoutBank);
             layoutCard = view.findViewById(R.id.layoutCard);
+            mainRL = view.findViewById(R.id.mainRL);
+            editLL = view.findViewById(R.id.editLL);
+            deleteLL = view.findViewById(R.id.deleteLL);
+            swipeLayout = view.findViewById(R.id.swipeLayout);
         }
     }
 
@@ -66,7 +75,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.selectedpaymentmethodlistitem, parent, false);
+                .inflate(R.layout.selectedpaymentmethodlist_item, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -75,6 +84,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
         try {
             PaymentsList objData = listPayments.get(position);
             if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                disableSwipe(holder);
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.layoutCard.setVisibility(View.GONE);
                 holder.imgPayMethod.setImageResource(R.drawable.ic_bankactive);
@@ -148,6 +158,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     holder.tvAccount.setText(objData.getAccountNumber());
                 }
             } else if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                disableSwipe(holder);
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.layoutCard.setVisibility(View.GONE);
                 holder.imgPayMethod.setImageResource(R.drawable.ic_signet_ac_logo);
@@ -241,6 +252,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     case "selectpay":
                     case "buytoken":
                     case "withdraw": {
+                        disableSwipe(holder);
                         if (objData.getCardType().toLowerCase().equals("debit")) {
                             if (objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
                                     && (!objMyApplication.getFeatureControlGlobal().getBuyDebit() || !objMyApplication.getFeatureControlByUser().getBuyDebit())) {
@@ -255,6 +267,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 } else {
                                     holder.layoutError.setVisibility(View.VISIBLE);
                                     holder.tvError.setText("Expired");
+                                    if (strScreen.equalsIgnoreCase("selectpay"))
+                                        enableSwipe(holder);
                                 }
                             }
                         } else {
@@ -271,6 +285,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 } else {
                                     holder.layoutError.setVisibility(View.VISIBLE);
                                     holder.tvError.setText("Expired");
+                                    if (strScreen.equalsIgnoreCase("selectpay"))
+                                        enableSwipe(holder);
                                 }
                             }
                         }
@@ -279,6 +295,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     break;
                     case "withdrawtoken":
                     case "wdrawtoken": {
+                        disableSwipe(holder);
                         if (objMyApplication.getFeatureControlGlobal().getWithInstant() != null && objMyApplication.getFeatureControlByUser() != null
                                 && (!objMyApplication.getFeatureControlGlobal().getWithInstant() || !objMyApplication.getFeatureControlByUser().getWithInstant())) {
                             holder.layoutError.setVisibility(View.VISIBLE);
@@ -297,12 +314,6 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     }
                     break;
                 }
-//                if (!objData.getExpired()) {
-//                    holder.layoutError.setVisibility(View.GONE);
-//                } else {
-//                    holder.layoutError.setVisibility(View.VISIBLE);
-//                    holder.tvError.setText("Expired");
-//                }
                 if (objData.getCardBrand() != null) {
                     switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {
                         case "VISA":
@@ -325,10 +336,12 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                 }
             }
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.mainRL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     try {
+                        mItemManger.closeAllItems();
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
                         }
@@ -350,7 +363,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                             }
                                         } else {
                                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                                                ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+//                                                ((BuyTokenPaymentMethodsActivity) mContext).expiry();
+                                                ((BuyTokenPaymentMethodsActivity) mContext).deleteBank(objData);
                                             } else {
                                                 ((SelectPaymentMethodActivity) mContext).expiry();
                                             }
@@ -410,7 +424,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                         if (!objData.getRelink()) {
                                             ((WithdrawPaymentMethodsActivity) mContext).bindSelectedBank("withdrawtoken");
                                         } else {
-                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+//                                            ((WithdrawPaymentMethodsActivity) mContext).expiry();
+                                            ((WithdrawPaymentMethodsActivity) mContext).deleteBank(objData);
                                         }
                                     }
                                 } else {
@@ -541,7 +556,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                             if (!objData.getRelink()) {
                                                 ((WithdrawTokenActivity) mContext).bindSelectedBank(objData);
                                             } else {
-                                                ((WithdrawTokenActivity) mContext).expiry();
+//                                                ((WithdrawTokenActivity) mContext).expiry();
+                                                ((WithdrawTokenActivity) mContext).deleteBank(objData);
                                             }
                                         }
                                     } else {
@@ -564,11 +580,84 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                         ex.printStackTrace();
                     }
                 }
+
+            });
+
+            holder.deleteLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mItemManger.closeAllItems();
+                    if (SystemClock.elapsedRealtime() - mLastClickTimeSwipe < 2000) {
+                        return;
+                    }
+                    mLastClickTimeSwipe = SystemClock.elapsedRealtime();
+                    ((BuyTokenPaymentMethodsActivity) mContext).deleteBank(objData);
+//                    switch (strScreen) {
+//                        case "selectpay":
+//                            ((BuyTokenActivity) mContext).deleteBank(objData);
+//                            break;
+//                    }
+
+                }
+            });
+
+            holder.editLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mItemManger.closeAllItems();
+                    if (SystemClock.elapsedRealtime() - mLastClickTimeSwipe < 2000) {
+                        return;
+                    }
+                    mLastClickTimeSwipe = SystemClock.elapsedRealtime();
+                    Intent i = new Intent(mContext, EditCardActivity.class);
+                    mContext.startActivity(i);
+//                    switch (strScreen) {
+//                        case "selectpay":
+//
+//                            break;
+//                    }
+
+                }
+            });
+
+            holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+                @Override
+                public void onStartOpen(SwipeLayout layout) {
+                    mItemManger.closeAllExcept(layout);
+                }
+
+                @Override
+                public void onOpen(SwipeLayout layout) {
+                    try {
+                        objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                        objMyApplication.setSelectedCard(objData);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onStartClose(SwipeLayout layout) {
+                }
+
+                @Override
+                public void onClose(SwipeLayout layout) {
+                }
+
+                @Override
+                public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+                }
+
+                @Override
+                public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+                }
             });
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+        mItemManger.bind(holder.itemView, position);
     }
 
     @Override
@@ -576,4 +665,19 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
         return listPayments.size();
     }
 
+    @Override
+    public int getSwipeLayoutResourceId(int position) {
+        return R.id.swipeLayout;
+    }
+
+    public void enableSwipe(MyViewHolder holder) {
+        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.swipeLL));
+        holder.swipeLayout.setLeftSwipeEnabled(false);
+        holder.swipeLayout.setRightSwipeEnabled(true);
+    }
+
+    public void disableSwipe(MyViewHolder holder) {
+        holder.swipeLayout.setLeftSwipeEnabled(false);
+        holder.swipeLayout.setRightSwipeEnabled(false);
+    }
 }

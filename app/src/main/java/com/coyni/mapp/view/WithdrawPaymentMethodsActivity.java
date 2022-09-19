@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.google.android.material.textfield.TextInputEditText;
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
@@ -70,7 +71,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
     List<PaymentsList> cardList;
     List<PaymentsList> signetList;
     Dialog payDialog, addPayDialog, extBankDialog;
-    String strSignOn = "", strCurrent = "", strScreen = "", strOnPauseScreen = "";
+    String strSignOn = "", strCurrent = "", strScreen = "", strOnPauseScreen = "", strPayment = "";
     SignOnData signOnData;
     Dialog dialog, pDialog, cvvDialog;
     LinearLayout lyAPayClose, lyExternalClose, lyBPayClose;
@@ -119,8 +120,8 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     if (extBankDialog != null) {
                         extBankDialog.dismiss();
                     }
-                    showProgressDialog();
-                    customerProfileViewModel.meSyncAccount();
+//                    showProgressDialog();
+//                    customerProfileViewModel.meSyncAccount();
                 }
             } else if (requestCode == 3) {
                 if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
@@ -140,14 +141,6 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         strScreen = "withdrawmethod";
                         strCurrent = "";
                     }
-//                    isDeCredit = true;
-//                    if (addPayDialog != null && addPayDialog.isShowing()) {
-//                        addPayDialog.dismiss();
-//                    }
-//                    ControlMethod("withdrawmethod");
-//                    selectWithdrawMethod();
-//                    strScreen = "withdrawmethod";
-//                    strCurrent = "";
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
@@ -157,16 +150,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     if (addPayDialog != null && addPayDialog.isShowing()) {
                         addPayDialog.dismiss();
                     }
-//                    if (signetList != null && signetList.size() > 0) {
-//                        isSignet = true;
-//                        ControlMethod("addbpayment");
-//                    } else {
-//                        ControlMethod("withdrawmethod");
-//                        selectWithdrawMethod();
-//                        strScreen = "withdrawmethod";
-//                        strCurrent = "";
-//                    }
-//Modified on 25 Aug 2022
+                    //Modified on 25 Aug 2022
                     ControlMethod("withdrawmethod");
                     selectWithdrawMethod();
                     strScreen = "withdrawmethod";
@@ -184,6 +168,26 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 selectWithdrawMethod();
                 strScreen = "withdrawmethod";
                 strCurrent = "";
+                getPaymentMethods();
+            } else if (requestCode == 7) {
+                if (!objMyApplication.getBankSave()) {
+                    isDeCredit = true;
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        ControlMethod("addpayment");
+                    } else {
+                        ControlMethod("addbpayment");
+                    }
+                    strCurrent = "";
+                } else {
+                    if (addPayDialog != null && addPayDialog.isShowing()) {
+                        addPayDialog.dismiss();
+                    }
+                    objMyApplication.setBankSave(false);
+                    ControlMethod("withdrawmethod");
+                    selectWithdrawMethod();
+                    strScreen = "withdrawmethod";
+                    strCurrent = "";
+                }
                 getPaymentMethods();
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -276,56 +280,56 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 ControlMethod("withdrawnotoken");
                 bindWithdrawNoTokens();
             }
-            if (Utils.checkInternet(WithdrawPaymentMethodsActivity.this)) {
-                if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
-                    customerProfileViewModel.meSignOn();
-                } else {
-                    strSignOn = objMyApplication.getStrSignOnError();
-                    signOnData = objMyApplication.getSignOnData();
-                }
-            } else {
-                Utils.displayAlert(getString(R.string.internet), WithdrawPaymentMethodsActivity.this, "", "");
-            }
+//            if (Utils.checkInternet(WithdrawPaymentMethodsActivity.this)) {
+//                if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
+//                    customerProfileViewModel.meSignOn();
+//                } else {
+//                    strSignOn = objMyApplication.getStrSignOnError();
+//                    signOnData = objMyApplication.getSignOnData();
+//                }
+//            } else {
+//                Utils.displayAlert(getString(R.string.internet), WithdrawPaymentMethodsActivity.this, "", "");
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     private void initObserver() {
-        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
-            @Override
-            public void onChanged(SignOn signOn) {
-                try {
-//                    if (dialog != null) {
-//                        dialog.dismiss();
+//        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+//            @Override
+//            public void onChanged(SignOn signOn) {
+//                try {
+////                    if (dialog != null) {
+////                        dialog.dismiss();
+////                    }
+//                    dismissDialog();
+//                    if (signOn != null) {
+//                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+//                            objMyApplication.setSignOnData(signOn.getData());
+//                            signOnData = signOn.getData();
+//                            objMyApplication.setStrSignOnError("");
+//                            strSignOn = "";
+//                            if (objMyApplication.getResolveUrl()) {
+//                                objMyApplication.callResolveFlow(WithdrawPaymentMethodsActivity.this, strSignOn, signOnData);
+//                            }
+//                        } else {
+//                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+//                                objMyApplication.setResolveUrl(true);
+//                                customerProfileViewModel.meSignOn();
+//                            } else {
+//                                objMyApplication.setSignOnData(null);
+//                                signOnData = null;
+//                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+//                                strSignOn = signOn.getError().getErrorDescription();
+//                            }
+//                        }
 //                    }
-                    dismissDialog();
-                    if (signOn != null) {
-                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                            objMyApplication.setSignOnData(signOn.getData());
-                            signOnData = signOn.getData();
-                            objMyApplication.setStrSignOnError("");
-                            strSignOn = "";
-                            if (objMyApplication.getResolveUrl()) {
-                                objMyApplication.callResolveFlow(WithdrawPaymentMethodsActivity.this, strSignOn, signOnData);
-                            }
-                        } else {
-                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
-                                objMyApplication.setResolveUrl(true);
-                                customerProfileViewModel.meSignOn();
-                            } else {
-                                objMyApplication.setSignOnData(null);
-                                signOnData = null;
-                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                                strSignOn = signOn.getError().getErrorDescription();
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         customerProfileViewModel.getApiErrorMutableLiveData().observe(WithdrawPaymentMethodsActivity.this, new Observer<APIError>() {
             @Override
@@ -336,7 +340,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     if (apiError != null) {
                         if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
                             objMyApplication.setResolveUrl(true);
-                            customerProfileViewModel.meSignOn();
+                            //customerProfileViewModel.meSignOn();
                         } else if (!isBank) {
                             if (!apiError.getError().getErrorDescription().equals("")) {
                                 Utils.displayAlert(apiError.getError().getErrorDescription(), WithdrawPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
@@ -360,26 +364,26 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             }
         });
 
-        customerProfileViewModel.getSyncAccountMutableLiveData().observe(WithdrawPaymentMethodsActivity.this, new Observer<SyncAccount>() {
-            @Override
-            public void onChanged(SyncAccount syncAccount) {
-                try {
-                    //dialog.dismiss();
-                    dismissDialog();
-                    if (syncAccount != null) {
-                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
-                            if (addPayDialog != null && addPayDialog.isShowing()) {
-                                addPayDialog.dismiss();
-                            }
-                            dashboardViewModel.mePaymentMethods();
-                            displaySuccess();
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//        customerProfileViewModel.getSyncAccountMutableLiveData().observe(WithdrawPaymentMethodsActivity.this, new Observer<SyncAccount>() {
+//            @Override
+//            public void onChanged(SyncAccount syncAccount) {
+//                try {
+//                    //dialog.dismiss();
+//                    dismissDialog();
+//                    if (syncAccount != null) {
+//                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+//                            if (addPayDialog != null && addPayDialog.isShowing()) {
+//                                addPayDialog.dismiss();
+//                            }
+//                            dashboardViewModel.mePaymentMethods();
+//                            displaySuccess();
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
@@ -443,7 +447,11 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 //pDialog.dismiss();
                 dismissDialog();
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
-                    Utils.showCustomToast(WithdrawPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                    if (strPayment.equals("bank")) {
+                        Utils.showCustomToast(WithdrawPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                    } else {
+                        Utils.showCustomToast(WithdrawPaymentMethodsActivity.this, "Signet has been removed.", R.drawable.ic_custom_tick, "");
+                    }
                     getPaymentMethods();
                 }
             }
@@ -528,7 +536,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                                showExternalBank();
+                                //showExternalBank();
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 7);
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
@@ -750,7 +761,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                                showExternalBank();
+                                //showExternalBank();
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 7);
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
@@ -1171,7 +1185,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         if (strPay.equals("bank")) {
                             if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                     && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
-                                showExternalBank();
+                                //showExternalBank();
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 7);
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
                             }
@@ -1350,7 +1367,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                     tvMessage.setText("Seems like you have an issue with your bank account");
                     tvEdit.setText("Relink");
-                    customerProfileViewModel.meSignOn();
+                    //customerProfileViewModel.meSignOn();
                 } else {
                     tvMessage.setText("Seems like you have an issue with your card");
                     tvEdit.setText("Edit");
@@ -1442,6 +1459,19 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
+                } else if (objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
+                    if (payDialog != null && payDialog.isShowing()) {
+                        payDialog.dismiss();
+                    }
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
+                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                    tvAccount.setVisibility(View.GONE);
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvBankName.setText(objPayment.getAccountNumber());
+                    }
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);
                     layoutBank.setVisibility(View.GONE);
@@ -1470,6 +1500,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             tvNo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     dialog.dismiss();
                 }
             });
@@ -1479,8 +1510,9 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     dialog.dismiss();
                     //pDialog = Utils.showProgressDialog(WithdrawPaymentMethodsActivity.this);
                     showProgressDialog();
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
+                        strPayment = objPayment.getPaymentMethod().toLowerCase();
                     } else {
                         paymentMethodsViewModel.deleteCards(objPayment.getId());
                     }
@@ -1822,7 +1854,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                             if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                     && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                                 strCurrent = "externalBank";
-                                showExternalBank();
+                                //showExternalBank();
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 7);
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
                             }

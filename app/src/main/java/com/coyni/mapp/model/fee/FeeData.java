@@ -36,6 +36,16 @@ public class FeeData {
     private String disputeChargebackFeeInDollar;
     private String disputeChargebackFeeInPercent;
 
+    public String getBuyTokenCreditCardFeeInPercent() {
+        return buyTokenCreditCardFeeInPercent;
+    }
+
+    public void setBuyTokenCreditCardFeeInPercent(String buyTokenCreditCardFeeInPercent) {
+        this.buyTokenCreditCardFeeInPercent = buyTokenCreditCardFeeInPercent;
+    }
+
+    private String buyTokenCreditCardFeeInPercent;
+
     public int getId() {
         return id;
     }

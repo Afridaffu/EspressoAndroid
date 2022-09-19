@@ -3,14 +3,17 @@ package com.coyni.mapp.fragments;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +48,7 @@ import com.coyni.mapp.model.DashboardReserveList.ReserveListData;
 import com.coyni.mapp.model.DashboardReserveList.ReserveListItems;
 import com.coyni.mapp.model.DashboardReserveList.ReserveListResponse;
 import com.coyni.mapp.model.RangeDates;
+import com.coyni.mapp.model.appupdate.AppUpdateResp;
 import com.coyni.mapp.model.biometric.BiometricTokenRequest;
 import com.coyni.mapp.model.biometric.BiometricTokenResponse;
 import com.coyni.mapp.model.business_activity.BusinessActivityData;
@@ -78,6 +82,7 @@ import com.coyni.mapp.viewmodel.BusinessIdentityVerificationViewModel;
 import com.coyni.mapp.viewmodel.CoyniViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.NotificationsViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -350,6 +355,31 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void initObservers() {
+
+
+        dashboardViewModel.getAppUpdateRespMutableLiveData().observe(getActivity(), new Observer<AppUpdateResp>() {
+            @Override
+            public void onChanged(AppUpdateResp appUpdate) {
+                try {
+                    if (appUpdate != null) {
+                        String version = getContext().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
+                        int versionCode = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionCode;
+                        int versionName = Integer.parseInt(version.replace(".", ""));
+                        Context context = new ContextThemeWrapper(getActivity(), R.style.Theme_QuickCard);
+                        if (versionName < Integer.parseInt(appUpdate.getData().getVersion().replace(".", ""))) {
+                            showUpdateDialog(context);
+                        } else if (versionName == Integer.parseInt(appUpdate.getData().getVersion().replace(".", ""))) {
+                            if (versionCode < Integer.parseInt(appUpdate.getData().getBuildNum().replace(".", ""))) {
+                                showUpdateDialog(context);
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
 
         businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
             @Override
@@ -1343,5 +1373,29 @@ public class BusinessDashboardFragment extends BaseFragment {
             e.printStackTrace();
         }
         return datee.getHours();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((BusinessDashboardActivity) getActivity()).notificationsAPICall();
+        if (Utils.checkInternet(getContext())) {
+            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
+        }
+    }
+
+    private void showUpdateDialog(Context context) {
+        new MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.app_name)
+                .setMessage(getString(R.string.appUpdate))
+                .setCancelable(false)
+                .setPositiveButton("Update", (dialog, which) -> {
+                    dialog.dismiss();
+                    Intent viewIntent =
+                            new Intent("android.intent.action.VIEW",
+                                    Uri.parse("market://details?id=com.coyni.app"));
+                    viewIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(viewIntent);
+                }).show();
     }
 }

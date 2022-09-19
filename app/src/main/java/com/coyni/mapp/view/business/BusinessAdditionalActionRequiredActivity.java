@@ -20,6 +20,7 @@ import android.text.Spanned;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -102,7 +103,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     private boolean reservedRule = false;
     private ImageView imvCLose;
     private HashMap<String, ProposalsPropertiesData> proposalsMap;
-    private TextView adminMessageTV;
+    private TextView adminMessageTV,resubmitTV,editTextTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +136,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         submitCV = findViewById(R.id.submitCV);
         adminMessageTV = findViewById(R.id.adminMessageTV);
         additionalActionRL = findViewById(R.id.additionalActionRL);
+        resubmitTV = findViewById(R.id.resubmitTV);
+        editTextTV = findViewById(R.id.editTextTV);
 
         underwritingUserActionRequiredViewModel = new ViewModelProvider(this).get(UnderwritingUserActionRequiredViewModel.class);
         showProgressDialog();
@@ -162,6 +165,28 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 postSubmitAPiCall();
+            }
+        });
+        resubmitTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                startActivity(new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class).putExtra("FROM", "Resubmit"));
+
+            }
+        });
+        editTextTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                startActivity(new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class).putExtra("FROM", "Edit"));
+
             }
         });
     }

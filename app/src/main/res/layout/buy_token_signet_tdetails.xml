@@ -99,7 +99,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="100.00"
                                 android:textColor="@color/primary_color"
                                 android:textSize="@dimen/_24ssp" />
 
@@ -147,7 +146,6 @@
                                 android:background="@drawable/fill_grn_color_smallradius"
                                 android:fontFamily="@font/opensans_bold"
                                 android:gravity="center"
-                                android:text="@string/completed"
                                 android:textColor="@color/active_green"
                                 android:textSize="@dimen/_7ssp" />
                         </LinearLayout>
@@ -172,7 +170,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="07/27/2020 10:36:14"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
                                 android:textColor="@color/primary_black"
@@ -201,7 +198,6 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
-                                android:text="$100.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -229,7 +225,6 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
-                                android:text="$1.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -274,7 +269,6 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:layout_weight=".1"
-                                android:text="$10100888888.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -327,7 +321,6 @@
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:gravity="end"
-                                    android:text="874jeM734h…"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
 
@@ -368,7 +361,6 @@
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:gravity="end"
-                                    android:text="1d3hsM734h…"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
 
@@ -403,7 +395,6 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text="BUYTOKENCYN"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -450,7 +441,6 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
-                                android:text="Dan Nusinovich"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -478,7 +468,6 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
-                                android:text="••••5359"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 

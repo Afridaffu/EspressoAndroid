@@ -650,6 +650,8 @@
     <string name="reserve_detail">Reserve Detail</string>
     <string name="daily_batch_ids">Daily Batch IDs</string>
     <string name="release_on">Release On</string>
+    <string name="appUpdate">There is an update available for coyni App. Please install the same to proceed further.</string>
+    <string name="appname">coyni</string>
     <string name="amount_released">Amount Released</string>
     <string name="reserve_canceled_description">Release Scheduled for %1$s for the amount of %2$s has been canceled due to lack of funds in the reserve balance.</string>
     <string name="being_held">Reserve Is Still Being Held</string>
@@ -777,8 +779,19 @@
     <string name="please_contact_the_coyni_customer_support">We’re sorry but this feature currently is not available, please wait until we finish your identity verification. If this is an error, please contact the coyni customer support.</string>
 
     <string name="password_characters">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?&amp;</string>
+    <string name="confirm_routing_number">Confirm Routing Number</string>
+    <string name="please_provide_your_bank_account_information_find_your_account_numbers">Please provide your bank account information. Find your account numbers</string>
+    <string name="where_to_find_my_account_information">Where to find my account information?</string>
+    <string name="account_numbers">You can find your routing and account numbers at the bottom of your checks or displayed in your online banking account. On checks, the routing number is typically left of your account number.</string>
     <string name="get_help_description">Send an email to our support team at support@coyni.com for any question, issues, or feedback. Please include the following to expedite our response:</string>
     <string name="our_support_team_is_here_for_you">Our support team is here for you.</string>
     <string name="need_help_with_coyni">Need help with coyni?</string>
     <string name="support_text">&#x2022; Name\n&#x2022; coyni email\n&#x2022;  Account ID number (located in your user details) \n&#x2022; A detailed description of your question, feedback, or issue</string>
+    <string name="bank_information">Bank Information</string>
+    <string name="please_resubmit_a_bank_account"><u>Please Resubmit a Bank Account</u></string>
+    <string name="edit_underline"><u>Edit</u></string>
+    <string name="resubmit">Resubmit Bank Account</string>
+    <string name="bank_account_added">Bank Account Added</string>
+    <string name="bank_account_failed">Verification Failed</string>
+    <string name="android_text">Android</string>
 </resources>

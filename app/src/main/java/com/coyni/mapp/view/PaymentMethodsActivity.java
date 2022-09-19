@@ -37,6 +37,7 @@ import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentsList;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.coyni.mapp.viewmodel.CustomerProfileViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.PaymentMethodsViewModel;
@@ -110,8 +111,8 @@ public class PaymentMethodsActivity extends BaseActivity {
                         extBankDialog.dismiss();
                     }
                     //dialog = Utils.showProgressDialog(PaymentMethodsActivity.this);
-                    showProgressDialog();
-                    customerProfileViewModel.meSyncAccount();
+//                    showProgressDialog();
+//                    customerProfileViewModel.meSyncAccount();
                 }
             } else if (requestCode == 2) {
                 if (data.getStringExtra("screen") != null && data.getStringExtra("screen").equals("editcard")) {
@@ -131,6 +132,16 @@ public class PaymentMethodsActivity extends BaseActivity {
                     }
                     getPaymentMethods();
                 }
+            } else if (requestCode == 4) {
+                if (!objMyApplication.getBankSave()) {
+                    isDeCredit = true;
+                    ControlMethod("addpayment");
+                } else {
+                    objMyApplication.setBankSave(false);
+                    ControlMethod("paymentMethods");
+                    strCurrent = "paymentMethods";
+                }
+                getPaymentMethods();
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
@@ -151,16 +162,16 @@ public class PaymentMethodsActivity extends BaseActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-            if (Utils.checkInternet(PaymentMethodsActivity.this)) {
-                if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
-                    customerProfileViewModel.meSignOn();
-                } else {
-                    strSignOn = objMyApplication.getStrSignOnError();
-                    signOnData = objMyApplication.getSignOnData();
-                }
-            } else {
-                Utils.displayAlert(getString(R.string.internet), PaymentMethodsActivity.this, "", "");
-            }
+//            if (Utils.checkInternet(PaymentMethodsActivity.this)) {
+//                if (objMyApplication.getSignOnData() == null || objMyApplication.getSignOnData().getUrl() == null) {
+//                    customerProfileViewModel.meSignOn();
+//                } else {
+//                    strSignOn = objMyApplication.getStrSignOnError();
+//                    signOnData = objMyApplication.getSignOnData();
+//                }
+//            } else {
+//                Utils.displayAlert(getString(R.string.internet), PaymentMethodsActivity.this, "", "");
+//            }
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 ControlMethod("paymentMethods");
                 strCurrent = "paymentMethods";
@@ -199,40 +210,40 @@ public class PaymentMethodsActivity extends BaseActivity {
     }
 
     private void initObserver() {
-        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
-            @Override
-            public void onChanged(SignOn signOn) {
-                try {
-//                    if (dialog != null) {
-//                        dialog.dismiss();
+//        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+//            @Override
+//            public void onChanged(SignOn signOn) {
+//                try {
+////                    if (dialog != null) {
+////                        dialog.dismiss();
+////                    }
+//                    dismissDialog();
+//                    if (signOn != null) {
+//                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+//                            objMyApplication.setSignOnData(signOn.getData());
+//                            signOnData = signOn.getData();
+//                            objMyApplication.setStrSignOnError("");
+//                            strSignOn = "";
+//                            if (objMyApplication.getResolveUrl()) {
+//                                objMyApplication.callResolveFlow(PaymentMethodsActivity.this, strSignOn, signOnData);
+//                            }
+//                        } else {
+//                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+//                                objMyApplication.setResolveUrl(true);
+//                                //customerProfileViewModel.meSignOn();
+//                            } else {
+//                                objMyApplication.setSignOnData(null);
+//                                signOnData = null;
+//                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+//                                strSignOn = signOn.getError().getErrorDescription();
+//                            }
+//                        }
 //                    }
-                    dismissDialog();
-                    if (signOn != null) {
-                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                            objMyApplication.setSignOnData(signOn.getData());
-                            signOnData = signOn.getData();
-                            objMyApplication.setStrSignOnError("");
-                            strSignOn = "";
-                            if (objMyApplication.getResolveUrl()) {
-                                objMyApplication.callResolveFlow(PaymentMethodsActivity.this, strSignOn, signOnData);
-                            }
-                        } else {
-                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
-                                objMyApplication.setResolveUrl(true);
-                                customerProfileViewModel.meSignOn();
-                            } else {
-                                objMyApplication.setSignOnData(null);
-                                signOnData = null;
-                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                                strSignOn = signOn.getError().getErrorDescription();
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         customerProfileViewModel.getApiErrorMutableLiveData().observe(PaymentMethodsActivity.this, new Observer<APIError>() {
             @Override
@@ -243,7 +254,7 @@ public class PaymentMethodsActivity extends BaseActivity {
                     if (apiError != null) {
                         if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
                             objMyApplication.setResolveUrl(true);
-                            customerProfileViewModel.meSignOn();
+                            //customerProfileViewModel.meSignOn();
                         } else if (!isBank) {
                             if (!apiError.getError().getErrorDescription().equals("")) {
                                 Utils.displayAlert(apiError.getError().getErrorDescription(), PaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
@@ -267,34 +278,31 @@ public class PaymentMethodsActivity extends BaseActivity {
             }
         });
 
-        customerProfileViewModel.getSyncAccountMutableLiveData().observe(PaymentMethodsActivity.this, new Observer<SyncAccount>() {
-            @Override
-            public void onChanged(SyncAccount syncAccount) {
-                try {
-//                    dialog.dismiss();
-                    dismissDialog();
-                    if (syncAccount != null) {
-                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
-                            dashboardViewModel.mePaymentMethods();
-                            displaySuccess();
-                        } else {
-//                        if (Arrays.asList(bob).contains("silly")) {
-//                            // true
+//        customerProfileViewModel.getSyncAccountMutableLiveData().observe(PaymentMethodsActivity.this, new Observer<SyncAccount>() {
+//            @Override
+//            public void onChanged(SyncAccount syncAccount) {
+//                try {
+////                    dialog.dismiss();
+//                    dismissDialog();
+//                    if (syncAccount != null) {
+//                        if (syncAccount.getStatus().toLowerCase().equals("success")) {
+//                            dashboardViewModel.mePaymentMethods();
+//                            displaySuccess();
+//                        } else {
+////                        if (Arrays.asList(bob).contains("silly")) {
+////                            // true
+////                        }
 //                        }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
-//                if (dialog != null) {
-//                    dialog.dismiss();
-//                }
                 dismissDialog();
                 if (payMethodsResponse != null) {
 //                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
@@ -432,7 +440,10 @@ public class PaymentMethodsActivity extends BaseActivity {
                         if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                                showExternalBank("");
+                                //showExternalBank("");
+                                Intent i = new Intent(PaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 4);
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), PaymentMethodsActivity.this, "", "");
@@ -828,7 +839,7 @@ public class PaymentMethodsActivity extends BaseActivity {
                 if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                     tvMessage.setText("Seems like you have an issue with your bank account");
                     tvEdit.setText("Relink");
-                    customerProfileViewModel.meSignOn();
+                    //customerProfileViewModel.meSignOn();
                 } else {
                     tvMessage.setText("Seems like you have an issue with your card");
                     tvEdit.setText("Edit");

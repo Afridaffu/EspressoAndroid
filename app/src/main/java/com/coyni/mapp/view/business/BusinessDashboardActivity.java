@@ -486,24 +486,24 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
-        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
-            @Override
-            public void onChanged(SignOn signOn) {
-                try {
-                    if (signOn != null) {
-                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                            objMyApplication.setSignOnData(signOn.getData());
-                            objMyApplication.setStrSignOnError("");
-                        } else {
-                            objMyApplication.setSignOnData(null);
-                            objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+//            @Override
+//            public void onChanged(SignOn signOn) {
+//                try {
+//                    if (signOn != null) {
+//                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+//                            objMyApplication.setSignOnData(signOn.getData());
+//                            objMyApplication.setStrSignOnError("");
+//                        } else {
+//                            objMyApplication.setSignOnData(null);
+//                            objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         mDashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
             @Override
@@ -746,6 +746,10 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
+//        notificationsViewModel.getNotifications();
+    }
+
+    public void notificationsAPICall() {
         notificationsViewModel.getNotifications();
     }
 
@@ -757,7 +761,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                customerProfileViewModel.meSignOn();
+                //customerProfileViewModel.meSignOn();
                 businessDashboardViewModel.meBusinessPaymentMethods();
                 if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                     mDashboardViewModel.getFeatureControlByUser(Integer.parseInt(objMyApplication.getBusinessUserID()));

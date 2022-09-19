@@ -36,6 +36,8 @@ import com.coyni.mapp.model.activtity_log.ActivityLogResp;
 import com.coyni.mapp.model.bank.BankDeleteResponseData;
 import com.coyni.mapp.model.bank.BankResponse;
 import com.coyni.mapp.model.bank.BanksResponseModel;
+import com.coyni.mapp.model.bank.ManualBankRequest;
+import com.coyni.mapp.model.bank.ManualBankResponse;
 import com.coyni.mapp.model.bank.SignOn;
 import com.coyni.mapp.model.bank.SyncAccount;
 import com.coyni.mapp.model.biometric.BiometricRequest;
@@ -180,6 +182,7 @@ import com.coyni.mapp.model.users.User;
 import com.coyni.mapp.model.users.UserData;
 import com.coyni.mapp.model.users.UserPreferenceModel;
 import com.coyni.mapp.model.wallet.UserDetails;
+import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
 import com.coyni.mapp.model.withdraw.WithdrawRequest;
 import com.coyni.mapp.model.withdraw.WithdrawResponse;
 
@@ -319,14 +322,17 @@ public interface ApiService {
     @POST("api/v2/business/preferences")
     Call<UserPreference> meUpdatePreferences_Shared(@Body UserPreferenceModel request);
 
+    @POST("api/v2/admin/{id}/preferences")
+    Call<UserPreference> updateTimeZoneShared(@Path("id") String id, @Body UserPreferenceModel request);
+
     @PATCH("api/v2/profile/me/update-address")
     Call<User> meUpdateAddress(@Body UserData request);
 
     @GET("api/v2/profile/me/profile-accounts")
     Call<ProfilesResponse> getProfiles();
 
-    @POST("api/v2/fiserv/signon")
-    Call<SignOn> meSignOn();
+//    @POST("api/v2/fiserv/signon")
+//    Call<SignOn> meSignOn();
 
     @POST("api/v2/user/update/otp/resend")
     Call<UpdateResendOTPResponse> updateOtpResend(@Body UpdateResendRequest request);
@@ -344,8 +350,8 @@ public interface ApiService {
     Call<TransactionList> meTransactionList(@Body TransactionListRequest request);
 
 
-    @POST("api/v2/fiserv/sync-account")
-    Call<SyncAccount> meSyncAccount();
+//    @POST("api/v2/fiserv/sync-account")
+//    Call<SyncAccount> meSyncAccount();
 
     @GET("api/v2/encryption/publickey")
     Call<PublicKeyResponse> getPublicKey(@Query("userId") int userId);
@@ -725,5 +731,13 @@ public interface ApiService {
     @POST("api/v2/user/stepup/phone")
     Call<StepUpOTPResponse> stepUpPhoneOTP(@Body SmsRequest request);
 
+    @POST("api/v2/user/start")
+    Call<WebSocketUrlResponse> webSocketUrl();
+    @POST("api/v2/banks/manual")
+    Call<ManualBankResponse> addManualBank(@Body ManualBankRequest request);
+
+
+    @GET("api/v2/app-version/retrieve")
+    Call<AppUpdateResp> getAppUpdate(@Query("osType") String osType);
 }
 

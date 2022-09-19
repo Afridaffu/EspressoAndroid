@@ -25,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="[Customer Name]"
             android:textSize="@dimen/_11ssp"
             android:fontFamily="@font/opensans_semibold"
             android:textColor="@color/primary_black" />
@@ -34,7 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="750,000,00"
             android:gravity="right"
             android:textSize="@dimen/_12ssp"
             android:layout_marginEnd="@dimen/_11sdp"
@@ -70,7 +68,6 @@
             android:layout_weight="1"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="right"
-            android:text="06/23/2021 @ 2:20am"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>

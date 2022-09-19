@@ -44,7 +44,7 @@ import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.business.BusinessDashboardActivity;
 import com.coyni.mapp.viewmodel.CoyniViewModel;
 
-public class GiftCardBindingLayoutActivity extends AppCompatActivity {
+public class GiftCardBindingLayoutActivity extends BaseActivity {
     String strScreen = "", enableType = "";
     TextView giftCardTypeTV, giftCardAmountTV, giftCardDescTV, refIDTV, gcProcessingTV, learnMoreTV, tvMessage, mTryButtonTV;
     LinearLayout refIDLL;
@@ -299,7 +299,6 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
 
     }
 
-
     private void buyInProgress(BuyTokenResponseData objData) {
         try {
             TextView tvAmount = findViewById(R.id.tvBAmount);
@@ -384,6 +383,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        startWebSocket();
                         if (objMyApplication.getStrScreen() != null && objMyApplication.getStrScreen().equalsIgnoreCase(CheckOutConstants.FlowCheckOut)) {
                             objMyApplication.getCheckOutModel().setCheckOutFlag(true);
                             startActivity(new Intent(GiftCardBindingLayoutActivity.this, CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));

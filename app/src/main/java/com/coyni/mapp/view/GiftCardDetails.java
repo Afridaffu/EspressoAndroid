@@ -85,9 +85,8 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
     TextInputEditText firstNameET, lastNameET, emailET, amountET;
     TextInputLayout firstNameTIL, lastNameTIL, emailTIL, amountTIL;
     public LinearLayout emailErrorLL, firstNameErrorLL, lastNameErrorLL, giftCardDetailsLL, amountErrorLL;
-    public TextView emailErrorTV, firstNameErrorTV, lastNameErrorTV, amountErrorTV, brandNameTV, brandDescTV, viewAllTV;
+    public TextView emailErrorTV, firstNameErrorTV, lastNameErrorTV, amountErrorTV, brandNameTV, brandDescTV, viewAllTV, tvFeePer;
     ImageView brandIV, amountDDICon;
-    boolean isView = false;
     GiftCardsViewModel giftCardsViewModel;
     BuyTokenViewModel buyTokenViewModel;
     CoyniViewModel coyniViewModel;
@@ -96,7 +95,6 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
     Brand objBrand;
     Dialog pDialog;
     Double fee = 0.0, min = 0.0, max = 0.0, maxValue = 0.0, minValue = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
-    ;
     List<Items> listAmounts = new ArrayList<>();
     String amountETString = "", amount = "", strLimit = "", strBrandDesc = "";
     public String selectedFixedAmount = "";
@@ -124,8 +122,6 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
         try {
             super.onCreate(savedInstanceState);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_gift_card_details);
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -172,6 +168,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
             amountDDICon = findViewById(R.id.amountDDICon);
             purchaseCV = findViewById(R.id.purchaseCV);
             amountRL = findViewById(R.id.amountRL);
+            tvFeePer = findViewById(R.id.tvFeePer);
 
             giftCardsViewModel = new ViewModelProvider(this).get(GiftCardsViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
@@ -323,7 +320,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                 }
             });
 
-            calculateFee("10");
+            calculateFee("1");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -403,6 +400,108 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                         feeInAmount = transferFeeResponse.getData().getFeeInAmount();
                         feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
                     }
+
+                    String feeString = "Fees: ";
+
+                    if (feeInAmount != 0 && feeInPercentage != 0)
+                        feeString = feeString + "$" + Utils.convertTwoDecimalPoints(feeInAmount) + " + " + Utils.convertTwoDecimalPoints(feeInPercentage) + "%";
+
+                    else if (feeInAmount != 0 && feeInPercentage == 0)
+                        feeString = feeString + "$" + Utils.convertTwoDecimalPoints(feeInAmount);
+
+                    else if (feeInAmount == 0 && feeInPercentage != 0)
+                        feeString = feeString + Utils.convertTwoDecimalPoints(feeInPercentage) + "%";
+
+                    if (!feeString.equals("Fees: "))
+                        tvFeePer.setText(feeString);
+                    else
+                        tvFeePer.setVisibility(View.GONE);
+
+
+
+
+                    //-----------------------
+
+                    Double walletAmount = 0.0;
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+                    } else {
+//                                walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+                        walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+                    }
+//                            Double giftCardAmount = (Utils.doubleParsing(amountET.getText().toString().replace(",", "")) + Utils.doubleParsing(fee.toString().replace(",", "")));
+                    Double giftCardAmount = Utils.doubleParsing(amountET.getText().toString().replace(",", "")) * (1 - (feeInPercentage / 100)) - feeInAmount;
+                    Double giftCardETAmount = Utils.doubleParsing(amountET.getText().toString().replace(",", ""));
+                    if (objTranLimit.getData() != null && objTranLimit.getData().getMinimumLimit() != null) {
+                        minValue = Utils.doubleParsing(objTranLimit.getData().getMinimumLimit());
+                    }
+                    if (minValue < min) {
+                        minValue = min;
+                    }
+
+                    String strPFee = Utils.convertBigDecimalUSD(String.valueOf(fee));
+                    Double total = Utils.doubleParsing(amountET.getText().toString().trim().replace(",", "")) + Utils.doubleParsing(strPFee);
+                    if (walletAmount.equals(giftCardETAmount)) {
+                        isAmount = false;
+                        amountErrorLL.setVisibility(VISIBLE);
+                        amountErrorTV.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
+
+                    } else if ((walletAmount < giftCardAmount) || (total > walletAmount)) {
+                        isAmount = false;
+                        amountErrorLL.setVisibility(VISIBLE);
+                        amountErrorTV.setText("Amount entered exceeds available balance");
+
+                    } else if (giftCardETAmount < minValue) {
+                        isAmount = false;
+                        amountErrorLL.setVisibility(VISIBLE);
+                        amountErrorTV.setText("Amount should be equal to or greater than " + Utils.USNumberFormat(minValue) + " USD");
+                    } else if (giftCardETAmount > max) {
+                        isAmount = false;
+                        amountErrorLL.setVisibility(VISIBLE);
+                        amountErrorTV.setText("Amount entered exceeds limit");
+                    } else {
+                        String limitType = objTranLimit.getData().getLimitType();
+                        if (limitType.equalsIgnoreCase("PER TRANSACTION")) {
+                            if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
+                                isAmount = false;
+                                amountErrorLL.setVisibility(VISIBLE);
+                                amountErrorTV.setText("Amount entered exceeds transaction limit");
+                            } else {
+                                isAmount = true;
+                                amountErrorLL.setVisibility(GONE);
+                            }
+                        } else if (limitType.equalsIgnoreCase("DAILY")) {
+                            if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
+                                isAmount = false;
+                                amountErrorLL.setVisibility(VISIBLE);
+                                amountErrorTV.setText("Amount entered exceeds daily limit");
+                            } else {
+                                isAmount = true;
+                                amountErrorLL.setVisibility(GONE);
+                            }
+                        } else if (!limitType.equalsIgnoreCase("NO LIMIT")) {
+                            if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
+                                isAmount = false;
+                                amountErrorLL.setVisibility(VISIBLE);
+                                amountErrorTV.setText("Amount entered exceeds weekly limit");
+                            } else {
+                                isAmount = true;
+                                amountErrorLL.setVisibility(GONE);
+                            }
+                        } else if (limitType.equalsIgnoreCase("NO LIMIT")) {
+//                                    if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
+//                                        isAmount = false;
+//                                        amountErrorLL.setVisibility(VISIBLE);
+//                                        amountErrorTV.setText("Amount entered exceeds weekly limit");
+//                                    } else {
+                            isAmount = true;
+                            amountErrorLL.setVisibility(GONE);
+//                                    }
+                        }
+                    }
+
+                    enableOrDisableNext();
+                    //------------------------
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -483,91 +582,91 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                     try {
                         if (charSequence.toString().trim().length() > 0) {
 
-//                            amountTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                            Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_black));
-                            Double walletAmount = 0.0;
-                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                                walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
-                            } else {
-//                                walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
-                                walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
-                            }
-//                            Double giftCardAmount = (Utils.doubleParsing(amountET.getText().toString().replace(",", "")) + Utils.doubleParsing(fee.toString().replace(",", "")));
-                            Double giftCardAmount = Utils.doubleParsing(amountET.getText().toString().replace(",", "")) * (1 - (feeInPercentage / 100)) - feeInAmount;
-                            Double giftCardETAmount = Utils.doubleParsing(amountET.getText().toString().replace(",", ""));
-                            if (objTranLimit.getData() != null && objTranLimit.getData().getMinimumLimit() != null) {
-                                minValue = Utils.doubleParsing(objTranLimit.getData().getMinimumLimit());
-                            }
-                            if (minValue < min) {
-                                minValue = min;
-                            }
-
-                            String strPFee = Utils.convertBigDecimalUSD(String.valueOf(fee));
-                            Double total = Utils.doubleParsing(amountET.getText().toString().trim().replace(",", "")) + Utils.doubleParsing(strPFee);
-                            if (walletAmount.equals(giftCardETAmount)) {
-                                isAmount = false;
-                                amountErrorLL.setVisibility(VISIBLE);
-                                amountErrorTV.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
-
-                            } else if ((walletAmount < giftCardAmount) || (total > walletAmount)) {
-                                isAmount = false;
-                                amountErrorLL.setVisibility(VISIBLE);
-                                amountErrorTV.setText("Amount entered exceeds available balance");
-
-                            } else if (giftCardETAmount < minValue) {
-                                isAmount = false;
-                                amountErrorLL.setVisibility(VISIBLE);
-                                amountErrorTV.setText("Amount should be equal to or greater than " + Utils.USNumberFormat(minValue) + " USD");
-                            } else if (giftCardETAmount > max) {
-                                isAmount = false;
-                                amountErrorLL.setVisibility(VISIBLE);
-                                amountErrorTV.setText("Amount entered exceeds limit");
-                            } else {
-                                String limitType = objTranLimit.getData().getLimitType();
-                                if (limitType.equalsIgnoreCase("PER TRANSACTION")) {
-                                    if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
-                                        isAmount = false;
-                                        amountErrorLL.setVisibility(VISIBLE);
-                                        amountErrorTV.setText("Amount entered exceeds transaction limit");
-                                    } else {
-                                        isAmount = true;
-                                        amountErrorLL.setVisibility(GONE);
-                                    }
-                                } else if (limitType.equalsIgnoreCase("DAILY")) {
-                                    if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
-                                        isAmount = false;
-                                        amountErrorLL.setVisibility(VISIBLE);
-                                        amountErrorTV.setText("Amount entered exceeds daily limit");
-                                    } else {
-                                        isAmount = true;
-                                        amountErrorLL.setVisibility(GONE);
-                                    }
-                                } else if (!limitType.equalsIgnoreCase("NO LIMIT")) {
-                                    if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
-                                        isAmount = false;
-                                        amountErrorLL.setVisibility(VISIBLE);
-                                        amountErrorTV.setText("Amount entered exceeds weekly limit");
-                                    } else {
-                                        isAmount = true;
-                                        amountErrorLL.setVisibility(GONE);
-                                    }
-                                } else if (limitType.equalsIgnoreCase("NO LIMIT")) {
+////                            amountTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+////                            Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_black));
+//                            Double walletAmount = 0.0;
+//                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                                walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+//                            } else {
+////                                walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+//                                walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+//                            }
+////                            Double giftCardAmount = (Utils.doubleParsing(amountET.getText().toString().replace(",", "")) + Utils.doubleParsing(fee.toString().replace(",", "")));
+//                            Double giftCardAmount = Utils.doubleParsing(amountET.getText().toString().replace(",", "")) * (1 - (feeInPercentage / 100)) - feeInAmount;
+//                            Double giftCardETAmount = Utils.doubleParsing(amountET.getText().toString().replace(",", ""));
+//                            if (objTranLimit.getData() != null && objTranLimit.getData().getMinimumLimit() != null) {
+//                                minValue = Utils.doubleParsing(objTranLimit.getData().getMinimumLimit());
+//                            }
+//                            if (minValue < min) {
+//                                minValue = min;
+//                            }
+//
+//                            String strPFee = Utils.convertBigDecimalUSD(String.valueOf(fee));
+//                            Double total = Utils.doubleParsing(amountET.getText().toString().trim().replace(",", "")) + Utils.doubleParsing(strPFee);
+//                            if (walletAmount.equals(giftCardETAmount)) {
+//                                isAmount = false;
+//                                amountErrorLL.setVisibility(VISIBLE);
+//                                amountErrorTV.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
+//
+//                            } else if ((walletAmount < giftCardAmount) || (total > walletAmount)) {
+//                                isAmount = false;
+//                                amountErrorLL.setVisibility(VISIBLE);
+//                                amountErrorTV.setText("Amount entered exceeds available balance");
+//
+//                            } else if (giftCardETAmount < minValue) {
+//                                isAmount = false;
+//                                amountErrorLL.setVisibility(VISIBLE);
+//                                amountErrorTV.setText("Amount should be equal to or greater than " + Utils.USNumberFormat(minValue) + " USD");
+//                            } else if (giftCardETAmount > max) {
+//                                isAmount = false;
+//                                amountErrorLL.setVisibility(VISIBLE);
+//                                amountErrorTV.setText("Amount entered exceeds limit");
+//                            } else {
+//                                String limitType = objTranLimit.getData().getLimitType();
+//                                if (limitType.equalsIgnoreCase("PER TRANSACTION")) {
+//                                    if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
+//                                        isAmount = false;
+//                                        amountErrorLL.setVisibility(VISIBLE);
+//                                        amountErrorTV.setText("Amount entered exceeds transaction limit");
+//                                    } else {
+//                                        isAmount = true;
+//                                        amountErrorLL.setVisibility(GONE);
+//                                    }
+//                                } else if (limitType.equalsIgnoreCase("DAILY")) {
+//                                    if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
+//                                        isAmount = false;
+//                                        amountErrorLL.setVisibility(VISIBLE);
+//                                        amountErrorTV.setText("Amount entered exceeds daily limit");
+//                                    } else {
+//                                        isAmount = true;
+//                                        amountErrorLL.setVisibility(GONE);
+//                                    }
+//                                } else if (!limitType.equalsIgnoreCase("NO LIMIT")) {
 //                                    if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
 //                                        isAmount = false;
 //                                        amountErrorLL.setVisibility(VISIBLE);
 //                                        amountErrorTV.setText("Amount entered exceeds weekly limit");
 //                                    } else {
-                                        isAmount = true;
-                                        amountErrorLL.setVisibility(GONE);
+//                                        isAmount = true;
+//                                        amountErrorLL.setVisibility(GONE);
 //                                    }
-                                }
-                            }
+//                                } else if (limitType.equalsIgnoreCase("NO LIMIT")) {
+////                                    if (giftCardETAmount > Utils.doubleParsing(objTranLimit.getData().getTransactionLimit())) {
+////                                        isAmount = false;
+////                                        amountErrorLL.setVisibility(VISIBLE);
+////                                        amountErrorTV.setText("Amount entered exceeds weekly limit");
+////                                    } else {
+//                                    isAmount = true;
+//                                    amountErrorLL.setVisibility(GONE);
+////                                    }
+//                                }
+//                            }
                         } else if (amountET.getText().toString().trim().length() == 0) {
                             amountErrorLL.setVisibility(GONE);
 //                            amountErrorTV.setText("Field Required");
                             isAmount = false;
                         }
-                        enableOrDisableNext();
+//                        enableOrDisableNext();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -756,7 +855,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                             amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(amountTIL, getColor(R.color.primary_black));
 
-                            if (amountErrorLL.getVisibility() == VISIBLE) {
+                            if (amountErrorLL.getVisibility() == VISIBLE || !isAmount) {
                                 amountTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(amountTIL, getColor(R.color.error_red));
                             }

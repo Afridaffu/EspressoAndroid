@@ -154,6 +154,7 @@ public class CustomEncryptionHandler implements Interceptor {
             strOldBody = "{}";
         }
         String strNewBody = null;
+        Log.e("API REQUEST", strOldBody);
         String base64Str = java.util.Base64.getEncoder().encodeToString(strOldBody.getBytes());
         String finalStr = appendDateTime(base64Str) + "." + randomRequestId;
         try {

@@ -41,15 +41,8 @@ public class GetHelpActivity extends BaseActivity {
         supportTv = findViewById(R.id.text_support_tv);
         supportDescClick = findViewById(R.id.support_text_click);
         ivBackButton = findViewById(R.id.IVBack);
-
-
         spannableText();
         ivBackButton.setOnClickListener(view -> finish());
-
-
-
-
-
     }
 
     private void spannableText() {
@@ -82,11 +75,11 @@ public class GetHelpActivity extends BaseActivity {
                     Intent intent = new Intent(Intent.ACTION_SENDTO);
                     intent.setData(Uri.parse("mailto:")); // only email apps should handle this
                     //intent.putExtra(Intent.EXTRA_EMAIL, "shivas@ideyalabs.com");
-                    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"ravim@ideyalabs.com","shivas@ideyalabs.com"});
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "Test Subject");
-                    if (intent.resolveActivity(getPackageManager()) != null) {
+                    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"ravim@ideyalabs.com"});
+//                    intent.putExtra(Intent.EXTRA_SUBJECT, "Test Subject");
+//                    if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivity(intent);
-                    }
+//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

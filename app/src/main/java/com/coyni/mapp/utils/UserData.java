@@ -15,6 +15,7 @@ import com.coyni.mapp.model.buytoken.BuyTokenRequest;
 import com.coyni.mapp.model.buytoken.BuyTokenResponse;
 import com.coyni.mapp.model.check_out_transactions.OrderPayResponse;
 import com.coyni.mapp.model.featurecontrols.FeatureControlByUser;
+import com.coyni.mapp.model.fee.Fees;
 import com.coyni.mapp.model.giftcard.BrandsResponse;
 import com.coyni.mapp.model.identity_verification.LatestTxnResponse;
 import com.coyni.mapp.model.login.LoginResponse;
@@ -37,6 +38,7 @@ import com.coyni.mapp.model.transaction.TransactionList;
 import com.coyni.mapp.model.transaction.TransactionListRequest;
 import com.coyni.mapp.model.transferfee.TransferFeeResponse;
 import com.coyni.mapp.model.wallet.UserDetails;
+import com.coyni.mapp.model.websocket.WebSocketUrlResponseData;
 import com.coyni.mapp.model.withdraw.WithdrawRequest;
 import com.coyni.mapp.model.withdraw.WithdrawResponse;
 
@@ -50,6 +52,7 @@ public class UserData {
     private RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
     private String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "CST", strInvite = "", strScreen = "";
     private Profile myProfile = new Profile();
+    private Fees fees = new Fees();
     private UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     private UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
     private UserDetails userDetails;
@@ -102,6 +105,7 @@ public class UserData {
     private List<BatchPayoutListItems> batchPayList = new ArrayList<>();
     private FeatureControlByUser featureControlByUser;
     private FeatureControlByUser featureControlGlobal;
+    private WebSocketUrlResponseData webSocketUrlResponse;
 
     public OrderPayResponse getOrderPayResponse() {
         return orderPayResponse;
@@ -769,5 +773,21 @@ public class UserData {
 
     public void setFeatureControlGlobal(FeatureControlByUser featureControlGlobal) {
         this.featureControlGlobal = featureControlGlobal;
+    }
+
+    public Fees getFees() {
+        return fees;
+    }
+
+    public void setFees(Fees fees) {
+        this.fees = fees;
+    }
+
+    public WebSocketUrlResponseData getWebSocketUrlResponse() {
+        return webSocketUrlResponse;
+    }
+
+    public void setWebSocketUrlResponse(WebSocketUrlResponseData webSocketUrlResponse) {
+        this.webSocketUrlResponse = webSocketUrlResponse;
     }
 }
