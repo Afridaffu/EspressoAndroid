@@ -28,7 +28,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/_60sdp"
                     android:layout_marginBottom="@dimen/_21sdp"
-                    android:src="@drawable/ic_success" />
+                    android:src="@drawable/ic_success_icon" />
 
                 <TextView
                     android:id="@+id/headerTV"
