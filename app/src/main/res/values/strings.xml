@@ -650,6 +650,8 @@
     <string name="reserve_detail">Reserve Detail</string>
     <string name="daily_batch_ids">Daily Batch IDs</string>
     <string name="release_on">Release On</string>
+    <string name="appUpdate">There is an update available for coyni App. Please install the same to proceed further.</string>
+    <string name="appname">coyni</string>
     <string name="amount_released">Amount Released</string>
     <string name="reserve_canceled_description">Release Scheduled for %1$s for the amount of %2$s has been canceled due to lack of funds in the reserve balance.</string>
     <string name="being_held">Reserve Is Still Being Held</string>
@@ -791,4 +793,5 @@
     <string name="resubmit">Resubmit Bank Account</string>
     <string name="bank_account_added">Bank Account Added</string>
     <string name="bank_account_failed">Verification Failed</string>
+    <string name="android_text">Android</string>
 </resources>

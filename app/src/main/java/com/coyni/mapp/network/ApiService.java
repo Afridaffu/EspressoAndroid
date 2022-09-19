@@ -736,5 +736,8 @@ public interface ApiService {
     @POST("api/v2/banks/manual")
     Call<ManualBankResponse> addManualBank(@Body ManualBankRequest request);
 
+
+    @GET("api/v2/app-version/retrieve")
+    Call<AppUpdateResp> getAppUpdate(@Query("osType") String osType);
 }
 
