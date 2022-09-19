@@ -240,9 +240,6 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
             }
             addPayment();
             paymentMethods();
-            if (objMyApplication.getWebSocketUrlResponse() == null) {
-                customerProfileViewModel.webSocketUrl();
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -437,15 +434,6 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                }
-            }
-        });
-
-        customerProfileViewModel.getWebSocketUrlResponseMutableLiveData().observe(this, new Observer<WebSocketUrlResponse>() {
-            @Override
-            public void onChanged(WebSocketUrlResponse webSocketUrlResponse) {
-                if (webSocketUrlResponse != null) {
-                    objMyApplication.setWebSocketUrlResponse(webSocketUrlResponse.getData());
                 }
             }
         });
