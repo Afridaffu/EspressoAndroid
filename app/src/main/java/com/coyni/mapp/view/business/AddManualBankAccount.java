@@ -116,6 +116,8 @@ public class AddManualBankAccount extends BaseActivity {
             } else if (getIntent().getStringExtra("FROM").equalsIgnoreCase("Edit")) {
                 headingTV.setText(R.string.resubmit);
                 strScreen = "";
+            } else if(getIntent().getStringExtra("FROM").equalsIgnoreCase("REVIEW")){
+                strScreen = "";
             }
             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 nameOnBankET.setText(objMyApplication.getStrUserName());

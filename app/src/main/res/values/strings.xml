@@ -792,6 +792,7 @@
     <string name="edit_underline"><u>Edit</u></string>
     <string name="resubmit">Resubmit Bank Account</string>
     <string name="bank_account_added">Bank Account Added</string>
+    <string name="account_number">Account Number</string>
     <string name="bank_account_failed">Verification Failed</string>
     <string name="android_text">Android</string>
 </resources>
