@@ -10,6 +10,7 @@
     <color name="primary_green">#00A6A2</color>
     <color name="text_color">#151515</color>
     <color name="error">#E32B25</color>
+    <color name="headcolor">#4C4C4C</color>
     <color name="bg_inactive">#b5e2e0</color>
     <color name="light_primary_color">#1900A6A2</color>
 
