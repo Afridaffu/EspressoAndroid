@@ -48,6 +48,7 @@ import android.widget.TextView;
 
 import com.coyni.mapp.model.bank.BankDeleteResponseData;
 import com.coyni.mapp.model.cards.CardDeleteResponse;
+import com.coyni.mapp.view.business.RefundTransactionActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
@@ -1568,14 +1569,14 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     }
                 }
             });
-
             cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialogInterface) {
                     cvvDialog = null;
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(WithdrawTokenActivity.this);
                 }
             });
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
