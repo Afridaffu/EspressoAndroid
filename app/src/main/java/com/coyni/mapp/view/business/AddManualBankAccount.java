@@ -773,7 +773,10 @@ public class AddManualBankAccount extends BaseActivity {
                 nameOnBankTV.setText(manualBankResponse.getData().getAccountName());
                 routingNumTV.setText(manualBankResponse.getData().getRoutingNumber());
                 if (manualBankResponse.getData().getAccountNumber() != null && manualBankResponse.getData().getAccountNumber().length() > 4) {
-                    accNumTV.setText("**** " + manualBankResponse.getData().getAccountNumber().substring(manualBankResponse.getData().getAccountNumber().length() - 4));
+//                    accNumTV.setText("**** " + manualBankResponse.getData().getAccountNumber().substring(manualBankResponse.getData().getAccountNumber().length() - 4));
+                    convert = manualBankResponse.getData().getAccountNumber().replaceAll("", "");
+                    String converted = convert.replaceAll("\\w(?=\\w{4})", "•");
+                    accNumTV.setText(converted);
                 } else {
                     accNumTV.setText(manualBankResponse.getData().getAccountNumber());
                 }
