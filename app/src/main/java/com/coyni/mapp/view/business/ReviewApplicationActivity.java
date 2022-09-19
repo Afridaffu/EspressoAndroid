@@ -180,6 +180,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         edit2 = findViewById(R.id.edit2TV);
         edit3 = findViewById(R.id.edit3TV);
         bankEditTV = findViewById(R.id.bankEditTV);
+        tvAccountNum = findViewById(R.id.tvAccountNum);
         tvName = findViewById(R.id.tvName);
         tvRoutingNum = findViewById(R.id.tvRoutingNum);
         agreeCB = findViewById(R.id.agreeCB);
@@ -750,7 +751,10 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     tvRoutingNum.setText(bankBankAccounts.get(0).getRoutingNumber());
                                 }
                                 if(bankBankAccounts.get(0).getAccountNumber() != null){
-                                    tvAccountNum.setText(bankBankAccounts.get(0).getAccountNumber());
+                                    convert = bankBankAccounts.get(0).getAccountNumber().replaceAll("","");
+                                    String converted = convert.replaceAll("\\w(?=\\w{4})", "•");
+                                    tvAccountNum.setText(converted);
+
                                 }
 
 
