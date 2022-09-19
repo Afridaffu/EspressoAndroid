@@ -39,6 +39,7 @@ import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.AddCardActivity;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.EditCardActivity;
+import com.coyni.mapp.view.PaymentMethodsActivity;
 import com.coyni.mapp.view.WebViewActivity;
 import com.coyni.mapp.viewmodel.BusinessDashboardViewModel;
 import com.coyni.mapp.viewmodel.CustomerProfileViewModel;
@@ -119,6 +120,17 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                                 deleteBank(objMyApplication.getSelectedCard());
                             }
                         }
+                        break;
+                    case 5:
+                        if (!objMyApplication.getBankSave()) {
+                            isDeCredit = true;
+                            ControlMethod("addpayment");
+                        } else {
+                            objMyApplication.setBankSave(false);
+                            ControlMethod("paymentMethods");
+                            strCurrent = "paymentMethods";
+                        }
+                        getPaymentMethods();
                         break;
                 }
             } else {
@@ -414,8 +426,10 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                                 && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
 //                                ControlMethod("externalBank");
-                                strCurrent = "externalBank";
-                                startActivity(new Intent(BusinessPaymentMethodsActivity.this, AddManualBankAccount.class).putExtra("From","ExternalBank"));
+                                //strCurrent = "externalBank";
+                                Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 5);
 
                             }
                         } else {
@@ -660,7 +674,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     strCurrent = "externalBank";
-                    startActivity(new Intent(BusinessPaymentMethodsActivity.this, AddManualBankAccount.class).putExtra("From","ExternalBank"));
+                    startActivity(new Intent(BusinessPaymentMethodsActivity.this, AddManualBankAccount.class).putExtra("From", "ExternalBank"));
 
 //                  ControlMethod("externalBank");
                 }
