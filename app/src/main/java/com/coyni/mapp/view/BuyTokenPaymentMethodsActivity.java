@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
+import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.google.android.material.textfield.TextInputEditText;
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
@@ -186,6 +187,18 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 } else {
                     onBackPressed();
                 }
+            } else if (requestCode == 4) {
+                if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+                    onBackPressed();
+                } else if (!objMyApplication.getBankSave()) {
+                    isDeCredit = true;
+                    ControlMethod("addpayment");
+                } else {
+                    objMyApplication.setBankSave(false);
+                    ControlMethod("paymentMethods");
+                    strCurrent = "paymentMethods";
+                }
+                getPaymentMethods();
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
@@ -227,9 +240,6 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
             }
             addPayment();
             paymentMethods();
-            if (objMyApplication.getWebSocketUrlResponse() == null) {
-                customerProfileViewModel.webSocketUrl();
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -427,15 +437,6 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 }
             }
         });
-
-        customerProfileViewModel.getWebSocketUrlResponseMutableLiveData().observe(this, new Observer<WebSocketUrlResponse>() {
-            @Override
-            public void onChanged(WebSocketUrlResponse webSocketUrlResponse) {
-                if (webSocketUrlResponse != null) {
-                    objMyApplication.setWebSocketUrlResponse(webSocketUrlResponse.getData());
-                }
-            }
-        });
     }
 
     private void callResolveFlow() {
@@ -522,7 +523,10 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                         if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                                showExternalBank();
+                                //showExternalBank();
+                                Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 4);
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), BuyTokenPaymentMethodsActivity.this, "", "");

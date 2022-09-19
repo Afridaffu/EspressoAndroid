@@ -299,7 +299,6 @@ public class GiftCardBindingLayoutActivity extends BaseActivity {
 
     }
 
-
     private void buyInProgress(BuyTokenResponseData objData) {
         try {
             TextView tvAmount = findViewById(R.id.tvBAmount);

@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.coyni.mapp.view.BuyTokenPaymentMethodsActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
@@ -196,6 +197,20 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     onBackPressed();
                 } else if (objMyApplication.getSignet()) {
                     objMyApplication.setSignet(false);
+                    getPaymentMethods();
+                }
+            } else if (requestCode == 4) {
+                if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
+                    onBackPressed();
+                } else {
+                    if (!objMyApplication.getBankSave()) {
+                        isDeCredit = true;
+                        ControlMethod("addpayment");
+                    } else {
+                        objMyApplication.setBankSave(false);
+                        ControlMethod("paymentMethods");
+                        strCurrent = "paymentMethods";
+                    }
                     getPaymentMethods();
                 }
             } else {
@@ -504,7 +519,10 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                         if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                                showExternalBank();
+                                //showExternalBank();
+                                Intent i = new Intent(SelectPaymentMethodActivity.this, AddManualBankAccount.class);
+                                i.putExtra("From", "pay");
+                                startActivityForResult(i, 4);
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), SelectPaymentMethodActivity.this, "", "");

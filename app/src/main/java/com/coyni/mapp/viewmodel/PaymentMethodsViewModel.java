@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.coyni.mapp.model.bank.ManualBankRequest;
+import com.coyni.mapp.model.bank.ManualBankResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.coyni.mapp.model.APIError;
@@ -43,6 +45,7 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
     private MutableLiveData<CardEditResponse> cardEditResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CardDeleteResponse> cardDeleteResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BusinessCardResponse> businessCardResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<ManualBankResponse> manualBankResponseMutableLiveData = new MutableLiveData<>();
 
     public PaymentMethodsViewModel(@NonNull Application application) {
         super(application);
@@ -86,6 +89,10 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
 
     public MutableLiveData<BusinessCardResponse> getBusinessCardResponseMutableLiveData() {
         return businessCardResponseMutableLiveData;
+    }
+
+    public MutableLiveData<ManualBankResponse> getManualBankResponseMutableLiveData() {
+        return manualBankResponseMutableLiveData;
     }
 
     public void getPublicKey(int userId) {
@@ -352,6 +359,38 @@ public class PaymentMethodsViewModel extends AndroidViewModel {
                 public void onFailure(Call<BusinessCardResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     businessCardResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void saveManualBank(ManualBankRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<ManualBankResponse> mCall = apiService.addManualBank(request);
+            mCall.enqueue(new Callback<ManualBankResponse>() {
+                @Override
+                public void onResponse(Call<ManualBankResponse> call, Response<ManualBankResponse> response) {
+                    if (response.isSuccessful()) {
+                        ManualBankResponse obj = response.body();
+                        manualBankResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ManualBankResponse>() {
+                        }.getType();
+                        ManualBankResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            manualBankResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ManualBankResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    manualBankResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

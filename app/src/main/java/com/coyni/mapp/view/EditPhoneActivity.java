@@ -194,11 +194,16 @@ public class EditPhoneActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
 //                        Utils.hideKeypad(EditPhoneActivity.this);
                         Utils.hideSoftKeyboard(EditPhoneActivity.this);
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(Utils.mondayURL));
-                        startActivity(i);
+//                        Intent i = new Intent(Intent.ACTION_VIEW);
+//                        i.setData(Uri.parse(Utils.mondayURL));
+//                        startActivity(i);
+                        startActivity(new Intent(EditPhoneActivity.this,GetHelpActivity.class));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -209,11 +214,16 @@ public class EditPhoneActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
 //                        Utils.hideKeypad(EditPhoneActivity.this);
                         Utils.hideSoftKeyboard(EditPhoneActivity.this);
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(Utils.mondayURL));
-                        startActivity(i);
+//                        Intent i = new Intent(Intent.ACTION_VIEW);
+//                        i.setData(Uri.parse(Utils.mondayURL));
+//                        startActivity(i);
+                        startActivity(new Intent(EditPhoneActivity.this,GetHelpActivity.class));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
