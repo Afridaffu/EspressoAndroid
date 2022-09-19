@@ -2,7 +2,6 @@ package com.coyni.mapp.view.business;
 
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,8 +15,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
-import android.util.DisplayMetrics;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -38,8 +35,6 @@ import com.coyni.mapp.model.bank.ManualBankResponse;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
-import com.coyni.mapp.view.PaymentMethodsActivity;
-import com.coyni.mapp.view.WebViewActivity;
 import com.coyni.mapp.viewmodel.PaymentMethodsViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -59,12 +54,14 @@ public class AddManualBankAccount extends BaseActivity {
     String strScreen = "";
     RelativeLayout lyAddBank, layoutLoader;
     Dialog bankStatusDialog;
+    private String convert = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_add_manual_bank_account);
+
             initfields();
             initObserver();
             textWatchers();
@@ -110,6 +107,9 @@ public class AddManualBankAccount extends BaseActivity {
             if (getIntent().getStringExtra("From").equalsIgnoreCase("pay")) {
                 headingTV.setText(R.string.add_bank_account);
                 strScreen = getIntent().getStringExtra("From");
+                Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
+                routingNumberET.requestFocus();
+
             } else if (getIntent().getStringExtra("FROM").equalsIgnoreCase("Resubmit")) {
                 headingTV.setText(R.string.resubmit);
                 strScreen = "";
@@ -788,7 +788,7 @@ public class AddManualBankAccount extends BaseActivity {
             } else {
                 imageIV.setImageResource(R.drawable.ic_failed);
                 headerTV.setText(getString(R.string.bank_account_failed));
-                bankNameTV.setText("--");
+                bankNameTV.setText("- -");
                 doneTV.setText(getString(R.string.try_again));
                 errorDescriptnTV.setVisibility(View.VISIBLE);
                 statusTV.setText("Declined");
@@ -797,8 +797,13 @@ public class AddManualBankAccount extends BaseActivity {
                 if (manualBankResponse.getData() != null && manualBankResponse.getStatus().toLowerCase().equals("success")) {
                     nameOnBankTV.setText(manualBankResponse.getData().getAccountName());
                     routingNumTV.setText(manualBankResponse.getData().getRoutingNumber());
-                    if (manualBankResponse.getData().getAccountNumber() != null && manualBankResponse.getData().getAccountNumber().length() > 4) {
-                        accNumTV.setText("**** " + manualBankResponse.getData().getAccountNumber().substring(manualBankResponse.getData().getAccountNumber().length() - 4));
+                    if (manualBankResponse.getData().getAccountNumber() != null &&
+                            manualBankResponse.getData().getAccountNumber().length() > 4) {
+//                        accNumTV.setText("**** " + manualBankResponse.getData().getAccountNumber().substring(manualBankResponse.getData().getAccountNumber().length() - 4));
+                        convert = manualBankResponse.getData().getAccountNumber().replaceAll("", "");
+                        String converted = convert.replaceAll("\\w(?=\\w{4})", "•");
+                        accNumTV.setText(converted);
+
                     } else {
                         accNumTV.setText(manualBankResponse.getData().getAccountNumber());
                     }
