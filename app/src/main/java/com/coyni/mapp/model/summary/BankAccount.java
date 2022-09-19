@@ -6,7 +6,7 @@ public class BankAccount {
 
     private String bankName;
 
-    private Object routingNumber;
+    private String routingNumber;
 
     private String accountNumber;
 
@@ -14,7 +14,7 @@ public class BankAccount {
 
     private Object bankAccountName;
 
-    private Object accountName;
+    private String accountName;
 
     private String accountCategory;
 
@@ -60,11 +60,11 @@ public class BankAccount {
         this.bankName = bankName;
     }
 
-    public Object getRoutingNumber() {
+    public String getRoutingNumber() {
         return routingNumber;
     }
 
-    public void setRoutingNumber(Object routingNumber) {
+    public void setRoutingNumber(String routingNumber) {
         this.routingNumber = routingNumber;
     }
 
@@ -92,11 +92,11 @@ public class BankAccount {
         this.bankAccountName = bankAccountName;
     }
 
-    public Object getAccountName() {
+    public String getAccountName() {
         return accountName;
     }
 
-    public void setAccountName(Object accountName) {
+    public void setAccountName(String accountName) {
         this.accountName = accountName;
     }
 

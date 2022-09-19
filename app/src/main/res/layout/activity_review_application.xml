@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/et_bg_gray"
@@ -940,6 +939,17 @@
                     android:text="Bank Account"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_12ssp" />
+                <TextView
+                    android:id="@+id/bankEditTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="right"
+                    android:text="@string/edit"
+                    android:textColor="@color/primary_color"
+                    android:textSize="@dimen/_11ssp" />
+
+
 
             </LinearLayout>
 
@@ -958,10 +968,100 @@
                     android:orientation="vertical"
                     android:padding="@dimen/_11sdp">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/banksRecycler"
+                    <LinearLayout
+                        android:id="@+id/emailLL"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_1sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/name_on_account"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/tvName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_7sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text=""
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_12ssp" />
+
+                        <View
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_marginBottom="@dimen/_12sdp"
+                            android:background="@color/light_gray" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/routingNumLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_1sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/routing_number"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/tvRoutingNum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_7sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text=""
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_12ssp" />
+
+                        <View
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_marginBottom="@dimen/_12sdp"
+                            android:background="@color/light_gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/accountNumLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_1sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/account_number"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/tvAccountNum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_7sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text=""
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_12ssp" />
+
+                        <View
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_marginBottom="@dimen/_12sdp"
+                            android:background="@color/light_gray" />
+                    </LinearLayout>
 
                 </LinearLayout>
 

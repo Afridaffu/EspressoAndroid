@@ -52,9 +52,10 @@ public class AddManualBankAccount extends BaseActivity {
         focusWatchers();
 
 
-        if(getIntent().getStringExtra("From").equalsIgnoreCase("ExternalBank")){
-
-        }else if(getIntent().getStringExtra("FROM").equalsIgnoreCase("Resubmit")){
+//        if(getIntent().getStringExtra("From").equalsIgnoreCase("ExternalBank")){
+//
+//        }else
+            if(getIntent().getStringExtra("FROM").equalsIgnoreCase("Resubmit")){
             headingTV.setText(R.string.resubmit);
         } else if(getIntent().getStringExtra("FROM").equalsIgnoreCase("Edit")){
             headingTV.setText(R.string.resubmit);
