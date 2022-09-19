@@ -35,6 +35,7 @@ import com.coyni.mapp.R;
 import com.coyni.mapp.dialogs.ManualAccountNumbersFullPage;
 import com.coyni.mapp.model.bank.ManualBankRequest;
 import com.coyni.mapp.model.bank.ManualBankResponse;
+import com.coyni.mapp.model.summary.BankAccount;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
@@ -107,29 +108,46 @@ public class AddManualBankAccount extends BaseActivity {
             endIcon2IV = findViewById(R.id.endIcon2IV);
             headingTV = findViewById(R.id.headingTV);
 
-            if (getIntent().getStringExtra("From").equalsIgnoreCase("pay") || getIntent().getStringExtra("From").equalsIgnoreCase("signUp")) {
+            if (getIntent().getStringExtra("From") != null && (getIntent().getStringExtra("From").equalsIgnoreCase("pay")
+                    || getIntent().getStringExtra("From").equalsIgnoreCase("signUp")
+                    || getIntent().getStringExtra("From").equalsIgnoreCase("REVIEW"))) {
                 headingTV.setText(R.string.add_bank_account);
                 strScreen = getIntent().getStringExtra("From");
-            } else if (getIntent().getStringExtra("FROM").equalsIgnoreCase("Resubmit")) {
+            } else if (getIntent().getStringExtra("From") != null && getIntent().getStringExtra("From").equalsIgnoreCase("Resubmit")) {
                 headingTV.setText(R.string.resubmit);
                 strScreen = "";
-            } else if (getIntent().getStringExtra("FROM").equalsIgnoreCase("Edit")) {
+            } else if (getIntent().getStringExtra("From") != null && getIntent().getStringExtra("From").equalsIgnoreCase("Edit")) {
                 headingTV.setText(R.string.resubmit);
-                strScreen = "";
-            } else if(getIntent().getStringExtra("FROM").equalsIgnoreCase("REVIEW")){
                 strScreen = "";
             }
-            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                nameOnBankET.setText(objMyApplication.getStrUserName());
+            if (getIntent().getSerializableExtra("bankObject") != null) {
+                BankAccount objBank = (BankAccount) getIntent().getSerializableExtra("bankObject");
+                nameOnBankET.setText(objBank.getAccountName());
+                routingNumberET.setText(objBank.getRoutingNumber());
+                confirmRoutingNumberET.setText(objBank.getRoutingNumber());
+                checkAccNumberET.setText(objBank.getAccountNumber());
+                confirmAccNumberET.setText(objBank.getAccountNumber());
+                endIconIV.setVisibility(View.VISIBLE);
+                endIcon2IV.setVisibility(View.VISIBLE);
                 isName = true;
+                isRoutNum = true;
+                isConfRoutNum = true;
+                isaccountNum = true;
+                isConfirm = true;
+                enableOrDisableNext();
             } else {
-                if (objMyApplication.getMyProfile() != null) {
-                    if (objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
-                        nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
-                    } else {
-                        nameOnBankET.setText(objMyApplication.getStrUserName());
-                    }
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    nameOnBankET.setText(objMyApplication.getStrUserName());
                     isName = true;
+                } else {
+                    if (objMyApplication.getMyProfile() != null) {
+                        if (objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
+                            nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
+                        } else {
+                            nameOnBankET.setText(objMyApplication.getStrUserName());
+                        }
+                        isName = true;
+                    }
                 }
             }
             routingNumberET.requestFocus();
@@ -181,12 +199,12 @@ public class AddManualBankAccount extends BaseActivity {
                     if (manualBankResponse.getStatus().toLowerCase().equals("success")) {
                         if (strScreen.equals("pay")) {
                             layoutLoader.setVisibility(View.GONE);
-                        } else if (strScreen.equals("signUp")) {
-                            onBackPressed();
                         }
                     }
                     if (strScreen.equals("pay")) {
                         showSuccessFailure(manualBankResponse);
+                    } else if (strScreen.equals("signUp") || strScreen.equals("REVIEW")) {
+                        onBackPressed();
                     }
                 }
             }

@@ -1,6 +1,8 @@
 package com.coyni.mapp.model.summary;
 
-public class BankAccount {
+import java.io.Serializable;
+
+public class BankAccount implements Serializable {
 
     private Integer bankId;
 
