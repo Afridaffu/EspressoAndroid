@@ -146,16 +146,7 @@ public class AddManualBankAccount extends BaseActivity {
                     if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                         nameOnBankET.setText(objMyApplication.getStrUserName());
                         isName = true;
-                    } else {
-                        if (objMyApplication.getMyProfile() != null) {
-                            if (objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
-                                nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
-                            } else {
-                                nameOnBankET.setText(objMyApplication.getStrUserName());
-                            }
-                            isName = true;
-                        }
-                    }
+                    } 
                 }
                 routingNumberET.requestFocus();
 
