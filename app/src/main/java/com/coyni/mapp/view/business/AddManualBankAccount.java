@@ -134,6 +134,13 @@ public class AddManualBankAccount extends BaseActivity {
                 isaccountNum = true;
                 isConfirm = true;
                 enableOrDisableNext();
+            }
+
+            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                nameOnBankET.setText(objMyApplication.getStrUserName());
+                Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
+                routingNumberET.requestFocus();
+                isName = true;
             } else {
                 if (objMyApplication.getMyProfile() != null) {
                     if (objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
@@ -143,10 +150,6 @@ public class AddManualBankAccount extends BaseActivity {
                     } else {
                         nameOnBankET.setText(objMyApplication.getStrUserName());
                     }
-                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                        nameOnBankET.setText(objMyApplication.getStrUserName());
-                        isName = true;
-                    } 
                 }
                 routingNumberET.requestFocus();
 
