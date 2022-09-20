@@ -1028,7 +1028,9 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 request.setTxnSubType(Utils.instantType);
             }
             if (Utils.checkInternet(BuyTokenActivity.this)) {
-                buyTokenViewModel.transferFee(request);
+                if (!objMyApplication.getSelectedCard().getExpired()) {
+                    buyTokenViewModel.transferFee(request);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -1,13 +1,5 @@
 package com.coyni.mapp.view;
 
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -28,6 +20,14 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.ActivityLogAdapter;
@@ -374,7 +374,7 @@ public class TransactionDetailsActivity extends BaseActivity {
         reserveAmount = findViewById(R.id.reserve_amount);
         status = findViewById(R.id.reserve_status);
         date = findViewById(R.id.released_on);
-        referenceId = findViewById(R.id.reference_id);
+        referenceId = findViewById(R.id.ref_id);
         reserveRules = findViewById(R.id.reserve_rules);
         depositTo = findViewById(R.id.deposit_to);
         tokenType = findViewById(R.id.token_account_type);
@@ -418,7 +418,6 @@ public class TransactionDetailsActivity extends BaseActivity {
         if (reserveData.getReleasedDate() != null) {
             date.setText(objMyApplication.convertZoneLatestTxn(reserveData.getReleasedDate()));
         }
-
 
         if (reserveData.getReferenceId() != null) {
             if (reserveData.getReferenceId().length() > 10) {
