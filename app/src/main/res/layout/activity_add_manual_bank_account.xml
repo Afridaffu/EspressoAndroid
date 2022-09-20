@@ -56,6 +56,7 @@
             android:layout_below="@+id/lineaLL"
             android:layout_marginTop="@dimen/_10sdp"
             android:fillViewport="true"
+            android:fadeScrollbars="false"
             android:paddingHorizontal="@dimen/_21sdp"
             android:paddingBottom="@dimen/_4sdp"
             android:scrollbars="none">
@@ -299,6 +300,7 @@
                             android:digits="1234567890"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
+                            android:inputType="numberPassword"
                             android:longClickable="false"
                             android:maxLength="17"
                             android:maxLines="1"
@@ -362,6 +364,7 @@
                                 android:digits="1234567890"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:imeOptions="actionDone"
+                                android:inputType="numberPassword"
                                 android:longClickable="false"
                                 android:maxLength="17"
                                 android:maxLines="1"
