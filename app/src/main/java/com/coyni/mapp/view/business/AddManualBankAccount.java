@@ -3,6 +3,7 @@ package com.coyni.mapp.view.business;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -55,6 +56,7 @@ public class AddManualBankAccount extends BaseActivity {
     String strScreen = "";
     RelativeLayout lyAddBank, layoutLoader;
     Dialog bankStatusDialog;
+    private String convert = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +119,7 @@ public class AddManualBankAccount extends BaseActivity {
                     || getIntent().getStringExtra("From").equalsIgnoreCase("REVIEW"))) {
                 headingTV.setText(R.string.add_bank_account);
                 strScreen = getIntent().getStringExtra("From");
+            } else if (getIntent().getStringExtra("FROM").equalsIgnoreCase("Resubmit")) {
             } else if (getIntent().getStringExtra("From") != null && getIntent().getStringExtra("From").equalsIgnoreCase("Resubmit")) {
                 headingTV.setText(R.string.resubmit);
                 strScreen = "";
@@ -139,23 +142,62 @@ public class AddManualBankAccount extends BaseActivity {
                 isAcNum = true;
                 isConfirmAc = true;
                 enableOrDisableNext();
+            }
+
+            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                nameOnBankET.setText(objMyApplication.getStrUserName());
+                Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
+                routingNumberET.requestFocus();
+                isName = true;
             } else {
-                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                    nameOnBankET.setText(objMyApplication.getStrUserName());
-                    isName = true;
-                } else {
-                    if (objMyApplication.getMyProfile() != null) {
-                        if (objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
-                            nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
-                        } else {
-                            nameOnBankET.setText(objMyApplication.getStrUserName());
-                        }
-                        isName = true;
+                if (objMyApplication.getMyProfile() != null) {
+                    if (objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
+                        nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
+                        Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
+                        routingNumberET.requestFocus();
+                    } else {
+                        nameOnBankET.setText(objMyApplication.getStrUserName());
                     }
                 }
-            }
-            routingNumberET.requestFocus();
+                routingNumberET.requestFocus();
 
+                backLL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onBackPressed();
+                    }
+                });
+
+                addCV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            if (isAddEnabled) {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                if (Utils.isKeyboardVisible)
+                                    Utils.hideKeypad(AddManualBankAccount.this);
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                if (strScreen.equals("pay")) {
+                                    lyAddBank.setVisibility(View.GONE);
+                                    layoutLoader.setVisibility(View.VISIBLE);
+                                }
+                                ManualBankRequest request = new ManualBankRequest();
+                                request.setAccountName(nameOnBankET.getText().toString());
+                                request.setRoutingNumber(routingNumberET.getText().toString());
+                                request.setAccountNumber(checkAccNumberET.getText().toString());
+                                request.setGiactReq(true);
+                                paymentMethodsViewModel.saveManualBank(request);
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+            }
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
             backLL.setOnClickListener(view -> onBackPressed());
 
             addCV.setOnClickListener(view -> {
@@ -623,7 +665,10 @@ public class AddManualBankAccount extends BaseActivity {
                 nameOnBankTV.setText(manualBankResponse.getData().getAccountName());
                 routingNumTV.setText(manualBankResponse.getData().getRoutingNumber());
                 if (manualBankResponse.getData().getAccountNumber() != null && manualBankResponse.getData().getAccountNumber().length() > 4) {
-                    accNumTV.setText("**** " + manualBankResponse.getData().getAccountNumber().substring(manualBankResponse.getData().getAccountNumber().length() - 4));
+//                    accNumTV.setText("**** " + manualBankResponse.getData().getAccountNumber().substring(manualBankResponse.getData().getAccountNumber().length() - 4));
+                    convert = manualBankResponse.getData().getAccountNumber().replaceAll("", "");
+                    String converted = convert.replaceAll("\\w(?=\\w{4})", "•");
+                    accNumTV.setText(converted);
                 } else {
                     accNumTV.setText(manualBankResponse.getData().getAccountNumber());
                 }
@@ -638,7 +683,7 @@ public class AddManualBankAccount extends BaseActivity {
             } else {
                 imageIV.setImageResource(R.drawable.ic_failed);
                 headerTV.setText(getString(R.string.bank_account_failed));
-                bankNameTV.setText("--");
+                bankNameTV.setText("- -");
                 doneTV.setText(getString(R.string.try_again));
                 errorDescriptnTV.setVisibility(View.VISIBLE);
                 statusTV.setText("Declined");
@@ -647,8 +692,13 @@ public class AddManualBankAccount extends BaseActivity {
                 if (manualBankResponse.getData() != null && manualBankResponse.getStatus().toLowerCase().equals("success")) {
                     nameOnBankTV.setText(manualBankResponse.getData().getAccountName());
                     routingNumTV.setText(manualBankResponse.getData().getRoutingNumber());
-                    if (manualBankResponse.getData().getAccountNumber() != null && manualBankResponse.getData().getAccountNumber().length() > 4) {
-                        accNumTV.setText("**** " + manualBankResponse.getData().getAccountNumber().substring(manualBankResponse.getData().getAccountNumber().length() - 4));
+                    if (manualBankResponse.getData().getAccountNumber() != null &&
+                            manualBankResponse.getData().getAccountNumber().length() > 4) {
+//                        accNumTV.setText("**** " + manualBankResponse.getData().getAccountNumber().substring(manualBankResponse.getData().getAccountNumber().length() - 4));
+                        convert = manualBankResponse.getData().getAccountNumber().replaceAll("", "");
+                        String converted = convert.replaceAll("\\w(?=\\w{4})", "•");
+                        accNumTV.setText(converted);
+
                     } else {
                         accNumTV.setText(manualBankResponse.getData().getAccountNumber());
                     }
