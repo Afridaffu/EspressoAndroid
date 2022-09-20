@@ -961,4 +961,5 @@ public class MyApplication extends Application {
     public void setWebSocketUrlResponse(WebSocketUrlResponseData webSocketUrlResponse) {
         mCurrentUserData.setWebSocketUrlResponse(webSocketUrlResponse);
     }
+
 }
