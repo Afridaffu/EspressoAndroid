@@ -318,6 +318,8 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                 } else {
                                     noTransactionTV.setVisibility(View.VISIBLE);
                                     bottomCorners.setVisibility(View.GONE);
+                                    nestedScrollView.scrollTo(0,0);
+
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

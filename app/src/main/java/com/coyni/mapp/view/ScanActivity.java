@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.view.business.SelectPaymentMethodActivity;
 import com.google.zxing.Reader;
 import com.coyni.mapp.dialogs.OnDialogClickListener;
 import com.coyni.mapp.dialogs.PayToMerchantWithAmountDialog;
@@ -1640,8 +1641,9 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             public void onClick(View view) {
                 dialog.dismiss();
                 objMyApplication.setStrScreen("payRequest");
-                Intent i = new Intent(ScanActivity.this, BuyTokenPaymentMethodsActivity.class);
+                Intent i = new Intent(ScanActivity.this, SelectPaymentMethodActivity.class);
                 i.putExtra("screen", "payRequest");
+                i.putExtra("menuitem","Bank");
                 startActivity(i);
                 //finish();
             }
