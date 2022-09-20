@@ -538,6 +538,7 @@ public class GiftCardBindingLayoutActivity extends BaseActivity {
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    startWebSocket();
                     dashboardNavigation("Token");
                 }
             });
