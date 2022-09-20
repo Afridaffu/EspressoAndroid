@@ -1,9 +1,7 @@
 package com.coyni.mapp.view.business;
 
-
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -13,7 +11,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
@@ -142,20 +139,20 @@ public class AddManualBankAccount extends BaseActivity {
                 isAcNum = true;
                 isConfirmAc = true;
                 enableOrDisableNext();
-            }
-
-            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                nameOnBankET.setText(objMyApplication.getStrUserName());
-                Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
-                isName = true;
             } else {
-                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
-                    nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
-                } else {
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     nameOnBankET.setText(objMyApplication.getStrUserName());
+                    Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
+                    isName = true;
+                } else {
+                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
+                        nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
+                        Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
+                    } else {
+                        nameOnBankET.setText(objMyApplication.getStrUserName());
+                    }
+                    isName = true;
                 }
-                isName = true;
-                Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
             }
             backLL.setOnClickListener(view -> {
                 if (Utils.isKeyboardVisible)

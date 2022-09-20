@@ -121,7 +121,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private LoginViewModel loginViewModel;
     private MyApplication objMyApplication;
     private String mCompanyName = "", mBusinessEntity = "", mEIN = "", mEmail = "", mPhoneNumber = "", mAddress = "", mArticleDate = "", mEINDate = "", mW9Date = "";
-    private String mDbName = "", mBusinessType = "", convert = "", mTimeZone = "", mWebsite = "", mMonthlyProcVolume = "", mHighTicket = "", mAverageTicket = "", mCustomerServiceEmail = "", mCustomerServicePhone = "", mDbAddressLine = "", mDbFillingDate = "";
+    private String mDbName = "", mBusinessType = "",accountNumber = "", convert = "", mTimeZone = "", mWebsite = "", mMonthlyProcVolume = "", mHighTicket = "", mAverageTicket = "", mCustomerServiceEmail = "", mCustomerServicePhone = "", mDbAddressLine = "", mDbFillingDate = "";
     private Boolean addBusiness = false;
     private Boolean addDBA = false;
     private BankAccountsViewModel bankAccountsViewModel;
@@ -262,6 +262,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //                        mEINTx.setText(hifened);
                     } else {
                         isCPwdEye = false;
+                        llEin.setBackgroundResource(R.drawable.ic_eyeopen);
                         if (cir.getIdentificationType() == 11) {
                             String hifened = convert.substring(0, 3) + " - " + convert.substring(3, 5) + " - " + convert.substring(5, convert.length());
                             mEINTx.setText(hifened);
@@ -270,7 +271,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + " - " + cir.getSsnOrEin().substring(2));
 
                         }
-                        llEin.setBackgroundResource(R.drawable.ic_eyeopen);
                         // mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + "-" + cir.getSsnOrEin().substring(2));
                     }
 
@@ -514,6 +514,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     if (cir.getIdentificationType() == 11) {
                                         ssnEinTV.setText("SSN");
                                         isCPwdEye = true;
+                                        llEin.setBackgroundResource(R.drawable.ic_eyeclose);
                                         convert = cir.getSsnOrEin().replaceAll("\\-", "");
                                         String converted = convert.replaceAll("\\w(?=\\w{2})", "•");
                                         String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5, converted.length());
@@ -522,6 +523,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     } else {
                                         ssnEinTV.setText("EIN/TIN");
                                         isCPwdEye = true;
+                                        llEin.setBackgroundResource(R.drawable.ic_eyeclose);
                                         String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", "•");
                                         String hifened = converted.substring(0, 2) + " - " + converted.substring(2);
                                         mEINTx.setText(hifened);
@@ -753,8 +755,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     tvRoutingNum.setText(bankBankAccounts.get(0).getRoutingNumber());
                                 }
                                 if (bankBankAccounts.get(0).getAccountNumber() != null) {
-                                    convert = bankBankAccounts.get(0).getAccountNumber().replaceAll("", "");
-                                    String converted = convert.replaceAll("\\w(?=\\w{4})", "•");
+                                    accountNumber = bankBankAccounts.get(0).getAccountNumber().replaceAll("", "");
+                                    String converted = accountNumber.replaceAll("\\w(?=\\w{4})", "•");
                                     tvAccountNum.setText(converted);
 
                                 }
