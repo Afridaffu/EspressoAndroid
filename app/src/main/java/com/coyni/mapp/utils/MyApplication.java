@@ -72,6 +72,7 @@ public class MyApplication extends Application {
     private List<States> listStates = new ArrayList<>();
     private String strMobileToken = "";
     private DatabaseHandler dbHandler;
+    private String totalBuyAmountWithFee;
 
     @Override
     public void onCreate() {
@@ -127,6 +128,14 @@ public class MyApplication extends Application {
 
     public void setPaidOrderResp(PaidOrderResp paidOrderResp) {
         mCurrentUserData.setPaidOrderResp(paidOrderResp);
+    }
+
+    public String getTotalBuyAmountWithFee() {
+        return totalBuyAmountWithFee;
+    }
+
+    public void setTotalBuyAmountWithFee(String totalBuyAmountWithFee) {
+        this.totalBuyAmountWithFee = totalBuyAmountWithFee;
     }
 
     public void setOrderPayResponse(OrderPayResponse orderPayResponse) {
