@@ -1138,6 +1138,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
             tvProcessingFee.setText(Utils.USNumberFormat(Utils.doubleParsing(strPFee)) + " USD");
             total = cynValue + Utils.doubleParsing(strPFee);
             tvTotal.setText(Utils.USNumberFormat(total) + " USD");
+            objMyApplication.setTotalBuyAmountWithFee(Utils.USNumberFormat(total));
             prepareBuyRequest();
             if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
                 MatomoUtility.getInstance().trackEvent(MatomoConstants.BUY_TOKEN_BANK, MatomoConstants.BUY_TOKEN_BANK_CLICKED);
@@ -1457,11 +1458,11 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
 
             try {
                 if (objData.getDescriptorName() != null)
-                    tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement as " + objData.getDescriptorName().toLowerCase() + ".");
+                    tvMessage.setText("This total amount of " + objMyApplication.getTotalBuyAmountWithFee() + " will appear on your\nbank statement as " + objData.getDescriptorName().toLowerCase() + ".");
                 else
-                    tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement.");
+                    tvMessage.setText("This total amount of " + objMyApplication.getTotalBuyAmountWithFee() + " will appear on your\nbank statement.");
             } catch (Exception e) {
-                tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement.");
+                tvMessage.setText("This total amount of " + objMyApplication.getTotalBuyAmountWithFee() + " will appear on your\nbank statement.");
             }
 
 

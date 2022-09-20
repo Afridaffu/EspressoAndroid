@@ -3,17 +3,13 @@ package com.coyni.mapp.view;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -26,7 +22,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -46,16 +41,15 @@ import com.coyni.mapp.viewmodel.CoyniViewModel;
 
 public class GiftCardBindingLayoutActivity extends BaseActivity {
     String strScreen = "", enableType = "";
-    TextView giftCardTypeTV, giftCardAmountTV, giftCardDescTV, refIDTV, gcProcessingTV, learnMoreTV, tvMessage, mTryButtonTV;
-    LinearLayout refIDLL;
+    TextView giftCardTypeTV, giftCardAmountTV, giftCardDescTV, referenceIDTV, gcProcessingTV, learnMoreTV, tvMessage, mTryButtonTV;
+    LinearLayout referenceIDLL;
     CardView doneCV, cvTryAgain;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
     Dialog pDialog;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
-    private static int CODE_AUTHENTICATION = 512;
+    private static final int CODE_AUTHENTICATION = 512;
     CoyniViewModel coyniViewModel;
-    SQLiteDatabase mydatabase;
     DatabaseHandler dbHandler;
     Double cynValue = 0.0;
 
@@ -115,11 +109,11 @@ public class GiftCardBindingLayoutActivity extends BaseActivity {
             giftCardTypeTV = findViewById(R.id.giftCardTypeTV);
             giftCardAmountTV = findViewById(R.id.giftCardAmountTV);
             giftCardDescTV = findViewById(R.id.giftCardDescTV);
-            refIDTV = findViewById(R.id.refIDTV);
+            referenceIDTV = findViewById(R.id.refIDTV);
             dbHandler = DatabaseHandler.getInstance(GiftCardBindingLayoutActivity.this);
             gcProcessingTV = findViewById(R.id.gcProcessingTV);
             learnMoreTV = findViewById(R.id.learnMoreTV);
-            refIDLL = findViewById(R.id.refIDLL);
+            referenceIDLL = findViewById(R.id.refIDLL);
             doneCV = findViewById(R.id.doneCV);
             mTryButtonTV = findViewById(R.id.try_button_tv);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
@@ -373,11 +367,11 @@ public class GiftCardBindingLayoutActivity extends BaseActivity {
 
             try {
                 if (objData.getDescriptorName() != null)
-                    tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement as " + objData.getDescriptorName().toLowerCase() + ".");
+                    tvMessage.setText("This total amount of " + objMyApplication.getTotalBuyAmountWithFee() + " will appear on your\nbank statement as " + objData.getDescriptorName().toLowerCase() + ".");
                 else
-                    tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement.");
+                    tvMessage.setText("This total amount of " + objMyApplication.getTotalBuyAmountWithFee() + " will appear on your\nbank statement.");
             } catch (Exception e) {
-                tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement.");
+                tvMessage.setText("This total amount of " + objMyApplication.getTotalBuyAmountWithFee() + " will appear on your\nbank statement.");
             }
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -439,7 +433,7 @@ public class GiftCardBindingLayoutActivity extends BaseActivity {
             }
 
             if (objMyApplication.getWithdrawResponse() != null) {
-                refIDTV.setText(objMyApplication.getWithdrawResponse().getData().getGbxTransactionId().substring(0, 15));
+                referenceIDTV.setText(objMyApplication.getWithdrawResponse().getData().getGbxTransactionId().substring(0, 15));
             }
 
             learnMoreTV.setOnClickListener(new View.OnClickListener() {
@@ -453,7 +447,7 @@ public class GiftCardBindingLayoutActivity extends BaseActivity {
                 }
             });
 
-            refIDLL.setOnClickListener(new View.OnClickListener() {
+            referenceIDLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Utils.copyText(objMyApplication.getWithdrawResponse().getData().getGbxTransactionId(), GiftCardBindingLayoutActivity.this);
