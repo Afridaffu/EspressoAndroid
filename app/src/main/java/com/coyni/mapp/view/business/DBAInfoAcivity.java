@@ -444,21 +444,21 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
             });
 
-            eCommerceLL.setOnClickListener(view -> {
-                if (!isECommerce) {
-                    eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
-                    retailIV.setImageResource(R.drawable.ic_rb_unselected);
-                    websiteOET.setHint("Website");
-                    isECommerce = true;
-                    isRetail = false;
-                    identificationType = 9;
-                    isIDVESelected = true;
-
-//                    dbaFillingLL.setVisibility(GONE);
-                }
-                isWebsite = isValidUrl(websiteOET.getText().trim());
-                enableOrDisableNext();
-            });
+//            eCommerceLL.setOnClickListener(view -> {
+//                if (!isECommerce) {
+//                    eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
+//                    retailIV.setImageResource(R.drawable.ic_rb_unselected);
+//                    websiteOET.setHint("Website");
+//                    isECommerce = true;
+//                    isRetail = false;
+//                    identificationType = 9;
+//                    isIDVESelected = true;
+//
+////                    dbaFillingLL.setVisibility(GONE);
+//                }
+//                isWebsite = isValidUrl(websiteOET.getText().trim());
+//                enableOrDisableNext();
+//            });
 
             retailLL.setOnClickListener(view -> {
                 if (!isRetail) {
@@ -545,9 +545,9 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             websiteOET.setHint("Website (Optional)");
             //isWebsite = isValidUrl(websiteOET.getText().trim());
             //end
-            isECommerce = true;
-            isRetail = false;
-            identificationType = 9;
+            isECommerce = false;
+            isRetail = true;
+            identificationType = 8;
             isIDVESelected = true;
 
 
@@ -1565,7 +1565,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         websiteOET.setSelection();
                     }
 
-                    if (cir.getIdentificationType().equals("8")) {
+//                    if (cir.getIdentificationType().equals("8")) {
                         websiteOET.setHint("Website (Optional)");
                         isECommerce = false;
                         isRetail = true;
@@ -1574,16 +1574,16 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
                         isWebsite = true;
                         isIDVESelected = true;
-                    } else if (cir.getIdentificationType().equals("9")) {
-                        eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
-                        retailIV.setImageResource(R.drawable.ic_rb_unselected);
-                        websiteOET.setHint("Website");
-                        isECommerce = true;
-                        isRetail = false;
-                        identificationType = 9;
-                        isWebsite = isValidUrl(cir.getWebsite());
-                        isIDVESelected = true;
-                    }
+//                    } else if (cir.getIdentificationType().equals("9")) {
+//                        eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
+//                        retailIV.setImageResource(R.drawable.ic_rb_unselected);
+//                        websiteOET.setHint("Website");
+//                        isECommerce = true;
+//                        isRetail = false;
+//                        identificationType = 9;
+//                        isWebsite = isValidUrl(cir.getWebsite());
+//                        isIDVESelected = true;
+//                    }
 
                     if (cir.getRequiredDocuments().size() > 0) {
                         dbaFillingLL.setVisibility(VISIBLE);
