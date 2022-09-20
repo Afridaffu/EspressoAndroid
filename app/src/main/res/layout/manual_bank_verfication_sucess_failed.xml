@@ -86,7 +86,7 @@
                                 android:paddingEnd="@dimen/_3sdp"
                                 android:text="Approved"
                                 android:textColor="@color/active_green"
-                                android:textSize="@dimen/_11ssp" />
+                                android:textSize="@dimen/_10ssp" />
 
 
                         </LinearLayout>

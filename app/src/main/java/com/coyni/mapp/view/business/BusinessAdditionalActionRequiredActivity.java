@@ -20,7 +20,6 @@ import android.text.Spanned;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -667,16 +666,20 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         } else {
             note.setText(R.string.thank_you_for_your_interest_in_coyni_after_ncarefully_reviewing_the_coyni_team_made_ndecision_to_approve_your_application_with);
         }
-        if (actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().contains("CYN")) {
-            tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume()));
-        } else {
-            tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("", "CYN")));
-        }
+        if (actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume() != null) {
 
-        if (actionRequiredResponse.getData().getReserveRule().getHighTicket().contains("CYN")) {
-            tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket()));
-        } else {
-            tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("", "CYN")));
+            if (actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().contains("CYN")) {
+                tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume()));
+            } else {
+                tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("", "CYN")));
+            }
+        }
+        if (actionRequiredResponse.getData().getReserveRule().getHighTicket() != null) {
+            if (actionRequiredResponse.getData().getReserveRule().getHighTicket().contains("CYN")) {
+                tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket()));
+            } else {
+                tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("", "CYN")));
+            }
         }
         String percent = Utils.convertBigDecimalUSD(String.valueOf(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString()));
         tv_reserveAmount.setText(Utils.convertTwoDecimal(percent.replace("0*$", "") + " %"));
