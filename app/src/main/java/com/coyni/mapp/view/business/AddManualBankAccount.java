@@ -142,21 +142,22 @@ public class AddManualBankAccount extends BaseActivity {
                 isAcNum = true;
                 isConfirmAc = true;
                 enableOrDisableNext();
+            } else {
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    nameOnBankET.setText(objMyApplication.getStrUserName());
+                    Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
+                    isName = true;
+                } else {
+                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
+                        nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
+                        Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
+                    } else {
+                        nameOnBankET.setText(objMyApplication.getStrUserName());
+                    }
+                    isName = true;
+                }
             }
 
-            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                nameOnBankET.setText(objMyApplication.getStrUserName());
-                Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
-                isName = true;
-            } else {
-                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
-                    nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
-                    Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
-                } else {
-                    nameOnBankET.setText(objMyApplication.getStrUserName());
-                }
-                isName = true;
-            }
             backLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
