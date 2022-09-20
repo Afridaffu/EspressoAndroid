@@ -137,9 +137,13 @@ import com.coyni.mapp.model.register.EmailResendResponse;
 import com.coyni.mapp.model.register.EmailResponse;
 import com.coyni.mapp.model.register.InitCustomerRequest;
 import com.coyni.mapp.model.register.InitializeCustomerResponse;
+import com.coyni.mapp.model.register.OTPValidateRequest;
+import com.coyni.mapp.model.register.OTPValidateResponse;
 import com.coyni.mapp.model.register.SMSResend;
 import com.coyni.mapp.model.register.SMSResponse;
 import com.coyni.mapp.model.register.SMSValidate;
+import com.coyni.mapp.model.register.SignAgreementRequest;
+import com.coyni.mapp.model.register.SignAgreementResponse;
 import com.coyni.mapp.model.register.SmsRequest;
 import com.coyni.mapp.model.reguser.RegUsersResponse;
 import com.coyni.mapp.model.reguser.RegisteredUsersRequest;
@@ -155,6 +159,8 @@ import com.coyni.mapp.model.retrieveemail.RetrieveUsersResponse;
 import com.coyni.mapp.model.signedagreements.SignedAgreementResponse;
 import com.coyni.mapp.model.signet.SignetRequest;
 import com.coyni.mapp.model.signet.SignetResponse;
+import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.model.signin.InitializeResponse;
 import com.coyni.mapp.model.submit.ApplicationSubmitResponseModel;
 import com.coyni.mapp.model.summary.ApplicationSummaryModelResponse;
 import com.coyni.mapp.model.team.TeamGetDataModel;
@@ -216,17 +222,35 @@ public interface ApiService {
     @POST("api/v2/user/register/phone-otp/validate")
     Call<SMSValidate> smsotp(@Body SmsRequest smsRequest);
 
+    @POST("api/v2/user/verify/phone-otp/registration")
+    Call<OTPValidateResponse> validateRegisterMobileOTP(@Body OTPValidateRequest OTPValidateRequest);
+
+
     @POST("api/v2/user/sms-otp/validate")
     Call<SMSValidate> smsotpLogin(@Body SmsRequest smsRequest);
 
     @POST("api/v2/user/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
 
+    @POST("api/v2/user/signin")
+    Call<BiometricSignIn> loginNew(@Body LoginRequest loginRequest);
+
+    @POST("api/v2/user/initialize")
+    Call<InitializeResponse> initialize();
+
     @POST("api/v2/user/logout")
     Call<LogoutResponse> logout();
 
     @POST("api/v2/register/newcustomer")
     Call<CustRegisterResponse> custRegister(@Body CustRegisRequest custRegisRequest);
+
+    //2.1 Register flow
+    @POST("api/v2/register/new-user")
+    Call<CustRegisterResponse> registerNew(@Body CustRegisRequest custRegisRequest);
+
+
+    @POST("api/v2/user/verify/email-otp/registration")
+    Call<OTPValidateResponse> validateRegisterEmailOTP(@Body OTPValidateRequest OTPValidateRequest);
 
     @POST("api/v2/user/email-otp/validate")
     Call<EmailValidateResponse> emailotpValidate(@Body SmsRequest smsRequest);
@@ -271,7 +295,7 @@ public interface ApiService {
     Call<BiometricResponse> saveBiometric(@Body BiometricRequest request);
 
     @POST("api/v2/user/biometric/login")
-    Call<LoginResponse> biometricLogin(@Body BiometricLoginRequest request);
+    Call<BiometricSignIn> biometricLogin(@Body BiometricLoginRequest request);
 
     @GET("api/v2/profile/me")
     Call<Profile> meProfile();
@@ -734,11 +758,18 @@ public interface ApiService {
 
     @POST("api/v2/user/start")
     Call<WebSocketUrlResponse> webSocketUrl();
+
     @POST("api/v2/banks/manual")
     Call<ManualBankResponse> addManualBank(@Body ManualBankRequest request);
 
-
     @GET("api/v2/app-version/retrieve")
     Call<AppUpdateResp> getAppUpdate(@Query("osType") String osType);
+
+    @POST("api/v2/user/sign/agreement")
+    Call<OTPValidateResponse> signAgreementTOS(@Body SignAgreementRequest signAgreementRequest);
+
+    @POST("api/v2/user/sign/agreement")
+    Call<SignAgreementResponse> signAgreementPP(@Body SignAgreementRequest signAgreementRequest);
+
 }
 

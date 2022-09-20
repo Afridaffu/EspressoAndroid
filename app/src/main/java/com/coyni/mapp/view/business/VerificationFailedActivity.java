@@ -15,6 +15,8 @@ import androidx.cardview.widget.CardView;
 import com.coyni.mapp.R;
 import com.coyni.mapp.model.login.LoginData;
 import com.coyni.mapp.model.login.LoginResponse;
+import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.model.signin.BiometricSignInData;
 import com.coyni.mapp.utils.CustomTypefaceSpan;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
@@ -25,7 +27,7 @@ public class VerificationFailedActivity extends AppCompatActivity {
     private TextView mTvName, mTvDbaName, mTvLegalName, descTV;
     private CardView mCvDone;
     private ImageView mIvClose;
-    private LoginResponse loginResponse;
+    private BiometricSignIn loginResponse;
     MyApplication myApplication;
 
     @Override
@@ -40,7 +42,7 @@ public class VerificationFailedActivity extends AppCompatActivity {
         Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
         if (loginResponse != null && loginResponse.getStatus() != null
                 && loginResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-            LoginData data = loginResponse.getData();
+            BiometricSignInData data = loginResponse.getData();
             if (data != null) {
                 if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                     if (data.getFirstName() != null && data.getLastName() != null) {

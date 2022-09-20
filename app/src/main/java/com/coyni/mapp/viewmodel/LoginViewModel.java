@@ -9,6 +9,12 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.coyni.mapp.model.coynipin.StepUpOTPResponse;
+import com.coyni.mapp.model.register.OTPValidateRequest;
+import com.coyni.mapp.model.register.OTPValidateResponse;
+import com.coyni.mapp.model.register.SignAgreementRequest;
+import com.coyni.mapp.model.register.SignAgreementResponse;
+import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.model.signin.InitializeResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.coyni.mapp.model.APIError;
@@ -63,10 +69,13 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<EmailResendResponse> emailresendMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailResponse> emailotpLiveData = new MutableLiveData<>();
+    private MutableLiveData<OTPValidateResponse> regEmailOTPValidateLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailValidateResponse> emailValidateResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SMSResponse> smsresendMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SMSValidate> smsotpLiveData = new MutableLiveData<>();
+    private MutableLiveData<OTPValidateResponse> regMobileOTPLiveData = new MutableLiveData<>();
     private MutableLiveData<LoginResponse> loginLiveData = new MutableLiveData<>();
+    private MutableLiveData<BiometricSignIn> loginNewLiveData = new MutableLiveData<>();
 
     private MutableLiveData<CustRegisterResponse> custRegisResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailResponse> emailresendLiveData = new MutableLiveData<>();
@@ -76,7 +85,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<InitializeCustomerResponse> initCustomerLiveData = new MutableLiveData<>();
     private MutableLiveData<RetrieveEmailResponse> retrieveEmailResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<RetrieveUsersResponse> retrieveUsersResponseMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<LoginResponse> biometricResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BiometricSignIn> biometricResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UpdateEmailResponse> updateEmailValidateResponse = new MutableLiveData<>();
     private MutableLiveData<UpdatePhoneResponse> updatePhoneValidateResponse = new MutableLiveData<>();
     private MutableLiveData<ManagePasswordResponse> managePasswordResponseMutableLiveData = new MutableLiveData<>();
@@ -88,6 +97,17 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<DeviceInitializeResponse> deviceInitializeResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<StepUpOTPResponse> stepUpEmailOTPResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<StepUpOTPResponse> stepUpPhoneOTPResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<OTPValidateResponse> signAgreementTOSotpLiveData = new MutableLiveData<>();
+    private MutableLiveData<SignAgreementResponse> signAgreementPPotpLiveData = new MutableLiveData<>();
+    private MutableLiveData<InitializeResponse> initializeResponseMutableLiveData = new MutableLiveData<>();
+
+
+    public MutableLiveData<InitializeResponse> getInitializeResponseMutableLiveData() {
+        return initializeResponseMutableLiveData;
+    }
+    public MutableLiveData<BiometricSignIn> getLoginNewLiveData() {
+        return loginNewLiveData;
+    }
 
     public MutableLiveData<LoginResponse> getAuthenticatePasswordResponse() {
         return authenticatePasswordResponse;
@@ -129,6 +149,10 @@ public class LoginViewModel extends AndroidViewModel {
         return smsotpLiveData;
     }
 
+    public MutableLiveData<OTPValidateResponse> getRegMobileOTPLiveData() {
+        return regMobileOTPLiveData;
+    }
+
     public MutableLiveData<LoginResponse> getLoginLiveData() {
         return loginLiveData;
     }
@@ -165,7 +189,7 @@ public class LoginViewModel extends AndroidViewModel {
         return retrieveUsersResponseMutableLiveData;
     }
 
-    public MutableLiveData<LoginResponse> getBiometricResponseMutableLiveData() {
+    public MutableLiveData<BiometricSignIn> getBiometricResponseMutableLiveData() {
         return biometricResponseMutableLiveData;
     }
 
@@ -200,6 +224,19 @@ public class LoginViewModel extends AndroidViewModel {
     public MutableLiveData<StepUpOTPResponse> getStepUpPhoneOTPResponseMutableLiveData() {
         return stepUpPhoneOTPResponseMutableLiveData;
     }
+
+    public MutableLiveData<OTPValidateResponse> getRegEmailOTPValidateLiveData() {
+        return regEmailOTPValidateLiveData;
+    }
+
+    public MutableLiveData<OTPValidateResponse> getSignAgreementTOSotpLiveData() {
+        return signAgreementTOSotpLiveData;
+    }
+
+    public MutableLiveData<SignAgreementResponse> getSignAgreementPPotpLiveData() {
+        return signAgreementPPotpLiveData;
+    }
+
 
     public void smsotpresend(SMSResend resend) {
         try {
@@ -304,6 +341,40 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
+    public void validateRegisterEmailOTP(OTPValidateRequest OTPValidateRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<OTPValidateResponse> mCall = apiService.validateRegisterEmailOTP(OTPValidateRequest);
+            mCall.enqueue(new Callback<OTPValidateResponse>() {
+                @Override
+                public void onResponse(Call<OTPValidateResponse> call, Response<OTPValidateResponse> response) {
+                    if (response.isSuccessful()) {
+                        OTPValidateResponse obj = response.body();
+                        regEmailOTPValidateLiveData.setValue(obj);
+                        Log.e("Email Validate Resp", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<OTPValidateResponse>() {
+                        }.getType();
+                        OTPValidateResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            regEmailOTPValidateLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<OTPValidateResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
     public void smsotp(SmsRequest smsRequest) {
         try {
             ApiService apiService = ApiClient.getInstance().create(ApiService.class);
@@ -328,6 +399,39 @@ public class LoginViewModel extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<SMSValidate> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void validateRegisterMobileOTP(OTPValidateRequest OTPValidateRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<OTPValidateResponse> mCall = apiService.validateRegisterMobileOTP(OTPValidateRequest);
+            mCall.enqueue(new Callback<OTPValidateResponse>() {
+                @Override
+                public void onResponse(Call<OTPValidateResponse> call, Response<OTPValidateResponse> response) {
+                    if (response.isSuccessful()) {
+                        OTPValidateResponse obj = response.body();
+                        regMobileOTPLiveData.setValue(obj);
+                        Log.e("SMS Validate Resp", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<OTPValidateResponse>() {
+                        }.getType();
+                        OTPValidateResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            regMobileOTPLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<OTPValidateResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }
@@ -456,6 +560,60 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
+    public void loginNew(LoginRequest loginRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<BiometricSignIn> mCall = apiService.loginNew(loginRequest);
+            mCall.enqueue(new Callback<BiometricSignIn>() {
+                @Override
+                public void onResponse(Call<BiometricSignIn> call, Response<BiometricSignIn> response) {
+                    try {
+                        String strResponse = "";
+                        if (response.isSuccessful()) {
+                            BiometricSignIn obj = response.body();
+                            loginNewLiveData.setValue(obj);
+                        } else if (response.code() == 500) {
+                            strResponse = response.errorBody().string();
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<BiometricSignIn>() {
+                            }.getType();
+                            BiometricSignIn errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                loginNewLiveData.setValue(errorResponse);
+                            } else {
+                                BiometricSignIn errorResponse1 = gson.fromJson(strResponse, type);
+                                loginNewLiveData.setValue(errorResponse1);
+                            }
+                        } else {
+                            strResponse = response.errorBody().string();
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            if (errorResponse != null) {
+                                apiErrorMutableLiveData.setValue(errorResponse);
+                            } else {
+                                APIError errorResponse1 = gson.fromJson(strResponse, type);
+                                apiErrorMutableLiveData.setValue(errorResponse1);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BiometricSignIn> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    loginNewLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public void emailotpValidate(SmsRequest smsRequest) {
         try {
             ApiService apiService = ApiClient.getInstance().create(ApiService.class);
@@ -541,6 +699,54 @@ public class LoginViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
+    //new Signup flow
+    public void registrationNew(CustRegisRequest custRegisRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<CustRegisterResponse> mCall = apiService.registerNew(custRegisRequest);
+            mCall.enqueue(new Callback<CustRegisterResponse>() {
+                @Override
+                public void onResponse(Call<CustRegisterResponse> call, Response<CustRegisterResponse> response) {
+
+                    if (response.isSuccessful()) {
+                        Log.e("CustReg Success", "CustReg Success");
+                        try {
+                            CustRegisterResponse obj = response.body();
+                            custRegisResponseMutableLiveData.setValue(obj);
+                            Log.e("CustReg Success", new Gson().toJson(obj));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.e("CustReg Error", "CustReg Error");
+                        try {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<CustRegisterResponse>() {
+                            }.getType();
+                            CustRegisterResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                custRegisResponseMutableLiveData.setValue(errorResponse);
+                            }
+                            Log.e("CustReg Error", new Gson().toJson(errorResponse));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CustRegisterResponse> call, Throwable t) {
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
     public void setPassword(SetPassword setPassword) {
         try {
@@ -672,12 +878,12 @@ public class LoginViewModel extends AndroidViewModel {
     public void biometricLogin(BiometricLoginRequest request, MyApplication objMyApplication) {
         try {
             ApiService apiService = ApiClient.getInstance().create(ApiService.class);
-            Call<LoginResponse> mCall = apiService.biometricLogin(request);
-            mCall.enqueue(new Callback<LoginResponse>() {
+            Call<BiometricSignIn> mCall = apiService.biometricLogin(request);
+            mCall.enqueue(new Callback<BiometricSignIn>() {
                 @Override
-                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                public void onResponse(Call<BiometricSignIn> call, Response<BiometricSignIn> response) {
                     if (response.isSuccessful()) {
-                        LoginResponse obj = response.body();
+                        BiometricSignIn obj = response.body();
                         if (obj != null && obj.getData() != null) {
                             objMyApplication.setBusinessUserID(String.valueOf(obj.getData().getBusinessUserId()));
                             objMyApplication.setOwnerImage(obj.getData().getOwnerImage());
@@ -686,9 +892,9 @@ public class LoginViewModel extends AndroidViewModel {
                         Log.e("Bio Success", new Gson().toJson(obj));
                     } else {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<LoginResponse>() {
+                        Type type = new TypeToken<BiometricSignIn>() {
                         }.getType();
-                        LoginResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        BiometricSignIn errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
                             biometricResponseMutableLiveData.setValue(errorResponse);
                             Log.e("Biometric Error", new Gson().toJson(errorResponse));
@@ -697,7 +903,7 @@ public class LoginViewModel extends AndroidViewModel {
                 }
 
                 @Override
-                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                public void onFailure(Call<BiometricSignIn> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }
@@ -1025,6 +1231,126 @@ public class LoginViewModel extends AndroidViewModel {
                 public void onFailure(Call<StepUpOTPResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     stepUpPhoneOTPResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void signAgreementTOS(SignAgreementRequest signAgreementRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<OTPValidateResponse> mCall = apiService.signAgreementTOS(signAgreementRequest);
+            mCall.enqueue(new Callback<OTPValidateResponse>() {
+                @Override
+                public void onResponse(Call<OTPValidateResponse> call, Response<OTPValidateResponse> response) {
+                    if (response.isSuccessful()) {
+                        OTPValidateResponse obj = response.body();
+                        signAgreementTOSotpLiveData.setValue(obj);
+                        Log.e("SMS Validate Resp", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<OTPValidateResponse>() {
+                        }.getType();
+                        OTPValidateResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            signAgreementTOSotpLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<OTPValidateResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    signAgreementTOSotpLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void signAgreementPP(SignAgreementRequest signAgreementRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<SignAgreementResponse> mCall = apiService.signAgreementPP(signAgreementRequest);
+            mCall.enqueue(new Callback<SignAgreementResponse>() {
+                @Override
+                public void onResponse(Call<SignAgreementResponse> call, Response<SignAgreementResponse> response) {
+                    if (response.isSuccessful()) {
+                        SignAgreementResponse obj = response.body();
+                        signAgreementPPotpLiveData.setValue(obj);
+                        Log.e("SMS Validate Resp", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<SignAgreementResponse>() {
+                        }.getType();
+                        SignAgreementResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            signAgreementPPotpLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SignAgreementResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    signAgreementPPotpLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void initialize() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<InitializeResponse> mCall = apiService.initialize();
+            mCall.enqueue(new Callback<>() {
+                @Override
+                public void onResponse(Call<InitializeResponse> call, Response<InitializeResponse> response) {
+                    try {
+                        String strResponse = "";
+                        if (response.isSuccessful()) {
+                            InitializeResponse obj = response.body();
+                            initializeResponseMutableLiveData.setValue(obj);
+                        } else if (response.code() == 500) {
+                            strResponse = response.errorBody().string();
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<InitializeResponse>() {
+                            }.getType();
+                            InitializeResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                initializeResponseMutableLiveData.setValue(errorResponse);
+                            } else {
+                                InitializeResponse errorResponse1 = gson.fromJson(strResponse, type);
+                                initializeResponseMutableLiveData.setValue(errorResponse1);
+                            }
+                        } else {
+                            strResponse = response.errorBody().string();
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            if (errorResponse != null) {
+                                apiErrorMutableLiveData.setValue(errorResponse);
+                            } else {
+                                APIError errorResponse1 = gson.fromJson(strResponse, type);
+                                apiErrorMutableLiveData.setValue(errorResponse1);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<InitializeResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    initializeResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

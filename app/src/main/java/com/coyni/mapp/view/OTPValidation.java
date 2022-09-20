@@ -42,6 +42,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.model.coynipin.StepUpOTPResponse;
+import com.coyni.mapp.model.register.OTPValidateRequest;
+import com.coyni.mapp.model.register.OTPValidateResponse;
+import com.coyni.mapp.view.business.AcceptAgreementsActivity;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
@@ -445,20 +448,29 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                 if (OTP_TYPE.equals("MOBILE")) {
                                     if (charSequence.length() == 6) {
                                         Utils.hideKeypad(OTPValidation.this);
-                                        SmsRequest smsRequest = new SmsRequest();
-                                        smsRequest.setEmail(EMAIL.trim());
-                                        smsRequest.setOtp(charSequence.toString().trim());
-                                        smsRequest.setToken(objMyApplication.getStrRegisToken());
-                                        loginViewModel.smsotp(smsRequest);
+//                                        SmsRequest smsRequest = new SmsRequest();
+//                                        smsRequest.setEmail(EMAIL.trim());
+//                                        smsRequest.setOtp(charSequence.toString().trim());
+//                                        smsRequest.setToken(objMyApplication.getStrRegisToken());
+//                                        loginViewModel.smsotp(smsRequest);
+                                        OTPValidateRequest OTPValidateRequest = new OTPValidateRequest();
+                                        OTPValidateRequest.setOtp(charSequence.toString().trim());
+                                        OTPValidateRequest.setToken(objMyApplication.getStrRegisToken());
+                                        loginViewModel.validateRegisterMobileOTP(OTPValidateRequest);
                                     }
                                 } else if (OTP_TYPE.equals("EMAIL")) {
                                     if (charSequence.length() == 6) {
                                         Utils.hideKeypad(OTPValidation.this);
-                                        SmsRequest smsRequest = new SmsRequest();
-                                        smsRequest.setEmail(EMAIL.trim());
-                                        smsRequest.setOtp(charSequence.toString().trim());
-                                        smsRequest.setToken(objMyApplication.getStrRegisToken());
-                                        loginViewModel.emailotp(smsRequest);
+//                                        SmsRequest smsRequest = new SmsRequest();
+//                                        smsRequest.setEmail(EMAIL.trim());
+//                                        smsRequest.setOtp(charSequence.toString().trim());
+//                                        smsRequest.setToken(objMyApplication.getStrRegisToken());
+//                                        loginViewModel.emailotp(smsRequest);
+
+                                        OTPValidateRequest OTPValidateRequest = new OTPValidateRequest();
+                                        OTPValidateRequest.setOtp(charSequence.toString().trim());
+                                        OTPValidateRequest.setToken(objMyApplication.getStrRegisToken());
+                                        loginViewModel.validateRegisterEmailOTP(OTPValidateRequest);
                                     }
                                 }
                             }
@@ -554,6 +566,59 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     }
 
     private void initObserver() {
+
+        loginViewModel.getRegEmailOTPValidateLiveData().observe(this, new Observer<OTPValidateResponse>() {
+            @Override
+            public void onChanged(OTPValidateResponse emailResponse) {
+                try {
+                    //dialog.dismiss();
+                    if (emailResponse != null) {
+                        Log.e("Email OTP Validate", new Gson().toJson(emailResponse));
+                        if (emailResponse.getStatus().toLowerCase().equals("error")) {
+                            otpPV.setLineColor(getResources().getColor(R.color.error_red));
+                            shakeAnimateLeftRight();
+                        } else {
+                            otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                            shakeAnimateUpDown();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        if (strScreen != null && !strScreen.equals("")) {
+                                            switch (strScreen) {
+                                                case "SignUp":
+                                                    if (OTP_TYPE.equals("EMAIL")) {
+                                                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                                                        Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
+//                                                        Utils.setStrAuth(emailResponse.getData().getJwtToken());
+//                                                        secureAccountRL.setVisibility(View.VISIBLE);
+//                                                        layoutMain.setClickable(false);
+//                                                        layoutMain.setEnabled(false);
+//                                                        layoutType = "SECURE";
+//                                                        layoutEntry.setVisibility(View.GONE);
+//                                                        layoutFailure.setVisibility(View.GONE);
+                                                        objMyApplication.setStrRegisToken(emailResponse.getData().getToken());
+                                                        startActivity(new Intent(OTPValidation.this, AcceptAgreementsActivity.class)
+                                                                .putExtra(Utils.AGREEMENT_TYPE, Utils.cTOS)
+                                                                .putExtra(Utils.ACT_TYPE, Utils.multiple));
+                                                        finish();
+                                                    }
+                                                    break;
+                                            }
+                                        }
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            }, Utils.duration);
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         loginViewModel.getEmailotpLiveData().observe(this, new Observer<EmailResponse>() {
             @Override
             public void onChanged(EmailResponse emailResponse) {
@@ -1146,6 +1211,79 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         otpPV.setLineColor(getResources().getColor(R.color.error_red));
                         shakeAnimateLeftRight();
                     }
+                }
+            }
+        });
+
+        loginViewModel.getRegMobileOTPLiveData().observe(this, new Observer<OTPValidateResponse>() {
+            @Override
+            public void onChanged(OTPValidateResponse smsValidate) {
+                try {
+                    if (smsValidate != null) {
+                        if (smsValidate.getStatus().toLowerCase().equals("error")) {
+                            otpPV.setLineColor(getResources().getColor(R.color.error_red));
+                            shakeAnimateLeftRight();
+                            if (strScreen != null && strScreen.equals("login_SET_PIN")) {
+                                if (resendCounter >= 5) {
+                                    Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error", "");
+                                }
+                            } else {
+                                if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio")) {
+                                    try {
+                                        if (smsValidate.getError().getErrorDescription().equals("")) {
+                                            Utils.displayAlert(smsValidate.getError().getFieldErrors().get(0), OTPValidation.this, "", smsValidate.getError().getFieldErrors().get(0));
+                                        } else {
+                                            Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this, "", smsValidate.getError().getFieldErrors().get(0));
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        } else {
+                            if (strScreen != null && !strScreen.equals("")) {
+                                switch (strScreen) {
+                                    case "SignUp":
+                                        if (OTP_TYPE.equals("MOBILE")) {
+                                            otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                                            shakeAnimateUpDown();
+                                            resendCounter = 0;
+                                            new Handler().postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        if (smsValidate.getData().getToken() != null) {
+                                                            objMyApplication.setStrRegisToken(smsValidate.getData().getToken());
+                                                        }
+                                                        startActivity(new Intent(OTPValidation.this, OTPValidation.class)
+                                                                .putExtra("screen", "SignUp")
+                                                                .putExtra("OTP_TYPE", "EMAIL")
+                                                                .putExtra("MOBILE", MOBILE)
+                                                                .putExtra("EMAIL", EMAIL));
+                                                        finish();
+                                                    } catch (Exception ex) {
+                                                        ex.printStackTrace();
+                                                    }
+                                                }
+                                            }, Utils.duration);
+                                        }
+                                        break;
+                                    case "login_SET_PIN":
+                                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                                        secureAccountRL.setVisibility(View.VISIBLE);
+                                        layoutMain.setClickable(false);
+                                        layoutMain.setEnabled(false);
+                                        layoutType = "SECURE";
+                                        layoutEntry.setVisibility(View.GONE);
+                                        layoutFailure.setVisibility(View.GONE);
+                                        break;
+                                }
+                            }
+
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });

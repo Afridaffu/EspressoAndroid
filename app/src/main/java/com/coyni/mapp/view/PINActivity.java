@@ -3,10 +3,12 @@ package com.coyni.mapp.view;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Html;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,6 +25,8 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.model.States;
+import com.coyni.mapp.model.signin.InitializeResponse;
 import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
 import com.coyni.mapp.view.business.BusinessProfileActivity;
 import com.coyni.mapp.viewmodel.CustomerProfileViewModel;
@@ -50,6 +54,15 @@ import com.coyni.mapp.viewmodel.CheckOutViewModel;
 import com.coyni.mapp.viewmodel.CoyniViewModel;
 import com.coyni.mapp.viewmodel.LoginViewModel;
 import com.coyni.mapp.viewmodel.PayViewModel;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 
 public class PINActivity extends AppCompatActivity implements View.OnClickListener {
     private View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
@@ -193,6 +206,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             } else {
                 imgBack.setImageResource(R.drawable.ic_back);
             }
+
+            if (getIntent().getStringExtra("screen").equals("login")) {
+                loginViewModel.initialize();
+            }
+
             keyZeroTV.setOnClickListener(this);
             keyOneTV.setOnClickListener(this);
             keyTwoTV.setOnClickListener(this);
@@ -719,6 +737,43 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 }
             }
         });
+
+        loginViewModel.getInitializeResponseMutableLiveData().observe(this, new Observer<InitializeResponse>() {
+            @Override
+            public void onChanged(InitializeResponse initializeResponse) {
+                if (initializeResponse != null) {
+                    if (initializeResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        if (initializeResponse.getData() != null) {
+
+                            if (initializeResponse.getData().getStateList() != null && initializeResponse.getData().getStateList().getUS() != null) {
+                                getStatesUrl(initializeResponse.getData().getStateList().getUS());
+                            }
+
+                            objMyApplication.setDbaOwnerId(initializeResponse.getData().getDbaOwnerId());
+
+                            objMyApplication.setIsReserveEnabled(initializeResponse.getData().isReserveEnabled());
+
+                            if (initializeResponse.getData().getBusinessUserId() != null) {
+                                objMyApplication.setBusinessUserID(String.valueOf(initializeResponse.getData().getBusinessUserId()));
+//                                objMyApplication.setOwnerImage(initializeResponse.getData().getOwnerImage());
+                            }
+
+                            if (initializeResponse.getData().getEmail() != null) {
+                                objMyApplication.setStrEmail(initializeResponse.getData().getEmail());
+                                Utils.setUserEmail(PINActivity.this, initializeResponse.getData().getEmail());
+                            }
+
+                            objMyApplication.setLoginUserId(initializeResponse.getData().getUserId());
+
+                            objMyApplication.setAccountType(initializeResponse.getData().getAccountType());
+
+                        }
+
+                    }
+                }
+            }
+        });
+
     }
 
     @Override
@@ -1262,6 +1317,77 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void getStatesUrl(String strCode) {
+        try {
+            byte[] valueDecoded = new byte[0];
+            valueDecoded = Base64.decode(strCode.getBytes("UTF-8"), Base64.DEFAULT);
+            objMyApplication.setStrStatesUrl(new String(valueDecoded));
+            Log.e("States url", objMyApplication.getStrStatesUrl() + "   sdssd");
+            try {
+                new HttpGetRequest().execute("");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public class HttpGetRequest extends AsyncTask<String, Void, String> {
+        public static final String REQUEST_METHOD = "GET";
+        public static final int READ_TIMEOUT = 15000;
+        public static final int CONNECTION_TIMEOUT = 15000;
+
+        @Override
+        protected String doInBackground(String... params) {
+            String stringUrl = params[0];
+            String result;
+            String inputLine;
+            try {
+                //Create a URL object holding our url
+                URL myUrl = new URL(objMyApplication.getStrStatesUrl());
+                //Create a connection
+                HttpURLConnection connection = (HttpURLConnection)
+                        myUrl.openConnection();
+                //Set methods and timeouts
+                connection.setRequestMethod(REQUEST_METHOD);
+                connection.setReadTimeout(READ_TIMEOUT);
+                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+
+                //Connect to our url
+                connection.connect();
+                //Create a new InputStreamReader
+                InputStreamReader streamReader = new
+                        InputStreamReader(connection.getInputStream());
+                //Create a new buffered reader and String Builder
+                BufferedReader reader = new BufferedReader(streamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                //Check if the line we are reading is not null
+                while ((inputLine = reader.readLine()) != null) {
+                    stringBuilder.append(inputLine);
+                }
+                //Close our InputStream and Buffered reader
+                reader.close();
+                streamReader.close();
+                //Set our result equal to our stringBuilder
+                result = stringBuilder.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+                result = null;
+            }
+            return result;
+        }
+
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<States>>() {
+            }.getType();
+            List<States> listStates = gson.fromJson(result, type);
+            objMyApplication.setListStates(listStates);
         }
     }
 

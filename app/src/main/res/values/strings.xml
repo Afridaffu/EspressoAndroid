@@ -795,4 +795,8 @@
     <string name="account_number">Account Number</string>
     <string name="bank_account_failed">Verification Failed</string>
     <string name="android_text">Android</string>
+    <string name="select_type_description">Please choose if you want to create a Business or Personal coyni account. You can always create another one later.</string>
+    <string name="pp">Privacy Policy.</string>
+    <string name="m_agree">Merchant Agreement</string>
+
 </resources>

@@ -115,7 +115,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     int[] errorColor, color;
     ColorStateList errorColorState, colorState;
 
-    boolean isEmailError = false, isPhoneError = false, isPwdEye = false, isCPwdEye = false, isAgreed = false;
+    boolean isEmailError = false, isPhoneError = false, isPwdEye = false, isCPwdEye = false, isAgreed = true;
     RelativeLayout mainRL;
     ScrollView mainSV;
     public static int focusedID = 0;
@@ -343,8 +343,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         if (confirmPasswordET.getText().length() > 0) {
                             confirmPasswordET.setSelection(confirmPasswordET.getText().length());
                         }
-//                        confirmPasswordET.setHint("Confirm Password");
-                        confPasswordTIL.setHint("Confirm Password");
+//                        confPasswordTIL.setHint("Confirm Password");
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -377,26 +376,32 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                                 if (custRegisterResponse.getData().getToken() != null) {
                                     objMyApplication.setStrRegisToken(custRegisterResponse.getData().getToken());
                                 }
+//                                Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
+//                                if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
+//                                    i.putExtra("screen", "SignUp");
+//                                    i.putExtra("OTP_TYPE", "MOBILE");
+//                                    i.putExtra("MOBILE", phoneNumber);
+//                                    i.putExtra("MASK_MOBILE", phoneNumberET.getText());
+//                                    i.putExtra("EMAIL", emailET.getText().toString().trim());
+//                                } else if (custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
+//                                    i.putExtra("screen", "SignUp");
+//                                    i.putExtra("OTP_TYPE", "EMAIL");
+//                                    i.putExtra("MOBILE", phoneNumber);
+//                                    i.putExtra("MASK_MOBILE", phoneNumberET.getText());
+//                                    i.putExtra("EMAIL", emailET.getText().toString().trim());
+//                                } else if (custRegisterResponse.getData().isSmsVerified() && custRegisterResponse.getData().isEmailVerified()) {
+//                                    i.putExtra("screen", "SignUp");
+//                                    i.putExtra("OTP_TYPE", "SECURE");
+//                                    i.putExtra("MOBILE", phoneNumber);
+//                                    i.putExtra("MASK_MOBILE", phoneNumberET.getText());
+//                                    i.putExtra("EMAIL", emailET.getText().toString().trim());
+//                                }
                                 Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
-                                if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
-                                    i.putExtra("screen", "SignUp");
-                                    i.putExtra("OTP_TYPE", "MOBILE");
-                                    i.putExtra("MOBILE", phoneNumber);
-                                    i.putExtra("MASK_MOBILE", phoneNumberET.getText());
-                                    i.putExtra("EMAIL", emailET.getText().toString().trim());
-                                } else if (custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
-                                    i.putExtra("screen", "SignUp");
-                                    i.putExtra("OTP_TYPE", "EMAIL");
-                                    i.putExtra("MOBILE", phoneNumber);
-                                    i.putExtra("MASK_MOBILE", phoneNumberET.getText());
-                                    i.putExtra("EMAIL", emailET.getText().toString().trim());
-                                } else if (custRegisterResponse.getData().isSmsVerified() && custRegisterResponse.getData().isEmailVerified()) {
-                                    i.putExtra("screen", "SignUp");
-                                    i.putExtra("OTP_TYPE", "SECURE");
-                                    i.putExtra("MOBILE", phoneNumber);
-                                    i.putExtra("MASK_MOBILE", phoneNumberET.getText());
-                                    i.putExtra("EMAIL", emailET.getText().toString().trim());
-                                }
+                                i.putExtra("screen", "SignUp");
+                                i.putExtra("OTP_TYPE", "MOBILE");
+                                i.putExtra("MOBILE", phoneNumber);
+                                i.putExtra("MASK_MOBILE", phoneNumberET.getText());
+                                i.putExtra("EMAIL", emailET.getText().toString().trim());
                                 startActivity(i);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -1163,25 +1168,35 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             phone.setCountryCode(Utils.strCCode);
             phone.setPhoneNumber(phoneNumber);
 
+//            CustRegisRequest regisRequest = new CustRegisRequest();
+//            regisRequest.setFirstName(firstNameET.getText().toString().trim());
+//            regisRequest.setLastName(lastNameET.getText().toString().trim());
+//            regisRequest.setPhoneNumberWithCountryCode(phone);
+//            regisRequest.setEmail(emailET.getText().toString().trim());
+//            regisRequest.setCreatePassword(passwordET.getText().toString().trim());
+//            regisRequest.setConfirmPassword(passwordET.getText().toString().trim());
+//            regisRequest.setAccountType(objMyApplication.getAccountType());
+//            regisRequest.setParentAccount(0);
+//            regisRequest.setEntityName(firstNameET.getText().toString().trim() + " " + lastNameET.getText().toString().trim());
+//            regisRequest.setToken(objMyApplication.getStrRegisToken());
+//            if (Singleton.getCustRegisterResponse().getData().getUserId().equals("")) {
+//                loginViewModel.customerRegistration(regisRequest, "POST");
+//            } else {
+//                regisRequest.setUserId(Singleton.getCustRegisterResponse().getData().getUserId() + "");
+//                loginViewModel.customerRegistration(regisRequest, "PATCH");
+//            }
+//            Log.e("Regsiter Object", new Gson().toJson(regisRequest));
+//            Singleton.setCustRegisRequest(regisRequest);
+
             CustRegisRequest regisRequest = new CustRegisRequest();
             regisRequest.setFirstName(firstNameET.getText().toString().trim());
             regisRequest.setLastName(lastNameET.getText().toString().trim());
             regisRequest.setPhoneNumberWithCountryCode(phone);
             regisRequest.setEmail(emailET.getText().toString().trim());
-            regisRequest.setCreatePassword(passwordET.getText().toString().trim());
-            regisRequest.setConfirmPassword(passwordET.getText().toString().trim());
+            regisRequest.setPassword(passwordET.getText().toString().trim());
             regisRequest.setAccountType(objMyApplication.getAccountType());
-            regisRequest.setParentAccount(0);
-            regisRequest.setEntityName(firstNameET.getText().toString().trim() + " " + lastNameET.getText().toString().trim());
-            regisRequest.setToken(objMyApplication.getStrRegisToken());
-            if (Singleton.getCustRegisterResponse().getData().getUserId().equals("")) {
-                loginViewModel.customerRegistration(regisRequest, "POST");
-            } else {
-                regisRequest.setUserId(Singleton.getCustRegisterResponse().getData().getUserId() + "");
-                loginViewModel.customerRegistration(regisRequest, "PATCH");
-            }
-            Log.e("Regsiter Object", new Gson().toJson(regisRequest));
-            Singleton.setCustRegisRequest(regisRequest);
+            regisRequest.setToken("true");
+            loginViewModel.registrationNew(regisRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

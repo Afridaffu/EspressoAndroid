@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.coyni.mapp.model.fee.Fees;
+import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.model.websocket.WebSocketUrlResponseData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -361,11 +362,11 @@ public class MyApplication extends Application {
         mCurrentUserData.setOldLoginUserID(logUserId);
     }
 
-    public LoginResponse getLoginResponse() {
+    public BiometricSignIn getLoginResponse() {
         return mCurrentUserData.getLoginResponse();
     }
 
-    public void setLoginResponse(LoginResponse loginResponse) {
+    public void setLoginResponse(BiometricSignIn loginResponse) {
         mCurrentUserData.setLoginResponse(loginResponse);
     }
 
@@ -735,7 +736,7 @@ public class MyApplication extends Application {
 
     public boolean checkForDeclinedStatus() {
 
-        LoginResponse loginResponse = getLoginResponse();
+        BiometricSignIn loginResponse = getLoginResponse();
         if (loginResponse != null && loginResponse.getStatus() != null
                 && loginResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)
                 && loginResponse.getData() != null

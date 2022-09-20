@@ -13,6 +13,7 @@ public class CustRegisRequest {
     private String entityName;
     private String token;
     private PhNoWithCountryCode phoneNumberWithCountryCode;
+    private String password;
 
     public String getEmail() {
         return email;
@@ -100,5 +101,13 @@ public class CustRegisRequest {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
