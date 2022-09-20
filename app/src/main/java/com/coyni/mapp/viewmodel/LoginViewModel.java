@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.coyni.mapp.model.coynipin.StepUpOTPResponse;
+import com.coyni.mapp.model.register.OTPResendRequest;
 import com.coyni.mapp.model.register.OTPValidateRequest;
 import com.coyni.mapp.model.register.OTPValidateResponse;
 import com.coyni.mapp.model.register.SignAgreementRequest;
@@ -67,6 +68,8 @@ import retrofit2.Response;
 
 public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<EmailResendResponse> emailresendMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<OTPValidateResponse> regEmailOTPResendLiveData = new MutableLiveData<>();
+    private MutableLiveData<OTPValidateResponse> regPhoneOTPResendLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailResponse> emailotpLiveData = new MutableLiveData<>();
     private MutableLiveData<OTPValidateResponse> regEmailOTPValidateLiveData = new MutableLiveData<>();
@@ -102,9 +105,18 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<InitializeResponse> initializeResponseMutableLiveData = new MutableLiveData<>();
 
 
+    public MutableLiveData<OTPValidateResponse> getRegEmailOTPResendLiveData() {
+        return regEmailOTPResendLiveData;
+    }
+
+    public MutableLiveData<OTPValidateResponse> getRegPhoneOTPResendLiveData() {
+        return regPhoneOTPResendLiveData;
+    }
+
     public MutableLiveData<InitializeResponse> getInitializeResponseMutableLiveData() {
         return initializeResponseMutableLiveData;
     }
+
     public MutableLiveData<BiometricSignIn> getLoginNewLiveData() {
         return loginNewLiveData;
     }
@@ -1351,6 +1363,75 @@ public class LoginViewModel extends AndroidViewModel {
                 public void onFailure(Call<InitializeResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     initializeResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void regEmailOTPResend(OTPResendRequest resendRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<OTPValidateResponse> mCall = apiService.regEmailOTPResend(resendRequest);
+            mCall.enqueue(new Callback<OTPValidateResponse>() {
+                @Override
+                public void onResponse(Call<OTPValidateResponse> call, Response<OTPValidateResponse> response) {
+                    if (response.isSuccessful()) {
+                        OTPValidateResponse obj = response.body();
+                        regEmailOTPResendLiveData.setValue(obj);
+                        Log.e("Email Resend Resp", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<OTPValidateResponse>() {
+                        }.getType();
+                        OTPValidateResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            regEmailOTPResendLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<OTPValidateResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    regEmailOTPResendLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void regPhoneOTPResend(OTPResendRequest resend) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<OTPValidateResponse> mCall = apiService.regPhoneOTPResend(resend);
+            mCall.enqueue(new Callback<OTPValidateResponse>() {
+                @Override
+                public void onResponse(Call<OTPValidateResponse> call, Response<OTPValidateResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            OTPValidateResponse obj = response.body();
+                            regPhoneOTPResendLiveData.setValue(obj);
+                            Log.e("SMS Resend Resp", new Gson().toJson(obj));
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<OTPValidateResponse>() {
+                            }.getType();
+                            OTPValidateResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                regPhoneOTPResendLiveData.setValue(errorResponse);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<OTPValidateResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    regPhoneOTPResendLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

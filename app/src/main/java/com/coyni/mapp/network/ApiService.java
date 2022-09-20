@@ -137,6 +137,7 @@ import com.coyni.mapp.model.register.EmailResendResponse;
 import com.coyni.mapp.model.register.EmailResponse;
 import com.coyni.mapp.model.register.InitCustomerRequest;
 import com.coyni.mapp.model.register.InitializeCustomerResponse;
+import com.coyni.mapp.model.register.OTPResendRequest;
 import com.coyni.mapp.model.register.OTPValidateRequest;
 import com.coyni.mapp.model.register.OTPValidateResponse;
 import com.coyni.mapp.model.register.SMSResend;
@@ -770,6 +771,12 @@ public interface ApiService {
 
     @POST("api/v2/user/sign/agreement")
     Call<SignAgreementResponse> signAgreementPP(@Body SignAgreementRequest signAgreementRequest);
+
+    @POST("api/v2/user/resend/email-otp/registration")
+    Call<OTPValidateResponse> regEmailOTPResend(@Body OTPResendRequest resendRequest);
+
+    @POST("api/v2/user/resend/phone-otp/registration")
+    Call<OTPValidateResponse> regPhoneOTPResend(@Body OTPResendRequest resend);
 
 }
 

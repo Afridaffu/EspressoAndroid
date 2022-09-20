@@ -865,6 +865,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                     }
                 }
             });
+
             loginViewModel.getSmsresendMutableLiveData().observe(this, new Observer<SMSResponse>() {
                 @Override
                 public void onChanged(SMSResponse smsResponse) {
