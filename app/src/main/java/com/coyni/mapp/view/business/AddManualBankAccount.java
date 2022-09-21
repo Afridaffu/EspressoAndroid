@@ -32,6 +32,7 @@ import com.coyni.mapp.dialogs.ManualAccountNumbersFullPage;
 import com.coyni.mapp.model.bank.ManualBankRequest;
 import com.coyni.mapp.model.bank.ManualBankResponse;
 import com.coyni.mapp.model.summary.BankAccount;
+import com.coyni.mapp.utils.EmojiFilter;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
@@ -80,6 +81,7 @@ public class AddManualBankAccount extends BaseActivity {
             nameOnBankErrorTV = findViewById(R.id.nameOnBankErrorTV);
             nameOnBankTIL = findViewById(R.id.nameOnBankTIL);
             nameOnBankET = findViewById(R.id.nameOnBankET);
+            nameOnBankET.setFilters(EmojiFilter.getFilter());
             nameOnBankErrorLL = findViewById(R.id.nameOnBankErrorLL);
             routingNumberTIL = findViewById(R.id.routingNumberTIL);
             routingNumberET = findViewById(R.id.routingNumberET);
@@ -223,7 +225,7 @@ public class AddManualBankAccount extends BaseActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
+                    if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 62) {
                         isName = true;
                         nameOnBankErrorLL.setVisibility(View.GONE);
                     } else {
@@ -418,17 +420,19 @@ public class AddManualBankAccount extends BaseActivity {
                         nameOnBankET.setText(nameOnBankET.getText().toString().substring(0, 1).toUpperCase() + nameOnBankET.getText().toString().substring(1));
                     }
                     nameOnBankET.setHint("");
-                    if (nameOnBankET.getText().toString().trim().length() > 1) {
+                    if (nameOnBankET.getText().toString().trim().length() > 0) {
                         nameOnBankErrorLL.setVisibility(View.GONE);
                         nameOnBankTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(nameOnBankTIL, getColor(R.color.primary_black));
 
-                    } else if (nameOnBankET.getText().toString().trim().length() == 1) {
-                        nameOnBankTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                        Utils.setUpperHintColor(nameOnBankTIL, getColor(R.color.error_red));
-                        nameOnBankErrorLL.setVisibility(View.VISIBLE);
-                        nameOnBankErrorTV.setText("Minimum 2 Characters Required");
-                    } else if (nameOnBankET.getText().toString().trim().length() <= 0) {
+                    }
+//                    else if (nameOnBankET.getText().toString().trim().length() == 1) {
+//                        nameOnBankTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+//                        Utils.setUpperHintColor(nameOnBankTIL, getColor(R.color.error_red));
+//                        nameOnBankErrorLL.setVisibility(View.VISIBLE);
+//                        nameOnBankErrorTV.setText("Minimum 2 Characters Required");
+//                    }
+                    else if (nameOnBankET.getText().toString().trim().length() <= 0) {
                         nameOnBankTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(nameOnBankTIL, getColor(R.color.light_gray));
                         nameOnBankErrorLL.setVisibility(View.VISIBLE);
