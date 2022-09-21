@@ -44,6 +44,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.coyni.mapp.utils.EmojiFilter;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -196,6 +197,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             businessTIL = findViewById(R.id.businessTIL);
 
             companynameET = findViewById(R.id.companynameET);
+            companynameET.setFilters(EmojiFilter.getFilter());
             companynametil = findViewById(R.id.companynameTIL);
 
             companynameerrorTV = findViewById(R.id.companyNameErrorTV);
