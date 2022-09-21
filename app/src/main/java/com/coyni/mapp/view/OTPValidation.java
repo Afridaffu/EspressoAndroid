@@ -1420,7 +1420,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
         super.onResume();
         isActivityVisible = true;
         otpPV.requestFocus();
-        new Handler().postDelayed(new Runnable() {
+        new Handler().post(new Runnable() {
             @Override
             public void run() {
                 if (!layoutType.equals("SECURE")) {
@@ -1430,7 +1430,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
 //                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 }
             }
-        },400);
+        });
     }
 
     @Override

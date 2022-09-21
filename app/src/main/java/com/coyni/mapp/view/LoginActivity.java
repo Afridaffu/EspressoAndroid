@@ -782,6 +782,8 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                         i.putExtra(Utils.ACCOUNT_TYPE, login.getData().getAccountType());
                                         startActivity(i);
                                     } else {
+                                        if (Utils.isKeyboardVisible)
+                                            Utils.hideKeypad(LoginActivity.this);
                                         loginResponse = login;
                                         SMSResend resend = new SMSResend();
                                         resend.setCountryCode(Utils.getStrCCode());

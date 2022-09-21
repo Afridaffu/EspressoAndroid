@@ -248,6 +248,10 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
             passwordET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
             confirmPasswordET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
+            passwordET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            confirmPasswordET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            confirmPasswordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
 
             lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
