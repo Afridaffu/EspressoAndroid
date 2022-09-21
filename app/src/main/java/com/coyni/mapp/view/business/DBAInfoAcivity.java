@@ -44,6 +44,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.coyni.mapp.utils.EmojiFilter;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.coyni.mapp.R;
@@ -228,6 +229,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             //Screen 1
             dbanameTIL = findViewById(R.id.DBAnameTIL);
             dbanameET = findViewById(R.id.DBAnameET);
+            dbanameET.setFilters(EmojiFilter.getFilter());
             dbanameLL = findViewById(R.id.DBAnameErrorLL);
             dbanameTV = findViewById(R.id.DBAnameErrorTV);
 
