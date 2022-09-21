@@ -55,8 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/lineaLL"
             android:layout_marginTop="@dimen/_10sdp"
-            android:fillViewport="true"
             android:fadeScrollbars="false"
+            android:fillViewport="true"
             android:paddingHorizontal="@dimen/_21sdp"
             android:paddingBottom="@dimen/_4sdp"
             android:scrollbars="none">
@@ -94,7 +94,7 @@
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
                             android:inputType="text|textNoSuggestions"
-                            android:maxLength="30"
+                            android:maxLength="60"
                             android:maxLines="1"
                             android:padding="@dimen/_14sdp"
                             android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"

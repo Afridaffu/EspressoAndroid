@@ -33,6 +33,10 @@ public class ProposalsPropertiesData {
     @Expose
     private String userMessage;
 
+    @SerializedName("giactResponse")
+    @Expose
+    private String giactResponse;
+
 
     public String getName() {
         return name;
@@ -88,5 +92,13 @@ public class ProposalsPropertiesData {
 
     public void setUserMessage(String userMessage) {
         this.userMessage = userMessage;
+    }
+
+    public String getGiactResponse() {
+        return giactResponse;
+    }
+
+    public void setGiactResponse(String giactResponse) {
+        this.giactResponse = giactResponse;
     }
 }
