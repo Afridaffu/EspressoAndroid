@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -59,6 +60,7 @@ import android.widget.Toast;
 
 import androidx.biometric.BiometricManager;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -133,6 +135,8 @@ public class Utils {
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "Shared";
     public static final String TOKEN = "0", MERCHANT = "1", RESERVE = "2";
     public static final String TOKEN_STR = "TOKEN", MERCHANT_STR = "MERCHANT", RESERVE_STR = "RESERVE";
+
+    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
 
     public static enum BUSINESS_ACCOUNT_STATUS {
         UNDER_REVIEW("Under Review"),
@@ -462,6 +466,14 @@ public class Utils {
     public static final String paySignetEnable = "token account.payment methods.signet account";
     public static final String allControlsEnable = "token account.all controls";
 
+    public static final String AGREEMENT_TYPE = "AGREE_TYPE";
+    public static final String ACT_TYPE = "ACT_TYPE";
+    public static final String DOC_URL = "DOC_URL";
+    public static final String DOC_NAME = "DOC_NAME";
+    public static final String single = "Single";
+    public static final String multiple = "Multiple";
+    public static final String verifyActionType = "Verify";
+
     public static final long centuryTimeInMillis = 3155760000000L;
 
     public static String getStrLang() {
@@ -566,8 +578,19 @@ public class Utils {
         manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     public static void shwForcedKeypad(Context context) {
-        Activity  activity = (Activity) context;
+        Activity activity = (Activity) context;
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
@@ -599,7 +622,7 @@ public class Utils {
 
     public static void hideKeypad(Context context) {
         try {
-            Activity  activity = (Activity) context;
+            Activity activity = (Activity) context;
             activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
@@ -2824,4 +2847,27 @@ public class Utils {
         spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
         spannableTV.setHighlightColor(Color.TRANSPARENT);
     }
+
+    //Request for permissions
+    public static boolean checkAndRequestStoragePermission(final Activity context) {
+        try {
+            int WExtstorePermission = ContextCompat.checkSelfPermission(context,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            List<String> listPermissionsNeeded = new ArrayList<>();
+            if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded
+                        .add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (!listPermissionsNeeded.isEmpty()) {
+                ActivityCompat.requestPermissions(context, listPermissionsNeeded
+                                .toArray(new String[listPermissionsNeeded.size()]),
+                        REQUEST_ID_MULTIPLE_PERMISSIONS);
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return true;
+    }
+
 }

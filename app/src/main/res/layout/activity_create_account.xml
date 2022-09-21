@@ -85,7 +85,7 @@
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="textVisiblePassword|textCapSentences|textNoSuggestions"
+                        android:inputType="textCapSentences|textNoSuggestions"
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
@@ -142,7 +142,7 @@
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="textVisiblePassword|textNoSuggestions|textCapSentences"
+                        android:inputType="textNoSuggestions|textCapSentences"
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
@@ -201,7 +201,7 @@
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
                         android:importantForAutofill="no"
-                        android:inputType="textEmailAddress|textNoSuggestions"
+                        android:inputType="text|textNoSuggestions"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -297,7 +297,7 @@
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
                             android:importantForAutofill="no"
-                            android:inputType="textPassword|textNoSuggestions"
+                            android:inputType="textNoSuggestions"
                             android:longClickable="false"
                             android:maxLength="12"
                             android:padding="@dimen/_14sdp"
@@ -408,7 +408,7 @@
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionDone"
                         android:importantForAutofill="no"
-                        android:inputType="textPassword|textNoSuggestions"
+                        android:inputType="textNoSuggestions"
                         android:longClickable="false"
                         android:maxLength="12"
                         android:padding="@dimen/_14sdp"
@@ -450,7 +450,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <CheckBox
                         android:id="@+id/agreeCB"
@@ -516,7 +517,7 @@
                     android:id="@+id/nextCV"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_43sdp"
-                    android:layout_marginTop="@dimen/_14sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
                     android:layout_marginBottom="@dimen/_20sdp"
                     app:cardBackgroundColor="@color/inactive_color"
                     app:cardCornerRadius="@dimen/_22sdp">

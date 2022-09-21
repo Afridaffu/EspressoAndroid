@@ -33,6 +33,7 @@ import com.coyni.mapp.model.profile.updatephone.UpdatePhoneResponse;
 import com.coyni.mapp.model.reguser.Contacts;
 import com.coyni.mapp.model.reguser.RegisteredUsersRequest;
 import com.coyni.mapp.model.retrieveemail.RetrieveUsersResponse;
+import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.model.submit.ApplicationSubmitResponseModel;
 import com.coyni.mapp.model.transaction.TransactionList;
 import com.coyni.mapp.model.transaction.TransactionListRequest;
@@ -64,7 +65,7 @@ public class UserData {
     //    WalletResponse walletResponse;
     private String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
     private int timezoneID = 0, tempTimezoneID = 0, loginUserId, oldLoginUserID, accountType, dbaOwnerId = 0;
-    private LoginResponse loginResponse;
+    private BiometricSignIn loginResponse;
     private TransactionList transactionList;
     private PaymentsList selectedCard, prevSelectedCard;
     private TransferFeeResponse transferFeeResponse;
@@ -395,11 +396,11 @@ public class UserData {
         this.oldLoginUserID = oldLoginUserID;
     }
 
-    public LoginResponse getLoginResponse() {
+    public BiometricSignIn getLoginResponse() {
         return loginResponse;
     }
 
-    public void setLoginResponse(LoginResponse response) {
+    public void setLoginResponse(BiometricSignIn response) {
         this.loginResponse = response;
     }
 

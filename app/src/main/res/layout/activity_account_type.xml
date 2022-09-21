@@ -21,17 +21,16 @@
                 android:id="@+id/layoutClose"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_21sdp"
-                android:layout_marginTop="?attr/actionBarSize"
-                android:orientation="horizontal">
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_34sdp">
 
                 <ImageView
-                    android:id="@+id/imgClose"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/close"
-                    android:padding="@dimen/_5sdp"
+                    android:layout_margin="@dimen/_6sdp"
                     android:src="@drawable/ic_close" />
+
             </LinearLayout>
 
             <ImageView
@@ -40,22 +39,35 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:contentDescription="@string/coyni_account"
-                android:src="@drawable/bg_account_type" />
+                android:src="@drawable/ic_account_type_bg_top" />
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/iv_account_type_bg"
-                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_150sdp"
                 android:contentDescription="@string/coyni_account"
-                android:src="@drawable/coyni_logo_full" />
+                android:src="@drawable/select_type_coyni_logo" />
 
         </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_24sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:lineSpacingExtra="@dimen/_4ssp"
+            android:text="@string/select_type_description"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_24sdp"
+            android:layout_marginHorizontal="@dimen/_24sdp"
+            android:layout_marginTop="@dimen/_44sdp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -66,7 +78,7 @@
                 android:background="@drawable/account_type_bg"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="@dimen/_18sdp">
+                android:paddingVertical="@dimen/_25sdp">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -85,7 +97,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="@dimen/_14sdp"
+                android:layout_width="@dimen/_17sdp"
                 android:layout_height="1dp"
                 android:visibility="invisible" />
 
@@ -97,7 +109,7 @@
                 android:background="@drawable/account_type_bg"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="@dimen/_18sdp">
+                android:paddingVertical="@dimen/_25sdp">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -117,4 +129,5 @@
 
         </LinearLayout>
     </LinearLayout>
+
 </ScrollView>

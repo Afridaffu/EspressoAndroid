@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -302,9 +303,9 @@ public class OnboardActivity extends BaseActivity {
 
     private void initObserver() {
         try {
-            loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {
+            loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricSignIn>() {
                 @Override
-                public void onChanged(LoginResponse loginResponse) {
+                public void onChanged(BiometricSignIn loginResponse) {
                     dismissDialog();
                     try {
                         if (loginResponse != null) {
@@ -312,15 +313,15 @@ public class OnboardActivity extends BaseActivity {
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                 objMyApplication.setStrEmail(loginResponse.getData().getEmail());
                                 //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
-                                objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
+                                objMyApplication.setLoginUserId(Integer.parseInt(String.valueOf(loginResponse.getData().getUserId())));
                                 objMyApplication.setLoginResponse(loginResponse);
                                 Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
                                 objMyApplication.setStrEmail(loginResponse.getData().getEmail());
-                                objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
+                                objMyApplication.setBiometric(loginResponse.getData().isBiometricEnabled());
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
-                                objMyApplication.setDbaOwnerId(loginResponse.getData().getDbaOwnerId());
-                                if (loginResponse.getData().getPasswordExpired()) {
+                                objMyApplication.setDbaOwnerId(Integer.parseInt(String.valueOf(loginResponse.getData().getDbaOwnerId())));
+                                if (loginResponse.getData().isPasswordExpired()) {
 //                                    Intent i = new Intent(OnboardActivity.this, PINActivity.class);
 //                                    i.putExtra("screen", "loginExpiry");
 //                                    i.putExtra("TYPE", "ENTER");

@@ -37,6 +37,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -84,7 +85,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
     private RelativeLayout layoutMain;
     private long mLastClickTime = 0;
     private static int CODE_AUTHENTICATION_VERIFICATION = 241;
-    private LoginResponse loginResponse;
+    private BiometricSignIn loginResponse;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private boolean closeClicked = false;
     private int logoClickCount = 0;
@@ -664,9 +665,79 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
 
     private void initObserver() {
         try {
-            loginViewModel.getLoginLiveData().observe(this, new Observer<LoginResponse>() {
+//            loginViewModel.getLoginLiveData().observe(this, new Observer<LoginResponse>() {
+//                @Override
+//                public void onChanged(LoginResponse login) {
+//                    try {
+//                        dismissDialog();
+//                        if (login != null) {
+//                            if (!login.getStatus().toLowerCase().equals("error")) {
+//                                Utils.setStrAuth(login.getData().getJwtToken());
+//                                objMyApplication.setStrEmail(login.getData().getEmail());
+//                                //                            objMyApplication.setUserId(login.getData().getUserId());
+//                                objMyApplication.setLoginUserId(login.getData().getUserId());
+//                                objMyApplication.setLoginResponse(login);
+//                                Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
+//                                objMyApplication.setBiometric(login.getData().getBiometricEnabled());
+//                                getStatesUrl(login.getData().getStateList().getUS());
+//                                objMyApplication.setAccountType(login.getData().getAccountType());
+//                                objMyApplication.setDbaOwnerId(login.getData().getDbaOwnerId());
+//                                objMyApplication.setIsReserveEnabled(login.getData().isReserveEnabled());
+//                                if (login.getData() != null) {
+//                                    objMyApplication.setBusinessUserID(String.valueOf(login.getData().getBusinessUserId()));
+//                                    objMyApplication.setOwnerImage(login.getData().getOwnerImage());
+//                                }
+////                                if (!strFCMToken.equals("")) {
+////                                    loginViewModel.initializeDevice(strFCMToken);
+////                                }
+//                                if (login.getData().getPasswordExpired()) {
+//                                    isExpiry = true;
+//                                    Intent i = new Intent(LoginActivity.this, PINActivity.class);
+//                                    i.putExtra("screen", "loginExpiry");
+//                                    i.putExtra("TYPE", "ENTER");
+//                                    startActivity(i);
+//                                } else {
+//                                    if (chkRemember.isChecked()) {
+//                                        saveCredentials();
+//                                    } else {
+////                                        mydatabase.execSQL("Delete from tblRemember");
+//                                        dbHandler.clearTableRemember();
+//                                    }
+//                                    saveFirstUser();
+//                                    if (login.getData().getCoyniPin()) {
+//                                        Intent i = new Intent(LoginActivity.this, PINActivity.class);
+//                                        i.putExtra("TYPE", "ENTER");
+//                                        i.putExtra("screen", "login");
+//                                        i.putExtra(Utils.ACCOUNT_TYPE, login.getData().getAccountType());
+//                                        startActivity(i);
+//                                    } else {
+//                                        loginResponse = login;
+//                                        SMSResend resend = new SMSResend();
+//                                        resend.setCountryCode(Utils.getStrCCode());
+//                                        resend.setPhoneNumber(login.getData().getPhoneNumber());
+//                                        loginViewModel.smsotpresend(resend);
+//
+//                                    }
+//                                }
+//                            } else {
+//                                if (login.getData() != null) {
+//                                    if (!login.getData().getMessage().equals("") && login.getData().getPasswordFailedAttempts() > 0) {
+//                                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
+//                                    }
+//                                } else {
+//                                    Utils.displayAlert(login.getError().getErrorDescription(), LoginActivity.this, "", login.getError().getFieldErrors().get(0));
+//                                }
+//                            }
+//                        }
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            });
+
+            loginViewModel.getLoginNewLiveData().observe(this, new Observer<BiometricSignIn>() {
                 @Override
-                public void onChanged(LoginResponse login) {
+                public void onChanged(BiometricSignIn login) {
                     try {
                         dismissDialog();
                         if (login != null) {
@@ -674,22 +745,23 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 Utils.setStrAuth(login.getData().getJwtToken());
                                 objMyApplication.setStrEmail(login.getData().getEmail());
                                 //                            objMyApplication.setUserId(login.getData().getUserId());
-                                objMyApplication.setLoginUserId(login.getData().getUserId());
+                                objMyApplication.setLoginUserId(Integer.parseInt(String.valueOf(login.getData().getUserId())));
                                 objMyApplication.setLoginResponse(login);
                                 Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
-                                objMyApplication.setBiometric(login.getData().getBiometricEnabled());
-                                getStatesUrl(login.getData().getStateList().getUS());
+                                objMyApplication.setBiometric(login.getData().isBiometricEnabled());
+//                                getStatesUrl(login.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(login.getData().getAccountType());
-                                objMyApplication.setDbaOwnerId(login.getData().getDbaOwnerId());
-                                objMyApplication.setIsReserveEnabled(login.getData().isReserveEnabled());
-                                if (login.getData() != null) {
-                                    objMyApplication.setBusinessUserID(String.valueOf(login.getData().getBusinessUserId()));
-                                    objMyApplication.setOwnerImage(login.getData().getOwnerImage());
-                                }
+//                                objMyApplication.setDbaOwnerId(Integer.parseInt(String.valueOf(login.getData().getDbaOwnerId())));
+//                                objMyApplication.setIsReserveEnabled(login.getData().isReserveEnabled());
+//                                if (login.getData() != null) {
+//                                    objMyApplication.setBusinessUserID(String.valueOf(login.getData().getBusinessUserId()));
+//                                    objMyApplication.setOwnerImage(login.getData().getOwnerImage());
+//                                }
+
 //                                if (!strFCMToken.equals("")) {
 //                                    loginViewModel.initializeDevice(strFCMToken);
 //                                }
-                                if (login.getData().getPasswordExpired()) {
+                                if (login.getData().isPasswordExpired()) {
                                     isExpiry = true;
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("screen", "loginExpiry");
@@ -703,19 +775,21 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                         dbHandler.clearTableRemember();
                                     }
                                     saveFirstUser();
-                                    if (login.getData().getCoyniPin()) {
+                                    if (login.getData().isCoyniPin()) {
                                         Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                         i.putExtra("TYPE", "ENTER");
                                         i.putExtra("screen", "login");
                                         i.putExtra(Utils.ACCOUNT_TYPE, login.getData().getAccountType());
                                         startActivity(i);
                                     } else {
+                                        if (Utils.isKeyboardVisible)
+                                            Utils.hideKeypad(LoginActivity.this);
                                         loginResponse = login;
                                         SMSResend resend = new SMSResend();
                                         resend.setCountryCode(Utils.getStrCCode());
                                         resend.setPhoneNumber(login.getData().getPhoneNumber());
                                         loginViewModel.smsotpresend(resend);
-
+//                                        loginViewModel.smsOTPResend();
                                     }
                                 }
                             } else {
@@ -728,6 +802,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 }
                             }
                         }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -745,9 +820,9 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                 }
             });
 
-            loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {
+            loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricSignIn>() {
                 @Override
-                public void onChanged(LoginResponse loginResponse) {
+                public void onChanged(BiometricSignIn loginResponse) {
                     dismissDialog();
                     try {
                         if (loginResponse != null) {
@@ -755,14 +830,14 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                 objMyApplication.setStrEmail(loginResponse.getData().getEmail());
                                 //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
-                                objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
+                                objMyApplication.setLoginUserId(Integer.parseInt(String.valueOf(loginResponse.getData().getUserId())));
                                 objMyApplication.setLoginResponse(loginResponse);
                                 Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
-                                objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
+                                objMyApplication.setBiometric(loginResponse.getData().isBiometricEnabled());
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
-                                objMyApplication.setDbaOwnerId(loginResponse.getData().getDbaOwnerId());
-                                if (loginResponse.getData().getPasswordExpired()) {
+                                objMyApplication.setDbaOwnerId(Integer.parseInt(String.valueOf(loginResponse.getData().getDbaOwnerId())));
+                                if (loginResponse.getData().isPasswordExpired()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("screen", "loginExpiry");
                                     i.putExtra("TYPE", "ENTER");
@@ -841,10 +916,11 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             LoginRequest loginRequest = new LoginRequest();
             loginRequest.setEmail(strEmail);
             loginRequest.setPassword(strPwd);
-            loginViewModel.login(loginRequest);
+            loginViewModel.loginNew(loginRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
     }
 
     private void biometricLogin() {

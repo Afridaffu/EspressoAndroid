@@ -1,139 +1,40 @@
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--<head>-->
-<!--    <title>PDF Demo for Qdev</title>-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.2.228/build/pdf.min.js"></script>-->
-<!--    <style>-->
-<!--        body {-->
-<!--            margin: 0;-->
-<!--            background-color: #dfdfdf; /* Grey background */-->
-<!--        }-->
-<!--        .center {-->
-<!--            text-align: center; /* center pages */-->
-<!--        }-->
-
-
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-<!--<div id="pages" class="center"></div>-->
-<!--<script type="text/javascript">-->
-<!--function testEcho(p1){-->
-
-<!--&lt;!&ndash;        pdfjsLib.getDocument(p1).promise.then(function (doc) {&ndash;&gt;-->
-<!--&lt;!&ndash;            var numPages = doc.numPages;&ndash;&gt;-->
-<!--&lt;!&ndash;            console.log('# Document Loaded');&ndash;&gt;-->
-<!--&lt;!&ndash;            console.log('Number of Pages: ' + numPages);&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-<!--        // download the pdf-->
-<!--        var pdfTask = pdfjsLib.getDocument(p1);-->
-<!--        // parse the get params-->
-<!--        var queryString = window.location.hash.split("#")[1];-->
-<!--        // default params-->
-<!--        var params = {pg: 1};-->
-<!--        var pagen = 1;-->
-<!--        // if get params are present-->
-<!--        if (queryString) {-->
-<!--            // update the default settings-->
-<!--            params = Object.assign(params, parseParams(queryString));-->
-<!--        }-->
-<!--        // Load the pages div from the DOM-->
-<!--        var pages = document.getElementById("pages");-->
-<!--        // handle the pdf once loaded (asyncronous)-->
-<!--        pdfTask.promise.then(function(pdf) {-->
-
-<!--            window.totalPages = pdf.numPages;-->
-
-<!--            // globalize pdf-->
-<!--            window.pdf = pdf;-->
-<!--            // load the first page-->
-<!--            loadPage(pdf, parseInt(params.pg));-->
-<!--            pagen++;-->
-<!--        });-->
-<!--        // stores the page number of the page currently in the viewport-->
-<!--        var curpage = parseInt(params.pg) + pagen;-->
-<!--        // every half a second, check for scroll updates-->
-<!--        setInterval(function() {-->
-<!--            // if we're within 200px of the bottom of the page-->
-<!--            if (document.body.scrollHeight - (window.scrollY + window.innerHeight) < 200) {-->
-<!--                if (window.pdf != undefined) {-->
-<!--                    // load 5 more pages-->
-<!--                    if(pagen<=window.totalPages){-->
-<!--                        loadPage(pdf, pagen);-->
-<!--                        pagen++;-->
-<!--                    }-->
-<!--                }-->
-<!--            }-->
-<!--            // if the page in our viewport has changed, update the url-->
-<!--            if (curpage != parseInt(params.pg) + parseInt(window.scrollY /-->
-<!--                    (document.body.scrollHeight / pagen))) {-->
-<!--                curpage = parseInt(params.pg) + parseInt(window.scrollY /-->
-<!--                    (document.body.scrollHeight / pagen));-->
-<!--                window.location.hash = "#pg=" + curpage;-->
-<!--            }-->
-<!--        }, 500);-->
-
-<!--        }-->
-
-<!--        // render `pg` from `pdf` and append it to the pages div-->
-<!--        function loadPage(pdf, pg){-->
-<!--            pdf.getPage(pg).then(function(page){-->
-<!--                var scale = 1.7;-->
-<!--                var viewport = page.getViewport({scale: scale});-->
-<!--                var canvas = document.createElement('canvas');-->
-<!--                var context = canvas.getContext('2d');-->
-
-<!--                canvas.id = "page-" + pg;-->
-<!--                canvas.height += viewport.height;-->
-<!--                canvas.width = viewport.width;-->
-
-<!--                pages.appendChild(canvas);-->
-
-<!--                var renderContext = {-->
-<!--                    canvasContext: context,-->
-<!--                    viewport: viewport-->
-<!--                };-->
-<!--                page.render(renderContext);-->
-<!--            });-->
-<!--        }-->
-
-<!--        // parses get params from a query string into an object-->
-<!--        function parseParams(queryString) {-->
-<!--            var query = {};-->
-<!--            var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');-->
-<!--            for (var i = 0; i < pairs.length; i++) {-->
-<!--                var pair = pairs[i].split('=');-->
-<!--                query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');-->
-<!--            }-->
-<!--            return query;-->
-<!--        }-->
-
-
-<!--</script>-->
-<!--</body>-->
-<!--</html>-->
-
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PDF Demo for Qdev</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible">
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.2.228/build/pdf.min.js"></script>
     <style>
-  #pdf-viewer {
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.1);
-    overflow: auto;
-  }
+      #pdf-viewer {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0);
+        overflow: auto;
+      }
 
-  .pdf-page-canvas {
-    display: block;
-    margin: 5px auto;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-  }
+      .pdf-page-canvas {
+        display: block;
+        margin: 5px auto;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+      }
+
+<!--    /* Center the loader */-->
+<!--    #loader {-->
+<!--      position: absolute;-->
+<!--      left: 40%;-->
+<!--      top: 40%;-->
+<!--      z-index: 1;-->
+<!--      width: 50px;-->
+<!--      height: 50px;-->
+<!--      margin: 0px;-->
+<!--      border: 10px solid #f3f3f3;-->
+<!--      border-radius: 50%;-->
+<!--      border-top: 10px solid #00A6A2;-->
+<!--      -webkit-animation: spin 2s linear infinite;-->
+<!--      animation: spin 2s linear infinite;-->
+<!--    }-->
+
 
 
 
@@ -141,45 +42,62 @@
 </head>
 <body>
 <script>
-    url = 'https://atikur-rabbi.github.io/data/sample.pdf';
+
+    myurl = 'https://atikur-rabbi.github.io/data/sample.pdf';
     var thePdf = null;
-    var scale = 1.5;
+    var scale = 5;
+<!--    const myInterval = null;-->
 
+<!--    function clearListener(){-->
+<!--        clearInterval(myInterval)-->
+<!--    }-->
     function showPDF(url){
-        pdfjsLib.getDocument(url).promise.then(function(pdf) {
-            thePdf = pdf;
-            viewer = document.getElementById('pdf-viewer');
+<!--        document.getElementById("loader").style.display = "block";-->
+            window.JSInterface.showLoader();
 
-            for(page = 1; page <= pdf.numPages; page++) {
-              canvas = document.createElement("canvas");
-              canvas.className = 'pdf-page-canvas';
-              viewer.appendChild(canvas);
-              renderPage(page, canvas);
-            }
+            pdfjsLib.getDocument(url).promise.then(function(pdf) {
+                thePdf = pdf;
+                viewer = document.getElementById('pdf-viewer');
+                for(page = 1; page <= pdf.numPages; page++) {
+                  canvas = document.createElement("canvas");
+                  canvas.className = 'pdf-page-canvas';
+                  var pageNumberDiv = document.createElement("div");
+                  var pageNumber = document.createTextNode(page + " of " + pdf.numPages);
+                  pageNumberDiv.style.fontSize = "10px";
+                  pageNumberDiv.style.position = "absolute";
+                  pageNumberDiv.style.margin = "10px"
+<!--                  pageNumberDiv.style.top = 16px-->
+<!--                  pageNumberDiv.style.height = "16px";-->
+                  pageNumberDiv.appendChild(pageNumber);
+                  viewer.appendChild(pageNumberDiv);
+                  viewer.appendChild(canvas);
 
-            setInterval(function() {
-                // if we're within 200px of the bottom of the page
-                if (document.body.scrollHeight - (window.scrollY + window.innerHeight) < 200) {
-                    alert('bottom page')
+                  renderPage(page, canvas);
                 }
-            }, 500);
-        });
+                window.JSInterface.dismissLoader();
+
+                setInterval(function() {
+                    // if we're within 200px of the bottom of the page
+                    if (document.body.scrollHeight - (window.scrollY + window.innerHeight) < 200) {
+                        alert('bottom page')
+                    }
+                }, 500);
+
+
+<!--                document.getElementById("loader").style.display = "none";-->
+            }).catch();
     }
 
     function renderPage(pageNumber, canvas) {
         thePdf.getPage(pageNumber).then(function(page) {
-          viewport = page.getViewport({ scale: scale });
+          viewport = page.getViewport(scale);
           canvas.height = viewport.height;
           canvas.width = viewport.width;
+          canvas.style.width = "99%";
+          canvas.style.height = "100%";
           page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
         });
     }
-
-<!--    $(window).scroll(function() {-->
-<!--        if($(window).scrollTop() + $(window).height() == $(document).height()) {-->
-<!--            Android.onUserScrolledToBottom()-->
-<!--        }-->
-<!--    });-->
 
     function isPageBottom(){
             // if we're within 200px of the bottom of the page
@@ -193,10 +111,9 @@
     }
 
 
-
-
 </script>
 
 <div id='pdf-viewer'></div>
+<div id='loader' class='center'></div>
 </body>
 </html>

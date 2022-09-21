@@ -10,13 +10,11 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -42,6 +40,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.model.coynipin.StepUpOTPResponse;
+import com.coyni.mapp.model.register.OTPResendRequest;
+import com.coyni.mapp.model.register.OTPValidateRequest;
+import com.coyni.mapp.model.register.OTPValidateResponse;
+import com.coyni.mapp.view.business.AcceptAgreementsActivity;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
@@ -273,6 +275,10 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                 updateResendRequest.setTrackerId(objMyApplication.getUpdateEmailResponse().getData().getTrackerId());
                                 loginViewModel.updateOtpResend(updateResendRequest);
                             }
+                        } else if (strScreen.equals("SignUp")) {
+                            OTPResendRequest resend = new OTPResendRequest();
+                            resend.setToken(objMyApplication.getStrRegisToken());
+                            loginViewModel.regEmailOTPResend(resend);
                         } else {
                             EmailRequest emailRequest = new EmailRequest();
                             emailRequest.setEmail(EMAIL.trim());
@@ -282,10 +288,16 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
 
                     } else if (OTP_TYPE.equals("MOBILE")) {
                         dialog = Utils.showProgressDialog(this);
-                        SMSResend resend = new SMSResend();
-                        resend.setCountryCode(Utils.getStrCCode());
-                        resend.setPhoneNumber(MOBILE);
-                        loginViewModel.smsotpresend(resend);
+                        if (strScreen.equals("SignUp")) {
+                            OTPResendRequest resend = new OTPResendRequest();
+                            resend.setToken(objMyApplication.getStrRegisToken());
+                            loginViewModel.regPhoneOTPResend(resend);
+                        } else {
+                            SMSResend resend = new SMSResend();
+                            resend.setCountryCode(Utils.getStrCCode());
+                            resend.setPhoneNumber(MOBILE);
+                            loginViewModel.smsotpresend(resend);
+                        }
                     } else if (strScreen.equals("EditPhone")) {
                         dialog = Utils.showProgressDialog(this);
 //                            SMSResend resend = new SMSResend();
@@ -445,20 +457,29 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                 if (OTP_TYPE.equals("MOBILE")) {
                                     if (charSequence.length() == 6) {
                                         Utils.hideKeypad(OTPValidation.this);
-                                        SmsRequest smsRequest = new SmsRequest();
-                                        smsRequest.setEmail(EMAIL.trim());
-                                        smsRequest.setOtp(charSequence.toString().trim());
-                                        smsRequest.setToken(objMyApplication.getStrRegisToken());
-                                        loginViewModel.smsotp(smsRequest);
+//                                        SmsRequest smsRequest = new SmsRequest();
+//                                        smsRequest.setEmail(EMAIL.trim());
+//                                        smsRequest.setOtp(charSequence.toString().trim());
+//                                        smsRequest.setToken(objMyApplication.getStrRegisToken());
+//                                        loginViewModel.smsotp(smsRequest);
+                                        OTPValidateRequest OTPValidateRequest = new OTPValidateRequest();
+                                        OTPValidateRequest.setOtp(charSequence.toString().trim());
+                                        OTPValidateRequest.setToken(objMyApplication.getStrRegisToken());
+                                        loginViewModel.validateRegisterMobileOTP(OTPValidateRequest);
                                     }
                                 } else if (OTP_TYPE.equals("EMAIL")) {
                                     if (charSequence.length() == 6) {
                                         Utils.hideKeypad(OTPValidation.this);
-                                        SmsRequest smsRequest = new SmsRequest();
-                                        smsRequest.setEmail(EMAIL.trim());
-                                        smsRequest.setOtp(charSequence.toString().trim());
-                                        smsRequest.setToken(objMyApplication.getStrRegisToken());
-                                        loginViewModel.emailotp(smsRequest);
+//                                        SmsRequest smsRequest = new SmsRequest();
+//                                        smsRequest.setEmail(EMAIL.trim());
+//                                        smsRequest.setOtp(charSequence.toString().trim());
+//                                        smsRequest.setToken(objMyApplication.getStrRegisToken());
+//                                        loginViewModel.emailotp(smsRequest);
+
+                                        OTPValidateRequest OTPValidateRequest = new OTPValidateRequest();
+                                        OTPValidateRequest.setOtp(charSequence.toString().trim());
+                                        OTPValidateRequest.setToken(objMyApplication.getStrRegisToken());
+                                        loginViewModel.validateRegisterEmailOTP(OTPValidateRequest);
                                     }
                                 }
                             }
@@ -510,7 +531,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
 //                    Intent i = new Intent(Intent.ACTION_VIEW);
 //                    i.setData(Uri.parse(Utils.mondayURL));
 //                    startActivity(i);
-                    startActivity(new Intent(OTPValidation.this,GetHelpActivity.class));
+                    startActivity(new Intent(OTPValidation.this, GetHelpActivity.class));
                 }
             });
 
@@ -554,6 +575,59 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     }
 
     private void initObserver() {
+
+        loginViewModel.getRegEmailOTPValidateLiveData().observe(this, new Observer<OTPValidateResponse>() {
+            @Override
+            public void onChanged(OTPValidateResponse emailResponse) {
+                try {
+                    //dialog.dismiss();
+                    if (emailResponse != null) {
+                        Log.e("Email OTP Validate", new Gson().toJson(emailResponse));
+                        if (emailResponse.getStatus().toLowerCase().equals("error")) {
+                            otpPV.setLineColor(getResources().getColor(R.color.error_red));
+                            shakeAnimateLeftRight();
+                        } else {
+                            otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                            shakeAnimateUpDown();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        if (strScreen != null && !strScreen.equals("")) {
+                                            switch (strScreen) {
+                                                case "SignUp":
+                                                    if (OTP_TYPE.equals("EMAIL")) {
+                                                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                                                        Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
+//                                                        Utils.setStrAuth(emailResponse.getData().getJwtToken());
+//                                                        secureAccountRL.setVisibility(View.VISIBLE);
+//                                                        layoutMain.setClickable(false);
+//                                                        layoutMain.setEnabled(false);
+//                                                        layoutType = "SECURE";
+//                                                        layoutEntry.setVisibility(View.GONE);
+//                                                        layoutFailure.setVisibility(View.GONE);
+                                                        objMyApplication.setStrRegisToken(emailResponse.getData().getToken());
+                                                        startActivity(new Intent(OTPValidation.this, AcceptAgreementsActivity.class)
+                                                                .putExtra(Utils.AGREEMENT_TYPE, Utils.cTOS)
+                                                                .putExtra(Utils.ACT_TYPE, Utils.multiple));
+                                                        finish();
+                                                    }
+                                                    break;
+                                            }
+                                        }
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            }, Utils.duration);
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         loginViewModel.getEmailotpLiveData().observe(this, new Observer<EmailResponse>() {
             @Override
             public void onChanged(EmailResponse emailResponse) {
@@ -1150,6 +1224,164 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             }
         });
 
+        loginViewModel.getRegMobileOTPLiveData().observe(this, new Observer<OTPValidateResponse>() {
+            @Override
+            public void onChanged(OTPValidateResponse smsValidate) {
+                try {
+                    if (smsValidate != null) {
+                        if (smsValidate.getStatus().toLowerCase().equals("error")) {
+                            otpPV.setLineColor(getResources().getColor(R.color.error_red));
+                            shakeAnimateLeftRight();
+                            if (strScreen != null && strScreen.equals("login_SET_PIN")) {
+                                if (resendCounter >= 5) {
+                                    Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error", "");
+                                }
+                            } else {
+                                if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio")) {
+                                    try {
+                                        if (smsValidate.getError().getErrorDescription().equals("")) {
+                                            Utils.displayAlert(smsValidate.getError().getFieldErrors().get(0), OTPValidation.this, "", smsValidate.getError().getFieldErrors().get(0));
+                                        } else {
+                                            Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this, "", smsValidate.getError().getFieldErrors().get(0));
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        } else {
+                            if (strScreen != null && !strScreen.equals("")) {
+                                switch (strScreen) {
+                                    case "SignUp":
+                                        if (OTP_TYPE.equals("MOBILE")) {
+                                            otpPV.setLineColor(getResources().getColor(R.color.primary_color));
+                                            shakeAnimateUpDown();
+                                            resendCounter = 0;
+                                            new Handler().postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        if (smsValidate.getData().getToken() != null) {
+                                                            objMyApplication.setStrRegisToken(smsValidate.getData().getToken());
+                                                        }
+                                                        startActivity(new Intent(OTPValidation.this, OTPValidation.class)
+                                                                .putExtra("screen", "SignUp")
+                                                                .putExtra("OTP_TYPE", "EMAIL")
+                                                                .putExtra("MOBILE", MOBILE)
+                                                                .putExtra("EMAIL", EMAIL));
+                                                        finish();
+                                                    } catch (Exception ex) {
+                                                        ex.printStackTrace();
+                                                    }
+                                                }
+                                            }, Utils.duration);
+                                        }
+                                        break;
+                                    case "login_SET_PIN":
+                                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                                        secureAccountRL.setVisibility(View.VISIBLE);
+                                        layoutMain.setClickable(false);
+                                        layoutMain.setEnabled(false);
+                                        layoutType = "SECURE";
+                                        layoutEntry.setVisibility(View.GONE);
+                                        layoutFailure.setVisibility(View.GONE);
+                                        break;
+                                }
+                            }
+
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        loginViewModel.getRegPhoneOTPResendLiveData().observe(this, new Observer<OTPValidateResponse>() {
+            @Override
+            public void onChanged(OTPValidateResponse smsResponse) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                if (smsResponse != null) {
+                    if (smsResponse.getStatus().toLowerCase().toString().equals("success")) {
+                        resendTV.setVisibility(View.GONE);
+                        newCodeTV.setVisibility(View.VISIBLE);
+                        resendCounter++;
+                        startTimer();
+                        if (smsResponse.getData().getToken() != null) {
+                            objMyApplication.setStrRegisToken(smsResponse.getData().getToken());
+                        }
+                        if (strScreen != null && strScreen.equals("login_SET_PIN")) {
+                            if (resendCounter >= 5) {
+                                Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error", "");
+                            }
+                        }
+                    } else {
+                        try {
+                            if (smsResponse.getError().getErrorDescription().equals("")) {
+                                if (!strScreen.equals("retEmail"))
+                                    Utils.displayAlert(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
+                                else
+                                    displayAlertNew(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", strScreen);
+                            } else {
+                                if (!strScreen.equals("retEmail")) {
+                                    if (smsResponse.getError().getErrorDescription().equals(getString(R.string.otp_retry_error))) {
+                                        showAlert(smsResponse.getError().getErrorDescription());
+                                    } else
+                                        Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
+                                } else {
+                                    if (smsResponse.getError().getErrorDescription().equals(getString(R.string.otp_retry_error))) {
+                                        showAlert(smsResponse.getError().getErrorDescription());
+                                    } else
+                                        displayAlertNew(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", strScreen);
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+            }
+        });
+
+        loginViewModel.getRegEmailOTPResendLiveData().observe(this, new Observer<OTPValidateResponse>() {
+            @Override
+            public void onChanged(OTPValidateResponse emailResponse) {
+                try {
+                    dialog.dismiss();
+                    if (emailResponse != null) {
+                        if (emailResponse.getStatus().toLowerCase().toString().equals("success")) {
+                            resendTV.setVisibility(View.GONE);
+                            newCodeTV.setVisibility(View.VISIBLE);
+                            resendCounter++;
+                            startTimer();
+                            if (emailResponse.getData().getToken() != null) {
+                                objMyApplication.setStrRegisToken(emailResponse.getData().getToken());
+                            }
+                        } else {
+                            try {
+                                if (emailResponse.getError().getErrorDescription().equals("")) {
+                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
+                                } else {
+                                    if (emailResponse.getError().getErrorDescription().equals(getString(R.string.otp_retry_error))) {
+                                        showAlert(emailResponse.getError().getErrorDescription());
+                                    } else {
+                                        Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     public void shakeAnimateLeftRight() {
@@ -1181,20 +1413,6 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     public void shakeAnimateUpDown() {
         otpPV.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake_up_down));
         isBackEnabled = true;
-    }
-
-    public void vibrateAction() {
-        try {
-            // Vibrate for 500 milliseconds
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createOneShot(600, VibrationEffect.DEFAULT_AMPLITUDE));
-            } else {
-                //deprecated in API 26
-                vibrator.vibrate(600);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     @Override
@@ -1295,28 +1513,6 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             otpPV.setText(matcher.group(0));
         }
     }
-
-    //Shiva Comment's
-//    private void SetDB() {
-//        try {
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
-//        } catch (Exception ex) {
-//            if (ex.getMessage().toString().contains("no such table")) {
-//                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
-//                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
-//            }
-//        }
-//    }
-
-//    private void saveFirstUser() {
-//        try {
-//            mydatabase.execSQL("Delete from tblUserDetails");
-//            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + EMAIL.toLowerCase() + "')");
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
 
     private void getStatesUrl(String strCode) {
         try {
