@@ -143,20 +143,21 @@ public class AddManualBankAccount extends BaseActivity {
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     nameOnBankET.setText(objMyApplication.getStrUserName());
                     Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
-                    isName = true;
                 } else {
                     if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
                         nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
                         Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
-                    } else {
+                    } else if (objMyApplication.getStrUserName() != null) {
                         nameOnBankET.setText(objMyApplication.getStrUserName());
+                    } else if (objMyApplication.getCompanyInfoResp() != null) {
+                        nameOnBankET.setText(objMyApplication.getCompanyInfoResp().getData().getName());
                     }
-                    isName = true;
                 }
+                isName = true;
             }
+
             backLL.setOnClickListener(view -> {
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(AddManualBankAccount.this);
+                Utils.hideKeypad(AddManualBankAccount.this);
                 onBackPressed();
             });
 
@@ -188,9 +189,11 @@ public class AddManualBankAccount extends BaseActivity {
                     ex.printStackTrace();
                 }
             });
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
         }
+
     }
 
     private void initObserver() {
@@ -595,6 +598,7 @@ public class AddManualBankAccount extends BaseActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        Utils.hideKeypad(AddManualBankAccount.this);
                         ManualAccountNumbersFullPage showImgDialog = new ManualAccountNumbersFullPage(AddManualBankAccount.this);
                         showImgDialog.show();
 
