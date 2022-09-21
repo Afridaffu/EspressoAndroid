@@ -144,7 +144,7 @@ public class AddManualBankAccount extends BaseActivity {
                     nameOnBankET.setText(objMyApplication.getStrUserName());
                     Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
                 } else {
-                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
+                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
                         nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
                         Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
                     } else if (objMyApplication.getStrUserName() != null) {
@@ -189,8 +189,7 @@ public class AddManualBankAccount extends BaseActivity {
                     ex.printStackTrace();
                 }
             });
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
