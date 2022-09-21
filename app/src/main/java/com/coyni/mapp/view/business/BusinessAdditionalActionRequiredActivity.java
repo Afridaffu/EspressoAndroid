@@ -47,6 +47,7 @@ import com.coyni.mapp.dialogs.OnDialogClickListener;
 import com.coyni.mapp.dialogs.ShowFullPageImageDialog;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
 import com.coyni.mapp.model.DialogAttributes;
+import com.coyni.mapp.model.summary.BankAccount;
 import com.coyni.mapp.model.underwriting.ActionRequiredResponse;
 import com.coyni.mapp.model.underwriting.ActionRequiredSubmitResponse;
 import com.coyni.mapp.model.underwriting.InformationChangeData;
@@ -58,6 +59,7 @@ import com.coyni.mapp.utils.FileUtils;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
+import com.coyni.mapp.view.PaymentMethodsActivity;
 import com.coyni.mapp.viewmodel.UnderwritingUserActionRequiredViewModel;
 
 import org.json.JSONArray;
@@ -67,6 +69,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -77,7 +80,7 @@ import okhttp3.RequestBody;
 public class BusinessAdditionalActionRequiredActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     public ScrollView scrollview;
     private LinearLayout additionReservedLL, llApprovedReserved, llHeading, llBottomView, additionalDocumentRequiredLL,
-            websiteRevisionRequiredLL, informationRevisionLL;
+            websiteRevisionRequiredLL, informationRevisionLL, bank_information;
     private String selectedDocType = "";
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
     private static final int ACTIVITY_CHOOSE_FILE = 3;
@@ -102,7 +105,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     private boolean reservedRule = false;
     private ImageView imvCLose;
     private HashMap<String, ProposalsPropertiesData> proposalsMap;
-    private TextView adminMessageTV,resubmitTV,editTextTV;
+    private TextView adminMessageTV, resubmitTV, editTextTV;
+    private BankAccount objBank;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +134,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         llBottomView = findViewById(R.id.llBottomView);
         additionalDocumentRequiredLL = findViewById(R.id.ll_document_required);
         websiteRevisionRequiredLL = findViewById(R.id.website_revision_required);
+        bank_information = findViewById(R.id.bank_information);
         informationRevisionLL = findViewById(R.id.information_revision);
         imvCLose = findViewById(R.id.imvCLose);
         submitCV = findViewById(R.id.submitCV);
@@ -173,7 +178,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class).putExtra("From", "Resubmit"));
+                Intent i = new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class);
+                i.putExtra("From", "Resubmit");
+                startActivityForResult(i, 5);
 
             }
         });
@@ -184,8 +191,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class).putExtra("From", "Edit"));
-
+                Intent i = new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class);
+                i.putExtra("From", "Edit");
+                i.putExtra("bankObject", objBank);
+                startActivityForResult(i, 5);
             }
         });
     }
@@ -455,9 +464,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     }
 
     private void informationRevision(ActionRequiredResponse actionRequiredResponse) {
-
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
         List<InformationChangeData> informationChangeData = actionRequiredResponse.getData().getInformationChange();
         if (informationChangeData != null && informationChangeData.size() > 0) {
             InformationChangeData changeData = informationChangeData.get(0);
@@ -465,93 +472,97 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 proposalsMap = new HashMap<>();
                 for (int count = 0; count < changeData.getProposals().size(); count++) {
                     ProposalsData data = changeData.getProposals().get(count);
-                    List<ProposalsPropertiesData> proposalsPropertiesData = data.getProperties();
-                    if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
-                        informationRevisionLL.setVisibility(View.VISIBLE);
-                        for (int i = 0; i < proposalsPropertiesData.size(); i++) {
-                            View inf1 = getLayoutInflater().inflate(R.layout.additional_information_change, null);
-                            LinearLayout websiteChangeLL = inf1.findViewById(R.id.informationChange);
-                            TextView typeNameTV = inf1.findViewById(R.id.type_nameTV);
-                            TextView fieldNameTV = inf1.findViewById(R.id.field_nameTV);
-                            TextView companyNameOriginal = inf1.findViewById(R.id.comapnyNameOriginal);
-                            TextView companyNameProposed = inf1.findViewById(R.id.comapnyNamePropesed);
-                            TextView tvMessage = inf1.findViewById(R.id.tvMessage);
-                            ImageView imvAcceptTick = inf1.findViewById(R.id.imvAccepttick);
-                            TextView tvAcceptMsg = inf1.findViewById(R.id.acceptMsgTV);
-                            LinearLayout llDecline = inf1.findViewById(R.id.declineLL);
-                            LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
-                            ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
-                            if (data.getDisplayName() != null) {
-                                typeNameTV.setText(data.getDisplayName());
-                            }
-
-                            String fieldName = propertiesData.getDisplayName() != null ? propertiesData.getDisplayName() : "";
-                            fieldNameTV.setText(fieldName);
-                            if (propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
-                                companyNameOriginal.setText(Utils.formatPhoneNumber(propertiesData.getOriginalValue()));
-                                companyNameProposed.setText(Utils.formatPhoneNumber(propertiesData.getProposedValue()));
-                            } else {
-                                companyNameOriginal.setText(propertiesData.getOriginalValue());
-                                companyNameProposed.setText(propertiesData.getProposedValue());
-                            }
-
-                            if (propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
-                                String message = "";
-                                if (!propertiesData.getAdminMessage().startsWith("\"")) {
-                                    message += "\"";
+                    if (data.getType().toLowerCase().equals("bank")) {
+                        bankInformation(data);
+                    } else {
+                        List<ProposalsPropertiesData> proposalsPropertiesData = data.getProperties();
+                        if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
+                            informationRevisionLL.setVisibility(View.VISIBLE);
+                            for (int i = 0; i < proposalsPropertiesData.size(); i++) {
+                                View inf1 = getLayoutInflater().inflate(R.layout.additional_information_change, null);
+                                LinearLayout websiteChangeLL = inf1.findViewById(R.id.informationChange);
+                                TextView typeNameTV = inf1.findViewById(R.id.type_nameTV);
+                                TextView fieldNameTV = inf1.findViewById(R.id.field_nameTV);
+                                TextView companyNameOriginal = inf1.findViewById(R.id.comapnyNameOriginal);
+                                TextView companyNameProposed = inf1.findViewById(R.id.comapnyNamePropesed);
+                                TextView tvMessage = inf1.findViewById(R.id.tvMessage);
+                                ImageView imvAcceptTick = inf1.findViewById(R.id.imvAccepttick);
+                                TextView tvAcceptMsg = inf1.findViewById(R.id.acceptMsgTV);
+                                LinearLayout llDecline = inf1.findViewById(R.id.declineLL);
+                                LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
+                                ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
+                                if (data.getDisplayName() != null) {
+                                    typeNameTV.setText(data.getDisplayName());
                                 }
-                                message += propertiesData.getAdminMessage();
-                                if (!propertiesData.getAdminMessage().endsWith("\"")) {
-                                    message += "\"";
+
+                                String fieldName = propertiesData.getDisplayName() != null ? propertiesData.getDisplayName() : "";
+                                fieldNameTV.setText(fieldName);
+                                if (propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
+                                    companyNameOriginal.setText(Utils.formatPhoneNumber(propertiesData.getOriginalValue()));
+                                    companyNameProposed.setText(Utils.formatPhoneNumber(propertiesData.getProposedValue()));
+                                } else {
+                                    companyNameOriginal.setText(propertiesData.getOriginalValue());
+                                    companyNameProposed.setText(propertiesData.getProposedValue());
                                 }
-                                tvMessage.setText(message);
-                            }
 
-                            String verificationKey = data.getType() + "" + propertiesData.getName();
-                            typeNameTV.setTag(verificationKey);
-                            proposalsMap.put(verificationKey, propertiesData);
-                            fileUpload.put(verificationKey.trim().hashCode(), null);
+                                if (propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
+                                    String message = "";
+                                    if (!propertiesData.getAdminMessage().startsWith("\"")) {
+                                        message += "\"";
+                                    }
+                                    message += propertiesData.getAdminMessage();
+                                    if (!propertiesData.getAdminMessage().endsWith("\"")) {
+                                        message += "\"";
+                                    }
+                                    tvMessage.setText(message);
+                                }
 
-                            informationRevisionLL.addView(inf1, layoutParams);
-                            llAccept.setTag(inf1);
-                            llAccept.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    imvAcceptTick.setVisibility(View.VISIBLE);
-                                    tvAcceptMsg.setVisibility(View.VISIBLE);
-                                    llAccept.setVisibility(View.GONE);
-                                    llDecline.setVisibility(View.GONE);
-                                    tvAcceptMsg.setText(getResources().getString(R.string.Accepted) + " " + Utils.getCurrentDate());
-                                    View v = (View) view.getTag();
-                                    TextView tv = v.findViewById(R.id.type_nameTV);
+                                String verificationKey = data.getType() + "" + propertiesData.getName();
+                                typeNameTV.setTag(verificationKey);
+                                proposalsMap.put(verificationKey, propertiesData);
+                                fileUpload.put(verificationKey.trim().hashCode(), null);
+
+                                informationRevisionLL.addView(inf1, layoutParams);
+                                llAccept.setTag(inf1);
+                                llAccept.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        imvAcceptTick.setVisibility(View.VISIBLE);
+                                        tvAcceptMsg.setVisibility(View.VISIBLE);
+                                        llAccept.setVisibility(View.GONE);
+                                        llDecline.setVisibility(View.GONE);
+                                        tvAcceptMsg.setText(getResources().getString(R.string.Accepted) + " " + Utils.getCurrentDate());
+                                        View v = (View) view.getTag();
+                                        TextView tv = v.findViewById(R.id.type_nameTV);
 //                                    TextView displayNameTV = v.findViewById(R.id.display_nameTV);
 //                                    String verificationKey1 = displayNameTV.getText().toString() + "" + tv.getText().toString();
-                                    String verificationKey1 = (String) tv.getTag();
-                                    if (fileUpload.containsKey(verificationKey1.trim().hashCode())) {
-                                        fileUpload.replace(verificationKey1.trim().hashCode(), "true");
-                                    }
-                                    if (proposalsMap.get(verificationKey1) != null) {
-                                        proposalsMap.get(verificationKey1).setUserAccepted(true);
-                                        proposalsMap.get(verificationKey1).setUserMessage("Accepted");
-                                    }
-                                    enableOrDisableNext();
+                                        String verificationKey1 = (String) tv.getTag();
+                                        if (fileUpload.containsKey(verificationKey1.trim().hashCode())) {
+                                            fileUpload.replace(verificationKey1.trim().hashCode(), "true");
+                                        }
+                                        if (proposalsMap.get(verificationKey1) != null) {
+                                            proposalsMap.get(verificationKey1).setUserAccepted(true);
+                                            proposalsMap.get(verificationKey1).setUserMessage("Accepted");
+                                        }
+                                        enableOrDisableNext();
 
-                                }
-                            });
-                            llDecline.setTag(inf1);
-                            llDecline.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                        return;
                                     }
-                                    mLastClickTime = SystemClock.elapsedRealtime();
-                                    View v = (View) view.getTag();
-                                    showCommentDialog(v);
-                                    if (!Utils.isKeyboardVisible)
-                                        Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
-                                }
-                            });
+                                });
+                                llDecline.setTag(inf1);
+                                llDecline.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                            return;
+                                        }
+                                        mLastClickTime = SystemClock.elapsedRealtime();
+                                        View v = (View) view.getTag();
+                                        showCommentDialog(v);
+                                        if (!Utils.isKeyboardVisible)
+                                            Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
+                                    }
+                                });
+                            }
                         }
                     }
                 }
@@ -560,6 +571,14 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         enableOrDisableNext();
     }
 
+    private void bankInformation(ProposalsData data) {
+        try {
+            bank_information.setVisibility(View.VISIBLE);
+            LinearLayout verificationFailLL, editLL;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     private DisplayImageUtility.ImageHolder displayWebsiteImage(String imageId, ImageView iv) {
         iv.setVisibility(View.VISIBLE);

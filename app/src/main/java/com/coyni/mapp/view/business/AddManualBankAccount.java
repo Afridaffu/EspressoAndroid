@@ -115,13 +115,10 @@ public class AddManualBankAccount extends BaseActivity {
                     || getIntent().getStringExtra("From").equalsIgnoreCase("REVIEW"))) {
                 headingTV.setText(R.string.add_bank_account);
                 strScreen = getIntent().getStringExtra("From");
-            } else if (getIntent().getStringExtra("FROM").equalsIgnoreCase("Resubmit")) {
-            } else if (getIntent().getStringExtra("From") != null && getIntent().getStringExtra("From").equalsIgnoreCase("Resubmit")) {
+            } else if (getIntent().getStringExtra("From") != null && getIntent().getStringExtra("From").equalsIgnoreCase("Resubmit")
+                    || getIntent().getStringExtra("From").equalsIgnoreCase("Edit")) {
                 headingTV.setText(R.string.resubmit);
-                strScreen = "";
-            } else if (getIntent().getStringExtra("From") != null && getIntent().getStringExtra("From").equalsIgnoreCase("Edit")) {
-                headingTV.setText(R.string.resubmit);
-                strScreen = "";
+                strScreen = getIntent().getStringExtra("From");
             }
             if (getIntent().getSerializableExtra("bankObject") != null) {
                 BankAccount objBank = (BankAccount) getIntent().getSerializableExtra("bankObject");
@@ -130,6 +127,7 @@ public class AddManualBankAccount extends BaseActivity {
                 confirmRoutingNumberET.setText(objBank.getRoutingNumber());
                 checkAccNumberET.setText(objBank.getAccountNumber());
                 confirmAccNumberET.setText(objBank.getAccountNumber());
+                Utils.setUpperHintColor(nameOnBankTIL, getColor(R.color.primary_black));
                 Utils.setUpperHintColor(confirmRoutingNumberTIL, getColor(R.color.primary_black));
                 Utils.setUpperHintColor(checkAccNumberTIL, getColor(R.color.primary_black));
                 Utils.setUpperHintColor(confirmAccNumberTIL, getColor(R.color.primary_black));
@@ -146,10 +144,10 @@ public class AddManualBankAccount extends BaseActivity {
                     nameOnBankET.setText(objMyApplication.getStrUserName());
                     Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
                 } else {
-                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
+                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
                         nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
                         Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
-                    } else if (objMyApplication.getStrUserName() != null) {
+                    } else if (objMyApplication.getStrUserName() != null && !objMyApplication.getStrUserName().equals("")) {
                         nameOnBankET.setText(objMyApplication.getStrUserName());
                     } else if (objMyApplication.getCompanyInfoResp() != null) {
                         nameOnBankET.setText(objMyApplication.getCompanyInfoResp().getData().getName());
@@ -191,8 +189,7 @@ public class AddManualBankAccount extends BaseActivity {
                     ex.printStackTrace();
                 }
             });
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
