@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -229,7 +230,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             //Screen 1
             dbanameTIL = findViewById(R.id.DBAnameTIL);
             dbanameET = findViewById(R.id.DBAnameET);
-            dbanameET.setFilters(EmojiFilter.getFilter());
+            InputFilter[] filters = {new InputFilter.LengthFilter(50), EmojiFilter.getFilter()};
+            dbanameET.setFilters(filters);
             dbanameLL = findViewById(R.id.DBAnameErrorLL);
             dbanameTV = findViewById(R.id.DBAnameErrorTV);
 
@@ -792,10 +794,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             dbanameTV.setText("Field Required");
                             Utils.setUpperHintColor(dbanameTIL, getColor(R.color.light_gray));
                         }
-                        if (dbanameET.getText().toString().length() > 0 && !dbanameET.getText().toString().substring(0, 1).equals(" ")) {
-                            dbanameET.setText(dbanameET.getText().toString().substring(0, 1).toUpperCase() + dbanameET.getText().toString().substring(1));
-                            dbanameET.setSelection(dbanameET.getText().toString().length());
-                        }
+//                        if (dbanameET.getText().toString().length() > 0 && !dbanameET.getText().toString().substring(0, 1).equals(" ")) {
+//                            dbanameET.setText(dbanameET.getText().toString().substring(0, 1).toUpperCase() + dbanameET.getText().toString().substring(1));
+//                            dbanameET.setSelection(dbanameET.getText().toString().length());
+//                        }
                     } else {
 //                        dbanameET.setHint("DBA Name");
                         dbanameTIL.setBoxStrokeColor(getColor(R.color.primary_green));
