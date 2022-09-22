@@ -7,6 +7,7 @@ import com.coyni.mapp.model.CompanyInfo.CompanyInfoResp;
 import com.coyni.mapp.model.DBAInfo.BusinessTypeResp;
 import com.coyni.mapp.model.DBAInfo.DBAInfoResp;
 import com.coyni.mapp.model.States;
+import com.coyni.mapp.model.bank.ManualBankRequest;
 import com.coyni.mapp.model.bank.SignOnData;
 import com.coyni.mapp.model.business_id_verification.BusinessTrackerResponse;
 import com.coyni.mapp.model.businesswallet.WalletInfo;
@@ -35,6 +36,7 @@ import com.coyni.mapp.model.reguser.RegisteredUsersRequest;
 import com.coyni.mapp.model.retrieveemail.RetrieveUsersResponse;
 import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.model.submit.ApplicationSubmitResponseModel;
+import com.coyni.mapp.model.summary.BankAccount;
 import com.coyni.mapp.model.transaction.TransactionList;
 import com.coyni.mapp.model.transaction.TransactionListRequest;
 import com.coyni.mapp.model.transferfee.TransferFeeResponse;
@@ -107,6 +109,7 @@ public class UserData {
     private FeatureControlByUser featureControlByUser;
     private FeatureControlByUser featureControlGlobal;
     private WebSocketUrlResponseData webSocketUrlResponse;
+    private BankAccount bankAccount;
 
     public OrderPayResponse getOrderPayResponse() {
         return orderPayResponse;
@@ -790,5 +793,13 @@ public class UserData {
 
     public void setWebSocketUrlResponse(WebSocketUrlResponseData webSocketUrlResponse) {
         this.webSocketUrlResponse = webSocketUrlResponse;
+    }
+
+    public BankAccount getBankAccount() {
+        return bankAccount;
+    }
+
+    public void setBankAccount(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
     }
 }

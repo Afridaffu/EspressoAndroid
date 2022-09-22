@@ -57,6 +57,7 @@ import com.coyni.mapp.utils.CustomTypefaceSpan;
 import com.coyni.mapp.utils.DisplayImageUtility;
 import com.coyni.mapp.utils.FileUtils;
 import com.coyni.mapp.utils.LogUtils;
+import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.PaymentMethodsActivity;
@@ -105,8 +106,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     private boolean reservedRule = false;
     private ImageView imvCLose;
     private HashMap<String, ProposalsPropertiesData> proposalsMap;
-    private TextView adminMessageTV, resubmitTV, editTextTV;
-    private BankAccount objBank;
+    private TextView adminMessageTV;
+    private MyApplication objMyApplication;
+    private ProposalsData bankProposal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,8 +127,14 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         }
     }
 
-    private void initFields() {
+    @Override
+    protected void onDestroy() {
+        objMyApplication.setBankAccount(null);
+        super.onDestroy();
+    }
 
+    private void initFields() {
+        objMyApplication = (MyApplication) getApplicationContext();
         additionReservedLL = findViewById(R.id.lladditionReserve);
         llApprovedReserved = findViewById(R.id.llapprovedreserved);
         scrollview = findViewById(R.id.scrollview);
@@ -140,8 +148,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         submitCV = findViewById(R.id.submitCV);
         adminMessageTV = findViewById(R.id.adminMessageTV);
         additionalActionRL = findViewById(R.id.additionalActionRL);
-        resubmitTV = findViewById(R.id.resubmitTV);
-        editTextTV = findViewById(R.id.editTextTV);
 
         underwritingUserActionRequiredViewModel = new ViewModelProvider(this).get(UnderwritingUserActionRequiredViewModel.class);
         showProgressDialog();
@@ -171,32 +177,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 postSubmitAPiCall();
             }
         });
-        resubmitTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                Intent i = new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class);
-                i.putExtra("From", "Resubmit");
-                startActivityForResult(i, 5);
-
-            }
-        });
-        editTextTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                Intent i = new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class);
-                i.putExtra("From", "Edit");
-                i.putExtra("bankObject", objBank);
-                startActivityForResult(i, 5);
-            }
-        });
     }
 
     private void postSubmitAPiCall() {
@@ -206,6 +186,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         try {
             JSONArray documents = new JSONArray();
             JSONArray website = new JSONArray();
+            JSONObject bankRequest = new JSONObject();
             if (actionRequired.getData().getAdditionalDocument() != null) {
                 for (int i = 0; i <= actionRequired.getData().getAdditionalDocument().size() - 1; i++) {
                     documents.put(actionRequired.getData().getAdditionalDocument().get(i).getDocumentId());
@@ -219,8 +200,17 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             if (actionRequired.getData().getReserveRule() != null) {
                 informationJSON.put("reserveRuleAccepted", reservedRuleAccepted);
             }
+
+            if (objMyApplication.getBankAccount() != null) {
+                bankRequest.put("accountName", objMyApplication.getBankAccount().getAccountName());
+                bankRequest.put("accountNumber", objMyApplication.getBankAccount().getAccountNumber());
+                bankRequest.put("bankId", bankProposal.getDbId());
+                bankRequest.put("giactReq", true);
+                bankRequest.put("routingNumber", objMyApplication.getBankAccount().getRoutingNumber());
+            }
             informationJSON.put("documentIdList", documents);
             informationJSON.put("websiteUpdates", website);
+            informationJSON.put("bankRequest", bankRequest);
 
             JSONArray proposals = new JSONArray();
 
@@ -233,23 +223,78 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                         String type = proposal.getType();
                         JSONObject proposalsObj = new JSONObject();
                         JSONArray proposalsArray = new JSONArray();
-                        if (proposal != null && proposal.getProperties() != null && proposal.getProperties().size() > 0) {
-                            for (int k = 0; k < proposal.getProperties().size(); k++) {
-                                ProposalsPropertiesData property = proposal.getProperties().get(k);
-                                JSONObject propertyObj = new JSONObject();
-                                //String verificationKey = type + "" + capFirstLetter(property.getDisplayName());
-                                String verificationKey = type + "" + property.getName();
-                                propertyObj.put("isUserAccepted", proposalsMap.get(verificationKey).isUserAccepted());
-                                propertyObj.put("name", property.getName());
-                                propertyObj.put("userMessage", proposalsMap.get(verificationKey).getUserMessage());
-                                proposalsArray.put(propertyObj);
+                        JSONArray bankProposalsArray = new JSONArray();
+                        if (type.toLowerCase().equals("bank")) {
+                            if (proposal != null && proposal.getProperties() != null && proposal.getProperties().size() > 0) {
+                                for (int k = 0; k < proposal.getProperties().size(); k++) {
+                                    ProposalsPropertiesData property = proposal.getProperties().get(k);
+                                    JSONObject propertyObj = new JSONObject();
+                                    if (bankProposal.getProperties().get(0).getAdminMessage() != null) {
+                                        propertyObj.put("adminMessage", bankProposal.getProperties().get(0).getAdminMessage());
+                                    } else {
+                                        propertyObj.put("adminMessage", JSONObject.NULL);
+                                    }
+                                    if (bankProposal.getProperties().get(0).getDisplayName() != null) {
+                                        propertyObj.put("displayName", bankProposal.getProperties().get(0).getDisplayName());
+                                    } else {
+                                        propertyObj.put("displayName", JSONObject.NULL);
+                                    }
+                                    propertyObj.put("isUserAccepted", true);
+                                    propertyObj.put("name", bankProposal.getProperties().get(0).getName());
+                                    if (bankProposal.getProperties().get(0).getOriginalValue() != null) {
+                                        propertyObj.put("originalValue", bankProposal.getProperties().get(0).getOriginalValue());
+                                    } else {
+                                        propertyObj.put("originalValue", JSONObject.NULL);
+                                    }
+                                    if (bankProposal.getProperties().get(0).getProposedValue() != null) {
+                                        propertyObj.put("proposedValue", bankProposal.getProperties().get(0).getProposedValue());
+                                    } else {
+                                        propertyObj.put("proposedValue", JSONObject.NULL);
+                                    }
+                                    if (bankProposal.getProperties().get(0).getUserMessage() != null) {
+                                        propertyObj.put("userMessage", bankProposal.getProperties().get(0).getUserMessage());
+                                    } else {
+                                        propertyObj.put("userMessage", JSONObject.NULL);
+                                    }
+                                    bankProposalsArray.put(propertyObj);
+                                }
                             }
+
+                            proposalsObj.put("dbId", proposal.getDbId());
+                            if (bankProposal.getDisplayName() != null) {
+                                proposalsObj.put("displayName", bankProposal.getDisplayName());
+                            } else {
+                                proposalsObj.put("displayName", JSONObject.NULL);
+                            }
+                            if (bankProposal.getFirstName() != null) {
+                                proposalsObj.put("firstName", bankProposal.getFirstName());
+                            } else {
+                                proposalsObj.put("firstName", JSONObject.NULL);
+                            }
+                            if (bankProposal.getLastName() != null) {
+                                proposalsObj.put("lastName", bankProposal.getLastName());
+                            } else {
+                                proposalsObj.put("lastName", JSONObject.NULL);
+                            }
+                            proposalsObj.put("type", proposal.getType());
+                            proposalsObj.put("properties", bankProposalsArray);
+                        } else {
+                            if (proposal != null && proposal.getProperties() != null && proposal.getProperties().size() > 0) {
+                                for (int k = 0; k < proposal.getProperties().size(); k++) {
+                                    ProposalsPropertiesData property = proposal.getProperties().get(k);
+                                    JSONObject propertyObj = new JSONObject();
+                                    String verificationKey = type + "" + property.getName();
+                                    propertyObj.put("isUserAccepted", proposalsMap.get(verificationKey).isUserAccepted());
+                                    propertyObj.put("name", property.getName());
+                                    propertyObj.put("userMessage", proposalsMap.get(verificationKey).getUserMessage());
+                                    proposalsArray.put(propertyObj);
+                                }
+                            }
+
+                            proposalsObj.put("dbId", proposal.getDbId());
+                            proposalsObj.put("type", proposal.getType());
+                            proposalsObj.put("properties", proposalsArray);
                         }
-
-                        proposalsObj.put("dbId", proposal.getDbId());
-                        proposalsObj.put("type", proposal.getType());
-                        proposalsObj.put("properties", proposalsArray);
-
                         proposals.put(proposalsObj);
                         informationJSON.put("proposals", proposals);
                     }
@@ -473,6 +518,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 for (int count = 0; count < changeData.getProposals().size(); count++) {
                     ProposalsData data = changeData.getProposals().get(count);
                     if (data.getType().toLowerCase().equals("bank")) {
+                        fileUpload.put(data.getDbId(), null);
+                        bankProposal = data;
                         bankInformation(data);
                     } else {
                         List<ProposalsPropertiesData> proposalsPropertiesData = data.getProperties();
@@ -575,6 +622,64 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         try {
             bank_information.setVisibility(View.VISIBLE);
             LinearLayout verificationFailLL, editLL;
+            TextView errorDescrptnTV, resubmitTV, editTextTV, nameOnAccTV, routingNumTV, accNumberTV;
+            errorDescrptnTV = findViewById(R.id.errorDescrptnTV);
+            verificationFailLL = findViewById(R.id.verificationFailLL);
+            editLL = findViewById(R.id.editLL);
+            resubmitTV = findViewById(R.id.resubmitTV);
+            editTextTV = findViewById(R.id.editTextTV);
+            nameOnAccTV = findViewById(R.id.nameOnAccTV);
+            routingNumTV = findViewById(R.id.routingNumTV);
+            accNumberTV = findViewById(R.id.accNumberTV);
+            if (objMyApplication.getBankAccount() == null) {
+                verificationFailLL.setVisibility(View.VISIBLE);
+                editLL.setVisibility(View.GONE);
+                if (data != null && data.getProperties() != null && data.getProperties().size() > 0) {
+                    errorDescrptnTV.setText(data.getProperties().get(0).getGiactResponse());
+                }
+            } else {
+                fileUpload.put(bankProposal.getDbId(), "true");
+                String convert = "";
+                verificationFailLL.setVisibility(View.GONE);
+                editLL.setVisibility(View.VISIBLE);
+                nameOnAccTV.setText(objMyApplication.getBankAccount().getAccountName());
+                routingNumTV.setText(objMyApplication.getBankAccount().getRoutingNumber());
+                if (objMyApplication.getBankAccount().getAccountNumber() != null && objMyApplication.getBankAccount().getAccountNumber().length() > 4) {
+                    //accNumberTV.setText("**** " + objMyApplication.getBankAccount().getAccountNumber().substring(objMyApplication.getBankAccount().getAccountNumber().length() - 4));
+                    convert = objMyApplication.getBankAccount().getAccountNumber().replaceAll("", "");
+                    String converted = convert.replaceAll("\\w(?=\\w{4})", "•");
+                    accNumberTV.setText(converted);
+                } else {
+                    accNumberTV.setText(objMyApplication.getBankAccount().getAccountNumber());
+                }
+                enableOrDisableNext();
+            }
+            resubmitTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Intent i = new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class);
+                    i.putExtra("From", "Resubmit");
+                    startActivityForResult(i, 5);
+
+                }
+            });
+            editTextTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Intent i = new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class);
+                    i.putExtra("From", "Edit");
+                    i.putExtra("bankObject", objMyApplication.getBankAccount());
+                    startActivityForResult(i, 5);
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -867,6 +972,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             } else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
                 LogUtils.d(TAG, "PICK_IMAGE_REQUEST" + data.getData());
                 uploadDocumentFromLibrary(data.getData(), PICK_IMAGE_REQUEST);
+            } else if (requestCode == 5) {
+                bankInformation(null);
             }
 
         } catch (Exception e) {

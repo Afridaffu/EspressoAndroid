@@ -95,8 +95,6 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
     public void submitActionRequired(MultipartBody.Part[] requestBody, RequestBody underWriting) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-//            LogUtils.d(TAG, "submitActionRequired" + documentsImageList);
-
             Call<ActionRequiredSubmitResponse> mCall = apiService.submitActionRequired(requestBody, underWriting);
             mCall.enqueue(new Callback<ActionRequiredSubmitResponse>() {
                 @Override
