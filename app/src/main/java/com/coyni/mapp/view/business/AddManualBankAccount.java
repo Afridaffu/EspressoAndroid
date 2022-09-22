@@ -3,9 +3,12 @@ package com.coyni.mapp.view.business;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -14,9 +17,17 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -29,6 +40,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.R;
 import com.coyni.mapp.dialogs.ManualAccountNumbersFullPage;
+import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
 import com.coyni.mapp.model.bank.ManualBankRequest;
 import com.coyni.mapp.model.bank.ManualBankResponse;
 import com.coyni.mapp.model.summary.BankAccount;
@@ -40,7 +52,7 @@ import com.coyni.mapp.viewmodel.PaymentMethodsViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class AddManualBankAccount extends BaseActivity {
+public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisibilityListener {
     private TextView descriptionTV, nameOnBankErrorTV, routingNumberErrorTV, confirmRoutingNumberErrorTV, checkAccNumberErrorTV, confirmAccNumberErrorTV, headingTV;
     private TextInputLayout nameOnBankTIL, routingNumberTIL, confirmRoutingNumberTIL, checkAccNumberTIL, confirmAccNumberTIL;
     private TextInputEditText nameOnBankET, routingNumberET, confirmRoutingNumberET, checkAccNumberET, confirmAccNumberET;
@@ -72,6 +84,7 @@ public class AddManualBankAccount extends BaseActivity {
 
     private void initFields() {
         try {
+            setKeyboardVisibilityListener(this);
             objMyApplication = (MyApplication) getApplicationContext();
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             setSpannableText();
@@ -81,22 +94,32 @@ public class AddManualBankAccount extends BaseActivity {
             nameOnBankErrorTV = findViewById(R.id.nameOnBankErrorTV);
             nameOnBankTIL = findViewById(R.id.nameOnBankTIL);
             nameOnBankET = findViewById(R.id.nameOnBankET);
-            nameOnBankET.setFilters(EmojiFilter.getFilter());
+            InputFilter[] filters = {new InputFilter.LengthFilter(61), EmojiFilter.getFilter()};
+            nameOnBankET.setFilters(filters);
+
             nameOnBankErrorLL = findViewById(R.id.nameOnBankErrorLL);
             routingNumberTIL = findViewById(R.id.routingNumberTIL);
             routingNumberET = findViewById(R.id.routingNumberET);
+            blockCopy(routingNumberET);
+
             routingNumberErrorLL = findViewById(R.id.routingNumberErrorLL);
             routingNumberErrorTV = findViewById(R.id.routingNumberErrorTV);
             confirmRoutingNumberTIL = findViewById(R.id.confirmRoutingNumberTIL);
             confirmRoutingNumberET = findViewById(R.id.confirmRoutingNumberET);
+            blockCopy(confirmRoutingNumberET);
+
             confirmRoutingNumberErrorLL = findViewById(R.id.confirmRoutingNumberErrorLL);
             confirmRoutingNumberErrorTV = findViewById(R.id.confirmRoutingNumberErrorTV);
             checkAccNumberTIL = findViewById(R.id.checkAccNumberTIL);
             checkAccNumberET = findViewById(R.id.checkAccNumberET);
+            blockCopy(checkAccNumberET);
+
             checkAccNumberErrorLL = findViewById(R.id.checkAccNumberErrorLL);
             checkAccNumberErrorTV = findViewById(R.id.checkAccNumberErrorTV);
             confirmAccNumberTIL = findViewById(R.id.confirmAccNumberTIL);
             confirmAccNumberET = findViewById(R.id.confirmAccNumberET);
+            blockCopy(confirmAccNumberET);
+
             confirmAccNumberErrorLL = findViewById(R.id.confirmAccNumberErrorLL);
             confirmAccNumberErrorTV = findViewById(R.id.confirmAccNumberErrorTV);
             addCV = findViewById(R.id.addCV);
@@ -144,7 +167,9 @@ public class AddManualBankAccount extends BaseActivity {
                     nameOnBankET.setText(objMyApplication.getStrUserName());
                     Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
                 } else {
-                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getCompanyName() != null && !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
+                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                            && objMyApplication.getMyProfile().getData().getCompanyName() != null &&
+                            !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
                         nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
                         Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
                     } else if (objMyApplication.getStrUserName() != null && !objMyApplication.getStrUserName().equals("")) {
@@ -157,7 +182,8 @@ public class AddManualBankAccount extends BaseActivity {
             }
 
             backLL.setOnClickListener(view -> {
-                Utils.hideKeypad(AddManualBankAccount.this);
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(AddManualBankAccount.this);
                 onBackPressed();
             });
 
@@ -258,8 +284,11 @@ public class AddManualBankAccount extends BaseActivity {
 
             routingNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence charSeq, int i, int i1, int i2) {
-
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (i2 - i1 > 1) {
+                        routingNumberET.setText(charSequence);
+                        routingNumberET.setSelection(charSequence.toString().length());
+                    }
                 }
 
                 @Override
@@ -305,8 +334,11 @@ public class AddManualBankAccount extends BaseActivity {
 
             confirmRoutingNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence charSeq, int i, int i1, int i2) {
-
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (i2 - i1 > 1) {
+                        confirmRoutingNumberET.setText(charSequence);
+                        confirmRoutingNumberET.setSelection(charSequence.toString().length());
+                    }
                 }
 
                 @Override
@@ -335,7 +367,10 @@ public class AddManualBankAccount extends BaseActivity {
             checkAccNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSeq, int i, int i1, int i2) {
-
+                    if (i2 - i1 > 1) {
+                        checkAccNumberET.setText(charSeq);
+                        checkAccNumberET.setSelection(charSeq.toString().length());
+                    }
                 }
 
                 @Override
@@ -380,7 +415,10 @@ public class AddManualBankAccount extends BaseActivity {
             confirmAccNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSeq, int i, int i1, int i2) {
-
+                    if (i2 - i1 > 1) {
+                        confirmAccNumberET.setText(charSeq);
+                        confirmAccNumberET.setSelection(charSeq.toString().length());
+                    }
                 }
 
                 @Override
@@ -416,9 +454,9 @@ public class AddManualBankAccount extends BaseActivity {
             nameOnBankET.setOnFocusChangeListener((view, b) -> {
                 if (!b) {
 
-                    if (nameOnBankET.getText().length() > 0 && !nameOnBankET.getText().toString().substring(0, 1).equals(" ")) {
-                        nameOnBankET.setText(nameOnBankET.getText().toString().substring(0, 1).toUpperCase() + nameOnBankET.getText().toString().substring(1));
-                    }
+//                    if (nameOnBankET.getText().length() > 0 && !nameOnBankET.getText().toString().substring(0, 1).equals(" ")) {
+//                        nameOnBankET.setText(nameOnBankET.getText().toString().substring(0, 1).toUpperCase() + nameOnBankET.getText().toString().substring(1));
+//                    }
                     nameOnBankET.setHint("");
                     if (nameOnBankET.getText().toString().trim().length() > 0) {
                         nameOnBankErrorLL.setVisibility(View.GONE);
@@ -599,7 +637,8 @@ public class AddManualBankAccount extends BaseActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        Utils.hideKeypad(AddManualBankAccount.this);
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(AddManualBankAccount.this);
                         ManualAccountNumbersFullPage showImgDialog = new ManualAccountNumbersFullPage(AddManualBankAccount.this);
                         showImgDialog.show();
 
@@ -748,6 +787,58 @@ public class AddManualBankAccount extends BaseActivity {
     protected void onResume() {
         super.onResume();
         routingNumberET.requestFocus();
-        Utils.shwForcedKeypad(this);
+        if (!Utils.isKeyboardVisible)
+            Utils.shwForcedKeypad(this);
+    }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
+    }
+
+    private void blockCopy(EditText editText){
+        editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            public void onDestroyActionMode(ActionMode mode) {
+            }
+
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return false;
+            }
+        });
     }
 }

@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -197,7 +198,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             businessTIL = findViewById(R.id.businessTIL);
 
             companynameET = findViewById(R.id.companynameET);
-            companynameET.setFilters(EmojiFilter.getFilter());
+            InputFilter[] filters = {new InputFilter.LengthFilter(50), EmojiFilter.getFilter()};
+            companynameET.setFilters(filters);
+
             companynametil = findViewById(R.id.companynameTIL);
 
             companynameerrorTV = findViewById(R.id.companyNameErrorTV);
@@ -896,10 +899,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             companynameerrorTV.setText("Field Required");
 
                         }
-                        if (companynameET.getText().toString().length() > 0 && !companynameET.getText().toString().substring(0, 1).equals(" ")) {
-                            companynameET.setText(companynameET.getText().toString().substring(0, 1).toUpperCase() + companynameET.getText().toString().substring(1));
-                            companynameET.setSelection(companynameET.getText().toString().length());
-                        }
+//                        if (companynameET.getText().toString().length() > 0 && !companynameET.getText().toString().substring(0, 1).equals(" ")) {
+//                            companynameET.setText(companynameET.getText().toString().substring(0, 1).toUpperCase() + companynameET.getText().toString().substring(1));
+//                            companynameET.setSelection(companynameET.getText().toString().length());
+//                        }
 
                     } else {
 //                        companynameET.setHint("Company’s Name");

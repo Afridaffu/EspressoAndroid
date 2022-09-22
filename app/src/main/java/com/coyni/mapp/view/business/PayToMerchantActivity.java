@@ -847,7 +847,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 objMyApplication.setStrScreen("payRequest");
                 Intent i = new Intent(PayToMerchantActivity.this, SelectPaymentMethodActivity.class);
                 i.putExtra("screen", "payRequest");
-                i.putExtra("menuitem","Bank");
+                i.putExtra("menuitem","buy");
                 startActivity(i);
                 //finish();
             }

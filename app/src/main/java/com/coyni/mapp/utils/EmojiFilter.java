@@ -4,7 +4,7 @@ import android.text.InputFilter;
 import android.text.Spanned;
 
 public class EmojiFilter {
-    public static InputFilter[] getFilter() {
+    public static InputFilter getFilter() {
         InputFilter EMOJI_FILTER = new InputFilter() {
 
             @Override
@@ -21,6 +21,6 @@ public class EmojiFilter {
                 return null;
             }
         };
-        return new InputFilter[]{EMOJI_FILTER};
+        return EMOJI_FILTER;
     }
 }

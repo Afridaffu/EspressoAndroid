@@ -1643,7 +1643,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 objMyApplication.setStrScreen("payRequest");
                 Intent i = new Intent(ScanActivity.this, SelectPaymentMethodActivity.class);
                 i.putExtra("screen", "payRequest");
-                i.putExtra("menuitem","Bank");
+                i.putExtra("menuitem","buy");
                 startActivity(i);
                 //finish();
             }
