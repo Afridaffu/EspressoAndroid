@@ -163,15 +163,14 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                 isConfirmAc = true;
                 enableOrDisableNext();
             } else {
+                Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     nameOnBankET.setText(objMyApplication.getStrUserName());
-                    Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
                 } else {
                     if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                             && objMyApplication.getMyProfile().getData().getCompanyName() != null &&
                             !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
                         nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
-                        Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
                     } else if (objMyApplication.getStrUserName() != null && !objMyApplication.getStrUserName().equals("")) {
                         nameOnBankET.setText(objMyApplication.getStrUserName());
                     } else if (objMyApplication.getCompanyInfoResp() != null) {
@@ -196,20 +195,31 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                         if (Utils.isKeyboardVisible)
                             Utils.hideKeypad(AddManualBankAccount.this);
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if (strScreen.equals("pay")) {
-                            lyAddBank.setVisibility(View.GONE);
-                            layoutLoader.setVisibility(View.VISIBLE);
-                        }
-                        ManualBankRequest request = new ManualBankRequest();
-                        request.setAccountName(nameOnBankET.getText().toString());
-                        request.setRoutingNumber(routingNumberET.getText().toString());
-                        request.setAccountNumber(checkAccNumberET.getText().toString());
-                        if (strScreen.equals("signUp") || strScreen.equals("REVIEW")) {
-                            request.setGiactReq(false);
+                        if (!strScreen.equals("Resubmit") && !strScreen.equals("Edit")) {
+                            if (strScreen.equals("pay")) {
+                                lyAddBank.setVisibility(View.GONE);
+                                layoutLoader.setVisibility(View.VISIBLE);
+                            }
+                            ManualBankRequest request = new ManualBankRequest();
+                            request.setAccountName(nameOnBankET.getText().toString());
+                            request.setRoutingNumber(routingNumberET.getText().toString());
+                            request.setAccountNumber(checkAccNumberET.getText().toString());
+                            if (strScreen.equals("signUp") || strScreen.equals("REVIEW")) {
+                                request.setGiactReq(false);
+                            } else {
+                                request.setGiactReq(true);
+                            }
+                            paymentMethodsViewModel.saveManualBank(request);
                         } else {
-                            request.setGiactReq(true);
+                            BankAccount objBank = new BankAccount();
+                            objBank.setAccountName(nameOnBankET.getText().toString());
+                            objBank.setRoutingNumber(routingNumberET.getText().toString());
+                            objBank.setAccountNumber(checkAccNumberET.getText().toString());
+                            objMyApplication.setBankAccount(objBank);
+                            Intent i = new Intent();
+                            setResult(RESULT_OK, i);
+                            finish();
                         }
-                        paymentMethodsViewModel.saveManualBank(request);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -681,9 +691,6 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             TextView doneTV = bankStatusDialog.findViewById(R.id.doneTV);
             CardView validateCV = bankStatusDialog.findViewById(R.id.validateCV);
 
-//            nameOnBankTV.setText(manualBankResponse.getData().getAccountName());
-//            routingNumTV.setText(manualBankResponse.getData().getRoutingNumber());
-//            accNumTV.setText(manualBankResponse.getData().getAccountNumber());
             Window window = bankStatusDialog.getWindow();
             if (manualBankResponse.getData() != null && !manualBankResponse.getData().getGiactFail()) {
                 nameOnBankTV.setText(manualBankResponse.getData().getAccountName());
@@ -732,7 +739,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                     routingNumTV.setText(routingNumberET.getText().toString());
                     accNumTV.setText(checkAccNumberET.getText().toString());
                     if (checkAccNumberET.getText().toString() != null && checkAccNumberET.getText().toString().length() > 4) {
-                        accNumTV.setText("**** " + checkAccNumberET.getText().toString().substring(checkAccNumberET.getText().toString().length() - 4));
+                        //accNumTV.setText("**** " + checkAccNumberET.getText().toString().substring(checkAccNumberET.getText().toString().length() - 4));
+                        convert = checkAccNumberET.getText().toString().replaceAll("", "");
+                        String converted = convert.replaceAll("\\w(?=\\w{4})", "•");
+                        accNumTV.setText(converted);
                     } else {
                         accNumTV.setText(checkAccNumberET.getText().toString());
                     }
@@ -822,7 +832,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
         Utils.isKeyboardVisible = visible;
     }
 
-    private void blockCopy(EditText editText){
+    private void blockCopy(EditText editText) {
         editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
 
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
