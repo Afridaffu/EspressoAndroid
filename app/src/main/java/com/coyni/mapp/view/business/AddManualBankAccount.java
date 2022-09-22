@@ -832,7 +832,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
         Utils.isKeyboardVisible = visible;
     }
 
-    private void blockCopy(EditText editText){
+    private void blockCopy(EditText editText) {
         editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
 
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
