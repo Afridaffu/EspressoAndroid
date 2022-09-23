@@ -584,8 +584,18 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                     if (emailResponse != null) {
                         Log.e("Email OTP Validate", new Gson().toJson(emailResponse));
                         if (emailResponse.getStatus().toLowerCase().equals("error")) {
-                            otpPV.setLineColor(getResources().getColor(R.color.error_red));
-                            shakeAnimateLeftRight();
+                            try {
+                                if (emailResponse.getError().getErrorDescription().equals(getString(R.string.otp_retry_error))) {
+                                    showAlert(emailResponse.getError().getErrorDescription());
+                                } else {
+                                    otpPV.setLineColor(getResources().getColor(R.color.error_red));
+                                    shakeAnimateLeftRight();
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                         } else {
                             otpPV.setLineColor(getResources().getColor(R.color.primary_color));
                             shakeAnimateUpDown();
@@ -1230,23 +1240,21 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                 try {
                     if (smsValidate != null) {
                         if (smsValidate.getStatus().toLowerCase().equals("error")) {
-                            otpPV.setLineColor(getResources().getColor(R.color.error_red));
-                            shakeAnimateLeftRight();
                             if (strScreen != null && strScreen.equals("login_SET_PIN")) {
                                 if (resendCounter >= 5) {
                                     Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error", "");
                                 }
                             } else {
-                                if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio")) {
-                                    try {
-                                        if (smsValidate.getError().getErrorDescription().equals("")) {
-                                            Utils.displayAlert(smsValidate.getError().getFieldErrors().get(0), OTPValidation.this, "", smsValidate.getError().getFieldErrors().get(0));
-                                        } else {
-                                            Utils.displayAlert(smsValidate.getError().getErrorDescription(), OTPValidation.this, "", smsValidate.getError().getFieldErrors().get(0));
-                                        }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+                                try {
+                                    if (smsValidate.getError().getErrorDescription().equals(getString(R.string.otp_retry_error))) {
+                                        showAlert(smsValidate.getError().getErrorDescription());
+                                    } else {
+                                        otpPV.setLineColor(getResources().getColor(R.color.error_red));
+                                        shakeAnimateLeftRight();
                                     }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                             }
                         } else {
