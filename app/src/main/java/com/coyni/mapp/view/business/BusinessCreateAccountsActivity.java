@@ -353,6 +353,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 if (btResp != null) {
                     if (btResp.getStatus().toLowerCase().equals("success")) {
 
+                        if (btResp.getData() != null)
+                            myApplication.setCompanyName(btResp.getData().getCompanyName());
+
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountType());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getDbaOwnerId());

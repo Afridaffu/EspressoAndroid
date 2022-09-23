@@ -163,19 +163,17 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                 isConfirmAc = true;
                 enableOrDisableNext();
             } else {
+                Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     nameOnBankET.setText(objMyApplication.getStrUserName());
-                    Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
                 } else {
-                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                    if (objMyApplication.getCompanyInfoResp() != null && objMyApplication.getCompanyInfoResp().getData() != null &&
+                            objMyApplication.getCompanyInfoResp().getData().getName() != null) {
+                        nameOnBankET.setText(objMyApplication.getCompanyInfoResp().getData().getName());
+                    } else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                             && objMyApplication.getMyProfile().getData().getCompanyName() != null &&
                             !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
                         nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
-                        Utils.setUpperHintColor(nameOnBankTIL, getResources().getColor(R.color.primary_black));
-                    } else if (objMyApplication.getStrUserName() != null && !objMyApplication.getStrUserName().equals("")) {
-                        nameOnBankET.setText(objMyApplication.getStrUserName());
-                    } else if (objMyApplication.getCompanyInfoResp() != null) {
-                        nameOnBankET.setText(objMyApplication.getCompanyInfoResp().getData().getName());
                     }
                 }
                 isName = true;
@@ -822,7 +820,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
         Utils.isKeyboardVisible = visible;
     }
 
-    private void blockCopy(EditText editText){
+    private void blockCopy(EditText editText) {
         editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
 
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
