@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.coyni.mapp.model.fee.Fees;
 import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.model.summary.BankAccount;
 import com.coyni.mapp.model.websocket.WebSocketUrlResponseData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -978,6 +979,14 @@ public class MyApplication extends Application {
 
     public void setCompanyName(String companyName) {
         mCurrentUserData.setCompanyName(companyName);
+    }
+
+    public BankAccount getBankAccount() {
+        return mCurrentUserData.getBankAccount();
+    }
+
+    public void setBankAccount(BankAccount bankAccount) {
+        mCurrentUserData.setBankAccount(bankAccount);
     }
 
 }
