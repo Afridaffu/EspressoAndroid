@@ -135,11 +135,11 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
 
             if (getIntent().getStringExtra("From") != null && (getIntent().getStringExtra("From").equalsIgnoreCase("pay")
                     || getIntent().getStringExtra("From").equalsIgnoreCase("signUp")
-                    || getIntent().getStringExtra("From").equalsIgnoreCase("REVIEW"))) {
+                    || getIntent().getStringExtra("From").equalsIgnoreCase("REVIEW"))
+                    || getIntent().getStringExtra("From").equalsIgnoreCase("Edit")) {
                 headingTV.setText(R.string.add_bank_account);
                 strScreen = getIntent().getStringExtra("From");
-            } else if (getIntent().getStringExtra("From") != null && getIntent().getStringExtra("From").equalsIgnoreCase("Resubmit")
-                    || getIntent().getStringExtra("From").equalsIgnoreCase("Edit")) {
+            } else if (getIntent().getStringExtra("From") != null && getIntent().getStringExtra("From").equalsIgnoreCase("Resubmit")) {
                 headingTV.setText(R.string.resubmit);
                 strScreen = getIntent().getStringExtra("From");
             }
