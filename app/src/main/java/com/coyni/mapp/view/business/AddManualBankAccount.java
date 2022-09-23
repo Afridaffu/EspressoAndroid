@@ -167,14 +167,13 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     nameOnBankET.setText(objMyApplication.getStrUserName());
                 } else {
-                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                    if (objMyApplication.getCompanyInfoResp() != null && objMyApplication.getCompanyInfoResp().getData() != null &&
+                            objMyApplication.getCompanyInfoResp().getData().getName() != null) {
+                        nameOnBankET.setText(objMyApplication.getCompanyInfoResp().getData().getName());
+                    } else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                             && objMyApplication.getMyProfile().getData().getCompanyName() != null &&
                             !objMyApplication.getMyProfile().getData().getCompanyName().equals("")) {
                         nameOnBankET.setText(objMyApplication.getMyProfile().getData().getCompanyName());
-                    } else if (objMyApplication.getStrUserName() != null && !objMyApplication.getStrUserName().equals("")) {
-                        nameOnBankET.setText(objMyApplication.getStrUserName());
-                    } else if (objMyApplication.getCompanyInfoResp() != null) {
-                        nameOnBankET.setText(objMyApplication.getCompanyInfoResp().getData().getName());
                     }
                 }
                 isName = true;

@@ -85,7 +85,7 @@
                         app:errorIconDrawable="@null"
                         app:hintTextColor="@color/primary_green">
 
-<!--                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"-->
+                        <!--                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"-->
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/nameOnBankET"
@@ -301,7 +301,7 @@
                             android:digits="1234567890"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
-                            android:inputType="numberPassword"
+                            android:inputType="numberPassword|textNoSuggestions"
                             android:longClickable="false"
                             android:maxLength="17"
                             android:maxLines="1"
@@ -365,7 +365,7 @@
                                 android:digits="1234567890"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:imeOptions="actionDone"
-                                android:inputType="numberPassword"
+                                android:inputType="numberPassword|textNoSuggestions"
                                 android:longClickable="false"
                                 android:maxLength="17"
                                 android:maxLines="1"

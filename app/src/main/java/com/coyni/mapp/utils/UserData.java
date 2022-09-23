@@ -104,7 +104,7 @@ public class UserData {
     private String strToken;
     private boolean isLoggedIn = false;
     private String businessUserID = "";
-    private String ownerImage = "";
+    private String ownerImage = "", companyName = "";
     private List<BatchPayoutListItems> batchPayList = new ArrayList<>();
     private FeatureControlByUser featureControlByUser;
     private FeatureControlByUser featureControlGlobal;
@@ -801,5 +801,13 @@ public class UserData {
 
     public void setBankAccount(BankAccount bankAccount) {
         this.bankAccount = bankAccount;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 }
