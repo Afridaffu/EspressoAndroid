@@ -308,11 +308,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-//                        if (businessTrackerResponse.getData().isBeneficialOwners()) {
+                        if (businessTrackerResponse.getData().isBeneficialOwners()) {
                             Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddManualBankAccount.class);
                             intent.putExtra("From", "signUp");
                             startActivity(intent);
-//                        }
+                        }
 
 //                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
 //                    startActivity(intent);
