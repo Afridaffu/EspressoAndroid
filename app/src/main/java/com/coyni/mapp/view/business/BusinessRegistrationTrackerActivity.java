@@ -308,11 +308,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if (businessTrackerResponse.getData().isBeneficialOwners()) {
+//                        if (businessTrackerResponse.getData().isBeneficialOwners()) {
                             Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddManualBankAccount.class);
                             intent.putExtra("From", "signUp");
                             startActivity(intent);
-                        }
+//                        }
 
 //                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AddBankAccount.class);
 //                    startActivity(intent);
@@ -412,6 +412,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             LogUtils.d("btResp", "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
                             objMyApplication.setLoginUserId(btResp.getData().getUserId());
+                            objMyApplication.setAccountType(btResp.getData().getAccountType());
+                            objMyApplication.setCompanyName(btResp.getData().getCompanyName());
                             isAddBusinessCalled = false;
                             isAddDbaCalled = false;
                             finish();
@@ -479,6 +481,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 
                                 objMyApplication.setCompanyInfoResp(companyInfoResp);
                                 CompanyInfoResp.Data cir = companyInfoResp.getData();
+                                if (cir.getName() != null)
+                                    objMyApplication.setCompanyName(cir.getName());
 
                                 if (cir.getName() != null && !cir.getName().equals("")
                                         || cir.getEmail() != null && !cir.getEmail().equals("")

@@ -722,7 +722,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         objMyApplication.setOldLoginUserId(objMyApplication.getLoginUserId());
                         objMyApplication.setLoginUserId(identityImageResponse.getData().getUserId());
-
+                        objMyApplication.setAccountType(Utils.BUSINESS_ACCOUNT);
+                        objMyApplication.setCompanyName(companynameET.getText().toString().trim());
                         isNewCompanyFlag = true;
                         isNew = false;
                         BusinessRegistrationTrackerActivity.isAddBusinessCalled = true;

@@ -973,6 +973,14 @@ public class MyApplication extends Application {
         mCurrentUserData.setWebSocketUrlResponse(webSocketUrlResponse);
     }
 
+    public String getCompanyName() {
+        return mCurrentUserData.getCompanyName();
+    }
+
+    public void setCompanyName(String companyName) {
+        mCurrentUserData.setCompanyName(companyName);
+    }
+
     public BankAccount getBankAccount() {
         return mCurrentUserData.getBankAccount();
     }
