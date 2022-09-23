@@ -65,6 +65,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
     ImageView imgBankIcon, imgBankArrow, imgSignetLogo, imgSignetArrow, imgDCardLogo, imgDCardArrow, imgLogo;
     Long mLastClickTime = 0L;
     Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
+    PaymentMethodsAdapter paymentMethodsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -320,6 +321,9 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                         ControlMethod("addpayment");
                         strCurrent = "addpayment";
                         addPayment();
+                        if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() == 0) {
+                            paymentMethodsAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }
@@ -567,7 +571,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
     }
 
     private void bindPaymentMethods(List<PaymentsList> listPayments) {
-        PaymentMethodsAdapter paymentMethodsAdapter;
+//        PaymentMethodsAdapter paymentMethodsAdapter;
         try {
             if (listPayments != null && listPayments.size() > 0) {
                 paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, BusinessPaymentMethodsActivity.this, "business");

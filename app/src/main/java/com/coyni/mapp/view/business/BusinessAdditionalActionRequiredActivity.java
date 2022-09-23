@@ -210,7 +210,11 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             }
             informationJSON.put("documentIdList", documents);
             informationJSON.put("websiteUpdates", website);
-            informationJSON.put("bankRequest", bankRequest);
+            if (bankRequest.length() > 0) {
+                informationJSON.put("bankRequest", bankRequest);
+            } else {
+                informationJSON.put("bankRequest", JSONObject.NULL);
+            }
 
             JSONArray proposals = new JSONArray();
 
