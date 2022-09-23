@@ -179,6 +179,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             EchoWebSocketListener listener = new EchoWebSocketListener();
             WebSocket webSocket = client.newWebSocket(request, listener);
             client.dispatcher().executorService().shutdown();
+            Log.d("WebSocket Started with url : ", serverUrl);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -190,6 +191,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         @Override
         public void onOpen(WebSocket webSocket, Response response) {
             try {
+                Log.d("authorization: ", Utils.getStrAuth());
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("authorization", Utils.getStrAuth());
                 webSocket.send(jsonObject.toString());
@@ -200,7 +202,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         @Override
         public void onMessage(WebSocket webSocket, String message) {
-            Log.e("Receive Message: ", message);
+            Log.d("Receive Message: ", message);
             try {
                 JSONObject obj = new JSONObject(message);
                 if (obj.getString("eventType").equals("TXN_STATUS") && obj.getString("txnStatus").toLowerCase().equals("completed")) {
@@ -214,20 +216,23 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         @Override
         public void onMessage(WebSocket webSocket, ByteString bytes) {
-            Log.e("Receive Bytes : ", bytes.hex());
+            Log.d("Receive Bytes : ", bytes.hex());
         }
 
         @Override
         public void onClosing(WebSocket webSocket, int code, String reason) {
             webSocket.close(CLOSE_STATUS, null);
-            Log.e("Closing Socket : ", code + " / " + reason);
+            Log.d("Closing Socket : ", code + " / " + reason);
         }
 
         @Override
         public void onFailure(WebSocket webSocket, Throwable throwable, Response response) {
             try {
                 //webSocket.close(CLOSE_STATUS, null);
-                Log.e("Error : ", throwable.getMessage());
+                if (throwable.getMessage() != null)
+                    Log.d("Error : ", throwable.getMessage());
+                else
+                    Log.d("Error : ", throwable.toString());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
