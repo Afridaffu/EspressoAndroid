@@ -614,7 +614,7 @@ public class BusinessProfileActivity extends BaseActivity {
         disableLayout(feesLL, isEnable);
         disableLayout(accountlimitsLL, isEnable);
         disableLayout(cpagreeementsLL, isEnable);
-        disableLayout(cpHelpLL,isEnable);
+        disableLayout(cpHelpLL,true);
     }
 
     public void setToken() {
