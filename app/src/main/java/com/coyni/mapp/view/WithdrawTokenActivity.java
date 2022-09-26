@@ -496,10 +496,21 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         else if (feeInAmount == 0 && feeInPercentage != 0)
                             feeString = feeString + Utils.convertTwoDecimalPoints(feeInPercentage) + "%";
 
-                        if (!feeString.equals("Fees: "))
+                        if (!feeString.equals("Fees: ")) {
+                            tvFeePer.setVisibility(View.VISIBLE);
                             tvFeePer.setText(feeString);
-                        else
+                        } else
                             tvFeePer.setVisibility(View.GONE);
+
+                        if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Utils.doubleParsing(etAmount.getText().toString().replace(",", "")) > 0) {
+                            isUSD = true;
+                            convertUSDValue();
+                            if (validation()) {
+                                ctKey.enableButton();
+                            } else {
+                                ctKey.disableButton();
+                            }
+                        }
 
                     }
                 } catch (Exception ex) {
