@@ -590,9 +590,10 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                         else if (feeInAmount == 0 && feeInPercentage != 0)
                             feeString = feeString + Utils.convertTwoDecimalPoints(feeInPercentage) + "%";
 
-                        if (!feeString.equals("Fees: "))
+                        if (!feeString.equals("Fees: ")) {
+                            tvFeePer.setVisibility(View.VISIBLE);
                             tvFeePer.setText(feeString);
-                        else
+                        } else
                             tvFeePer.setVisibility(View.GONE);
                     }
                 } catch (Exception ex) {
@@ -1027,7 +1028,9 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 request.setTxnSubType(Utils.instantType);
             }
             if (Utils.checkInternet(BuyTokenActivity.this)) {
-                buyTokenViewModel.transferFee(request);
+                if (!objMyApplication.getSelectedCard().getExpired()) {
+                    buyTokenViewModel.transferFee(request);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();

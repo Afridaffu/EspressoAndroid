@@ -525,6 +525,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                                 strCurrent = "debit";
                                 Intent i = new Intent(SelectPaymentMethodActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "debit");
+                                i.putExtra("screen", strScreen);
                                 startActivityForResult(i, 3);
                             }
                         } else {
