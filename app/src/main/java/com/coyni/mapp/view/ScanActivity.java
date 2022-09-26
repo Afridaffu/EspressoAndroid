@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.view.business.SelectPaymentMethodActivity;
 import com.google.zxing.Reader;
 import com.coyni.mapp.dialogs.OnDialogClickListener;
 import com.coyni.mapp.dialogs.PayToMerchantWithAmountDialog;
@@ -342,13 +343,25 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 tvSaveUserName.setText(savedStrName);
             }
             saveToAlbumbindImage();
-            WalletResponseData walletResponse = objMyApplication.getCurrentUserData().getTokenWalletResponse();
-            if (walletResponse != null && walletResponse.getWalletNames() != null
-                    && walletResponse.getWalletNames().get(0) != null
-                    && walletResponse.getWalletNames().get(0).getWalletId() != null) {
-                strWallet = walletResponse.getWalletNames().get(0).getWalletId();
-                generateQRCode(strWallet);
-                tvWalletAddress.setText(strWallet.substring(0, 16) + "...");
+            if (Utils.PERSONAL_ACCOUNT == objMyApplication.getAccountType()) {
+                WalletResponseData walletResponse = objMyApplication.getCurrentUserData().getTokenWalletResponse();
+                if (walletResponse != null && walletResponse.getWalletNames() != null
+                        && walletResponse.getWalletNames().get(0) != null
+                        && walletResponse.getWalletNames().get(0).getWalletId() != null) {
+                    strWallet = walletResponse.getWalletNames().get(0).getWalletId();
+                    generateQRCode(strWallet);
+                    tvWalletAddress.setText(strWallet.substring(0, 16) + "...");
+                }
+            }
+            else {
+                WalletResponseData walletResponse = objMyApplication.getCurrentUserData().getMerchantWalletResponse();
+                if (walletResponse != null && walletResponse.getWalletNames() != null
+                        && walletResponse.getWalletNames().get(0) != null
+                        && walletResponse.getWalletNames().get(0).getWalletId() != null) {
+                    strWallet = walletResponse.getWalletNames().get(0).getWalletId();
+                    generateQRCode(strWallet);
+                    tvWalletAddress.setText(strWallet.substring(0, 16) + "...");
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1640,8 +1653,16 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             public void onClick(View view) {
                 dialog.dismiss();
                 objMyApplication.setStrScreen("payRequest");
-                Intent i = new Intent(ScanActivity.this, BuyTokenPaymentMethodsActivity.class);
-                i.putExtra("screen", "payRequest");
+                Intent i = null;
+                if (Utils.PERSONAL_ACCOUNT == objMyApplication.getAccountType()) {
+                    i = new Intent(ScanActivity.this, BuyTokenPaymentMethodsActivity.class);
+                    i.putExtra("screen", "payRequest");
+                }
+                else {
+                    i = new Intent(ScanActivity.this, SelectPaymentMethodActivity.class);
+                    i.putExtra("screen", "payRequest");
+                    i.putExtra("menuitem","buy");
+                }
                 startActivity(i);
                 //finish();
             }
