@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.coyni.mapp.model.APIError;
@@ -39,6 +40,7 @@ public class CustomerProfileViewModel extends AndroidViewModel {
     private MutableLiveData<UserPreference> userPreferenceMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BankResponse> bankResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<WebSocketUrlResponse> webSocketUrlResponseMutableLiveData = new MutableLiveData<>();
 
     public CustomerProfileViewModel(@NonNull Application application) {
         super(application);
@@ -77,6 +79,10 @@ public class CustomerProfileViewModel extends AndroidViewModel {
 
     public MutableLiveData<BankResponse> getBankResponseMutableLiveData() {
         return bankResponseMutableLiveData;
+    }
+
+    public MutableLiveData<WebSocketUrlResponse> getWebSocketUrlResponseMutableLiveData() {
+        return webSocketUrlResponseMutableLiveData;
     }
 
     public void updateEmailSendOTP(UpdateEmailRequest request) {
@@ -331,6 +337,45 @@ public class CustomerProfileViewModel extends AndroidViewModel {
                 public void onFailure(Call<BankResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     bankResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void webSocketUrl() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<WebSocketUrlResponse> mCall = apiService.webSocketUrl();
+            mCall.enqueue(new Callback<WebSocketUrlResponse>() {
+                @Override
+                public void onResponse(Call<WebSocketUrlResponse> call, Response<WebSocketUrlResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            WebSocketUrlResponse obj = response.body();
+                            webSocketUrlResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<WebSocketUrlResponse>() {
+                            }.getType();
+                            WebSocketUrlResponse errorResponse = null;
+                            try {
+                                errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            webSocketUrlResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        webSocketUrlResponseMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<WebSocketUrlResponse> call, Throwable t) {
+                    webSocketUrlResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

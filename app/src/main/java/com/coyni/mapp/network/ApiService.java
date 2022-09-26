@@ -33,6 +33,7 @@ import com.coyni.mapp.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.coyni.mapp.model.actionRqrd.ActionRqrdResponse;
 import com.coyni.mapp.model.actionRqrd.SubmitActionRqrdResponse;
 import com.coyni.mapp.model.activtity_log.ActivityLogResp;
+import com.coyni.mapp.model.appupdate.AppUpdateResp;
 import com.coyni.mapp.model.bank.BankDeleteResponseData;
 import com.coyni.mapp.model.bank.BankResponse;
 import com.coyni.mapp.model.bank.BanksResponseModel;
@@ -180,6 +181,7 @@ import com.coyni.mapp.model.users.User;
 import com.coyni.mapp.model.users.UserData;
 import com.coyni.mapp.model.users.UserPreferenceModel;
 import com.coyni.mapp.model.wallet.UserDetails;
+import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
 import com.coyni.mapp.model.withdraw.WithdrawRequest;
 import com.coyni.mapp.model.withdraw.WithdrawResponse;
 
@@ -724,6 +726,12 @@ public interface ApiService {
 
     @POST("api/v2/user/stepup/phone")
     Call<StepUpOTPResponse> stepUpPhoneOTP(@Body SmsRequest request);
+
+    @POST("api/v2/user/start")
+    Call<WebSocketUrlResponse> webSocketUrl();
+
+    @GET("api/v2/app-version/retrieve")
+    Call<AppUpdateResp> getAppUpdate(@Query("osType") String osType);
 
 }
 

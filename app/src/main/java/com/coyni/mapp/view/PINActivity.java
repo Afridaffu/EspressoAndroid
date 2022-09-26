@@ -23,7 +23,9 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
 import com.coyni.mapp.view.business.BusinessProfileActivity;
+import com.coyni.mapp.viewmodel.CustomerProfileViewModel;
 import com.google.gson.Gson;
 import com.coyni.mapp.R;
 import com.coyni.mapp.model.EmailRequest;

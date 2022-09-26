@@ -86,7 +86,7 @@ import com.coyni.mapp.viewmodel.PaymentMethodsViewModel;
 import java.util.Locale;
 
 
-public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
+public class BuyTokenActivity extends BaseActivity implements TextWatcher {
     MyApplication objMyApplication;
     PaymentsList selectedCard, objSelected, prevSelectedCard;
     ImageView imgBankIcon, imgArrow, imgConvert;
@@ -1482,10 +1482,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent i = new Intent(BuyTokenActivity.this, DashboardActivity.class);
-//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    startActivity(i);
                     try {
+                        //startWebSocket();
                         if (objMyApplication.getStrScreen().equalsIgnoreCase(CheckOutConstants.FlowCheckOut)) {
                             objMyApplication.getCheckOutModel().setCheckOutFlag(true);
                             startActivity(new Intent(BuyTokenActivity.this, CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));

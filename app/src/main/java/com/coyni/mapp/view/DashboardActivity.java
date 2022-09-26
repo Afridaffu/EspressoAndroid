@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -33,6 +34,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.LatestTxnAdapter;
+import com.coyni.mapp.model.appupdate.AppUpdateResp;
 import com.coyni.mapp.model.bank.SignOn;
 import com.coyni.mapp.model.businesswallet.BusinessWalletResponse;
 import com.coyni.mapp.model.businesswallet.WalletInfo;
@@ -51,6 +53,7 @@ import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.preferences.Preferences;
 import com.coyni.mapp.model.profile.Profile;
 import com.coyni.mapp.model.profile.TrackerResponse;
+import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
 import com.coyni.mapp.utils.DatabaseHandler;
 import com.coyni.mapp.utils.DisplayImageUtility;
 import com.coyni.mapp.utils.MyApplication;
@@ -64,6 +67,7 @@ import com.coyni.mapp.viewmodel.LoginViewModel;
 import com.coyni.mapp.viewmodel.NotificationsViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
@@ -856,6 +860,40 @@ public class DashboardActivity extends BaseActivity {
             }
         });
 
+        customerProfileViewModel.getWebSocketUrlResponseMutableLiveData().observe(this, new Observer<WebSocketUrlResponse>() {
+            @Override
+            public void onChanged(WebSocketUrlResponse webSocketUrlResponse) {
+                if (webSocketUrlResponse != null) {
+                    objMyApplication.setWebSocketUrlResponse(webSocketUrlResponse.getData());
+                }
+            }
+        });
+
+        dashboardViewModel.getAppUpdateRespMutableLiveData().observe(this, new Observer<AppUpdateResp>() {
+            @Override
+            public void onChanged(AppUpdateResp appUpdateResp) {
+                try {
+                    if (appUpdateResp == null){
+                        return;
+                    }
+                    String version = getPackageManager().getPackageInfo(DashboardActivity.this.getPackageName(), 0).versionName;
+                    int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                    int versionName = Integer.parseInt(version.replace(".", ""));
+                    Context context = new ContextThemeWrapper(DashboardActivity.this, R.style.Theme_Coyni_Update);
+                    if (versionName < Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
+                        showUpdateDialog(context);
+                    } else if (versionName == Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
+                        if (versionCode < Integer.parseInt(appUpdateResp.getData().getBuildNum().replace(".", ""))) {
+                            showUpdateDialog(context);
+                        }
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
     }
 
     private void showUnderReviewData() {
@@ -974,6 +1012,9 @@ public class DashboardActivity extends BaseActivity {
                 if (!strFCMToken.equals("")) {
                     loginViewModel.initializeDevice(strFCMToken);
                 }
+                if (objMyApplication.getWebSocketUrlResponse() == null) {
+                    customerProfileViewModel.webSocketUrl();
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -1048,6 +1089,8 @@ public class DashboardActivity extends BaseActivity {
             dashboardViewModel.meProfile();
             dashboardViewModel.mePreferences(objMyApplication);
             transactionsNSV.smoothScrollTo(0, 0);
+            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
+            startWebSocket();
         } else {
             Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "", "");
         }
@@ -1268,6 +1311,21 @@ public class DashboardActivity extends BaseActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void showUpdateDialog(Context context) {
+        new MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.app_name)
+                .setMessage(getString(R.string.appUpdate))
+                .setCancelable(false)
+                .setPositiveButton("Update", (dialog, which) -> {
+                    dialog.dismiss();
+                    Intent viewIntent =
+                            new Intent("android.intent.action.VIEW",
+                                    Uri.parse("market://details?id=com.coyni.mapp"));
+                    viewIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(viewIntent);
+                }).show();
     }
 
 }

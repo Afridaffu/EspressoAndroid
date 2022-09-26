@@ -65,7 +65,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_bold"
-                            android:text="@string/cu_profile_name"
+                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_14ssp" />
 
@@ -162,7 +162,7 @@
                                     android:background="@color/profile_gray"
                                     android:fontFamily="@font/opensans_bold"
                                     android:gravity="center"
-                                    android:text="VT"
+                                    android:text=""
                                     android:textColor="@color/primary_green"
                                     android:textSize="@dimen/_18ssp"
                                     android:visibility="visible" />
@@ -186,71 +186,6 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <!--                    <androidx.constraintlayout.widget.ConstraintLayout-->
-                    <!--                        android:id="@+id/profilePicCL"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_alignParentEnd="true"-->
-                    <!--                        android:layout_marginEnd="@dimen/_30ssp"-->
-                    <!--                        android:visibility="visible">-->
-
-                    <!--                        <androidx.constraintlayout.widget.ConstraintLayout-->
-                    <!--                            android:id="@+id/linearLayout"-->
-                    <!--                            android:layout_width="@dimen/_50sdp"-->
-                    <!--                            android:layout_height="@dimen/_50sdp"-->
-                    <!--                            android:layout_alignParentRight="true"-->
-                    <!--                            android:background="@drawable/corecircle"-->
-                    <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                            app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                            app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                            app:layout_constraintTop_toTopOf="parent">-->
-
-
-                    <!--                            <androidx.cardview.widget.CardView-->
-                    <!--                                android:id="@+id/userProfileCV"-->
-                    <!--                                android:layout_width="@dimen/_48sdp"-->
-                    <!--                                android:layout_height="@dimen/_48sdp"-->
-                    <!--                                android:layout_alignParentRight="true"-->
-                    <!--                                android:layout_gravity="center"-->
-                    <!--                                app:cardCornerRadius="@dimen/_24sdp"-->
-                    <!--                                app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                                app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                                app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                                app:layout_constraintTop_toTopOf="parent">-->
-
-
-                    <!--                                <ImageView-->
-                    <!--                                    android:id="@+id/profileIV"-->
-                    <!--                                    android:layout_width="match_parent"-->
-                    <!--                                    android:layout_height="match_parent"-->
-                    <!--                                    android:scaleType="fitXY"-->
-                    <!--                                    android:src="@drawable/ic_profile_male_user"-->
-                    <!--                                    android:visibility="visible" />-->
-
-                    <!--                                <TextView-->
-                    <!--                                    android:id="@+id/imageTextTV"-->
-                    <!--                                    android:layout_width="wrap_content"-->
-                    <!--                                    android:layout_height="wrap_content"-->
-                    <!--                                    android:layout_gravity="center"-->
-                    <!--                                    android:fontFamily="@font/opensans_bold"-->
-                    <!--                                    android:text="VT"-->
-                    <!--                                    android:textColor="@color/primary_black"-->
-                    <!--                                    android:textSize="@dimen/_20sdp"-->
-                    <!--                                    android:visibility="gone" />-->
-                    <!--                            </androidx.cardview.widget.CardView>-->
-
-
-                    <!--                        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-                    <!--                        <ImageView-->
-                    <!--                            android:id="@+id/imgQRCode"-->
-                    <!--                            android:layout_width="@dimen/_23sdp"-->
-                    <!--                            android:layout_height="@dimen/_23sdp"-->
-                    <!--                            android:src="@drawable/ic_qr_code"-->
-                    <!--                            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"-->
-                    <!--                            app:layout_constraintEnd_toEndOf="@+id/linearLayout" />-->
-
-                    <!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
                 </RelativeLayout>
 
             </LinearLayout>
