@@ -64,15 +64,15 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
 
                     if (websiteET.getText().toString().trim().length() > 0 && !isValidUrl(websiteET.getText().toString().trim())) {
                         websiteET.setHint("");
-                        if (hintString.equals("Website")) {
-                            hintName.setTextColor(getResources().getColor(R.color.error_red));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                            websiteErrorLL.setVisibility(VISIBLE);
-                            websiteErrorTV.setText("Please enter a valid Website");
-                        } else {
-                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
-                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
-                        }
+//                        if (hintString.equals("Website")) {
+                        hintName.setTextColor(getResources().getColor(R.color.error_red));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                        websiteErrorLL.setVisibility(VISIBLE);
+                        websiteErrorTV.setText("Please enter a valid Website");
+//                        } else {
+//                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
+//                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+//                        }
                     } else if ((websiteET.getText().length() == 0)) {
                         websiteET.setHint(hintString);
                         if (hintString.equals("Website")) {
@@ -109,15 +109,22 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
 
                 if (FROM.equals("DBA_INFO")) {
                     DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
-                    if (isValidUrl(charSequence.toString())) {
-                        dia.isWebsite = true;
-                        websiteErrorLL.setVisibility(GONE);
-                    } else {
-                        if (hintString.equals("Website"))
-                            dia.isWebsite = false;
-                        else
+                    if (hintString.equals("Website")) {
+                        if (isValidUrl(charSequence.toString())) {
                             dia.isWebsite = true;
+                            websiteErrorLL.setVisibility(GONE);
+                        } else {
+                            dia.isWebsite = false;
+                        }
+                    } else {
+                        if (isValidUrl(charSequence.toString()) || charSequence.toString().equalsIgnoreCase("")) {
+                            dia.isWebsite = true;
+                            websiteErrorLL.setVisibility(GONE);
+                        } else {
+                            dia.isWebsite = false;
+                        }
                     }
+
                     dia.enableOrDisableNext();
                 }
             }
@@ -141,7 +148,6 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
                 }
             }
         });
-
 //        websiteET.setOnTouchListener((view, motionEvent) -> {
 //            if(FROM.equals("DBA_INFO")){
 //                DBAInfoAcivity dia = (DBAInfoAcivity) mContext;

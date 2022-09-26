@@ -1097,7 +1097,7 @@ public class DashboardViewModel extends AndroidViewModel {
                             featureControlGlobalRespMutableLiveData.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<FeatureControlRespByUser>() {
+                            Type type = new TypeToken<FeatureControlGlobalResp>() {
                             }.getType();
                             FeatureControlGlobalResp errorResponse = null;
                             try {
