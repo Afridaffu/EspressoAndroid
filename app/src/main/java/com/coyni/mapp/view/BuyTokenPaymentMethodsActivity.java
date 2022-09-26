@@ -530,6 +530,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                                 strCurrent = "debit";
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "debit");
+                                i.putExtra("screen", strScreen);
                                 startActivityForResult(i, 3);
                             }
                         } else {
@@ -551,6 +552,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                                 strCurrent = "credit";
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "credit");
+                                i.putExtra("screen", strScreen);
                                 startActivityForResult(i, 3);
                             }
                         } else {
