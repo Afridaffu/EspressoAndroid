@@ -355,8 +355,6 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void initObservers() {
-
-
         dashboardViewModel.getAppUpdateRespMutableLiveData().observe(getActivity(), new Observer<AppUpdateResp>() {
             @Override
             public void onChanged(AppUpdateResp appUpdate) {
@@ -365,7 +363,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                         String version = getContext().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
                         int versionCode = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionCode;
                         int versionName = Integer.parseInt(version.replace(".", ""));
-                        Context context = new ContextThemeWrapper(getActivity(), R.style.Theme_QuickCard);
+                        Context context = new ContextThemeWrapper(getActivity(), R.style.Theme_Coyni_Update);
                         if (versionName < Integer.parseInt(appUpdate.getData().getVersion().replace(".", ""))) {
                             showUpdateDialog(context);
                         } else if (versionName == Integer.parseInt(appUpdate.getData().getVersion().replace(".", ""))) {
@@ -379,7 +377,6 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
             }
         });
-
 
         businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
             @Override
@@ -1393,7 +1390,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     dialog.dismiss();
                     Intent viewIntent =
                             new Intent("android.intent.action.VIEW",
-                                    Uri.parse("market://details?id=com.coyni.app"));
+                                    Uri.parse("market://details?id=com.coyni.mapp"));
                     viewIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(viewIntent);
                 }).show();

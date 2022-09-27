@@ -120,7 +120,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false, isInvalid = false;
     public Boolean isCard = false, isScan = false, isCardClear = false, isLicense = false;
     TextView tvError;
-//    private BlinkCardRecognizer mRecognizer;
+    //    private BlinkCardRecognizer mRecognizer;
 //    private RecognizerBundle mRecognizerBundle;
     CustomKeyboard ctKey;
 
@@ -129,6 +129,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     int pagerPosition = 0, diffMonths = -1;
     private static final String API_KEY = "qOJ_fF-WLDMbG05iBq5wvwiTNTmM2qIn";
     CardScanSheet sheet;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -417,6 +418,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                                 request.setName(strName);
                                 request.setState(strState);
                                 request.setZipCode(strZip);
+                                if (getIntent().getStringExtra("screen") != null) {
+                                    request.setFromTxnScreen(getIntent().getStringExtra("screen"));
+                                } else {
+                                    request.setFromTxnScreen("");
+                                }
                                 paymentMethodsViewModel.saveBusinessCards(request);
                             }
                         }
@@ -1676,6 +1682,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             request.setAddressLine1(strAdd1);
             request.setAddressLine2(strAdd2);
             request.setCardNumber(strCardNo);
+            if (getIntent().getStringExtra("screen") != null) {
+                request.setFromTxnScreen(getIntent().getStringExtra("screen"));
+            } else {
+                request.setFromTxnScreen("");
+            }
             paymentMethodsViewModel.preAuthVerify(request);
         } catch (Exception ex) {
             preDialog.dismiss();

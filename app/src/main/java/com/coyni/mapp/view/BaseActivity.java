@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -175,13 +177,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void startWebSocket() {
         try {
-            String serverUrl = myApplication.getWebSocketUrlResponse().getWebsocketUrl();
-            OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.MILLISECONDS).build();
-            Request request = new Request.Builder().url(serverUrl).build();
-            EchoWebSocketListener listener = new EchoWebSocketListener();
-            WebSocket webSocket = client.newWebSocket(request, listener);
-            client.dispatcher().executorService().shutdown();
-            Log.d("WebSocket Started with url : ", serverUrl);
+            if (myApplication.getWebSocketUrlResponse() != null && myApplication.getWebSocketUrlResponse().getWebsocketUrl() != null) {
+                String serverUrl = myApplication.getWebSocketUrlResponse().getWebsocketUrl();
+                OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.MILLISECONDS).build();
+                Request request = new Request.Builder().url(serverUrl).build();
+                EchoWebSocketListener listener = new EchoWebSocketListener();
+                WebSocket webSocket = client.newWebSocket(request, listener);
+                client.dispatcher().executorService().shutdown();
+                Log.d("WebSocket Started with url : ", serverUrl);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -189,6 +193,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private final class EchoWebSocketListener extends WebSocketListener {
         private static final int CLOSE_STATUS = 1000;
+        private final int interval = 2000;
+        private Handler handler = new Handler(Looper.getMainLooper());
+        private Runnable runnable;
 
         @Override
         public void onOpen(WebSocket webSocket, Response response) {
@@ -207,8 +214,26 @@ public abstract class BaseActivity extends AppCompatActivity {
             Log.d("Receive Message: ", message);
             try {
                 JSONObject obj = new JSONObject(message);
-                if (obj.getString("eventType").equals("TXN_STATUS") && obj.getString("txnStatus").toLowerCase().equals("completed")) {
+                if (obj.getString("eventType").equals("SERVER_CONNECTION")) {
+                    runnable = new Runnable() {
+                        public void run() {
+                            try {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("authorization", Utils.getStrAuth());
+                                jsonObject.put("eventType", "ping");
+                                webSocket.send(jsonObject.toString());
+                                handler.postDelayed(runnable, interval);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    };
+                    handler.postDelayed(runnable, 0);
+                } else if (obj.getString("eventType").equals("TXN_STATUS") && obj.getString("txnStatus").toLowerCase().equals("completed")) {
                     sendBroadcast(new Intent().setAction(Utils.NOTIFICATION_ACTION));
+                    webSocket.close(CLOSE_STATUS, null);
+                } else if (obj.getString("eventType").equals("SESSION_EXPIRY")) {
+                    handler.removeCallbacks(runnable);
                     webSocket.close(CLOSE_STATUS, null);
                 }
             } catch (Exception ex) {
@@ -224,6 +249,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         @Override
         public void onClosing(WebSocket webSocket, int code, String reason) {
             webSocket.close(CLOSE_STATUS, null);
+            handler.removeCallbacks(runnable);
             Log.d("Closing Socket : ", code + " / " + reason);
         }
 
@@ -235,6 +261,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                     Log.d("Error : ", throwable.getMessage());
                 else
                     Log.d("Error : ", throwable.toString());
+                handler.removeCallbacks(runnable);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

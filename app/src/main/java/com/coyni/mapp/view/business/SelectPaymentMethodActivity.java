@@ -522,6 +522,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                                 //showExternalBank();
                                 Intent i = new Intent(SelectPaymentMethodActivity.this, AddManualBankAccount.class);
                                 i.putExtra("From", "pay");
+                                i.putExtra("screen", strScreen);
                                 startActivityForResult(i, 4);
                             }
                         } else {
