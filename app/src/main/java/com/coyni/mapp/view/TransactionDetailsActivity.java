@@ -374,7 +374,7 @@ public class TransactionDetailsActivity extends BaseActivity {
         reserveAmount = findViewById(R.id.reserve_amount);
         status = findViewById(R.id.reserve_status);
         date = findViewById(R.id.released_on);
-        referenceId = findViewById(R.id.reference_id);
+        referenceId = findViewById(R.id.ref_id);
         reserveRules = findViewById(R.id.reserve_rules);
         depositTo = findViewById(R.id.deposit_to);
         tokenType = findViewById(R.id.token_account_type);
