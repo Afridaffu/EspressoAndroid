@@ -33,6 +33,7 @@ import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.IdentityVerificationViewModel;
+import com.coyni.mapp.viewmodel.LoginViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private BaseProfile selectedProfile = null;
     private Long mLastClickTimeQA = 0L;
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +60,15 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.business_add_new_business_account);
-
+        objMyApplication = (MyApplication) getApplicationContext();
         llNewComapny = findViewById(R.id.ll_new_company);
         llNewDba = findViewById(R.id.ll_new_dba);
         imageViewClose = findViewById(R.id.imv_close);
 
         identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
 
         llNewComapny.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +133,8 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         RecyclerView rvCompanyList = dialog.findViewById(R.id.rv_company_list);
         CardView addDBACardView = dialog.findViewById(R.id.cvAction);
 
+        selectedProfile = null;
+
         AddNewBusinessAccountDBAAdapter addNewBusinessAccountDBAAdapter = new AddNewBusinessAccountDBAAdapter(businessAccountList, mContext, new AddNewBusinessAccountDBAAdapter.OnSelectListner() {
             @Override
             public void selectedItem(BaseProfile item) {
@@ -162,13 +168,20 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
 //                    identityVerificationViewModel.getPostAddDBABusiness(companyId);
 //                    dialog.cancel();
 //                }
-                Intent inAddDba = new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class);
-                inAddDba.putExtra(Utils.ADD_BUSINESS, true);
-                inAddDba.putExtra(Utils.ADD_DBA, true);
-                inAddDba.putExtra(Utils.NEW_DBA, true);
-                inAddDba.putExtra(Utils.COMPANY_ID, selectedProfile.getId());
-                startActivity(inAddDba);
+
+//                if (objMyApplication.getLoginUserId() != selectedProfile.getId()) {
+                    showProgressDialog();
+                    loginViewModel.postChangeAccount(selectedProfile.getId());
+//                } else {
+//                    Intent inAddDba = new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class);
+//                    inAddDba.putExtra(Utils.ADD_BUSINESS, true);
+//                    inAddDba.putExtra(Utils.ADD_DBA, true);
+//                    inAddDba.putExtra(Utils.NEW_DBA, true);
+//                    inAddDba.putExtra(Utils.COMPANY_ID, selectedProfile.getId());
+//                    startActivity(inAddDba);
+//                }
                 dialog.dismiss();
+
             }
         });
 
@@ -194,7 +207,6 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                         businessAccountList.get(i).setSelected(false);
                     }
                 }
-                selectedProfile = null;
             }
         });
     }
@@ -269,6 +281,35 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try {
+            loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+                @Override
+                public void onChanged(AddBusinessUserResponse btResp) {
+                    dismissDialog();
+                    if (btResp != null) {
+                        if (btResp.getStatus().toLowerCase().toString().equals("success")) {
+                            LogUtils.d("btResp", "btResp" + btResp);
+                            Utils.setStrAuth(btResp.getData().getJwtToken());
+                            objMyApplication.setOldLoginUserId(objMyApplication.getLoginUserId());
+                            objMyApplication.setLoginUserId(selectedProfile.getId());
+                            objMyApplication.setAccountType(btResp.getData().getAccountType());
+
+                            Intent inAddDba = new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class);
+                            inAddDba.putExtra(Utils.ADD_BUSINESS, true);
+                            inAddDba.putExtra(Utils.ADD_DBA, true);
+                            inAddDba.putExtra(Utils.NEW_DBA, true);
+                            inAddDba.putExtra(Utils.COMPANY_ID, selectedProfile.getId());
+                            startActivity(inAddDba);
+
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

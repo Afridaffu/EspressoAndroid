@@ -151,6 +151,10 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
             confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
             currentPass.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
 
+            passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            confirmPasswordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            currentPassET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
             strScreen = getIntent().getStringExtra("screen");
             if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
                 tvMessage.setVisibility(VISIBLE);
