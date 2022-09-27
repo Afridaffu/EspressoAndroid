@@ -14,6 +14,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
@@ -126,6 +127,9 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             endIconIV = findViewById(R.id.endIcon1IV);
             endIcon2IV = findViewById(R.id.endIcon2IV);
             headingTV = findViewById(R.id.headingTV);
+
+            checkAccNumberET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            confirmAccNumberET.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
             nameOnBankTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
             routingNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
