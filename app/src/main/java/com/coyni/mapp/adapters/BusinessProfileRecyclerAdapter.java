@@ -343,11 +343,11 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
             }
             if (headerInfo.getFullName() != null) {
-                if (headerInfo.getFullName().length() > 21) {
-                    heading.setText(Utils.capitalize(headerInfo.getFullName().substring(0, 20)));
-                } else {
+//                if (headerInfo.getFullName().length() > 21) {
+//                    heading.setText(Utils.capitalize(headerInfo.getFullName().substring(0, 20)));
+//                } else {
                     heading.setText(Utils.capitalize(headerInfo.getFullName()));
-                }
+//                }
             } else {
                 heading.setText("[Personal]");
             }
@@ -389,11 +389,11 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         } else if (headerInfo.getAccountType().equals(Utils.BUSINESS)) {
             arrowImg.setVisibility(View.VISIBLE);
             if (headerInfo.getCompanyName() != null) {
-                if (headerInfo.getCompanyName().length() > 21) {
-                    heading.setText(Utils.capitalize(headerInfo.getCompanyName().substring(0, 20)));
-                } else {
+//                if (headerInfo.getCompanyName().length() > 21) {
+//                    heading.setText(Utils.capitalize(headerInfo.getCompanyName().substring(0, 20)));
+//                } else {
                     heading.setText(Utils.capitalize(headerInfo.getCompanyName()));
-                }
+//                }
             } else {
                 heading.setText("[Company Name]");
             }

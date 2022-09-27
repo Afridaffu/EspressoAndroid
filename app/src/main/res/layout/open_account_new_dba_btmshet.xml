@@ -17,14 +17,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select the Company you wish to add the \nnew DBA below. \nYou will need to complete a new Merchant\nApplication for each DBA you add."
-        android:textSize="@dimen/_12ssp"
-        android:fontFamily="@font/opensans_regular"
-        android:textColor="@color/primary_black"
         android:layout_marginStart="@dimen/_21sdp"
         android:layout_marginEnd="@dimen/_21sdp"
         android:layout_marginBottom="@dimen/_12sdp"
-     />
+        android:fontFamily="@font/opensans_regular"
+        android:text="Select the Company you wish to add the \nnew DBA below. \nYou will need to complete a new Merchant\nApplication for each DBA you add."
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_12ssp" />
 
     <LinearLayout
         android:id="@+id/bbqLL"
