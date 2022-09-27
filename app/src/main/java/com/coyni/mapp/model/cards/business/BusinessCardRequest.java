@@ -11,6 +11,7 @@ public class BusinessCardRequest {
     private String name;
     private String state;
     private String zipCode;
+    private String fromTxnScreen;
 
     public String getAddressLine1() {
         return addressLine1;
@@ -90,5 +91,13 @@ public class BusinessCardRequest {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public String getFromTxnScreen() {
+        return fromTxnScreen;
+    }
+
+    public void setFromTxnScreen(String fromTxnScreen) {
+        this.fromTxnScreen = fromTxnScreen;
     }
 }

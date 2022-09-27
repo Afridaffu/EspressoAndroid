@@ -539,6 +539,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                 //showExternalBank();
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddManualBankAccount.class);
                                 i.putExtra("From", "pay");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 7);
                             }
                         } else {
@@ -560,6 +561,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                 strCurrent = "debit";
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "debit");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 3);
                             }
                         } else {
@@ -581,6 +583,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                 strCurrent = "credit";
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "credit");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 3);
                             }
                         } else {
@@ -764,6 +767,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                 //showExternalBank();
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddManualBankAccount.class);
                                 i.putExtra("From", "pay");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 7);
                             }
                         } else {
@@ -785,6 +789,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                 strCurrent = "debit";
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "debit");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 3);
                             }
                         } else {
@@ -1188,6 +1193,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                 //showExternalBank();
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddManualBankAccount.class);
                                 i.putExtra("From", "pay");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 7);
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
@@ -1198,6 +1204,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                 strCurrent = "debit";
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "debit");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 3);
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
@@ -1857,6 +1864,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                 //showExternalBank();
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddManualBankAccount.class);
                                 i.putExtra("From", "pay");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 7);
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
@@ -1875,6 +1883,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                 strCurrent = "debit";
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "debit");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 6);
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
