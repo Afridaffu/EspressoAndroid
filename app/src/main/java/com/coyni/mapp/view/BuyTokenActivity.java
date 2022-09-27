@@ -1487,7 +1487,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
-                        startWebSocket();
+                        //startWebSocket();
                         if (objMyApplication.getStrScreen().equalsIgnoreCase(CheckOutConstants.FlowCheckOut)) {
                             objMyApplication.getCheckOutModel().setCheckOutFlag(true);
                             startActivity(new Intent(BuyTokenActivity.this, CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));

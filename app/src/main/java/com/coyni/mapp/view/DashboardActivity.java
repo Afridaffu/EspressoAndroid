@@ -538,7 +538,7 @@ public class DashboardActivity extends BaseActivity {
                     String version = getPackageManager().getPackageInfo(DashboardActivity.this.getPackageName(), 0).versionName;
                     int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
                     int versionName = Integer.parseInt(version.replace(".", ""));
-                        Context context = new ContextThemeWrapper(DashboardActivity.this, R.style.Theme_QuickCard);
+                        Context context = new ContextThemeWrapper(DashboardActivity.this, R.style.Theme_Coyni_Update);
                     if (versionName < Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
                         showUpdateDialog(context);
                     } else if (versionName == Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
@@ -1083,6 +1083,7 @@ public class DashboardActivity extends BaseActivity {
             dashboardViewModel.mePreferences(objMyApplication);
             transactionsNSV.smoothScrollTo(0, 0);
             dashboardViewModel.getAppUpdate(getString(R.string.android_text));
+            startWebSocket();
         } else {
             Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "", "");
         }
@@ -1313,7 +1314,7 @@ public class DashboardActivity extends BaseActivity {
                     dialog.dismiss();
                     Intent viewIntent =
                             new Intent("android.intent.action.VIEW",
-                                    Uri.parse("market://details?id=com.coyni.app"));
+                                    Uri.parse("market://details?id=com.coyni.mapp"));
                     viewIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(viewIntent);
                 }).show();

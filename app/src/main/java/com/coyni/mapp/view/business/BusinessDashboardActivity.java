@@ -126,6 +126,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         new FetchData(BusinessDashboardActivity.this).execute();
+        startWebSocket();
     }
 
     @Override

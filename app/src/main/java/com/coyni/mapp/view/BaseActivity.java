@@ -173,13 +173,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void startWebSocket() {
         try {
-            String serverUrl = myApplication.getWebSocketUrlResponse().getWebsocketUrl();
-            OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.MILLISECONDS).build();
-            Request request = new Request.Builder().url(serverUrl).build();
-            EchoWebSocketListener listener = new EchoWebSocketListener();
-            WebSocket webSocket = client.newWebSocket(request, listener);
-            client.dispatcher().executorService().shutdown();
-            Log.d("WebSocket Started with url : ", serverUrl);
+            if (myApplication.getWebSocketUrlResponse() != null && myApplication.getWebSocketUrlResponse().getWebsocketUrl() != null) {
+                String serverUrl = myApplication.getWebSocketUrlResponse().getWebsocketUrl();
+                OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.MILLISECONDS).build();
+                Request request = new Request.Builder().url(serverUrl).build();
+                EchoWebSocketListener listener = new EchoWebSocketListener();
+                WebSocket webSocket = client.newWebSocket(request, listener);
+                client.dispatcher().executorService().shutdown();
+                Log.d("WebSocket Started with url : ", serverUrl);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

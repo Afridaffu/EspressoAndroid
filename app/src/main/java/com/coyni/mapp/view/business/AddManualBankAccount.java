@@ -717,7 +717,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             } else {
                 imageIV.setImageResource(R.drawable.ic_failed);
                 headerTV.setText(getString(R.string.bank_account_failed));
-                bankNameTV.setText("- -");
+//                bankNameTV.setText("- -");
                 doneTV.setText(getString(R.string.try_again));
                 errorDescriptnTV.setVisibility(View.VISIBLE);
                 statusTV.setText("Declined");
@@ -726,6 +726,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                 if (manualBankResponse.getData() != null && manualBankResponse.getStatus().toLowerCase().equals("success")) {
                     nameOnBankTV.setText(manualBankResponse.getData().getAccountName());
                     routingNumTV.setText(manualBankResponse.getData().getRoutingNumber());
+                    bankNameTV.setText(manualBankResponse.getData().getBankName());
                     if (manualBankResponse.getData().getAccountNumber() != null &&
                             manualBankResponse.getData().getAccountNumber().length() > 4) {
 //                        accNumTV.setText("**** " + manualBankResponse.getData().getAccountNumber().substring(manualBankResponse.getData().getAccountNumber().length() - 4));
@@ -736,11 +737,12 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                     } else {
                         accNumTV.setText(manualBankResponse.getData().getAccountNumber());
                     }
-                    errorDescriptnTV.setText("Bank verification failed due to error code: " + manualBankResponse.getData().getAccountResponseCodeName() + " - " + manualBankResponse.getData().getAccountReponseCodeDescription() + " Please try again.");
+                    errorDescriptnTV.setText("Bank verification failed due to error code: " + manualBankResponse.getData().getAccountResponseCodeName() + " - " + manualBankResponse.getData().getAccountReponseCodeDescription());
                 } else {
                     nameOnBankTV.setText(nameOnBankET.getText().toString());
                     routingNumTV.setText(routingNumberET.getText().toString());
                     accNumTV.setText(checkAccNumberET.getText().toString());
+                    bankNameTV.setText("- -");
                     if (checkAccNumberET.getText().toString() != null && checkAccNumberET.getText().toString().length() > 4) {
                         //accNumTV.setText("**** " + checkAccNumberET.getText().toString().substring(checkAccNumberET.getText().toString().length() - 4));
                         convert = checkAccNumberET.getText().toString().replaceAll("", "");
@@ -749,7 +751,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                     } else {
                         accNumTV.setText(checkAccNumberET.getText().toString());
                     }
-                    errorDescriptnTV.setText("Bank verification failed due to error code: " + manualBankResponse.getError().getErrorCode() + " - " + manualBankResponse.getError().getErrorDescription() + " Please try again.");
+                    errorDescriptnTV.setText("Bank verification failed due to error code: " + manualBankResponse.getError().getErrorCode() + " - " + manualBankResponse.getError().getErrorDescription());
                 }
             }
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
