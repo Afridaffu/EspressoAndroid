@@ -1,25 +1,6 @@
 package com.coyni.mapp.model.preauth;
 
 public class PreAuthRequest {
-//    private String key;
-//    private String payload;
-//
-//    public String getKey() {
-//        return key;
-//    }
-//
-//    public void setKey(String key) {
-//        this.key = key;
-//    }
-//
-//    public String getPayload() {
-//        return payload;
-//    }
-//
-//    public void setPayload(String payload) {
-//        this.payload = payload;
-//    }
-
     private String amount;
     private String transactionId;
     private String name;
@@ -30,6 +11,7 @@ public class PreAuthRequest {
     private String addressLine1;
     private String addressLine2;
     private String cardNumber;
+    private String fromTxnScreen;
 
     public String getAmount() {
         return amount;
@@ -109,6 +91,14 @@ public class PreAuthRequest {
 
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
+    }
+
+    public String getFromTxnScreen() {
+        return fromTxnScreen;
+    }
+
+    public void setFromTxnScreen(String fromTxnScreen) {
+        this.fromTxnScreen = fromTxnScreen;
     }
 }
 

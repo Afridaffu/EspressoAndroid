@@ -208,6 +208,11 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                             } else {
                                 request.setGiactReq(true);
                             }
+                            if (getIntent().getStringExtra("screen") != null) {
+                                request.setFromTxnScreen(getIntent().getStringExtra("screen"));
+                            } else {
+                                request.setFromTxnScreen("");
+                            }
                             paymentMethodsViewModel.saveManualBank(request);
                         } else {
                             BankAccount objBank = new BankAccount();
