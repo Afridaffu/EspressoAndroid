@@ -726,7 +726,9 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 public void onClick(View v) {
                     numberOfAccounts();
                     ControlMethod("addpayment");
-                    strScreen = "addpay";
+                    if (!strScreen.equals(CheckOutConstants.ScreenCheckOut)) {
+                        strScreen = "addpay";
+                    }
                     strCurrent = "addpay";
                     addPayment();
                 }
