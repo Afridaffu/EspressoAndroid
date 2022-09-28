@@ -53,6 +53,7 @@ import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.preferences.Preferences;
 import com.coyni.mapp.model.profile.Profile;
 import com.coyni.mapp.model.profile.TrackerResponse;
+import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
 import com.coyni.mapp.utils.DatabaseHandler;
 import com.coyni.mapp.utils.DisplayImageUtility;
 import com.coyni.mapp.utils.MyApplication;
@@ -499,7 +500,7 @@ public class DashboardActivity extends BaseActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        startActivity(new Intent(DashboardActivity.this,GetHelpActivity.class));
+                        startActivity(new Intent(DashboardActivity.this, GetHelpActivity.class));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -890,6 +891,15 @@ public class DashboardActivity extends BaseActivity {
             }
         });
 
+        customerProfileViewModel.getWebSocketUrlResponseMutableLiveData().observe(this, new Observer<WebSocketUrlResponse>() {
+            @Override
+            public void onChanged(WebSocketUrlResponse webSocketUrlResponse) {
+                if (webSocketUrlResponse != null) {
+                    objMyApplication.setWebSocketUrlResponse(webSocketUrlResponse.getData());
+                }
+            }
+        });
+
     }
 
     private void showUnderReviewData() {
@@ -1007,6 +1017,9 @@ public class DashboardActivity extends BaseActivity {
                 dashboardViewModel.getFeatureControlGlobal(getString(R.string.portalType));
                 if (!strFCMToken.equals("")) {
                     loginViewModel.initializeDevice(strFCMToken);
+                }
+                if (objMyApplication.getWebSocketUrlResponse() == null) {
+                    customerProfileViewModel.webSocketUrl();
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

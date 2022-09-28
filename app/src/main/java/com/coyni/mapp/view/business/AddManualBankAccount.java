@@ -137,16 +137,18 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             checkAccNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
             confirmAccNumberTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
-            if (getIntent().getStringExtra("From") != null && (getIntent().getStringExtra("From").equalsIgnoreCase("pay")
-                    || getIntent().getStringExtra("From").equalsIgnoreCase("signUp")
-                    || getIntent().getStringExtra("From").equalsIgnoreCase("REVIEW"))
-                    || getIntent().getStringExtra("From").equalsIgnoreCase("Edit")) {
-                headingTV.setText(R.string.add_bank_account);
-                strScreen = getIntent().getStringExtra("From");
-            } else if (getIntent().getStringExtra("From") != null && getIntent().getStringExtra("From").equalsIgnoreCase("Resubmit")) {
-                headingTV.setText(R.string.resubmit);
-                strScreen = getIntent().getStringExtra("From");
-            }
+//            if (getIntent().getStringExtra("From") != null && (getIntent().getStringExtra("From").equalsIgnoreCase("pay")
+//                    || getIntent().getStringExtra("From").equalsIgnoreCase("signUp")
+//                    || getIntent().getStringExtra("From").equalsIgnoreCase("REVIEW"))
+//                    || getIntent().getStringExtra("From").equalsIgnoreCase("Edit")) {
+//                headingTV.setText(R.string.add_bank_account);
+//                strScreen = getIntent().getStringExtra("From");
+//            } else if (getIntent().getStringExtra("From") != null && getIntent().getStringExtra("From").equalsIgnoreCase("Resubmit")) {
+//                headingTV.setText(R.string.resubmit);
+//                strScreen = getIntent().getStringExtra("From");
+//            }
+
+            strScreen = getIntent().getStringExtra("From");
             if (getIntent().getSerializableExtra("bankObject") != null) {
                 BankAccount objBank = (BankAccount) getIntent().getSerializableExtra("bankObject");
                 nameOnBankET.setText(objBank.getAccountName());
@@ -655,7 +657,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if (Utils.isKeyboardVisible)
+                        //if (Utils.isKeyboardVisible)
                             Utils.hideKeypad(AddManualBankAccount.this);
                         ManualAccountNumbersFullPage showImgDialog = new ManualAccountNumbersFullPage(AddManualBankAccount.this);
                         showImgDialog.show();

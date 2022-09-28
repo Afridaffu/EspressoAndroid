@@ -27,7 +27,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.model.States;
 import com.coyni.mapp.model.signin.InitializeResponse;
-import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
 import com.coyni.mapp.view.business.BusinessProfileActivity;
 import com.coyni.mapp.viewmodel.CustomerProfileViewModel;
 import com.google.gson.Gson;
@@ -607,9 +606,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                         if (!stepUpResponse.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(stepUpResponse.getData().getJwtToken());
                             shakeAnimateUpDown();//new
-                            if (objMyApplication.getWebSocketUrlResponse() == null) {
-                                customerProfileViewModel.webSocketUrl();
-                            }
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -726,15 +722,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     }
                 }
 
-            }
-        });
-
-        customerProfileViewModel.getWebSocketUrlResponseMutableLiveData().observe(this, new Observer<WebSocketUrlResponse>() {
-            @Override
-            public void onChanged(WebSocketUrlResponse webSocketUrlResponse) {
-                if (webSocketUrlResponse != null) {
-                    objMyApplication.setWebSocketUrlResponse(webSocketUrlResponse.getData());
-                }
             }
         });
 

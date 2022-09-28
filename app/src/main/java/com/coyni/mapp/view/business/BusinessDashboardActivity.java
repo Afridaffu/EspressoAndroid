@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
 import com.coyni.mapp.view.ScanActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -638,6 +639,15 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
+        customerProfileViewModel.getWebSocketUrlResponseMutableLiveData().observe(this, new Observer<WebSocketUrlResponse>() {
+            @Override
+            public void onChanged(WebSocketUrlResponse webSocketUrlResponse) {
+                if (webSocketUrlResponse != null) {
+                    objMyApplication.setWebSocketUrlResponse(webSocketUrlResponse.getData());
+                }
+            }
+        });
+
     }
 
     private void checkLoadFragment(Profile profile) {
@@ -770,6 +780,9 @@ public class BusinessDashboardActivity extends BaseActivity {
                     mDashboardViewModel.getFeatureControlByUser(objMyApplication.getLoginUserId());
                 }
                 mDashboardViewModel.getFeatureControlGlobal(getString(R.string.portalType));
+                if (objMyApplication.getWebSocketUrlResponse() == null) {
+                    customerProfileViewModel.webSocketUrl();
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
