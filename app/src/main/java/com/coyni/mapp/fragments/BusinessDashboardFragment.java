@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -110,6 +111,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private TextView mTvProcessingVolume;
     private TransactionListPendingAdapter transactionListPendingAdapter;
     private MerchantTransactionListPostedNewAdapter transactionListPostedAdapter;
+    private final long oneSecond = 1000;
 
     private DashboardViewModel dashboardViewModel;
     private List<TransactionListPending> globalPending = new ArrayList<>();
@@ -437,9 +439,12 @@ public class BusinessDashboardFragment extends BaseFragment {
                     if (batchNowResponse.getStatus() != null && batchNowResponse.getData() != null) {
                         Log.d(TAG, "Batched successfully");
                         batchReq();
-                        WalletRequest walletRequest = new WalletRequest();
-                        walletRequest.setWalletType(Utils.MERCHANT);
-                        businessDashboardViewModel.meMerchantWallet(walletRequest);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                getWalletData();
+                            }
+                        },oneSecond);
                         Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
                     } else {
                         Log.d(TAG, "No items found");
