@@ -9,19 +9,26 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.R;
+import com.coyni.mapp.model.appupdate.AppUpdateResp;
 import com.coyni.mapp.model.check_out_transactions.CheckOutModel;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.viewmodel.DashboardViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private MyApplication myApplication;
     private BroadcastReceiver mReceiver;
     private IntentFilter mIntentFilter;
+    private DashboardViewModel dashboardViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +57,33 @@ public abstract class BaseActivity extends AppCompatActivity {
         LogUtils.d(TAG, getClass().getName());
         Utils.launchedActivity = getClass();
         myApplication = (MyApplication) getApplicationContext();
+        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         //getIntentData(getIntent());
+
+
+        dashboardViewModel.getAppUpdateRespMutableLiveData().observe(this, new Observer<AppUpdateResp>() {
+            @Override
+            public void onChanged(AppUpdateResp appUpdate) {
+                try {
+                    if (appUpdate != null) {
+                        String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+                        int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                        int versionName = Integer.parseInt(version.replace(".", ""));
+                        Context context = new ContextThemeWrapper(BaseActivity.this, R.style.Theme_Coyni_Update);
+                        if (versionName < Integer.parseInt(appUpdate.getData().getVersion().replace(".", ""))) {
+                            Utils.showUpdateDialog(context);
+                        } else if (versionName == Integer.parseInt(appUpdate.getData().getVersion().replace(".", ""))) {
+                            if (versionCode < Integer.parseInt(appUpdate.getData().getBuildNum().replace(".", ""))) {
+                                Utils.showUpdateDialog(context);
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -69,6 +103,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         createReceiver();
         registerReceiver(mReceiver, mIntentFilter);
+
+        if (Utils.checkInternet(BaseActivity.this)) {
+            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
+        } else {
+            Utils.displayAlert(getString(R.string.internet), BaseActivity.this, "", "");
+        }
     }
 
     @Override
@@ -266,4 +306,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void showSoftKeyboard(View view) {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
 }

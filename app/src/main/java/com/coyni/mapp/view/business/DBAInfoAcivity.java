@@ -150,7 +150,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     protected void onResume() {
         try {
             super.onResume();
-            dbanameET.requestFocus();
+//            dbanameET.requestFocus();
+            showSoftKeyboard(dbanameET);
 //            businessIdentityVerificationViewModel.getBusinessType();
             businessIdentityVerificationViewModel.getCompanyInfo();
         } catch (Exception e) {
@@ -162,7 +163,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     protected void onDestroy() {
         try {
             super.onDestroy();
-            if (!isPostSuccess && !isAddDBA && !addBusiness)
+//            if (!isPostSuccess && !isAddDBA && !addBusiness)
+            if (!isPostSuccess && !isAddDBA)
                 dbaInfoAPICall(prepareRequest());
 
 //            if (!isPostSuccess && !isAddDBA) {
@@ -181,7 +183,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     @Override
     public void onBackPressed() {
         if (selectedPage == 0) {
-            if (isAddDBA || addBusiness)
+//            if (isAddDBA || addBusiness)
+            if (isAddDBA)
                 confirmationAlert();
             else {
                 if (getIntent().getStringExtra("FROM").equals("EDIT")) {
@@ -339,18 +342,20 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         backIV.setVisibility(GONE);
                         viewBarLeft.setBackgroundResource(R.drawable.button_background);
                         viewBarRight.setBackgroundResource(R.drawable.button_background1);
-                        dbanameET.requestFocus();
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(DBAInfoAcivity.this);
+                        showSoftKeyboard(dbanameET);
+//                        dbanameET.requestFocus();
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(DBAInfoAcivity.this);
 
                     } else if (position == 1) {
                         closeIV.setVisibility(GONE);
                         backIV.setVisibility(VISIBLE);
                         viewBarLeft.setBackgroundResource(R.drawable.button_background1);
                         viewBarRight.setBackgroundResource(R.drawable.button_background);
-                        companyaddressET.requestFocus();
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(DBAInfoAcivity.this);
+                        showSoftKeyboard(companyaddressET);
+//                        companyaddressET.requestFocus();
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(DBAInfoAcivity.this);
                     }
                 }
 
@@ -473,7 +478,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     retailIV.setImageResource(R.drawable.ic_rb_selected);
                     eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
                 }
-                isWebsite = true;
+                if (websiteOET.getText().trim().equals(""))
+                    isWebsite = true;
+                else
+                    isWebsite = isValidUrl(websiteOET.getText().trim());
                 enableOrDisableNext();
             });
 
@@ -947,9 +955,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             zipcodeErrorTV.setText("Field Required");
                         }
                     } else {
-                        zipcodeET.requestFocus();
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(DBAInfoAcivity.this);
+                        showSoftKeyboard(zipcodeET);
+//                        zipcodeET.requestFocus();
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(DBAInfoAcivity.this);
 
 //                        zipcodeET.setHint("Zip Code");
                         zipcodetil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));

@@ -191,7 +191,7 @@
                                     android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:imeOptions="actionNext"
-                                    android:inputType="numberDecimal|textNoSuggestions"
+                                    android:inputType="numberDecimal"
                                     android:maxLength="@string/maxlength"
                                     android:padding="@dimen/_14sdp"
                                     android:textColor="@color/text_color"

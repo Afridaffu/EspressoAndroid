@@ -65,6 +65,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -567,9 +568,9 @@ public class Utils {
     }
 
     public static void shwForcedKeypad(Context context) {
-        Activity  activity = (Activity) context;
-        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+//        Activity  activity = (Activity) context;
+//        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+//        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
@@ -2826,5 +2827,20 @@ public class Utils {
         spannableTV.setText(ss);
         spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
         spannableTV.setHighlightColor(Color.TRANSPARENT);
+    }
+
+    public static void showUpdateDialog(Context context) {
+        new MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.app_name)
+                .setMessage(context.getString(R.string.appUpdate))
+                .setCancelable(false)
+                .setPositiveButton("Update", (dialog, which) -> {
+                    dialog.dismiss();
+                    Intent viewIntent =
+                            new Intent("android.intent.action.VIEW",
+                                    Uri.parse("market://details?id=com.coyni.mapp"));
+                    viewIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(viewIntent);
+                }).show();
     }
 }

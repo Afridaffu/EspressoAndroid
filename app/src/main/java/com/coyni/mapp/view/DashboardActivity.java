@@ -1089,7 +1089,7 @@ public class DashboardActivity extends BaseActivity {
             dashboardViewModel.meProfile();
             dashboardViewModel.mePreferences(objMyApplication);
             transactionsNSV.smoothScrollTo(0, 0);
-            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
+//            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
             startWebSocket();
         } else {
             Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "", "");

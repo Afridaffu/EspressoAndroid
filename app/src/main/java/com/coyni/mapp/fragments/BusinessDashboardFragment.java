@@ -186,9 +186,10 @@ public class BusinessDashboardFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (Utils.checkInternet(getContext())) {
-            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
-        }
+        ((BusinessDashboardActivity) getActivity()).notificationsAPICall();
+//        if (Utils.checkInternet(getContext())) {
+//            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
+//        }
     }
 
     private void initViewModels() {

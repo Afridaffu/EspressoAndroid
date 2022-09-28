@@ -126,11 +126,6 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
                     enable();
                 }
 
-                private void onBackPressed() {
-//                    if (Utils.isKeyboardVisible)
-//                        Utils.hideKeypad(ForgotPasswordActivity.this);
-                }
-
                 @Override
                 public void afterTextChanged(Editable s) {
                     try {
@@ -283,10 +278,9 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
         super.onResume();
         try {
             if (fromStr.equals("ForgotPwd")) {
-                etEmail.requestFocus();
                 etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                 if (!Utils.isKeyboardVisible)
-                    Utils.shwForcedKeypad(this);
+                    showSoftKeyboard(etEmail);
             } else {
                 if (Utils.isKeyboardVisible)
                     Utils.hideKeypad(this);
