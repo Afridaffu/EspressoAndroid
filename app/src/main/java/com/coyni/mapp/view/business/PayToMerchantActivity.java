@@ -845,9 +845,16 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             public void onClick(View view) {
                 dialog.dismiss();
                 objMyApplication.setStrScreen("payRequest");
-                Intent i = new Intent(PayToMerchantActivity.this, SelectPaymentMethodActivity.class);
-                i.putExtra("screen", "payRequest");
-                i.putExtra("menuitem","buy");
+                Intent i;
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    i = new Intent(PayToMerchantActivity.this, BuyTokenPaymentMethodsActivity.class);
+                    i.putExtra("screen", "payRequest");
+                }
+                else {
+                    i = new Intent(PayToMerchantActivity.this, SelectPaymentMethodActivity.class);
+                    i.putExtra("screen", "payRequest");
+                    i.putExtra("menuitem","buy");
+                }
                 startActivity(i);
                 //finish();
             }
