@@ -440,6 +440,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     if (batchNowResponse.getStatus() != null && batchNowResponse.getData() != null) {
                         Log.d(TAG, "Batched successfully");
                         batchReq();
+                        getWalletData();
                         Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
                     } else {
                         Log.d(TAG, "No items found");
