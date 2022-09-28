@@ -355,28 +355,28 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void initObservers() {
-        dashboardViewModel.getAppUpdateRespMutableLiveData().observe(getActivity(), new Observer<AppUpdateResp>() {
-            @Override
-            public void onChanged(AppUpdateResp appUpdate) {
-                try {
-                    if (appUpdate != null) {
-                        String version = getContext().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
-                        int versionCode = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionCode;
-                        int versionName = Integer.parseInt(version.replace(".", ""));
-                        Context context = new ContextThemeWrapper(getActivity(), R.style.Theme_Coyni_Update);
-                        if (versionName < Integer.parseInt(appUpdate.getData().getVersion().replace(".", ""))) {
-                            showUpdateDialog(context);
-                        } else if (versionName == Integer.parseInt(appUpdate.getData().getVersion().replace(".", ""))) {
-                            if (versionCode < Integer.parseInt(appUpdate.getData().getBuildNum().replace(".", ""))) {
-                                showUpdateDialog(context);
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//        dashboardViewModel.getAppUpdateRespMutableLiveData().observe(getActivity(), new Observer<AppUpdateResp>() {
+//            @Override
+//            public void onChanged(AppUpdateResp appUpdate) {
+//                try {
+//                    if (appUpdate != null) {
+//                        String version = getContext().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
+//                        int versionCode = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionCode;
+//                        int versionName = Integer.parseInt(version.replace(".", ""));
+//                        Context context = new ContextThemeWrapper(getActivity(), R.style.Theme_Coyni_Update);
+//                        if (versionName < Integer.parseInt(appUpdate.getData().getVersion().replace(".", ""))) {
+//                            showUpdateDialog(context);
+//                        } else if (versionName == Integer.parseInt(appUpdate.getData().getVersion().replace(".", ""))) {
+//                            if (versionCode < Integer.parseInt(appUpdate.getData().getBuildNum().replace(".", ""))) {
+//                                showUpdateDialog(context);
+//                            }
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
             @Override
@@ -1379,23 +1379,23 @@ public class BusinessDashboardFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         ((BusinessDashboardActivity) getActivity()).notificationsAPICall();
-        if (Utils.checkInternet(getContext())) {
-            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
-        }
+//        if (Utils.checkInternet(getContext())) {
+//            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
+//        }
     }
 
-    private void showUpdateDialog(Context context) {
-        new MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.app_name)
-                .setMessage(getString(R.string.appUpdate))
-                .setCancelable(false)
-                .setPositiveButton("Update", (dialog, which) -> {
-                    dialog.dismiss();
-                    Intent viewIntent =
-                            new Intent("android.intent.action.VIEW",
-                                    Uri.parse("market://details?id=com.coyni.mapp"));
-                    viewIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(viewIntent);
-                }).show();
-    }
+//    private void showUpdateDialog(Context context) {
+//        new MaterialAlertDialogBuilder(context)
+//                .setTitle(R.string.app_name)
+//                .setMessage(getString(R.string.appUpdate))
+//                .setCancelable(false)
+//                .setPositiveButton("Update", (dialog, which) -> {
+//                    dialog.dismiss();
+//                    Intent viewIntent =
+//                            new Intent("android.intent.action.VIEW",
+//                                    Uri.parse("market://details?id=com.coyni.mapp"));
+//                    viewIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(viewIntent);
+//                }).show();
+//    }
 }

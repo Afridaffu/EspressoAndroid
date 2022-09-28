@@ -67,6 +67,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -2871,6 +2872,21 @@ public class Utils {
             ex.printStackTrace();
         }
         return true;
+    }
+
+    public static void showUpdateDialog(Context context) {
+        new MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.app_name)
+                .setMessage(context.getString(R.string.appUpdate))
+                .setCancelable(false)
+                .setPositiveButton("Update", (dialog, which) -> {
+                    dialog.dismiss();
+                    Intent viewIntent =
+                            new Intent("android.intent.action.VIEW",
+                                    Uri.parse("market://details?id=com.coyni.mapp"));
+                    viewIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(viewIntent);
+                }).show();
     }
 
 }

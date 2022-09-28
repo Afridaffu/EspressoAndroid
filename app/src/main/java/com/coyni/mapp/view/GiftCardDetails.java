@@ -430,7 +430,8 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                         walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
                     }
 //                            Double giftCardAmount = (Utils.doubleParsing(amountET.getText().toString().replace(",", "")) + Utils.doubleParsing(fee.toString().replace(",", "")));
-                    Double giftCardAmount = Utils.doubleParsing(amountET.getText().toString().replace(",", "")) * (1 - (feeInPercentage / 100)) - feeInAmount;
+//                    Double giftCardAmount = Utils.doubleParsing(amountET.getText().toString().replace(",", "")) * (1 - (feeInPercentage / 100)) - feeInAmount;
+                    Double giftCardAmount =  (Utils.doubleParsing(amountET.getText().toString().replace(",", "")) + (Utils.doubleParsing(amountET.getText().toString().replace(",", "")) * (feeInPercentage / 100))) + feeInAmount;
                     Double giftCardETAmount = Utils.doubleParsing(amountET.getText().toString().replace(",", ""));
                     if (objTranLimit.getData() != null && objTranLimit.getData().getMinimumLimit() != null) {
                         minValue = Utils.doubleParsing(objTranLimit.getData().getMinimumLimit());
@@ -441,7 +442,8 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
 
                     String strPFee = Utils.convertBigDecimalUSD(String.valueOf(fee));
                     Double total = Utils.doubleParsing(amountET.getText().toString().trim().replace(",", "")) + Utils.doubleParsing(strPFee);
-                    if (walletAmount.equals(giftCardETAmount)) {
+//                    if (walletAmount.equals(giftCardETAmount)) {
+                    if (giftCardETAmount <= walletAmount && (walletAmount < giftCardAmount)) {
                         isAmount = false;
                         amountErrorLL.setVisibility(VISIBLE);
                         amountErrorTV.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");

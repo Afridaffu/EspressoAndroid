@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -18,12 +19,16 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.R;
+import com.coyni.mapp.model.appupdate.AppUpdateResp;
 import com.coyni.mapp.model.check_out_transactions.CheckOutModel;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.viewmodel.DashboardViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +49,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private MyApplication myApplication;
     private BroadcastReceiver mReceiver;
     private IntentFilter mIntentFilter;
+    DashboardViewModel dashboardViewModel;
+    public Boolean isBaseBiometric = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,14 +58,39 @@ public abstract class BaseActivity extends AppCompatActivity {
         LogUtils.d(TAG, getClass().getName());
         Utils.launchedActivity = getClass();
         myApplication = (MyApplication) getApplicationContext();
-        //getIntentData(getIntent());
+        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+
+        dashboardViewModel.getAppUpdateRespMutableLiveData().observe(this, new Observer<AppUpdateResp>() {
+            @Override
+            public void onChanged(AppUpdateResp appUpdateResp) {
+                try {
+                    if (appUpdateResp == null) {
+                        return;
+                    }
+                    String version = getPackageManager().getPackageInfo(BaseActivity.this.getPackageName(), 0).versionName;
+                    int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                    int versionName = Integer.parseInt(version.replace(".", ""));
+                    Context context = new ContextThemeWrapper(BaseActivity.this, R.style.Theme_Coyni_Update);
+                    if (versionName < Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
+                        if (!isBaseBiometric)
+                            Utils.showUpdateDialog(context);
+                    } else if (versionName == Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
+                        if (versionCode < Integer.parseInt(appUpdateResp.getData().getBuildNum().replace(".", ""))) {
+                            if (!isBaseBiometric)
+                                Utils.showUpdateDialog(context);
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         LogUtils.v(TAG, "onNewIntent called");
-        //getIntentData(intent);
         setIntent(intent);
     }
 
@@ -69,6 +101,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             LogUtils.v(TAG, "Launching the checkout flow");
             launchCheckout();
         }
+        dashboardViewModel.getAppUpdate(getString(R.string.android_text));
         createReceiver();
         registerReceiver(mReceiver, mIntentFilter);
     }
