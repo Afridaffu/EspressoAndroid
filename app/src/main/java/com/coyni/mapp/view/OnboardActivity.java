@@ -108,18 +108,11 @@ public class OnboardActivity extends BaseActivity {
             }
 
             CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
-//            if (Utils.getStrAuth() != null && !Utils.getStrAuth().equals("")) {
-//                Intent dashboardIntent = new Intent(OnboardActivity.this, DashboardActivity.class);
-//                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-//                    dashboardIntent = new Intent(OnboardActivity.this, BusinessDashboardActivity.class);
-//                }
-//                dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                startActivity(dashboardIntent);
-//            } else {
             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
                     layoutOnBoarding.setVisibility(View.GONE);
                     layoutAuth.setVisibility(View.VISIBLE);
+                    isBaseBiometric = true;
                     Utils.checkAuthentication(OnboardActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                 } else {
                     FaceIdDisabled_BottomSheet faceIdDisable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
@@ -139,7 +132,7 @@ public class OnboardActivity extends BaseActivity {
                     finish();
                 }
             }
-//            }
+
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 
@@ -196,41 +189,6 @@ public class OnboardActivity extends BaseActivity {
             });
 
             initObserver();
-
-
-//            BiometricManager biometricManager = BiometricManager.from(getApplicationContext());
-//            switch (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK)) {
-//                case BiometricManager.BIOMETRIC_SUCCESS:
-//                    Log.e("BIOMETRIC_WEAK", "App can authenticate using biometrics.");
-//                    break;
-//                case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-//                    Log.e("BIOMETRIC_WEAK", "No biometric features available on this device.");
-//                    break;
-//                case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-//                    Log.e("BIOMETRIC_WEAK", "Biometric features are currently unavailable.");
-//                    break;
-//                case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-//                    // Prompts the user to create credentials that your app accepts.
-//                    Log.e("BIOMETRIC_WEAK", "BIOMETRIC_ERROR_NONE_ENROLLED.");
-//                    break;
-//            }
-//
-//            BiometricManager biometricManager2 = BiometricManager.from(getApplicationContext());
-//            switch (biometricManager2.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
-//                case BiometricManager.BIOMETRIC_SUCCESS:
-//                    Log.e("BIOMETRIC_STRONG", "App can authenticate using biometrics.");
-//                    break;
-//                case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-//                    Log.e("BIOMETRIC_STRONG", "No biometric features available on this device.");
-//                    break;
-//                case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-//                    Log.e("BIOMETRIC_STRONG", "Biometric features are currently unavailable.");
-//                    break;
-//                case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-//                    // Prompts the user to create credentials that your app accepts.
-//                    Log.e("BIOMETRIC_STRONG", "BIOMETRIC_ERROR_NONE_ENROLLED.");
-//                    break;
-//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -416,43 +374,6 @@ public class OnboardActivity extends BaseActivity {
         objMyApplication.setStrMobileToken(strToken);
     }
 
-//    private void setFaceLock() {
-//        try {
-//            isFaceLock = false;
-//            String value = dbHandler.getFacePinLock();
-//            if (value != null && value.equals("true")) {
-//                isFaceLock = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isFaceLock = false;
-//                objMyApplication.setLocalBiometric(false);
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    private void setTouchId() {
-//        try {
-//            isTouchId = false;
-//            String value = dbHandler.getThumbPinLock();
-//            if (value != null && value.equals("true")) {
-//                isTouchId = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isTouchId = false;
-////                objMyApplication.setLocalBiometric(false);
-//                if (!isFaceLock) {
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     private void login() {
         try {
             showProgressDialog();
@@ -547,4 +468,5 @@ public class OnboardActivity extends BaseActivity {
             objMyApplication.setListStates(listStates);
         }
     }
+
 }

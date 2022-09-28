@@ -6,6 +6,7 @@ public class ManualBankRequest {
     private Boolean giactReq;
     private String routingNumber;
     private int bankId;
+    private String fromTxnScreen;
 
     public String getAccountName() {
         return accountName;
@@ -45,6 +46,14 @@ public class ManualBankRequest {
 
     public void setBankId(int bankId) {
         this.bankId = bankId;
+    }
+
+    public String getFromTxnScreen() {
+        return fromTxnScreen;
+    }
+
+    public void setFromTxnScreen(String fromTxnScreen) {
+        this.fromTxnScreen = fromTxnScreen;
     }
 }
 

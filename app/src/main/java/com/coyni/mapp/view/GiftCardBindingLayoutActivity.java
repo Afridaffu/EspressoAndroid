@@ -377,7 +377,7 @@ public class GiftCardBindingLayoutActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        startWebSocket();
+                        //startWebSocket();
                         if (objMyApplication.getStrScreen() != null && objMyApplication.getStrScreen().equalsIgnoreCase(CheckOutConstants.FlowCheckOut)) {
                             objMyApplication.getCheckOutModel().setCheckOutFlag(true);
                             startActivity(new Intent(GiftCardBindingLayoutActivity.this, CheckOutPaymentActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -532,7 +532,7 @@ public class GiftCardBindingLayoutActivity extends BaseActivity {
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startWebSocket();
+                    //startWebSocket();
                     dashboardNavigation("Token");
                 }
             });

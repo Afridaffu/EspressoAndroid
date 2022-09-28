@@ -753,7 +753,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
         if (businessTrackerResponse.getData().isAgreementSigned()) {
             aggrementsCompleteLL.setVisibility(View.VISIBLE);
             aggrementsIncompleteLL.setVisibility(GONE);
-            addBankIncompleteLL.setVisibility(View.GONE);
+            //addBankIncompleteLL.setVisibility(View.GONE);
         } else {
             aggrementsCompleteLL.setVisibility(View.GONE);
             aggrementsIncompleteLL.setVisibility(View.VISIBLE);

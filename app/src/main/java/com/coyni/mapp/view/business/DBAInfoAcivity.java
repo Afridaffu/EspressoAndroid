@@ -464,20 +464,20 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 //                enableOrDisableNext();
 //            });
 
-            retailLL.setOnClickListener(view -> {
-                if (!isRetail) {
-                    websiteOET.setHint("Website (Optional)");
-                    isECommerce = false;
-                    isRetail = true;
-                    identificationType = 8;
-                    isIDVESelected = true;
-//                    dbaFillingLL.setVisibility(VISIBLE);
-                    retailIV.setImageResource(R.drawable.ic_rb_selected);
-                    eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
-                }
-                isWebsite = true;
-                enableOrDisableNext();
-            });
+//            retailLL.setOnClickListener(view -> {
+//                if (!isRetail) {
+//                    websiteOET.setHint("Website (Optional)");
+//                    isECommerce = false;
+//                    isRetail = true;
+//                    identificationType = 8;
+//                    isIDVESelected = true;
+//                    retailIV.setImageResource(R.drawable.ic_rb_selected);
+//                    eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
+//                }
+////                isWebsite = true;
+//                isWebsite = isValidUrl(websiteOET.getText().trim());
+//                enableOrDisableNext();
+//            });
 
             dbaNextCV.setOnClickListener(v -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -1570,14 +1570,14 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     }
 
 //                    if (cir.getIdentificationType().equals("8")) {
-                        websiteOET.setHint("Website (Optional)");
-                        isECommerce = false;
-                        isRetail = true;
-                        identificationType = 8;
-                        retailIV.setImageResource(R.drawable.ic_rb_selected);
-                        eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
-                        isWebsite = true;
-                        isIDVESelected = true;
+                    websiteOET.setHint("Website (Optional)");
+                    isECommerce = false;
+                    isRetail = true;
+                    identificationType = 8;
+                    retailIV.setImageResource(R.drawable.ic_rb_selected);
+                    eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
+                    isWebsite = true;
+                    isIDVESelected = true;
 //                    } else if (cir.getIdentificationType().equals("9")) {
 //                        eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
 //                        retailIV.setImageResource(R.drawable.ic_rb_unselected);

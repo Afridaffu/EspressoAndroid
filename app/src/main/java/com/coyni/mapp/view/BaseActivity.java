@@ -6,20 +6,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.R;
+import com.coyni.mapp.model.appupdate.AppUpdateResp;
 import com.coyni.mapp.model.check_out_transactions.CheckOutModel;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.viewmodel.DashboardViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +49,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private MyApplication myApplication;
     private BroadcastReceiver mReceiver;
     private IntentFilter mIntentFilter;
+    DashboardViewModel dashboardViewModel;
+    public Boolean isBaseBiometric = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,14 +58,39 @@ public abstract class BaseActivity extends AppCompatActivity {
         LogUtils.d(TAG, getClass().getName());
         Utils.launchedActivity = getClass();
         myApplication = (MyApplication) getApplicationContext();
-        //getIntentData(getIntent());
+        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+
+        dashboardViewModel.getAppUpdateRespMutableLiveData().observe(this, new Observer<AppUpdateResp>() {
+            @Override
+            public void onChanged(AppUpdateResp appUpdateResp) {
+                try {
+                    if (appUpdateResp == null) {
+                        return;
+                    }
+                    String version = getPackageManager().getPackageInfo(BaseActivity.this.getPackageName(), 0).versionName;
+                    int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                    int versionName = Integer.parseInt(version.replace(".", ""));
+                    Context context = new ContextThemeWrapper(BaseActivity.this, R.style.Theme_Coyni_Update);
+                    if (versionName < Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
+                        if (!isBaseBiometric)
+                            Utils.showUpdateDialog(context);
+                    } else if (versionName == Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
+                        if (versionCode < Integer.parseInt(appUpdateResp.getData().getBuildNum().replace(".", ""))) {
+                            if (!isBaseBiometric)
+                                Utils.showUpdateDialog(context);
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         LogUtils.v(TAG, "onNewIntent called");
-        //getIntentData(intent);
         setIntent(intent);
     }
 
@@ -65,6 +101,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             LogUtils.v(TAG, "Launching the checkout flow");
             launchCheckout();
         }
+        dashboardViewModel.getAppUpdate(getString(R.string.android_text));
         createReceiver();
         registerReceiver(mReceiver, mIntentFilter);
     }
@@ -173,13 +210,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void startWebSocket() {
         try {
-            String serverUrl = myApplication.getWebSocketUrlResponse().getWebsocketUrl();
-            OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.MILLISECONDS).build();
-            Request request = new Request.Builder().url(serverUrl).build();
-            EchoWebSocketListener listener = new EchoWebSocketListener();
-            WebSocket webSocket = client.newWebSocket(request, listener);
-            client.dispatcher().executorService().shutdown();
-            Log.d("WebSocket Started with url : ", serverUrl);
+            if (myApplication.getWebSocketUrlResponse() != null && myApplication.getWebSocketUrlResponse().getWebsocketUrl() != null) {
+                String serverUrl = myApplication.getWebSocketUrlResponse().getWebsocketUrl();
+                OkHttpClient client = new OkHttpClient.Builder().readTimeout(0, TimeUnit.MILLISECONDS).build();
+                Request request = new Request.Builder().url(serverUrl).build();
+                EchoWebSocketListener listener = new EchoWebSocketListener();
+                WebSocket webSocket = client.newWebSocket(request, listener);
+                client.dispatcher().executorService().shutdown();
+                Log.d("WebSocket Started with url : ", serverUrl);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -187,6 +226,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private final class EchoWebSocketListener extends WebSocketListener {
         private static final int CLOSE_STATUS = 1000;
+        private final int interval = 2000;
+        private Handler handler = new Handler(Looper.getMainLooper());
+        private Runnable runnable;
 
         @Override
         public void onOpen(WebSocket webSocket, Response response) {
@@ -205,8 +247,26 @@ public abstract class BaseActivity extends AppCompatActivity {
             Log.d("Receive Message: ", message);
             try {
                 JSONObject obj = new JSONObject(message);
-                if (obj.getString("eventType").equals("TXN_STATUS") && obj.getString("txnStatus").toLowerCase().equals("completed")) {
+                if (obj.getString("eventType").equals("SERVER_CONNECTION")) {
+                    runnable = new Runnable() {
+                        public void run() {
+                            try {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("authorization", Utils.getStrAuth());
+                                jsonObject.put("eventType", "ping");
+                                webSocket.send(jsonObject.toString());
+                                handler.postDelayed(runnable, interval);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    };
+                    handler.postDelayed(runnable, 0);
+                } else if (obj.getString("eventType").equals("TXN_STATUS") && obj.getString("txnStatus").toLowerCase().equals("completed")) {
                     sendBroadcast(new Intent().setAction(Utils.NOTIFICATION_ACTION));
+                    webSocket.close(CLOSE_STATUS, null);
+                } else if (obj.getString("eventType").equals("SESSION_EXPIRY")) {
+                    handler.removeCallbacks(runnable);
                     webSocket.close(CLOSE_STATUS, null);
                 }
             } catch (Exception ex) {
@@ -222,6 +282,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         @Override
         public void onClosing(WebSocket webSocket, int code, String reason) {
             webSocket.close(CLOSE_STATUS, null);
+            handler.removeCallbacks(runnable);
             Log.d("Closing Socket : ", code + " / " + reason);
         }
 
@@ -233,10 +294,19 @@ public abstract class BaseActivity extends AppCompatActivity {
                     Log.d("Error : ", throwable.getMessage());
                 else
                     Log.d("Error : ", throwable.toString());
+                handler.removeCallbacks(runnable);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
     }
 
+    public void showSoftKeyboard(View view) {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            Log.e("open", "keyboard");
+        }
+    }
 }

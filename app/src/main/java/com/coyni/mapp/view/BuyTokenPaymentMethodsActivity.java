@@ -526,6 +526,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                                 //showExternalBank();
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddManualBankAccount.class);
                                 i.putExtra("From", "pay");
+                                i.putExtra("screen", strScreen);
                                 startActivityForResult(i, 4);
                             }
                         } else {
@@ -547,6 +548,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                                 strCurrent = "debit";
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "debit");
+                                i.putExtra("screen", strScreen);
                                 startActivityForResult(i, 3);
                             }
                         } else {
@@ -568,6 +570,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                                 strCurrent = "credit";
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "credit");
+                                i.putExtra("screen", strScreen);
                                 startActivityForResult(i, 3);
                             }
                         } else {

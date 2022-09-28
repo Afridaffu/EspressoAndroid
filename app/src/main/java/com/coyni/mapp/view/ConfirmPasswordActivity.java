@@ -79,6 +79,8 @@ public class ConfirmPasswordActivity extends BaseActivity implements OnKeyboardV
             tvPwdError = findViewById(R.id.tvPwdError);
             strong = Pattern.compile(STRONG_PATTERN);
 
+            currentPassET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
             setKeyboardVisibilityListener(this);
 
             currentTIL.setEndIconOnClickListener(new View.OnClickListener() {

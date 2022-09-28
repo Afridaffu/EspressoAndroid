@@ -522,6 +522,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                                 //showExternalBank();
                                 Intent i = new Intent(SelectPaymentMethodActivity.this, AddManualBankAccount.class);
                                 i.putExtra("From", "pay");
+                                i.putExtra("screen", strScreen);
                                 startActivityForResult(i, 4);
                             }
                         } else {
@@ -558,8 +559,8 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-//                        if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
-//                                && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
+                        if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
                         if (!strMenu.equals("buy") && !strCurrent.equals("notokens")) {
                             if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
                                 strCurrent = "signet";
@@ -568,9 +569,9 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                                 startActivityForResult(i, 2);
                             }
                         }
-//                        } else {
-//                            Utils.displayAlert(getString(R.string.errormsg), SelectPaymentMethodActivity.this, "", "");
-//                        }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), SelectPaymentMethodActivity.this, "", "");
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
