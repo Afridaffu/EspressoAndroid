@@ -528,32 +528,6 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void initObserver() {
-
-//        dashboardViewModel.getAppUpdateRespMutableLiveData().observe(this, new Observer<AppUpdateResp>() {
-//            @Override
-//            public void onChanged(AppUpdateResp appUpdateResp) {
-//                try {
-//                    if (appUpdateResp == null){
-//                        return;
-//                    }
-//                    String version = getPackageManager().getPackageInfo(DashboardActivity.this.getPackageName(), 0).versionName;
-//                    int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-//                    int versionName = Integer.parseInt(version.replace(".", ""));
-//                        Context context = new ContextThemeWrapper(DashboardActivity.this, R.style.Theme_Coyni_Update);
-//                    if (versionName < Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
-//                        showUpdateDialog(context);
-//                    } else if (versionName == Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
-//                        if (versionCode < Integer.parseInt(appUpdateResp.getData().getBuildNum().replace(".", ""))) {
-//                            showUpdateDialog(context);
-//                        }
-//                    }
-//
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
-//        });
-
         dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
             @Override
             public void onChanged(Profile profile) {
@@ -899,6 +873,31 @@ public class DashboardActivity extends BaseActivity {
                 }
             }
         });
+
+//        dashboardViewModel.getAppUpdateRespMutableLiveData().observe(this, new Observer<AppUpdateResp>() {
+//            @Override
+//            public void onChanged(AppUpdateResp appUpdateResp) {
+//                try {
+//                    if (appUpdateResp == null){
+//                        return;
+//                    }
+//                    String version = getPackageManager().getPackageInfo(DashboardActivity.this.getPackageName(), 0).versionName;
+//                    int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+//                    int versionName = Integer.parseInt(version.replace(".", ""));
+//                    Context context = new ContextThemeWrapper(DashboardActivity.this, R.style.Theme_Coyni_Update);
+//                    if (versionName < Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
+//                        showUpdateDialog(context);
+//                    } else if (versionName == Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
+//                        if (versionCode < Integer.parseInt(appUpdateResp.getData().getBuildNum().replace(".", ""))) {
+//                            showUpdateDialog(context);
+//                        }
+//                    }
+//
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
     }
 

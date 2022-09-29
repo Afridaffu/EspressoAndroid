@@ -78,6 +78,7 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<ActivityLogResp> activityLogRespMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<FeatureControlRespByUser> featureControlRespByUserMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<FeatureControlGlobalResp> featureControlGlobalRespMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<AppUpdateResp> appUpdateRespMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<LatestTxnResponse> getGetUserLatestTxns() {
         return getUserLatestTxns;
@@ -186,6 +187,10 @@ public class DashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<FeatureControlGlobalResp> getFeatureControlGlobalRespMutableLiveData() {
         return featureControlGlobalRespMutableLiveData;
+    }
+
+    public MutableLiveData<AppUpdateResp> getAppUpdateRespMutableLiveData() {
+        return appUpdateRespMutableLiveData;
     }
 
     public void meProfile() {
@@ -1120,6 +1125,34 @@ public class DashboardViewModel extends AndroidViewModel {
                 @Override
                 public void onFailure(Call<FeatureControlGlobalResp> call, Throwable t) {
                     featureControlGlobalRespMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getAppUpdate(String osType) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<AppUpdateResp> mCall = apiService.getAppUpdate(osType);
+            mCall.enqueue(new Callback<>() {
+                @Override
+                public void onResponse(Call<AppUpdateResp> call, Response<AppUpdateResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            AppUpdateResp obj = response.body();
+                            appUpdateRespMutableLiveData.setValue(obj);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AppUpdateResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    appUpdateRespMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

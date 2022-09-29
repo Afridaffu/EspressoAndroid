@@ -147,9 +147,9 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
 
     private void showFiltersPopup() {
         try {
-            if (batchFilter != null) {
-                PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this, batchFilter);
-            }
+//            if (batchFilter != null) {
+//                PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this, batchFilter);
+//            }
             PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this, batchFilter);
             dialog.setOnDialogClickListener(new OnDialogClickListener() {
                 @Override

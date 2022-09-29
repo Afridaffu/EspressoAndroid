@@ -485,7 +485,7 @@
                     android:paddingLeft="@dimen/_8sdp"
                     android:paddingTop="@dimen/_13sdp"
                     android:paddingBottom="@dimen/_14sdp"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
 
                     <ImageView

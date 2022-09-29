@@ -121,6 +121,7 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
 //                            dia.isWebsite = true;
                         dia.isWebsite = false;
                     }
+
                     dia.enableOrDisableNext();
                 }
             }
@@ -144,7 +145,6 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
                 }
             }
         });
-
 //        websiteET.setOnTouchListener((view, motionEvent) -> {
 //            if(FROM.equals("DBA_INFO")){
 //                DBAInfoAcivity dia = (DBAInfoAcivity) mContext;

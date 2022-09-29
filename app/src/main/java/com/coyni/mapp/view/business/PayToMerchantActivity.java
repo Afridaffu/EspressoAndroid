@@ -142,11 +142,11 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                         payET.setTextSize(Utils.pixelsToSp(PayToMerchantActivity.this, fontSize));
                         tvCurrency.setTextSize(Utils.pixelsToSp(PayToMerchantActivity.this, dollarFont));
                     }
-                    if (Utils.doubleParsing(editable.toString().replace(",", "")) > 0) {
-                        disableButtons(false);
-                    } else {
-                        disableButtons(true);
-                    }
+//                    if (Utils.doubleParsing(editable.toString().replace(",", "")) > 0) {
+//                        disableButtons(false);
+//                    } else {
+//                        disableButtons(true);
+//                    }
                     if (validation()) {
                         disableButtons(false);
                     } else {

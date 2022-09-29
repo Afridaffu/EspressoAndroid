@@ -91,6 +91,13 @@ public class MyApplication extends Application {
         this.checkOutModel = checkOutModel;
     }
 
+    public String getTotalBuyAmountWithFee() {
+        return totalBuyAmountWithFee;
+    }
+
+    public void setTotalBuyAmountWithFee(String totalBuyAmountWithFee) {
+        this.totalBuyAmountWithFee = totalBuyAmountWithFee;
+    }
 
     public static Context getContext() {
         return context;
@@ -130,14 +137,6 @@ public class MyApplication extends Application {
 
     public void setPaidOrderResp(PaidOrderResp paidOrderResp) {
         mCurrentUserData.setPaidOrderResp(paidOrderResp);
-    }
-
-    public String getTotalBuyAmountWithFee() {
-        return totalBuyAmountWithFee;
-    }
-
-    public void setTotalBuyAmountWithFee(String totalBuyAmountWithFee) {
-        this.totalBuyAmountWithFee = totalBuyAmountWithFee;
     }
 
     public void setOrderPayResponse(OrderPayResponse orderPayResponse) {

@@ -130,6 +130,10 @@ public class BusinessDashboardActivity extends BaseActivity {
         startWebSocket();
     }
 
+    public void notificationsAPICall() {
+        notificationsViewModel.getNotifications();
+    }
+
     @Override
     public void onNotificationUpdate() {
         super.onNotificationUpdate();
@@ -758,10 +762,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 //        notificationsViewModel.getNotifications();
-    }
-
-    public void notificationsAPICall() {
-        notificationsViewModel.getNotifications();
     }
 
     public class FetchData extends AsyncTask<Void, Void, Boolean> {

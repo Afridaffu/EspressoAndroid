@@ -478,9 +478,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         divider0.setBackgroundResource(R.drawable.button_background);
                         divider1.setBackgroundResource(R.drawable.button_background1);
                         divider2.setBackgroundResource(R.drawable.button_background1);
-                        companynameET.requestFocus();
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                        showSoftKeyboard(companynameET);
+//                        companynameET.requestFocus();
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
 
                         enableOrDisableNext();
                     } else if (position == 1) {
@@ -489,11 +490,15 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         divider0.setBackgroundResource(R.drawable.button_background1);
                         divider1.setBackgroundResource(R.drawable.button_background);
                         divider2.setBackgroundResource(R.drawable.button_background1);
-                        companyaddressET.requestFocus();
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                        showSoftKeyboard(companyaddressET);
+//                        companyaddressET.requestFocus();
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
                         enableOrDisableAddressNext();
                     } else if (position == 2) {
+                        if (isNew && !isNewCompanyFlag) {
+                            identityVerificationViewModel.getAddBusinessUser();
+                        }
                         if (Utils.isKeyboardVisible)
                             Utils.hideKeypad(CompanyInformationActivity.this);
                         close.setVisibility(GONE);
@@ -729,7 +734,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         BusinessRegistrationTrackerActivity.isAddBusinessCalled = true;
                         isApiCalled = true;
 //                        setResult(RESULT_OK);
-                        if (selectedPage == 2) {
+                        if (selectedPage == 2 && isDocsDoneEnabled) {
                             businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
                         } else {
                             companyInfoAPICall(prepareRequest());

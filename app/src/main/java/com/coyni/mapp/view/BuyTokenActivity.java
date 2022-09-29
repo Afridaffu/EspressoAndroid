@@ -1137,6 +1137,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
             tvPurchaseAmt.setText(Utils.USNumberFormat(cynValue) + " USD");
             tvProcessingFee.setText(Utils.USNumberFormat(Utils.doubleParsing(strPFee)) + " USD");
             total = cynValue + Utils.doubleParsing(strPFee);
+            objMyApplication.setTotalBuyAmountWithFee(Utils.USNumberFormat(total));
             tvTotal.setText(Utils.USNumberFormat(total) + " USD");
             objMyApplication.setTotalBuyAmountWithFee(Utils.USNumberFormat(total));
             prepareBuyRequest();

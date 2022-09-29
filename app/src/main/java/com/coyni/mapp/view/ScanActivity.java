@@ -1131,6 +1131,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         try {
             super.onPause();
             if (mcodeScanner != null) {
+                if (mcodeScanner.isFlashEnabled())
+                    mcodeScanner.setFlashEnabled(false);
                 mcodeScanner.releaseResources();
             }
         } catch (Exception e) {
@@ -1641,9 +1643,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             public void onClick(View view) {
                 dialog.dismiss();
                 objMyApplication.setStrScreen("payRequest");
-                Intent i = new Intent(ScanActivity.this, SelectPaymentMethodActivity.class);
+                Intent i = new Intent(ScanActivity.this, BuyTokenPaymentMethodsActivity.class);
                 i.putExtra("screen", "payRequest");
-                i.putExtra("menuitem","buy");
                 startActivity(i);
                 //finish();
             }
@@ -1918,4 +1919,5 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             e.printStackTrace();
         }
     }
+
 }

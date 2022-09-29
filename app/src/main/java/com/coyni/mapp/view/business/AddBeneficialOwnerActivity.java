@@ -127,7 +127,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
     protected void onResume() {
         try {
             super.onResume();
-            fnameET.requestFocus();
+            showSoftKeyboard(fnameET);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -160,15 +160,17 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     backIV.setVisibility(GONE);
                     divider1.setBackgroundResource(R.drawable.button_background);
                     divider2.setBackgroundResource(R.drawable.button_background1);
-                    fnameET.requestFocus();
-                    if (!Utils.isKeyboardVisible)
-                        Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
+                    showSoftKeyboard(fnameET);
+//                    fnameET.requestFocus();
+//                    if (!Utils.isKeyboardVisible)
+//                        Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
 
                 } else if (position == 1) {
                     closeIV.setVisibility(GONE);
                     backIV.setVisibility(VISIBLE);
                     divider1.setBackgroundResource(R.drawable.button_background1);
                     divider2.setBackgroundResource(R.drawable.button_background);
+                    showSoftKeyboard(address1ET);
 //                    address1ET.requestFocus();
 //                    if (!Utils.isKeyboardVisible)
 //                        Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);

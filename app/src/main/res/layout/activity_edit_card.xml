@@ -167,7 +167,7 @@
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
                             android:textSize="@dimen/_12ssp"
-                            app:mask="__/__"  />
+                            app:mask="__/__" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -402,7 +402,7 @@
                                 android:id="@+id/etState"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:autofillHints="creditCardSecurityCode"
+                                android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                                 android:cursorVisible="false"
                                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 android:editable="false"

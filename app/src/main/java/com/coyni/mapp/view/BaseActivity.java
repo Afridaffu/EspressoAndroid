@@ -101,9 +101,14 @@ public abstract class BaseActivity extends AppCompatActivity {
             LogUtils.v(TAG, "Launching the checkout flow");
             launchCheckout();
         }
-        dashboardViewModel.getAppUpdate(getString(R.string.android_text));
         createReceiver();
         registerReceiver(mReceiver, mIntentFilter);
+
+        if (Utils.checkInternet(BaseActivity.this)) {
+            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
+        } else {
+            Utils.displayAlert(getString(R.string.internet), BaseActivity.this, "", "");
+        }
     }
 
     @Override

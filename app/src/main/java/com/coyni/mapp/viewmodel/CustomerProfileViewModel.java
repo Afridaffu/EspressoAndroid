@@ -465,4 +465,43 @@ public class CustomerProfileViewModel extends AndroidViewModel {
         }
     }
 
+    public void webSocketUrl() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<WebSocketUrlResponse> mCall = apiService.webSocketUrl();
+            mCall.enqueue(new Callback<WebSocketUrlResponse>() {
+                @Override
+                public void onResponse(Call<WebSocketUrlResponse> call, Response<WebSocketUrlResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            WebSocketUrlResponse obj = response.body();
+                            webSocketUrlResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<WebSocketUrlResponse>() {
+                            }.getType();
+                            WebSocketUrlResponse errorResponse = null;
+                            try {
+                                errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            webSocketUrlResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        webSocketUrlResponseMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<WebSocketUrlResponse> call, Throwable t) {
+                    webSocketUrlResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

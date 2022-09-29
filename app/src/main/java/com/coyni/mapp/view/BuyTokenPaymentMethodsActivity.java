@@ -917,16 +917,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                             Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, EditCardActivity.class);
                             startActivity(i);
                         } else {
-                            if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
-                                isBank = true;
-                                Log.e("setResolveUrl", "862 setResolveUrl");
-                                //objMyApplication.setResolveUrl(true);
-                                Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, WebViewActivity.class);
-                                i.putExtra("signon", signOnData);
-                                startActivityForResult(i, 1);
-                            } else {
-                                Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "", "");
-                            }
+                            openBankFiserv();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -949,6 +940,19 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
             dialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void openBankFiserv(){
+        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+            isBank = true;
+            Log.e("setResolveUrl", "862 setResolveUrl");
+            //objMyApplication.setResolveUrl(true);
+            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, WebViewActivity.class);
+            i.putExtra("signon", signOnData);
+            startActivityForResult(i, 1);
+        } else {
+            Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "", "");
         }
     }
 

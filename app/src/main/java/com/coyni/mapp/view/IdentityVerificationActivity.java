@@ -1005,6 +1005,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 @Override
                 public void onClick(View view) {
                     if (isNext) {
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(IdentityVerificationActivity.this);
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
                         }
@@ -1020,6 +1022,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 @Override
                 public void onClick(View view) {
                     if (isSubmit) {
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(IdentityVerificationActivity.this);
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
                         }
@@ -1336,7 +1340,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
                             //SSN Error
                             startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class)
-                                    .putExtra("from","IDVE"));
+                                    .putExtra("from", "IDVE"));
 
                         } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
                                 || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")

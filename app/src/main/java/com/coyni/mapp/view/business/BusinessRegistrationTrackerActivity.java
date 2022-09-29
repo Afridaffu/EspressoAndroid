@@ -261,13 +261,21 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
                         if (addDBA) {
-                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
-                            intent.putExtra("FROM", "TRACKER");
-                            intent.putExtra("TYPE", "EXIST");
-                            intent.putExtra(Utils.ADD_DBA, addDBA);
-                            intent.putExtra(Utils.NEW_DBA, new_DBA);
-                            intent.putExtra(Utils.COMPANY_ID, getIntent().getIntExtra(Utils.COMPANY_ID, 0));
-                            startActivity(intent);
+                            if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() != 0) {
+                                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
+                                intent.putExtra("FROM", "TRACKER");
+                                intent.putExtra("TYPE", "EXIST");
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
+                                intent.putExtra("FROM", "TRACKER");
+                                intent.putExtra("TYPE", "EXIST");
+                                intent.putExtra(Utils.ADD_DBA, addDBA);
+                                intent.putExtra(Utils.NEW_DBA, new_DBA);
+                                intent.putExtra(Utils.COMPANY_ID, getIntent().getIntExtra(Utils.COMPANY_ID, 0));
+                                startActivity(intent);
+                            }
+
 
                         } else if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
                             if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() == 0) {

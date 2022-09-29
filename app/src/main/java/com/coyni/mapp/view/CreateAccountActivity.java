@@ -253,6 +253,9 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
             confirmPasswordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
+            passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            confirmPasswordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
 
             lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
             firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
