@@ -83,7 +83,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibilityListener {
+public class OTPValidation extends BaseActivity implements OnKeyboardVisibilityListener {
     TextView resendTV, newCodeTV, subHeaderTV, headerTV, contactUsTV;
     PinView otpPV;
     ImageView otpValidationCloseIV;
@@ -1206,9 +1206,8 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             public void run() {
                 if (!layoutType.equals("SECURE")) {
                     if (!Utils.isKeyboardVisible)
-                        Utils.shwForcedKeypad(OTPValidation.this);
-//                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+//                        Utils.shwForcedKeypad(OTPValidation.this);
+                        showSoftKeyboard(otpPV);
                 }
             }
         });

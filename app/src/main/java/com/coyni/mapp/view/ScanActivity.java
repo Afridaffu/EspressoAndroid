@@ -352,8 +352,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                     generateQRCode(strWallet);
                     tvWalletAddress.setText(strWallet.substring(0, 16) + "...");
                 }
-            }
-            else {
+            } else {
                 WalletResponseData walletResponse = objMyApplication.getCurrentUserData().getMerchantWalletResponse();
                 if (walletResponse != null && walletResponse.getWalletNames() != null
                         && walletResponse.getWalletNames().get(0) != null
@@ -1143,6 +1142,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         try {
             super.onPause();
             if (mcodeScanner != null) {
+                if (mcodeScanner.isFlashEnabled())
+                    mcodeScanner.setFlashEnabled(false);
                 mcodeScanner.releaseResources();
             }
         } catch (Exception e) {
@@ -1657,11 +1658,10 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 if (Utils.PERSONAL_ACCOUNT == objMyApplication.getAccountType()) {
                     i = new Intent(ScanActivity.this, BuyTokenPaymentMethodsActivity.class);
                     i.putExtra("screen", "payRequest");
-                }
-                else {
+                } else {
                     i = new Intent(ScanActivity.this, SelectPaymentMethodActivity.class);
                     i.putExtra("screen", "payRequest");
-                    i.putExtra("menuitem","buy");
+                    i.putExtra("menuitem", "buy");
                 }
                 startActivity(i);
                 //finish();
@@ -1937,4 +1937,5 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             e.printStackTrace();
         }
     }
+
 }

@@ -169,7 +169,7 @@
                                     android:layout_height="@dimen/_72sdp"
                                     android:background="@color/white"
                                     android:fontFamily="@font/opensans_bold"
-                                    android:gravity="center_vertical|end"
+                                    android:gravity="center_vertical|right"
                                     android:hint="0.00"
                                     android:inputType="numberDecimal"
                                     android:maxLength="@string/maxlength"

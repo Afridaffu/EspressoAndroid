@@ -130,6 +130,10 @@ public class BusinessDashboardActivity extends BaseActivity {
         startWebSocket();
     }
 
+    public void notificationsAPICall() {
+        notificationsViewModel.getNotifications();
+    }
+
     @Override
     public void onNotificationUpdate() {
         super.onNotificationUpdate();

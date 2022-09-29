@@ -1574,6 +1574,8 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 @Override
                 public void onDismiss(DialogInterface dialogInterface) {
                     cvvDialog = null;
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(WithdrawTokenActivity.this);
                 }
             });
 

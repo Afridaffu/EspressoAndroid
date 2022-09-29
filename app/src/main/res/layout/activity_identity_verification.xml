@@ -538,7 +538,7 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:imeOptions="actionNext"
                                 android:importantForAutofill="no"
-                                android:inputType="textVisiblePassword|textNoSuggestions"
+                                android:inputType="text|textNoSuggestions"
                                 android:maxLength="50"
                                 android:maxLines="1"
                                 android:padding="@dimen/_14sdp"
