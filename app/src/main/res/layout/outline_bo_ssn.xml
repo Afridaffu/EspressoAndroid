@@ -30,7 +30,7 @@
             android:hint="SSN"
             android:imeOptions="actionDone"
             android:importantForAutofill="noExcludeDescendants"
-            android:inputType="numberPassword"
+            android:inputType="number"
             android:maxLines="1"
             android:padding="14dp"
             android:singleLine="true"

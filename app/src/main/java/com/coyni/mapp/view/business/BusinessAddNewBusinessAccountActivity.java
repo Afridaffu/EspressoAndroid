@@ -170,15 +170,15 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
 //                }
 
 //                if (objMyApplication.getLoginUserId() != selectedProfile.getId()) {
-                    showProgressDialog();
-                    loginViewModel.postChangeAccount(selectedProfile.getId());
+//                    showProgressDialog();
+//                    loginViewModel.postChangeAccount(selectedProfile.getId());
 //                } else {
-//                    Intent inAddDba = new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class);
-//                    inAddDba.putExtra(Utils.ADD_BUSINESS, true);
-//                    inAddDba.putExtra(Utils.ADD_DBA, true);
-//                    inAddDba.putExtra(Utils.NEW_DBA, true);
-//                    inAddDba.putExtra(Utils.COMPANY_ID, selectedProfile.getId());
-//                    startActivity(inAddDba);
+                Intent inAddDba = new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class);
+                inAddDba.putExtra(Utils.ADD_BUSINESS, true);
+                inAddDba.putExtra(Utils.ADD_DBA, true);
+                inAddDba.putExtra(Utils.NEW_DBA, true);
+                inAddDba.putExtra(Utils.COMPANY_ID, selectedProfile.getId());
+                startActivity(inAddDba);
 //                }
                 dialog.dismiss();
 
