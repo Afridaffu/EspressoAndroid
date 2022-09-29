@@ -1320,7 +1320,7 @@ public class LoginViewModel extends AndroidViewModel {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<InitializeResponse> mCall = apiService.initialize();
-            mCall.enqueue(new Callback<>() {
+            mCall.enqueue(new Callback<InitializeResponse>() {
                 @Override
                 public void onResponse(Call<InitializeResponse> call, Response<InitializeResponse> response) {
                     try {
