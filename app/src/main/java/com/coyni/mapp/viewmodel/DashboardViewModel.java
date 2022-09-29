@@ -86,7 +86,6 @@ public class DashboardViewModel extends AndroidViewModel {
 
     private MutableLiveData<TransactionList> transactionListMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CancelBuyTokenResponse> cancelBuyTokenResponseMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<AppUpdateResp> appUpdateRespMutableLiveData = new MutableLiveData<>();
 
 
     public MutableLiveData<ActivityLogResp> getActivityLogRespMutableLiveData() {
@@ -189,9 +188,6 @@ public class DashboardViewModel extends AndroidViewModel {
         return featureControlGlobalRespMutableLiveData;
     }
 
-    public MutableLiveData<AppUpdateResp> getAppUpdateRespMutableLiveData() {
-        return appUpdateRespMutableLiveData;
-    }
 
     public void meProfile() {
         try {
@@ -1159,35 +1155,5 @@ public class DashboardViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
-
-
-    public void getAppUpdate(String osType) {
-        try {
-            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
-            Call<AppUpdateResp> mCall = apiService.getAppUpdate(osType);
-            mCall.enqueue(new Callback<>() {
-                @Override
-                public void onResponse(Call<AppUpdateResp> call, Response<AppUpdateResp> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            AppUpdateResp obj = response.body();
-                            appUpdateRespMutableLiveData.setValue(obj);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<AppUpdateResp> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    appUpdateRespMutableLiveData.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
 
 }
