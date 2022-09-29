@@ -216,6 +216,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                 @Override
                 public void onClick(View view) {
                     try {
+                        brandDescTV.setText(strBrandDesc);
                         Utils.hideKeypad(GiftCardDetails.this, view);
                         if (brandDescTV.getMaxLines() == 3) {
                             brandDescTV.setMaxLines(Integer.MAX_VALUE);
@@ -347,7 +348,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
 //                                brandDescTV.setText(Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\n\\r]+", " ").replaceAll("\\s+", " ").trim()));
 //                            }
                             strBrandDesc = (Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " "), Html.FROM_HTML_MODE_COMPACT).toString().trim());
-                            brandDescTV.setText((Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " "), Html.FROM_HTML_MODE_COMPACT).toString().trim()));
+                            brandDescTV.setText(strBrandDesc);
 //                            Glide.with(GiftCardDetails.this).load(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim()).into(brandIV);
 
                             DisplayImageUtility utility = DisplayImageUtility.getInstance(GiftCardDetails.this);
@@ -1003,44 +1004,6 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
 
     }
 
-    private void getDescription(String htmlString, String option) {
-        try {
-            SpannableString ss = new SpannableString(htmlString);
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    try {
-                        String strDesc = "";
-                        if (option.equals("...View More")) {
-                            strDesc = Html.fromHtml(brandsResponseObj.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\n\\r]+", " ").replaceAll("\\s+", " ").trim() + " ...View Less").toString();
-                            getDescription(strDesc, "...View Less");
-                        } else {
-                            String description = brandsResponseObj.getData().getBrands().get(0).getDescription().substring(0, 200).replaceAll("[\\t\\n\\r]+", " ").replaceAll("\\s+", " ").trim() + " ...View More";
-                            strDesc = Html.fromHtml(description).toString();
-                            getDescription(strDesc, "...View More");
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setColor(Color.parseColor("#35BAB6"));
-                    ds.setUnderlineText(false);
-                }
-            };
-            int startIndex = htmlString.indexOf(option);
-            int endIndex = htmlString.length();
-            ss.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            brandDescTV.setText(ss);
-            brandDescTV.setMovementMethod(LinkMovementMethod.getInstance());
-            brandDescTV.setHighlightColor(Color.TRANSPARENT);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
     public void enableOrDisableNext() {
         try {

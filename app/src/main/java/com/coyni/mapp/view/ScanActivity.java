@@ -1643,8 +1643,15 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             public void onClick(View view) {
                 dialog.dismiss();
                 objMyApplication.setStrScreen("payRequest");
-                Intent i = new Intent(ScanActivity.this, BuyTokenPaymentMethodsActivity.class);
-                i.putExtra("screen", "payRequest");
+                Intent i;
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    i = new Intent(ScanActivity.this, BuyTokenPaymentMethodsActivity.class);
+                    i.putExtra("screen", "payRequest");
+                } else {
+                    i = new Intent(ScanActivity.this, SelectPaymentMethodActivity.class);
+                    i.putExtra("screen", "payRequest");
+                    i.putExtra("menuitem", "buy");
+                }
                 startActivity(i);
                 //finish();
             }

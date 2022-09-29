@@ -111,7 +111,7 @@ public class CustomEncryptionHandler implements Interceptor {
                 Gson gson = new Gson();
                 AbstractResponse resp = gson.fromJson(errorResponse, AbstractResponse.class);
                 if (resp != null && resp.getError() != null
-                        && resp.getError().getErrorDescription().equalsIgnoreCase(Utils.ACCESS_TOKEN_EXPIRED)) {
+                        && (resp.getError().getErrorDescription().equalsIgnoreCase(Utils.ACCESS_TOKEN_EXPIRED) || resp.getError().getErrorDescription().equalsIgnoreCase(Utils.TIME_EXCEEDED))) {
                     response = response.newBuilder()
                             .body(ResponseBody.create("", mediaType))
                             .build();

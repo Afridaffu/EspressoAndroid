@@ -168,6 +168,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                     tvError.setVisibility(View.GONE);
                     lyBalance.setVisibility(View.VISIBLE);
                 } else {
+                    payET.setTextDirection(View.TEXT_DIRECTION_RTL);
                     payET.setText("");
                     cynValue = 0.0;
                     usdValue = 0.0;
@@ -849,11 +850,10 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     i = new Intent(PayToMerchantActivity.this, BuyTokenPaymentMethodsActivity.class);
                     i.putExtra("screen", "payRequest");
-                }
-                else {
+                } else {
                     i = new Intent(PayToMerchantActivity.this, SelectPaymentMethodActivity.class);
                     i.putExtra("screen", "payRequest");
-                    i.putExtra("menuitem","buy");
+                    i.putExtra("menuitem", "buy");
                 }
                 startActivity(i);
                 //finish();

@@ -102,6 +102,7 @@ public class GiftCardActivity extends BaseActivity implements OnKeyboardVisibili
                 if (filterList.size() > 0) {
                     brandsLL.setVisibility(View.VISIBLE);
                     noBrandsTV.setVisibility(View.GONE);
+                    brandsGV.setNestedScrollingEnabled(false);
                     brandsGV.setExpanded(true);
                     GridLayoutManager layoutManager = new GridLayoutManager(GiftCardActivity.this, 2);
                     giftCardsAdapter = new GiftCardsRecyclerAdapter(GiftCardActivity.this, filterList);
@@ -140,6 +141,7 @@ public class GiftCardActivity extends BaseActivity implements OnKeyboardVisibili
                             if (brandsResponse.getData().getBrands().size() > 0) {
                                 brandsLL.setVisibility(View.VISIBLE);
                                 noBrandsTV.setVisibility(View.GONE);
+                                brandsGV.setNestedScrollingEnabled(false);
                                 brandsGV.setExpanded(true);
                                 GridLayoutManager layoutManager = new GridLayoutManager(GiftCardActivity.this, 2);
                                 giftCardsAdapter = new GiftCardsRecyclerAdapter(GiftCardActivity.this, brandsResponse.getData().getBrands());

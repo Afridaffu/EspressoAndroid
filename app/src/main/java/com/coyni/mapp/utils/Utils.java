@@ -387,6 +387,7 @@ public class Utils {
     public static final String IS_FIRST_DBA = "is_first_dba";
     public static final String NEW_DBA = "NEW DBA";
     public static final String ACCESS_TOKEN_EXPIRED = "Access token expired";
+    public static final String TIME_EXCEEDED = "User inactive time exceeded";
 
     public static final int boTargetPercentage = 51;
 
