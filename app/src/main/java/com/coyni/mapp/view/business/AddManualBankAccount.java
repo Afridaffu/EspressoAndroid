@@ -214,8 +214,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                             } else {
                                 request.setGiactReq(true);
                             }
-                            if (getIntent().getStringExtra("screen") != null) {
+                            if (getIntent().getStringExtra("screen") != null && !strScreen.equals("signUp") && !strScreen.equals("REVIEW")) {
                                 request.setFromTxnScreen(getIntent().getStringExtra("screen"));
+                            } else if (strScreen.equals("signUp") || strScreen.equals("REVIEW")) {
+                                request.setFromTxnScreen(getString(R.string.trackerbank));
                             } else {
                                 request.setFromTxnScreen("");
                             }
@@ -658,7 +660,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         //if (Utils.isKeyboardVisible)
-                            Utils.hideKeypad(AddManualBankAccount.this);
+                        Utils.hideKeypad(AddManualBankAccount.this);
                         ManualAccountNumbersFullPage showImgDialog = new ManualAccountNumbersFullPage(AddManualBankAccount.this);
                         showImgDialog.show();
 
