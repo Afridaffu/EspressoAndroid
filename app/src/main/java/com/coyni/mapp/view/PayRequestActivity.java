@@ -725,7 +725,14 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 //            }
 
             String strPhContact = "", strEcoSysName = "", strPhone = "", strName = "";
-            if (userDetails.getData().getFullName() != null && !userDetails.getData().getFullName().equals("")) {
+            if (userDetails.getData().getFirstName() != null && !userDetails.getData().getFirstName().equals("") && userDetails.getData().getLastName() != null && !userDetails.getData().getLastName().equals("")) {
+                String fullName = userDetails.getData().getFirstName() + " " + userDetails.getData().getLastName();
+                if (fullName.length() > 20) {
+                    strEcoSysName = fullName.substring(0, 20) + "...";
+                } else {
+                    strEcoSysName = fullName;
+                }
+            } else if (userDetails.getData().getFullName() != null && !userDetails.getData().getFullName().equals("")) {
                 if (userDetails.getData().getFullName().length() > 20) {
                     strEcoSysName = userDetails.getData().getFullName().substring(0, 20) + "...";
                 } else {
@@ -757,7 +764,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             if (!strPhContact.equals("") && !strEcoSysName.equals("")) {
                 tvName.setText(Utils.capitalize(strPhContact));
                 userWalletAddre.setText("@" + Utils.capitalize(strEcoSysName));
-                userName.setText(objMyApplication.setNameHead(strPhContact));
+                userName.setText(objMyApplication.setNameHead(strEcoSysName));
             } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
                 tvName.setText(Utils.capitalize(strEcoSysName));
                 userWalletAddre.setVisibility(View.GONE);

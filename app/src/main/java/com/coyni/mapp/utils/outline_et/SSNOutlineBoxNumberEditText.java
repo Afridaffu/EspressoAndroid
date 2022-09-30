@@ -1,5 +1,6 @@
 package com.coyni.mapp.utils.outline_et;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.SystemClock;
@@ -7,9 +8,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -250,7 +254,8 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                         if (!ssnType.getText().toString().equals("SSN")) {
                             ssnType.setText(ssnTV.getText().toString());
                             ssnET.setVisibility(VISIBLE);
-                            ssnET.requestFocus();
+//                            ssnET.requestFocus();
+                            showKeypad(ssnET);
                             einET.clearFocus();
                             einET.setVisibility(GONE);
                             ssnET.setText("");
@@ -266,8 +271,8 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
 //                            );
 //                            weightRL.setLayoutParams(param);
                             comAct.setUI_IdentificationType();
-                            if(!Utils.isKeyboardVisible)
-                                Utils.shwForcedKeypad(mContext);
+//                            if (!Utils.isKeyboardVisible)
+//                                Utils.shwForcedKeypad(mContext);
                         }
                     }
                 });
@@ -282,6 +287,7 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                             einET.setVisibility(VISIBLE);
                             ssnET.clearFocus();
                             einET.requestFocus();
+                            showKeypad(einET);
                             einET.setText("");
                             ssnET.setText("");
                             comAct.ssnErrorLL.setVisibility(GONE);
@@ -295,8 +301,8 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
 //                            );
 //                            weightRL.setLayoutParams(param);
                             comAct.setUI_IdentificationType();
-                            if(!Utils.isKeyboardVisible)
-                                Utils.shwForcedKeypad(mContext);
+//                            if (!Utils.isKeyboardVisible)
+//                                Utils.shwForcedKeypad(mContext);
                         }
                     }
                 });
@@ -370,12 +376,14 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
     }
 
     public void requestETFocus(String type) {
-        if (type.equals("SSN"))
-            ssnET.requestFocus();
-        else
-            einET.requestFocus();
-        if (!Utils.isKeyboardVisible)
-            Utils.shwForcedKeypad(mContext);
+        if (type.equals("SSN")) {
+//            ssnET.requestFocus();
+            showKeypad(ssnET);
+        } else
+//            einET.requestFocus();
+            showKeypad(einET);
+//        if (!Utils.isKeyboardVisible)
+//            Utils.shwForcedKeypad(mContext);
     }
 
     public void setSSNTypeText(String text) {
@@ -423,4 +431,12 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
         dropdownIV.setVisibility(VISIBLE);
     }
 
+    public void showKeypad(MaskEditText editText) {
+        if (((EditText) editText).requestFocus()) {
+            InputMethodManager imm = (InputMethodManager)
+                    mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput((EditText) editText, InputMethodManager.SHOW_IMPLICIT);
+            Log.e("open", "keyboard");
+        }
+    }
 }

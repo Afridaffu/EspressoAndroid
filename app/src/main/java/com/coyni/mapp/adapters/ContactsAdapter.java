@@ -72,7 +72,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             } else {
                 strPhContact = "";
             }
-            if (objData.getFullName() != null && !objData.getFullName().equals("")) {
+            if (objData.getFirstName() != null && !objData.getFirstName().equals("") && objData.getLastName() != null && !objData.getLastName().equals("")) {
+                String fullName = objData.getFirstName() + " " + objData.getLastName();
+                if (fullName.length() > 20) {
+                    strEcoSysName = fullName.substring(0, 20) + "...";
+                } else {
+                    strEcoSysName = fullName;
+                }
+            } else if (objData.getFullName() != null && !objData.getFullName().equals("")) {
                 if (objData.getFullName().length() > 24) {
                     strEcoSysName = objData.getFullName().substring(0, 24) + "...";
                 } else {
@@ -93,10 +100,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 holder.imgInvite.setVisibility(View.GONE);
                 holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
             } else if (!strPhContact.equals("") && strEcoSysName.equals("")) {
-                holder.tvUserName.setText(Utils.capitalize(strPhContact.replace("null","")));
+                holder.tvUserName.setText(Utils.capitalize(strPhContact.replace("null", "")));
                 holder.tvWalletAddress.setVisibility(View.GONE);
                 holder.imgInvite.setVisibility(View.VISIBLE);
-                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact.replace("null","")));
+                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact.replace("null", "")));
             }
 
             if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
