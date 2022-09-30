@@ -83,7 +83,7 @@
     <string name="identityInstruction">Enter your mailing address of your primary residence. Please do not use a PO Box.</string>
     <string name="submitbtn">Submit</string>
     <string name="exitbtn">Exit</string>
-    <string name="addNewbusinessaccountdba">Select the Company you wish to add the new DBA below.You will need to complete a new Merchant Application for each DBA you add.</string>
+    <string name="addNewbusinessaccountdba">Select the Company you wish to add the new DBA below.\nYou will need to complete a new Merchant Application for each DBA you add.</string>
     <string name="addDBAButton">Add DBA</string>
     <string name="complete_application_step_by_step">Complete the merchant application step by step in 5 min</string>
     <string name="businessProfileAccountItemChildImage">Business Profile account Sub Profile Image</string>
@@ -799,5 +799,25 @@
     <string name="pp">Privacy Policy.</string>
     <string name="m_agree">Merchant Agreement</string>
     <string name="trackerbank">No Mail</string>
+    <string name="add_new_account">Add New Account</string>
+    <string name="newacct_mhead">Start accepting coyni at your business.</string>
+    <string name="newacct_thead">Tokenize your personal finances with coyni.</string>
+    <string name="newacct_bForesight">Business Foresight</string>
+    <string name="newacct_bForesightmsg">Leverage coyni’s business tools so you can focus on your vision for the future</string>
+    <string name="newacct_sCompetitive">Stay Competitive</string>
+    <string name="newacct_sCompetitivemsg">Competitive fees compared to traditional processors</string>
+    <string name="newacct_mQuickly">Move Quickly</string>
+    <string name="newacct_mQuicklymsg">Empowering you by making your funds available quickly</string>
+    <string name="newacct_iDecisions">Informed Decisions</string>
+    <string name="newacct_iDecisionsmsg">Easy to use, intuitive and informative business insights at glance</string>
+    <string name="newacct_cEcosystem">Closed Loop Ecosystem</string>
+    <string name="newacct_cEcosystemmsg">Digital token backed by the U.S. dollar on a 1:1 ratio</string>
+    <string name="newacct_yTime">On Your Time</string>
+    <string name="newacct_yTimemsg">Send and request payments when you want</string>
+    <string name="newacct_tPayments">Tailored Payments</string>
+    <string name="newacct_tPaymentsmsg">Generate QR codes for specific values to make direct payments</string>
+    <string name="newacct_sPlatform">Secure Platform</string>
+    <string name="newacct_sPlatformmsg">2-step identity verification and fraud monitoring</string>
+    <string name="addNewdbaaccount">You are about to add a new DBA for the following company.\n\nYou will need to complete a new Merchant Application for each DBA you add. Would you like to continue?</string>
 
 </resources>

@@ -281,7 +281,8 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (listener != null) {
-                    listener.onAddDbaClicked(detailInfo.getAccountType(), groupProfile.getId());
+//                    listener.onAddDbaClicked(detailInfo.getAccountType(), groupProfile.getId());
+                    listener.onAddDbaClicked(detailInfo, groupProfile.getId());
                 }
             }
         });
@@ -346,7 +347,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 //                if (headerInfo.getFullName().length() > 21) {
 //                    heading.setText(Utils.capitalize(headerInfo.getFullName().substring(0, 20)));
 //                } else {
-                    heading.setText(Utils.capitalize(headerInfo.getFullName()));
+                heading.setText(Utils.capitalize(headerInfo.getFullName()));
 //                }
             } else {
                 heading.setText("[Personal]");
@@ -392,7 +393,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 //                if (headerInfo.getCompanyName().length() > 21) {
 //                    heading.setText(Utils.capitalize(headerInfo.getCompanyName().substring(0, 20)));
 //                } else {
-                    heading.setText(Utils.capitalize(headerInfo.getCompanyName()));
+                heading.setText(Utils.capitalize(headerInfo.getCompanyName()));
 //                }
             } else {
                 heading.setText("[Company Name]");
@@ -449,7 +450,8 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
         void onChildClicked(ProfilesResponse.Profiles detailInfo);
 
-        void onAddDbaClicked(String accountType, Integer id);
+        //        void onAddDbaClicked(String accountType, Integer id);
+        void onAddDbaClicked(ProfilesResponse.Profiles profiles, Integer id);
     }
 
 
