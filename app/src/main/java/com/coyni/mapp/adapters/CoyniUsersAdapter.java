@@ -58,7 +58,14 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
         try {
             CoyniUsersData objData = listUsers.get(position);
             String strPhContact = "", strEcoSysName = "", strName = "", strImagePath = "";
-            if (objData.getFullName() != null && !objData.getFullName().equals("")) {
+            if (objData.getFirstName() != null && !objData.getFirstName().equals("") && objData.getLastName() != null && !objData.getLastName().equals("")) {
+                String fullName = objData.getFirstName() + " " + objData.getLastName();
+                if (fullName.length() > 20) {
+                    strEcoSysName = fullName.substring(0, 20) + "...";
+                } else {
+                    strEcoSysName = fullName;
+                }
+            } else if (objData.getFullName() != null && !objData.getFullName().equals("")) {
                 if (objData.getFullName().length() > 24) {
                     strEcoSysName = objData.getFullName().substring(0, 24) + "...";
                 } else {

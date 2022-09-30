@@ -111,7 +111,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 } else if (strCurrent.equals("paymentMethods")) {
                     //Why is empty , so i have added on backpressed
                     super.onBackPressed();
-                } else if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {
+                } else if (!strScreen.equals("dashboard") && !strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {
                     ControlMethod("paymentMethods");
                     strCurrent = "paymentMethods";
                 } else if ((!strCurrent.equals("firstError")) || (strScreen.equals("dashboard") && strCurrent.equals("addpayment"))) {
