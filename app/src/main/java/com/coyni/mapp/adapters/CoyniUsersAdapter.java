@@ -57,14 +57,16 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             CoyniUsersData objData = listUsers.get(position);
-            String strPhContact = "", strEcoSysName = "", strName = "", strImagePath = "";
-            if (objData.getFirstName() != null && !objData.getFirstName().equals("") && objData.getLastName() != null && !objData.getLastName().equals("")) {
+            String strPhContact = "", strEcoSysName = "", strName = "", strImagePath = "", strHead = "";
+            if (objData.getWalletId() != null && objData.getFirstName() != null && !objData.getFirstName().equals("") && objData.getLastName() != null && !objData.getLastName().equals("")) {
                 String fullName = objData.getFirstName() + " " + objData.getLastName();
                 if (fullName.length() > 20) {
                     strEcoSysName = fullName.substring(0, 20) + "...";
                 } else {
                     strEcoSysName = fullName;
                 }
+                strHead = Utils.capitalize(objData.getFirstName().substring(0, 1))
+                        + Utils.capitalize(objData.getLastName().substring(0, 1));
             } else if (objData.getFullName() != null && !objData.getFullName().equals("")) {
                 if (objData.getFullName().length() > 24) {
                     strEcoSysName = objData.getFullName().substring(0, 24) + "...";
@@ -90,11 +92,19 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
                 holder.tvUserName.setText(Utils.capitalize(strPhContact));
                 holder.tvWalletAddress.setText("@" + Utils.capitalize(strEcoSysName));
                 holder.tvWalletAddress.setVisibility(View.VISIBLE);
-                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+                if (!strHead.equals(""))
+                    holder.tvNameHead.setText(strHead);
+                else
+                    holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
+//                holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
             } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
                 holder.tvUserName.setText(Utils.capitalize(strEcoSysName));
                 holder.tvWalletAddress.setVisibility(View.GONE);
-                holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
+                if (!strHead.equals(""))
+                    holder.tvNameHead.setText(strHead);
+                else
+                    holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
+//                holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
             } else if (!strPhContact.equals("") && strEcoSysName.equals("")) {
                 holder.tvUserName.setText(Utils.capitalize(strPhContact));
                 holder.tvWalletAddress.setVisibility(View.GONE);

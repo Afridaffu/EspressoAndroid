@@ -724,14 +724,16 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 //                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
 //            }
 
-            String strPhContact = "", strEcoSysName = "", strPhone = "", strName = "";
-            if (userDetails.getData().getFirstName() != null && !userDetails.getData().getFirstName().equals("") && userDetails.getData().getLastName() != null && !userDetails.getData().getLastName().equals("")) {
+            String strPhContact = "", strEcoSysName = "", strPhone = "", strName = "", strHead = "";
+            if (userDetails.getData().getWalletId() != null && userDetails.getData().getFirstName() != null && !userDetails.getData().getFirstName().equals("") && userDetails.getData().getLastName() != null && !userDetails.getData().getLastName().equals("")) {
                 String fullName = userDetails.getData().getFirstName() + " " + userDetails.getData().getLastName();
                 if (fullName.length() > 20) {
                     strEcoSysName = fullName.substring(0, 20) + "...";
                 } else {
                     strEcoSysName = fullName;
                 }
+                strHead = Utils.capitalize(userDetails.getData().getFirstName().substring(0, 1))
+                        + Utils.capitalize(userDetails.getData().getLastName().substring(0, 1));
             } else if (userDetails.getData().getFullName() != null && !userDetails.getData().getFullName().equals("")) {
                 if (userDetails.getData().getFullName().length() > 20) {
                     strEcoSysName = userDetails.getData().getFullName().substring(0, 20) + "...";
@@ -764,11 +766,17 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             if (!strPhContact.equals("") && !strEcoSysName.equals("")) {
                 tvName.setText(Utils.capitalize(strPhContact));
                 userWalletAddre.setText("@" + Utils.capitalize(strEcoSysName));
-                userName.setText(objMyApplication.setNameHead(strEcoSysName));
+                if (!strHead.equals(""))
+                    userName.setText(strHead);
+                else
+                    userName.setText(objMyApplication.setNameHead(strEcoSysName));
             } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
                 tvName.setText(Utils.capitalize(strEcoSysName));
                 userWalletAddre.setVisibility(View.GONE);
-                userName.setText(objMyApplication.setNameHead(strEcoSysName));
+                if (!strHead.equals(""))
+                    userName.setText(strHead);
+                else
+                    userName.setText(objMyApplication.setNameHead(strEcoSysName));
             } else if (!strPhContact.equals("") && strEcoSysName.equals("")) {
                 tvName.setText(Utils.capitalize(strPhContact));
                 userWalletAddre.setVisibility(View.GONE);
