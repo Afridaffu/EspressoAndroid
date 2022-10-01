@@ -424,7 +424,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             objMyApplication.setCompanyName(btResp.getData().getCompanyName());
                             isAddBusinessCalled = false;
                             isAddDbaCalled = false;
-                            finish();
+//                            finish();
+                            Intent dashboardIntent = new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class);
+                            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(dashboardIntent);
                         }
                     }
                 }

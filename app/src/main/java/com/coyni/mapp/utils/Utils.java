@@ -388,6 +388,7 @@ public class Utils {
     public static final String NEW_DBA = "NEW DBA";
     public static final String ACCESS_TOKEN_EXPIRED = "Access token expired";
     public static final String TIME_EXCEEDED = "User inactive time exceeded";
+    public static final String RE_CREATE = "User activation time expired, kindly re-create the process.";
 
     public static final int boTargetPercentage = 51;
 
@@ -749,6 +750,8 @@ public class Utils {
                 Intent i = new Intent(activity, LoginActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(i);
+            } else if (msg.equalsIgnoreCase(RE_CREATE)) {
+                activity.finish();
             } else {
                 if (displayAlertDialog != null) {
                     displayAlertDialog.dismiss();
