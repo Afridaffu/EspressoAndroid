@@ -676,7 +676,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     businessTrackerCloseIV.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            finish();
+//                            finish();
+                            Intent dashboardIntent = new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class);
+                            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(dashboardIntent);
                         }
                     });
                 } else {

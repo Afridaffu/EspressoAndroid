@@ -22,6 +22,7 @@ import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.businesswallet.WalletResponseData;
 import com.coyni.mapp.model.preferences.ProfilesResponse;
 import com.coyni.mapp.model.profile.AddBusinessUserResponse;
+import com.coyni.mapp.model.profile.Profile;
 import com.coyni.mapp.utils.DisplayImageUtility;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
@@ -96,6 +97,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         super.onResume();
         try {
             showProgressDialog();
+            dashboardViewModel.meProfile();
             dashboardViewModel.getProfiles();
         } catch (Exception e) {
             e.printStackTrace();
@@ -346,6 +348,20 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             }
         });
 
+        dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
+            @Override
+            public void onChanged(Profile profile) {
+                if (profile.getStatus().equalsIgnoreCase("SUCCESS")) {
+                    try {
+                        myApplication.setMyProfile(profile);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+
         loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
@@ -471,6 +487,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     }
 
     public void openNewAccount() {
+        showProgressDialog();
         Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class);
         for (ProfilesResponse.Profiles profile : profilesList) {
             if (profile.getAccountType().equals(Utils.PERSONAL)) {
@@ -478,7 +495,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 break;
             }
         }
-        showProgressDialog();
         startActivity(inNewAccount);
     }
 }

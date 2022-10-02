@@ -664,6 +664,13 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 @Override
                 public void onChanged(RemoveIdentityResponse imageResponse) {
                     if (imageResponse != null) {
+
+                        dbaFillinguploadTV.setVisibility(VISIBLE);
+                        dbaFillingUploadedLL.setVisibility(GONE);
+                        dbaFillingUpdatedOnTV.setText("");
+                        isDBAFiling = false;
+                        enableOrDisableNext();
+
                         showProgressDialog();
 
                         RequestBody requestBody = null;

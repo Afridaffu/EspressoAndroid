@@ -76,7 +76,7 @@ public class CustomerProfileActivity extends BaseActivity {
     MyApplication objMyApplication;
     CardView cvLogout;
     ConstraintLayout userProfile;
-    LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL,cpHelpLL, cpChangePasswordLL, switchOff, switchOn, cpPreferencesLL;
+    LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpHelpLL, cpChangePasswordLL, switchOff, switchOn, cpPreferencesLL;
     Long mLastClickTime = 0L, mLastClickTimeShare = 0L;
     QRGEncoder qrgEncoder;
     Bitmap bitmap;
@@ -163,42 +163,7 @@ public class CustomerProfileActivity extends BaseActivity {
             }
             bindImage(objMyApplication.getMyProfile().getData().getImage());
 
-            if (objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
-                try {
-                    tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
-                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                        tvACStatus.setTextColor(getResources().getColor(R.color.active_green));
-                        statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.active_green));
-                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-                        tvACStatus.setTextColor(getResources().getColor(R.color.orange));
-                        statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.orange));
-                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
-                        tvACStatus.setTextColor(getResources().getColor(R.color.under_review_blue));
-                        statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
-                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
-                            objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
-                        tvACStatus.setTextColor(getResources().getColor(R.color.error_red));
-                        statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.error_red));
-                        tvACStatus.setText(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus());
-                    }
-                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-                        cardviewYourAccount.setVisibility(View.VISIBLE);
-                    } else {
-                        cardviewYourAccount.setVisibility(View.GONE);
-                    }
-
-                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                        cpAccountIDTV.setText("Account ID C-" + objMyApplication.getMyProfile().getData().getId());
-                    } else {
-                        cpAccountIDTV.setText("Account ID M-" + objMyApplication.getMyProfile().getData().getId());
-                    }
-                } catch (Resources.NotFoundException e) {
-                    e.printStackTrace();
-                }
-
-            } else {
-                tvACStatus.setText("");
-            }
+            setAccountStatus();
 
             try {
                 if (objMyApplication.getStrUserName().length() > 20) {
@@ -379,7 +344,7 @@ public class CustomerProfileActivity extends BaseActivity {
 //                    Intent i = new Intent(Intent.ACTION_VIEW);
 //                    i.setData(Uri.parse(Utils.helpURL));
 //                    startActivity(i);
-                    startActivity(new Intent(CustomerProfileActivity.this,GetHelpActivity.class));
+                    startActivity(new Intent(CustomerProfileActivity.this, GetHelpActivity.class));
                 }
             });
 
@@ -1048,6 +1013,7 @@ public class CustomerProfileActivity extends BaseActivity {
                     objMyApplication.setMyProfile(profile);
                     objMyApplication.setAccountType(profile.getData().getAccountType());
                     bindImage(objMyApplication.getMyProfile().getData().getImage());
+                    setAccountStatus();
                 }
             }
         });
@@ -1440,5 +1406,45 @@ public class CustomerProfileActivity extends BaseActivity {
             }
         }
 //        disableLayout(cpPaymentMethodsLL, isEnable);
+    }
+
+    private void setAccountStatus() {
+        if (objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
+            try {
+                tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
+                if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                    tvACStatus.setTextColor(getResources().getColor(R.color.active_green));
+                    statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.active_green));
+                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                    tvACStatus.setTextColor(getResources().getColor(R.color.orange));
+                    statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.orange));
+                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
+                    tvACStatus.setTextColor(getResources().getColor(R.color.under_review_blue));
+                    statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
+                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
+                        objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+                    tvACStatus.setTextColor(getResources().getColor(R.color.error_red));
+                    statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.error_red));
+                    tvACStatus.setText(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus());
+                }
+                if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                    cardviewYourAccount.setVisibility(View.VISIBLE);
+                } else {
+                    cardviewYourAccount.setVisibility(View.GONE);
+                }
+
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    cpAccountIDTV.setText("Account ID C-" + objMyApplication.getMyProfile().getData().getId());
+                } else {
+                    cpAccountIDTV.setText("Account ID M-" + objMyApplication.getMyProfile().getData().getId());
+                }
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            tvACStatus.setText("");
+        }
+
     }
 }

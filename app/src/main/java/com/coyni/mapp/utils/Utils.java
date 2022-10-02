@@ -96,6 +96,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -2893,4 +2894,19 @@ public class Utils {
                 }).show();
     }
 
+    public static boolean isValidFileSize(File file) {
+        boolean isValid = true;
+        // Get length of file in bytes
+        long fileSizeInBytes = file.length();
+        // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
+        long fileSizeInKB = fileSizeInBytes / 1024;
+        //  Convert the KB to MegaBytes (1 MB = 1024 KBytes)
+        long fileSizeInMB = fileSizeInKB / 1024;
+
+        return fileSizeInMB < 10;
+//        if (fileSizeInMB > 10) {
+//            isValid = false;
+//        }
+//        return isValid;
+    }
 }
