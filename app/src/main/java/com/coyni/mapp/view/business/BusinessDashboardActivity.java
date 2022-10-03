@@ -425,6 +425,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
 
             objMyApplication.setOldLoginUserId(0);
+            objMyApplication.setCompanyInfoResp(null);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

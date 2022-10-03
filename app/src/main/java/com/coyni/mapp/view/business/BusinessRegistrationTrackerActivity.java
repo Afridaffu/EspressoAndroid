@@ -27,6 +27,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.view.DashboardActivity;
 import com.google.gson.Gson;
 import com.coyni.mapp.R;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
@@ -228,9 +229,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                         else
                             loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                     } else {
-                        Intent dashboardIntent = new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class);
-                        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(dashboardIntent);
+                        launchDashboard();
                     }
                 }
             });
@@ -425,9 +424,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             isAddBusinessCalled = false;
                             isAddDbaCalled = false;
 //                            finish();
-                            Intent dashboardIntent = new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class);
-                            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(dashboardIntent);
+                            launchDashboard();
                         }
                     }
                 }
@@ -660,8 +657,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
     protected void onResume() {
         try {
             super.onResume();
-            if (Utils.isKeyboardVisible)
-                Utils.hideKeypad(this);
+//            if (Utils.isKeyboardVisible)
+            Utils.hideKeypad(this);
             if (!addBusiness || isAddBusinessCalled || isAddDbaCalled || isTrackerCall) {
                 showProgressDialog();
                 new Handler().postDelayed(() -> businessIdentityVerificationViewModel.getBusinessTracker(), 1000);
@@ -677,9 +674,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                         @Override
                         public void onClick(View view) {
 //                            finish();
-                            Intent dashboardIntent = new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class);
-                            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(dashboardIntent);
+                            launchDashboard();
                         }
                     });
                 } else {
@@ -858,4 +853,15 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
         }
     }
 
+    private void launchDashboard() {
+        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+            Intent dashboardIntent = new Intent(BusinessRegistrationTrackerActivity.this, DashboardActivity.class);
+            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(dashboardIntent);
+        } else {
+            Intent dashboardIntent = new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class);
+            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(dashboardIntent);
+        }
+    }
 }

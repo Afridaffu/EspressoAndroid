@@ -837,7 +837,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         batchNowDialog.show();
     }
 
-
     private void launchPinActivity() {
         Intent inPin = new Intent(getActivity(), ValidatePinActivity.class);
         inPin.putExtra(Utils.ACTION_TYPE, Utils.batchnowActionType);
