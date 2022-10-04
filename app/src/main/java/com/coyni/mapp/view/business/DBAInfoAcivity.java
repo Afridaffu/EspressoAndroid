@@ -1849,7 +1849,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     }
 
     public void removeAndUploadAdditionalDoc(int docID) {
-        identityVerificationViewModel.removeIdentityImage(docID + "");
+        if (Utils.isValidFileSize(dbaFile)) {
+            identityVerificationViewModel.removeIdentityImage(docID + "");
+        } else {
+            Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
+        }
     }
 
     private void chooseFilePopup(final Context context) {
@@ -1944,8 +1948,6 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             }
             File mediaFile = new File(FilePath);
             dbaFile = mediaFile;
-//            isFileLessThan10MB(dbaFile);
-//            Log.e("File size", getFileSize(dbaFile));
             removeAndUploadAdditionalDoc(identificationType);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1998,38 +2000,5 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
-    }
-
-
-    private boolean isFileLessThan10MB(File file) {
-        int maxFileSize = 10 * 1000 * 1000;
-        Long l = file.length();
-        String fileSize = l.toString();
-        int finalFileSize = Integer.parseInt(fileSize);
-        if (finalFileSize >= maxFileSize)
-            Log.e("Valid Size", "false " + finalFileSize);
-        else
-            Log.e("Valid Size", "true " + finalFileSize);
-        return finalFileSize >= maxFileSize;
-    }
-
-    public String getFileSize(File file) {
-
-        final DecimalFormat format = new DecimalFormat("#.##");
-        final long MiB = 1000 * 1000;
-        final long KiB = 1000;
-
-        if (!file.isFile()) {
-            throw new IllegalArgumentException("Expected a file");
-        }
-        final double length = file.length();
-
-        if (length > MiB) {
-            return format.format(length / MiB) + " MiB";
-        }
-        if (length > KiB) {
-            return format.format(length / KiB) + " KiB";
-        }
-        return format.format(length) + " B";
     }
 }

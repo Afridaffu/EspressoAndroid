@@ -438,7 +438,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 if (batchNowResponse != null) {
                     if (batchNowResponse.getStatus() != null && batchNowResponse.getData() != null) {
                         Log.d(TAG, "Batched successfully");
-//                        batchReq();
+                        batchReq();
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -642,7 +642,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                             myApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
                                     businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
                         }
-                        batchReq();
+
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -836,6 +836,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         });
         batchNowDialog.show();
     }
+
 
     private void launchPinActivity() {
         Intent inPin = new Intent(getActivity(), ValidatePinActivity.class);

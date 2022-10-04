@@ -1,5 +1,6 @@
 package com.coyni.mapp.custom_camera;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,6 +24,7 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.coyni.mapp.R;
+import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.AdditionalActionUploadActivity;
 import com.coyni.mapp.view.IdentityVerificationActivity;
 import com.coyni.mapp.view.business.AddBeneficialOwnerActivity;
@@ -170,7 +172,6 @@ public class RetakeActivity extends AppCompatActivity {
 
     private void rotatePicture(int rotation, byte[] data, ImageView photoImageView) {
         try {
-//            Bitmap bitmap = ImageUtility.decodeSampledBitmapFromByte(this, data);
             Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             if (rotation != 0) {
                 Bitmap oldBitmap = bitmap;
@@ -266,8 +267,12 @@ public class RetakeActivity extends AppCompatActivity {
                 mediaScannerIntent.setData(fileContentUri);
                 context.sendBroadcast(mediaScannerIntent);
                 if (from.equals("IDVE")) {
-                    IdentityVerificationActivity.identityFile = mediaFile;
-                    IdentityVerificationActivity.isFileSelected = true;
+                    if (Utils.isValidFileSize(mediaFile)) {
+                        IdentityVerificationActivity.identityFile = mediaFile;
+                        IdentityVerificationActivity.isFileSelected = true;
+                    } else {
+                        Utils.displayAlert(context.getString(R.string.allowed_file_size_error), (Activity) context, "coyni", "");
+                    }
                 } else if (from.equals("CI-AOI")) {
                     CompanyInformationActivity.aoiFile = mediaFile;
 //                CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(5);

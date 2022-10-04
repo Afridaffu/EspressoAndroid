@@ -2895,18 +2895,14 @@ public class Utils {
     }
 
     public static boolean isValidFileSize(File file) {
-        boolean isValid = true;
-        // Get length of file in bytes
-        long fileSizeInBytes = file.length();
-        // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
-        long fileSizeInKB = fileSizeInBytes / 1024;
-        //  Convert the KB to MegaBytes (1 MB = 1024 KBytes)
-        long fileSizeInMB = fileSizeInKB / 1024;
-
-        return fileSizeInMB < 10;
-//        if (fileSizeInMB > 10) {
-//            isValid = false;
-//        }
-//        return isValid;
+        int maxFileSize = 10 * 1000 * 1000;
+        Long l = file.length();
+        String fileSize = l.toString();
+        int finalFileSize = Integer.parseInt(fileSize);
+        if (finalFileSize > maxFileSize)
+            return false;
+        else
+            return true;
     }
+
 }

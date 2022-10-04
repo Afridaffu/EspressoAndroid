@@ -799,5 +799,6 @@
     <string name="pp">Privacy Policy.</string>
     <string name="m_agree">Merchant Agreement</string>
     <string name="trackerbank">No Mail</string>
-
+    <string name="add_manual_bank_same_value_error">Account Number and Routing Number cannot have the same value.</string>
+    <string name="allowed_file_size_error">Allowed File Size up to 10MB</string>
 </resources>
