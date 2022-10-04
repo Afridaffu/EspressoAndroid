@@ -262,7 +262,7 @@
                 android:background="@color/viewcolor"></View>
 
             <RelativeLayout
-                android:id="@+id/lySignet"
+                android:id="@+id/lyCogent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/_15sdp"
@@ -270,20 +270,20 @@
                 android:visibility="gone">
 
                 <ImageView
-                    android:id="@+id/imgSignetAcLogo"
+                    android:id="@+id/imgCogentAcLogo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_10sdp"
-                    android:contentDescription="@string/signet_account"
-                    android:src="@drawable/ic_signetactive" />
+                    android:contentDescription="@string/Cogent_account"
+                    android:src="@drawable/ic_cogentactive" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_14sdp"
                     android:layout_toLeftOf="@+id/imgCCardArrow"
-                    android:layout_toRightOf="@+id/imgSignetAcLogo"
+                    android:layout_toRightOf="@+id/imgCogentAcLogo"
                     android:orientation="vertical">
 
                     <TextView
@@ -291,7 +291,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="@string/signet_account"
+                        android:text="@string/Cogent_account"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -300,7 +300,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_10sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="@string/signet_ac_withdrawing_funds"
+                        android:text="@string/Cogent_ac_withdrawing_funds"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_10ssp" />
 
@@ -327,7 +327,7 @@
             </RelativeLayout>
 
             <View
-                android:id="@+id/viewSignet"
+                android:id="@+id/viewCogent"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/_5sdp"

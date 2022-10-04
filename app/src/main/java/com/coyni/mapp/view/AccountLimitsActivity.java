@@ -20,7 +20,7 @@ import com.coyni.mapp.viewmodel.AccountLimitsViewModel;
 
 public class AccountLimitsActivity extends BaseActivity {
     TextView mWithdrawBankLimit, mWithdrawInstantLimit, mWithdrawGiftCardLimit, mBuyBankLimit, mBuyDebitCardLimit, mBuyCreditCardLimit, payRequestTranLimit,
-            b_monthlyProcessingVolume, b_highTicketLimit, b_buyBankAccount, b_buySignetAccount, b_withdrawBankAccount, b_withDrawinstantPay, b_withDrawgiftCard, b_withdrawSignetAccount;
+            b_monthlyProcessingVolume, b_highTicketLimit, b_buyBankAccount, b_buyCogentAccount, b_withdrawBankAccount, b_withDrawinstantPay, b_withDrawgiftCard, b_withdrawCogentAccount;
     ScrollView personalAccountLimitsSv, businessAccountLimitsSv;
     LinearLayout backBtn, business_AccountLimitsLL;
     AccountLimitsViewModel accountLimitsViewModel;
@@ -57,11 +57,11 @@ public class AccountLimitsActivity extends BaseActivity {
         b_monthlyProcessingVolume = (TextView) findViewById(R.id.TvMonthlyProcessingVolume);
         b_highTicketLimit = (TextView) findViewById(R.id.TVHighTicketLimit);
         b_buyBankAccount = findViewById(R.id.TV_B_BUYBankAccount);
-        b_buySignetAccount = findViewById(R.id.TV_B_BuySignetAccount);
+        b_buyCogentAccount = findViewById(R.id.TV_B_BuyCogentAccount);
         b_withdrawBankAccount = findViewById(R.id.TV_B_WithdrawBankAccount);
         b_withDrawinstantPay = findViewById(R.id.Tv_B_InstantPay);
         b_withDrawgiftCard = findViewById(R.id.TV_B_GiftCard);
-        b_withdrawSignetAccount = findViewById(R.id.TV_B_WithdrawSignetAccount);
+        b_withdrawCogentAccount = findViewById(R.id.TV_B_WithdrawCogentAccount);
 
         try {
             showProgressDialog();
@@ -333,21 +333,21 @@ public class AccountLimitsActivity extends BaseActivity {
                 break;
         }
 
-        switch (data.getWithdrawsSignetType()) {
+        switch (data.getWithdrawsCogentType()) {
             case DAILY:
-                b_withdrawSignetAccount.setText(getUsFormat(data.getWithdrawsSignetTxnLimit()).concat(dayStr));
+                b_withdrawCogentAccount.setText(getUsFormat(data.getWithdrawsCogentTxnLimit()).concat(dayStr));
                 break;
             case WEEKLY:
-                b_withdrawSignetAccount.setText(getUsFormat(data.getWithdrawsSignetTxnLimit()).concat(weekStr));
+                b_withdrawCogentAccount.setText(getUsFormat(data.getWithdrawsCogentTxnLimit()).concat(weekStr));
                 break;
             case NOLIMIT:
-                b_withdrawSignetAccount.setText(NOLIMIT_STR);
+                b_withdrawCogentAccount.setText(NOLIMIT_STR);
                 break;
             case PERTRANSACTION:
-                b_withdrawSignetAccount.setText(getUsFormat(data.getWithdrawsSignetTxnLimit()).concat(transactionStr));
+                b_withdrawCogentAccount.setText(getUsFormat(data.getWithdrawsCogentTxnLimit()).concat(transactionStr));
                 break;
             case MONTHLY:
-                b_withdrawSignetAccount.setText(getUsFormat(data.getWithdrawsSignetTxnLimit()).concat(monthStr));
+                b_withdrawCogentAccount.setText(getUsFormat(data.getWithdrawsCogentTxnLimit()).concat(monthStr));
                 break;
         }
     }
@@ -371,21 +371,21 @@ public class AccountLimitsActivity extends BaseActivity {
                 break;
         }
 
-        switch (data.getBuyTokenSignetType()) {
+        switch (data.getBuyTokenCogentType()) {
             case DAILY:
-                b_buySignetAccount.setText(getUsFormat(data.getBuyTokenSignetTxnLimit()).concat(dayStr));
+                b_buyCogentAccount.setText(getUsFormat(data.getBuyTokenCogentTxnLimit()).concat(dayStr));
                 break;
             case WEEKLY:
-                b_buySignetAccount.setText(getUsFormat(data.getBuyTokenSignetTxnLimit()).concat(weekStr));
+                b_buyCogentAccount.setText(getUsFormat(data.getBuyTokenCogentTxnLimit()).concat(weekStr));
                 break;
             case NOLIMIT:
-                b_buySignetAccount.setText(NOLIMIT_STR);
+                b_buyCogentAccount.setText(NOLIMIT_STR);
                 break;
             case PERTRANSACTION:
-                b_buySignetAccount.setText(getUsFormat(data.getBuyTokenSignetTxnLimit()).concat(transactionStr));
+                b_buyCogentAccount.setText(getUsFormat(data.getBuyTokenCogentTxnLimit()).concat(transactionStr));
                 break;
             case MONTHLY:
-                b_buySignetAccount.setText(getUsFormat(data.getBuyTokenSignetTxnLimit()).concat(monthStr));
+                b_buyCogentAccount.setText(getUsFormat(data.getBuyTokenCogentTxnLimit()).concat(monthStr));
                 break;
         }
     }

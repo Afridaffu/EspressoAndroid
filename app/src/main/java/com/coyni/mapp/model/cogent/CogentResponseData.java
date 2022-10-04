@@ -1,6 +1,6 @@
-package com.coyni.mapp.model.signet;
+package com.coyni.mapp.model.cogent;
 
-public class SignetResponseData {
+public class CogentResponseData {
     private String id;
     private String message;
 

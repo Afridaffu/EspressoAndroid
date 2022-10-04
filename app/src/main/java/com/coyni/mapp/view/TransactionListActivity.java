@@ -468,7 +468,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
         Chip transSubTypeBA = dialog.findViewById(R.id.transSubTypeBA);
         Chip transSubTypeCC = dialog.findViewById(R.id.transSubTypeCC);
         Chip transSubTypeDC = dialog.findViewById(R.id.transSubTypeDC);
-        Chip transSubTypeSignet = dialog.findViewById(R.id.transSubTypeSignet);
+        Chip transSubTypeCogent = dialog.findViewById(R.id.transSubTypeCogent);
         Chip transSubTypeIP = dialog.findViewById(R.id.transSubTypeIP);
         Chip transSubTypeGiftCard = dialog.findViewById(R.id.transSubTypeGiftCard);
         Chip transSubTypeSOToken = dialog.findViewById(R.id.transSubTypeSOToken);
@@ -567,8 +567,8 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                             transSubTypeDC.setChecked(true);
                             break;
 
-                        case Utils.signet:
-                            transSubTypeSignet.setChecked(true);
+                        case Utils.Cogent:
+                            transSubTypeCogent.setChecked(true);
                             break;
 
                         case Utils.instantPay:
@@ -720,7 +720,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
             transSubTypeBA.setChecked(false);
             transSubTypeCC.setChecked(false);
             transSubTypeDC.setChecked(false);
-            transSubTypeSignet.setChecked(false);
+            transSubTypeCogent.setChecked(false);
             transSubTypeIP.setChecked(false);
             transSubTypeGiftCard.setChecked(false);
             transSubTypeSOToken.setChecked(false);
@@ -957,15 +957,15 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
             }
         });
 
-        transSubTypeSignet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        transSubTypeCogent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    tempTransactionSubType.add(Utils.signet);
+                    tempTransactionSubType.add(Utils.Cogent);
                 } else {
                     for (int i = 0; i < tempTransactionSubType.size(); i++) {
-                        if (tempTransactionSubType.get(i) == Utils.signet) {
+                        if (tempTransactionSubType.get(i) == Utils.Cogent) {
                             tempTransactionSubType.remove(i);
                             break;
                         }

@@ -76,14 +76,14 @@
                         android:paddingBottom="@dimen/_9sdp">
 
                         <TextView
-                            android:id="@+id/buySignetHeaderTV"
+                            android:id="@+id/buyCogentHeaderTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/_21sdp"
                             android:layout_marginBottom="@dimen/_5sdp"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="@string/buy_tokens_signet"
+                            android:text="@string/buy_tokens_Cogent"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_12ssp"
                             android:visibility="visible" />
@@ -95,7 +95,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/signetAmountTV"
+                                android:id="@+id/CogentAmountTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
@@ -139,7 +139,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/signetStatusTV"
+                                android:id="@+id/CogentStatusTV"
                                 android:layout_width="@dimen/_68sdp"
                                 android:layout_height="@dimen/_14sdp"
                                 android:layout_marginTop="@dimen/_6sdp"
@@ -166,7 +166,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/signetdateTimeTV"
+                                android:id="@+id/CogentdateTimeTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -192,7 +192,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/signetPurchaseTV"
+                                android:id="@+id/CogentPurchaseTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -219,7 +219,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/signetProcessingFeeTV"
+                                android:id="@+id/CogentProcessingFeeTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -262,7 +262,7 @@
                             </LinearLayout>
 
                             <TextView
-                                android:id="@+id/signetTotalAmountTV"
+                                android:id="@+id/CogentTotalAmountTV"
                                 android:layout_width="@dimen/_60sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
@@ -315,7 +315,7 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:id="@+id/signetDepositIDTV"
+                                    android:id="@+id/CogentDepositIDTV"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -355,7 +355,7 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:id="@+id/signetReferIDTV"
+                                    android:id="@+id/CogentReferIDTV"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -389,7 +389,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/signetDescNameTV"
+                                android:id="@+id/CogentDescNameTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -435,7 +435,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/signetNameOnAccountTV"
+                                android:id="@+id/CogentNameOnAccountTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -457,12 +457,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.3"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="@string/signet_wallet_id"
+                                android:text="@string/Cogent_wallet_id"
                                 android:textColor="@color/xdark_gray"
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/signetWalletIdTV"
+                                android:id="@+id/CogentWalletIdTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"

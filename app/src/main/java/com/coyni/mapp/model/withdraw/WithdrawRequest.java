@@ -5,7 +5,7 @@ public class WithdrawRequest {
     private Long cardId;
     private GiftCardWithDrawInfo giftCardWithDrawInfo;
     private String remarks = "";
-    private String signetWalletId = "";
+    private String CogentWalletId = "";
     private Double tokens;
     private String withdrawType;
     private String requestToken;
@@ -58,12 +58,12 @@ public class WithdrawRequest {
         this.remarks = remarks;
     }
 
-    public String getSignetWalletId() {
-        return signetWalletId;
+    public String getCogentWalletId() {
+        return CogentWalletId;
     }
 
-    public void setSignetWalletId(String signetWalletId) {
-        this.signetWalletId = signetWalletId;
+    public void setCogentWalletId(String CogentWalletId) {
+        this.CogentWalletId = CogentWalletId;
     }
 
     public String getRequestToken() {

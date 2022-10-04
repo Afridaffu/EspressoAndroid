@@ -563,12 +563,12 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_regular"
-                            android:text="Signet Account"
+                            android:text="Cogent Account"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
 
                         <TextView
-                            android:id="@+id/TV_B_BuySignetAccount"
+                            android:id="@+id/TV_B_BuyCogentAccount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_semibold"
@@ -684,12 +684,12 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_regular"
-                            android:text="Signet Account"
+                            android:text="Cogent Account"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
 
                         <TextView
-                            android:id="@+id/TV_B_WithdrawSignetAccount"
+                            android:id="@+id/TV_B_WithdrawCogentAccount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_semibold"

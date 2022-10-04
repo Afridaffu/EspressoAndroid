@@ -23,10 +23,10 @@ public class FeeData {
     private String buyTokenCardFeeInPercent;
     private String buyTokenBankFeeInDollar;
     private String buyTokenBankFeeInPercent;
-    private String withdrawalSignetFeeInDollar;
-    private String withdrawalSignetFeeInPercent;
-    private String buyTokenSignetFeeInDollar;
-    private String buyTokenSignetFeeInPercent;
+    private String withdrawalCogentFeeInDollar;
+    private String withdrawalCogentFeeInPercent;
+    private String buyTokenCogentFeeInDollar;
+    private String buyTokenCogentFeeInPercent;
     private String monthlyServiceFeeInDollar;
     private String monthlyServiceFeeInPercent;
     private String transactionSaleOrderTokenFeeInDollar;
@@ -190,36 +190,36 @@ public class FeeData {
         this.buyTokenBankFeeInPercent = buyTokenBankFeeInPercent;
     }
 
-    public String getWithdrawalSignetFeeInDollar() {
-        return withdrawalSignetFeeInDollar;
+    public String getWithdrawalCogentFeeInDollar() {
+        return withdrawalCogentFeeInDollar;
     }
 
-    public void setWithdrawalSignetFeeInDollar(String withdrawalSignetFeeInDollar) {
-        this.withdrawalSignetFeeInDollar = withdrawalSignetFeeInDollar;
+    public void setWithdrawalCogentFeeInDollar(String withdrawalCogentFeeInDollar) {
+        this.withdrawalCogentFeeInDollar = withdrawalCogentFeeInDollar;
     }
 
-    public String getWithdrawalSignetFeeInPercent() {
-        return withdrawalSignetFeeInPercent;
+    public String getWithdrawalCogentFeeInPercent() {
+        return withdrawalCogentFeeInPercent;
     }
 
-    public void setWithdrawalSignetFeeInPercent(String withdrawalSignetFeeInPercent) {
-        this.withdrawalSignetFeeInPercent = withdrawalSignetFeeInPercent;
+    public void setWithdrawalCogentFeeInPercent(String withdrawalCogentFeeInPercent) {
+        this.withdrawalCogentFeeInPercent = withdrawalCogentFeeInPercent;
     }
 
-    public String getBuyTokenSignetFeeInDollar() {
-        return buyTokenSignetFeeInDollar;
+    public String getBuyTokenCogentFeeInDollar() {
+        return buyTokenCogentFeeInDollar;
     }
 
-    public void setBuyTokenSignetFeeInDollar(String buyTokenSignetFeeInDollar) {
-        this.buyTokenSignetFeeInDollar = buyTokenSignetFeeInDollar;
+    public void setBuyTokenCogentFeeInDollar(String buyTokenCogentFeeInDollar) {
+        this.buyTokenCogentFeeInDollar = buyTokenCogentFeeInDollar;
     }
 
-    public String getBuyTokenSignetFeeInPercent() {
-        return buyTokenSignetFeeInPercent;
+    public String getBuyTokenCogentFeeInPercent() {
+        return buyTokenCogentFeeInPercent;
     }
 
-    public void setBuyTokenSignetFeeInPercent(String buyTokenSignetFeeInPercent) {
-        this.buyTokenSignetFeeInPercent = buyTokenSignetFeeInPercent;
+    public void setBuyTokenCogentFeeInPercent(String buyTokenCogentFeeInPercent) {
+        this.buyTokenCogentFeeInPercent = buyTokenCogentFeeInPercent;
     }
 
     public String getMonthlyServiceFeeInDollar() {

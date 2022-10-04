@@ -676,12 +676,12 @@ public class MyApplication extends Application {
         return mCurrentUserData.getAccountType();
     }
 
-    public Boolean getSignet() {
-        return mCurrentUserData.getSignet();
+    public Boolean getCogent() {
+        return mCurrentUserData.getCogent();
     }
 
-    public void setSignet(Boolean signet) {
-        mCurrentUserData.setSignet(signet);
+    public void setCogent(Boolean Cogent) {
+        mCurrentUserData.setCogent(Cogent);
     }
 
     public void setAccountType(int accountType) {
@@ -904,7 +904,7 @@ public class MyApplication extends Application {
         try {
             if (objResponse != null && objResponse.getData() != null && objResponse.getData().getData() != null && objResponse.getData().getData().size() > 0) {
                 for (int i = 0; i < objResponse.getData().getData().size(); i++) {
-                    if (!objResponse.getData().getData().get(i).getPaymentMethod().equalsIgnoreCase("bank") && !objResponse.getData().getData().get(i).getPaymentMethod().equalsIgnoreCase("signet")) {
+                    if (!objResponse.getData().getData().get(i).getPaymentMethod().equalsIgnoreCase("bank") && !objResponse.getData().getData().get(i).getPaymentMethod().equalsIgnoreCase("Cogent")) {
                         listData.add(objResponse.getData().getData().get(i));
                     }
                 }

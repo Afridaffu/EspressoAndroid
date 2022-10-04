@@ -40,15 +40,15 @@ public class AccountLimitsData{
     @SerializedName("withdrawsInstantPayTxnLimit")
     @Expose
     private String withdrawsInstantPayTxnLimit;
-    @SerializedName("withdrawsSignetMinLimit")
+    @SerializedName("withdrawsCogentMinLimit")
     @Expose
-    private String withdrawsSignetMinLimit;
-    @SerializedName("withdrawsSignetType")
+    private String withdrawsCogentMinLimit;
+    @SerializedName("withdrawsCogentType")
     @Expose
-    private int withdrawsSignetType;
-    @SerializedName("withdrawsSignetTxnLimit")
+    private int withdrawsCogentType;
+    @SerializedName("withdrawsCogentTxnLimit")
     @Expose
-    private String withdrawsSignetTxnLimit;
+    private String withdrawsCogentTxnLimit;
     @SerializedName("withdrawsGiftCardMinLimit")
     @Expose
     private String withdrawsGiftCardMinLimit;
@@ -76,15 +76,15 @@ public class AccountLimitsData{
     @SerializedName("buyTokenCardTxnLimit")
     @Expose
     private String buyTokenCardTxnLimit;
-    @SerializedName("buyTokenSignetMinLimit")
+    @SerializedName("buyTokenCogentMinLimit")
     @Expose
-    private String buyTokenSignetMinLimit;
-    @SerializedName("buyTokenSignetType")
+    private String buyTokenCogentMinLimit;
+    @SerializedName("buyTokenCogentType")
     @Expose
-    private int buyTokenSignetType;
-    @SerializedName("buyTokenSignetTxnLimit")
+    private int buyTokenCogentType;
+    @SerializedName("buyTokenCogentTxnLimit")
     @Expose
-    private String buyTokenSignetTxnLimit;
+    private String buyTokenCogentTxnLimit;
     @SerializedName("status")
     @Expose
     private String status;
@@ -178,16 +178,16 @@ public class AccountLimitsData{
         return withdrawsInstantPayTxnLimit;
     }
 
-    public String getWithdrawsSignetMinLimit() {
-        return withdrawsSignetMinLimit;
+    public String getWithdrawsCogentMinLimit() {
+        return withdrawsCogentMinLimit;
     }
 
-    public int getWithdrawsSignetType() {
-        return withdrawsSignetType;
+    public int getWithdrawsCogentType() {
+        return withdrawsCogentType;
     }
 
-    public String getWithdrawsSignetTxnLimit() {
-        return withdrawsSignetTxnLimit;
+    public String getWithdrawsCogentTxnLimit() {
+        return withdrawsCogentTxnLimit;
     }
 
     public String getWithdrawsGiftCardMinLimit() {
@@ -226,16 +226,16 @@ public class AccountLimitsData{
         return buyTokenCardTxnLimit;
     }
 
-    public String getBuyTokenSignetMinLimit() {
-        return buyTokenSignetMinLimit;
+    public String getBuyTokenCogentMinLimit() {
+        return buyTokenCogentMinLimit;
     }
 
-    public int getBuyTokenSignetType() {
-        return buyTokenSignetType;
+    public int getBuyTokenCogentType() {
+        return buyTokenCogentType;
     }
 
-    public String getBuyTokenSignetTxnLimit() {
-        return buyTokenSignetTxnLimit;
+    public String getBuyTokenCogentTxnLimit() {
+        return buyTokenCogentTxnLimit;
     }
 
     public String getStatus() {

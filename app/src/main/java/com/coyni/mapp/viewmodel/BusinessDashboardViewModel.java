@@ -8,10 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
-import com.coyni.mapp.R;
 import com.coyni.mapp.model.BatchNow.BatchNowPaymentRequest;
 import com.coyni.mapp.model.BatchNow.BatchNowRequest;
 import com.coyni.mapp.model.BatchNow.BatchNowResponse;
@@ -28,9 +24,11 @@ import com.coyni.mapp.model.business_activity.BusinessActivityResp;
 import com.coyni.mapp.model.business_id_verification.CancelApplicationResponse;
 import com.coyni.mapp.model.businesswallet.BusinessWalletResponse;
 import com.coyni.mapp.model.businesswallet.WalletRequest;
+import com.coyni.mapp.model.cogent.CogentRequest;
+import com.coyni.mapp.model.cogent.CogentResponse;
+import com.coyni.mapp.model.fee.Fees;
 import com.coyni.mapp.model.merchant_activity.MerchantActivityRequest;
 import com.coyni.mapp.model.merchant_activity.MerchantActivityResp;
-import com.coyni.mapp.model.fee.Fees;
 import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.reserveIdDetails.DetailsRequest;
 import com.coyni.mapp.model.reserveIdDetails.DetailsResponse;
@@ -38,11 +36,12 @@ import com.coyni.mapp.model.reservemanual.ManualListResponse;
 import com.coyni.mapp.model.reservemanual.RollingSearchRequest;
 import com.coyni.mapp.model.reserverule.RollingRuleResponse;
 import com.coyni.mapp.model.signedagreements.SignedAgreementResponse;
-import com.coyni.mapp.model.signet.SignetRequest;
-import com.coyni.mapp.model.signet.SignetResponse;
 import com.coyni.mapp.network.ApiService;
 import com.coyni.mapp.network.AuthApiClient;
 import com.coyni.mapp.utils.LogUtils;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -55,7 +54,7 @@ import retrofit2.Response;
 public class BusinessDashboardViewModel extends AndroidViewModel {
 
     private MutableLiveData<PaymentMethodsResponse> paymentMethodsResponseMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<SignetResponse> signetResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<CogentResponse> CogentResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BusinessWalletResponse> businessWalletResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SignedAgreementResponse> signedAgreementResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UpdateSignAgreementsResponse> updateSignAgreementsResponseMutableLiveData = new MutableLiveData<>();
@@ -93,8 +92,8 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         return reserveListResponseMutableLiveData;
     }
 
-    public MutableLiveData<SignetResponse> getSignetResponseMutableLiveData() {
-        return signetResponseMutableLiveData;
+    public MutableLiveData<CogentResponse> getCogentResponseMutableLiveData() {
+        return CogentResponseMutableLiveData;
     }
 
     public MutableLiveData<BusinessWalletResponse> getBusinessWalletResponseMutableLiveData() {
@@ -182,34 +181,34 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void saveSignetBank(SignetRequest request) {
+    public void saveCogentBank(CogentRequest request) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<SignetResponse> mCall = apiService.saveBanks(request);
-            mCall.enqueue(new Callback<SignetResponse>() {
+            Call<CogentResponse> mCall = apiService.saveBanks(request);
+            mCall.enqueue(new Callback<CogentResponse>() {
                 @Override
-                public void onResponse(Call<SignetResponse> call, Response<SignetResponse> response) {
+                public void onResponse(Call<CogentResponse> call, Response<CogentResponse> response) {
                     try {
                         if (response.isSuccessful()) {
-                            SignetResponse obj = response.body();
-                            signetResponseMutableLiveData.setValue(obj);
+                            CogentResponse obj = response.body();
+                            CogentResponseMutableLiveData.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<SignetResponse>() {
+                            Type type = new TypeToken<CogentResponse>() {
                             }.getType();
-                            SignetResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            signetResponseMutableLiveData.setValue(errorResponse);
+                            CogentResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            CogentResponseMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        signetResponseMutableLiveData.setValue(null);
+                        CogentResponseMutableLiveData.setValue(null);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<SignetResponse> call, Throwable t) {
+                public void onFailure(Call<CogentResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    signetResponseMutableLiveData.setValue(null);
+                    CogentResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

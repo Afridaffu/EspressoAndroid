@@ -511,7 +511,7 @@
                             android:paddingBottom="@dimen/_10sdp">
 
                             <TextView
-                                android:id="@+id/bankNameORSignetTV"
+                                android:id="@+id/bankNameORCogentTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"

@@ -63,13 +63,13 @@ public class SelectPaymentMethodActivity extends BaseActivity {
     DashboardViewModel dashboardViewModel;
     PaymentMethodsViewModel paymentMethodsViewModel;
     LinearLayout lyBPayClose, lyExternalClose, lySelBack, lyAddPay;
-    RelativeLayout layoutDCard, lyExternal, layoutSignet;
+    RelativeLayout layoutDCard, lyExternal, layoutCogent;
     String strCurrent = "", strSignOn = "", strScreen = "", strOnPauseScreen = "", strMenu = "";
     SignOnData signOnData;
     Dialog dialog, pDialog;
-    TextView tvBankError, tvDCardError, tvSignetError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvSignetCount, tvSignetMsg, tvSignetCS;
-    TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvSignetHead, tvErrorHead, tvMessage;
-    ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgSignetLogo, imgSignetArrow, imgLogo;
+    TextView tvBankError, tvDCardError, tvCogentError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCogentCount, tvCogentMsg, tvCogentCS;
+    TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCogentHead, tvErrorHead, tvMessage;
+    ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCogentLogo, imgCogentArrow, imgLogo;
     CardView cvNext, cvTryAgain, cvDone;
     Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
     TextInputEditText etCVV;
@@ -188,15 +188,15 @@ public class SelectPaymentMethodActivity extends BaseActivity {
 //                if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
 //                    onBackPressed();
 //                } else {
-//                    if (objMyApplication.getSignet()) {
-//                        objMyApplication.setSignet(false);
+//                    if (objMyApplication.getCogent()) {
+//                        objMyApplication.setCogent(false);
 //                        getPaymentMethods();
 //                    }
 //                }
                 if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
                     onBackPressed();
-                } else if (objMyApplication.getSignet()) {
-                    objMyApplication.setSignet(false);
+                } else if (objMyApplication.getCogent()) {
+                    objMyApplication.setCogent(false);
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
@@ -464,7 +464,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             lyBPayClose = findViewById(R.id.lyBPayClose);
             tvBankError = findViewById(R.id.tvBBankError);
             tvDCardError = findViewById(R.id.tvBDCardError);
-            tvSignetError = findViewById(R.id.tvSignetError);
+            tvCogentError = findViewById(R.id.tvCogentError);
             lyExternal = findViewById(R.id.lyAddBank);
             lyExternalClose = findViewById(R.id.lyExternalClose);
             tvExtBHead = findViewById(R.id.tvBankHead);
@@ -477,14 +477,14 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             tvDCardHead = findViewById(R.id.tvDCardCount);
             tvDCardMsg = findViewById(R.id.tvBDCardMsg);
             imgDCardArrow = findViewById(R.id.imgBDCardArrow);
-            imgSignetLogo = findViewById(R.id.imgSignetLogo);
-            imgSignetArrow = findViewById(R.id.imgSignetArrow);
-            tvSignetHead = findViewById(R.id.tvSignetHead);
-            tvSignetCount = findViewById(R.id.tvSignetCount);
-            tvSignetMsg = findViewById(R.id.tvSignetMsg);
-            tvSignetCS = findViewById(R.id.tvSignetCS);
+            imgCogentLogo = findViewById(R.id.imgCogentLogo);
+            imgCogentArrow = findViewById(R.id.imgCogentArrow);
+            tvCogentHead = findViewById(R.id.tvCogentHead);
+            tvCogentCount = findViewById(R.id.tvCogentCount);
+            tvCogentMsg = findViewById(R.id.tvCogentMsg);
+            tvCogentCS = findViewById(R.id.tvCogentCS);
             layoutDCard = findViewById(R.id.layoutBDCard);
-            layoutSignet = findViewById(R.id.layoutSignet);
+            layoutCogent = findViewById(R.id.layoutCogent);
             cvNext = findViewById(R.id.cvNext);
             tvLearnMore = findViewById(R.id.tvLearnMore);
             tvMessage = findViewById(R.id.tvMessage);
@@ -493,12 +493,12 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             paymentMethods();
             if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
                 layoutDCard.setVisibility(View.GONE);
-                tvSignetMsg.setVisibility(View.GONE);
-                tvSignetCS.setVisibility(VISIBLE);
+                tvCogentMsg.setVisibility(View.GONE);
+                tvCogentCS.setVisibility(VISIBLE);
             } else {
                 layoutDCard.setVisibility(VISIBLE);
-                tvSignetMsg.setVisibility(VISIBLE);
-                tvSignetCS.setVisibility(View.GONE);
+                tvCogentMsg.setVisibility(VISIBLE);
+                tvCogentCS.setVisibility(View.GONE);
             }
 
             lyBPayClose.setOnClickListener(new View.OnClickListener() {
@@ -556,17 +556,17 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 }
             });
 
-            layoutSignet.setOnClickListener(new View.OnClickListener() {
+            layoutCogent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
-                                && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
+                        if (objMyApplication.getFeatureControlGlobal().getPayCogent() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayCogent() && objMyApplication.getFeatureControlByUser().getPayCogent()) {
                         if (!strMenu.equals("buy") && !strCurrent.equals("notokens")) {
-                            if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                                strCurrent = "signet";
+                            if (paymentMethodsResponse.getData().getCogentCount() < paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
+                                strCurrent = "Cogent";
                                 strOnPauseScreen = "";
-                                Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
+                                Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
                                 startActivityForResult(i, 2);
                             }
                         }
@@ -590,11 +590,11 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             if (paymentMethodsResponse.getData() != null) {
                 tvExtBankHead.setText("(" + paymentMethodsResponse.getData().getBankCount() + "/" + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + ")");
                 tvDCardHead.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
-                tvSignetCount.setText("(" + paymentMethodsResponse.getData().getSignetCount() + "/" + paymentMethodsResponse.getData().getMaxSignetAccountsAllowed() + ")");
+                tvCogentCount.setText("(" + paymentMethodsResponse.getData().getCogentCount() + "/" + paymentMethodsResponse.getData().getMaxCogentAccountsAllowed() + ")");
 
                 tvBankError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + " banks");
                 tvDCardError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + " cards");
-                tvSignetError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxSignetAccountsAllowed() + " accounts");
+                tvCogentError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxCogentAccountsAllowed() + " accounts");
             }
 //            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
             if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
@@ -629,32 +629,32 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 imgDCardArrow.setColorFilter(getColor(R.color.primary_black));
                 imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
             }
-            if (paymentMethodsResponse.getData().getSignetCount() >= paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+            if (paymentMethodsResponse.getData().getCogentCount() >= paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
                 if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
-                    tvSignetError.setVisibility(View.GONE);
+                    tvCogentError.setVisibility(View.GONE);
                 } else {
-                    tvSignetError.setVisibility(View.VISIBLE);
+                    tvCogentError.setVisibility(View.VISIBLE);
                 }
-                tvSignetHead.setTextColor(getColor(R.color.light_gray));
-                tvSignetCount.setTextColor(getColor(R.color.light_gray));
-                tvSignetMsg.setTextColor(getColor(R.color.light_gray));
-                imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
-                imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
+                tvCogentHead.setTextColor(getColor(R.color.light_gray));
+                tvCogentCount.setTextColor(getColor(R.color.light_gray));
+                tvCogentMsg.setTextColor(getColor(R.color.light_gray));
+                imgCogentArrow.setColorFilter(getColor(R.color.light_gray));
+                imgCogentLogo.setImageResource(R.drawable.ic_cogentinactive);
             } else {
-                tvSignetError.setVisibility(View.GONE);
-                tvSignetHead.setTextColor(getColor(R.color.primary_black));
-                tvSignetCount.setTextColor(getColor(R.color.dark_grey));
-//                tvSignetHead.setTextColor(getColor(R.color.light_gray));
-//                tvSignetCount.setTextColor(getColor(R.color.light_gray));
-                tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
-                imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
-                imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
-//                imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
+                tvCogentError.setVisibility(View.GONE);
+                tvCogentHead.setTextColor(getColor(R.color.primary_black));
+                tvCogentCount.setTextColor(getColor(R.color.dark_grey));
+//                tvCogentHead.setTextColor(getColor(R.color.light_gray));
+//                tvCogentCount.setTextColor(getColor(R.color.light_gray));
+                tvCogentMsg.setTextColor(getColor(R.color.dark_grey));
+                imgCogentArrow.setColorFilter(getColor(R.color.primary_black));
+                imgCogentLogo.setImageResource(R.drawable.ic_cogentactive);
+//                imgCogentLogo.setImageResource(R.drawable.ic_Cogentinactive);
                 if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
-                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
-                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
-                    imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
-                    imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
+                    tvCogentHead.setTextColor(getColor(R.color.light_gray));
+                    tvCogentCount.setTextColor(getColor(R.color.light_gray));
+                    imgCogentLogo.setImageResource(R.drawable.ic_cogentinactive);
+                    imgCogentArrow.setColorFilter(getColor(R.color.light_gray));
                 }
             }
 //            }
@@ -982,10 +982,10 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
-                } else if (objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
+                } else if (objPayment.getPaymentMethod().toLowerCase().equals("Cogent")) {
                     layoutCard.setVisibility(View.GONE);
                     layoutBank.setVisibility(View.VISIBLE);
-                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                    imgBankIcon.setImageResource(R.drawable.ic_cogentactive);
                     tvAccount.setVisibility(View.GONE);
                     if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
                         tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));

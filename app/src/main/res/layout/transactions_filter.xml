@@ -203,14 +203,14 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/transSubTypeSignet"
+                        android:id="@+id/transSubTypeCogent"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="@string/signet"
+                        android:text="@string/Cogent"
                         android:textAlignment="center"
                         android:textColor="@color/chip_text_color"
                         android:textSize="@dimen/_11ssp"

@@ -48,7 +48,7 @@ import com.coyni.mapp.utils.MatomoUtility;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.utils.keyboards.CustomKeyboard;
-import com.coyni.mapp.view.business.AddPaymentSignetActivity;
+import com.coyni.mapp.view.business.AddPaymentCogentActivity;
 import com.coyni.mapp.view.business.SelectPaymentMethodActivity;
 import com.coyni.mapp.viewmodel.CustomerProfileViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
@@ -66,25 +66,25 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
     WalletResponseData walletResponse;
     Double walletBalance = 0.0;
     Long mLastClickTime = 0L;
-    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false, isNoToken = false, isSignet = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false, isNoToken = false, isCogent = false;
     List<PaymentsList> bankList;
     List<PaymentsList> cardList;
-    List<PaymentsList> signetList;
+    List<PaymentsList> CogentList;
     Dialog payDialog, addPayDialog, extBankDialog;
     String strSignOn = "", strCurrent = "", strScreen = "", strOnPauseScreen = "", strPayment = "";
     SignOnData signOnData;
     Dialog dialog, pDialog, cvvDialog;
     LinearLayout lyAPayClose, lyExternalClose, lyBPayClose;
-    RelativeLayout layoutDCard, lyAddExternal, layoutCCard, lyAddBank, layoutSignet, layoutBDCard;
+    RelativeLayout layoutDCard, lyAddExternal, layoutCCard, lyAddBank, layoutCogent, layoutBDCard;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg, tvDCardCount;
     TextView tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
     CardView cvNext, cvTryAgain, cvDone;
     public static WithdrawPaymentMethodsActivity withdrawPaymentMethodsActivity;
     TextView tvErrorHead, tvErrorMessage;
-    TextView tvBankHead, tvBankCount, tvBankMsg, tvBBankError, tvSignetHead, tvSignetCount, tvSignetMsg, tvSignetError;
+    TextView tvBankHead, tvBankCount, tvBankMsg, tvBBankError, tvCogentHead, tvCogentCount, tvCogentMsg, tvCogentError;
     TextView tvBDCHead, tvBDCardMsg, tvBDCardError;
-    ImageView imgBBankIcon, imgBBankArrow, imgSignetLogo, imgSignetArrow, imgBDCardLogo, imgBDCardArrow;
+    ImageView imgBBankIcon, imgBBankArrow, imgCogentLogo, imgCogentArrow, imgBDCardLogo, imgBDCardArrow;
     TextInputEditText etCVV;
 
     @Override
@@ -144,8 +144,8 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
-                if (strCurrent.equals("signet")) {
-//                    isSignet = true;
+                if (strCurrent.equals("Cogent")) {
+//                    isCogent = true;
                     //ControlMethod("addbpayment");
                     if (addPayDialog != null && addPayDialog.isShowing()) {
                         addPayDialog.dismiss();
@@ -415,8 +415,8 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
 //                            strCurrent = "addbpayment";
 //                            numberOfMerchantAccounts();
 //                        }
-                    } else if (isSignet) {
-                        isSignet = false;
+                    } else if (isCogent) {
+                        isCogent = false;
                         ControlMethod("addbpayment");
                         strCurrent = "addbpayment";
                         numberOfMerchantAccounts();
@@ -450,7 +450,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     if (strPayment.equals("bank")) {
                         Utils.showCustomToast(WithdrawPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
                     } else {
-                        Utils.showCustomToast(WithdrawPaymentMethodsActivity.this, "Signet has been removed.", R.drawable.ic_custom_tick, "");
+                        Utils.showCustomToast(WithdrawPaymentMethodsActivity.this, "Cogent has been removed.", R.drawable.ic_custom_tick, "");
                     }
                     getPaymentMethods();
                 }
@@ -721,7 +721,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             lyBPayClose = findViewById(R.id.lyBPayClose);
             tvBBankError = findViewById(R.id.tvBBankError);
             tvBDCardError = findViewById(R.id.tvBDCardError);
-            tvSignetError = findViewById(R.id.tvSignetError);
+            tvCogentError = findViewById(R.id.tvCogentError);
             lyAddBank = findViewById(R.id.lyAddBank);
             lyExternalClose = findViewById(R.id.lyExternalClose);
             tvBankHead = findViewById(R.id.tvBankHead);
@@ -734,13 +734,13 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             tvDCardCount = findViewById(R.id.tvDCardCount);
             tvBDCardMsg = findViewById(R.id.tvBDCardMsg);
             imgBDCardArrow = findViewById(R.id.imgBDCardArrow);
-            imgSignetLogo = findViewById(R.id.imgSignetLogo);
-            imgSignetArrow = findViewById(R.id.imgSignetArrow);
-            tvSignetHead = findViewById(R.id.tvSignetHead);
-            tvSignetCount = findViewById(R.id.tvSignetCount);
-            tvSignetMsg = findViewById(R.id.tvSignetMsg);
+            imgCogentLogo = findViewById(R.id.imgCogentLogo);
+            imgCogentArrow = findViewById(R.id.imgCogentArrow);
+            tvCogentHead = findViewById(R.id.tvCogentHead);
+            tvCogentCount = findViewById(R.id.tvCogentCount);
+            tvCogentMsg = findViewById(R.id.tvCogentMsg);
             layoutBDCard = findViewById(R.id.layoutBDCard);
-            layoutSignet = findViewById(R.id.layoutSignet);
+            layoutCogent = findViewById(R.id.layoutCogent);
             cvNext = findViewById(R.id.cvNext);
             tvLearnMore = findViewById(R.id.tvLearnMore);
             tvMessage = findViewById(R.id.tvMessage);
@@ -801,15 +801,15 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 }
             });
 
-            layoutSignet.setOnClickListener(new View.OnClickListener() {
+            layoutCogent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
-                                && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
-                            if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                                strCurrent = "signet";
-                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                        if (objMyApplication.getFeatureControlGlobal().getPayCogent() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPayCogent() && objMyApplication.getFeatureControlByUser().getPayCogent()) {
+                            if (paymentMethodsResponse.getData().getCogentCount() < paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
+                                strCurrent = "Cogent";
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentCogentActivity.class);
                                 startActivityForResult(i, 4);
                             }
                         } else {
@@ -876,11 +876,11 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             if (paymentMethodsResponse.getData() != null) {
                 tvBankCount.setText("(" + paymentMethodsResponse.getData().getBankCount() + "/" + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + ")");
                 tvDCardCount.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
-                tvSignetCount.setText("(" + paymentMethodsResponse.getData().getSignetCount() + "/" + paymentMethodsResponse.getData().getMaxSignetAccountsAllowed() + ")");
+                tvCogentCount.setText("(" + paymentMethodsResponse.getData().getCogentCount() + "/" + paymentMethodsResponse.getData().getMaxCogentAccountsAllowed() + ")");
 
                 tvBBankError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + " banks");
                 tvBDCardError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + " cards");
-                tvSignetError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxSignetAccountsAllowed() + " accounts");
+                tvCogentError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxCogentAccountsAllowed() + " accounts");
             }
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
@@ -915,22 +915,22 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     imgBDCardArrow.setColorFilter(getColor(R.color.primary_black));
                     imgBDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
                 }
-                if (paymentMethodsResponse.getData().getSignetCount() >= paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                    tvSignetError.setVisibility(View.VISIBLE);
-                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
-                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
-                    tvSignetMsg.setTextColor(getColor(R.color.light_gray));
-                    imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
+                if (paymentMethodsResponse.getData().getCogentCount() >= paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
+                    tvCogentError.setVisibility(View.VISIBLE);
+                    tvCogentHead.setTextColor(getColor(R.color.light_gray));
+                    tvCogentCount.setTextColor(getColor(R.color.light_gray));
+                    tvCogentMsg.setTextColor(getColor(R.color.light_gray));
+                    imgCogentArrow.setColorFilter(getColor(R.color.light_gray));
+                    imgCogentLogo.setImageResource(R.drawable.ic_cogentinactive);
                 } else {
-                    tvSignetError.setVisibility(View.GONE);
-                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
-                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
-//                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
-//                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
-                    tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
-                    imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
-                    imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
+                    tvCogentError.setVisibility(View.GONE);
+                    tvCogentHead.setTextColor(getColor(R.color.primary_black));
+                    tvCogentCount.setTextColor(getColor(R.color.dark_grey));
+//                    tvCogentHead.setTextColor(getColor(R.color.light_gray));
+//                    tvCogentCount.setTextColor(getColor(R.color.light_gray));
+                    tvCogentMsg.setTextColor(getColor(R.color.dark_grey));
+                    imgCogentArrow.setColorFilter(getColor(R.color.primary_black));
+                    imgCogentLogo.setImageResource(R.drawable.ic_cogentactive);
 
                 }
             }
@@ -1042,19 +1042,19 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             RelativeLayout lyExternal = findViewById(R.id.lyExternal);
             RelativeLayout lyInstantPay = findViewById(R.id.lyInstantPay);
             RelativeLayout lyGiftCard = findViewById(R.id.lyGiftCard);
-            RelativeLayout lySignet = findViewById(R.id.lySignet);
-            View viewSignet = findViewById(R.id.viewSignet);
+            RelativeLayout lyCogent = findViewById(R.id.lyCogent);
+            View viewCogent = findViewById(R.id.viewCogent);
             LinearLayout layoutError = findViewById(R.id.layoutError);
             LinearLayout lyGCInfo = findViewById(R.id.lyGCInfo);
             ImageView imgGCardLogo = findViewById(R.id.imgGCardLogo);
             ImageView imgGCArrow = findViewById(R.id.imgGCArrow);
 
             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-                lySignet.setVisibility(VISIBLE);
-                viewSignet.setVisibility(VISIBLE);
+                lyCogent.setVisibility(VISIBLE);
+                viewCogent.setVisibility(VISIBLE);
             } else {
-                lySignet.setVisibility(View.GONE);
-                viewSignet.setVisibility(View.GONE);
+                lyCogent.setVisibility(View.GONE);
+                viewCogent.setVisibility(View.GONE);
             }
 
             if (objMyApplication.getFeatureControlGlobal().getWithGift() != null && objMyApplication.getFeatureControlByUser() != null
@@ -1128,16 +1128,16 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 }
             });
 
-            lySignet.setOnClickListener(new View.OnClickListener() {
+            lyCogent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
-                        MatomoUtility.getInstance().trackEvent(MatomoConstants.SIGNET_ACCOUNT, MatomoConstants.SIGNET_ACCOUNT_CLICKED);
-                        if (signetList != null && signetList.size() > 0) {
-                            selectPayMethod(signetList);
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.Cogent_ACCOUNT, MatomoConstants.Cogent_ACCOUNT_CLICKED);
+                        if (CogentList != null && CogentList.size() > 0) {
+                            selectPayMethod(CogentList);
                         } else {
-                            strCurrent = "signet";
-                            showAddPayment("signet");
+                            strCurrent = "Cogent";
+                            showAddPayment("Cogent");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1466,13 +1466,13 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
-                } else if (objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
+                } else if (objPayment.getPaymentMethod().toLowerCase().equals("Cogent")) {
                     if (payDialog != null && payDialog.isShowing()) {
                         payDialog.dismiss();
                     }
                     layoutCard.setVisibility(View.GONE);
                     layoutBank.setVisibility(View.VISIBLE);
-                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                    imgBankIcon.setImageResource(R.drawable.ic_cogentactive);
                     tvAccount.setVisibility(View.GONE);
                     if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
                         tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
@@ -1517,7 +1517,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     dialog.dismiss();
                     //pDialog = Utils.showProgressDialog(WithdrawPaymentMethodsActivity.this);
                     showProgressDialog();
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("signet")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("Cogent")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
                         strPayment = objPayment.getPaymentMethod().toLowerCase();
                     } else {
@@ -1590,7 +1590,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             if (allPayments != null && allPayments.size() > 0) {
                 bankList = new ArrayList<>();
                 cardList = new ArrayList<>();
-                signetList = new ArrayList<>();
+                CogentList = new ArrayList<>();
                 for (int i = 0; i < allPayments.size(); i++) {
                     if (allPayments.get(i).getPaymentMethod() != null) {
                         switch (allPayments.get(i).getPaymentMethod().toLowerCase()) {
@@ -1600,8 +1600,8 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                             case "debit":
                                 cardList.add(allPayments.get(i));
                                 break;
-                            case "signet":
-                                signetList.add(allPayments.get(i));
+                            case "Cogent":
+                                CogentList.add(allPayments.get(i));
                                 break;
                         }
                     }
@@ -1817,13 +1817,13 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 tvMessage.setText("Can be used for making coyni purchases or withdrawing funds.");
                 imgLogo.setImageResource(R.drawable.ic_add_bank);
                 imgPaymnt.setImageResource(R.drawable.ic_bank_account_active);
-            } else if (strType.equals("signet")) {
-                tvHead.setText("Add Signet Account");
-                tvPayHead.setText("Signet Account");
+            } else if (strType.equals("Cogent")) {
+                tvHead.setText("Add Cogent Account");
+                tvPayHead.setText("Cogent Account");
                 tvCnt.setVisibility(View.GONE);
                 tvMessage.setText("Can be used for making coyni purchases or withdrawing funds.");
-                imgLogo.setImageResource(R.drawable.ic_add_signet);
-                imgPaymnt.setImageResource(R.drawable.ic_signetactive);
+                imgLogo.setImageResource(R.drawable.ic_add_cogent);
+                imgPaymnt.setImageResource(R.drawable.ic_cogentactive);
             } else {
                 tvHead.setText("Add Instant Pay");
                 tvPayHead.setText("Debit Card");
@@ -1869,10 +1869,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
                             }
-                        } else if (strType.equals("signet")) {
-                            if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
-                                    && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
-                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                        } else if (strType.equals("Cogent")) {
+                            if (objMyApplication.getFeatureControlGlobal().getPayCogent() != null && objMyApplication.getFeatureControlByUser() != null
+                                    && objMyApplication.getFeatureControlGlobal().getPayCogent() && objMyApplication.getFeatureControlByUser().getPayCogent()) {
+                                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentCogentActivity.class);
                                 startActivityForResult(i, 4);
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");

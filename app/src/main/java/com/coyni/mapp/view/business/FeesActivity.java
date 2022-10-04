@@ -19,8 +19,8 @@ import com.coyni.mapp.viewmodel.BusinessDashboardViewModel;
 public class
 FeesActivity extends BaseActivity {
     private LinearLayout bpbackBtn;
-    private TextView salesOrderDollTV, salesOrderPerTV, refundDollTV, refundPerTV, tvEBADoll, tvEBAPer, instantPayDollTV, instantPayPerTV, signetAccDollTV, signetAccPerTV,
-            giftCardDollTV, giftCardPerTV, fdwDollTV, fdwPerTV, buyTokenEBADollTV, buyTokenEBAPerTV, buytokenSignetDollTV, buytokenSignetPerTV, monthlyFeeDollTV, monthlyFeePerTV;
+    private TextView salesOrderDollTV, salesOrderPerTV, refundDollTV, refundPerTV, tvEBADoll, tvEBAPer, instantPayDollTV, instantPayPerTV, CogentAccDollTV, CogentAccPerTV,
+            giftCardDollTV, giftCardPerTV, fdwDollTV, fdwPerTV, buyTokenEBADollTV, buyTokenEBAPerTV, buytokenCogentDollTV, buytokenCogentPerTV, monthlyFeeDollTV, monthlyFeePerTV;
     private BusinessDashboardViewModel viewModel;
     private MyApplication objMyApplication;
     private int feeStructure_id;
@@ -42,16 +42,16 @@ FeesActivity extends BaseActivity {
             tvEBAPer = findViewById(R.id.tvEBAPer);
             instantPayDollTV = findViewById(R.id.instantPayDollTV);
             instantPayPerTV = findViewById(R.id.instantPayPerTV);
-            signetAccDollTV = findViewById(R.id.signetAccDollTV);
-            signetAccPerTV = findViewById(R.id.signetAccPerTV);
+            CogentAccDollTV = findViewById(R.id.CogentAccDollTV);
+            CogentAccPerTV = findViewById(R.id.CogentAccPerTV);
             giftCardDollTV = findViewById(R.id.giftCardDollTV);
             giftCardPerTV = findViewById(R.id.giftCardPerTV);
             fdwDollTV = findViewById(R.id.fdwDollTV);
             fdwPerTV = findViewById(R.id.fdwPerTV);
             buyTokenEBADollTV = findViewById(R.id.buyTokenEBADollTV);
             buyTokenEBAPerTV = findViewById(R.id.buyTokenEBAPerTV);
-            buytokenSignetDollTV = findViewById(R.id.buytokenSignetDollTV);
-            buytokenSignetPerTV = findViewById(R.id.buytokenSignetPerTV);
+            buytokenCogentDollTV = findViewById(R.id.buytokenCogentDollTV);
+            buytokenCogentPerTV = findViewById(R.id.buytokenCogentPerTV);
             monthlyFeeDollTV = findViewById(R.id.monthlyFeeDollTV);
             monthlyFeePerTV = findViewById(R.id.monthlyFeePerTV);
 
@@ -111,16 +111,16 @@ FeesActivity extends BaseActivity {
                                 instantPayPerTV.setText("");
                             }
 
-                            if (fees.getData().getWithdrawalSignetFeeInDollar() != null) {
-                                signetAccDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalSignetFeeInDollar()))));
+                            if (fees.getData().getWithdrawalCogentFeeInDollar() != null) {
+                                CogentAccDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalCogentFeeInDollar()))));
                             } else {
-                                signetAccDollTV.setText("");
+                                CogentAccDollTV.setText("");
                             }
 
-                            if (fees.getData().getWithdrawalSignetFeeInPercent() != null) {
-                                signetAccPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalSignetFeeInPercent()) + "%");
+                            if (fees.getData().getWithdrawalCogentFeeInPercent() != null) {
+                                CogentAccPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalCogentFeeInPercent()) + "%");
                             } else {
-                                signetAccPerTV.setText("");
+                                CogentAccPerTV.setText("");
                             }
 
                             if (fees.getData().getWithdrawalGiftcardFeeInDollar() != null) {
@@ -161,16 +161,16 @@ FeesActivity extends BaseActivity {
                                 buyTokenEBAPerTV.setText("");
                             }
 
-                            if (fees.getData().getBuyTokenSignetFeeInDollar() != null) {
-                                buytokenSignetDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenSignetFeeInDollar()))));
+                            if (fees.getData().getBuyTokenCogentFeeInDollar() != null) {
+                                buytokenCogentDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenCogentFeeInDollar()))));
                             } else {
-                                buytokenSignetDollTV.setText("");
+                                buytokenCogentDollTV.setText("");
                             }
 
-                            if (fees.getData().getBuyTokenSignetFeeInPercent() != null) {
-                                buytokenSignetPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenSignetFeeInPercent()) + "%");
+                            if (fees.getData().getBuyTokenCogentFeeInPercent() != null) {
+                                buytokenCogentPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenCogentFeeInPercent()) + "%");
                             } else {
-                                buytokenSignetPerTV.setText("");
+                                buytokenCogentPerTV.setText("");
                             }
 
                             //other fees

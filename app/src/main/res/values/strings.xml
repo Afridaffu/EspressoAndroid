@@ -231,8 +231,8 @@
     <string name="calendar_friday">F</string>
     <string name="calendar_saturday">S</string>
     <string name="something_went_wrong">something went wrong</string>
-    <string name="signet_account">Signet Account</string>
-    <string name="signet_ac_withdrawing_funds">Can be used for withdrawing funds from your coyni account.</string>
+    <string name="Cogent_account">Cogent Account</string>
+    <string name="Cogent_ac_withdrawing_funds">Can be used for withdrawing funds from your coyni account.</string>
     <string name="withdraw_to_usd">Withdraw to USD</string>
     <string name="scan">Scan</string>
     <string name="pay_request">Pay/Request</string>
@@ -322,7 +322,7 @@
     <string name="making_coyni_purchases">Can be used for making coyni purchases \nor withdrawing funds.</string>
     <string name="buying_tokens">Used for buying tokens or withdrawing \nfunds.</string>
     <string name="can_only_be_used_for_instant_pay_withdraw">Can only be used for instant pay withdraw.</string>
-    <string name="add_a_signet_account">Add A Signet Account</string>
+    <string name="add_a_Cogent_account">Add A Cogent Account</string>
     <string name="please_enter_card_details">Please enter card details</string>
     <string name="enter_name">Enter Name</string>
     <string name="add">Add</string>
@@ -403,11 +403,11 @@
     <string name="open_new_account">Open New Account</string>
     <string name="application_cancelled_message">Thank you for your interest in merchant processing through coyni. Hope to see you again. </string>
 
-    <string name="buy_tokens_signet">Buy Tokens - Signet</string>
+    <string name="buy_tokens_Cogent">Buy Tokens - Cogent</string>
     <string name="descriptor_name">Descriptor Name</string>
     <string name="deposit_id">Deposit ID</string>
     <string name="reference_id">Reference ID</string>
-    <string name="signet_wallet_id">Signet Wallet ID</string>
+    <string name="Cogent_wallet_id">Cogent Wallet ID</string>
     <string name="name_on_account">Name on Account</string>
     <string name="status">Status</string>
     <string name="completed">Completed</string>
@@ -459,7 +459,7 @@
     <string name="phonenumber_curr">Current Phone Number</string>
     <string name="scan_to_make_a_payment">Scan to make a payment.</string>
     <string name="receive_payments">Receive payments for goods and services.</string>
-    <string name="buy_token_with">Buy token with bank account or signet account.</string>
+    <string name="buy_token_with">Buy token with bank account or Cogent account.</string>
     <string name="withdraw_token_to_usd">Withdraw token to USD.</string>
     <string name="authorization_failed">Authorization Failed</string>
     <string name="card_authorization_failed">The card authorization failed due to error \ncode: {error code - error code \ndescription}. Please try again.</string>
@@ -582,7 +582,7 @@
     <string name="total_available_funds">Total Available Funds</string>
     <string name="recent_token_transactions">Recent Token Transactions</string>
     <string name="identify_verification_under_review">Identity Verification\nUnder Review</string>
-    <string name="name_on_signet_account">Name on Signet Account</string>
+    <string name="name_on_Cogent_account">Name on Cogent Account</string>
 
     <string name="purchase_amount_processing_fee">(Purchase Amount + Processing Fee)</string>
     <string name="dollor">$</string>
@@ -659,7 +659,7 @@
     <string name="release_scheduled_for">Release Scheduled for %s for the amount of %s.</string>
     <string name="time">11:59pm</string>
     <string name="sales_orders">Sale Orders</string>
-    <string name="signet">Signet</string>
+    <string name="Cogent">Cogent</string>
     <string name="withdraw_tokens">Withdraw Tokens</string>
     <string name="cyn_under_payout">(CYN)</string>
     <string name="avail_bal">12132.2323</string>

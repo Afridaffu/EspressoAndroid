@@ -32,17 +32,17 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.coyni.mapp.R;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
-import com.coyni.mapp.model.signet.SignetRequest;
-import com.coyni.mapp.model.signet.SignetResponse;
+import com.coyni.mapp.model.cogent.CogentResponse;
+import com.coyni.mapp.model.cogent.CogentRequest;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.viewmodel.BusinessDashboardViewModel;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
-public class AddPaymentSignetActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
+public class AddPaymentCogentActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
     TextInputLayout etlName, etlWalletId, etlAddress1, etlAddress2, etlCity, etlState, etlZipCode;
     TextInputEditText etName, etWalletId, etAddress1, etAddress2, etCity, etState, etZipCode;
     LinearLayout nameErrorLL, walletErrorLL, address1ErrorLL, address2ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL, layoutClose;
@@ -63,7 +63,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            setContentView(R.layout.activity_add_payment_signet);
+            setContentView(R.layout.activity_add_payment_cogent);
             initialization();
             initObserver();
             focusWatchers();
@@ -124,8 +124,8 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(AddPaymentSignetActivity.this);
-                    Utils.populateStates(AddPaymentSignetActivity.this, etState, objMyApplication);
+                        Utils.hideKeypad(AddPaymentCogentActivity.this);
+                    Utils.populateStates(AddPaymentCogentActivity.this, etState, objMyApplication);
                 }
             });
 
@@ -137,8 +137,8 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(AddPaymentSignetActivity.this);
-                    Utils.populateStates(AddPaymentSignetActivity.this, etState, objMyApplication);
+                        Utils.hideKeypad(AddPaymentCogentActivity.this);
+                    Utils.populateStates(AddPaymentCogentActivity.this, etState, objMyApplication);
                 }
             });
 
@@ -151,8 +151,8 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(AddPaymentSignetActivity.this);
-                    Utils.populateStates(AddPaymentSignetActivity.this, etState, objMyApplication);
+                        Utils.hideKeypad(AddPaymentCogentActivity.this);
+                    Utils.populateStates(AddPaymentCogentActivity.this, etState, objMyApplication);
                 }
             });
 
@@ -160,7 +160,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                 @Override
                 public void onClick(View view) {
                     onBackPressed();
-                    Utils.hideKeypad(AddPaymentSignetActivity.this);
+                    Utils.hideKeypad(AddPaymentCogentActivity.this);
                 }
             });
 
@@ -174,27 +174,27 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
                             if (Utils.isKeyboardVisible)
-                                Utils.hideKeypad(AddPaymentSignetActivity.this);
-                            progressDialog = Utils.showProgressDialog(AddPaymentSignetActivity.this);
-                            SignetRequest obj = new SignetRequest();
-                            obj.setAccountCategory("Signet");
+                                Utils.hideKeypad(AddPaymentCogentActivity.this);
+                            progressDialog = Utils.showProgressDialog(AddPaymentCogentActivity.this);
+                            CogentRequest obj = new CogentRequest();
+                            obj.setAccountCategory("Cogent");
                             obj.setAccountName(etName.getText().toString());
                             obj.setAccountNumber(etWalletId.getText().toString());
                             obj.setAccountType("Savings");
                             obj.setAddressLine1(etAddress1.getText().toString().trim());
                             obj.setAddressLine2(etAddress2.getText().toString().trim());
-                            obj.setBankAccountName("Signet");
-                            obj.setBankName("Signet");
+                            obj.setBankAccountName("Cogent");
+                            obj.setBankName("Cogent");
 //                                obj.setCountry(etCountry.getText().toString().trim());
                             obj.setCountry("US");
                             obj.setState(etState.getText().toString().trim());
                             obj.setCity(etCity.getText().toString().trim());
                             obj.setZipCode(etZipCode.getText().toString().trim());
                             obj.setDefault(true);
-                            if (Utils.checkInternet(AddPaymentSignetActivity.this)) {
-                                businessDashboardViewModel.saveSignetBank(obj);
+                            if (Utils.checkInternet(AddPaymentCogentActivity.this)) {
+                                businessDashboardViewModel.saveCogentBank(obj);
                             } else {
-                                Utils.displayAlert(getString(R.string.internet), AddPaymentSignetActivity.this, "", "");
+                                Utils.displayAlert(getString(R.string.internet), AddPaymentCogentActivity.this, "", "");
                             }
                         }
                     } catch (Exception ex) {
@@ -208,16 +208,16 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
     }
 
     private void initObserver() {
-        businessDashboardViewModel.getSignetResponseMutableLiveData().observe(this, new Observer<SignetResponse>() {
+        businessDashboardViewModel.getCogentResponseMutableLiveData().observe(this, new Observer<CogentResponse>() {
             @Override
-            public void onChanged(SignetResponse signetResponse) {
+            public void onChanged(CogentResponse CogentResponse) {
                 progressDialog.dismiss();
-                if (signetResponse != null) {
-                    if (signetResponse.getStatus().toUpperCase().equals("SUCCESS")) {
+                if (CogentResponse != null) {
+                    if (CogentResponse.getStatus().toUpperCase().equals("SUCCESS")) {
                         displaySuccess();
                     } else {
-                        Utils.displayAlert(signetResponse.getError().getErrorDescription(),
-                                AddPaymentSignetActivity.this, "", signetResponse.getError().getFieldErrors().get(0));
+                        Utils.displayAlert(CogentResponse.getError().getErrorDescription(),
+                                AddPaymentCogentActivity.this, "", CogentResponse.getError().getFieldErrors().get(0));
                     }
                 }
             }
@@ -259,7 +259,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
 //                        etName.setHint("Enter Name");
                         etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
-                        InputMethodManager imm = (InputMethodManager) AddPaymentSignetActivity.this.getSystemService(Service.INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager) AddPaymentCogentActivity.this.getSystemService(Service.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(etName, 0);
                         nameErrorLL.setVisibility(GONE);
                     }
@@ -283,10 +283,10 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.primary_black));
                         } else if (etWalletId.getText().toString().trim().length() > 0 && etWalletId.getText().toString().trim().length() < 16) {
                             isWallet = false;
-                            etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState(AddPaymentSignetActivity.this));
+                            etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState(AddPaymentCogentActivity.this));
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.error_red));
                             walletErrorLL.setVisibility(VISIBLE);
-                            walletErrorTV.setText("Signet Wallet ID length should be minimum 16 characters.");
+                            walletErrorTV.setText("Cogent Wallet ID length should be minimum 16 characters.");
                         } else {
                             isWallet = false;
                             etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
@@ -408,7 +408,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
             public void onFocusChange(View view, boolean b) {
                 try {
 
-                    Utils.hideKeypad(AddPaymentSignetActivity.this);
+                    Utils.hideKeypad(AddPaymentCogentActivity.this);
 
                     if (!b) {
                         if (etState.getText().toString().trim().length() > 0) {
@@ -423,7 +423,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                             stateErrorTV.setText(R.string.field_required);
                         }
                     } else {
-                        Utils.hideKeypad(AddPaymentSignetActivity.this);
+                        Utils.hideKeypad(AddPaymentCogentActivity.this);
                         etlState.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlState, getColor(R.color.primary_green));
                         stateErrorLL.setVisibility(GONE);
@@ -456,7 +456,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                             zipErrorTV.setText(R.string.field_required);
                         }
                     } else {
-                        Utils.shwForcedKeypad(AddPaymentSignetActivity.this);
+                        Utils.shwForcedKeypad(AddPaymentCogentActivity.this);
 //                        etZipCode.setHint("Zip Code");
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
@@ -801,7 +801,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
         try {
             CardView cvDone;
             TextView tvMessage;
-            preDialog = new Dialog(AddPaymentSignetActivity.this, R.style.DialogTheme);
+            preDialog = new Dialog(AddPaymentCogentActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preDialog.setContentView(R.layout.activity_all_done_success);
             Window window = preDialog.getWindow();
@@ -819,13 +819,13 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
             preDialog.show();
             cvDone = preDialog.findViewById(R.id.cvDone);
             tvMessage = preDialog.findViewById(R.id.tvMessage);
-            tvMessage.setText("Your Signet Account has been successfully authorized and added to your payment methods.");
+            tvMessage.setText("Your Cogent Account has been successfully authorized and added to your payment methods.");
 
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
-                        objMyApplication.setSignet(true);
+                        objMyApplication.setCogent(true);
                         Intent i = new Intent();
                         setResult(RESULT_OK, i);
                         finish();

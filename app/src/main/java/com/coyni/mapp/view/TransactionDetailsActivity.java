@@ -55,11 +55,11 @@ public class TransactionDetailsActivity extends BaseActivity {
     private static final String PAY_REQUEST = "PayRequest";
     private static final String BUY_TOKEN = "BuyTokenDebitAndCreditCard";
     private static final String BUY_BANK = "BuyTokenBank";
-    private static final String BUY_SIGNET = "BuyTokenSignet";
+    private static final String BUY_Cogent = "BuyTokenCogent";
     private static final String WITH_GIFT = "WithdrawGiftCard";
     private static final String WITH_Instant = "WithdrawInstantPay";
     private static final String WITH_BANK = "WithdrawBankAccount";
-    private static final String WITH_SIGNET = "WithdrawSignet";
+    private static final String WITH_Cogent = "WithdrawCogent";
     private static final String BUSINESS_PAYOUT = "businessPayout";
     private static final String CANCELLED_WITH = "cancelledWithdrawBank";
     private static final String FAILED_WITH = "failedWithdrawBank";
@@ -86,7 +86,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     private static final String bank_account = "bank account";
     private static final String credit_card = "credit card";
     private static final String debit_card = "debit card";
-    private static final String signet = "signet";
+    private static final String Cogent = "Cogent";
     private static final String gift_card = "gift card";
     private static final String instant_pay = "instant pay";
     private static final String token = "token";
@@ -176,8 +176,8 @@ public class TransactionDetailsActivity extends BaseActivity {
                     case instant_pay:
                         txnSubType = Integer.parseInt(Utils.instantType);
                         break;
-                    case signet:
-                        txnSubType = Integer.parseInt(Utils.signetType);
+                    case Cogent:
+                        txnSubType = Integer.parseInt(Utils.CogentType);
                         break;
                     case token:
                         txnSubType = Integer.parseInt(Utils.tokenType);
@@ -231,9 +231,9 @@ public class TransactionDetailsActivity extends BaseActivity {
                                 ControlMethod(BUY_BANK);
                                 buyTokenBankAccount(transactionDetails.getData());
                                 break;
-                            case signet:
-                                ControlMethod(BUY_SIGNET);
-                                buyTokenSignet(transactionDetails.getData());
+                            case Cogent:
+                                ControlMethod(BUY_Cogent);
+                                buyTokenCogent(transactionDetails.getData());
                                 break;
                         }
                         break;
@@ -251,9 +251,9 @@ public class TransactionDetailsActivity extends BaseActivity {
                                 ControlMethod(WITH_BANK);
                                 withdrawBank(transactionDetails.getData());
                                 break;
-                            case signet:
-                                ControlMethod(WITH_SIGNET);
-                                withdrawSignet(transactionDetails.getData());
+                            case Cogent:
+                                ControlMethod(WITH_Cogent);
+                                withdrawCogent(transactionDetails.getData());
                                 break;
                         }
                         break;
@@ -1207,21 +1207,21 @@ public class TransactionDetailsActivity extends BaseActivity {
 
     }
 
-    private void buyTokenSignet(TransactionData objData) {
+    private void buyTokenCogent(TransactionData objData) {
         TextView headerText, amount, status, date, purchaseAmount, processingFee, totalAmount, depositID, referenceID, descriptorName, nameOnAccount, walletID;
         LinearLayout copyRefID, copyDepositId;
-        headerText = findViewById(R.id.buySignetHeaderTV);
-        amount = findViewById(R.id.signetAmountTV);
-        status = findViewById(R.id.signetStatusTV);
-        date = findViewById(R.id.signetdateTimeTV);
-        purchaseAmount = findViewById(R.id.signetPurchaseTV);
-        processingFee = findViewById(R.id.signetProcessingFeeTV);
-        totalAmount = findViewById(R.id.signetTotalAmountTV);
-        depositID = findViewById(R.id.signetDepositIDTV);
-        referenceID = findViewById(R.id.signetReferIDTV);
-        descriptorName = findViewById(R.id.signetDescNameTV);
-        nameOnAccount = findViewById(R.id.signetNameOnAccountTV);
-        walletID = findViewById(R.id.signetWalletIdTV);
+        headerText = findViewById(R.id.buyCogentHeaderTV);
+        amount = findViewById(R.id.CogentAmountTV);
+        status = findViewById(R.id.CogentStatusTV);
+        date = findViewById(R.id.CogentdateTimeTV);
+        purchaseAmount = findViewById(R.id.CogentPurchaseTV);
+        processingFee = findViewById(R.id.CogentProcessingFeeTV);
+        totalAmount = findViewById(R.id.CogentTotalAmountTV);
+        depositID = findViewById(R.id.CogentDepositIDTV);
+        referenceID = findViewById(R.id.CogentReferIDTV);
+        descriptorName = findViewById(R.id.CogentDescNameTV);
+        nameOnAccount = findViewById(R.id.CogentNameOnAccountTV);
+        walletID = findViewById(R.id.CogentWalletIdTV);
         copyRefID = findViewById(R.id.copyRefID);
         copyDepositId = findViewById(R.id.copyDepositID);
 
@@ -1656,10 +1656,10 @@ public class TransactionDetailsActivity extends BaseActivity {
         });
     }
 
-    private void withdrawSignet(TransactionData objData) {
+    private void withdrawCogent(TransactionData objData) {
 
         TextView withBankHeader, withBankAmount, withBankDescription, withBankStatus, withBankDateTime, withBankWithdrawalAmount, withBankProcessingFee, withBankTotal, withBankAccountBal, withBankWithdrawalId, withBankRefId;
-        TextView withBankNameOnAccount, withBankName, withBankAccount, signetTextTV;
+        TextView withBankNameOnAccount, withBankName, withBankAccount, CogentTextTV;
 //        ImageView withbankwithdrawalid, withbankrefIDIV;
         LinearLayout withBankCloseLL, withBankWithdrawalID, withBankReference;
 
@@ -1679,7 +1679,7 @@ public class TransactionDetailsActivity extends BaseActivity {
         withBankNameOnAccount = findViewById(R.id.withBankNameOnAccountTV);
         withBankName = findViewById(R.id.withBankBanknameTV);
         withBankAccount = findViewById(R.id.withBankbankaccountTV);
-        signetTextTV = findViewById(R.id.bankNameORSignetTV);
+        CogentTextTV = findViewById(R.id.bankNameORCogentTV);
         withBankCloseLL = findViewById(R.id.withbankCloseLL);
 
 
@@ -1772,8 +1772,8 @@ public class TransactionDetailsActivity extends BaseActivity {
             withBankNameOnAccount.setText(objData.getNameOnBank());
         }
 
-        signetTextTV.setText("Signet Wallet ID");
-//        signetTextTV.setPadding(0, 0, 0, 20);
+        CogentTextTV.setText("Cogent Wallet ID");
+//        CogentTextTV.setPadding(0, 0, 0, 20);
 //        findViewById(R.id.nameOnAccount).setPadding(0, 10, 0, 0);
 //        findViewById(R.id.withdrawIDTV).setPadding(30, 30, 0, 0);
         if (objData.getWalletId() != null) {
@@ -2207,7 +2207,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
-                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenCogent).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
@@ -2223,7 +2223,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
-                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenCogent).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
@@ -2239,7 +2239,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
-                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenCogent).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
@@ -2247,14 +2247,14 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
-                case BUY_SIGNET: {
+                case BUY_Cogent: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
-                    view = findViewById(R.id.buyTokenSignet);
+                    view = findViewById(R.id.buyTokenCogent);
                     view.setVisibility(View.VISIBLE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
@@ -2271,7 +2271,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     view.setVisibility(View.VISIBLE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
-                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenCogent).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
@@ -2287,7 +2287,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     view = findViewById(R.id.withdrawInstant);
                     view.setVisibility(View.VISIBLE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
-                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenCogent).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
@@ -2296,7 +2296,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                 }
                 break;
                 case WITH_BANK:
-                case WITH_SIGNET: {
+                case WITH_Cogent: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
@@ -2304,7 +2304,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     view = findViewById(R.id.withdrawBank);
                     view.setVisibility(View.VISIBLE);
-                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenCogent).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
@@ -2319,7 +2319,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
-                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenCogent).setVisibility(View.GONE);
                     view = findViewById(R.id.businessPayout);
                     view.setVisibility(View.VISIBLE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
@@ -2336,7 +2336,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
-                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenCogent).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     view = findViewById(R.id.failedWithdrawBankAcc);
                     view.setVisibility(View.VISIBLE);
@@ -2353,7 +2353,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
-                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenCogent).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     view = findViewById(R.id.paidOrderToken);
@@ -2369,7 +2369,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
-                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenCogent).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
@@ -2385,7 +2385,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.withdrawGift).setVisibility(View.GONE);
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
-                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenCogent).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);

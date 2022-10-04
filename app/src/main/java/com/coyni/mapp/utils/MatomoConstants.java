@@ -32,7 +32,7 @@ public class MatomoConstants {
     public static final String EXTERNAL_BANK = "External Bank";
     public static final String INSTANT_PAY = "Instant Pay";
     public static final String GIFT_CARD = "GiftCard";
-    public static final String SIGNET_ACCOUNT = "Signet Account";
+    public static final String Cogent_ACCOUNT = "Cogent Account";
     public static final String BUSINESS_PREFERENCES = "Business Preferences";
     public static final String BUSINESS_AGREEMENTS = "Business Agreements";
     public static final String BUSINESS_ACCOUNT_LIMITS = "Business AccountLimits";
@@ -60,7 +60,7 @@ public class MatomoConstants {
     public static final String EXTERNAL_BANK_CLICKED = "External Bank Clicked";
     public static final String INSTANT_PAY_CLICKED = "Instant Pay Clicked";
     public static final String GIFT_CARD_CLICKED = "GiftCard Clicked";
-    public static final String SIGNET_ACCOUNT_CLICKED = "Signet Account Clicked";
+    public static final String Cogent_ACCOUNT_CLICKED = "Cogent Account Clicked";
     public static final String BUSINESS_PREFERENCES_CLICKED = "Business Preferences Clicked";
     public static final String BUSINESS_AGREEMENTS_CLICKED = "Business Agreements Clicked";
     public static final String BUSINESS_ACCOUNT_LIMITS_CLICKED = "Business AccountLimits Clicked";

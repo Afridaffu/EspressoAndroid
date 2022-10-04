@@ -1250,8 +1250,8 @@ public class DashboardActivity extends BaseActivity {
                         case Utils.buyCreditEnable:
                             featureControlByUser.setBuyCredit(permissionResponseList.get(i).getPermission());
                             break;
-                        case Utils.buySignetEnable:
-                            featureControlByUser.setBuySignet(permissionResponseList.get(i).getPermission());
+                        case Utils.buyCogentEnable:
+                            featureControlByUser.setBuyCogent(permissionResponseList.get(i).getPermission());
                             break;
                         case Utils.withBankEnable:
                             featureControlByUser.setWithBank(permissionResponseList.get(i).getPermission());
@@ -1262,8 +1262,8 @@ public class DashboardActivity extends BaseActivity {
                         case Utils.withGiftEnable:
                             featureControlByUser.setWithGift(permissionResponseList.get(i).getPermission());
                             break;
-                        case Utils.withSignetEnable:
-                            featureControlByUser.setWithSignet(permissionResponseList.get(i).getPermission());
+                        case Utils.withCogentEnable:
+                            featureControlByUser.setWithCogent(permissionResponseList.get(i).getPermission());
                             break;
                         case Utils.allControlsEnable:
                             featureControlByUser.setAllControls(permissionResponseList.get(i).getPermission());
@@ -1280,8 +1280,8 @@ public class DashboardActivity extends BaseActivity {
                         case Utils.payDebitEnable:
                             featureControlByUser.setPayDebit(permissionResponseList.get(i).getPermission());
                             break;
-                        case Utils.paySignetEnable:
-                            featureControlByUser.setPaySignet(permissionResponseList.get(i).getPermission());
+                        case Utils.payCogentEnable:
+                            featureControlByUser.setPayCogent(permissionResponseList.get(i).getPermission());
                             break;
                         case Utils.payEnable:
                             featureControlByUser.setPay(permissionResponseList.get(i).getPermission());

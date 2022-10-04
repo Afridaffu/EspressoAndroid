@@ -39,8 +39,6 @@ import com.coyni.mapp.model.bank.BankResponse;
 import com.coyni.mapp.model.bank.BanksResponseModel;
 import com.coyni.mapp.model.bank.ManualBankRequest;
 import com.coyni.mapp.model.bank.ManualBankResponse;
-import com.coyni.mapp.model.bank.SignOn;
-import com.coyni.mapp.model.bank.SyncAccount;
 import com.coyni.mapp.model.biometric.BiometricRequest;
 import com.coyni.mapp.model.biometric.BiometricResponse;
 import com.coyni.mapp.model.biometric.BiometricTokenRequest;
@@ -71,6 +69,8 @@ import com.coyni.mapp.model.check_out_transactions.OrderPayRequest;
 import com.coyni.mapp.model.check_out_transactions.OrderPayResponse;
 import com.coyni.mapp.model.check_out_transactions.ScanQRRequest;
 import com.coyni.mapp.model.check_out_transactions.ScanQrCodeResp;
+import com.coyni.mapp.model.cogent.CogentRequest;
+import com.coyni.mapp.model.cogent.CogentResponse;
 import com.coyni.mapp.model.coynipin.PINRegisterResponse;
 import com.coyni.mapp.model.coynipin.RegisterRequest;
 import com.coyni.mapp.model.coynipin.StepUpOTPResponse;
@@ -158,8 +158,6 @@ import com.coyni.mapp.model.retrieveemail.RetrieveEmailResponse;
 import com.coyni.mapp.model.retrieveemail.RetrieveUsersRequest;
 import com.coyni.mapp.model.retrieveemail.RetrieveUsersResponse;
 import com.coyni.mapp.model.signedagreements.SignedAgreementResponse;
-import com.coyni.mapp.model.signet.SignetRequest;
-import com.coyni.mapp.model.signet.SignetResponse;
 import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.model.signin.InitializeResponse;
 import com.coyni.mapp.model.submit.ApplicationSubmitResponseModel;
@@ -550,7 +548,7 @@ public interface ApiService {
     Call<PaymentMethodsResponse> meBusinessPaymentMethods();
 
     @POST("api/v2/banks/me")
-    Call<SignetResponse> saveBanks(@Body SignetRequest request);
+    Call<CogentResponse> saveBanks(@Body CogentRequest request);
 
     @POST("api/v2/business/company-info")
     Call<CompanyInfoUpdateResp> postCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
