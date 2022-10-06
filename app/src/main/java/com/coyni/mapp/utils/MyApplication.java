@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.fee.Fees;
 import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.model.summary.BankAccount;
@@ -689,13 +690,22 @@ public class MyApplication extends Application {
     }
 
     public void setWalletResponseData(WalletResponseData walletResponseData) {
-        if (walletResponseData.getWalletNames().size() > 0) {
-            if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
-                mCurrentUserData.setTokenWalletResponse(walletResponseData);
-            } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
-                mCurrentUserData.setMerchantWalletResponse(walletResponseData);
-            } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
-                mCurrentUserData.setReserveWalletResponse(walletResponseData);
+
+        List<WalletInfo> walletInfoList = walletResponseData.getWalletNames();
+        for (WalletInfo walletInfo : walletInfoList) {
+            if (walletInfo.getWalletType() == null) {
+                continue;
+            }
+            switch (walletInfo.getWalletType()) {
+                case Utils.TOKEN_STR:
+                    mCurrentUserData.setTokenWalletResponse(walletInfo);
+                    break;
+                case Utils.MERCHANT_STR:
+                    mCurrentUserData.setMerchantWalletResponse(walletInfo);
+                    break;
+                case Utils.RESERVE_STR:
+                    mCurrentUserData.setReserveWalletResponse(walletInfo);
+                    break;
             }
         }
     }

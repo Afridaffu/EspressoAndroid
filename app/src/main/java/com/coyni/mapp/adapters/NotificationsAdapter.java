@@ -186,14 +186,14 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     holder.messageTV.setText(notifications.get(position).getFromUser() + " sent you a reminder");
                 } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")
                         && notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getCurrentUserData().getTokenWalletResponse()
-                        .getWalletNames().get(0).getWalletId())) {
+                        .getWalletId())) {
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.fromRequesterLL.setVisibility(View.GONE);
                     holder.messageTV.setVisibility(View.VISIBLE);
                     holder.messageTV.setText(notifications.get(position).getFromUser() + " declined this request");
                 } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")
                         && !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getCurrentUserData().getTokenWalletResponse()
-                        .getWalletNames().get(0).getWalletId())) {
+                        .getWalletId())) {
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.fromRequesterLL.setVisibility(View.GONE);
                     holder.messageTV.setVisibility(View.VISIBLE);
@@ -235,7 +235,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             Log.e("payLL", "payLL");
                             if (objMyApplication.getFeatureControlGlobal().getPay() != null && objMyApplication.getFeatureControlGlobal().getPay()
                                     && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
-                                if (notifications.get(position).getAmount() <= objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount()) {
+                                if (notifications.get(position).getAmount() <= objMyApplication.getCurrentUserData().getTokenWalletResponse().getExchangeAmount()) {
                                     ((NotificationsActivity) mContext).selectedRow = position + "";
 
                                     TransferPayRequest request = new TransferPayRequest();
@@ -245,7 +245,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
 
                                     ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
                                 } else {
-                                    Utils.displayAlert("Amount exceeds available balance\nAvailable: " + Utils.convertBigDecimalUSD(String.valueOf(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount())) + " CYN", (Activity) mContext, "", "");
+                                    Utils.displayAlert("Amount exceeds available balance\nAvailable: " + Utils.convertBigDecimalUSD(String.valueOf(objMyApplication.getCurrentUserData().getTokenWalletResponse().getExchangeAmount())) + " CYN", (Activity) mContext, "", "");
                                 }
                             } else {
                                 Utils.displayAlert(mContext.getString(R.string.errormsg), ((NotificationsActivity) mContext), "", "");

@@ -49,7 +49,9 @@ public class AccountsActivity extends BaseActivity {
         try {
 
 //            setUserBalance(objMyApplication.getWalletResponseData());
-            setUserBalance(objMyApplication.getCurrentUserData().getMerchantWalletResponse());
+            if (objMyApplication.getCurrentUserData().getMerchantWalletResponse() != null) {
+                setUserBalance(objMyApplication.getCurrentUserData().getMerchantWalletResponse());
+            }
 
             userNameTV.setText(objMyApplication.getStrUserName());
             imgProfile.setVisibility(View.GONE);
@@ -79,23 +81,9 @@ public class AccountsActivity extends BaseActivity {
         }
     }
 
-    private void setUserBalance(WalletResponseData walletResponse) {
-        try {
-            String strAmount = "";
-            List<WalletInfo> walletInfo = walletResponse.getWalletNames();
-            if (walletInfo != null && walletInfo.size() > 0) {
-                for (int i = 0; i < walletInfo.size(); i++) {
-//                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
-//                        objMyApplication.setGbtWallet(walletInfo.get(i));
-                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getAvailabilityToUse()));
-//                    userBalanceTV.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)));
-                    userBalanceTV.setText(strAmount);
-                    objMyApplication.setGBTBalance(walletInfo.get(i).getAvailabilityToUse(), walletInfo.get(0).getWalletType());
-//                    }
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    private void setUserBalance(WalletInfo walletResponse) {
+        String strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletResponse.getAvailabilityToUse()));
+        userBalanceTV.setText(strAmount);
+        objMyApplication.setGBTBalance(walletResponse.getAvailabilityToUse(), walletResponse.getWalletType());
     }
 }

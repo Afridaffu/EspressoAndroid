@@ -418,7 +418,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             dollarFont = tvCurrency.getTextSize();
             availBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
             avaBal = objMyApplication.getGBTBalance();
-            cynWallet = objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0);
+            cynWallet = objMyApplication.getCurrentUserData().getTokenWalletResponse();
             payRequestET.requestFocus();
             payRequestET.setShowSoftInputOnFocus(false);
             // payRequestET.setMovementMethod(null);
@@ -1037,7 +1037,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             request.setTokens(payRequestET.getText().toString().trim().replace(",", ""));
             request.setRemarks(addNoteTV.getText().toString().trim());
             request.setRecipientWalletId(recipientAddress);
-            request.setSourceWalletId(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId());
+            request.setSourceWalletId(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletId());
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayRequestActivity.this)) {
@@ -1054,7 +1054,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             request.setTokens(payRequestET.getText().toString().trim().replace(",", ""));
             request.setRemarks(addNoteTV.getText().toString().trim());
             request.setRecipientWalletId(recipientAddress);
-            request.setSourceWalletId(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId());
+            request.setSourceWalletId(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletId());
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
         } catch (Exception ex) {

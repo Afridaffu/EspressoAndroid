@@ -565,8 +565,8 @@ public interface ApiService {
 //    @GET("api/v2/profile/me/{walletType}")
 //    Call<BusinessWalletResponse> meMerchantWallet(@Path("walletType") String walletType);
 
-    @POST("api/v2/profile/wallet")
-    Call<BusinessWalletResponse> meMerchantWallet(@Body WalletRequest request);
+    @GET("api/v2/profile/wallets")
+    Call<BusinessWalletResponse> meWallets();
 
     @GET("api/v2/lov/BT")
     Call<BusinessTypeResp> getBusinessType();

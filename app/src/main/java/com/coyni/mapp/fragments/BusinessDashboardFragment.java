@@ -3,10 +3,8 @@ package com.coyni.mapp.fragments;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -14,7 +12,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,13 +46,13 @@ import com.coyni.mapp.model.DashboardReserveList.ReserveListData;
 import com.coyni.mapp.model.DashboardReserveList.ReserveListItems;
 import com.coyni.mapp.model.DashboardReserveList.ReserveListResponse;
 import com.coyni.mapp.model.RangeDates;
-import com.coyni.mapp.model.appupdate.AppUpdateResp;
 import com.coyni.mapp.model.biometric.BiometricTokenRequest;
 import com.coyni.mapp.model.biometric.BiometricTokenResponse;
 import com.coyni.mapp.model.business_activity.BusinessActivityData;
 import com.coyni.mapp.model.business_activity.BusinessActivityRequest;
 import com.coyni.mapp.model.business_activity.BusinessActivityResp;
 import com.coyni.mapp.model.businesswallet.BusinessWalletResponse;
+import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.businesswallet.WalletRequest;
 import com.coyni.mapp.model.merchant_activity.MerchantActivityRequest;
 import com.coyni.mapp.model.merchant_activity.MerchantActivityResp;
@@ -83,7 +80,6 @@ import com.coyni.mapp.viewmodel.BusinessIdentityVerificationViewModel;
 import com.coyni.mapp.viewmodel.CoyniViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.NotificationsViewModel;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -444,7 +440,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                             public void run() {
                                 getWalletData();
                             }
-                        },oneSecond);
+                        }, oneSecond);
                         Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
                     } else {
                         Log.d(TAG, "No items found");
@@ -634,22 +630,11 @@ public class BusinessDashboardFragment extends BaseFragment {
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                walletCount++;
-                try {
-                    if (businessWalletResponse != null) {
-                        myApplication.setWalletResponseData(businessWalletResponse.getData());
-                        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
-                            myApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
-                                    businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
-                        }
-
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                if (businessWalletResponse == null) {
+                    return;
                 }
-                if (walletCount == 3) {
-                    walletCount = 0;
-                    updateUIAfterWalletBalance();
+                if (businessWalletResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                    walletRespData(businessWalletResponse);
                 }
             }
         });
@@ -766,16 +751,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void getWalletData() {
-        WalletRequest walletRequest = new WalletRequest();
-        walletRequest.setWalletType(Utils.MERCHANT);
-//        walletRequest.setUserId(String.valueOf(myApplication.getLoginUserId()));
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-        walletRequest.setWalletType(Utils.RESERVE);
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-        walletRequest.setWalletType(Utils.TOKEN);
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
+        businessDashboardViewModel.meWallets();
     }
 
     private void setBusinessData() {
@@ -1401,4 +1377,13 @@ public class BusinessDashboardFragment extends BaseFragment {
 //                    startActivity(viewIntent);
 //                }).show();
 //    }
+
+    private void walletRespData(BusinessWalletResponse businessWalletResponse) {
+        myApplication.setWalletResponseData(businessWalletResponse.getData());
+        List<WalletInfo> walletData = businessWalletResponse.getData().getWalletNames();
+        for (WalletInfo walletInfo : walletData) {
+            myApplication.setGBTBalance(walletInfo.getAvailabilityToUse(), walletInfo.getWalletType());
+        }
+        updateUIAfterWalletBalance();
+    }
 }

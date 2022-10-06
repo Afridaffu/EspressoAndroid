@@ -39,6 +39,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 
+import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.coyni.mapp.BuildConfig;
 import com.coyni.mapp.R;
@@ -47,7 +48,6 @@ import com.coyni.mapp.model.biometric.BiometricRequest;
 import com.coyni.mapp.model.biometric.BiometricResponse;
 import com.coyni.mapp.model.biometric.BiometricTokenRequest;
 import com.coyni.mapp.model.biometric.BiometricTokenResponse;
-import com.coyni.mapp.model.businesswallet.WalletResponseData;
 import com.coyni.mapp.model.logout.LogoutResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.profile.Profile;
@@ -612,7 +612,7 @@ public class CustomerProfileActivity extends BaseActivity {
             }
 
 
-            WalletResponseData walletResponse = objMyApplication.getCurrentUserData().getTokenWalletResponse();
+            WalletInfo walletResponse = objMyApplication.getCurrentUserData().getTokenWalletResponse();
 
             try {
                 imgProfile.setVisibility(View.GONE);
@@ -640,12 +640,12 @@ public class CustomerProfileActivity extends BaseActivity {
                 ex.printStackTrace();
             }
 
-            if (walletResponse != null && walletResponse.getWalletNames().size() > 0) {
-                strWallet = walletResponse.getWalletNames().get(0).getWalletId();
+            if (walletResponse != null) {
+                strWallet = walletResponse.getWalletId();
                 generateQRCode(strWallet);
                 meQrCode.setImageBitmap(bitmap);
                 savedImageView.setImageBitmap(bitmap);
-                walletAddress.setText(walletResponse.getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
+                walletAddress.setText(walletResponse.getWalletId().substring(0, 16) + "...");
             }
             imgClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -698,7 +698,7 @@ public class CustomerProfileActivity extends BaseActivity {
                         myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
                         ClipData myClip;
-                        String text = objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId();
+                        String text = objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletId();
                         myClip = ClipData.newPlainText("text", text);
                         myClipboard.setPrimaryClip(myClip);
 //                    showToast();
