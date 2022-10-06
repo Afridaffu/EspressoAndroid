@@ -431,6 +431,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
+
         businessDashboardViewModel.getBatchNowSlideResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchNowResponse>() {
             @Override
             public void onChanged(BatchNowResponse batchNowResponse) {
@@ -444,7 +445,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                             public void run() {
                                 getWalletData();
                             }
-                        },oneSecond);
+                        }, oneSecond);
                         Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
                     } else {
                         Log.d(TAG, "No items found");
@@ -858,6 +859,12 @@ public class BusinessDashboardFragment extends BaseFragment {
         request.setRequestToken(token);
         request.setPayoutId(batchId);
         businessDashboardViewModel.batchNowSlideData(request);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                businessDashboardViewModel.batchNowSlideData(request);
+//            }
+//        }, 500);
     }
 
     @Override

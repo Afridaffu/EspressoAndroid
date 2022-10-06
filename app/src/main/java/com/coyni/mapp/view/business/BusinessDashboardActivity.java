@@ -103,6 +103,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             enableDisableTabView();
             removeFragment();
             showProgressDialog();
+            mDashboardViewModel.meProfile();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -125,10 +126,11 @@ public class BusinessDashboardActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mDashboardViewModel.meProfile();
+//        mDashboardViewModel.meProfile();
         new FetchData(BusinessDashboardActivity.this).execute();
         startWebSocket();
     }
+
 
     public void notificationsAPICall() {
         notificationsViewModel.getNotifications();
