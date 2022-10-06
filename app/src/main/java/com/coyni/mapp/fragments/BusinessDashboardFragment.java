@@ -427,6 +427,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
+
         businessDashboardViewModel.getBatchNowSlideResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchNowResponse>() {
             @Override
             public void onChanged(BatchNowResponse batchNowResponse) {
@@ -834,6 +835,12 @@ public class BusinessDashboardFragment extends BaseFragment {
         request.setRequestToken(token);
         request.setPayoutId(batchId);
         businessDashboardViewModel.batchNowSlideData(request);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                businessDashboardViewModel.batchNowSlideData(request);
+//            }
+//        }, 500);
     }
 
     @Override

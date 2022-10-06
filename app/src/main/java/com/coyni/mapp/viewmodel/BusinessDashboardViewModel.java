@@ -132,9 +132,11 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     public MutableLiveData<BatchPayoutListResponse> getRollingListResponseMutableLiveData() {
         return rollingListResponseMutableLiveData;
     }
+
     public MutableLiveData<DetailsResponse> getDetailsResponseMutableLiveData() {
         return detailsResponseMutableLiveData;
     }
+
     public MutableLiveData<ManualListResponse> getManualListResponseMutableLiveData() {
         return manualListResponseMutableLiveData;
     }
@@ -669,11 +671,13 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     public void batchNowSlideData(BatchNowPaymentRequest request) {
         ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
         Call<BatchNowResponse> call = apiService.getSlideBatchNow(request);
+        LogUtils.e("Modell", "success" + request.toString());
         call.enqueue(new Callback<BatchNowResponse>() {
             @Override
             public void onResponse(Call<BatchNowResponse> call, Response<BatchNowResponse> response) {
-//                LogUtils.d("Modell","success"+response.isSuccessful());
+//                LogUtils.e("Modell", "success" + response.isSuccessful());
                 if (response.isSuccessful()) {
+                    LogUtils.e("Modell", "success" + response.body());
                     BatchNowResponse obj = response.body();
                     batchNowSlideResponseMutableLiveData.setValue(obj);
                     //Utils.showCustomToast(getApplication(), "Successfully_Closed_Batch ", R.drawable.ic_custom_tick, "Batch");
@@ -689,6 +693,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                         e.printStackTrace();
                     }
                     batchNowSlideResponseMutableLiveData.setValue(errorResponse);
+                    LogUtils.e("Modell", "error" + errorResponse);
                 }
             }
 
