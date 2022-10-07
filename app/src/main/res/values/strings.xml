@@ -323,7 +323,7 @@
     <string name="buying_tokens">Used for buying tokens or withdrawing \nfunds.</string>
     <string name="can_only_be_used_for_instant_pay_withdraw">Can only be used for instant pay withdraw.</string>
     <string name="add_a_Cogent_account">Add A Cogent Account</string>
-    <string name="please_enter_card_details">Please enter card details</string>
+    <string name="please_enter_account_details">Please enter account details</string>
     <string name="enter_name">Enter Name</string>
     <string name="add">Add</string>
     <string name="ca">CA</string>

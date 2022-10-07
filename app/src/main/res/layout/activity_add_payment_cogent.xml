@@ -57,7 +57,7 @@
                 android:layout_marginTop="@dimen/_14sdp"
                 android:layout_marginEnd="@dimen/_21sdp"
                 android:fontFamily="@font/opensans_regular"
-                android:text="@string/please_enter_card_details"
+                android:text="@string/please_enter_account_details"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
         </LinearLayout>
