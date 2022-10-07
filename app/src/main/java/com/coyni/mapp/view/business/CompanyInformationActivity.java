@@ -1912,7 +1912,18 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
     public void removeAndUploadAdditionalDoc(int docID) {
         docTypeID = docID;
-        identityVerificationViewModel.removeIdentityImage(docTypeID + "");
+        boolean isValid = false;
+        if (selectedDocType.equals("CI-AOI"))
+            isValid = Utils.isValidFileSize(aoiFile);
+        else if (selectedDocType.equals("CI-EINLETTER"))
+            isValid = Utils.isValidFileSize(einLetterFile);
+        else if (selectedDocType.equals("CI-W9"))
+            isValid = Utils.isValidFileSize(w9FormFile);
+
+        if (isValid)
+            identityVerificationViewModel.removeIdentityImage(docTypeID + "");
+        else
+            Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
     }
 
     private void chooseFilePopup(final Context context, String type) {

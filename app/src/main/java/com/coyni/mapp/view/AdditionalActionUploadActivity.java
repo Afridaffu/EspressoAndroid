@@ -322,24 +322,31 @@ public class AdditionalActionUploadActivity extends BaseActivity {
 
         mediaFile = new File(FilePath);
 
-        LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
-        LogUtils.d(TAG, "documentID" + documentID);
+        if (Utils.isValidFileSize(mediaFile)) {
+
+            LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
+            LogUtils.d(TAG, "documentID" + documentID);
 
 //        if (fileUpload.containsKey(documentID)) {
 //            fileUpload.replace(documentID, mediaFile.getAbsolutePath());
 //            documentsFIle.add(mediaFile);
 //        }
-        if (filesToUpload.containsKey(documentID)) {
-            filesToUpload.replace(documentID, mediaFile);
-            documentsFIle.add(mediaFile);
+            if (filesToUpload.containsKey(documentID)) {
+                filesToUpload.replace(documentID, mediaFile);
+                documentsFIle.add(mediaFile);
+            }
+
+            if (selectedLayout != null) {
+                selectedLayout.setVisibility(View.VISIBLE);
+                selectedText.setVisibility(View.GONE);
+            }
+            enableOrDisableNext();
+            LogUtils.d(TAG, "fileUpload" + filesToUpload);
+        } else {
+            Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
         }
 
-        if (selectedLayout != null) {
-            selectedLayout.setVisibility(View.VISIBLE);
-            selectedText.setVisibility(View.GONE);
-        }
-        enableOrDisableNext();
-        LogUtils.d(TAG, "fileUpload" + filesToUpload);
+
     }
 
     public void uploadDocumentFromLibrary(Uri uri, int reqType) {
@@ -351,27 +358,32 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                 FilePath = getRealPathFromURI(uri);
             }
             mediaFile = new File(FilePath);
+            if (Utils.isValidFileSize(mediaFile)) {
 
-            LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
-            LogUtils.d(TAG, "documentID" + documentID);
+                LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
+                LogUtils.d(TAG, "documentID" + documentID);
 
 //            if (fileUpload.containsKey(documentID)) {
 //                fileUpload.replace(documentID, mediaFile.getAbsolutePath());
 //                documentsFIle.add(mediaFile);
 //            }
 
-            if (filesToUpload.containsKey(documentID)) {
-                filesToUpload.replace(documentID, mediaFile);
-                documentsFIle.add(mediaFile);
+                if (filesToUpload.containsKey(documentID)) {
+                    filesToUpload.replace(documentID, mediaFile);
+                    documentsFIle.add(mediaFile);
+                }
+
+                if (selectedLayout != null) {
+                    selectedLayout.setVisibility(View.VISIBLE);
+                    selectedText.setVisibility(View.GONE);
+
+                }
+                enableOrDisableNext();
+                LogUtils.d(TAG, "fileUpload" + filesToUpload);
+            } else {
+                Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
             }
 
-            if (selectedLayout != null) {
-                selectedLayout.setVisibility(View.VISIBLE);
-                selectedText.setVisibility(View.GONE);
-
-            }
-            enableOrDisableNext();
-            LogUtils.d(TAG, "fileUpload" + filesToUpload);
 
         } catch (Exception e) {
             e.printStackTrace();
