@@ -1074,6 +1074,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 Collections.sort(listItems, Collections.reverseOrder());
                 int i = 0;
                 boolean isOpen = false, isPaid = false;
+                setSpannableTextView();
                 while (i < listItems.size()) {
                     if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
                         String amount = listItems.get(i).getTotalAmount();
@@ -1101,13 +1102,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                             String convertedDateTime = Utils.convertPrefZoneTimeFromPST(dateFormat.format(newDate), "MM/dd/yyyy @ hh:mma", "MM/dd/yyyy @ hh:mma", myApplication.getStrPreference());
                             nxtPayoutDatenTimeTV.setText(convertedDateTime.toLowerCase());
 
-                            setSpannableTextView();
-
+//                            setSpannableTextView();
                         } else {
                             Log.d("date format", date);
                         }
-
-
                         isOpen = true;
                     } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
                         String amount = Utils.convertBigDecimalUSDC((listItems.get(i).getTotalAmount()));
@@ -1140,6 +1138,9 @@ public class BusinessDashboardFragment extends BaseFragment {
                         TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
                         TextView payoutManualTV = xmlView.findViewById(R.id.payoutManualTV);
                         String listDate = listItems.get(j).getUpdatedAt();
+                        if (listDate == null) {
+                            listDate = listItems.get(j).getCreatedAt();
+                        }
                         if (listDate != null && listDate.contains(".")) {
                             String listD = listDate.substring(0, listDate.lastIndexOf("."));
                             payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
