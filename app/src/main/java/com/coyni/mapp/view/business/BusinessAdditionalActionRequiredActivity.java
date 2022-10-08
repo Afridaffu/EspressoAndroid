@@ -1025,37 +1025,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         String FilePath = String.valueOf(cameraFIle);
 
         mediaFile = new File(FilePath);
-
-        LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
-        LogUtils.d(TAG, "documentID" + documentID);
-
-        if (fileUpload.containsKey(documentID)) {
-            fileUpload.replace(documentID, mediaFile.getAbsolutePath());
-            documentsFIle.add(mediaFile);
-        }
-
-        if (filesToUpload.containsKey(documentID)) {
-            filesToUpload.replace(documentID, mediaFile);
-        }
-
-        if (selectedLayout != null) {
-            selectedLayout.setVisibility(View.VISIBLE);
-            selectedText.setVisibility(View.GONE);
-        }
-        enableOrDisableNext();
-        LogUtils.d(TAG, "fileUpload" + fileUpload);
-    }
-
-    public void uploadDocumentFromLibrary(Uri uri, int reqType) {
-        try {
-            String FilePath = "";
-            if (reqType == ACTIVITY_CHOOSE_FILE) {
-                FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
-            } else {
-                FilePath = getRealPathFromURI(uri);
-            }
-            mediaFile = new File(FilePath);
-
+        if (Utils.isValidFileSize(mediaFile)) {
             LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
             LogUtils.d(TAG, "documentID" + documentID);
 
@@ -1071,10 +1041,46 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             if (selectedLayout != null) {
                 selectedLayout.setVisibility(View.VISIBLE);
                 selectedText.setVisibility(View.GONE);
-
             }
             enableOrDisableNext();
             LogUtils.d(TAG, "fileUpload" + fileUpload);
+        } else {
+            Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
+        }
+    }
+
+    public void uploadDocumentFromLibrary(Uri uri, int reqType) {
+        try {
+            String FilePath = "";
+            if (reqType == ACTIVITY_CHOOSE_FILE) {
+                FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
+            } else {
+                FilePath = getRealPathFromURI(uri);
+            }
+            mediaFile = new File(FilePath);
+            if (Utils.isValidFileSize(mediaFile)) {
+                LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
+                LogUtils.d(TAG, "documentID" + documentID);
+
+                if (fileUpload.containsKey(documentID)) {
+                    fileUpload.replace(documentID, mediaFile.getAbsolutePath());
+                    documentsFIle.add(mediaFile);
+                }
+
+                if (filesToUpload.containsKey(documentID)) {
+                    filesToUpload.replace(documentID, mediaFile);
+                }
+
+                if (selectedLayout != null) {
+                    selectedLayout.setVisibility(View.VISIBLE);
+                    selectedText.setVisibility(View.GONE);
+
+                }
+                enableOrDisableNext();
+                LogUtils.d(TAG, "fileUpload" + fileUpload);
+            } else {
+                Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
