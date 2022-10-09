@@ -406,15 +406,15 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         isDeCredit = false;
                         isPayments = false;
                         //Modified on 21 Jun 2022 -
-//                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-//                            ControlMethod("addpayment");
-//                            strCurrent = "addpayment";
-//                            numberOfAccounts();
-//                        } else {
-//                            ControlMethod("addbpayment");
-//                            strCurrent = "addbpayment";
-//                            numberOfMerchantAccounts();
-//                        }
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            ControlMethod("addpayment");
+                            strCurrent = "addpayment";
+                            numberOfAccounts();
+                        } else {
+                            ControlMethod("addbpayment");
+                            strCurrent = "addbpayment";
+                            numberOfMerchantAccounts();
+                        }
                     } else if (isSignet) {
                         isSignet = false;
                         ControlMethod("addbpayment");
@@ -1274,6 +1274,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         } else {
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, SelectPaymentMethodActivity.class);
                             i.putExtra("screen", "withdraw");
+                            i.putExtra("subtype", "add");
                             startActivityForResult(i, 5);
                         }
                     } catch (Exception ex) {
