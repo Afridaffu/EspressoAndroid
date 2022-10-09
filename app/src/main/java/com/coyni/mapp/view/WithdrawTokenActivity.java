@@ -1964,8 +1964,8 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     }
                     break;
                 case "debit":
-                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
-                            && (objMyApplication.getFeatureControlGlobal().getBuyDebit() && objMyApplication.getFeatureControlByUser().getBuyDebit())) {
+                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getWithInstant() != null && objMyApplication.getFeatureControlByUser() != null
+                            && (objMyApplication.getFeatureControlGlobal().getWithInstant() && objMyApplication.getFeatureControlByUser().getWithInstant())) {
                         selectedCard = objData;
                         objMyApplication.setSelectedCard(selectedCard);
                     }
