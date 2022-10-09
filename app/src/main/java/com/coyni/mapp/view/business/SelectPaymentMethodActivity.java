@@ -1,5 +1,6 @@
 package com.coyni.mapp.view.business;
 
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.app.Dialog;
@@ -562,14 +563,14 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     try {
                         if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
-                        if (!strMenu.equals("buy") && !strCurrent.equals("notokens")) {
-                            if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                                strCurrent = "signet";
-                                strOnPauseScreen = "";
-                                Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
-                                startActivityForResult(i, 2);
+                            if (!strMenu.equals("buy") && !strCurrent.equals("notokens") && tvSignetCS.getVisibility() == GONE) {
+                                if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                                    strCurrent = "signet";
+                                    strOnPauseScreen = "";
+                                    Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
+                                    startActivityForResult(i, 2);
+                                }
                             }
-                        }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), SelectPaymentMethodActivity.this, "", "");
                         }
@@ -650,7 +651,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
                 imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
 //                imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
-                if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
+                if (strMenu.equals("buy") || strCurrent.equals("notokens") || tvSignetCS.getVisibility() == VISIBLE) {
                     tvSignetHead.setTextColor(getColor(R.color.light_gray));
                     tvSignetCount.setTextColor(getColor(R.color.light_gray));
                     imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
