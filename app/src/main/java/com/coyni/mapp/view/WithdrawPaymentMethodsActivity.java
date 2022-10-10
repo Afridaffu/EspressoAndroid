@@ -1274,7 +1274,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         } else {
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, SelectPaymentMethodActivity.class);
                             i.putExtra("screen", "withdraw");
-                            i.putExtra("subtype", "add");
+                            i.putExtra("subtype", "notokens");
                             startActivityForResult(i, 5);
                         }
                     } catch (Exception ex) {

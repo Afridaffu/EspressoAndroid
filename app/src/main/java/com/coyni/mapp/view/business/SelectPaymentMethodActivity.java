@@ -169,7 +169,8 @@ public class SelectPaymentMethodActivity extends BaseActivity {
 //                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
 //                        onBackPressed();
 //                    } else
-                    if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
+//                    if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
+                    if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) {
                         onBackPressed();
                     } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                         if (!objMyApplication.getCardSave()) {
@@ -194,14 +195,14 @@ public class SelectPaymentMethodActivity extends BaseActivity {
 //                        getPaymentMethods();
 //                    }
 //                }
-                if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
+                if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) {
                     onBackPressed();
                 } else if (objMyApplication.getSignet()) {
                     objMyApplication.setSignet(false);
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
-                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) || strScreen.equals("buytoken")) {
+                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) || strScreen.equals("buytoken")) {
                     onBackPressed();
                 } else {
                     if (!objMyApplication.getBankSave()) {
@@ -260,6 +261,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     String strSub = "";
                     if (getIntent().getStringExtra("subtype") != null) {
                         strSub = getIntent().getStringExtra("subtype");
+                        strCurrent = strSub;
                     }
                     if (strSub.equals(""))
                         strCurrent = "notokens";
