@@ -421,6 +421,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             objMyApplication.setLoginUserId(btResp.getData().getUserId());
                             objMyApplication.setAccountType(btResp.getData().getAccountType());
                             objMyApplication.setCompanyName(btResp.getData().getCompanyName());
+                            objMyApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
                             isAddBusinessCalled = false;
                             isAddDbaCalled = false;
 //                            finish();

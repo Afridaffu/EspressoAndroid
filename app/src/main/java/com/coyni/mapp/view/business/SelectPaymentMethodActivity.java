@@ -1,5 +1,6 @@
 package com.coyni.mapp.view.business;
 
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.app.Dialog;
@@ -168,7 +169,8 @@ public class SelectPaymentMethodActivity extends BaseActivity {
 //                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
 //                        onBackPressed();
 //                    } else
-                    if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
+//                    if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
+                    if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) {
                         onBackPressed();
                     } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                         if (!objMyApplication.getCardSave()) {
@@ -193,14 +195,14 @@ public class SelectPaymentMethodActivity extends BaseActivity {
 //                        getPaymentMethods();
 //                    }
 //                }
-                if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
+                if (strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) {
                     onBackPressed();
                 } else if (objMyApplication.getCogent()) {
                     objMyApplication.setCogent(false);
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
-                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) || strScreen.equals("buytoken")) {
+                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) || strScreen.equals("buytoken")) {
                     onBackPressed();
                 } else {
                     if (!objMyApplication.getBankSave()) {
@@ -259,6 +261,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     String strSub = "";
                     if (getIntent().getStringExtra("subtype") != null) {
                         strSub = getIntent().getStringExtra("subtype");
+                        strCurrent = strSub;
                     }
                     if (strSub.equals(""))
                         strCurrent = "notokens";
@@ -562,7 +565,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     try {
                         if (objMyApplication.getFeatureControlGlobal().getPayCogent() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayCogent() && objMyApplication.getFeatureControlByUser().getPayCogent()) {
-                        if (!strMenu.equals("buy") && !strCurrent.equals("notokens")) {
+                        if (!strMenu.equals("buy") && !strCurrent.equals("notokens")&& tvCogentCS.getVisibility() == GONE) {
                             if (paymentMethodsResponse.getData().getCogentCount() < paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
                                 strCurrent = "Cogent";
                                 strOnPauseScreen = "";
@@ -650,7 +653,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 imgCogentArrow.setColorFilter(getColor(R.color.primary_black));
                 imgCogentLogo.setImageResource(R.drawable.ic_cogentactive);
 //                imgCogentLogo.setImageResource(R.drawable.ic_Cogentinactive);
-                if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
+                if (strMenu.equals("buy") || strCurrent.equals("notokens")|| tvCogentCS.getVisibility() == VISIBLE) {
                     tvCogentHead.setTextColor(getColor(R.color.light_gray));
                     tvCogentCount.setTextColor(getColor(R.color.light_gray));
                     imgCogentLogo.setImageResource(R.drawable.ic_cogentinactive);

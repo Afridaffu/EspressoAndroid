@@ -389,12 +389,10 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         myApplication.setIsLoggedIn(true);
 
                         if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
-                            myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
                             Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         } else {
-                            myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
                             Intent intent = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
@@ -487,7 +485,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     }
 
     public void openNewAccount() {
-        showProgressDialog();
+//        showProgressDialog();
         Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class);
         for (ProfilesResponse.Profiles profile : profilesList) {
             if (profile.getAccountType().equals(Utils.PERSONAL)) {
