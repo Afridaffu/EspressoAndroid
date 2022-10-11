@@ -2002,9 +2002,9 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                         objMyApplication.setSelectedCard(selectedCard);
                     }
                     break;
-                case "signet":
-                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getBuySignet() != null && objMyApplication.getFeatureControlByUser() != null
-                            && (objMyApplication.getFeatureControlGlobal().getBuySignet() && objMyApplication.getFeatureControlByUser().getBuySignet())) {
+                case "cogent":
+                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getBuyCogent() != null && objMyApplication.getFeatureControlByUser() != null
+                            && (objMyApplication.getFeatureControlGlobal().getBuyCogent() && objMyApplication.getFeatureControlByUser().getBuyCogent())) {
                         selectedCard = objData;
                         objMyApplication.setSelectedCard(selectedCard);
                     }

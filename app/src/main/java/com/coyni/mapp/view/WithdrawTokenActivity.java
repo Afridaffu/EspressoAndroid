@@ -1956,9 +1956,9 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         objMyApplication.setSelectedCard(selectedCard);
                     }
                     break;
-                case "signet":
-                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getWithSignet() != null && objMyApplication.getFeatureControlByUser() != null
-                            && (objMyApplication.getFeatureControlGlobal().getWithSignet() && objMyApplication.getFeatureControlByUser().getWithSignet())) {
+                case "cogent":
+                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getWithCogent() != null && objMyApplication.getFeatureControlByUser() != null
+                            && (objMyApplication.getFeatureControlGlobal().getWithCogent() && objMyApplication.getFeatureControlByUser().getWithCogent())) {
                         selectedCard = objData;
                         objMyApplication.setSelectedCard(selectedCard);
                     }
