@@ -200,38 +200,43 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                         if (Utils.isKeyboardVisible)
                             Utils.hideKeypad(AddManualBankAccount.this);
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if (!strScreen.equals("Resubmit") && !strScreen.equals("Edit")) {
-                            if (strScreen.equals("pay")) {
-                                lyAddBank.setVisibility(View.GONE);
-                                layoutLoader.setVisibility(View.VISIBLE);
-                            }
-                            ManualBankRequest request = new ManualBankRequest();
-                            request.setAccountName(nameOnBankET.getText().toString());
-                            request.setRoutingNumber(routingNumberET.getText().toString());
-                            request.setAccountNumber(checkAccNumberET.getText().toString());
-                            if (strScreen.equals("signUp") || strScreen.equals("REVIEW")) {
-                                request.setGiactReq(false);
+                        if (!routingNumberET.getText().toString().trim().equals(checkAccNumberET.getText().toString().trim())) {
+                            if (!strScreen.equals("Resubmit") && !strScreen.equals("Edit")) {
+                                if (strScreen.equals("pay")) {
+                                    lyAddBank.setVisibility(View.GONE);
+                                    layoutLoader.setVisibility(View.VISIBLE);
+                                }
+                                ManualBankRequest request = new ManualBankRequest();
+                                request.setAccountName(nameOnBankET.getText().toString());
+                                request.setRoutingNumber(routingNumberET.getText().toString());
+                                request.setAccountNumber(checkAccNumberET.getText().toString());
+                                if (strScreen.equals("signUp") || strScreen.equals("REVIEW")) {
+                                    request.setGiactReq(false);
+                                } else {
+                                    request.setGiactReq(true);
+                                }
+                                if (getIntent().getStringExtra("screen") != null && !strScreen.equals("signUp") && !strScreen.equals("REVIEW")) {
+                                    request.setFromTxnScreen(getIntent().getStringExtra("screen"));
+                                } else if (strScreen.equals("signUp") || strScreen.equals("REVIEW")) {
+                                    request.setFromTxnScreen(getString(R.string.trackerbank));
+                                } else {
+                                    request.setFromTxnScreen("");
+                                }
+                                paymentMethodsViewModel.saveManualBank(request);
                             } else {
-                                request.setGiactReq(true);
+                                BankAccount objBank = new BankAccount();
+                                objBank.setAccountName(nameOnBankET.getText().toString());
+                                objBank.setRoutingNumber(routingNumberET.getText().toString());
+                                objBank.setAccountNumber(checkAccNumberET.getText().toString());
+                                objMyApplication.setBankAccount(objBank);
+                                Intent i = new Intent();
+                                setResult(RESULT_OK, i);
+                                finish();
                             }
-                            if (getIntent().getStringExtra("screen") != null && !strScreen.equals("signUp") && !strScreen.equals("REVIEW")) {
-                                request.setFromTxnScreen(getIntent().getStringExtra("screen"));
-                            } else if (strScreen.equals("signUp") || strScreen.equals("REVIEW")) {
-                                request.setFromTxnScreen(getString(R.string.trackerbank));
-                            } else {
-                                request.setFromTxnScreen("");
-                            }
-                            paymentMethodsViewModel.saveManualBank(request);
                         } else {
-                            BankAccount objBank = new BankAccount();
-                            objBank.setAccountName(nameOnBankET.getText().toString());
-                            objBank.setRoutingNumber(routingNumberET.getText().toString());
-                            objBank.setAccountNumber(checkAccNumberET.getText().toString());
-                            objMyApplication.setBankAccount(objBank);
-                            Intent i = new Intent();
-                            setResult(RESULT_OK, i);
-                            finish();
+                            Utils.displayAlert(getString(R.string.add_manual_bank_same_value_error), this, "coyni", "");
                         }
+
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -307,10 +312,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             routingNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (i2 - i1 > 1) {
-                        routingNumberET.setText(charSequence);
-                        routingNumberET.setSelection(charSequence.toString().length());
-                    }
+//                    if (i2 - i1 > 1) {
+//                        routingNumberET.setText(charSequence);
+//                        routingNumberET.setSelection(charSequence.toString().length());
+//                    }
                 }
 
                 @Override
@@ -357,10 +362,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             confirmRoutingNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (i2 - i1 > 1) {
-                        confirmRoutingNumberET.setText(charSequence);
-                        confirmRoutingNumberET.setSelection(charSequence.toString().length());
-                    }
+//                    if (i2 - i1 > 1) {
+//                        confirmRoutingNumberET.setText(charSequence);
+//                        confirmRoutingNumberET.setSelection(charSequence.toString().length());
+//                    }
                 }
 
                 @Override
@@ -389,10 +394,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             checkAccNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSeq, int i, int i1, int i2) {
-                    if (i2 - i1 > 1) {
-                        checkAccNumberET.setText(charSeq);
-                        checkAccNumberET.setSelection(charSeq.toString().length());
-                    }
+//                    if (i2 - i1 > 1) {
+//                        checkAccNumberET.setText(charSeq);
+//                        checkAccNumberET.setSelection(charSeq.toString().length());
+//                    }
                 }
 
                 @Override
@@ -437,10 +442,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             confirmAccNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSeq, int i, int i1, int i2) {
-                    if (i2 - i1 > 1) {
-                        confirmAccNumberET.setText(charSeq);
-                        confirmAccNumberET.setSelection(charSeq.toString().length());
-                    }
+//                    if (i2 - i1 > 1) {
+//                        confirmAccNumberET.setText(charSeq);
+//                        confirmAccNumberET.setSelection(charSeq.toString().length());
+//                    }
                 }
 
                 @Override

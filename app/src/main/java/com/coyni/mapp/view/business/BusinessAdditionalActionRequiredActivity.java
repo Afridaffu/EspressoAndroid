@@ -47,6 +47,7 @@ import com.coyni.mapp.dialogs.OnDialogClickListener;
 import com.coyni.mapp.dialogs.ShowFullPageImageDialog;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
 import com.coyni.mapp.model.DialogAttributes;
+import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.summary.BankAccount;
 import com.coyni.mapp.model.underwriting.ActionRequiredResponse;
 import com.coyni.mapp.model.underwriting.ActionRequiredSubmitResponse;
@@ -61,6 +62,7 @@ import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.PaymentMethodsActivity;
+import com.coyni.mapp.viewmodel.BusinessDashboardViewModel;
 import com.coyni.mapp.viewmodel.UnderwritingUserActionRequiredViewModel;
 
 import org.json.JSONArray;
@@ -109,6 +111,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     private TextView adminMessageTV;
     private MyApplication objMyApplication;
     private ProposalsData bankProposal;
+    private BusinessDashboardViewModel businessDashboardViewModel;
+    private int bankID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +152,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         submitCV = findViewById(R.id.submitCV);
         adminMessageTV = findViewById(R.id.adminMessageTV);
         additionalActionRL = findViewById(R.id.additionalActionRL);
-
+        businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
         underwritingUserActionRequiredViewModel = new ViewModelProvider(this).get(UnderwritingUserActionRequiredViewModel.class);
         showProgressDialog();
         underwritingUserActionRequiredViewModel.getAdditionalActionRequiredData();
@@ -158,6 +162,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         documentsFIle = new ArrayList<>();
 
         setKeyboardVisibilityListener(BusinessAdditionalActionRequiredActivity.this);
+        businessDashboardViewModel.meBusinessPaymentMethods();
 
         imvCLose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,7 +209,11 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             if (objMyApplication.getBankAccount() != null) {
                 bankRequest.put("accountName", objMyApplication.getBankAccount().getAccountName());
                 bankRequest.put("accountNumber", objMyApplication.getBankAccount().getAccountNumber());
-                bankRequest.put("bankId", bankProposal.getDbId());
+                if (bankID != 0) {
+                    bankRequest.put("bankId", bankID);
+                } else {
+                    bankRequest.put("bankId", bankProposal.getDbId());
+                }
                 bankRequest.put("giactReq", true);
                 bankRequest.put("routingNumber", objMyApplication.getBankAccount().getRoutingNumber());
             }
@@ -264,7 +273,11 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                 }
                             }
 
-                            proposalsObj.put("dbId", proposal.getDbId());
+                            if (bankID != 0) {
+                                proposalsObj.put("dbId", bankID);
+                            } else {
+                                proposalsObj.put("dbId", proposal.getDbId());
+                            }
                             if (bankProposal.getDisplayName() != null) {
                                 proposalsObj.put("displayName", bankProposal.getDisplayName());
                             } else {
@@ -402,6 +415,15 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                         }
                     }
                 });
+
+        businessDashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
+                if (paymentMethodsResponse != null && paymentMethodsResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                    bankID = paymentMethodsResponse.getData().getData().get(0).getId();
+                }
+            }
+        });
 
     }
 
@@ -1003,37 +1025,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         String FilePath = String.valueOf(cameraFIle);
 
         mediaFile = new File(FilePath);
-
-        LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
-        LogUtils.d(TAG, "documentID" + documentID);
-
-        if (fileUpload.containsKey(documentID)) {
-            fileUpload.replace(documentID, mediaFile.getAbsolutePath());
-            documentsFIle.add(mediaFile);
-        }
-
-        if (filesToUpload.containsKey(documentID)) {
-            filesToUpload.replace(documentID, mediaFile);
-        }
-
-        if (selectedLayout != null) {
-            selectedLayout.setVisibility(View.VISIBLE);
-            selectedText.setVisibility(View.GONE);
-        }
-        enableOrDisableNext();
-        LogUtils.d(TAG, "fileUpload" + fileUpload);
-    }
-
-    public void uploadDocumentFromLibrary(Uri uri, int reqType) {
-        try {
-            String FilePath = "";
-            if (reqType == ACTIVITY_CHOOSE_FILE) {
-                FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
-            } else {
-                FilePath = getRealPathFromURI(uri);
-            }
-            mediaFile = new File(FilePath);
-
+        if (Utils.isValidFileSize(mediaFile)) {
             LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
             LogUtils.d(TAG, "documentID" + documentID);
 
@@ -1049,10 +1041,46 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             if (selectedLayout != null) {
                 selectedLayout.setVisibility(View.VISIBLE);
                 selectedText.setVisibility(View.GONE);
-
             }
             enableOrDisableNext();
             LogUtils.d(TAG, "fileUpload" + fileUpload);
+        } else {
+            Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
+        }
+    }
+
+    public void uploadDocumentFromLibrary(Uri uri, int reqType) {
+        try {
+            String FilePath = "";
+            if (reqType == ACTIVITY_CHOOSE_FILE) {
+                FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
+            } else {
+                FilePath = getRealPathFromURI(uri);
+            }
+            mediaFile = new File(FilePath);
+            if (Utils.isValidFileSize(mediaFile)) {
+                LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
+                LogUtils.d(TAG, "documentID" + documentID);
+
+                if (fileUpload.containsKey(documentID)) {
+                    fileUpload.replace(documentID, mediaFile.getAbsolutePath());
+                    documentsFIle.add(mediaFile);
+                }
+
+                if (filesToUpload.containsKey(documentID)) {
+                    filesToUpload.replace(documentID, mediaFile);
+                }
+
+                if (selectedLayout != null) {
+                    selectedLayout.setVisibility(View.VISIBLE);
+                    selectedText.setVisibility(View.GONE);
+
+                }
+                enableOrDisableNext();
+                LogUtils.d(TAG, "fileUpload" + fileUpload);
+            } else {
+                Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

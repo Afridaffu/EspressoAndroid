@@ -126,9 +126,11 @@ public class BusinessDashboardActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+//        mDashboardViewModel.meProfile();
         new FetchData(BusinessDashboardActivity.this).execute();
         startWebSocket();
     }
+
 
     public void notificationsAPICall() {
         notificationsViewModel.getNotifications();
@@ -423,6 +425,9 @@ public class BusinessDashboardActivity extends BaseActivity {
                 LogUtils.d(TAG, "AccountTab-Redirected");
                 pushFragment(new BusinessAccountFragment());
             }
+
+            objMyApplication.setOldLoginUserId(0);
+            objMyApplication.setCompanyInfoResp(null);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

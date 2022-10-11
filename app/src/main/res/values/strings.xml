@@ -799,6 +799,8 @@
     <string name="pp">Privacy Policy.</string>
     <string name="m_agree">Merchant Agreement</string>
     <string name="trackerbank">No Mail</string>
+    <string name="add_manual_bank_same_value_error">Account Number and Routing Number cannot have the same value.</string>
+    <string name="allowed_file_size_error">Allowed File Size up to 10MB</string>
     <string name="add_new_account">Add New Account</string>
     <string name="newacct_mhead">Start accepting coyni at your business.</string>
     <string name="newacct_thead">Tokenize your personal finances with coyni.</string>

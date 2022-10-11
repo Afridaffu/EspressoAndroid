@@ -507,6 +507,8 @@ public class DashboardActivity extends BaseActivity {
                 }
             });
 
+            objMyApplication.setOldLoginUserId(0);
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -544,8 +546,9 @@ public class DashboardActivity extends BaseActivity {
                         tvUserNameSmall.setText(getString(R.string.hi_text) + strName);
                     }
                     Utils.setUserEmail(DashboardActivity.this, profile.getData().getEmail());
+                    showUnderReviewData();
                 }
-                new FetchData(DashboardActivity.this).execute();
+//                new FetchData(DashboardActivity.this).execute();
             }
         });
 
@@ -700,7 +703,6 @@ public class DashboardActivity extends BaseActivity {
                         }
 
                     }
-                    showUnderReviewData();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -917,7 +919,11 @@ public class DashboardActivity extends BaseActivity {
             if (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
                     && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE")) {
                 tvUserStatusUpdate.setText(R.string.under_review_dispute);
+            } else {
+                underReviewCV.setVisibility(View.GONE);
             }
+        } else {
+            underReviewCV.setVisibility(View.GONE);
         }
     }
 
@@ -1096,6 +1102,7 @@ public class DashboardActivity extends BaseActivity {
             transactionsNSV.smoothScrollTo(0, 0);
 //            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
             startWebSocket();
+            new FetchData(DashboardActivity.this).execute();
         } else {
             Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "", "");
         }

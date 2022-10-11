@@ -1717,6 +1717,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 @Override
                 public void onClick(View view) {
                     try {
+                        preDialog.dismiss();
                         objMyApplication.setCardSave(true);
                         Intent i = new Intent();
                         setResult(RESULT_OK, i);

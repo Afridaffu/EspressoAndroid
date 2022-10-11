@@ -73,6 +73,7 @@ import com.coyni.mapp.viewmodel.BusinessIdentityVerificationViewModel;
 import com.coyni.mapp.viewmodel.IdentityVerificationViewModel;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -664,6 +665,13 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 @Override
                 public void onChanged(RemoveIdentityResponse imageResponse) {
                     if (imageResponse != null) {
+
+                        dbaFillinguploadTV.setVisibility(VISIBLE);
+                        dbaFillingUploadedLL.setVisibility(GONE);
+                        dbaFillingUpdatedOnTV.setText("");
+                        isDBAFiling = false;
+                        enableOrDisableNext();
+
                         showProgressDialog();
 
                         RequestBody requestBody = null;
@@ -753,6 +761,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     objMyApplication.setOldLoginUserId(objMyApplication.getLoginUserId());
                     objMyApplication.setLoginUserId(identityImageResponse.getData().getUserId());
                     objMyApplication.setAccountType(Utils.BUSINESS_ACCOUNT);
+                    objMyApplication.setDbaOwnerId(companyID);
                     BusinessRegistrationTrackerActivity.isAddDbaCalled = true;
                     isAddDBAAPICalled = true;
                     isAddDBA = false;
@@ -1841,7 +1850,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     }
 
     public void removeAndUploadAdditionalDoc(int docID) {
-        identityVerificationViewModel.removeIdentityImage(docID + "");
+        if (Utils.isValidFileSize(dbaFile)) {
+            identityVerificationViewModel.removeIdentityImage(docID + "");
+        } else {
+            Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
+        }
     }
 
     private void chooseFilePopup(final Context context) {
@@ -1989,6 +2002,4 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
-
-
 }

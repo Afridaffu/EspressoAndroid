@@ -431,6 +431,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
+
         businessDashboardViewModel.getBatchNowSlideResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchNowResponse>() {
             @Override
             public void onChanged(BatchNowResponse batchNowResponse) {
@@ -444,7 +445,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                             public void run() {
                                 getWalletData();
                             }
-                        },oneSecond);
+                        }, oneSecond);
                         Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
                     } else {
                         Log.d(TAG, "No items found");
@@ -858,6 +859,12 @@ public class BusinessDashboardFragment extends BaseFragment {
         request.setRequestToken(token);
         request.setPayoutId(batchId);
         businessDashboardViewModel.batchNowSlideData(request);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                businessDashboardViewModel.batchNowSlideData(request);
+//            }
+//        }, 500);
     }
 
     @Override
@@ -1067,6 +1074,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 Collections.sort(listItems, Collections.reverseOrder());
                 int i = 0;
                 boolean isOpen = false, isPaid = false;
+                setSpannableTextView();
                 while (i < listItems.size()) {
                     if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
                         String amount = listItems.get(i).getTotalAmount();
@@ -1094,13 +1102,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                             String convertedDateTime = Utils.convertPrefZoneTimeFromPST(dateFormat.format(newDate), "MM/dd/yyyy @ hh:mma", "MM/dd/yyyy @ hh:mma", myApplication.getStrPreference());
                             nxtPayoutDatenTimeTV.setText(convertedDateTime.toLowerCase());
 
-                            setSpannableTextView();
-
+//                            setSpannableTextView();
                         } else {
                             Log.d("date format", date);
                         }
-
-
                         isOpen = true;
                     } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
                         String amount = Utils.convertBigDecimalUSDC((listItems.get(i).getTotalAmount()));
@@ -1133,6 +1138,9 @@ public class BusinessDashboardFragment extends BaseFragment {
                         TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
                         TextView payoutManualTV = xmlView.findViewById(R.id.payoutManualTV);
                         String listDate = listItems.get(j).getUpdatedAt();
+                        if (listDate == null) {
+                            listDate = listItems.get(j).getCreatedAt();
+                        }
                         if (listDate != null && listDate.contains(".")) {
                             String listD = listDate.substring(0, listDate.lastIndexOf("."));
                             payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());

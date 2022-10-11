@@ -1830,10 +1830,15 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
     public void removeAndUploadBODoc() {
         try {
-            if (existingIdentityType != -1)
-                businessIdentityVerificationViewModel.removeBODoc(existingIdentityType + "", boID + "");
-            else
-                businessIdentityVerificationViewModel.removeBODoc(identityType + "", boID + "");
+            if (Utils.isValidFileSize(identityFile)) {
+                if (existingIdentityType != -1)
+                    businessIdentityVerificationViewModel.removeBODoc(existingIdentityType + "", boID + "");
+                else
+                    businessIdentityVerificationViewModel.removeBODoc(identityType + "", boID + "");
+            } else {
+                Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();

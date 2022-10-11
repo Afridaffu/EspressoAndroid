@@ -647,8 +647,9 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     } else {
                         isPayment = false;
                         if (!objData.getPaymentMethod().toLowerCase().equals("credit")) {
-                            objMyApplication.setSelectedCard(objData);
-                            bindPayMethod(objData);
+//                            objMyApplication.setSelectedCard(objData);
+//                            bindPayMethod(objData);
+                            bindPayMethod(previousSelectedCard(objData));
                         } else {
                             bindPayMethod(rollbackSelectedCard());
                         }
@@ -1941,6 +1942,37 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             } else {
                 selectedCard = objMyApplication.getSelectedCard();
             }
+        }
+        return selectedCard;
+    }
+
+    public PaymentsList previousSelectedCard(PaymentsList objData) {
+        try {
+            switch (objData.getPaymentMethod().toLowerCase()) {
+                case "bank":
+                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getWithBank() != null && objMyApplication.getFeatureControlByUser() != null
+                            && (objMyApplication.getFeatureControlGlobal().getWithBank() && objMyApplication.getFeatureControlByUser().getWithBank())) {
+                        selectedCard = objData;
+                        objMyApplication.setSelectedCard(selectedCard);
+                    }
+                    break;
+                case "signet":
+                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getWithSignet() != null && objMyApplication.getFeatureControlByUser() != null
+                            && (objMyApplication.getFeatureControlGlobal().getWithSignet() && objMyApplication.getFeatureControlByUser().getWithSignet())) {
+                        selectedCard = objData;
+                        objMyApplication.setSelectedCard(selectedCard);
+                    }
+                    break;
+                case "debit":
+                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getWithInstant() != null && objMyApplication.getFeatureControlByUser() != null
+                            && (objMyApplication.getFeatureControlGlobal().getWithInstant() && objMyApplication.getFeatureControlByUser().getWithInstant())) {
+                        selectedCard = objData;
+                        objMyApplication.setSelectedCard(selectedCard);
+                    }
+                    break;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return selectedCard;
     }

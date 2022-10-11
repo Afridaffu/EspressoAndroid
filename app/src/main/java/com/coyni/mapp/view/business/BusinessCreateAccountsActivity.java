@@ -34,6 +34,7 @@ import com.coyni.mapp.model.businesswallet.WalletResponseData;
 import com.coyni.mapp.model.preferences.BaseProfile;
 import com.coyni.mapp.model.preferences.ProfilesResponse;
 import com.coyni.mapp.model.profile.AddBusinessUserResponse;
+import com.coyni.mapp.model.profile.Profile;
 import com.coyni.mapp.utils.DisplayImageUtility;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
@@ -108,6 +109,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         super.onResume();
         try {
             showProgressDialog();
+            dashboardViewModel.meProfile();
             dashboardViewModel.getProfiles();
         } catch (Exception e) {
             e.printStackTrace();
@@ -365,6 +367,20 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             }
         });
 
+        dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
+            @Override
+            public void onChanged(Profile profile) {
+                if (profile.getStatus().equalsIgnoreCase("SUCCESS")) {
+                    try {
+                        myApplication.setMyProfile(profile);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+
         loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
@@ -392,12 +408,10 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         myApplication.setIsLoggedIn(true);
 
                         if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
-                            myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
                             Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         } else {
-                            myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
                             Intent intent = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);

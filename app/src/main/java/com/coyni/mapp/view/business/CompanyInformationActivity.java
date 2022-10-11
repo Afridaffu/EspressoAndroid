@@ -834,15 +834,31 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         RequestBody requestBody = null;
                         MultipartBody.Part idFile = null;
                         if (docTypeID == 5) {
+                            aoiUploadTV.setVisibility(VISIBLE);
+                            aoiUploadedLL.setVisibility(GONE);
+                            aoiUpdatedOnTV.setVisibility(GONE);
+                            isAOIUploaded = false;
+
                             requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), aoiFile);
                             idFile = MultipartBody.Part.createFormData("identityFile", aoiFile.getName(), requestBody);
                         } else if (docTypeID == 6) {
+                            einLetterUploadTV.setVisibility(VISIBLE);
+                            einLetterUploadedLL.setVisibility(GONE);
+                            einLetterUpdatedOnTV.setVisibility(GONE);
+                            isEINLetterUploaded = false;
+
                             requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), einLetterFile);
                             idFile = MultipartBody.Part.createFormData("identityFile", einLetterFile.getName(), requestBody);
                         } else if (docTypeID == 7 || docTypeID == 11) {
+                            w9FormUploadTV.setVisibility(VISIBLE);
+                            w9FormUploadedLL.setVisibility(GONE);
+                            w9FormUpdatedOnTV.setVisibility(GONE);
+                            isW9FormUploaded = false;
+
                             requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), w9FormFile);
                             idFile = MultipartBody.Part.createFormData("identityFile", w9FormFile.getName(), requestBody);
                         }
+                        enableOrDisableDocsDone();
                         RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), docTypeID + "");
                         RequestBody idNumber = RequestBody.create(MediaType.parse("text/plain"), ssnET.getText().trim().toString().replace("-", ""));
                         identityVerificationViewModel.uploadIdentityImage(idFile, idType, idNumber);
@@ -1896,7 +1912,18 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
     public void removeAndUploadAdditionalDoc(int docID) {
         docTypeID = docID;
-        identityVerificationViewModel.removeIdentityImage(docTypeID + "");
+        boolean isValid = false;
+        if (selectedDocType.equals("CI-AOI"))
+            isValid = Utils.isValidFileSize(aoiFile);
+        else if (selectedDocType.equals("CI-EINLETTER"))
+            isValid = Utils.isValidFileSize(einLetterFile);
+        else if (selectedDocType.equals("CI-W9"))
+            isValid = Utils.isValidFileSize(w9FormFile);
+
+        if (isValid)
+            identityVerificationViewModel.removeIdentityImage(docTypeID + "");
+        else
+            Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
     }
 
     private void chooseFilePopup(final Context context, String type) {

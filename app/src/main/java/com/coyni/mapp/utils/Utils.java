@@ -96,6 +96,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -2891,6 +2892,17 @@ public class Utils {
                     viewIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(viewIntent);
                 }).show();
+    }
+
+    public static boolean isValidFileSize(File file) {
+        int maxFileSize = 10 * 1000 * 1000;
+        Long l = file.length();
+        String fileSize = l.toString();
+        int finalFileSize = Integer.parseInt(fileSize);
+        if (finalFileSize > maxFileSize)
+            return false;
+        else
+            return true;
     }
 
 }
