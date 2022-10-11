@@ -312,10 +312,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             routingNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (i2 - i1 > 1) {
-                        routingNumberET.setText(charSequence);
-                        routingNumberET.setSelection(charSequence.toString().length());
-                    }
+//                    if (i2 - i1 > 1) {
+//                        routingNumberET.setText(charSequence);
+//                        routingNumberET.setSelection(charSequence.toString().length());
+//                    }
                 }
 
                 @Override
@@ -362,10 +362,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             confirmRoutingNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (i2 - i1 > 1) {
-                        confirmRoutingNumberET.setText(charSequence);
-                        confirmRoutingNumberET.setSelection(charSequence.toString().length());
-                    }
+//                    if (i2 - i1 > 1) {
+//                        confirmRoutingNumberET.setText(charSequence);
+//                        confirmRoutingNumberET.setSelection(charSequence.toString().length());
+//                    }
                 }
 
                 @Override
@@ -394,10 +394,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             checkAccNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSeq, int i, int i1, int i2) {
-                    if (i2 - i1 > 1) {
-                        checkAccNumberET.setText(charSeq);
-                        checkAccNumberET.setSelection(charSeq.toString().length());
-                    }
+//                    if (i2 - i1 > 1) {
+//                        checkAccNumberET.setText(charSeq);
+//                        checkAccNumberET.setSelection(charSeq.toString().length());
+//                    }
                 }
 
                 @Override
@@ -442,10 +442,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             confirmAccNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSeq, int i, int i1, int i2) {
-                    if (i2 - i1 > 1) {
-                        confirmAccNumberET.setText(charSeq);
-                        confirmAccNumberET.setSelection(charSeq.toString().length());
-                    }
+//                    if (i2 - i1 > 1) {
+//                        confirmAccNumberET.setText(charSeq);
+//                        confirmAccNumberET.setSelection(charSeq.toString().length());
+//                    }
                 }
 
                 @Override
