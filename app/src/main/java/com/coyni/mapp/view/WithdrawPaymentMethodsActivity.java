@@ -160,14 +160,19 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             } else if (requestCode == 5) {
                 getPaymentMethods();
             } else if (requestCode == 6) {
-                isDeCredit = true;
-                if (addPayDialog != null && addPayDialog.isShowing()) {
-                    addPayDialog.dismiss();
+                if (objMyApplication.getCardSave()) {
+//                    isDeCredit = true;
+                    if (addPayDialog != null && addPayDialog.isShowing()) {
+                        addPayDialog.dismiss();
+                    }
+                    ControlMethod("withdrawmethod");
+                    selectWithdrawMethod();
+                    strScreen = "withdrawmethod";
+                    strCurrent = "";
+//                    getPaymentMethods();
+                } else {
+                    isDeCredit = true;
                 }
-                ControlMethod("withdrawmethod");
-                selectWithdrawMethod();
-                strScreen = "withdrawmethod";
-                strCurrent = "";
                 getPaymentMethods();
             } else if (requestCode == 7) {
                 if (!objMyApplication.getBankSave()) {
@@ -1814,7 +1819,8 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             if (strType.equals("bank")) {
                 tvHead.setText("Add Bank Account");
                 tvPayHead.setText("External Bank Account");
-                tvCnt.setText("(0/2)");
+                tvCnt.setText("(0/4)");
+                tvCnt.setVisibility(View.GONE);
                 tvMessage.setText("Can be used for making coyni purchases or withdrawing funds.");
                 imgLogo.setImageResource(R.drawable.ic_add_bank);
                 imgPaymnt.setImageResource(R.drawable.ic_bank_account_active);
@@ -1829,6 +1835,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 tvHead.setText("Add Instant Pay");
                 tvPayHead.setText("Debit Card");
                 tvCnt.setText("(0/4)");
+                tvCnt.setVisibility(View.GONE);
                 tvMessage.setText("Visa or Mastercard debit cards");
                 imgLogo.setImageResource(R.drawable.ic_notokenavail);
                 imgPaymnt.setImageResource(R.drawable.ic_credit_debit_card);
