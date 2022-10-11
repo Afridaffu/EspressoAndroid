@@ -111,16 +111,16 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
                 holder.txvCompanyName.setEnabled(true);
             }
 
-            if (listCompany.get(position).getImage() != null
-                    && !listCompany.get(position).getImage().trim().equals("")) {
-                // profileImageText.setVisibility(View.GONE);
-                holder.profileImage.setVisibility(View.VISIBLE);
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
-                utility.addImage(listCompany.get(position).getImage(), holder.profileImage, R.drawable.ic_case);
-            } else {
+//            if (listCompany.get(position).getImage() != null
+//                    && !listCompany.get(position).getImage().trim().equals("")) {
+//                // profileImageText.setVisibility(View.GONE);
+//                holder.profileImage.setVisibility(View.VISIBLE);
+//                DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
+//                utility.addImage(listCompany.get(position).getImage(), holder.profileImage, R.drawable.ic_case);
+//            } else {
                 holder.profileImage.setVisibility(View.VISIBLE);
                 holder.profileImage.setImageResource(R.drawable.ic_case);
-            }
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
