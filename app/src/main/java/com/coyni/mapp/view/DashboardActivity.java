@@ -541,7 +541,7 @@ public class DashboardActivity extends BaseActivity {
                     Utils.setUserEmail(DashboardActivity.this, profile.getData().getEmail());
                     showUnderReviewData();
                 }
-                new FetchData(DashboardActivity.this).execute();
+//                new FetchData(DashboardActivity.this).execute();
             }
         });
 
@@ -1099,6 +1099,7 @@ public class DashboardActivity extends BaseActivity {
             transactionsNSV.smoothScrollTo(0, 0);
 //            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
             startWebSocket();
+            new FetchData(DashboardActivity.this).execute();
         } else {
             Utils.displayAlert(getString(R.string.internet), DashboardActivity.this, "", "");
         }

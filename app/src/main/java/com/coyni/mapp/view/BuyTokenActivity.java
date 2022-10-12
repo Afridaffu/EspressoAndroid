@@ -721,14 +721,16 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                             isPayment = false;
                             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                                 if (!objData.getPaymentMethod().toLowerCase().equals("debit")) {
-                                    objMyApplication.setSelectedCard(objData);
-                                    bindPayMethod(objData);
+//                                    objMyApplication.setSelectedCard(objData);
+//                                    bindPayMethod(objData);
+                                    bindPayMethod(previousSelectedCard(objData));
                                 } else {
                                     bindPayMethod(rollbackSelectedCard());
                                 }
                             } else {
-                                objMyApplication.setSelectedCard(objData);
-                                bindPayMethod(objData);
+//                                objMyApplication.setSelectedCard(objData);
+//                                bindPayMethod(objData);
+                                bindPayMethod(previousSelectedCard(objData));
                             }
                         }
                     }
@@ -1990,46 +1992,84 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
         return selectedCard;
     }
 
-    private void setToken() {
-        strToken = dbHandler.getPermanentToken();
-    }
-
-    private void setFaceLock() {
+    public PaymentsList previousSelectedCard(PaymentsList objData) {
         try {
-            isFaceLock = false;
-            String value = dbHandler.getFacePinLock();
-            if (value != null && value.equals("true")) {
-                isFaceLock = true;
-                objMyApplication.setLocalBiometric(true);
-            } else {
-                isFaceLock = false;
-                objMyApplication.setLocalBiometric(false);
+            switch (objData.getPaymentMethod().toLowerCase()) {
+                case "bank":
+                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getBuyBank() != null && objMyApplication.getFeatureControlByUser() != null
+                            && (objMyApplication.getFeatureControlGlobal().getBuyBank() && objMyApplication.getFeatureControlByUser().getBuyBank())) {
+                        selectedCard = objData;
+                        objMyApplication.setSelectedCard(selectedCard);
+                    }
+                    break;
+                case "signet":
+                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getBuySignet() != null && objMyApplication.getFeatureControlByUser() != null
+                            && (objMyApplication.getFeatureControlGlobal().getBuySignet() && objMyApplication.getFeatureControlByUser().getBuySignet())) {
+                        selectedCard = objData;
+                        objMyApplication.setSelectedCard(selectedCard);
+                    }
+                    break;
+                case "debit":
+                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getBuyDebit() != null && objMyApplication.getFeatureControlByUser() != null
+                            && (objMyApplication.getFeatureControlGlobal().getBuyDebit() && objMyApplication.getFeatureControlByUser().getBuyDebit())) {
+                        selectedCard = objData;
+                        objMyApplication.setSelectedCard(selectedCard);
+                    }
+                    break;
+                case "credit":
+                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getBuyCredit() != null && objMyApplication.getFeatureControlByUser() != null
+                            && (objMyApplication.getFeatureControlGlobal().getBuyCredit() && objMyApplication.getFeatureControlByUser().getBuyCredit())) {
+                        selectedCard = objData;
+                        objMyApplication.setSelectedCard(selectedCard);
+                    }
+                    break;
             }
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        return selectedCard;
     }
 
-    private void setTouchId() {
-        try {
-            isTouchId = false;
-            String value = dbHandler.getThumbPinLock();
-            if (value != null && value.equals("true")) {
-                isTouchId = true;
-                objMyApplication.setLocalBiometric(true);
-            } else {
-                isTouchId = false;
+//    private void setToken() {
+//        strToken = dbHandler.getPermanentToken();
+//    }
+//
+//    private void setFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            String value = dbHandler.getFacePinLock();
+//            if (value != null && value.equals("true")) {
+//                isFaceLock = true;
+//                objMyApplication.setLocalBiometric(true);
+//            } else {
+//                isFaceLock = false;
 //                objMyApplication.setLocalBiometric(false);
-                if (!isFaceLock) {
-                    objMyApplication.setLocalBiometric(false);
-                }
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    private void setTouchId() {
+//        try {
+//            isTouchId = false;
+//            String value = dbHandler.getThumbPinLock();
+//            if (value != null && value.equals("true")) {
+//                isTouchId = true;
+//                objMyApplication.setLocalBiometric(true);
+//            } else {
+//                isTouchId = false;
+////                objMyApplication.setLocalBiometric(false);
+//                if (!isFaceLock) {
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     private void defaultInputSetup() {
         tvCYN.setVisibility(View.VISIBLE);
