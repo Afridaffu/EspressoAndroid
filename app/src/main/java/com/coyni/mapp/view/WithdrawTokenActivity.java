@@ -1616,7 +1616,8 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
         try {
             if (isUSD) {
                 isUSD = false;
-                usdValue = Utils.doubleParsing(etAmount.getText().toString().trim().replace(",", ""));
+//                usdValue = Utils.doubleParsing(etAmount.getText().toString().trim().replace(",", ""));
+                usdValue = Utils.doubleParsing(Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", "")));
                 cynValue = (usdValue + (usdValue * (feeInPercentage / 100))) + feeInAmount;
             }
         } catch (Exception ex) {
