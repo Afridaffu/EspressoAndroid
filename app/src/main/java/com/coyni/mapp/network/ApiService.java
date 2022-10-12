@@ -565,8 +565,8 @@ public interface ApiService {
 //    @GET("api/v2/profile/me/{walletType}")
 //    Call<BusinessWalletResponse> meMerchantWallet(@Path("walletType") String walletType);
 
-    @POST("api/v2/profile/wallet")
-    Call<BusinessWalletResponse> meMerchantWallet(@Body WalletRequest request);
+    @GET("api/v2/profile/wallets")
+    Call<BusinessWalletResponse> meWallets();
 
     @GET("api/v2/lov/BT")
     Call<BusinessTypeResp> getBusinessType();
@@ -587,10 +587,10 @@ public interface ApiService {
     Call<BankResponse> meBanks();
 
     @GET("api/v2/business/beneficial-owners")
-    Call<BOResp> getBeneficailOwners();
+    Call<BOResp> getBeneficialOwners();
 
     @POST("api/v2/business/beneficial-owners")
-    Call<BOIdResp> postBeneficailOwnersID();
+    Call<BOIdResp> postBeneficialOwnersID();
 
     @DELETE("api/v2/business/beneficial-owners")
     Call<DeleteBOResp> deleteBeneficialOwner(@Query("beneficialOwnerId") Integer beneficialOwnerId);
@@ -607,7 +607,7 @@ public interface ApiService {
     Call<RemoveIdentityResponse> removeBODoc(@Query("identityType") String identityType, @Query("beneficialOwnerId") String beneficialOwnerId);
 
     @GET("api/v2/business/beneficial-owners-validate")
-    Call<BOValidateResp> validateBeneficailOwners();
+    Call<BOValidateResp> validateBeneficialOwners();
 
     @GET("api/v2/banks/me")
     Call<BanksResponseModel> getBankAccountsData();

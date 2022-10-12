@@ -34,6 +34,7 @@ import com.coyni.mapp.model.DialogAttributes;
 import com.coyni.mapp.model.biometric.BiometricTokenRequest;
 import com.coyni.mapp.model.biometric.BiometricTokenResponse;
 import com.coyni.mapp.model.businesswallet.BusinessWalletResponse;
+import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.businesswallet.WalletRequest;
 import com.coyni.mapp.model.check_out_transactions.CancelOrderRequest;
 import com.coyni.mapp.model.check_out_transactions.CancelOrderResponse;
@@ -51,11 +52,12 @@ import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.business.BusinessDashboardActivity;
-import com.coyni.mapp.view.business.VerificationFailedActivity;
 import com.coyni.mapp.viewmodel.BusinessDashboardViewModel;
 import com.coyni.mapp.viewmodel.BuyTokenViewModel;
 import com.coyni.mapp.viewmodel.CheckOutViewModel;
 import com.coyni.mapp.viewmodel.CoyniViewModel;
+
+import java.util.List;
 
 public class CheckOutPaymentActivity extends AppCompatActivity {
 
@@ -268,13 +270,11 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                if (businessWalletResponse != null) {
-                    if (businessWalletResponse.getStatus() != null && businessWalletResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null) {
-                            availableBalance = businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse();
-                            mTokenBalance.setText("Available: " + Utils.convertTwoDecimal(String.valueOf(availableBalance)) + "CYN");
-                        }
-                    }
+                if (businessWalletResponse == null) {
+                    return;
+                }
+                if (businessWalletResponse.getStatus() != null && businessWalletResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                    tokenWalletData(businessWalletResponse);
                 }
             }
         });
@@ -464,11 +464,9 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
 
     private void walletAPICall() {
 
-        WalletRequest walletRequest = new WalletRequest();
-        walletRequest.setWalletType(Utils.TOKEN);
 
         if (Utils.checkInternet(CheckOutPaymentActivity.this)) {
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
+            businessDashboardViewModel.meWallets();
         } else {
             Utils.displayAlert(getString(R.string.internet), CheckOutPaymentActivity.this, "", "");
         }
@@ -757,4 +755,15 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     }
 
 
+    private void tokenWalletData(BusinessWalletResponse businessWalletResponse) {
+        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null) {
+            List<WalletInfo> walletInfoList = businessWalletResponse.getData().getWalletNames();
+            for (WalletInfo walletInfo : walletInfoList){
+                if (walletInfo.getWalletType().equalsIgnoreCase(Utils.TOKEN_STR)){
+                    availableBalance = walletInfo.getAvailabilityToUse();
+                    mTokenBalance.setText("Available: " + Utils.convertTwoDecimal(String.valueOf(availableBalance)) + "CYN");
+                }
+            }
+        }
+    }
 }

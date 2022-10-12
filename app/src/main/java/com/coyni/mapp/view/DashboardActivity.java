@@ -4,13 +4,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -34,8 +32,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.LatestTxnAdapter;
-import com.coyni.mapp.model.appupdate.AppUpdateResp;
-import com.coyni.mapp.model.bank.SignOn;
 import com.coyni.mapp.model.businesswallet.BusinessWalletResponse;
 import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.businesswallet.WalletRequest;
@@ -67,7 +63,6 @@ import com.coyni.mapp.viewmodel.LoginViewModel;
 import com.coyni.mapp.viewmodel.NotificationsViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
@@ -519,9 +514,7 @@ public class DashboardActivity extends BaseActivity {
             LatestTransactionsRequest request = new LatestTransactionsRequest();
             request.setTransactionType(getDefaultTransactionTypes());
             dashboardViewModel.getLatestTxns(request);
-            WalletRequest walletRequest = new WalletRequest();
-            walletRequest.setWalletType(Utils.TOKEN);
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
+            businessDashboardViewModel.meWallets();
             notificationsViewModel.getNotifications();
             transactionsNSV.smoothScrollTo(0, 0);
         } else {
@@ -555,9 +548,14 @@ public class DashboardActivity extends BaseActivity {
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                if (businessWalletResponse != null) {
-                    objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-                    getBalance(businessWalletResponse.getData());
+                if (businessWalletResponse == null) {
+                    return;
+                }
+                if (businessWalletResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                    tokenWalletData(businessWalletResponse);
+                    if (businessWalletResponse.getData()!=null){
+                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                    }
                 }
             }
         });
@@ -1014,9 +1012,8 @@ public class DashboardActivity extends BaseActivity {
             try {
                 //customerProfileViewModel.meSignOn();
                 dashboardViewModel.mePaymentMethods();
-                WalletRequest walletRequest = new WalletRequest();
-                walletRequest.setWalletType(Utils.TOKEN);
-                businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+                businessDashboardViewModel.meWallets();
                 notificationsViewModel.getNotifications();
                 dashboardViewModel.getFeatureControlByUser(objMyApplication.getLoginUserId());
                 dashboardViewModel.getFeatureControlGlobal(getString(R.string.portalType));
@@ -1339,5 +1336,18 @@ public class DashboardActivity extends BaseActivity {
 //                }).show();
 //    }
 
+    private void tokenWalletData(BusinessWalletResponse businessWalletResponse) {
+        String strAmount = "";
+        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null) {
+            List<WalletInfo> walletInfoList = businessWalletResponse.getData().getWalletNames();
+            for (WalletInfo walletInfo : walletInfoList) {
+                if (walletInfo.getWalletType().equalsIgnoreCase(Utils.TOKEN_STR)) {
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.getAvailabilityToUse()));
+                    tvBalance.setText(strAmount);
+                    objMyApplication.setGBTBalance(walletInfo.getAvailabilityToUse(), walletInfo.getWalletType());
+                }
+            }
+        }
+    }
 
 }

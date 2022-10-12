@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.view.business.SelectPaymentMethodActivity;
 import com.google.zxing.Reader;
 import com.coyni.mapp.dialogs.OnDialogClickListener;
@@ -343,11 +344,9 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 tvSaveUserName.setText(savedStrName);
             }
             saveToAlbumbindImage();
-            WalletResponseData walletResponse = objMyApplication.getCurrentUserData().getTokenWalletResponse();
-            if (walletResponse != null && walletResponse.getWalletNames() != null
-                    && walletResponse.getWalletNames().get(0) != null
-                    && walletResponse.getWalletNames().get(0).getWalletId() != null) {
-                strWallet = walletResponse.getWalletNames().get(0).getWalletId();
+            WalletInfo walletResponse = objMyApplication.getCurrentUserData().getTokenWalletResponse();
+            if (walletResponse != null && walletResponse.getWalletId() != null) {
+                strWallet = walletResponse.getWalletId();
                 generateQRCode(strWallet);
                 tvWalletAddress.setText(strWallet.substring(0, 16) + "...");
             }
@@ -449,7 +448,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                         myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
                         ClipData myClip;
-                        String text = objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId();
+                        String text = objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletId();
                         myClip = ClipData.newPlainText("text", text);
                         myClipboard.setPrimaryClip(myClip);
 
