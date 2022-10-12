@@ -170,6 +170,7 @@ public class DashboardActivity extends BaseActivity {
         super.onNotificationUpdate();
         latestTxnRefresh.setRefreshing(true);
         fetchTransactions();
+        startWebSocket();
     }
 
     private void initialization() {
