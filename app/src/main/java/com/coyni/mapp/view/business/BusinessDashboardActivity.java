@@ -139,6 +139,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     @Override
     public void onNotificationUpdate() {
         super.onNotificationUpdate();
+        startWebSocket();
         if (mCurrentFragment != null) {
             mCurrentFragment.onNotificationUpdate();
         }
