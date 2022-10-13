@@ -44,11 +44,13 @@ import com.coyni.mapp.dialogs.ManualAccountNumbersFullPage;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
 import com.coyni.mapp.model.bank.ManualBankRequest;
 import com.coyni.mapp.model.bank.ManualBankResponse;
+import com.coyni.mapp.model.paymentmethods.PaymentsList;
 import com.coyni.mapp.model.summary.BankAccount;
 import com.coyni.mapp.utils.EmojiFilter;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
+import com.coyni.mapp.view.WithdrawTokenActivity;
 import com.coyni.mapp.viewmodel.PaymentMethodsViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -785,8 +787,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (manualBankResponse.getData() != null && !manualBankResponse.getData().getGiactFail()) {
                             objMyApplication.setBankSave(true);
-                            Intent i = new Intent();
-                            setResult(RESULT_OK, i);
+//                            Intent i = new Intent();
+//                            setResult(RESULT_OK, i);
+//                            finish();
+                            startActivity(new Intent(AddManualBankAccount.this, WithdrawTokenActivity.class));
                             finish();
                         } else {
 //                            bankStatusDialog.dismiss();
