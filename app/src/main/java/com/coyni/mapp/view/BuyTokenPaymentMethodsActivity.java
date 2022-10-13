@@ -64,12 +64,11 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
     RelativeLayout layoutDCard, lyExternal, layoutCCard;
     String strCurrent = "", strSignOn = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
-    Dialog dialog, pDialog;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
     TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
     CardView cvNext, cvTryAgain, cvDone;
-    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false, isPaymentAdded = false;
     TextInputEditText etCVV;
     RecyclerView rvSelPayMethods;
     public static BuyTokenPaymentMethodsActivity buyTokenPaymentMethodsActivity;
@@ -193,11 +192,12 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 } else if (!objMyApplication.getBankSave()) {
                     isDeCredit = true;
                     ControlMethod("addpayment");
-                } else {
-                    objMyApplication.setBankSave(false);
-                    ControlMethod("paymentMethods");
-                    strCurrent = "paymentMethods";
                 }
+//                else {
+//                    objMyApplication.setBankSave(false);
+//                    ControlMethod("paymentMethods");
+//                    strCurrent = "paymentMethods";
+//                }
                 getPaymentMethods();
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -373,9 +373,26 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                         numberOfAccounts();
                     } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
-                        ControlMethod("paymentMethods");
-                        strCurrent = "paymentMethods";
-                        paymentMethods();
+                        if (!objMyApplication.getCardSave() && objMyApplication.getBankSave()) {
+                            ControlMethod("paymentMethods");
+                            strCurrent = "paymentMethods";
+                            paymentMethods();
+                        } else {
+                            PaymentsList objData = paymentMethodsResponse.getData().getData().get(0);
+                            objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                            objMyApplication.setSelectedCard(objData);
+                            switch (objData.getPaymentMethod().toLowerCase()) {
+                                case "bank":
+                                    objMyApplication.setBankSave(false);
+                                    bindSelectedBank();
+                                    break;
+                                case "credit":
+                                case "debit": {
+
+                                }
+                                break;
+                            }
+                        }
                     } else if (isPayments) {
                         isPayments = false;
                         isDeCredit = false;
@@ -943,7 +960,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
         }
     }
 
-    public void openBankFiserv(){
+    public void openBankFiserv() {
         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
             isBank = true;
             Log.e("setResolveUrl", "862 setResolveUrl");
