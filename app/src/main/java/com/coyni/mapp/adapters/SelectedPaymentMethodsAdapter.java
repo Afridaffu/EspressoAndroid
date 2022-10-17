@@ -158,7 +158,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                 } else {
                     holder.tvAccount.setText(objData.getAccountNumber());
                 }
-            } else if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equals("Cogent")) {
+            } else if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                 disableSwipe(holder);
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.layoutCard.setVisibility(View.GONE);
@@ -371,7 +371,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                                             }
                                         }
                                     }
-                                } else if (objData.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                                } else if (objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                                     if (objMyApplication.getFeatureControlGlobal()!=null&&objMyApplication.getFeatureControlGlobal().getBuyCogent() != null && objMyApplication.getFeatureControlByUser() != null
                                             && objMyApplication.getFeatureControlGlobal().getBuyCogent() && objMyApplication.getFeatureControlByUser().getBuyCogent()) {
                                         if (!objData.getRelink()) {
@@ -419,7 +419,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                                             ((WithdrawPaymentMethodsActivity) mContext).expiry();
                                         }
                                     }
-                                } else if (objData.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                                } else if (objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                                     if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getWithCogent() != null && objMyApplication.getFeatureControlByUser() != null
                                             && objMyApplication.getFeatureControlGlobal().getWithCogent() && objMyApplication.getFeatureControlByUser().getWithCogent()) {
                                         if (!objData.getRelink()) {
@@ -458,7 +458,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                                                 ((BuyTokenActivity) mContext).expiry();
                                             }
                                         }
-                                    } else if (objData.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                                    } else if (objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                                         if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getBuyCogent() != null && objMyApplication.getFeatureControlByUser() != null
                                                 && objMyApplication.getFeatureControlGlobal().getBuyCogent() && objMyApplication.getFeatureControlByUser().getBuyCogent()) {
                                             objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
@@ -548,7 +548,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
                                                 ((WithdrawTokenActivity) mContext).expiry();
                                             }
                                         }
-                                    } else if (objData.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                                    } else if (objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                                         if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getWithCogent() != null && objMyApplication.getFeatureControlByUser() != null
                                                 && objMyApplication.getFeatureControlGlobal().getWithCogent() && objMyApplication.getFeatureControlByUser().getWithCogent()) {
                                             objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());

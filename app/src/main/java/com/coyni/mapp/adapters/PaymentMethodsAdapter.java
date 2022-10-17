@@ -86,7 +86,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                 } else {
                     holder.tvAccNumber.setText(objData.getAccountNumber());
                 }
-            } else if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equals("Cogent")) {
+            } else if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                 holder.tvBankHead.setText("Cogent Account");
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.tvCardNumber.setVisibility(View.GONE);
@@ -227,7 +227,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                                 } else {
                                     Utils.displayAlert(mContext.getString(R.string.errormsg), ((BusinessPaymentMethodsActivity) mContext), "", "");
                                 }
-                            } else if (objData.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                            } else if (objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                                 if (objMyApplication.getFeatureControlGlobal().getPayCogent() != null && objMyApplication.getFeatureControlByUser() != null
                                         && objMyApplication.getFeatureControlGlobal().getPayCogent() && objMyApplication.getFeatureControlByUser().getPayCogent()) {
                                     ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
