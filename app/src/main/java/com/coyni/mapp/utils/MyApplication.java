@@ -684,6 +684,15 @@ public class MyApplication extends Application {
         mCurrentUserData.setCogent(Cogent);
     }
 
+    public Boolean getSignet() {
+        return mCurrentUserData.getSignet();
+    }
+
+    public void setSignet(Boolean Signet) {
+        mCurrentUserData.setSignet(Signet);
+    }
+
+
     public void setAccountType(int accountType) {
         mCurrentUserData.setAccountType(accountType);
     }

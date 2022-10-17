@@ -232,6 +232,7 @@
     <string name="calendar_saturday">S</string>
     <string name="something_went_wrong">something went wrong</string>
     <string name="Cogent_account">Cogent Account</string>
+    <string name="Signet_account">Signet Account</string>
     <string name="Cogent_ac_withdrawing_funds">Can be used for withdrawing funds from your coyni account.</string>
     <string name="withdraw_to_usd">Withdraw to USD</string>
     <string name="scan">Scan</string>
@@ -323,6 +324,7 @@
     <string name="buying_tokens">Used for buying tokens or withdrawing \nfunds.</string>
     <string name="can_only_be_used_for_instant_pay_withdraw">Can only be used for instant pay withdraw.</string>
     <string name="add_a_Cogent_account">Add A Cogent Account</string>
+    <string name="add_a_signet_account">Add A Signet Account</string>
     <string name="please_enter_account_details">Please enter account details</string>
     <string name="enter_name">Enter Name</string>
     <string name="add">Add</string>
@@ -408,6 +410,7 @@
     <string name="deposit_id">Deposit ID</string>
     <string name="reference_id">Reference ID</string>
     <string name="Cogent_wallet_id">Cogent Wallet ID</string>
+    <string name="signet_wallet_id">Signet Wallet ID</string>
     <string name="name_on_account">Name on Account</string>
     <string name="status">Status</string>
     <string name="completed">Completed</string>
@@ -583,6 +586,7 @@
     <string name="recent_token_transactions">Recent Token Transactions</string>
     <string name="identify_verification_under_review">Identity Verification\nUnder Review</string>
     <string name="name_on_Cogent_account">Name on Cogent Account</string>
+    <string name="name_on_signet_account">Name on Signet Account</string>
 
     <string name="purchase_amount_processing_fee">(Purchase Amount + Processing Fee)</string>
     <string name="dollor">$</string>
@@ -660,6 +664,7 @@
     <string name="time">11:59pm</string>
     <string name="sales_orders">Sale Orders</string>
     <string name="Cogent">Cogent</string>
+    <string name="Signet">Signet</string>
     <string name="withdraw_tokens">Withdraw Tokens</string>
     <string name="cyn_under_payout">(CYN)</string>
     <string name="avail_bal">12132.2323</string>

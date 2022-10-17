@@ -1254,6 +1254,9 @@ public class DashboardActivity extends BaseActivity {
                         case Utils.buyCogentEnable:
                             featureControlByUser.setBuyCogent(permissionResponseList.get(i).getPermission());
                             break;
+                        case Utils.buySignetEnable:
+                            featureControlByUser.setBuySignet(permissionResponseList.get(i).getPermission());
+                            break;
                         case Utils.withBankEnable:
                             featureControlByUser.setWithBank(permissionResponseList.get(i).getPermission());
                             break;
@@ -1265,6 +1268,9 @@ public class DashboardActivity extends BaseActivity {
                             break;
                         case Utils.withCogentEnable:
                             featureControlByUser.setWithCogent(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.withSignetEnable:
+                            featureControlByUser.setWithSignet(permissionResponseList.get(i).getPermission());
                             break;
                         case Utils.allControlsEnable:
                             featureControlByUser.setAllControls(permissionResponseList.get(i).getPermission());
@@ -1283,6 +1289,9 @@ public class DashboardActivity extends BaseActivity {
                             break;
                         case Utils.payCogentEnable:
                             featureControlByUser.setPayCogent(permissionResponseList.get(i).getPermission());
+                            break;
+                        case Utils.paySignetEnable:
+                            featureControlByUser.setPaySignet(permissionResponseList.get(i).getPermission());
                             break;
                         case Utils.payEnable:
                             featureControlByUser.setPay(permissionResponseList.get(i).getPermission());

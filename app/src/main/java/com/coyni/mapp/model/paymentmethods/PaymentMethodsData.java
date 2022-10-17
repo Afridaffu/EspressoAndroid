@@ -10,10 +10,12 @@ public class PaymentMethodsData {
     private int debitCardCount;
     private int bankCount;
     private int cogentCount;
+    private int signetCount;
     private int maxDebitCardsAllowed;
     private int maxCreditCardsAllowed;
     private int maxBankAccountsAllowed;
     private int maxCogentAccountsAllowed;
+    private int maxSignetAccountsAllowed;
 
     public List<PaymentsList> getData() {
         return data;
@@ -85,5 +87,21 @@ public class PaymentMethodsData {
 
     public void setMaxCogentAccountsAllowed(int maxCogentAccountsAllowed) {
         this.maxCogentAccountsAllowed = maxCogentAccountsAllowed;
+    }
+
+    public int getSignetCount() {
+        return signetCount;
+    }
+
+    public void setSignetCount(int signetCount) {
+        this.signetCount = signetCount;
+    }
+
+    public int getMaxSignetAccountsAllowed() {
+        return maxSignetAccountsAllowed;
+    }
+
+    public void setMaxSignetAccountsAllowed(int maxSignetAccountsAllowed) {
+        this.maxSignetAccountsAllowed = maxSignetAccountsAllowed;
     }
 }

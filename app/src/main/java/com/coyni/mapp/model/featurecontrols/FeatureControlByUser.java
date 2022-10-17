@@ -3,6 +3,7 @@ package com.coyni.mapp.model.featurecontrols;
 public class FeatureControlByUser {
     private Boolean isSaleOrder = true;
     private Boolean isBuyCogent = true;
+    private Boolean isBuySignet = true;
     private Boolean isBuyBank = true;
     private Boolean isBuyDebit = true;
     private Boolean isBuyCredit = true;
@@ -10,7 +11,9 @@ public class FeatureControlByUser {
     private Boolean isWithBank = true;
     private Boolean isWithInstant = true;
     private Boolean isWithCogent = true;
+    private Boolean isWithSignet = true;
     private Boolean isPayCogent = true;
+    private Boolean isPaySignet = true;
     private Boolean isPayBank = true;
     private Boolean isPayCredit = true;
     private Boolean isPayDebit = true;
@@ -144,5 +147,29 @@ public class FeatureControlByUser {
 
     public void setAllControls(Boolean allControls) {
         isAllControls = allControls;
+    }
+
+    public Boolean getBuySignet() {
+        return isBuySignet;
+    }
+
+    public void setBuySignet(Boolean buySignet) {
+        isBuySignet = buySignet;
+    }
+
+    public Boolean getWithSignet() {
+        return isWithSignet;
+    }
+
+    public void setWithSignet(Boolean withSignet) {
+        isWithSignet = withSignet;
+    }
+
+    public Boolean getPaySignet() {
+        return isPaySignet;
+    }
+
+    public void setPaySignet(Boolean paySignet) {
+        isPaySignet = paySignet;
     }
 }

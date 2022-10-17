@@ -64,13 +64,14 @@ public class SelectPaymentMethodActivity extends BaseActivity {
     DashboardViewModel dashboardViewModel;
     PaymentMethodsViewModel paymentMethodsViewModel;
     LinearLayout lyBPayClose, lyExternalClose, lySelBack, lyAddPay;
-    RelativeLayout layoutDCard, lyExternal, layoutCogent;
+    RelativeLayout layoutDCard, lyExternal, layoutCogent, layoutSignet;
     String strCurrent = "", strSignOn = "", strScreen = "", strOnPauseScreen = "", strMenu = "";
     SignOnData signOnData;
     Dialog dialog, pDialog;
-    TextView tvBankError, tvDCardError, tvCogentError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCogentCount, tvCogentMsg, tvCogentCS;
-    TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCogentHead, tvErrorHead, tvMessage;
-    ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCogentLogo, imgCogentArrow, imgLogo;
+    TextView tvBankError, tvDCardError, tvCogentError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCogentCount, tvCogentMsg, tvCogentCS,
+            tvSignetError, tvSignetCount, tvSignetMsg, tvSignetCS;
+    TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCogentHead, tvErrorHead, tvMessage, tvSignetHead;
+    ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCogentLogo, imgCogentArrow, imgLogo, imgSignetLogo, imgSignetArrow;
     CardView cvNext, cvTryAgain, cvDone;
     Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
     TextInputEditText etCVV;
@@ -199,6 +200,9 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     onBackPressed();
                 } else if (objMyApplication.getCogent()) {
                     objMyApplication.setCogent(false);
+                    getPaymentMethods();
+                } else if (objMyApplication.getSignet()) {
+                    objMyApplication.setSignet(false);
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
@@ -488,6 +492,15 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             tvCogentCS = findViewById(R.id.tvCogentCS);
             layoutDCard = findViewById(R.id.layoutBDCard);
             layoutCogent = findViewById(R.id.layoutCogent);
+
+            layoutSignet = findViewById(R.id.layoutSignet);
+            imgSignetLogo = findViewById(R.id.imgSignetLogo);
+            imgSignetArrow = findViewById(R.id.imgSignetArrow);
+            tvSignetHead = findViewById(R.id.tvSignetHead);
+            tvSignetCount = findViewById(R.id.tvSignetCount);
+            tvSignetMsg = findViewById(R.id.tvSignetMsg);
+            tvSignetCS = findViewById(R.id.tvSignetCS);
+
             cvNext = findViewById(R.id.cvNext);
             tvLearnMore = findViewById(R.id.tvLearnMore);
             tvMessage = findViewById(R.id.tvMessage);
@@ -502,6 +515,18 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 layoutDCard.setVisibility(VISIBLE);
                 tvCogentMsg.setVisibility(VISIBLE);
                 tvCogentCS.setVisibility(View.GONE);
+            }
+
+            if (objMyApplication.getWebSocketUrlResponse().getIsCogentEnabled().equalsIgnoreCase("true")) {
+                layoutCogent.setVisibility(VISIBLE);
+            } else {
+                layoutCogent.setVisibility(GONE);
+            }
+
+            if (objMyApplication.getWebSocketUrlResponse().getIsSignetEnabled().equalsIgnoreCase("true")) {
+                layoutSignet.setVisibility(VISIBLE);
+            } else {
+                layoutSignet.setVisibility(GONE);
             }
 
             lyBPayClose.setOnClickListener(new View.OnClickListener() {
@@ -565,14 +590,39 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     try {
                         if (objMyApplication.getFeatureControlGlobal().getPayCogent() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayCogent() && objMyApplication.getFeatureControlByUser().getPayCogent()) {
-                        if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
-                            if (paymentMethodsResponse.getData().getCogentCount() < paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
-                                strCurrent = "Cogent";
-                                strOnPauseScreen = "";
-                                Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
-                                startActivityForResult(i, 2);
+                            if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
+                                if (paymentMethodsResponse.getData().getCogentCount() < paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
+                                    strCurrent = "Cogent";
+                                    strOnPauseScreen = "";
+                                    Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
+                                    i.putExtra("TYPE", "Cogent");
+                                    startActivityForResult(i, 2);
+                                }
                             }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), SelectPaymentMethodActivity.this, "", "");
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            layoutSignet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
+                                && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
+                            if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
+                                if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                                    strCurrent = "Signet";
+                                    strOnPauseScreen = "";
+                                    Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
+                                    i.putExtra("TYPE", "Signet");
+                                    startActivityForResult(i, 2);
+                                }
+                            }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), SelectPaymentMethodActivity.this, "", "");
                         }
@@ -594,10 +644,12 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 tvExtBankHead.setText("(" + paymentMethodsResponse.getData().getBankCount() + "/" + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + ")");
                 tvDCardHead.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
                 tvCogentCount.setText("(" + paymentMethodsResponse.getData().getCogentCount() + "/" + paymentMethodsResponse.getData().getMaxCogentAccountsAllowed() + ")");
+                tvSignetCount.setText("(" + paymentMethodsResponse.getData().getSignetCount() + "/" + paymentMethodsResponse.getData().getMaxSignetAccountsAllowed() + ")");
 
                 tvBankError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + " banks");
                 tvDCardError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + " cards");
                 tvCogentError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxCogentAccountsAllowed() + " accounts");
+                tvSignetError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxSignetAccountsAllowed() + " accounts");
             }
 //            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
             if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
@@ -636,7 +688,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
 //                if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
 //                    tvCogentError.setVisibility(View.GONE);
 //                } else {
-                    tvCogentError.setVisibility(View.VISIBLE);
+                tvCogentError.setVisibility(View.VISIBLE);
 //                }
                 tvCogentHead.setTextColor(getColor(R.color.light_gray));
                 tvCogentCount.setTextColor(getColor(R.color.light_gray));
@@ -660,6 +712,23 @@ public class SelectPaymentMethodActivity extends BaseActivity {
 //                    imgCogentArrow.setColorFilter(getColor(R.color.light_gray));
 //                }
             }
+
+            if (paymentMethodsResponse.getData().getSignetCount() >= paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                tvSignetError.setVisibility(View.VISIBLE);
+                tvSignetHead.setTextColor(getColor(R.color.light_gray));
+                tvSignetCount.setTextColor(getColor(R.color.light_gray));
+                tvSignetMsg.setTextColor(getColor(R.color.light_gray));
+                imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
+                imgSignetLogo.setImageResource(R.drawable.ic_signetinactive);
+            } else {
+                tvSignetError.setVisibility(View.GONE);
+                tvSignetHead.setTextColor(getColor(R.color.primary_black));
+                tvSignetCount.setTextColor(getColor(R.color.dark_grey));
+                tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
+                imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
+                imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
+            }
+
 //            }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -995,6 +1064,16 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     } else {
                         tvBankName.setText(objPayment.getAccountNumber());
                     }
+                } else if (objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("signet")) {
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
+                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                    tvAccount.setVisibility(View.GONE);
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvBankName.setText(objPayment.getAccountNumber());
+                    }
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);
                     layoutBank.setVisibility(View.GONE);
@@ -1031,7 +1110,8 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 public void onClick(View v) {
                     dialog.dismiss();
                     pDialog = Utils.showProgressDialog(SelectPaymentMethodActivity.this);
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")
+                            || objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("signet")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
                     } else {
                         paymentMethodsViewModel.deleteCards(objPayment.getId());
