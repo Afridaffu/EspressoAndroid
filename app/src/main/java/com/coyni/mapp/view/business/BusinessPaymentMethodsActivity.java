@@ -788,7 +788,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
-                } else if (objPayment.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                } else if (objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                     layoutCard.setVisibility(View.GONE);
                     layoutBank.setVisibility(View.VISIBLE);
                     imgBankIcon.setImageResource(R.drawable.ic_cogentactive);
@@ -834,7 +834,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                 public void onClick(View v) {
                     dialog.dismiss();
                     pDialog = Utils.showProgressDialog(BusinessPaymentMethodsActivity.this);
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
                     } else {
                         paymentMethodsViewModel.deleteCards(objPayment.getId());

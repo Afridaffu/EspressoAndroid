@@ -496,8 +496,8 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             paymentMethods();
             if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
                 layoutDCard.setVisibility(View.GONE);
-                tvCogentMsg.setVisibility(View.GONE);
-                tvCogentCS.setVisibility(VISIBLE);
+                tvCogentMsg.setVisibility(VISIBLE);
+                tvCogentCS.setVisibility(GONE);
             } else {
                 layoutDCard.setVisibility(VISIBLE);
                 tvCogentMsg.setVisibility(VISIBLE);
@@ -565,7 +565,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     try {
                         if (objMyApplication.getFeatureControlGlobal().getPayCogent() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayCogent() && objMyApplication.getFeatureControlByUser().getPayCogent()) {
-                        if (!strMenu.equals("buy") && !strCurrent.equals("notokens")&& tvCogentCS.getVisibility() == GONE) {
+                        if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
                             if (paymentMethodsResponse.getData().getCogentCount() < paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
                                 strCurrent = "Cogent";
                                 strOnPauseScreen = "";
@@ -633,11 +633,11 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
             }
             if (paymentMethodsResponse.getData().getCogentCount() >= paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
-                if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
-                    tvCogentError.setVisibility(View.GONE);
-                } else {
+//                if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
+//                    tvCogentError.setVisibility(View.GONE);
+//                } else {
                     tvCogentError.setVisibility(View.VISIBLE);
-                }
+//                }
                 tvCogentHead.setTextColor(getColor(R.color.light_gray));
                 tvCogentCount.setTextColor(getColor(R.color.light_gray));
                 tvCogentMsg.setTextColor(getColor(R.color.light_gray));
@@ -653,12 +653,12 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 imgCogentArrow.setColorFilter(getColor(R.color.primary_black));
                 imgCogentLogo.setImageResource(R.drawable.ic_cogentactive);
 //                imgCogentLogo.setImageResource(R.drawable.ic_Cogentinactive);
-                if (strMenu.equals("buy") || strCurrent.equals("notokens")|| tvCogentCS.getVisibility() == VISIBLE) {
-                    tvCogentHead.setTextColor(getColor(R.color.light_gray));
-                    tvCogentCount.setTextColor(getColor(R.color.light_gray));
-                    imgCogentLogo.setImageResource(R.drawable.ic_cogentinactive);
-                    imgCogentArrow.setColorFilter(getColor(R.color.light_gray));
-                }
+//                if (strMenu.equals("buy") || strCurrent.equals("notokens")|| tvCogentCS.getVisibility() == VISIBLE) {
+//                    tvCogentHead.setTextColor(getColor(R.color.light_gray));
+//                    tvCogentCount.setTextColor(getColor(R.color.light_gray));
+//                    imgCogentLogo.setImageResource(R.drawable.ic_cogentinactive);
+//                    imgCogentArrow.setColorFilter(getColor(R.color.light_gray));
+//                }
             }
 //            }
         } catch (Exception ex) {
@@ -985,7 +985,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
-                } else if (objPayment.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                } else if (objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                     layoutCard.setVisibility(View.GONE);
                     layoutBank.setVisibility(View.VISIBLE);
                     imgBankIcon.setImageResource(R.drawable.ic_cogentactive);

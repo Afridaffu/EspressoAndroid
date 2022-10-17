@@ -879,7 +879,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             obj.setTransactionType(Integer.parseInt(Utils.withdrawType));
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("Cogent")) {
+            if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                     strType = "bank";
                     strSubType = Utils.bankType;
@@ -1073,7 +1073,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             isAuthenticationCalled = false;
             createWithdrawRequest();
 
-            if (selectedCard.getPaymentMethod().toLowerCase().equals("bank") || selectedCard.getPaymentMethod().toLowerCase().equals("Cogent")) {
+            if (selectedCard.getPaymentMethod().toLowerCase().equals("bank") || selectedCard.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
                 tvBankName.setText(selectedCard.getBankName());
@@ -1281,7 +1281,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
-                } else if (objPayment.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                } else if (objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                     if (payDialog != null && payDialog.isShowing()) {
                         payDialog.dismiss();
                     }
@@ -1330,7 +1330,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 public void onClick(View v) {
                     dialog.dismiss();
                     pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
                         strPayment = objPayment.getPaymentMethod().toLowerCase();
                     } else {
@@ -1928,7 +1928,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
     }
 
     public PaymentsList rollbackSelectedCard() {
-        if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank") || objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("Cogent")) {
+        if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank") || objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
             if (objMyApplication.getSelectedCard().getRelink()) {
                 selectedCard = objMyApplication.getPrevSelectedCard();
                 objMyApplication.setSelectedCard(selectedCard);

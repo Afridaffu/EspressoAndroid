@@ -1472,7 +1472,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
-                } else if (objPayment.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                } else if (objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                     if (payDialog != null && payDialog.isShowing()) {
                         payDialog.dismiss();
                     }
@@ -1523,7 +1523,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                     dialog.dismiss();
                     //pDialog = Utils.showProgressDialog(WithdrawPaymentMethodsActivity.this);
                     showProgressDialog();
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
                         strPayment = objPayment.getPaymentMethod().toLowerCase();
                     } else {
@@ -1606,7 +1606,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                             case "debit":
                                 cardList.add(allPayments.get(i));
                                 break;
-                            case "Cogent":
+                            case "cogent":
                                 CogentList.add(allPayments.get(i));
                                 break;
                         }
