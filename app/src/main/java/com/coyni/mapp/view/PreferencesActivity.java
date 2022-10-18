@@ -281,36 +281,41 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
 
                         timeZoneID = preferences.getData().getTimeZone();
                         myApplicationObj.setTimezoneID(timeZoneID);
-                        if (preferences.getData().getTimeZone() == 0) {
+                        if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.PST.getZoneID()) {
                             timeZoneET.setText(getString(R.string.PST));
                             myApplicationObj.setTempTimezone(getString(R.string.PST));
-                            myApplicationObj.setTempTimezoneID(0);
-                            myApplicationObj.setStrPreference("PST");
-                        } else if (preferences.getData().getTimeZone() == 1) {
+                            myApplicationObj.setTempTimezoneID(Utils.STRING_PREFERENCE.PST.getZoneID());
+                            myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.PST.getStrPreference());
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.MST.getZoneID()) {
                             timeZoneET.setText(getString(R.string.MST));
                             myApplicationObj.setTempTimezone(getString(R.string.MST));
-                            myApplicationObj.setTempTimezoneID(1);
-                            myApplicationObj.setStrPreference("America/Denver");
-                        } else if (preferences.getData().getTimeZone() == 2) {
+                            myApplicationObj.setTempTimezoneID(Utils.STRING_PREFERENCE.MST.getZoneID());
+                            myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.MST.getStrPreference());
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.CST.getZoneID()) {
                             timeZoneET.setText(getString(R.string.CST));
                             myApplicationObj.setTempTimezone(getString(R.string.CST));
-                            myApplicationObj.setTempTimezoneID(2);
-                            myApplicationObj.setStrPreference("CST");
-                        } else if (preferences.getData().getTimeZone() == 3) {
+                            myApplicationObj.setTempTimezoneID(Utils.STRING_PREFERENCE.CST.getZoneID());
+                            myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.CST.getStrPreference());
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.EST.getZoneID()) {
                             timeZoneET.setText(getString(R.string.EST));
                             myApplicationObj.setTempTimezone(getString(R.string.EST));
-                            myApplicationObj.setTempTimezoneID(3);
-                            myApplicationObj.setStrPreference("America/New_York");
-                        } else if (preferences.getData().getTimeZone() == 4) {
+                            myApplicationObj.setTempTimezoneID(Utils.STRING_PREFERENCE.EST.getZoneID());
+                            myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.EST.getStrPreference());
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.HST.getZoneID()) {
                             timeZoneET.setText(getString(R.string.HST));
                             myApplicationObj.setTempTimezone(getString(R.string.HST));
-                            myApplicationObj.setTempTimezoneID(4);
-                            myApplicationObj.setStrPreference("HST");
-                        } else if (preferences.getData().getTimeZone() == 5) {
+                            myApplicationObj.setTempTimezoneID(Utils.STRING_PREFERENCE.HST.getZoneID());
+                            myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.HST.getStrPreference());
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.AST.getZoneID()) {
                             timeZoneET.setText(getString(R.string.AST));
                             myApplicationObj.setTempTimezone(getString(R.string.AST));
-                            myApplicationObj.setTempTimezoneID(5);
-                            myApplicationObj.setStrPreference("AST");
+                            myApplicationObj.setTempTimezoneID(Utils.STRING_PREFERENCE.AST.getZoneID());
+                            myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.AST.getStrPreference());
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.SST.getZoneID()) {
+                            timeZoneET.setText(getString(R.string.SST));
+                            myApplicationObj.setTempTimezone(getString(R.string.SST));
+                            myApplicationObj.setTempTimezoneID(Utils.STRING_PREFERENCE.SST.getZoneID());
+                            myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.SST.getStrPreference());
                         }
                         if (myApplicationObj.getAccountType() != Utils.SHARED_ACCOUNT)
                             dashboardViewModel.getProfiles();
@@ -349,18 +354,20 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                                 preferredId = accountTypeId;
                                 myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                                 myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
-                                if (myApplicationObj.getTempTimezoneID() == 0) {
-                                    myApplicationObj.setStrPreference("PST");
-                                } else if (myApplicationObj.getTempTimezoneID() == 1) {
-                                    myApplicationObj.setStrPreference("America/Denver");
-                                } else if (myApplicationObj.getTempTimezoneID() == 2) {
-                                    myApplicationObj.setStrPreference("CST");
-                                } else if (myApplicationObj.getTempTimezoneID() == 3) {
-                                    myApplicationObj.setStrPreference("America/New_York");
-                                } else if (myApplicationObj.getTempTimezoneID() == 4) {
-                                    myApplicationObj.setStrPreference("HST");
-                                } else if (myApplicationObj.getTempTimezoneID() == 5) {
-                                    myApplicationObj.setStrPreference("AST");
+                                if (myApplicationObj.getTempTimezoneID() == Utils.STRING_PREFERENCE.PST.getZoneID()) {
+                                    myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.PST.getStrPreference());
+                                } else if (myApplicationObj.getTempTimezoneID() == Utils.STRING_PREFERENCE.MST.getZoneID()) {
+                                    myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.MST.getStrPreference());
+                                } else if (myApplicationObj.getTempTimezoneID() == Utils.STRING_PREFERENCE.CST.getZoneID()) {
+                                    myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.CST.getStrPreference());
+                                } else if (myApplicationObj.getTempTimezoneID() == Utils.STRING_PREFERENCE.EST.getZoneID()) {
+                                    myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.EST.getStrPreference());
+                                } else if (myApplicationObj.getTempTimezoneID() == Utils.STRING_PREFERENCE.HST.getZoneID()) {
+                                    myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.HST.getStrPreference());
+                                } else if (myApplicationObj.getTempTimezoneID() == Utils.STRING_PREFERENCE.AST.getZoneID()) {
+                                    myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.AST.getStrPreference());
+                                } else if (myApplicationObj.getTempTimezoneID() == Utils.STRING_PREFERENCE.SST.getZoneID()) {
+                                    myApplicationObj.setStrPreference(Utils.STRING_PREFERENCE.SST.getStrPreference());
                                 }
                                 timeZoneET.setText(myApplicationObj.getTimezone());
                                 Utils.showCustomToast(PreferencesActivity.this, isTimeZone ? getString(R.string.time_zone_changed) : getString(R.string.default_account_changed), R.drawable.ic_custom_tick, "authid");

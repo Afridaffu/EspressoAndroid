@@ -288,9 +288,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
     private void walletAPICall() {
         try {
-            WalletRequest walletRequest = new WalletRequest();
-            walletRequest.setWalletType(Utils.TOKEN);
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
+            businessDashboardViewModel.meWallets();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -497,26 +495,15 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                if (businessWalletResponse != null) {
-                    try {
-                        if (businessWalletResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                            if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null) {
-                                List<WalletInfo> walletData = businessWalletResponse.getData().getWalletNames();
-                                if (walletData.get(0).getWalletId() != null) {
-                                    avaBal = walletData.get(0).getAvailabilityToUse();
-                                    availBal.setText(Utils.USNumberFormat(avaBal));
-                                    cynWallet = walletData.get(0);
 
-                                    intents();
-                                }
-                            }
-                        } else {
-                            try {
-                                Utils.displayAlert(businessWalletResponse.getError().getErrorDescription(), PayToMerchantActivity.this, "Oops", "");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
+                if (businessWalletResponse == null) {
+                    return;
+                }
+                if (businessWalletResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                    tokenWalletData(businessWalletResponse);
+                } else {
+                    try {
+                        Utils.displayAlert(businessWalletResponse.getError().getErrorDescription(), PayToMerchantActivity.this, "Oops", "");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1069,5 +1056,21 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             objMyApplication.setCheckOutModel(null);
         }
         super.onBackPressed();
+    }
+
+    private void tokenWalletData(BusinessWalletResponse businessWalletResponse) {
+        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null) {
+            List<WalletInfo> walletInfoList = businessWalletResponse.getData().getWalletNames();
+            for (WalletInfo walletInfo : walletInfoList) {
+                if (walletInfo.getWalletType().equalsIgnoreCase(Utils.TOKEN_STR)) {
+                    if (walletInfo.getWalletId() != null) {
+                        avaBal = walletInfo.getAvailabilityToUse();
+                        availBal.setText(Utils.USNumberFormat(avaBal));
+                        cynWallet = walletInfo;
+                        intents();
+                    }
+                }
+            }
+        }
     }
 }

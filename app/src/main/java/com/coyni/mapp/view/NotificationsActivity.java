@@ -730,7 +730,7 @@ public class NotificationsActivity extends BaseActivity {
             } else {
                 requesterIDTV.setText(dataItem.getRequesterWalletId());
             }
-            balanceTV.setText("Available: " + Utils.convertBigDecimalUSDC(String.valueOf(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount())) + " CYN");
+            balanceTV.setText("Available: " + Utils.convertBigDecimalUSDC(String.valueOf(objMyApplication.getCurrentUserData().getTokenWalletResponse().getExchangeAmount())) + " CYN");
 
             if (!dataItem.getRemarks().equals("")) {
                 messageLL.setVisibility(View.VISIBLE);

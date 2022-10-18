@@ -41,6 +41,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.getbouncer.cardscan.ui.CardScanSheet;
 import com.getbouncer.cardscan.ui.CardScanSheetResult;
 import com.getbouncer.cardscan.ui.ScannedCard;
@@ -1719,8 +1720,9 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                     try {
                         preDialog.dismiss();
                         objMyApplication.setCardSave(true);
-                        Intent i = new Intent();
-                        setResult(RESULT_OK, i);
+//                        Intent i = new Intent();
+//                        setResult(RESULT_OK, i);
+                        startActivity(new Intent(AddCardActivity.this, WithdrawTokenActivity.class));
                         finish();
                     } catch (Exception ex) {
                         ex.printStackTrace();

@@ -84,7 +84,7 @@ public class UserData {
     private TransactionListRequest transactionListSearch = new TransactionListRequest();
     private Double withdrawAmount;
     private BusinessTrackerResponse businessTrackerResponse;
-    private WalletResponseData walletResponseData, tokenWalletResponse, merchantWalletResponse, reserveWalletResponse;
+    private WalletInfo walletResponseData, tokenWalletResponse, merchantWalletResponse, reserveWalletResponse;
     private BusinessTypeResp businessTypeResp;
     private CompanyInfoResp companyInfoResp;
     private DBAInfoResp dbaInfoResp;
@@ -555,11 +555,11 @@ public class UserData {
         this.businessTrackerResponse = businessTrackerResponse;
     }
 
-    public WalletResponseData getWalletResponseData() {
+    public WalletInfo getWalletResponseData() {
         return walletResponseData;
     }
 
-    public void setWalletResponseData(WalletResponseData walletResponseData) {
+    public void setWalletResponseData(WalletInfo walletResponseData) {
         this.walletResponseData = walletResponseData;
     }
 
@@ -675,27 +675,27 @@ public class UserData {
         this.selectedButTokenType = selectedButTokenType;
     }
 
-    public WalletResponseData getTokenWalletResponse() {
+    public WalletInfo getTokenWalletResponse() {
         return tokenWalletResponse;
     }
 
-    public void setTokenWalletResponse(WalletResponseData tokenWalletResponse) {
+    public void setTokenWalletResponse(WalletInfo tokenWalletResponse) {
         this.tokenWalletResponse = tokenWalletResponse;
     }
 
-    public WalletResponseData getMerchantWalletResponse() {
+    public WalletInfo getMerchantWalletResponse() {
         return merchantWalletResponse;
     }
 
-    public void setMerchantWalletResponse(WalletResponseData merchantWalletResponse) {
+    public void setMerchantWalletResponse(WalletInfo merchantWalletResponse) {
         this.merchantWalletResponse = merchantWalletResponse;
     }
 
-    public WalletResponseData getReserveWalletResponse() {
+    public WalletInfo getReserveWalletResponse() {
         return reserveWalletResponse;
     }
 
-    public void setReserveWalletResponse(WalletResponseData reserveWalletResponse) {
+    public void setReserveWalletResponse(WalletInfo reserveWalletResponse) {
         this.reserveWalletResponse = reserveWalletResponse;
     }
 

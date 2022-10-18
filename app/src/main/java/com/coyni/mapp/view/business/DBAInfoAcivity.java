@@ -1643,36 +1643,41 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         avgTicketOET.setSelection();
                     }
 
-                    if (cir.getTimeZone() == 0) {
+                    if (cir.getTimeZone() == Utils.STRING_PREFERENCE.PST.getZoneID()) {
                         timeZoneET.setText(getString(R.string.PST));
                         objMyApplication.setTempTimezone(getString(R.string.PST));
-                        objMyApplication.setTempTimezoneID(0);
-                        objMyApplication.setStrPreference("PST");
-                    } else if (cir.getTimeZone() == 1) {
+                        objMyApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.PST.getZoneID());
+                        objMyApplication.setStrPreference(Utils.STRING_PREFERENCE.PST.getStrPreference());
+                    } else if (cir.getTimeZone() == Utils.STRING_PREFERENCE.MST.getZoneID()) {
                         timeZoneET.setText(getString(R.string.MST));
                         objMyApplication.setTempTimezone(getString(R.string.MST));
-                        objMyApplication.setTempTimezoneID(1);
-                        objMyApplication.setStrPreference("America/Denver");
-                    } else if (cir.getTimeZone() == 2) {
+                        objMyApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.MST.getZoneID());
+                        objMyApplication.setStrPreference(Utils.STRING_PREFERENCE.MST.getStrPreference());
+                    } else if (cir.getTimeZone() == Utils.STRING_PREFERENCE.CST.getZoneID()) {
                         timeZoneET.setText(getString(R.string.CST));
                         objMyApplication.setTempTimezone(getString(R.string.CST));
-                        objMyApplication.setTempTimezoneID(2);
-                        objMyApplication.setStrPreference("CST");
-                    } else if (cir.getTimeZone() == 3) {
+                        objMyApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.CST.getZoneID());
+                        objMyApplication.setStrPreference(Utils.STRING_PREFERENCE.CST.getStrPreference());
+                    } else if (cir.getTimeZone() == Utils.STRING_PREFERENCE.EST.getZoneID()) {
                         timeZoneET.setText(getString(R.string.EST));
                         objMyApplication.setTempTimezone(getString(R.string.EST));
-                        objMyApplication.setTempTimezoneID(3);
-                        objMyApplication.setStrPreference("America/New_York");
-                    } else if (cir.getTimeZone() == 4) {
+                        objMyApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.EST.getZoneID());
+                        objMyApplication.setStrPreference(Utils.STRING_PREFERENCE.EST.getStrPreference());
+                    } else if (cir.getTimeZone() == Utils.STRING_PREFERENCE.HST.getZoneID()) {
                         timeZoneET.setText(getString(R.string.HST));
                         objMyApplication.setTempTimezone(getString(R.string.HST));
-                        objMyApplication.setTempTimezoneID(4);
-                        objMyApplication.setStrPreference("HST");
-                    } else if (cir.getTimeZone() == 5) {
+                        objMyApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.HST.getZoneID());
+                        objMyApplication.setStrPreference(Utils.STRING_PREFERENCE.HST.getStrPreference());
+                    } else if (cir.getTimeZone() == Utils.STRING_PREFERENCE.AST.getZoneID()) {
                         timeZoneET.setText(getString(R.string.AST));
                         objMyApplication.setTempTimezone(getString(R.string.AST));
-                        objMyApplication.setTempTimezoneID(5);
-                        objMyApplication.setStrPreference("AST");
+                        objMyApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.AST.getZoneID());
+                        objMyApplication.setStrPreference(Utils.STRING_PREFERENCE.AST.getStrPreference());
+                    } else if (cir.getTimeZone() == Utils.STRING_PREFERENCE.SST.getZoneID()) {
+                        timeZoneET.setText(getString(R.string.SST));
+                        objMyApplication.setTempTimezone(getString(R.string.SST));
+                        objMyApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.SST.getZoneID());
+                        objMyApplication.setStrPreference(Utils.STRING_PREFERENCE.SST.getStrPreference());
                     }
 
                     if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
