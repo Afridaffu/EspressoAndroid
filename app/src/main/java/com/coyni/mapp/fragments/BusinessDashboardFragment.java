@@ -678,36 +678,78 @@ public class BusinessDashboardFragment extends BaseFragment {
 
                 try {
                     if (preferences != null) {
-                        if (preferences.getData().getTimeZone() == 0) {
+//                        if (preferences.getData().getTimeZone() == 0) {
+//                            myApplication.setTempTimezone(getString(R.string.PST));
+//                            myApplication.setTempTimezoneID(0);
+//                            myApplication.setStrPreference("PST");
+//                            localPreferenceValue = "PST";
+//                        } else if (preferences.getData().getTimeZone() == 1) {
+//                            myApplication.setTempTimezone(getString(R.string.MST));
+//                            myApplication.setTempTimezoneID(1);
+//                            myApplication.setStrPreference("America/Denver");
+//                            localPreferenceValue = "MST";
+//                        } else if (preferences.getData().getTimeZone() == 2) {
+//                            myApplication.setTempTimezone(getString(R.string.CST));
+//                            myApplication.setTempTimezoneID(2);
+//                            myApplication.setStrPreference("CST");
+//                            localPreferenceValue = "CST";
+//                        } else if (preferences.getData().getTimeZone() == 3) {
+//                            myApplication.setTempTimezone(getString(R.string.EST));
+//                            myApplication.setTempTimezoneID(3);
+//                            myApplication.setStrPreference("America/New_York");
+//                            localPreferenceValue = "EST";
+//                        } else if (preferences.getData().getTimeZone() == 4) {
+//                            myApplication.setTempTimezone(getString(R.string.HST));
+//                            myApplication.setTempTimezoneID(4);
+//                            myApplication.setStrPreference("HST");
+//                            localPreferenceValue = "HST";
+//                        } else if (preferences.getData().getTimeZone() == 5) {
+//                            myApplication.setTempTimezone(getString(R.string.AST));
+//                            myApplication.setTempTimezoneID(5);
+//                            myApplication.setStrPreference("AST");
+//                            localPreferenceValue = "AST";
+//                        }else if (preferences.getData().getTimeZone() == 6) {
+//                            myApplication.setTempTimezone(getString(R.string.SST));
+//                            myApplication.setTempTimezoneID(6);
+//                            myApplication.setStrPreference("Pacific/Guadalcanal");
+//                            localPreferenceValue = "SST";
+//                        }
+
+                        if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.PST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.PST));
-                            myApplication.setTempTimezoneID(0);
-                            myApplication.setStrPreference("PST");
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.PST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.PST.getStrPreference());
                             localPreferenceValue = "PST";
-                        } else if (preferences.getData().getTimeZone() == 1) {
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.MST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.MST));
-                            myApplication.setTempTimezoneID(1);
-                            myApplication.setStrPreference("America/Denver");
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.MST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.MST.getStrPreference());
                             localPreferenceValue = "MST";
-                        } else if (preferences.getData().getTimeZone() == 2) {
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.CST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.CST));
-                            myApplication.setTempTimezoneID(2);
-                            myApplication.setStrPreference("CST");
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.CST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.CST.getStrPreference());
                             localPreferenceValue = "CST";
-                        } else if (preferences.getData().getTimeZone() == 3) {
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.EST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.EST));
-                            myApplication.setTempTimezoneID(3);
-                            myApplication.setStrPreference("America/New_York");
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.EST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.EST.getStrPreference());
                             localPreferenceValue = "EST";
-                        } else if (preferences.getData().getTimeZone() == 4) {
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.HST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.HST));
-                            myApplication.setTempTimezoneID(4);
-                            myApplication.setStrPreference("HST");
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.HST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.HST.getStrPreference());
                             localPreferenceValue = "HST";
-                        } else if (preferences.getData().getTimeZone() == 5) {
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.AST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.AST));
-                            myApplication.setTempTimezoneID(5);
-                            myApplication.setStrPreference("AST");
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.AST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.AST.getStrPreference());
                             localPreferenceValue = "AST";
+                        }else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.SST.getZoneID()) {
+                            myApplication.setTempTimezone(getString(R.string.SST));
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.SST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.SST.getStrPreference());
+                            localPreferenceValue = "SST";
                         }
 
                         showData(myApplication.getBatchPayList());
