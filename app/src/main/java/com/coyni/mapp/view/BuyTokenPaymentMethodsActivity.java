@@ -164,9 +164,6 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                     if (extBankDialog != null) {
                         extBankDialog.dismiss();
                     }
-//                    dialog = Utils.showProgressDialog(this);
-//                    showProgressDialog();
-//                    customerProfileViewModel.meSyncAccount();
                 }
             } else if (requestCode == 3) {
                 if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
@@ -192,12 +189,11 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 } else if (!objMyApplication.getBankSave()) {
                     isDeCredit = true;
                     ControlMethod("addpayment");
+                } else {
+                    objMyApplication.setBankSave(false);
+                    ControlMethod("paymentMethods");
+                    strCurrent = "paymentMethods";
                 }
-//                else {
-//                    objMyApplication.setBankSave(false);
-//                    ControlMethod("paymentMethods");
-//                    strCurrent = "paymentMethods";
-//                }
                 getPaymentMethods();
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -351,13 +347,8 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
-//                if (dialog != null) {
-//                    dialog.dismiss();
-//                }
                 dismissDialog();
                 if (payMethodsResponse != null) {
-//                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
-//                    paymentMethodsResponse = payMethodsResponse;
                     PaymentMethodsResponse objResponse;
                     if (strScreen.equalsIgnoreCase(CheckOutConstants.ScreenCheckOut)) {
                         objResponse = objMyApplication.filterCheckPaymentMethods(payMethodsResponse);
@@ -373,26 +364,9 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                         numberOfAccounts();
                     } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
-                        if (!objMyApplication.getCardSave() && objMyApplication.getBankSave()) {
-                            ControlMethod("paymentMethods");
-                            strCurrent = "paymentMethods";
-                            paymentMethods();
-                        } else {
-                            PaymentsList objData = paymentMethodsResponse.getData().getData().get(0);
-                            objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                            objMyApplication.setSelectedCard(objData);
-                            switch (objData.getPaymentMethod().toLowerCase()) {
-                                case "bank":
-                                    objMyApplication.setBankSave(false);
-                                    bindSelectedBank();
-                                    break;
-                                case "credit":
-                                case "debit": {
-
-                                }
-                                break;
-                            }
-                        }
+                        ControlMethod("paymentMethods");
+                        strCurrent = "paymentMethods";
+                        paymentMethods();
                     } else if (isPayments) {
                         isPayments = false;
                         isDeCredit = false;
