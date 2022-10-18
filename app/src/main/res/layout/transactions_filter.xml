@@ -197,6 +197,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/cogentGCLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_8sdp"
@@ -207,7 +208,6 @@
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="@string/Cogent"
@@ -215,7 +215,9 @@
                         android:textColor="@color/chip_text_color"
                         android:textSize="@dimen/_11ssp"
                         app:chipBackgroundColor="@color/chipbackgroundcolor"
-                        app:chipMinHeight="@dimen/_32sdp" />
+                        app:chipMinHeight="@dimen/_32sdp"
+                        android:visibility="visible"
+                        android:layout_marginEnd="@dimen/_10sdp"/>
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/transSubTypeGiftCard"
@@ -232,6 +234,60 @@
                         app:chipBackgroundColor="@color/chipbackgroundcolor"
                         app:chipMinHeight="@dimen/_32sdp" />
 
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/emptyChip"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text=""
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="gone"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/signetLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeSignet"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="@string/Signet"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp"
+                        android:visibility="visible"
+                        android:layout_marginEnd="@dimen/_10sdp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeGiftCardNew"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Gift Card"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="visible"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
                 </LinearLayout>
 
                 <TextView

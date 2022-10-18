@@ -102,7 +102,7 @@ public class UserData {
     private List<Earning> earningList;
     boolean isReserveEnabled = false;
     private String strToken;
-    private boolean isLoggedIn = false;
+    private boolean isLoggedIn = false, isCogentEnabled = true, isSignetEnabled = false;
     private String businessUserID = "";
     private String ownerImage = "", companyName = "";
     private List<BatchPayoutListItems> batchPayList = new ArrayList<>();
@@ -817,5 +817,21 @@ public class UserData {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public boolean isCogentEnabled() {
+        return isCogentEnabled;
+    }
+
+    public void setCogentEnabled(boolean cogentEnabled) {
+        isCogentEnabled = cogentEnabled;
+    }
+
+    public boolean isSignetEnabled() {
+        return isSignetEnabled;
+    }
+
+    public void setSignetEnabled(boolean signetEnabled) {
+        isSignetEnabled = signetEnabled;
     }
 }

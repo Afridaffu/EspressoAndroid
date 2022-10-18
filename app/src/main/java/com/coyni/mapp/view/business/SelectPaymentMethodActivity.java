@@ -517,13 +517,13 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 tvCogentCS.setVisibility(View.GONE);
             }
 
-            if (objMyApplication.getWebSocketUrlResponse().getIsCogentEnabled().equalsIgnoreCase("true")) {
+            if (objMyApplication.isCogentEnabled()) {
                 layoutCogent.setVisibility(VISIBLE);
             } else {
                 layoutCogent.setVisibility(GONE);
             }
 
-            if (objMyApplication.getWebSocketUrlResponse().getIsSignetEnabled().equalsIgnoreCase("true")) {
+            if (objMyApplication.isSignetEnabled()) {
                 layoutSignet.setVisibility(VISIBLE);
             } else {
                 layoutSignet.setVisibility(GONE);

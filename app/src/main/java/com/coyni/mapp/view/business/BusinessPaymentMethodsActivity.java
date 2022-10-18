@@ -421,13 +421,13 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                 tvMsg.setVisibility(View.VISIBLE);
             }
 
-            if (objMyApplication.getWebSocketUrlResponse().getIsCogentEnabled().equalsIgnoreCase("true")) {
+            if (objMyApplication.isCogentEnabled()) {
                 layoutCogent.setVisibility(VISIBLE);
             } else {
                 layoutCogent.setVisibility(GONE);
             }
 
-            if (objMyApplication.getWebSocketUrlResponse().getIsSignetEnabled().equalsIgnoreCase("true")) {
+            if (objMyApplication.isSignetEnabled()) {
                 layoutSignet.setVisibility(VISIBLE);
             } else {
                 layoutSignet.setVisibility(GONE);

@@ -56,10 +56,12 @@ public class TransactionDetailsActivity extends BaseActivity {
     private static final String BUY_TOKEN = "BuyTokenDebitAndCreditCard";
     private static final String BUY_BANK = "BuyTokenBank";
     private static final String BUY_Cogent = "BuyTokenCogent";
+    private static final String BUY_Signet = "BuyTokenSignet";
     private static final String WITH_GIFT = "WithdrawGiftCard";
     private static final String WITH_Instant = "WithdrawInstantPay";
     private static final String WITH_BANK = "WithdrawBankAccount";
     private static final String WITH_Cogent = "WithdrawCogent";
+    private static final String WITH_Signet = "WithdrawSignet";
     private static final String BUSINESS_PAYOUT = "businessPayout";
     private static final String CANCELLED_WITH = "cancelledWithdrawBank";
     private static final String FAILED_WITH = "failedWithdrawBank";
@@ -87,6 +89,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     private static final String credit_card = "credit card";
     private static final String debit_card = "debit card";
     private static final String Cogent = "Cogent";
+    private static final String Signet = "Signet";
     private static final String gift_card = "gift card";
     private static final String instant_pay = "instant pay";
     private static final String token = "token";
@@ -179,6 +182,9 @@ public class TransactionDetailsActivity extends BaseActivity {
                     case Cogent:
                         txnSubType = Integer.parseInt(Utils.CogentType);
                         break;
+                    case Signet:
+                        txnSubType = Integer.parseInt(Utils.signetType);
+                        break;
                     case token:
                         txnSubType = Integer.parseInt(Utils.tokenType);
                         break;
@@ -235,6 +241,10 @@ public class TransactionDetailsActivity extends BaseActivity {
                                 ControlMethod(BUY_Cogent);
                                 buyTokenCogent(transactionDetails.getData());
                                 break;
+                            case Signet:
+                                ControlMethod(BUY_Signet);
+                                buyTokenCogent(transactionDetails.getData());
+                                break;
                         }
                         break;
                     case withdraw:
@@ -253,6 +263,10 @@ public class TransactionDetailsActivity extends BaseActivity {
                                 break;
                             case Cogent:
                                 ControlMethod(WITH_Cogent);
+                                withdrawCogent(transactionDetails.getData());
+                                break;
+                            case Signet:
+                                ControlMethod(WITH_Signet);
                                 withdrawCogent(transactionDetails.getData());
                                 break;
                         }
@@ -1658,6 +1672,7 @@ public class TransactionDetailsActivity extends BaseActivity {
 
     private void withdrawCogent(TransactionData objData) {
 
+        String txnType = objData.getTransactionType();
         TextView withBankHeader, withBankAmount, withBankDescription, withBankStatus, withBankDateTime, withBankWithdrawalAmount, withBankProcessingFee, withBankTotal, withBankAccountBal, withBankWithdrawalId, withBankRefId;
         TextView withBankNameOnAccount, withBankName, withBankAccount, CogentTextTV;
 //        ImageView withbankwithdrawalid, withbankrefIDIV;
@@ -1772,7 +1787,10 @@ public class TransactionDetailsActivity extends BaseActivity {
             withBankNameOnAccount.setText(objData.getNameOnBank());
         }
 
-        CogentTextTV.setText("Cogent Wallet ID");
+        if (txnType.equalsIgnoreCase("cogent"))
+            CogentTextTV.setText("Cogent Wallet ID");
+        else if (txnType.equalsIgnoreCase("signet"))
+            CogentTextTV.setText("Signet Wallet ID");
 //        CogentTextTV.setPadding(0, 0, 0, 20);
 //        findViewById(R.id.nameOnAccount).setPadding(0, 10, 0, 0);
 //        findViewById(R.id.withdrawIDTV).setPadding(30, 30, 0, 0);

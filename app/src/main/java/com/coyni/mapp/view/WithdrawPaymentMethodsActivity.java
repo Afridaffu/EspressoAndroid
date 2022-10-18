@@ -766,13 +766,13 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             tvMessage = findViewById(R.id.tvMessage);
             imgLogo = findViewById(R.id.imgLogo);
 
-            if (objMyApplication.getWebSocketUrlResponse().getIsCogentEnabled().equalsIgnoreCase("true")) {
+            if (objMyApplication.isCogentEnabled()) {
                 layoutCogent.setVisibility(VISIBLE);
             } else {
                 layoutCogent.setVisibility(GONE);
             }
 
-            if (objMyApplication.getWebSocketUrlResponse().getIsSignetEnabled().equalsIgnoreCase("true")) {
+            if (objMyApplication.isSignetEnabled()) {
                 layoutSignet.setVisibility(VISIBLE);
             } else {
                 layoutSignet.setVisibility(GONE);
@@ -1125,12 +1125,12 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             ImageView imgGCArrow = findViewById(R.id.imgGCArrow);
 
             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-                if (objMyApplication.getWebSocketUrlResponse().getIsCogentEnabled().equalsIgnoreCase("true"))
+                if (objMyApplication.isCogentEnabled())
                     lyCogent.setVisibility(VISIBLE);
                 else
                     lyCogent.setVisibility(View.GONE);
 
-                if (objMyApplication.getWebSocketUrlResponse().getIsSignetEnabled().equalsIgnoreCase("true"))
+                if (objMyApplication.isSignetEnabled())
                     lySignet.setVisibility(VISIBLE);
                 else
                     lySignet.setVisibility(View.GONE);
