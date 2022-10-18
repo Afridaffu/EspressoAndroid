@@ -137,7 +137,8 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                     filterIconIV.setImageResource(R.drawable.ic_filtericon);
                     getBatchListData();
                     dismissDialog();
-                    cynTV.setVisibility(View.VISIBLE);
+                    recyclerViewPayouts.setVisibility(View.GONE);
+//                    cynTV.setVisibility(View.VISIBLE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

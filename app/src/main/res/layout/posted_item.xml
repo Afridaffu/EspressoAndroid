@@ -5,33 +5,51 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/dateTV"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/et_bg_gray"
-        android:clickable="false"
-        android:fontFamily="@font/opensans_bold"
-        android:gravity="center_vertical"
-        android:paddingLeft="15dp"
-        android:paddingTop="@dimen/_10sdp"
-        android:paddingBottom="@dimen/_10sdp"
-        android:text="Date"
-        android:textColor="@color/primary_black"
-        android:textSize="@dimen/_12ssp"
-        android:visibility="visible" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/dateTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_10sdp"
+            android:text="Date"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_cyn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="15dp"
+            android:fontFamily="@font/opensans_regular"
+            android:text="(CYN)"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_10ssp"
+            android:textStyle="normal" />
+    </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="@dimen/_10sdp"
-        android:layout_marginBottom="1dp">
+        app:cardCornerRadius="@dimen/_10sdp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postedInnerRV"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
     </androidx.cardview.widget.CardView>
 </LinearLayout>
