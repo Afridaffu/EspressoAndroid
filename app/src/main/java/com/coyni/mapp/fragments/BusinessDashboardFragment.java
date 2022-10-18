@@ -1094,11 +1094,13 @@ public class BusinessDashboardFragment extends BaseFragment {
                 boolean isOpen = false, isPaid = false;
                 setSpannableTextView();
                 while (i < listItems.size()) {
+                    if(listItems.size() == 1 && listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN)){
+                        batchNoTransaction.setVisibility(View.VISIBLE);
+                    }
                     if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
                         String amount = listItems.get(i).getTotalAmount();
                         String amt = Utils.convertBigDecimalUSDC((amount));
                         Utils.setTextSize(nextPayoutAmountTV, amt, 48);
-
                         if (Utils.doubleParsing(amt.replaceAll(",", "")) <= 0) {
                             mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                             mCvBatchNow.setClickable(false);
@@ -1125,6 +1127,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                             Log.d("date format", date);
                         }
                         isOpen = true;
+
                     } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
                         String amount = Utils.convertBigDecimalUSDC((listItems.get(i).getTotalAmount()));
                         Utils.setTextSize(lastPayoutAmountTV, amount, 48);
