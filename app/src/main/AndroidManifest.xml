@@ -48,6 +48,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.business.AddNewAccountActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
             android:name="com.coyni.mapp.view.OnboardActivity"
             android:configChanges="uiMode"
             android:exported="true"
@@ -287,7 +292,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name="com.coyni.mapp.view.WithdrawPaymentMethodsActivity"
             android:configChanges="uiMode"
@@ -793,13 +798,11 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-
         <activity
             android:name=".view.business.AcceptAgreementsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-
 
         <service
             android:name="com.coyni.mapp.network.MyFirebaseMessagingService"

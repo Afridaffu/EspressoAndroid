@@ -357,6 +357,10 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
 //            }
 //            setFaceLock();
 //            setTouchId();
+
+            if (getIntent().getStringExtra("cvv") != null && getIntent().getStringExtra("cvv").equals("") && objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                displayCVV(selectedCard);
+            }
             objMyApplication.initializeDBHandler(BuyTokenActivity.this);
             isFaceLock = objMyApplication.setFaceLock();
             isTouchId = objMyApplication.setTouchId();
@@ -2038,47 +2042,6 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
         }
         return selectedCard;
     }
-
-//    private void setToken() {
-//        strToken = dbHandler.getPermanentToken();
-//    }
-//
-//    private void setFaceLock() {
-//        try {
-//            isFaceLock = false;
-//            String value = dbHandler.getFacePinLock();
-//            if (value != null && value.equals("true")) {
-//                isFaceLock = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isFaceLock = false;
-//                objMyApplication.setLocalBiometric(false);
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    private void setTouchId() {
-//        try {
-//            isTouchId = false;
-//            String value = dbHandler.getThumbPinLock();
-//            if (value != null && value.equals("true")) {
-//                isTouchId = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isTouchId = false;
-////                objMyApplication.setLocalBiometric(false);
-//                if (!isFaceLock) {
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
 
     private void defaultInputSetup() {
         tvCYN.setVisibility(View.VISIBLE);

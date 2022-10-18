@@ -64,12 +64,11 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
     RelativeLayout layoutDCard, lyExternal, layoutCCard;
     String strCurrent = "", strSignOn = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
-    Dialog dialog, pDialog;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
     TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
     CardView cvNext, cvTryAgain, cvDone;
-    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false, isPaymentAdded = false;
     TextInputEditText etCVV;
     RecyclerView rvSelPayMethods;
     public static BuyTokenPaymentMethodsActivity buyTokenPaymentMethodsActivity;
@@ -165,9 +164,6 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                     if (extBankDialog != null) {
                         extBankDialog.dismiss();
                     }
-//                    dialog = Utils.showProgressDialog(this);
-//                    showProgressDialog();
-//                    customerProfileViewModel.meSyncAccount();
                 }
             } else if (requestCode == 3) {
                 if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
@@ -351,13 +347,8 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
-//                if (dialog != null) {
-//                    dialog.dismiss();
-//                }
                 dismissDialog();
                 if (payMethodsResponse != null) {
-//                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
-//                    paymentMethodsResponse = payMethodsResponse;
                     PaymentMethodsResponse objResponse;
                     if (strScreen.equalsIgnoreCase(CheckOutConstants.ScreenCheckOut)) {
                         objResponse = objMyApplication.filterCheckPaymentMethods(payMethodsResponse);
@@ -943,7 +934,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
         }
     }
 
-    public void openBankFiserv(){
+    public void openBankFiserv() {
         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
             isBank = true;
             Log.e("setResolveUrl", "862 setResolveUrl");

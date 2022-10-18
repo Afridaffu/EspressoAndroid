@@ -486,11 +486,18 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
                 }
             }
 
-            @Override
-            public void onAddDbaClicked(String accountType, Integer id) {
-                LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
-                //childid = id;
+//            @Override
+//            public void onAddDbaClicked(String accountType, Integer id) {
+//                LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
+//                //childid = id;
+//
+//            }
 
+
+            @Override
+            public void onAddDbaClicked(ProfilesResponse.Profiles profiles, Integer id) {
+                LogUtils.v("PreferencesActivity", "account type " + profiles.getAccountType() + "    id: " + id);
+                //childid = id;
             }
         });
 

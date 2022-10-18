@@ -998,4 +998,68 @@ public class MyApplication extends Application {
         mCurrentUserData.setBankAccount(bankAccount);
     }
 
+    public Boolean buyFeatureCtrlEnabled(PaymentsList objData) {
+        Boolean isValue = false;
+        try {
+            switch (objData.getPaymentMethod().toLowerCase()) {
+                case "bank":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getBuyBank() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getBuyBank() && getFeatureControlByUser().getBuyBank())) {
+                        isValue = true;
+                    }
+                    break;
+                case "signet":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getBuySignet() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getBuySignet() && getFeatureControlByUser().getBuySignet())) {
+                        isValue = true;
+                    }
+                    break;
+                case "debit":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getBuyDebit() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getBuyDebit() && getFeatureControlByUser().getBuyDebit())) {
+                        isValue = true;
+                    }
+                    break;
+                case "credit":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getBuyCredit() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getBuyCredit() && getFeatureControlByUser().getBuyCredit())) {
+                        isValue = true;
+                    }
+                    break;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return isValue;
+    }
+
+    public Boolean withFeatureCtrlEnabled(PaymentsList objData) {
+        Boolean isValue = false;
+        try {
+            switch (objData.getPaymentMethod().toLowerCase()) {
+                case "bank":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getWithBank() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getWithBank() && getFeatureControlByUser().getWithBank())) {
+                        isValue = true;
+                    }
+                    break;
+                case "signet":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getWithSignet() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getWithSignet() && getFeatureControlByUser().getWithSignet())) {
+                        isValue = true;
+                    }
+                    break;
+                case "debit":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getWithInstant() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getWithInstant() && getFeatureControlByUser().getWithInstant())) {
+                        isValue = true;
+                    }
+                    break;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return isValue;
+    }
+
 }
