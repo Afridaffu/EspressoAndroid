@@ -194,6 +194,7 @@
     <string name="PST">Pacific (PST)</string>
     <string name="AST">Alaskan (AST)</string>
     <string name="HST">Hawaii (HST)</string>
+    <string name="SST">American Samoa (SST)</string>
     <string name="set_up_face_id">Set Up Face ID</string>
     <string name="enable_face_message">Enable Face ID to use face recognition to complete payments quickly and securely.</string>
     <string name="set_up_touch_id">Set Up Touch ID</string>
