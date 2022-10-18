@@ -127,6 +127,7 @@ public class BusinessAccountFragment extends BaseFragment {
                     walletInfoData(businessWalletResponse);
                 }
             }
+
         });
 
 
