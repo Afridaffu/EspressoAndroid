@@ -46,6 +46,7 @@ import com.coyni.mapp.model.paymentmethods.PaymentsList;
 import com.coyni.mapp.utils.CheckOutConstants;
 import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
+import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.getbouncer.cardscan.ui.CardScanSheet;
 import com.getbouncer.cardscan.ui.CardScanSheetResult;
 import com.getbouncer.cardscan.ui.ScannedCard;

@@ -255,22 +255,16 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         }
     }
 
-    private void setUserBalance(WalletResponseData walletResponse) {
+    private void setUserBalance(WalletInfo walletResponse) {
         try {
             String strAmount = "";
             if (walletResponse == null) {
+                userBalanceTV.setText("0.00");
                 return;
             }
-            List<WalletInfo> walletInfo = walletResponse.getWalletNames();
-            LogUtils.d(TAG, "setUserBalance" + walletInfo.toString());
-            if (walletInfo != null && walletInfo.size() > 0) {
-                for (int i = 0; i < walletInfo.size(); i++) {
-                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getAvailabilityToUse()));
-                    userBalanceTV.setText(strAmount);
-                }
-            } else {
-                userBalanceTV.setText("0.00");
-            }
+            LogUtils.d(TAG, "setUserBalance" + walletResponse.toString());
+            strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletResponse.getAvailabilityToUse()));
+            userBalanceTV.setText(strAmount);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

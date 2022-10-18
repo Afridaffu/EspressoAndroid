@@ -1003,6 +1003,10 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 strLimit = "week";
                 strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
                 tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
+            } else if (objLimit.getLimitType().toLowerCase().equals("per transaction")) {
+                strLimit = "per transaction";
+                strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
+                tvLimit.setText("Your per transaction limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
             }
 //            else if (objLimit.getTransactionLimit().toLowerCase().equals("unlimited")) {
 //                tvLimit.setText("Your daily limit is " + objLimit.getTransactionLimit() + strCurrency);
@@ -1094,6 +1098,11 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                     } else if (objResponse.getData().getLimitType().toLowerCase(Locale.ROOT).equals("weekly")) {
                         tvError.setText("Amount entered exceeds your weekly limit");
                     }
+                    tvError.setVisibility(View.VISIBLE);
+                    isMinimumError = false;
+                    value = false;
+                } else if (objResponse.getData().getLimitType().toLowerCase(Locale.ROOT).equals("per transaction")) {
+                    tvError.setText("Amount entered exceeds your per transaction limit");
                     tvError.setVisibility(View.VISIBLE);
                     isMinimumError = false;
                     value = false;

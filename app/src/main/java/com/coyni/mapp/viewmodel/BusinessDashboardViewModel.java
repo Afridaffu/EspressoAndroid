@@ -219,10 +219,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void meMerchantWallet(WalletRequest walletRequest) {
+    public void meWallets() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BusinessWalletResponse> mCall = apiService.meMerchantWallet(walletRequest);
+            Call<BusinessWalletResponse> mCall = apiService.meWallets();
             mCall.enqueue(new Callback<BusinessWalletResponse>() {
                 @Override
                 public void onResponse(Call<BusinessWalletResponse> call, Response<BusinessWalletResponse> response) {

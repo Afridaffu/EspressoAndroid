@@ -454,7 +454,7 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     public void getBeneficialOwners() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BOResp> mCall = apiService.getBeneficailOwners();
+            Call<BOResp> mCall = apiService.getBeneficialOwners();
             mCall.enqueue(new Callback<BOResp>() {
                 @Override
                 public void onResponse(Call<BOResp> call, Response<BOResp> response) {
@@ -489,7 +489,7 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     public void postBeneficialOwnersID() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BOIdResp> mCall = apiService.postBeneficailOwnersID();
+            Call<BOIdResp> mCall = apiService.postBeneficialOwnersID();
             mCall.enqueue(new Callback<BOIdResp>() {
                 @Override
                 public void onResponse(Call<BOIdResp> call, Response<BOIdResp> response) {
@@ -667,7 +667,7 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     public void validateBeneficialOwners() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BOValidateResp> mCall = apiService.validateBeneficailOwners();
+            Call<BOValidateResp> mCall = apiService.validateBeneficialOwners();
             mCall.enqueue(new Callback<BOValidateResp>() {
                 @Override
                 public void onResponse(Call<BOValidateResp> call, Response<BOValidateResp> response) {

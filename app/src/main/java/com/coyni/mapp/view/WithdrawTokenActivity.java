@@ -833,6 +833,10 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 strLimit = "week";
                 strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
                 tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
+            } else if (objLimit.getLimitType().toLowerCase().equals("per transaction")) {
+                strLimit = "per transaction";
+                strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
+                tvLimit.setText("Your per transaction limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
             }
 //            else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
 //                tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
@@ -1001,6 +1005,16 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         tvError.setText("Amount entered exceeds your daily limit");
                     } else if (objResponse.getData().getLimitType().toLowerCase(Locale.ROOT).equals("weekly")) {
                         tvError.setText("Amount entered exceeds your weekly limit");
+                    }
+                    tvError.setVisibility(View.VISIBLE);
+                    lyBalance.setVisibility(View.GONE);
+                    isMinimumError = false;
+                    value = false;
+                } else if (objResponse.getData().getLimitType().toLowerCase(Locale.ROOT).equals("per transaction")) {
+                    if (Utils.doubleParsing(strPay.replace(",", "")) > avaBal) {
+                        tvError.setText("Amount entered exceeds available balance");
+                    } else {
+                        tvError.setText("Amount entered exceeds your per transaction limit");
                     }
                     tvError.setVisibility(View.VISIBLE);
                     lyBalance.setVisibility(View.GONE);
@@ -1602,7 +1616,8 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
         try {
             if (isUSD) {
                 isUSD = false;
-                usdValue = Utils.doubleParsing(etAmount.getText().toString().trim().replace(",", ""));
+//                usdValue = Utils.doubleParsing(etAmount.getText().toString().trim().replace(",", ""));
+                usdValue = Utils.doubleParsing(Utils.convertBigDecimalUSD(etAmount.getText().toString().trim().replace(",", "")));
                 cynValue = (usdValue + (usdValue * (feeInPercentage / 100))) + feeInAmount;
             }
         } catch (Exception ex) {
@@ -1861,6 +1876,8 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                                 tvError.setText("Amount entered exceeds your daily limit");
                             } else if (strLimit.equals("week")) {
                                 tvError.setText("Amount entered exceeds your weekly limit");
+                            } else if (strLimit.equalsIgnoreCase("per transaction")) {
+                                tvError.setText("Amount entered exceeds your per transaction limit");
                             }
                         }
                     } else {
@@ -1884,6 +1901,8 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                                 tvError.setText("Amount entered exceeds your daily limit");
                             } else if (strLimit.equals("week")) {
                                 tvError.setText("Amount entered exceeds your weekly limit");
+                            } else if (strLimit.equalsIgnoreCase("per transaction")) {
+                                tvError.setText("Amount entered exceeds your per transaction limit");
                             }
                         }
                     } else {

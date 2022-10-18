@@ -425,10 +425,10 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
 
                     Double walletAmount = 0.0;
                     if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                        walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+                        walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getExchangeAmount() + "".replace(",", ""));
                     } else {
 //                                walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
-                        walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+                        walletAmount = Utils.doubleParsing(objMyApplication.getCurrentUserData().getTokenWalletResponse().getExchangeAmount() + "".replace(",", ""));
                     }
 //                            Double giftCardAmount = (Utils.doubleParsing(amountET.getText().toString().replace(",", "")) + Utils.doubleParsing(fee.toString().replace(",", "")));
 //                    Double giftCardAmount = Utils.doubleParsing(amountET.getText().toString().replace(",", "")) * (1 - (feeInPercentage / 100)) - feeInAmount;

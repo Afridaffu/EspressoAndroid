@@ -392,7 +392,7 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
             if (users != null && users.size() > 0) {
                 for (int i = 0; i < users.size(); i++) {
 //                    if (!users.get(i).getWalletId().equals(objMyApplication.getGbtWallet().getWalletId())) {
-                    if (!users.get(i).getWalletId().equals(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId())) {
+                    if (!users.get(i).getWalletId().equals(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletId())) {
                         listCoyniUsers.add(users.get(i));
                     }
                 }
@@ -590,7 +590,7 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
             if (contacts != null && contacts.size() > 0) {
                 for (int i = 0; i < contacts.size(); i++) {
                     if (!strUserPh.equals(contacts.get(i).getPhoneNumber())) {
-                        if (contacts.get(i).getWalletAddress() != null && !contacts.get(i).getWalletAddress().equals(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId())) {
+                        if (contacts.get(i).getWalletAddress() != null && !contacts.get(i).getWalletAddress().equals(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletId())) {
                             wWAList.add(contacts.get(i));
                         } else if (contacts.get(i).getWalletAddress() == null) {
                             nWAList.add(contacts.get(i));
