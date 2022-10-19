@@ -49,6 +49,17 @@ public class AccountLimitsData{
     @SerializedName("withdrawsCogentTxnLimit")
     @Expose
     private String withdrawsCogentTxnLimit;
+
+    @SerializedName("withdrawsSignetMinLimit")
+    @Expose
+    private String withdrawsSignetMinLimit;
+    @SerializedName("withdrawsSignetType")
+    @Expose
+    private int withdrawsSignetType;
+    @SerializedName("withdrawsSignetTxnLimit")
+    @Expose
+    private String withdrawsSignetTxnLimit;
+
     @SerializedName("withdrawsGiftCardMinLimit")
     @Expose
     private String withdrawsGiftCardMinLimit;
@@ -85,6 +96,17 @@ public class AccountLimitsData{
     @SerializedName("buyTokenCogentTxnLimit")
     @Expose
     private String buyTokenCogentTxnLimit;
+
+   @SerializedName("buyTokenSignetMinLimit")
+    @Expose
+    private String buyTokenSignetMinLimit;
+    @SerializedName("buyTokenSignetType")
+    @Expose
+    private int buyTokenSignetType;
+    @SerializedName("buyTokenSignetTxnLimit")
+    @Expose
+    private String buyTokenSignetTxnLimit;
+
     @SerializedName("status")
     @Expose
     private String status;
@@ -240,6 +262,54 @@ public class AccountLimitsData{
 
     public String getStatus() {
         return status;
+    }
+
+    public String getWithdrawsSignetMinLimit() {
+        return withdrawsSignetMinLimit;
+    }
+
+    public void setWithdrawsSignetMinLimit(String withdrawsSignetMinLimit) {
+        this.withdrawsSignetMinLimit = withdrawsSignetMinLimit;
+    }
+
+    public int getWithdrawsSignetType() {
+        return withdrawsSignetType;
+    }
+
+    public void setWithdrawsSignetType(int withdrawsSignetType) {
+        this.withdrawsSignetType = withdrawsSignetType;
+    }
+
+    public String getWithdrawsSignetTxnLimit() {
+        return withdrawsSignetTxnLimit;
+    }
+
+    public void setWithdrawsSignetTxnLimit(String withdrawsSignetTxnLimit) {
+        this.withdrawsSignetTxnLimit = withdrawsSignetTxnLimit;
+    }
+
+    public String getBuyTokenSignetMinLimit() {
+        return buyTokenSignetMinLimit;
+    }
+
+    public void setBuyTokenSignetMinLimit(String buyTokenSignetMinLimit) {
+        this.buyTokenSignetMinLimit = buyTokenSignetMinLimit;
+    }
+
+    public int getBuyTokenSignetType() {
+        return buyTokenSignetType;
+    }
+
+    public void setBuyTokenSignetType(int buyTokenSignetType) {
+        this.buyTokenSignetType = buyTokenSignetType;
+    }
+
+    public String getBuyTokenSignetTxnLimit() {
+        return buyTokenSignetTxnLimit;
+    }
+
+    public void setBuyTokenSignetTxnLimit(String buyTokenSignetTxnLimit) {
+        this.buyTokenSignetTxnLimit = buyTokenSignetTxnLimit;
     }
 }
 

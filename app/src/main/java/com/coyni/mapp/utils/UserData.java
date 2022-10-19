@@ -102,7 +102,7 @@ public class UserData {
     private List<Earning> earningList;
     boolean isReserveEnabled = false;
     private String strToken;
-    private boolean isLoggedIn = false, isCogentEnabled = true, isSignetEnabled = false;
+    private boolean isLoggedIn = false, isCogentEnabled = true, isSignetEnabled = true;
     private String businessUserID = "";
     private String ownerImage = "", companyName = "";
     private List<BatchPayoutListItems> batchPayList = new ArrayList<>();

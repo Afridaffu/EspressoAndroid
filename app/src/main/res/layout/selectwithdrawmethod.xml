@@ -255,6 +255,83 @@
                     android:src="@drawable/ic_chevron_right" />
             </RelativeLayout>
 
+            <LinearLayout
+                android:id="@+id/lySignet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@color/viewcolor"></View>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/_15sdp"
+                    android:paddingEnd="@dimen/_7sdp">
+
+                    <ImageView
+                        android:id="@+id/imgSignetAcLogo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@string/Signet_account"
+                        android:src="@drawable/ic_signetactive" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_14sdp"
+                        android:layout_toLeftOf="@+id/imgSignetCCardArrow"
+                        android:layout_toRightOf="@+id/imgSignetAcLogo"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_2sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="@string/Signet_account"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_12ssp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/Cogent_ac_withdrawing_funds"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_10ssp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:fontFamily="@font/opensans_bold"
+                            android:text="Coming soon"
+                            android:textColor="@color/primary_color"
+                            android:textSize="@dimen/_10ssp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/imgSignetCCardArrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:src="@drawable/ic_chevron_right" />
+                </RelativeLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/lyCogent"
@@ -333,85 +410,6 @@
                 </RelativeLayout>
 
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lySignet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@color/viewcolor"></View>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_7sdp">
-
-                    <ImageView
-                        android:id="@+id/imgSignetAcLogo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:contentDescription="@string/Cogent_account"
-                        android:src="@drawable/ic_signetactive" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_14sdp"
-                        android:layout_toLeftOf="@+id/imgSignetCCardArrow"
-                        android:layout_toRightOf="@+id/imgSignetAcLogo"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_2sdp"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="@string/Signet_account"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_10sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="@string/Cogent_ac_withdrawing_funds"
-                            android:textColor="@color/dark_grey"
-                            android:textSize="@dimen/_10ssp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_10sdp"
-                            android:fontFamily="@font/opensans_bold"
-                            android:text="Coming soon"
-                            android:textColor="@color/primary_color"
-                            android:textSize="@dimen/_10ssp"
-                            android:visibility="gone" />
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/imgSignetCCardArrow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="@dimen/_12sdp"
-                        android:src="@drawable/ic_chevron_right" />
-                </RelativeLayout>
-
-            </LinearLayout>
-
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

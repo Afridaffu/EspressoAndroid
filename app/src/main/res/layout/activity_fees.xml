@@ -297,6 +297,49 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/wdSignetLL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_7sdp"
+                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:singleLine="true"
+                                android:text="@string/Signet_account"
+                                android:textColor="@color/xdark_gray"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <TextView
+                                android:id="@+id/SignetAccDollTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:gravity="end"
+                                android:singleLine="true"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <TextView
+                                android:id="@+id/SignetAccPerTV"
+                                android:layout_width="@dimen/_50sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_23sdp"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:gravity="end"
+                                android:singleLine="true"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/wdCogentLL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_7sdp"
@@ -461,7 +504,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_21sdp"
-                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:layout_marginBottom="@dimen/_20sdp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -501,8 +544,50 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_7sdp"
+                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:singleLine="true"
+                                android:text="@string/Signet_account"
+                                android:textColor="@color/xdark_gray"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <TextView
+                                android:id="@+id/buytokenSignetDollTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:gravity="end"
+                                android:singleLine="true"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <TextView
+                                android:id="@+id/buytokenSignetPerTV"
+                                android:layout_width="@dimen/_50sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_23sdp"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:gravity="end"
+                                android:singleLine="true"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_7sdp"
                             android:layout_marginBottom="@dimen/_20sdp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -536,6 +621,7 @@
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
+
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>

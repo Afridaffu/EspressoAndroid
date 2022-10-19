@@ -494,6 +494,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             layoutCogent = findViewById(R.id.layoutCogent);
 
             layoutSignet = findViewById(R.id.layoutSignet);
+            tvSignetError = findViewById(R.id.tvSignetError);
             imgSignetLogo = findViewById(R.id.imgSignetLogo);
             imgSignetArrow = findViewById(R.id.imgSignetArrow);
             tvSignetHead = findViewById(R.id.tvSignetHead);
@@ -517,17 +518,15 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 tvCogentCS.setVisibility(View.GONE);
             }
 
-            if (objMyApplication.isCogentEnabled()) {
-                layoutCogent.setVisibility(VISIBLE);
-            } else {
-                layoutCogent.setVisibility(GONE);
-            }
+            //Comment below to Enable buy token cogent/signet
+//            if (strMenu.equals("buy")) {
+//                layoutCogent.setVisibility(GONE);
+//                layoutSignet.setVisibility(GONE);
+//            } else {
+//                layoutCogent.setVisibility(objMyApplication.isCogentEnabled() ? View.VISIBLE : View.GONE);
+//                layoutSignet.setVisibility(objMyApplication.isSignetEnabled() ? View.VISIBLE : View.GONE);
+//            }
 
-            if (objMyApplication.isSignetEnabled()) {
-                layoutSignet.setVisibility(VISIBLE);
-            } else {
-                layoutSignet.setVisibility(GONE);
-            }
 
             lyBPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -540,6 +539,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     }
                 }
             });
+
             lyExternal.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

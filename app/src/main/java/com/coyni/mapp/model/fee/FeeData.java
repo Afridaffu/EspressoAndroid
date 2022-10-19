@@ -27,6 +27,10 @@ public class FeeData {
     private String withdrawalCogentFeeInPercent;
     private String buyTokenCogentFeeInDollar;
     private String buyTokenCogentFeeInPercent;
+    private String withdrawalSignetFeeInDollar;
+    private String withdrawalSignetFeeInPercent;
+    private String buyTokenSignetFeeInDollar;
+    private String buyTokenSignetFeeInPercent;
     private String monthlyServiceFeeInDollar;
     private String monthlyServiceFeeInPercent;
     private String transactionSaleOrderTokenFeeInDollar;
@@ -284,5 +288,37 @@ public class FeeData {
 
     public void setDisputeChargebackFeeInPercent(String disputeChargebackFeeInPercent) {
         this.disputeChargebackFeeInPercent = disputeChargebackFeeInPercent;
+    }
+
+    public String getWithdrawalSignetFeeInDollar() {
+        return withdrawalSignetFeeInDollar;
+    }
+
+    public void setWithdrawalSignetFeeInDollar(String withdrawalSignetFeeInDollar) {
+        this.withdrawalSignetFeeInDollar = withdrawalSignetFeeInDollar;
+    }
+
+    public String getWithdrawalSignetFeeInPercent() {
+        return withdrawalSignetFeeInPercent;
+    }
+
+    public void setWithdrawalSignetFeeInPercent(String withdrawalSignetFeeInPercent) {
+        this.withdrawalSignetFeeInPercent = withdrawalSignetFeeInPercent;
+    }
+
+    public String getBuyTokenSignetFeeInDollar() {
+        return buyTokenSignetFeeInDollar;
+    }
+
+    public void setBuyTokenSignetFeeInDollar(String buyTokenSignetFeeInDollar) {
+        this.buyTokenSignetFeeInDollar = buyTokenSignetFeeInDollar;
+    }
+
+    public String getBuyTokenSignetFeeInPercent() {
+        return buyTokenSignetFeeInPercent;
+    }
+
+    public void setBuyTokenSignetFeeInPercent(String buyTokenSignetFeeInPercent) {
+        this.buyTokenSignetFeeInPercent = buyTokenSignetFeeInPercent;
     }
 }

@@ -421,17 +421,8 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                 tvMsg.setVisibility(View.VISIBLE);
             }
 
-            if (objMyApplication.isCogentEnabled()) {
-                layoutCogent.setVisibility(VISIBLE);
-            } else {
-                layoutCogent.setVisibility(GONE);
-            }
-
-            if (objMyApplication.isSignetEnabled()) {
-                layoutSignet.setVisibility(VISIBLE);
-            } else {
-                layoutSignet.setVisibility(GONE);
-            }
+            layoutCogent.setVisibility(objMyApplication.isCogentEnabled() ? View.VISIBLE : View.GONE);
+            layoutSignet.setVisibility(objMyApplication.isSignetEnabled() ? View.VISIBLE : View.GONE);
 
             lyBPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
