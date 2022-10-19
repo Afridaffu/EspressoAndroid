@@ -67,7 +67,11 @@ public class TransactionListPostedNewAdapter extends RecyclerView.Adapter<Transa
 
     @Override
     public void onBindViewHolder(@NonNull TransactionListPostedNewAdapter.MyViewHolder holder, int position) {
-
+        if (position == 0) {
+            holder.cyn.setVisibility(View.VISIBLE);
+        } else {
+            holder.cyn.setVisibility(View.GONE);
+        }
         try {
             int currentYear = Calendar.getInstance().get(Calendar.YEAR);
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -105,13 +109,14 @@ public class TransactionListPostedNewAdapter extends RecyclerView.Adapter<Transa
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView date;
+        TextView date, cyn;
         RecyclerView innerRV;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             date = itemView.findViewById(R.id.dateTV);
             innerRV = itemView.findViewById(R.id.postedInnerRV);
+            cyn = itemView.findViewById(R.id.tv_cyn);
         }
 
     }

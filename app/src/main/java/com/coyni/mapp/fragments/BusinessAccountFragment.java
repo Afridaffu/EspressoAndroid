@@ -120,20 +120,14 @@ public class BusinessAccountFragment extends BaseFragment {
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                if (businessWalletResponse != null) {
-                    try {
-                        List<WalletInfo> walletInfo = businessWalletResponse.getData().getWalletNames();
-                        if (walletInfo != null && walletInfo.size() > 0) {
-                            String strAmount;
-                            objMyApplication.setGBTBalance(walletInfo.get(0).getAvailabilityToUse(), walletInfo.get(0).getWalletType());
-                            strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(0).getAvailabilityToUse()));
-                            tvBalance.setText(strAmount);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                if (businessWalletResponse == null) {
+                    return;
+                }
+                if (businessWalletResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                    walletInfoData(businessWalletResponse);
                 }
             }
+
         });
 
 
@@ -177,9 +171,9 @@ public class BusinessAccountFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (Utils.checkInternet(requireContext().getApplicationContext())) {
-            WalletRequest walletRequest = new WalletRequest();
-            walletRequest.setWalletType(Utils.TOKEN);
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
+//            WalletRequest walletRequest = new WalletRequest();
+//            walletRequest.setWalletType(Utils.TOKEN);
+            businessDashboardViewModel.meWallets();
             LatestTransactionsRequest request = new LatestTransactionsRequest();
             request.setTransactionType(getDefaultTransactionTypes());
             request.setMerchantTokenTransactions(true);
@@ -255,6 +249,20 @@ public class BusinessAccountFragment extends BaseFragment {
             latestTxnRefresh.setRefreshing(false);
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void walletInfoData(BusinessWalletResponse businessWalletResponse) {
+        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
+            List<WalletInfo> walletInfo = businessWalletResponse.getData().getWalletNames();
+            for (WalletInfo walletInfo1 : walletInfo) {
+                if (walletInfo1.getWalletType().equalsIgnoreCase(Utils.TOKEN_STR)) {
+                    String strAmount;
+                    objMyApplication.setGBTBalance(walletInfo1.getAvailabilityToUse(), walletInfo1.getWalletType());
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo1.getAvailabilityToUse()));
+                    tvBalance.setText(strAmount);
+                }
+            }
         }
     }
 

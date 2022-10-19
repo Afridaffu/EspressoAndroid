@@ -41,6 +41,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
+import com.coyni.mapp.model.paymentmethods.PaymentsList;
+import com.coyni.mapp.utils.CheckOutConstants;
+import com.coyni.mapp.view.business.AddManualBankAccount;
+import com.coyni.mapp.viewmodel.DashboardViewModel;
+import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.getbouncer.cardscan.ui.CardScanSheet;
 import com.getbouncer.cardscan.ui.CardScanSheetResult;
 import com.getbouncer.cardscan.ui.ScannedCard;
@@ -95,6 +101,7 @@ import kotlin.Unit;
 public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     String strPublicKey = "";
     PaymentMethodsViewModel paymentMethodsViewModel;
+    DashboardViewModel dashboardViewModel;
     MyApplication objMyApplication;
     RelativeLayout layoutCard, layoutAddress;
     LinearLayout layoutClose, nameErrorLL, expiryErrorLL, cvvErrorLL, lyExpiry, layoutCvv, llError;
@@ -110,7 +117,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1, etlAddress2, etlCity, etlZipCode, etlAmount;
     MaskEditText etExpiry;
     ConstraintLayout clStates;
-    Long mLastClickTime = 0L, mLastClickTimeDialog = 0L;
+    Long mLastClickTime = 0L;
     Dialog preDialog, preAuthDialog;
     CardResponseData cardResponseData;
     Dialog progressDialog;
@@ -118,7 +125,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     CardTypeResponse objCard;
     Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false;
     Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false, isInvalid = false;
-    public Boolean isCard = false, isScan = false, isCardClear = false, isLicense = false;
+    public Boolean isCard = false, isScan = false, isCardClear = false, isBuyFCEnabled = false, isWithFCEnabled = false;
     TextView tvError;
     //    private BlinkCardRecognizer mRecognizer;
 //    private RecognizerBundle mRecognizerBundle;
@@ -283,6 +290,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             setKeyboardVisibilityListener(this);
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             //paymentMethodsViewModel.getPublicKey(objMyApplication.getLoginUserId());
             //objMyApplication.getStates();
             if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
@@ -662,6 +670,29 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 }
             }
         });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse payMethodsResponse) {
+                if (payMethodsResponse != null) {
+                    PaymentMethodsResponse objResponse;
+                    objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
+                    objMyApplication.setPaymentMethodsResponse(objResponse);
+                    PaymentsList objData = objMyApplication.getPaymentMethodsResponse().getData().getData().get(0);
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
+                        isWithFCEnabled = objMyApplication.withFeatureCtrlEnabled(objData);
+                    }
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("addpay")) {
+                        isBuyFCEnabled = objMyApplication.buyFeatureCtrlEnabled(objData);
+                    }
+                    if (isWithFCEnabled || isBuyFCEnabled) {
+                        objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                        objMyApplication.setSelectedCard(objData);
+                    }
+                }
+            }
+        });
+
     }
 
     private Boolean validation() {
@@ -1700,7 +1731,9 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             if (preAuthDialog != null) {
                 preAuthDialog.dismiss();
             }
-
+            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("withdraw"))) {
+                dashboardViewModel.mePaymentMethods();
+            }
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preDialog.setContentView(R.layout.activity_all_done_card);
@@ -1717,9 +1750,23 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 @Override
                 public void onClick(View view) {
                     try {
+                        preDialog.dismiss();
                         objMyApplication.setCardSave(true);
-                        Intent i = new Intent();
-                        setResult(RESULT_OK, i);
+                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("addpay") && isBuyFCEnabled) {
+                            Intent i = new Intent(AddCardActivity.this, BuyTokenActivity.class);
+                            i.putExtra("cvv", "");
+                            startActivity(i);
+                        } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled) {
+                            if (getIntent().getStringExtra("card") != null && !getIntent().getStringExtra("card").equals("credit")) {
+                                startActivity(new Intent(AddCardActivity.this, WithdrawTokenActivity.class));
+                            } else {
+                                Intent i = new Intent();
+                                setResult(RESULT_OK, i);
+                            }
+                        } else {
+                            Intent i = new Intent();
+                            setResult(RESULT_OK, i);
+                        }
                         finish();
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1978,15 +2025,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
-
-    // method within MyActivity from previous step
-//    public void startScanning() {
-//        // Settings for BlinkCardActivity
-//        BlinkCardUISettings settings = new BlinkCardUISettings(mRecognizerBundle);
-//        // tweak settings as you wish
-//        // Start activity
-//        ActivityRunner.startActivityForResult(this, 123, settings);
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

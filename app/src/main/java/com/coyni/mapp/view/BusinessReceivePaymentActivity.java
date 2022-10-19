@@ -217,9 +217,9 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
 //                tvWalletAddress.setText(walletResponse.getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
 //            }
 
-            strWallet = objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getWalletId();
+            strWallet = objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletId();
             generateQRCode(strWallet);
-            tvWalletAddress.setText(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
+            tvWalletAddress.setText(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletId().substring(0, 16) + "...");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -233,7 +233,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                     myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
                     ClipData myClip;
-                    String text = objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getWalletId();
+                    String text = objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletId();
                     myClip = ClipData.newPlainText("text", text);
                     myClipboard.setPrimaryClip(myClip);
 
@@ -361,10 +361,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
     protected void onResume() {
         try {
             super.onResume();
-            WalletRequest walletRequest = new WalletRequest();
-            walletRequest.setWalletType(Utils.MERCHANT);
-//            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
-            dashboardViewModel.meMerchantWallet(walletRequest);
+            dashboardViewModel.meWallets();
 
         } catch (Exception e) {
             e.printStackTrace();

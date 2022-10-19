@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.fee.Fees;
 import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.model.summary.BankAccount;
@@ -698,13 +699,22 @@ public class MyApplication extends Application {
     }
 
     public void setWalletResponseData(WalletResponseData walletResponseData) {
-        if (walletResponseData.getWalletNames().size() > 0) {
-            if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
-                mCurrentUserData.setTokenWalletResponse(walletResponseData);
-            } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
-                mCurrentUserData.setMerchantWalletResponse(walletResponseData);
-            } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
-                mCurrentUserData.setReserveWalletResponse(walletResponseData);
+
+        List<WalletInfo> walletInfoList = walletResponseData.getWalletNames();
+        for (WalletInfo walletInfo : walletInfoList) {
+            if (walletInfo.getWalletType() == null) {
+                continue;
+            }
+            switch (walletInfo.getWalletType()) {
+                case Utils.TOKEN_STR:
+                    mCurrentUserData.setTokenWalletResponse(walletInfo);
+                    break;
+                case Utils.MERCHANT_STR:
+                    mCurrentUserData.setMerchantWalletResponse(walletInfo);
+                    break;
+                case Utils.RESERVE_STR:
+                    mCurrentUserData.setReserveWalletResponse(walletInfo);
+                    break;
             }
         }
     }
@@ -1014,6 +1024,70 @@ public class MyApplication extends Application {
 
     public void setBankAccount(BankAccount bankAccount) {
         mCurrentUserData.setBankAccount(bankAccount);
+    }
+
+    public Boolean buyFeatureCtrlEnabled(PaymentsList objData) {
+        Boolean isValue = false;
+        try {
+            switch (objData.getPaymentMethod().toLowerCase()) {
+                case "bank":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getBuyBank() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getBuyBank() && getFeatureControlByUser().getBuyBank())) {
+                        isValue = true;
+                    }
+                    break;
+                case "signet":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getBuySignet() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getBuySignet() && getFeatureControlByUser().getBuySignet())) {
+                        isValue = true;
+                    }
+                    break;
+                case "debit":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getBuyDebit() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getBuyDebit() && getFeatureControlByUser().getBuyDebit())) {
+                        isValue = true;
+                    }
+                    break;
+                case "credit":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getBuyCredit() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getBuyCredit() && getFeatureControlByUser().getBuyCredit())) {
+                        isValue = true;
+                    }
+                    break;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return isValue;
+    }
+
+    public Boolean withFeatureCtrlEnabled(PaymentsList objData) {
+        Boolean isValue = false;
+        try {
+            switch (objData.getPaymentMethod().toLowerCase()) {
+                case "bank":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getWithBank() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getWithBank() && getFeatureControlByUser().getWithBank())) {
+                        isValue = true;
+                    }
+                    break;
+                case "signet":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getWithSignet() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getWithSignet() && getFeatureControlByUser().getWithSignet())) {
+                        isValue = true;
+                    }
+                    break;
+                case "debit":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getWithInstant() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getWithInstant() && getFeatureControlByUser().getWithInstant())) {
+                        isValue = true;
+                    }
+                    break;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return isValue;
     }
 
 }

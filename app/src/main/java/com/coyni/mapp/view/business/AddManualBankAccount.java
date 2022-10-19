@@ -44,11 +44,18 @@ import com.coyni.mapp.dialogs.ManualAccountNumbersFullPage;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
 import com.coyni.mapp.model.bank.ManualBankRequest;
 import com.coyni.mapp.model.bank.ManualBankResponse;
+import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
+import com.coyni.mapp.model.paymentmethods.PaymentsList;
 import com.coyni.mapp.model.summary.BankAccount;
+import com.coyni.mapp.utils.CheckOutConstants;
 import com.coyni.mapp.utils.EmojiFilter;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
+import com.coyni.mapp.view.BuyTokenActivity;
+import com.coyni.mapp.view.BuyTokenPaymentMethodsActivity;
+import com.coyni.mapp.view.WithdrawTokenActivity;
+import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.PaymentMethodsViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -64,6 +71,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
     private MyApplication objMyApplication;
     private CardView addCV;
     PaymentMethodsViewModel paymentMethodsViewModel;
+    DashboardViewModel dashboardViewModel;
     String strScreen = "";
     RelativeLayout lyAddBank, layoutLoader;
     Dialog bankStatusDialog;
@@ -88,6 +96,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             setKeyboardVisibilityListener(this);
             objMyApplication = (MyApplication) getApplicationContext();
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             setSpannableText();
             lyAddBank = findViewById(R.id.lyAddBank);
             layoutLoader = findViewById(R.id.layoutLoader);
@@ -252,20 +261,46 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
         paymentMethodsViewModel.getManualBankResponseMutableLiveData().observe(this, new Observer<ManualBankResponse>() {
             @Override
             public void onChanged(ManualBankResponse manualBankResponse) {
-                if (manualBankResponse != null) {
-                    if (manualBankResponse.getStatus().toLowerCase().equals("success")) {
+                try {
+                    if (manualBankResponse != null) {
+                        if (manualBankResponse.getStatus().toLowerCase().equals("success")) {
+                            if (strScreen.equals("pay")) {
+                                layoutLoader.setVisibility(View.GONE);
+                            }
+                        }
+                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("withdraw"))) {
+                            dashboardViewModel.mePaymentMethods();
+                        }
                         if (strScreen.equals("pay")) {
-                            layoutLoader.setVisibility(View.GONE);
+                            showSuccessFailure(manualBankResponse);
+                        } else if (strScreen.equals("signUp") || strScreen.equals("REVIEW")) {
+                            onBackPressed();
                         }
                     }
-                    if (strScreen.equals("pay")) {
-                        showSuccessFailure(manualBankResponse);
-                    } else if (strScreen.equals("signUp") || strScreen.equals("REVIEW")) {
-                        onBackPressed();
-                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse payMethodsResponse) {
+                if (payMethodsResponse != null) {
+                    PaymentMethodsResponse objResponse;
+                    if (strScreen.equalsIgnoreCase(CheckOutConstants.ScreenCheckOut)) {
+                        objResponse = objMyApplication.filterCheckPaymentMethods(payMethodsResponse);
+                    } else {
+                        objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
+                    }
+                    objMyApplication.setPaymentMethodsResponse(objResponse);
+                    PaymentsList objData = objMyApplication.getPaymentMethodsResponse().getData().getData().get(0);
+                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                    objMyApplication.setSelectedCard(objData);
+                }
+            }
+        });
+
     }
 
     private void textWatchers() {
@@ -312,10 +347,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             routingNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (i2 - i1 > 1) {
-                        routingNumberET.setText(charSequence);
-                        routingNumberET.setSelection(charSequence.toString().length());
-                    }
+//                    if (i2 - i1 > 1) {
+//                        routingNumberET.setText(charSequence);
+//                        routingNumberET.setSelection(charSequence.toString().length());
+//                    }
                 }
 
                 @Override
@@ -362,10 +397,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             confirmRoutingNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (i2 - i1 > 1) {
-                        confirmRoutingNumberET.setText(charSequence);
-                        confirmRoutingNumberET.setSelection(charSequence.toString().length());
-                    }
+//                    if (i2 - i1 > 1) {
+//                        confirmRoutingNumberET.setText(charSequence);
+//                        confirmRoutingNumberET.setSelection(charSequence.toString().length());
+//                    }
                 }
 
                 @Override
@@ -394,10 +429,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             checkAccNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSeq, int i, int i1, int i2) {
-                    if (i2 - i1 > 1) {
-                        checkAccNumberET.setText(charSeq);
-                        checkAccNumberET.setSelection(charSeq.toString().length());
-                    }
+//                    if (i2 - i1 > 1) {
+//                        checkAccNumberET.setText(charSeq);
+//                        checkAccNumberET.setSelection(charSeq.toString().length());
+//                    }
                 }
 
                 @Override
@@ -442,10 +477,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
             confirmAccNumberET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSeq, int i, int i1, int i2) {
-                    if (i2 - i1 > 1) {
-                        confirmAccNumberET.setText(charSeq);
-                        confirmAccNumberET.setSelection(charSeq.toString().length());
-                    }
+//                    if (i2 - i1 > 1) {
+//                        confirmAccNumberET.setText(charSeq);
+//                        confirmAccNumberET.setSelection(charSeq.toString().length());
+//                    }
                 }
 
                 @Override
@@ -785,17 +820,17 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (manualBankResponse.getData() != null && !manualBankResponse.getData().getGiactFail()) {
                             objMyApplication.setBankSave(true);
-                            Intent i = new Intent();
-                            setResult(RESULT_OK, i);
+                            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("addpay")) {
+                                Intent i = new Intent(AddManualBankAccount.this, BuyTokenActivity.class);
+                                startActivity(i);
+                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
+                                startActivity(new Intent(AddManualBankAccount.this, WithdrawTokenActivity.class));
+                            } else {
+                                Intent i = new Intent();
+                                setResult(RESULT_OK, i);
+                            }
                             finish();
                         } else {
-//                            bankStatusDialog.dismiss();
-//                            lyAddBank.setVisibility(View.VISIBLE);
-//                            layoutLoader.setVisibility(View.GONE);
-//                            routingNumberET.setText("");
-//                            confirmRoutingNumberET.setText("");
-//                            checkAccNumberET.setText("");
-//                            confirmAccNumberET.setText("");
                             finish();
                             overridePendingTransition(0, 0);
                             startActivity(getIntent());

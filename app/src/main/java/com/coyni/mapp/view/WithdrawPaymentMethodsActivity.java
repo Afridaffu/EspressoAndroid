@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.google.android.material.textfield.TextInputEditText;
 import com.coyni.mapp.R;
@@ -39,7 +40,6 @@ import com.coyni.mapp.model.bank.BankDeleteResponseData;
 import com.coyni.mapp.model.bank.SignOn;
 import com.coyni.mapp.model.bank.SignOnData;
 import com.coyni.mapp.model.bank.SyncAccount;
-import com.coyni.mapp.model.businesswallet.WalletResponseData;
 import com.coyni.mapp.model.cards.CardDeleteResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentsList;
@@ -64,7 +64,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
     CustomerProfileViewModel customerProfileViewModel;
     DashboardViewModel dashboardViewModel;
     PaymentMethodsViewModel paymentMethodsViewModel;
-    WalletResponseData walletResponse;
+    WalletInfo walletResponse;
     Double walletBalance = 0.0;
     Long mLastClickTime = 0L;
     Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false, isNoToken = false, isCogent = false, isSignet = false;

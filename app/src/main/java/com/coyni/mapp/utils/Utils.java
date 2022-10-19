@@ -165,6 +165,34 @@ public class Utils {
         }
     }
 
+
+    public static enum STRING_PREFERENCE {
+        PST(0,"PST"),
+        MST(1,"America/Denver"),
+        CST(2,"CST"),
+        EST(3,"America/New_York"),
+        HST(4,"HST"),
+        AST(5,"AST"),
+        SST(6,"US/Samoa");
+
+        int zoneID;
+        String strPreference;
+
+        STRING_PREFERENCE(int zoneID,String strPreference){
+            this.zoneID = zoneID;
+            this.strPreference = strPreference;
+        }
+
+        public int getZoneID() {
+            return zoneID;
+        }
+
+        public String getStrPreference() {
+            return strPreference;
+        }
+
+    }
+
     public enum ROLLING_LIST_STATUS {
 
         OPEN(6, "Open"),
@@ -1360,6 +1388,11 @@ public class Utils {
             tzm = new TimeZoneModel();
             tzm.setTimezone(context.getString(R.string.HST));
             tzm.setTimezoneID(4);
+            arrZonesList.add(tzm);
+
+            tzm = new TimeZoneModel();
+            tzm.setTimezone(context.getString(R.string.SST));
+            tzm.setTimezoneID(6);
             arrZonesList.add(tzm);
 
             if (from.equals("PREFERENCES")) {

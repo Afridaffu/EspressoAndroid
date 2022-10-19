@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_11sdp"
         android:fontFamily="@font/opensans_regular"
-        android:text="Seems like no token available in your account. Please follow one of the prompts below to link an account."
+        android:text="Looks like you have no tokens available in your account. Please follow one of the prompts below to buy more tokens."
         android:textColor="@color/primary_black"
         android:textSize="@dimen/_12ssp" />
 

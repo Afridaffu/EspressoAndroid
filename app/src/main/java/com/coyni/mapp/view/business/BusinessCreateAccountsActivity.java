@@ -1,10 +1,16 @@
 package com.coyni.mapp.view.business;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -12,14 +18,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.coyni.mapp.R;
+import com.coyni.mapp.adapters.AddNewBusinessAccountDBAAdapter;
 import com.coyni.mapp.adapters.BusinessProfileRecyclerAdapter;
 import com.coyni.mapp.model.AccountsData;
 import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.businesswallet.WalletResponseData;
+import com.coyni.mapp.model.preferences.BaseProfile;
 import com.coyni.mapp.model.preferences.ProfilesResponse;
 import com.coyni.mapp.model.profile.AddBusinessUserResponse;
 import com.coyni.mapp.model.profile.Profile;
@@ -243,22 +255,16 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         }
     }
 
-    private void setUserBalance(WalletResponseData walletResponse) {
+    private void setUserBalance(WalletInfo walletResponse) {
         try {
             String strAmount = "";
             if (walletResponse == null) {
+                userBalanceTV.setText("0.00");
                 return;
             }
-            List<WalletInfo> walletInfo = walletResponse.getWalletNames();
-            LogUtils.d(TAG, "setUserBalance" + walletInfo.toString());
-            if (walletInfo != null && walletInfo.size() > 0) {
-                for (int i = 0; i < walletInfo.size(); i++) {
-                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getAvailabilityToUse()));
-                    userBalanceTV.setText(strAmount);
-                }
-            } else {
-                userBalanceTV.setText("0.00");
-            }
+            LogUtils.d(TAG, "setUserBalance" + walletResponse.toString());
+            strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletResponse.getAvailabilityToUse()));
+            userBalanceTV.setText(strAmount);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -292,16 +298,23 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 changeAccount(detailInfo.getId());
             }
 
-            @Override
-            public void onAddDbaClicked(String accountType, Integer id) {
-//                LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
+//            @Override
+//            public void onAddDbaClicked(String accountType, Integer id) {
+//                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+//                    return;
+//                }
+//                mLastClickTimeQA = SystemClock.elapsedRealtime();
 //                addDBA(id);
+//            }
+
+
+            @Override
+            public void onAddDbaClicked(ProfilesResponse.Profiles profiles, Integer id) {
                 if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
-//                openNewAccount();
-                addDBA(id);
+                displayDBAAlert(profiles, id);
             }
         });
         profilesListView.setAdapter(profilesListAdapter);
@@ -485,14 +498,59 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     }
 
     public void openNewAccount() {
-//        showProgressDialog();
-        Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class);
+//        Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class);
+        Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, AddNewAccountActivity.class);
         for (ProfilesResponse.Profiles profile : profilesList) {
             if (profile.getAccountType().equals(Utils.PERSONAL)) {
                 inNewAccount.putExtra("PersonalAccount", "true");
                 break;
             }
         }
+        //showProgressDialog();
         startActivity(inNewAccount);
+    }
+
+    private void displayDBAAlert(ProfilesResponse.Profiles profiles, Integer id) {
+        try {
+            // custom dialog
+            final Dialog dialog = new Dialog(BusinessCreateAccountsActivity.this);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.add_new_dba_account_alert_dialog);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            TextView tvCompany = dialog.findViewById(R.id.tvCompany);
+            TextView tvDBACount = dialog.findViewById(R.id.tvDBACount);
+            CardView addDBACardView = dialog.findViewById(R.id.cvAction);
+
+            tvCompany.setText(profiles.getCompanyName());
+            AccountsData accountsData = new AccountsData(profilesList);
+            ArrayList<ProfilesResponse.Profiles> dBAList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(profiles.getId());
+            tvDBACount.setText("Total DBAs : " + dBAList.size());
+
+            addDBACardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    addDBA(id);
+                    dialog.dismiss();
+
+                }
+            });
+
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -23,7 +23,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
     Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView txvCompanyName;
+        private TextView txvCompanyName, tvDBACount;
         private ImageView imvTickIcon, profileImage;
         private View viewLine;
 //        private TextView statusTV;
@@ -33,6 +33,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
         public MyViewHolder(View view) {
             super(view);
             txvCompanyName = (TextView) view.findViewById(R.id.title);
+            tvDBACount = (TextView) view.findViewById(R.id.tvDBACount);
             imvTickIcon = (ImageView) view.findViewById(R.id.tickIcon);
             profileImage = (ImageView) view.findViewById(R.id.profileImage);
             viewLine = (View) view.findViewById(R.id.viewLine);
@@ -59,10 +60,9 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
-            if(listCompany.get(position).getCompanyName() == null) {
+            if (listCompany.get(position).getCompanyName() == null) {
                 holder.txvCompanyName.setText("[Company Name]");
-            }
-            else {
+            } else {
                 holder.txvCompanyName.setText(listCompany.get(position).getCompanyName());
                 if (position == listCompany.size() - 1) {
                     holder.viewLine.setVisibility(View.GONE);
@@ -70,11 +70,12 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
                     holder.viewLine.setVisibility(View.VISIBLE);
                 }
             }
+            holder.tvDBACount.setText("Total DBAs : " + listCompany.get(position).getDbaCount());
 
             if (listCompany.get(position).isSelected()) {
                 holder.imvTickIcon.setVisibility(View.VISIBLE);
                 holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_green));
-            } else if(listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
+            } else if (listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_black));
                 holder.imvTickIcon.setVisibility(View.GONE);
             } else {
@@ -111,16 +112,16 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
                 holder.txvCompanyName.setEnabled(true);
             }
 
-            if (listCompany.get(position).getImage() != null
-                    && !listCompany.get(position).getImage().trim().equals("")) {
-                // profileImageText.setVisibility(View.GONE);
-                holder.profileImage.setVisibility(View.VISIBLE);
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
-                utility.addImage(listCompany.get(position).getImage(), holder.profileImage, R.drawable.ic_case);
-            } else {
+//            if (listCompany.get(position).getImage() != null
+//                    && !listCompany.get(position).getImage().trim().equals("")) {
+//                // profileImageText.setVisibility(View.GONE);
+//                holder.profileImage.setVisibility(View.VISIBLE);
+//                DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
+//                utility.addImage(listCompany.get(position).getImage(), holder.profileImage, R.drawable.ic_case);
+//            } else {
                 holder.profileImage.setVisibility(View.VISIBLE);
                 holder.profileImage.setImageResource(R.drawable.ic_case);
-            }
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -148,7 +149,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
 
     @Override
     public int getItemCount() {
-        if(listCompany == null) {
+        if (listCompany == null) {
             return 0;
         }
         return listCompany.size();
@@ -157,5 +158,5 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
     public interface OnSelectListner {
         void selectedItem(BaseProfile item);
     }
-    
+
 }

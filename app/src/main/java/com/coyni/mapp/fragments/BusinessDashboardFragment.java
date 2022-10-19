@@ -3,10 +3,8 @@ package com.coyni.mapp.fragments;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -14,7 +12,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,13 +46,13 @@ import com.coyni.mapp.model.DashboardReserveList.ReserveListData;
 import com.coyni.mapp.model.DashboardReserveList.ReserveListItems;
 import com.coyni.mapp.model.DashboardReserveList.ReserveListResponse;
 import com.coyni.mapp.model.RangeDates;
-import com.coyni.mapp.model.appupdate.AppUpdateResp;
 import com.coyni.mapp.model.biometric.BiometricTokenRequest;
 import com.coyni.mapp.model.biometric.BiometricTokenResponse;
 import com.coyni.mapp.model.business_activity.BusinessActivityData;
 import com.coyni.mapp.model.business_activity.BusinessActivityRequest;
 import com.coyni.mapp.model.business_activity.BusinessActivityResp;
 import com.coyni.mapp.model.businesswallet.BusinessWalletResponse;
+import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.businesswallet.WalletRequest;
 import com.coyni.mapp.model.merchant_activity.MerchantActivityRequest;
 import com.coyni.mapp.model.merchant_activity.MerchantActivityResp;
@@ -83,7 +80,6 @@ import com.coyni.mapp.viewmodel.BusinessIdentityVerificationViewModel;
 import com.coyni.mapp.viewmodel.CoyniViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.NotificationsViewModel;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -635,22 +631,11 @@ public class BusinessDashboardFragment extends BaseFragment {
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                walletCount++;
-                try {
-                    if (businessWalletResponse != null) {
-                        myApplication.setWalletResponseData(businessWalletResponse.getData());
-                        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
-                            myApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
-                                    businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
-                        }
-
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                if (businessWalletResponse == null) {
+                    return;
                 }
-                if (walletCount == 3) {
-                    walletCount = 0;
-                    updateUIAfterWalletBalance();
+                if (businessWalletResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                    walletRespData(businessWalletResponse);
                 }
             }
         });
@@ -693,36 +678,78 @@ public class BusinessDashboardFragment extends BaseFragment {
 
                 try {
                     if (preferences != null) {
-                        if (preferences.getData().getTimeZone() == 0) {
+//                        if (preferences.getData().getTimeZone() == 0) {
+//                            myApplication.setTempTimezone(getString(R.string.PST));
+//                            myApplication.setTempTimezoneID(0);
+//                            myApplication.setStrPreference("PST");
+//                            localPreferenceValue = "PST";
+//                        } else if (preferences.getData().getTimeZone() == 1) {
+//                            myApplication.setTempTimezone(getString(R.string.MST));
+//                            myApplication.setTempTimezoneID(1);
+//                            myApplication.setStrPreference("America/Denver");
+//                            localPreferenceValue = "MST";
+//                        } else if (preferences.getData().getTimeZone() == 2) {
+//                            myApplication.setTempTimezone(getString(R.string.CST));
+//                            myApplication.setTempTimezoneID(2);
+//                            myApplication.setStrPreference("CST");
+//                            localPreferenceValue = "CST";
+//                        } else if (preferences.getData().getTimeZone() == 3) {
+//                            myApplication.setTempTimezone(getString(R.string.EST));
+//                            myApplication.setTempTimezoneID(3);
+//                            myApplication.setStrPreference("America/New_York");
+//                            localPreferenceValue = "EST";
+//                        } else if (preferences.getData().getTimeZone() == 4) {
+//                            myApplication.setTempTimezone(getString(R.string.HST));
+//                            myApplication.setTempTimezoneID(4);
+//                            myApplication.setStrPreference("HST");
+//                            localPreferenceValue = "HST";
+//                        } else if (preferences.getData().getTimeZone() == 5) {
+//                            myApplication.setTempTimezone(getString(R.string.AST));
+//                            myApplication.setTempTimezoneID(5);
+//                            myApplication.setStrPreference("AST");
+//                            localPreferenceValue = "AST";
+//                        }else if (preferences.getData().getTimeZone() == 6) {
+//                            myApplication.setTempTimezone(getString(R.string.SST));
+//                            myApplication.setTempTimezoneID(6);
+//                            myApplication.setStrPreference("Pacific/Guadalcanal");
+//                            localPreferenceValue = "SST";
+//                        }
+
+                        if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.PST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.PST));
-                            myApplication.setTempTimezoneID(0);
-                            myApplication.setStrPreference("PST");
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.PST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.PST.getStrPreference());
                             localPreferenceValue = "PST";
-                        } else if (preferences.getData().getTimeZone() == 1) {
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.MST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.MST));
-                            myApplication.setTempTimezoneID(1);
-                            myApplication.setStrPreference("America/Denver");
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.MST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.MST.getStrPreference());
                             localPreferenceValue = "MST";
-                        } else if (preferences.getData().getTimeZone() == 2) {
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.CST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.CST));
-                            myApplication.setTempTimezoneID(2);
-                            myApplication.setStrPreference("CST");
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.CST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.CST.getStrPreference());
                             localPreferenceValue = "CST";
-                        } else if (preferences.getData().getTimeZone() == 3) {
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.EST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.EST));
-                            myApplication.setTempTimezoneID(3);
-                            myApplication.setStrPreference("America/New_York");
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.EST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.EST.getStrPreference());
                             localPreferenceValue = "EST";
-                        } else if (preferences.getData().getTimeZone() == 4) {
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.HST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.HST));
-                            myApplication.setTempTimezoneID(4);
-                            myApplication.setStrPreference("HST");
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.HST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.HST.getStrPreference());
                             localPreferenceValue = "HST";
-                        } else if (preferences.getData().getTimeZone() == 5) {
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.AST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.AST));
-                            myApplication.setTempTimezoneID(5);
-                            myApplication.setStrPreference("AST");
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.AST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.AST.getStrPreference());
                             localPreferenceValue = "AST";
+                        }else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.SST.getZoneID()) {
+                            myApplication.setTempTimezone(getString(R.string.SST));
+                            myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.SST.getZoneID());
+                            myApplication.setStrPreference(Utils.STRING_PREFERENCE.SST.getStrPreference());
+                            localPreferenceValue = "SST";
                         }
 
                         showData(myApplication.getBatchPayList());
@@ -767,16 +794,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void getWalletData() {
-        WalletRequest walletRequest = new WalletRequest();
-        walletRequest.setWalletType(Utils.MERCHANT);
-//        walletRequest.setUserId(String.valueOf(myApplication.getLoginUserId()));
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-        walletRequest.setWalletType(Utils.RESERVE);
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-        walletRequest.setWalletType(Utils.TOKEN);
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
+        businessDashboardViewModel.meWallets();
     }
 
     private void setBusinessData() {
@@ -1076,11 +1094,13 @@ public class BusinessDashboardFragment extends BaseFragment {
                 boolean isOpen = false, isPaid = false;
                 setSpannableTextView();
                 while (i < listItems.size()) {
+                    if(listItems.size() == 1 && listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN)){
+                        batchNoTransaction.setVisibility(View.VISIBLE);
+                    }
                     if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
                         String amount = listItems.get(i).getTotalAmount();
                         String amt = Utils.convertBigDecimalUSDC((amount));
                         Utils.setTextSize(nextPayoutAmountTV, amt, 48);
-
                         if (Utils.doubleParsing(amt.replaceAll(",", "")) <= 0) {
                             mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                             mCvBatchNow.setClickable(false);
@@ -1107,6 +1127,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                             Log.d("date format", date);
                         }
                         isOpen = true;
+
                     } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
                         String amount = Utils.convertBigDecimalUSDC((listItems.get(i).getTotalAmount()));
                         Utils.setTextSize(lastPayoutAmountTV, amount, 48);
@@ -1409,4 +1430,13 @@ public class BusinessDashboardFragment extends BaseFragment {
 //                    startActivity(viewIntent);
 //                }).show();
 //    }
+
+    private void walletRespData(BusinessWalletResponse businessWalletResponse) {
+        myApplication.setWalletResponseData(businessWalletResponse.getData());
+        List<WalletInfo> walletData = businessWalletResponse.getData().getWalletNames();
+        for (WalletInfo walletInfo : walletData) {
+            myApplication.setGBTBalance(walletInfo.getAvailabilityToUse(), walletInfo.getWalletType());
+        }
+        updateUIAfterWalletBalance();
+    }
 }

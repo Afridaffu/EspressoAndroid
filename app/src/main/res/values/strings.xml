@@ -83,7 +83,7 @@
     <string name="identityInstruction">Enter your mailing address of your primary residence. Please do not use a PO Box.</string>
     <string name="submitbtn">Submit</string>
     <string name="exitbtn">Exit</string>
-    <string name="addNewbusinessaccountdba">Select the Company you wish to add the new DBA below.You will need to complete a new Merchant Application for each DBA you add.</string>
+    <string name="addNewbusinessaccountdba">Select the Company you wish to add the new DBA below.\nYou will need to complete a new Merchant Application for each DBA you add.</string>
     <string name="addDBAButton">Add DBA</string>
     <string name="complete_application_step_by_step">Complete the merchant application step by step in 5 min</string>
     <string name="businessProfileAccountItemChildImage">Business Profile account Sub Profile Image</string>
@@ -194,6 +194,7 @@
     <string name="PST">Pacific (PST)</string>
     <string name="AST">Alaskan (AST)</string>
     <string name="HST">Hawaii (HST)</string>
+    <string name="SST">American Samoa (SST)</string>
     <string name="set_up_face_id">Set Up Face ID</string>
     <string name="enable_face_message">Enable Face ID to use face recognition to complete payments quickly and securely.</string>
     <string name="set_up_touch_id">Set Up Touch ID</string>
@@ -788,7 +789,7 @@
     <string name="please_provide_your_bank_account_information_find_your_account_numbers">Please provide your bank account information. Find your account numbers</string>
     <string name="where_to_find_my_account_information">Where to find my account information?</string>
     <string name="account_numbers">You can find your routing and account numbers at the bottom of your checks or displayed in your online banking account. On checks, the routing number is typically left of your account number.</string>
-    <string name="get_help_description">Send an email to our support team at support@coyni.com for any question, issues, or feedback. Please include the following to expedite our response:</string>
+    <string name="get_help_description">Send an email to our support team at support@coyni.com for any questions, issues, or feedback. Please include the following to expedite our response:</string>
     <string name="our_support_team_is_here_for_you">Our support team is here for you.</string>
     <string name="need_help_with_coyni">Need help with coyni?</string>
     <string name="support_text">&#x2022; Name\n&#x2022; coyni email\n&#x2022;  Account ID number (located in your user details) \n&#x2022; A detailed description of your question, feedback, or issue</string>
@@ -806,4 +807,25 @@
     <string name="trackerbank">No Mail</string>
     <string name="add_manual_bank_same_value_error">Account Number and Routing Number cannot have the same value.</string>
     <string name="allowed_file_size_error">Allowed File Size up to 10MB</string>
+    <string name="add_new_account">Add New Account</string>
+    <string name="newacct_mhead">Start accepting coyni at your business.</string>
+    <string name="newacct_thead">Tokenize your personal finances with coyni.</string>
+    <string name="newacct_bForesight">Business Foresight</string>
+    <string name="newacct_bForesightmsg">Leverage coyni’s business tools so you can focus on your vision for the future</string>
+    <string name="newacct_sCompetitive">Stay Competitive</string>
+    <string name="newacct_sCompetitivemsg">Competitive fees compared to traditional processors</string>
+    <string name="newacct_mQuickly">Move Quickly</string>
+    <string name="newacct_mQuicklymsg">Empowering you by making your funds available quickly</string>
+    <string name="newacct_iDecisions">Informed Decisions</string>
+    <string name="newacct_iDecisionsmsg">Easy to use, intuitive and informative business insights at glance</string>
+    <string name="newacct_cEcosystem">Closed Loop Ecosystem</string>
+    <string name="newacct_cEcosystemmsg">Digital token backed by the U.S. dollar on a 1:1 ratio</string>
+    <string name="newacct_yTime">On Your Time</string>
+    <string name="newacct_yTimemsg">Send and request payments when you want</string>
+    <string name="newacct_tPayments">Tailored Payments</string>
+    <string name="newacct_tPaymentsmsg">Generate QR codes for specific values to make direct payments</string>
+    <string name="newacct_sPlatform">Secure Platform</string>
+    <string name="newacct_sPlatformmsg">2-step identity verification and fraud monitoring</string>
+    <string name="addNewdbaaccount">You are about to add a new DBA for the following company.\n\nYou will need to complete a new Merchant Application for each DBA you add. Would you like to continue?</string>
+
 </resources>

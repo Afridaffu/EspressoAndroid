@@ -357,6 +357,10 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
 //            }
 //            setFaceLock();
 //            setTouchId();
+
+            if (getIntent().getStringExtra("cvv") != null && getIntent().getStringExtra("cvv").equals("") && objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                displayCVV(selectedCard);
+            }
             objMyApplication.initializeDBHandler(BuyTokenActivity.this);
             isFaceLock = objMyApplication.setFaceLock();
             isTouchId = objMyApplication.setTouchId();
@@ -999,6 +1003,10 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 strLimit = "week";
                 strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
                 tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
+            } else if (objLimit.getLimitType().toLowerCase().equals("per transaction")) {
+                strLimit = "per transaction";
+                strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
+                tvLimit.setText("Your per transaction limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
             }
 //            else if (objLimit.getTransactionLimit().toLowerCase().equals("unlimited")) {
 //                tvLimit.setText("Your daily limit is " + objLimit.getTransactionLimit() + strCurrency);
@@ -1090,6 +1098,11 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                     } else if (objResponse.getData().getLimitType().toLowerCase(Locale.ROOT).equals("weekly")) {
                         tvError.setText("Amount entered exceeds your weekly limit");
                     }
+                    tvError.setVisibility(View.VISIBLE);
+                    isMinimumError = false;
+                    value = false;
+                } else if (objResponse.getData().getLimitType().toLowerCase(Locale.ROOT).equals("per transaction")) {
+                    tvError.setText("Amount entered exceeds your per transaction limit");
                     tvError.setVisibility(View.VISIBLE);
                     isMinimumError = false;
                     value = false;
@@ -2029,47 +2042,6 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
         }
         return selectedCard;
     }
-
-//    private void setToken() {
-//        strToken = dbHandler.getPermanentToken();
-//    }
-//
-//    private void setFaceLock() {
-//        try {
-//            isFaceLock = false;
-//            String value = dbHandler.getFacePinLock();
-//            if (value != null && value.equals("true")) {
-//                isFaceLock = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isFaceLock = false;
-//                objMyApplication.setLocalBiometric(false);
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    private void setTouchId() {
-//        try {
-//            isTouchId = false;
-//            String value = dbHandler.getThumbPinLock();
-//            if (value != null && value.equals("true")) {
-//                isTouchId = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isTouchId = false;
-////                objMyApplication.setLocalBiometric(false);
-//                if (!isFaceLock) {
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
 
     private void defaultInputSetup() {
         tvCYN.setVisibility(View.VISIBLE);
