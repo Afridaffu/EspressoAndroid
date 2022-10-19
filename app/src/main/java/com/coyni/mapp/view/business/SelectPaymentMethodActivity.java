@@ -135,6 +135,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     ControlMethod("addpayment");
                 } else if (strScreen != null && !strScreen.equals("addpay")) {
                     if (!isPayments) {
+                        paymentMethods();
                         getPaymentMethods();
                     }
                 }
