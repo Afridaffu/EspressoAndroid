@@ -1848,7 +1848,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 displayAlert("Minimum Amount is " + Utils.USNumberFormat(Utils.doubleParsing(objResponse.getData().getMinimumLimit())) + " CYN", "Oops!");
                 value = false;
 
-            } else if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
+            } else if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit()) && !objResponse.getData().getLimitType().equalsIgnoreCase("NO LIMIT")) {
                 slideActionEnabled = true;
                 displayAlert("Amount entered exceeds transaction limit.", "Oops!");
                 value = false;
