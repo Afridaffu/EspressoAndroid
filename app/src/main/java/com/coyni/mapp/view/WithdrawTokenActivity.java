@@ -105,7 +105,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
     Dialog pDialog;
-    String strLimit = "", strType = "", strBankId = "", strCardId = "", strSubType = "", strSignOn = "", CogentWalletId = "", strPayment = "";
+    String strLimit = "", strType = "", strBankId = "", strCardId = "", strSubType = "", strSignOn = "", CogentWalletId = "", SignetWalletId = "", strPayment = "";
     Double maxValue = 0.0, dget = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
     SignOnData signOnData;
@@ -705,7 +705,9 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
                         if (strPayment.equals("bank")) {
                             Utils.showCustomToast(WithdrawTokenActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
-                        } else {
+                        } else if (strPayment.equalsIgnoreCase("sigent")) {
+                            Utils.showCustomToast(WithdrawTokenActivity.this, "Signet has been removed.", R.drawable.ic_custom_tick, "");
+                        } else if (strPayment.equalsIgnoreCase("cogent")) {
                             Utils.showCustomToast(WithdrawTokenActivity.this, "Cogent has been removed.", R.drawable.ic_custom_tick, "");
                         }
                         dashboardViewModel.mePaymentMethods();
@@ -865,8 +867,10 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 request.setTxnSubType(Utils.instantType);
             } else if (strType.toLowerCase().equals("bank")) {
                 request.setTxnSubType(Utils.bankType);
-            } else if (strType.toLowerCase().equals("Cogent")) {
+            } else if (strType.toLowerCase().equalsIgnoreCase("Cogent")) {
                 request.setTxnSubType(Utils.CogentType);
+            } else if (strType.toLowerCase().equalsIgnoreCase("Signet")) {
+                request.setTxnSubType(Utils.signetType);
             }
             if (Utils.checkInternet(WithdrawTokenActivity.this)) {
                 buyTokenViewModel.transferFee(request);
@@ -886,17 +890,24 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             obj.setTransactionType(Integer.parseInt(Utils.withdrawType));
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
+            if (objData.getPaymentMethod().toLowerCase().equals("bank")
+                    || objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")
+                    || objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("signet")) {
                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                     strType = "bank";
                     strSubType = Utils.bankType;
                     CogentWalletId = "";
                     imgBankIcon.setImageResource(R.drawable.ic_bankactive);
-                } else {
+                } else if (objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
                     strType = "Cogent";
                     strSubType = Utils.CogentType;
                     CogentWalletId = objData.getAccountNumber();
                     imgBankIcon.setImageResource(R.drawable.ic_cogentactive);
+                } else if (objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("signet")) {
+                    strType = "Signet";
+                    strSubType = Utils.signetType;
+                    SignetWalletId = objData.getAccountNumber();
+                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
                 }
                 strBankId = String.valueOf(objData.getId());
 //                obj.setTransactionSubType(Integer.parseInt(Utils.bankType));
@@ -1090,7 +1101,9 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             isAuthenticationCalled = false;
             createWithdrawRequest();
 
-            if (selectedCard.getPaymentMethod().toLowerCase().equals("bank") || selectedCard.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
+            if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")
+                    || selectedCard.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")
+                    || selectedCard.getPaymentMethod().toLowerCase().equalsIgnoreCase("signet")) {
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
                 tvBankName.setText(selectedCard.getBankName());
@@ -1311,6 +1324,19 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     } else {
                         tvBankName.setText(objPayment.getAccountNumber());
                     }
+                } else if (objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("signet")) {
+                    if (payDialog != null && payDialog.isShowing()) {
+                        payDialog.dismiss();
+                    }
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
+                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
+                    tvAccount.setVisibility(View.GONE);
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvBankName.setText(objPayment.getAccountNumber());
+                    }
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);
                     layoutBank.setVisibility(View.GONE);
@@ -1347,7 +1373,9 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 public void onClick(View v) {
                     dialog.dismiss();
                     pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank")
+                            || objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")
+                            || objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("signet")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
                         strPayment = objPayment.getPaymentMethod().toLowerCase();
                     } else {
@@ -1841,8 +1869,14 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
         request.setTokens(cynValue);
         request.setRemarks(etRemarks.getText().toString().trim());
         request.setWithdrawType(strSubType);
-        if (!CogentWalletId.equals("")) {
-            request.setCogentWalletId(CogentWalletId);
+        if (strSubType.equalsIgnoreCase(Utils.CogentType)) {
+            if (!CogentWalletId.equals("")) {
+                request.setCogentWalletId(CogentWalletId);
+            }
+        } else if (strSubType.equalsIgnoreCase(Utils.signetType)) {
+            if (!SignetWalletId.equals("")) {
+                request.setSignetWalletId(SignetWalletId);
+            }
         }
         objMyApplication.setWithdrawRequest(request);
         objMyApplication.setWithdrawAmount(cynValue);
@@ -1981,6 +2015,13 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 case "cogent":
                     if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getWithCogent() != null && objMyApplication.getFeatureControlByUser() != null
                             && (objMyApplication.getFeatureControlGlobal().getWithCogent() && objMyApplication.getFeatureControlByUser().getWithCogent())) {
+                        selectedCard = objData;
+                        objMyApplication.setSelectedCard(selectedCard);
+                    }
+                    break;
+                case "signet":
+                    if (objMyApplication.getFeatureControlGlobal() != null && objMyApplication.getFeatureControlGlobal().getWithSignet() != null && objMyApplication.getFeatureControlByUser() != null
+                            && (objMyApplication.getFeatureControlGlobal().getWithSignet() && objMyApplication.getFeatureControlByUser().getWithSignet())) {
                         selectedCard = objData;
                         objMyApplication.setSelectedCard(selectedCard);
                     }

@@ -819,6 +819,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                             break;
                         case Utils.buyCogentEnable:
                             featureControlByUser.setBuyCogent(permissionResponseList.get(i).getPermission());
+                            featureControlByUser.setBuyCogent(true);
                             break;
                         case Utils.buySignetEnable:
                             featureControlByUser.setBuySignet(permissionResponseList.get(i).getPermission());
@@ -834,6 +835,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                             break;
                         case Utils.withCogentEnable:
                             featureControlByUser.setWithCogent(permissionResponseList.get(i).getPermission());
+                            featureControlByUser.setWithCogent(true);
                             break;
                         case Utils.withSignetEnable:
                             featureControlByUser.setWithSignet(permissionResponseList.get(i).getPermission());
@@ -855,6 +857,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                             break;
                         case Utils.payCogentEnable:
                             featureControlByUser.setPayCogent(permissionResponseList.get(i).getPermission());
+                            featureControlByUser.setPayCogent(true);
                             break;
                         case Utils.paySignetEnable:
                             featureControlByUser.setPaySignet(permissionResponseList.get(i).getPermission());

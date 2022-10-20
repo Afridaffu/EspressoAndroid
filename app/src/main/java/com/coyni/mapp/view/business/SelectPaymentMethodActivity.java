@@ -519,13 +519,13 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             }
 
             //Comment below to Enable buy token cogent/signet
-//            if (strMenu.equals("buy")) {
-//                layoutCogent.setVisibility(GONE);
-//                layoutSignet.setVisibility(GONE);
-//            } else {
-//                layoutCogent.setVisibility(objMyApplication.isCogentEnabled() ? View.VISIBLE : View.GONE);
-//                layoutSignet.setVisibility(objMyApplication.isSignetEnabled() ? View.VISIBLE : View.GONE);
-//            }
+            if (strMenu.equals("buy")) {
+                layoutCogent.setVisibility(GONE);
+                layoutSignet.setVisibility(GONE);
+            } else {
+                layoutCogent.setVisibility(objMyApplication.isCogentEnabled() ? View.VISIBLE : View.GONE);
+                layoutSignet.setVisibility(objMyApplication.isSignetEnabled() ? View.VISIBLE : View.GONE);
+            }
 
 
             lyBPayClose.setOnClickListener(new View.OnClickListener() {
@@ -590,15 +590,15 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     try {
                         if (objMyApplication.getFeatureControlGlobal().getPayCogent() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayCogent() && objMyApplication.getFeatureControlByUser().getPayCogent()) {
-                            if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
-                                if (paymentMethodsResponse.getData().getCogentCount() < paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
-                                    strCurrent = "Cogent";
-                                    strOnPauseScreen = "";
-                                    Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
-                                    i.putExtra("TYPE", "Cogent");
-                                    startActivityForResult(i, 2);
-                                }
+//                            if (!strMenu.equals("buy") || !strCurrent.equals("notokens")) {
+                            if (paymentMethodsResponse.getData().getCogentCount() < paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
+                                strCurrent = "Cogent";
+                                strOnPauseScreen = "";
+                                Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
+                                i.putExtra("TYPE", "Cogent");
+                                startActivityForResult(i, 2);
                             }
+//                            }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), SelectPaymentMethodActivity.this, "", "");
                         }
@@ -614,15 +614,15 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     try {
                         if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
-                            if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
-                                if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                                    strCurrent = "Signet";
-                                    strOnPauseScreen = "";
-                                    Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
-                                    i.putExtra("TYPE", "Signet");
-                                    startActivityForResult(i, 2);
-                                }
+//                            if (!strMenu.equals("buy") || !strCurrent.equals("notokens")) {
+                            if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                                strCurrent = "Signet";
+                                strOnPauseScreen = "";
+                                Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
+                                i.putExtra("TYPE", "Signet");
+                                startActivityForResult(i, 2);
                             }
+//                            }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), SelectPaymentMethodActivity.this, "", "");
                         }

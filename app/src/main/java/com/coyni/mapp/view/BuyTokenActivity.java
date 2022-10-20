@@ -824,7 +824,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 } else {
                     tvBAccNumber.setText(objData.getAccountNumber());
                 }
-            } else if (objData.getPaymentMethod().toLowerCase().equals("Cogent")) {
+            } else if (objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("Cogent")) {
                 strType = "Cogent";
                 strBankId = String.valueOf(objData.getId());
                 strSubType = Utils.CogentType;
@@ -833,6 +833,25 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 lyCDetails.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
                 imgBankIcon.setImageResource(R.drawable.ic_cogentactive);
+                if (objData.getBankName().length() > 15) {
+                    tvBankName.setText(objData.getBankName().substring(0, 15) + "...");
+                } else {
+                    tvBankName.setText(objData.getBankName());
+                }
+                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
+                    tvBAccNumber.setText(objData.getAccountNumber().substring(0, 10) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                } else {
+                    tvBAccNumber.setText(objData.getAccountNumber());
+                }
+            } else if (objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("Signet")) {
+                strType = "Signet";
+                strBankId = String.valueOf(objData.getId());
+                strSubType = Utils.signetType;
+                obj.setTransactionSubType(Integer.parseInt(Utils.signetType));
+                lyBDetails.setVisibility(View.VISIBLE);
+                lyCDetails.setVisibility(View.GONE);
+                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
+                imgBankIcon.setImageResource(R.drawable.ic_signetactive);
                 if (objData.getBankName().length() > 15) {
                     tvBankName.setText(objData.getBankName().substring(0, 15) + "...");
                 } else {
@@ -1036,6 +1055,10 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 request.setTxnSubType(Utils.bankType);
             } else if (strType.toLowerCase().equals("instant")) {
                 request.setTxnSubType(Utils.instantType);
+            } else if (strType.toLowerCase().equalsIgnoreCase("cogent")) {
+                request.setTxnSubType(Utils.CogentType);
+            } else if (strType.toLowerCase().equalsIgnoreCase("signet")) {
+                request.setTxnSubType(Utils.signetType);
             }
             if (Utils.checkInternet(BuyTokenActivity.this)) {
                 if (!objMyApplication.getSelectedCard().getExpired()) {
@@ -1158,6 +1181,26 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
             prepareBuyRequest();
             if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
                 MatomoUtility.getInstance().trackEvent(MatomoConstants.BUY_TOKEN_BANK, MatomoConstants.BUY_TOKEN_BANK_CLICKED);
+                layoutBank.setVisibility(View.VISIBLE);
+                layoutCard.setVisibility(View.GONE);
+                tvBankName.setText(selectedCard.getBankName());
+                if (selectedCard.getAccountNumber() != null && selectedCard.getAccountNumber().length() > 4) {
+                    tvAccount.setText("**** " + selectedCard.getAccountNumber().substring(selectedCard.getAccountNumber().length() - 4));
+                } else {
+                    tvAccount.setText(selectedCard.getAccountNumber());
+                }
+            } else if (selectedCard.getPaymentMethod().toLowerCase().equals("cogent")) {
+                MatomoUtility.getInstance().trackEvent(MatomoConstants.BUY_TOKEN_COGENT, MatomoConstants.BUY_TOKEN_COGENT_CLICKED);
+                layoutBank.setVisibility(View.VISIBLE);
+                layoutCard.setVisibility(View.GONE);
+                tvBankName.setText(selectedCard.getBankName());
+                if (selectedCard.getAccountNumber() != null && selectedCard.getAccountNumber().length() > 4) {
+                    tvAccount.setText("**** " + selectedCard.getAccountNumber().substring(selectedCard.getAccountNumber().length() - 4));
+                } else {
+                    tvAccount.setText(selectedCard.getAccountNumber());
+                }
+            } else if (selectedCard.getPaymentMethod().toLowerCase().equals("signet")) {
+                MatomoUtility.getInstance().trackEvent(MatomoConstants.BUY_TOKEN_SIGNET, MatomoConstants.BUY_TOKEN_SIGNET_CLICKED);
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
                 tvBankName.setText(selectedCard.getBankName());
@@ -1788,13 +1831,26 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
-                } else if (objPayment.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                } else if (objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("Cogent")) {
                     if (payDialog != null && payDialog.isShowing()) {
                         payDialog.dismiss();
                     }
                     layoutCard.setVisibility(View.GONE);
                     layoutBank.setVisibility(View.VISIBLE);
                     imgBankIcon.setImageResource(R.drawable.ic_cogentactive);
+                    tvAccount.setVisibility(View.GONE);
+                    if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                    } else {
+                        tvBankName.setText(objPayment.getAccountNumber());
+                    }
+                } else if (objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("Signet")) {
+                    if (payDialog != null && payDialog.isShowing()) {
+                        payDialog.dismiss();
+                    }
+                    layoutCard.setVisibility(View.GONE);
+                    layoutBank.setVisibility(View.VISIBLE);
+                    imgBankIcon.setImageResource(R.drawable.ic_signetactive);
                     tvAccount.setVisibility(View.GONE);
                     if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
                         tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
@@ -1837,7 +1893,9 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 public void onClick(View v) {
                     dialog.dismiss();
                     pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
-                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank") || objPayment.getPaymentMethod().toLowerCase().equals("Cogent")) {
+                    if (objPayment.getPaymentMethod().toLowerCase().equals("bank")
+                            || objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("Cogent")
+                            || objPayment.getPaymentMethod().toLowerCase().equalsIgnoreCase("Signet")) {
                         paymentMethodsViewModel.deleteBanks(objPayment.getId());
                     } else {
                         paymentMethodsViewModel.deleteCards(objPayment.getId());
@@ -1986,7 +2044,9 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
     }
 
     public PaymentsList rollbackSelectedCard() {
-        if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank") || objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("Cogent")) {
+        if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")
+                || objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("Cogent")
+                || objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("Signet")) {
             if (objMyApplication.getSelectedCard().getRelink()) {
                 selectedCard = objMyApplication.getPrevSelectedCard();
                 objMyApplication.setSelectedCard(selectedCard);

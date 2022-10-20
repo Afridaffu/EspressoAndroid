@@ -26,6 +26,8 @@ public class MatomoConstants {
     public static final String RESERVE_RELEASE_FILTER = "ReserveRelease Filters";
     public static final String CUSTOMER_FILTERS = "Customer Filters";
     public static final String BUY_TOKEN_BANK = "BuyToken Bank";
+    public static final String BUY_TOKEN_COGENT = "BuyToken Cogent";
+    public static final String BUY_TOKEN_SIGNET = "BuyToken Signet";
     public static final String BUY_TOKEN_CARD = "BuyToken Card";
     public static final String CUSTOMER_PAY = "Customer Pay";
     public static final String CUSTOMER_REQUEST = "Customer Request";
@@ -55,6 +57,8 @@ public class MatomoConstants {
     public static final String RESERVE_RELEASE_FILTER_APPLIED = "ReserveRelease Filters Applied";
     public static final String CUSTOMER_FILTERS_APPLIED = "Customer Filters Applied";
     public static final String BUY_TOKEN_BANK_CLICKED = "BuyToken Bank Clicked";
+    public static final String BUY_TOKEN_COGENT_CLICKED = "BuyToken Cogent Clicked";
+    public static final String BUY_TOKEN_SIGNET_CLICKED = "BuyToken Signet Clicked";
     public static final String BUY_TOKEN_CARD_CLICKED = "BuyToken Card Clicked";
     public static final String CUSTOMER_PAY_CLICKED = "Customer Pay Clicked";
     public static final String CUSTOMER_REQUEST_CLICKED = "Customer Request Clicked";

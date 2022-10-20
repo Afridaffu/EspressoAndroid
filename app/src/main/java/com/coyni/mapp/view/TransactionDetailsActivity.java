@@ -88,8 +88,8 @@ public class TransactionDetailsActivity extends BaseActivity {
     private static final String bank_account = "bank account";
     private static final String credit_card = "credit card";
     private static final String debit_card = "debit card";
-    private static final String Cogent = "Cogent";
-    private static final String Signet = "Signet";
+    private static final String cogent = "cogent";
+    private static final String signet = "signet";
     private static final String gift_card = "gift card";
     private static final String instant_pay = "instant pay";
     private static final String token = "token";
@@ -179,10 +179,10 @@ public class TransactionDetailsActivity extends BaseActivity {
                     case instant_pay:
                         txnSubType = Integer.parseInt(Utils.instantType);
                         break;
-                    case Cogent:
+                    case cogent:
                         txnSubType = Integer.parseInt(Utils.CogentType);
                         break;
-                    case Signet:
+                    case signet:
                         txnSubType = Integer.parseInt(Utils.signetType);
                         break;
                     case token:
@@ -237,11 +237,11 @@ public class TransactionDetailsActivity extends BaseActivity {
                                 ControlMethod(BUY_BANK);
                                 buyTokenBankAccount(transactionDetails.getData());
                                 break;
-                            case Cogent:
+                            case cogent:
                                 ControlMethod(BUY_Cogent);
                                 buyTokenCogent(transactionDetails.getData());
                                 break;
-                            case Signet:
+                            case signet:
                                 ControlMethod(BUY_Signet);
                                 buyTokenCogent(transactionDetails.getData());
                                 break;
@@ -261,11 +261,11 @@ public class TransactionDetailsActivity extends BaseActivity {
                                 ControlMethod(WITH_BANK);
                                 withdrawBank(transactionDetails.getData());
                                 break;
-                            case Cogent:
+                            case cogent:
                                 ControlMethod(WITH_Cogent);
                                 withdrawCogent(transactionDetails.getData());
                                 break;
-                            case Signet:
+                            case signet:
                                 ControlMethod(WITH_Signet);
                                 withdrawCogent(transactionDetails.getData());
                                 break;
@@ -351,24 +351,28 @@ public class TransactionDetailsActivity extends BaseActivity {
         dashboardViewModel.getActivityLogRespMutableLiveData().observe(this, new Observer<ActivityLogResp>() {
             @Override
             public void onChanged(ActivityLogResp activityLogResp) {
-                if (activityLogResp != null) {
-                    if (activityLogResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        if (activityLogResp.getData().size() > 0) {
-                            ActivityLogAdapter activityListAdater = new ActivityLogAdapter(activityLogResp, TransactionDetailsActivity.this);
-                            LinearLayoutManager mLayoutManager = new LinearLayoutManager(TransactionDetailsActivity.this);
-                            recyclerView.setLayoutManager(mLayoutManager);
-                            recyclerView.setItemAnimator(new DefaultItemAnimator());
-                            recyclerView.setAdapter(activityListAdater);
-                            activity_log_tv.setVisibility(View.VISIBLE);
-                            cv_activity_log.setVisibility(View.VISIBLE);
+                try {
+                    if (activityLogResp != null) {
+                        if (activityLogResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                            if (activityLogResp.getData().size() > 0) {
+                                ActivityLogAdapter activityListAdater = new ActivityLogAdapter(activityLogResp, TransactionDetailsActivity.this);
+                                LinearLayoutManager mLayoutManager = new LinearLayoutManager(TransactionDetailsActivity.this);
+                                recyclerView.setLayoutManager(mLayoutManager);
+                                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                                recyclerView.setAdapter(activityListAdater);
+                                activity_log_tv.setVisibility(View.VISIBLE);
+                                cv_activity_log.setVisibility(View.VISIBLE);
+                            } else {
+                                activity_log_tv.setVisibility(View.GONE);
+                                cv_activity_log.setVisibility(View.GONE);
+                            }
                         } else {
                             activity_log_tv.setVisibility(View.GONE);
                             cv_activity_log.setVisibility(View.GONE);
                         }
-                    } else {
-                        activity_log_tv.setVisibility(View.GONE);
-                        cv_activity_log.setVisibility(View.GONE);
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -1787,9 +1791,9 @@ public class TransactionDetailsActivity extends BaseActivity {
             withBankNameOnAccount.setText(objData.getNameOnBank());
         }
 
-        if (txnType.equalsIgnoreCase("cogent"))
+        if (objData.getTransactionSubtype().equalsIgnoreCase("cogent"))
             CogentTextTV.setText("Cogent Wallet ID");
-        else if (txnType.equalsIgnoreCase("signet"))
+        else if (objData.getTransactionSubtype().equalsIgnoreCase("signet"))
             CogentTextTV.setText("Signet Wallet ID");
 //        CogentTextTV.setPadding(0, 0, 0, 20);
 //        findViewById(R.id.nameOnAccount).setPadding(0, 10, 0, 0);
@@ -2265,6 +2269,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
                 }
                 break;
+                case BUY_Signet:
                 case BUY_Cogent: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
@@ -2314,6 +2319,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                 }
                 break;
                 case WITH_BANK:
+                case WITH_Signet:
                 case WITH_Cogent: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
