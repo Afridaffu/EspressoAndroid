@@ -605,6 +605,15 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     if (stepUpResponse != null) {
                         if (!stepUpResponse.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(stepUpResponse.getData().getJwtToken());
+//                            if (initializeResponse.getData().getAccountType() == Utils.BUSINESS_ACCOUNT) {
+//                                if (!initializeResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                    loginViewModel.hasToSignAgreements();
+//                                }
+//                            } else if (initializeResponse.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                                if (!initializeResponse.getData().getTracker().isIsAgreementSigned()) {
+//                                    loginViewModel.hasToSignAgreements();
+//                                }
+//                            }
                             shakeAnimateUpDown();//new
                             new Handler().postDelayed(new Runnable() {
                                 @Override
@@ -754,6 +763,15 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 
                             objMyApplication.setAccountType(initializeResponse.getData().getAccountType());
 
+//                            if (initializeResponse.getData().getAccountType() == Utils.BUSINESS_ACCOUNT) {
+//                                if (!initializeResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                    loginViewModel.hasToSignAgreements();
+//                                }
+//                            } else if (initializeResponse.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                                if (!initializeResponse.getData().getTracker().isIsAgreementSigned()) {
+//                                    loginViewModel.hasToSignAgreements();
+//                                }
+//                            }
                         }
 
                     }

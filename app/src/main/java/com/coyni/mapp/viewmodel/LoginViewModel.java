@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.coynipin.StepUpOTPResponse;
 import com.coyni.mapp.model.register.OTPResendRequest;
 import com.coyni.mapp.model.register.OTPValidateRequest;
@@ -103,6 +104,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<OTPValidateResponse> signAgreementTOSotpLiveData = new MutableLiveData<>();
     private MutableLiveData<SignAgreementResponse> signAgreementPPotpLiveData = new MutableLiveData<>();
     private MutableLiveData<InitializeResponse> initializeResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<SignAgreementsResp> hasToSignResponseMutableLiveData = new MutableLiveData<>();
 
 
     public MutableLiveData<OTPValidateResponse> getRegEmailOTPResendLiveData() {
@@ -1369,6 +1371,61 @@ public class LoginViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
+    public void hasToSignAgreements() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<SignAgreementsResp> mCall = apiService.hasToSignAgreements();
+            mCall.enqueue(new Callback<SignAgreementsResp>() {
+                @Override
+                public void onResponse(Call<SignAgreementsResp> call, Response<SignAgreementsResp> response) {
+                    try {
+                        String strResponse = "";
+                        if (response.isSuccessful()) {
+                            SignAgreementsResp obj = response.body();
+                            hasToSignResponseMutableLiveData.setValue(obj);
+                        } else if (response.code() == 500) {
+                            strResponse = response.errorBody().string();
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<SignAgreementsResp>() {
+                            }.getType();
+                            SignAgreementsResp errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                hasToSignResponseMutableLiveData.setValue(errorResponse);
+                            } else {
+                                SignAgreementsResp errorResponse1 = gson.fromJson(strResponse, type);
+                                hasToSignResponseMutableLiveData.setValue(errorResponse1);
+                            }
+                        } else {
+                            strResponse = response.errorBody().string();
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            if (errorResponse != null) {
+                                apiErrorMutableLiveData.setValue(errorResponse);
+                            } else {
+                                APIError errorResponse1 = gson.fromJson(strResponse, type);
+                                apiErrorMutableLiveData.setValue(errorResponse1);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SignAgreementsResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    initializeResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public void regEmailOTPResend(OTPResendRequest resendRequest) {
         try {
             ApiService apiService = ApiClient.getInstance().create(ApiService.class);
