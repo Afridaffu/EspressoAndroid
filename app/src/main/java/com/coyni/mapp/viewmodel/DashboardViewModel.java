@@ -79,6 +79,7 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<FeatureControlRespByUser> featureControlRespByUserMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<FeatureControlGlobalResp> featureControlGlobalRespMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<AppUpdateResp> appUpdateRespMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> errorRespMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<LatestTxnResponse> getGetUserLatestTxns() {
         return getUserLatestTxns;
@@ -188,6 +189,9 @@ public class DashboardViewModel extends AndroidViewModel {
         return featureControlGlobalRespMutableLiveData;
     }
 
+    public MutableLiveData<String> getErrorRespMutableLiveData() {
+        return errorRespMutableLiveData;
+    }
 
     public void meProfile() {
         try {
@@ -1139,6 +1143,8 @@ public class DashboardViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             AppUpdateResp obj = response.body();
                             appUpdateRespMutableLiveData.setValue(obj);
+                        } else if (response.code() == 404) {
+                            errorRespMutableLiveData.setValue(response.errorBody().string());
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

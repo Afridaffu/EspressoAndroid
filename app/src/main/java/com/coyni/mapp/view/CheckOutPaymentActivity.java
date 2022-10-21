@@ -84,6 +84,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private String actionTypeNo = "No";
     private Long mLastClickTime = 0L;
     private double transactionLimit = 0.0, minimumLimit = 0.0, userAmount = 0.0;
+    private String limitType = "";
     private float fontSize, dollarFont;
     private static Dialog displayAlertDialog = null;
 
@@ -306,6 +307,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                         if (transactionLimitResponse.getData() != null) {
                             if (transactionLimitResponse.getData().getTransactionLimit() != null && transactionLimitResponse.getData().getMinimumLimit() != null) {
                                 transactionLimit = Utils.doubleParsing(transactionLimitResponse.getData().getTransactionLimit());
+                                limitType = transactionLimitResponse.getData().getLimitType();
                                 minimumLimit = Utils.doubleParsing(transactionLimitResponse.getData().getMinimumLimit());
                             }
 //                            validation(transactionLimitResponse);
@@ -551,7 +553,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             displayAlertNew(getString(R.string.amount_greater_zero), CheckOutPaymentActivity.this, getString(R.string.oops));
         } else if ((Utils.doubleParsing(strPay.replace(",", "")) < minimumLimit)) {
             displayAlertNew(getString(R.string.minimum_amount) + Utils.USNumberFormat(minimumLimit) + " CYN", CheckOutPaymentActivity.this, getString(R.string.oops));
-        } else if (Utils.doubleParsing(strPay.replace(",", "")) > transactionLimit) {
+        } else if (Utils.doubleParsing(strPay.replace(",", "")) > transactionLimit && !limitType.equalsIgnoreCase("NO LIMIT")) {
             displayAlertNew(getString(R.string.amount_exceed_message), CheckOutPaymentActivity.this, getString(R.string.oops));
         } else {
             value = true;
