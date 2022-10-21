@@ -502,7 +502,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 
             emptyChip.setVisibility(View.GONE);
             transSubTypeCogent.setVisibility(View.VISIBLE);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
             params.setMargins(0, 0, 0, 0);
             transSubTypeGiftCard.setLayoutParams(params);
         } else if (objMyApplication.isCogentEnabled() && !objMyApplication.isSignetEnabled()) {
