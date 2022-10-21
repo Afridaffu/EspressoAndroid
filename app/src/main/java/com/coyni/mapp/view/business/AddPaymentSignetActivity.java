@@ -32,6 +32,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
+import com.coyni.mapp.model.paymentmethods.PaymentsList;
+import com.coyni.mapp.utils.CheckOutConstants;
+import com.coyni.mapp.view.BuyTokenActivity;
+import com.coyni.mapp.view.WithdrawTokenActivity;
+import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.coyni.mapp.R;
@@ -50,10 +56,11 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
     CardView cvAdd;
     ConstraintLayout clStates;
     BusinessDashboardViewModel businessDashboardViewModel;
+    DashboardViewModel dashboardViewModel;
     Long mLastClickTime = 0L;
     Dialog progressDialog;
     Dialog preDialog;
-    Boolean isName, isWallet, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
+    Boolean isName, isWallet, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false, isWithFCEnabled = false;
     TextView nameErrorTV, walletErrorTV, address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV;
 
     @Override
@@ -77,6 +84,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
         try {
             objMyApplication = (MyApplication) getApplicationContext();
             businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             layoutClose = findViewById(R.id.layoutClose);
             clStates = findViewById(R.id.clStates);
             nameErrorLL = findViewById(R.id.nameErrorLL);
@@ -214,10 +222,35 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                 progressDialog.dismiss();
                 if (signetResponse != null) {
                     if (signetResponse.getStatus().toUpperCase().equals("SUCCESS")) {
+                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
+                            dashboardViewModel.mePaymentMethods();
+                        }
                         displaySuccess();
                     } else {
                         Utils.displayAlert(signetResponse.getError().getErrorDescription(),
                                 AddPaymentSignetActivity.this, "", signetResponse.getError().getFieldErrors().get(0));
+                    }
+                }
+            }
+        });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse payMethodsResponse) {
+                if (payMethodsResponse != null) {
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
+                        objMyApplication.setPaymentMethodsResponse(objResponse);
+                    } else {
+                        objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
+                    }
+                    PaymentsList objData = objMyApplication.getPaymentMethodsResponse().getData().getData().get(0);
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
+                        isWithFCEnabled = objMyApplication.withFeatureCtrlEnabled(objData);
+                    }
+                    if (isWithFCEnabled) {
+                        objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                        objMyApplication.setSelectedCard(objData);
                     }
                 }
             }
@@ -809,10 +842,6 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-//            WindowManager.LayoutParams lp = window.getAttributes();
-//            lp.dimAmount = 0.7f;
-//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            preDialog.getWindow().setAttributes(lp);
             preDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             preDialog.setCancelable(false);
@@ -826,8 +855,17 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                 public void onClick(View view) {
                     try {
                         objMyApplication.setSignet(true);
-                        Intent i = new Intent();
-                        setResult(RESULT_OK, i);
+//                        Intent i = new Intent();
+//                        setResult(RESULT_OK, i);
+//                        finish();
+
+                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled) {
+                            startActivity(new Intent(AddPaymentSignetActivity.this, WithdrawTokenActivity.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        } else {
+                            Intent i = new Intent();
+                            setResult(RESULT_OK, i);
+                        }
                         finish();
                     } catch (Exception ex) {
                         ex.printStackTrace();

@@ -72,10 +72,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
     private CardView addCV;
     PaymentMethodsViewModel paymentMethodsViewModel;
     DashboardViewModel dashboardViewModel;
-    String strScreen = "";
+    String strScreen = "", convert = "";
     RelativeLayout lyAddBank, layoutLoader;
     Dialog bankStatusDialog;
-    private String convert = "";
+    Boolean isBuyFCEnabled = false, isWithFCEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,8 +295,16 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                     }
                     objMyApplication.setPaymentMethodsResponse(objResponse);
                     PaymentsList objData = objMyApplication.getPaymentMethodsResponse().getData().getData().get(0);
-                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                    objMyApplication.setSelectedCard(objData);
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
+                        isWithFCEnabled = objMyApplication.withFeatureCtrlEnabled(objData);
+                    }
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("addpay")) {
+                        isBuyFCEnabled = objMyApplication.buyFeatureCtrlEnabled(objData);
+                    }
+                    if (isWithFCEnabled || isBuyFCEnabled) {
+                        objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                        objMyApplication.setSelectedCard(objData);
+                    }
                 }
             }
         });
@@ -820,11 +828,13 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (manualBankResponse.getData() != null && !manualBankResponse.getData().getGiactFail()) {
                             objMyApplication.setBankSave(true);
-                            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("addpay")) {
+                            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("addpay") && isBuyFCEnabled) {
                                 Intent i = new Intent(AddManualBankAccount.this, BuyTokenActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(i);
-                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
-                                startActivity(new Intent(AddManualBankAccount.this, WithdrawTokenActivity.class));
+                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled) {
+                                startActivity(new Intent(AddManualBankAccount.this, WithdrawTokenActivity.class)
+                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             } else {
                                 Intent i = new Intent();
                                 setResult(RESULT_OK, i);
