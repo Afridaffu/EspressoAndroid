@@ -85,6 +85,19 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
             }
         });
+
+        dashboardViewModel.getErrorRespMutableLiveData().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                try {
+                    if (s != null && !s.equals("")) {
+                        Utils.displayAlert(new JSONObject(s).getString("error"), BaseActivity.this, "", "");
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
