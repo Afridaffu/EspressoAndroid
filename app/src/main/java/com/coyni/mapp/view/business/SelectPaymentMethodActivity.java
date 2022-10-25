@@ -138,7 +138,11 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                         getPaymentMethods();
                     }
                 } else if (strScreen != null && strScreen.equals("addpay")) { //Added for Buy token navigation change while adding payment method
-                    paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        paymentMethodsResponse = objMyApplication.filterPaymentMethods(objMyApplication.getPaymentMethodsResponse());
+                    } else {
+                        paymentMethodsResponse = objMyApplication.businessPaymentMethods(objMyApplication.getPaymentMethodsResponse(), strMenu);
+                    }
                     ControlMethod("paymentMethods");
                     strCurrent = "paymentMethods";
                     paymentMethods();

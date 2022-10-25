@@ -832,7 +832,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                                 Intent i = new Intent(AddManualBankAccount.this, BuyTokenActivity.class);
                                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(i);
-                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled) {
+                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled && objMyApplication.getGBTBalance() != 0) {
                                 startActivity(new Intent(AddManualBankAccount.this, WithdrawTokenActivity.class)
                                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             } else {

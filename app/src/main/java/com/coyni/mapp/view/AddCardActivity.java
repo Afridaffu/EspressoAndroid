@@ -1757,7 +1757,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             i.putExtra("cvv", "");
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
-                        } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled) {
+                        } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled && objMyApplication.getGBTBalance() != 0) {
                             if (getIntent().getStringExtra("card") != null && !getIntent().getStringExtra("card").equals("credit")) {
                                 startActivity(new Intent(AddCardActivity.this, WithdrawTokenActivity.class)
                                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));

@@ -855,11 +855,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                 public void onClick(View view) {
                     try {
                         objMyApplication.setSignet(true);
-//                        Intent i = new Intent();
-//                        setResult(RESULT_OK, i);
-//                        finish();
-
-                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled) {
+                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled && objMyApplication.getGBTBalance() != 0) {
                             startActivity(new Intent(AddPaymentSignetActivity.this, WithdrawTokenActivity.class)
                                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         } else {
