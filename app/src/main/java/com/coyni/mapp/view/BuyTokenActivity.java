@@ -112,7 +112,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
     SignOnData signOnData;
     float fontSize, dollarFont;
     Boolean isUSD = false, isCYN = false, isBank = false, isFaceLock = false, isTouchId = false, isBuyTokenAPICalled = false, isButtonClick = false, isMinimumError = false;
-    Boolean isPayment = false;
+    Boolean isPayment = false, isCvv = false;
     public static BuyTokenActivity buyTokenActivity;
     TextInputEditText etCVV;
     Long mLastClickTime = 0L;
@@ -260,6 +260,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
             if (requestCode == 3) {
                 if (objMyApplication.getCardSave()) {
                     objMyApplication.setCardSave(false);
+                    isCvv = true;
                     isPayment = true;
                 } else if (objMyApplication.getBankSave()) {
                     objMyApplication.setBankSave(false);
@@ -735,6 +736,10 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
 //                                objMyApplication.setSelectedCard(objData);
 //                                bindPayMethod(objData);
                                 bindPayMethod(previousSelectedCard(objData));
+                                if (isCvv) {
+                                    isCvv = false;
+                                    displayCVV(objData);
+                                }
                             }
                         }
                     }

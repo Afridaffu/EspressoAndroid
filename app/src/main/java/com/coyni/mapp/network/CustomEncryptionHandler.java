@@ -85,46 +85,44 @@ public class CustomEncryptionHandler implements Interceptor {
         }
 
         Response response = null;
-        if (BuildConfig.SKIP_ENCRYPTION || Utils.QA_SKIP_ENCRYPTION
-                || !ArrayUtils.contains(methodsAllowed, method)
-                || requestBody instanceof MultipartBody) {
-            response = chain.proceed(requestBuild.build());
-        } else {
-            requestBody = getEncryptedRequestBody(randomReqId, requestBody);
-            requestBuild.method(request.method(), requestBody);
-            request = requestBuild.build();
-            response = chain.proceed(request);
-        }
+        try {
+            if (BuildConfig.SKIP_ENCRYPTION || Utils.QA_SKIP_ENCRYPTION
+                    || !ArrayUtils.contains(methodsAllowed, method)
+                    || requestBody instanceof MultipartBody) {
+                response = chain.proceed(requestBuild.build());
+            } else {
+                requestBody = getEncryptedRequestBody(randomReqId, requestBody);
+                requestBuild.method(request.method(), requestBody);
+                request = requestBuild.build();
+                response = chain.proceed(request);
+            }
 
-        MediaType mediaType = MediaType.parse(APPLICATION_JSON);
+            MediaType mediaType = MediaType.parse(APPLICATION_JSON);
 
-        if (response.code() != 200 && response.body() != null) {
+            if (response.code() != 200 && response.body() != null) {
 //            if (ArrayUtils.contains(errorCodes, response.code())) {
 //                Utils.deploymentErrorDialog();
 //            } else {
-            String errorResponse = response.peekBody(2048).string();
-            if (!Utils.isValidJson(errorResponse)) {
-                response = response.newBuilder()
-                        .body(ResponseBody.create(getCustomError(), mediaType))
-                        .build();
-            } else {
-                Gson gson = new Gson();
-                AbstractResponse resp = gson.fromJson(errorResponse, AbstractResponse.class);
-                if (resp != null && resp.getError() != null
-                        && (resp.getError().getErrorDescription().equalsIgnoreCase(Utils.ACCESS_TOKEN_EXPIRED) || resp.getError().getErrorDescription().equalsIgnoreCase(Utils.TIME_EXCEEDED))) {
+                String errorResponse = response.peekBody(2048).string();
+                if (!Utils.isValidJson(errorResponse)) {
                     response = response.newBuilder()
-                            .body(ResponseBody.create("", mediaType))
+                            .body(ResponseBody.create(getCustomError(), mediaType))
                             .build();
-                    launchLogin(MyApplication.getContext());
+                } else {
+                    Gson gson = new Gson();
+                    AbstractResponse resp = gson.fromJson(errorResponse, AbstractResponse.class);
+                    if (resp != null && resp.getError() != null
+                            && (resp.getError().getErrorDescription().equalsIgnoreCase(Utils.ACCESS_TOKEN_EXPIRED) || resp.getError().getErrorDescription().equalsIgnoreCase(Utils.TIME_EXCEEDED))) {
+                        response = response.newBuilder()
+                                .body(ResponseBody.create("", mediaType))
+                                .build();
+                        launchLogin(MyApplication.getContext());
+                    }
                 }
             }
-//            }
-
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-//        else if (response.code() == 200 && response.body() != null){
-//            Utils.deploymentErrorDialog();
-//        }
-
         return response;
     }
 
