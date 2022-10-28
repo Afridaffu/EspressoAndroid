@@ -807,5 +807,4 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
         this.listener = listener;
     }
 
-
 }

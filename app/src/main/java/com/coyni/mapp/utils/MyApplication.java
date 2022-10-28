@@ -990,16 +990,16 @@ public class MyApplication extends Application {
     public void setWebSocketUrlResponse(WebSocketUrlResponseData webSocketUrlResponse) {
         mCurrentUserData.setWebSocketUrlResponse(webSocketUrlResponse);
 
-//        //Save isCogentEnabled and isSignetEnabled keys
-//        if (webSocketUrlResponse.getIsCogentEnabled().equalsIgnoreCase("true"))
-//            mCurrentUserData.setCogentEnabled(true);
-//        else if (webSocketUrlResponse.getIsCogentEnabled().equalsIgnoreCase("false"))
-//            mCurrentUserData.setCogentEnabled(false);
-//
-//        if (webSocketUrlResponse.getIsSignetEnabled().equalsIgnoreCase("true"))
-//            mCurrentUserData.setSignetEnabled(true);
-//        else if (webSocketUrlResponse.getIsSignetEnabled().equalsIgnoreCase("false"))
-//            mCurrentUserData.setSignetEnabled(false);
+        //Save isCogentEnabled and isSignetEnabled keys
+        if (webSocketUrlResponse.getIsCogentEnabled().equalsIgnoreCase("true"))
+            mCurrentUserData.setCogentEnabled(true);
+        else if (webSocketUrlResponse.getIsCogentEnabled().equalsIgnoreCase("false"))
+            mCurrentUserData.setCogentEnabled(false);
+
+        if (webSocketUrlResponse.getIsSignetEnabled().equalsIgnoreCase("true"))
+            mCurrentUserData.setSignetEnabled(true);
+        else if (webSocketUrlResponse.getIsSignetEnabled().equalsIgnoreCase("false"))
+            mCurrentUserData.setSignetEnabled(false);
     }
 
     public boolean isCogentEnabled() {
