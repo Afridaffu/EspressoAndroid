@@ -268,7 +268,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                                 layoutLoader.setVisibility(View.GONE);
                             }
                         }
-                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("withdraw"))) {
+                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("withdraw") || getIntent().getStringExtra("screen").equals("dashboard") || getIntent().getStringExtra("screen").equals("payRequest"))) {
                             dashboardViewModel.mePaymentMethods();
                         }
                         if (strScreen.equals("pay")) {
@@ -298,7 +298,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                     if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
                         isWithFCEnabled = objMyApplication.withFeatureCtrlEnabled(objData);
                     }
-                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("addpay")) {
+                    if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("dashboard") || getIntent().getStringExtra("screen").equals("payRequest"))) {
+                        isBuyFCEnabled = objMyApplication.buyFeatureCtrlEnabled(objData);
+                    }
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && objMyApplication.getGBTBalance() == 0) {
                         isBuyFCEnabled = objMyApplication.buyFeatureCtrlEnabled(objData);
                     }
                     if (isWithFCEnabled || isBuyFCEnabled) {
@@ -828,13 +831,18 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (manualBankResponse.getData() != null && !manualBankResponse.getData().getGiactFail()) {
                             objMyApplication.setBankSave(true);
-                            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("addpay") && isBuyFCEnabled) {
+                            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("dashboard") || getIntent().getStringExtra("screen").equals("payRequest")) &&
+                                    isBuyFCEnabled) {
                                 Intent i = new Intent(AddManualBankAccount.this, BuyTokenActivity.class);
                                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(i);
                             } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled && objMyApplication.getGBTBalance() != 0) {
                                 startActivity(new Intent(AddManualBankAccount.this, WithdrawTokenActivity.class)
                                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isBuyFCEnabled && objMyApplication.getGBTBalance() == 0) {
+                                Intent i = new Intent(AddManualBankAccount.this, BuyTokenActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(i);
                             } else {
                                 Intent i = new Intent();
                                 setResult(RESULT_OK, i);

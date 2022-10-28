@@ -567,7 +567,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             coyniLogoIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!BuildConfig.FLAVOR.equals("sat") && !BuildConfig.FLAVOR.equals("uat")) {
+                    if (!BuildConfig.FLAVOR.equals("sat") && !BuildConfig.FLAVOR.equals("uat") && !BuildConfig.FLAVOR.equals("beta")) {
                         try {
                             String strEndPoint = "";
                             strEndPoint = BuildConfig.FLAVOR + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.URL_PRODUCTION;

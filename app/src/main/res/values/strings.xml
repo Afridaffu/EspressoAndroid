@@ -823,5 +823,6 @@
     <string name="newacct_sPlatformmsg">2-step identity verification and fraud monitoring</string>
     <string name="addNewdbaaccount">You are about to add a new DBA for the following company.\n\nYou will need to complete a new Merchant Application for each DBA you add. Would you like to continue?</string>
     <string name="accessrestricted">coyni is unavailable in your region. We restrict access only to areas inside the United States. If you are using a VPN, please turn it off and try again.</string>
+    <string name="accessrestrictederrorcode">CY30200302</string>
 
 </resources>

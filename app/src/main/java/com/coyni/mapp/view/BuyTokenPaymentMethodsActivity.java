@@ -117,7 +117,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                     super.onBackPressed();
                 }
             } else {
-                if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                if (!strScreen.equals("payRequest") && (strCurrent.equals("debit") || strCurrent.equals("credit"))) {
                     ControlMethod("addpayment");
                     strCurrent = "addpayment";
                 } else {
@@ -185,7 +185,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                     onBackPressed();
                 }
             } else if (requestCode == 4) {
-                if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+                if (strScreen.equals("withdraw") || strScreen.equals("buytoken") || strScreen.equals("payRequest")) {
                     onBackPressed();
                 } else if (!objMyApplication.getBankSave()) {
                     isDeCredit = true;

@@ -109,7 +109,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     super.onBackPressed();
                 }
             } else {
-                if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                if (!strScreen.equals("payRequest") && (strCurrent.equals("debit") || strCurrent.equals("credit"))) {
                     ControlMethod("addpayment");
                     strCurrent = "addpayment";
                 } else {
@@ -211,7 +211,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
-                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) || strScreen.equals("buytoken")) {
+                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) || strScreen.equals("buytoken") || strScreen.equals("payRequest")) {
                     onBackPressed();
                 } else {
                     if (!objMyApplication.getBankSave()) {
@@ -579,6 +579,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                                     strCurrent = "signet";
                                     strOnPauseScreen = "";
                                     Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
+                                    i.putExtra("screen", strScreen);
                                     startActivityForResult(i, 2);
                                 }
                             }

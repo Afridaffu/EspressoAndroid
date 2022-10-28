@@ -60,7 +60,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
     Long mLastClickTime = 0L;
     Dialog progressDialog;
     Dialog preDialog;
-    Boolean isName, isWallet, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false, isWithFCEnabled = false;
+    Boolean isName, isWallet, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false, isWithFCEnabled = false, isBuyFCEnabled = false;
     TextView nameErrorTV, walletErrorTV, address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV;
 
     @Override
@@ -247,6 +247,9 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                     PaymentsList objData = objMyApplication.getPaymentMethodsResponse().getData().getData().get(0);
                     if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
                         isWithFCEnabled = objMyApplication.withFeatureCtrlEnabled(objData);
+                    }
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && objMyApplication.getGBTBalance() == 0) {
+                        isBuyFCEnabled = objMyApplication.buyFeatureCtrlEnabled(objData);
                     }
                     if (isWithFCEnabled) {
                         objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
@@ -858,7 +861,13 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled && objMyApplication.getGBTBalance() != 0) {
                             startActivity(new Intent(AddPaymentSignetActivity.this, WithdrawTokenActivity.class)
                                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                        } else {
+                        }
+//                        else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isBuyFCEnabled && objMyApplication.getGBTBalance() != 0) {
+//                            Intent i = new Intent(AddPaymentSignetActivity.this, BuyTokenActivity.class);
+//                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            startActivity(i);
+//                        }
+                        else {
                             Intent i = new Intent();
                             setResult(RESULT_OK, i);
                         }

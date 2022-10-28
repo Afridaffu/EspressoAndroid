@@ -33,8 +33,9 @@ public class ApiClient {
             connectTimeout(TIME_OUT, TimeUnit.SECONDS).
             readTimeout(TIME_OUT, TimeUnit.SECONDS).
             addInterceptor(encryptionInterceptor).
-                    addInterceptor(interceptor).
-                    build();
+            addInterceptor(interceptor).
+            followRedirects(false).
+            build();
 
     GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();

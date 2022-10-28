@@ -12,4 +12,5 @@ public class AppUpdateResp extends BaseResponse {
     public void setData(AppUpdateData data) {
         this.data = data;
     }
+
 }
