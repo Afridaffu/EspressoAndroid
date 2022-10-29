@@ -804,6 +804,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
 
+        <activity
+            android:name=".view.business.SignAgreementsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
         <service
             android:name="com.coyni.mapp.network.MyFirebaseMessagingService"
             android:enabled="true"

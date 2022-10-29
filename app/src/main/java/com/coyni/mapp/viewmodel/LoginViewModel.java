@@ -9,7 +9,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.coyni.mapp.model.SignAgreementsResp;
+import com.coyni.mapp.model.UpdateSignAgreementsResp;
+import com.coyni.mapp.model.UpdateSignRequest;
 import com.coyni.mapp.model.coynipin.StepUpOTPResponse;
+import com.coyni.mapp.model.identity_verification.IdentityImageResponse;
 import com.coyni.mapp.model.register.OTPResendRequest;
 import com.coyni.mapp.model.register.OTPValidateRequest;
 import com.coyni.mapp.model.register.OTPValidateResponse;
@@ -18,6 +21,8 @@ import com.coyni.mapp.model.register.SignAgreementResponse;
 import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.model.signin.InitializeResponse;
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.coyni.mapp.model.APIError;
 import com.coyni.mapp.model.EmailRequest;
@@ -63,6 +68,8 @@ import com.coyni.mapp.utils.Singleton;
 
 import java.lang.reflect.Type;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -105,7 +112,20 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<SignAgreementResponse> signAgreementPPotpLiveData = new MutableLiveData<>();
     private MutableLiveData<InitializeResponse> initializeResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SignAgreementsResp> hasToSignResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<UpdateSignAgreementsResp> updatedSignAgreementLiveData = new MutableLiveData<>();
+    private MutableLiveData<UpdateSignAgreementsResp> uploadSignAgreementLiveData = new MutableLiveData<>();
 
+    public MutableLiveData<UpdateSignAgreementsResp> getUploadSignAgreementLiveData() {
+        return uploadSignAgreementLiveData;
+    }
+
+    public MutableLiveData<UpdateSignAgreementsResp> getUpdatedSignAgreementLiveData() {
+        return updatedSignAgreementLiveData;
+    }
+
+    public MutableLiveData<SignAgreementsResp> getHasToSignResponseMutableLiveData() {
+        return hasToSignResponseMutableLiveData;
+    }
 
     public MutableLiveData<OTPValidateResponse> getRegEmailOTPResendLiveData() {
         return regEmailOTPResendLiveData;
@@ -760,7 +780,6 @@ public class LoginViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
-
 
     public void setPassword(SetPassword setPassword) {
         try {
@@ -1418,7 +1437,77 @@ public class LoginViewModel extends AndroidViewModel {
                 @Override
                 public void onFailure(Call<SignAgreementsResp> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    initializeResponseMutableLiveData.setValue(null);
+                    hasToSignResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void signUpdatedAgreement(UpdateSignRequest updateSignRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UpdateSignAgreementsResp> mCall = apiService.signUpdatedAgreement(updateSignRequest);
+            mCall.enqueue(new Callback<UpdateSignAgreementsResp>() {
+                @Override
+                public void onResponse(Call<UpdateSignAgreementsResp> call, Response<UpdateSignAgreementsResp> response) {
+                    if (response.isSuccessful()) {
+                        UpdateSignAgreementsResp obj = response.body();
+                        updatedSignAgreementLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<UpdateSignAgreementsResp>() {
+                        }.getType();
+                        UpdateSignAgreementsResp errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            updatedSignAgreementLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UpdateSignAgreementsResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    updatedSignAgreementLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void signUpdatedAgreementDoc(int id, MultipartBody.Part idFile) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<UpdateSignAgreementsResp> mCall = apiService.signUpdatedAgreementDoc(id, idFile);
+            mCall.enqueue(new Callback<UpdateSignAgreementsResp>() {
+                @Override
+                public void onResponse(Call<UpdateSignAgreementsResp> call, Response<UpdateSignAgreementsResp> response) {
+                    if (response.isSuccessful()) {
+                        UpdateSignAgreementsResp obj = response.body();
+                        uploadSignAgreementLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<UpdateSignAgreementsResp>() {
+                        }.getType();
+                        try {
+                            UpdateSignAgreementsResp errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                uploadSignAgreementLiveData.setValue(errorResponse);
+                            }
+                        } catch (JsonIOException e) {
+                            e.printStackTrace();
+                        } catch (JsonSyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UpdateSignAgreementsResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    uploadSignAgreementLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {
@@ -1495,5 +1584,6 @@ public class LoginViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
 
 }

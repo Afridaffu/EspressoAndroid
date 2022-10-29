@@ -238,6 +238,13 @@ public class NotificationsActivity extends BaseActivity {
                                 i, "Notification"));
                     }
                     notificationsViewModel.getReceivedNotifications();
+                } else {
+                    if (notifications.getError().getErrorDescription().equalsIgnoreCase("")) {
+                        dismissDialog();
+                        if (progressDialog != null && progressDialog.isShowing())
+                            progressDialog.dismiss();
+                        Utils.displayAlert("", NotificationsActivity.this, "", "");
+                    }
                 }
             }
         });

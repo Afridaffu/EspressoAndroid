@@ -66,6 +66,10 @@ public class SignAgreementData {
     @Expose
     private boolean signedAgreementTracker;
 
+    @SerializedName("agreementFileRefPath")
+    @Expose
+    private String agreementFileRefPath;
+
     public int getId() {
         return id;
     }
@@ -184,5 +188,13 @@ public class SignAgreementData {
 
     public void setSignedAgreementTracker(boolean signedAgreementTracker) {
         this.signedAgreementTracker = signedAgreementTracker;
+    }
+
+    public String getAgreementFileRefPath() {
+        return agreementFileRefPath;
+    }
+
+    public void setAgreementFileRefPath(String agreementFileRefPath) {
+        this.agreementFileRefPath = agreementFileRefPath;
     }
 }

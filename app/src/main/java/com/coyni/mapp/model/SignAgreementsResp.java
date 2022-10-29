@@ -3,17 +3,23 @@ package com.coyni.mapp.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SignAgreementsResp {
 
     @SerializedName("status")
     @Expose
     private String status;
+
     @SerializedName("timestamp")
     @Expose
     private String timestamp;
+
     @SerializedName("data")
     @Expose
-    private SignAgreementData data;
+    private List<SignAgreementData> data = new ArrayList<>();
+
     @SerializedName("error")
     @Expose
     private Error error;
@@ -34,11 +40,11 @@ public class SignAgreementsResp {
         this.timestamp = timestamp;
     }
 
-    public SignAgreementData getData() {
+    public List<SignAgreementData> getData() {
         return data;
     }
 
-    public void setData(SignAgreementData data) {
+    public void setData(List<SignAgreementData> data) {
         this.data = data;
     }
 

@@ -31,6 +31,8 @@ import com.coyni.mapp.model.EmptyRequest;
 import com.coyni.mapp.model.SearchKeyRequest;
 import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.UpdateSignAgree.UpdateSignAgreementsResponse;
+import com.coyni.mapp.model.UpdateSignAgreementsResp;
+import com.coyni.mapp.model.UpdateSignRequest;
 import com.coyni.mapp.model.actionRqrd.ActionRqrdResponse;
 import com.coyni.mapp.model.actionRqrd.SubmitActionRqrdResponse;
 import com.coyni.mapp.model.activtity_log.ActivityLogResp;
@@ -781,6 +783,13 @@ public interface ApiService {
 
     @GET("api/v2/agreements/has-to-sign-agreements")
     Call<SignAgreementsResp> hasToSignAgreements();
+
+    @POST("api/v2/profile/update-sign-agreement")
+    Call<UpdateSignAgreementsResp> signUpdatedAgreement(@Body UpdateSignRequest updateSignRequest);
+
+    @Multipart
+    @POST("api/v2/profile/update-agreement/{agreementId}")
+    Call<UpdateSignAgreementsResp> signUpdatedAgreementDoc(@Path("agreementId") Integer agreementId, @Part MultipartBody.Part filee);
 
 }
 

@@ -702,9 +702,13 @@
     <string name="allow_access_header">Allow Access to your Camera</string>
     <string name="camera_permission_desc">You are not allowing to access the Camera. Please go to Settings and enable the Camera permission.</string>
 
-    <string name="gbx_tos">GreenBox-Terms of Service</string>
-    <string name="gbx_pp">GreenBox-Privacy Policy</string>
-    <string name="gbx_merchant">GreenBox-Merchant</string>
+<!--    <string name="gbx_tos">GreenBox-Terms of Service</string>-->
+<!--    <string name="gbx_pp">GreenBox-Privacy Policy</string>-->
+<!--    <string name="gbx_merchant">GreenBox-Merchant</string>-->
+
+    <string name="gbx_tos">Terms of Service</string>
+    <string name="gbx_pp">Privacy Policy</string>
+    <string name="gbx_merchant">Merchant Agreement</string>
 
     <string name="complete_idve">Please complete your Identity Verification process.</string>
     <string name="otp_retry_error">Looks like something went wrong. Please try again</string>

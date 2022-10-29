@@ -20,6 +20,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.view.business.SignAgreementsActivity;
+import com.coyni.mapp.view.business.VerificationFailedActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -279,6 +281,7 @@ public class OnboardActivity extends BaseActivity {
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
                                 objMyApplication.setDbaOwnerId(Integer.parseInt(String.valueOf(loginResponse.getData().getDbaOwnerId())));
+                                objMyApplication.setAgreementSigned(loginResponse.getData().isAgreementsSigned());
                                 if (loginResponse.getData().isPasswordExpired()) {
 //                                    Intent i = new Intent(OnboardActivity.this, PINActivity.class);
 //                                    i.putExtra("screen", "loginExpiry");
@@ -297,7 +300,10 @@ public class OnboardActivity extends BaseActivity {
 //                                        Intent i = new Intent(OnboardActivity.this, DashboardActivity.class);
 //                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                                        startActivity(i);
-                                    launchDashboard();
+                                    if (!loginResponse.getData().isAgreementsSigned())
+                                        startActivity(new Intent(OnboardActivity.this, SignAgreementsActivity.class));
+                                    else
+                                        launchDashboard();
 //                                    }
 //                                    Intent i = null;
 //                                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)

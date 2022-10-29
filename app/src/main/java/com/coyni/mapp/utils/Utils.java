@@ -92,6 +92,7 @@ import com.coyni.mapp.view.WebViewActivity;
 import com.coyni.mapp.view.business.CompanyInformationActivity;
 import com.coyni.mapp.view.business.DBAInfoAcivity;
 
+import org.apache.commons.net.time.TimeTCPClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -167,18 +168,18 @@ public class Utils {
 
 
     public static enum STRING_PREFERENCE {
-        PST(0,"PST"),
-        MST(1,"America/Denver"),
-        CST(2,"CST"),
-        EST(3,"America/New_York"),
-        HST(4,"HST"),
-        AST(5,"AST"),
-        SST(6,"US/Samoa");
+        PST(0, "PST"),
+        MST(1, "America/Denver"),
+        CST(2, "CST"),
+        EST(3, "America/New_York"),
+        HST(4, "HST"),
+        AST(5, "AST"),
+        SST(6, "US/Samoa");
 
         int zoneID;
         String strPreference;
 
-        STRING_PREFERENCE(int zoneID,String strPreference){
+        STRING_PREFERENCE(int zoneID, String strPreference) {
             this.zoneID = zoneID;
             this.strPreference = strPreference;
         }
@@ -466,6 +467,8 @@ public class Utils {
     public static final int mPP = 1;
     public static final int mTOS = 0;
     public static final int mAgmt = 2;
+    public static final int ACTIVE_AGREEMENT = 0;
+    public static final int SCHEDULED_AGREEMENT = 3;
 
     public static Class<?> launchedActivity = OnboardActivity.class;
     public static final String NOTIFICATION_ACTION = "com.coyni.notification_received";
@@ -1729,6 +1732,20 @@ public class Utils {
         return strDate;
     }
 
+    public static String convertEffectiveDate(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MMMM dd, yyyy");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
+
     public static String convertTwoDecimalPoints(Double value) {
         return df.format(value);
     }
@@ -2938,4 +2955,47 @@ public class Utils {
             return true;
     }
 
+    public static Date getNetworkDate() {
+        TimeTCPClient client = new TimeTCPClient();
+        try {
+            try {
+                // Set timeout of 60 seconds
+                client.setDefaultTimeout(60000);
+                // Connecting to time server
+                // Other time servers can be found at : http://tf.nist.gov/tf-cgi/servers.cgi#
+                // Make sure that your program NEVER queries a server more frequently than once every 4 seconds
+                client.connect("time.nist.gov");
+                Log.e("Network DateTime", ""+ client.getTime());
+                return client.getDate();
+            } finally {
+                client.disconnect();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static long getNetworkTime() {
+        TimeTCPClient client = new TimeTCPClient();
+        long timee = 0;
+        try {
+            try {
+                // Set timeout of 60 seconds
+                client.setDefaultTimeout(60000);
+                // Connecting to time server
+                // Other time servers can be found at : http://tf.nist.gov/tf-cgi/servers.cgi#
+                // Make sure that your program NEVER queries a server more frequently than once every 4 seconds
+                client.connect("time.nist.gov");
+                Log.e("Network DateTime", client.getDate() + " " + client.getTime());
+                System.out.println(client.getDate());
+                return client.getTime();
+            } finally {
+                client.disconnect();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return timee;
+    }
 }
