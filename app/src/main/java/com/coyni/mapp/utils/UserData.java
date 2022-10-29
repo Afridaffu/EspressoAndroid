@@ -105,7 +105,7 @@ public class UserData {
     private String strToken;
     private boolean isLoggedIn = false;
     private String businessUserID = "";
-    private String ownerImage = "", companyName = "";
+    private String ownerImage = "", companyName = "", strCVV = "";
     private List<BatchPayoutListItems> batchPayList = new ArrayList<>();
     private FeatureControlByUser featureControlByUser;
     private FeatureControlByUser featureControlGlobal;
@@ -828,5 +828,13 @@ public class UserData {
 
     public void setAgreementSigned(boolean agreementSigned) {
         isAgreementSigned = agreementSigned;
+    }
+
+    public String getStrCVV() {
+        return strCVV;
+    }
+
+    public void setStrCVV(String strCVV) {
+        this.strCVV = strCVV;
     }
 }

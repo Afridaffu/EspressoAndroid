@@ -568,7 +568,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             coyniLogoIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!BuildConfig.FLAVOR.equals("sat") && !BuildConfig.FLAVOR.equals("uat")) {
+                    if (!BuildConfig.FLAVOR.equals("sat") && !BuildConfig.FLAVOR.equals("uat") && !BuildConfig.FLAVOR.equals("beta")) {
                         try {
                             String strEndPoint = "";
                             strEndPoint = BuildConfig.FLAVOR + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.URL_PRODUCTION;
@@ -815,8 +815,8 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                 public void onChanged(APIError apiError) {
                     dismissDialog();
                     if (apiError != null) {
-//                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
-                        Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this, "", apiError.getError().getFieldErrors().get(0));
+                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
+                        //Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this, "", apiError.getError().getFieldErrors().get(0));
                     }
                 }
             });

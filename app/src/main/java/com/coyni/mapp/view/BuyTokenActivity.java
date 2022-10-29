@@ -359,9 +359,9 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
 //            setFaceLock();
 //            setTouchId();
 
-            if (getIntent().getStringExtra("cvv") != null && getIntent().getStringExtra("cvv").equals("") && objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                displayCVV(selectedCard);
-            }
+//            if (getIntent().getStringExtra("cvv") != null && getIntent().getStringExtra("cvv").equals("") && objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                displayCVV(selectedCard);
+//            }
             objMyApplication.initializeDBHandler(BuyTokenActivity.this);
             isFaceLock = objMyApplication.setFaceLock();
             isTouchId = objMyApplication.setTouchId();
@@ -738,7 +738,11 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                                 bindPayMethod(previousSelectedCard(objData));
                                 if (isCvv) {
                                     isCvv = false;
-                                    displayCVV(objData);
+                                    //displayCVV(objData);
+                                    if (objMyApplication.getStrCVV() != null && !objMyApplication.getStrCVV().equals("")) {
+                                        strCvv = objMyApplication.getStrCVV();
+                                        objMyApplication.setStrCVV("");
+                                    }
                                 }
                             }
                         }
@@ -1661,9 +1665,10 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 cvvDialog.dismiss();
                 strCvv = etCVV.getText().toString().trim();
                 bindPayMethod(objSelected);
-            } else {
-                Utils.displayAlert("Please enter CVV", BuyTokenActivity.this, "", "");
             }
+//            else {
+//                Utils.displayAlert("Please enter CVV", BuyTokenActivity.this, "", "");
+//            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
