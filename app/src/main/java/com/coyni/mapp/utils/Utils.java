@@ -92,7 +92,6 @@ import com.coyni.mapp.view.WebViewActivity;
 import com.coyni.mapp.view.business.CompanyInformationActivity;
 import com.coyni.mapp.view.business.DBAInfoAcivity;
 
-import org.apache.commons.net.time.TimeTCPClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -2953,49 +2952,5 @@ public class Utils {
             return false;
         else
             return true;
-    }
-
-    public static Date getNetworkDate() {
-        TimeTCPClient client = new TimeTCPClient();
-        try {
-            try {
-                // Set timeout of 60 seconds
-                client.setDefaultTimeout(60000);
-                // Connecting to time server
-                // Other time servers can be found at : http://tf.nist.gov/tf-cgi/servers.cgi#
-                // Make sure that your program NEVER queries a server more frequently than once every 4 seconds
-                client.connect("time.nist.gov");
-                Log.e("Network DateTime", ""+ client.getTime());
-                return client.getDate();
-            } finally {
-                client.disconnect();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static long getNetworkTime() {
-        TimeTCPClient client = new TimeTCPClient();
-        long timee = 0;
-        try {
-            try {
-                // Set timeout of 60 seconds
-                client.setDefaultTimeout(60000);
-                // Connecting to time server
-                // Other time servers can be found at : http://tf.nist.gov/tf-cgi/servers.cgi#
-                // Make sure that your program NEVER queries a server more frequently than once every 4 seconds
-                client.connect("time.nist.gov");
-                Log.e("Network DateTime", client.getDate() + " " + client.getTime());
-                System.out.println(client.getDate());
-                return client.getTime();
-            } finally {
-                client.disconnect();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return timee;
     }
 }
