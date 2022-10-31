@@ -1871,7 +1871,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
         request.setWithdrawType(strSubType);
         if (strSubType.equalsIgnoreCase(Utils.CogentType)) {
             if (!CogentWalletId.equals("")) {
-                request.setCogentWalletId(CogentWalletId);
+                request.setSignetWalletId(CogentWalletId);
             }
         } else if (strSubType.equalsIgnoreCase(Utils.signetType)) {
             if (!SignetWalletId.equals("")) {
