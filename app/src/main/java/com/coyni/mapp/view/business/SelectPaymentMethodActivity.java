@@ -109,7 +109,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     super.onBackPressed();
                 }
             } else {
-                if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                if (!strScreen.equals("payRequest") && (strCurrent.equals("debit") || strCurrent.equals("credit"))) {
                     ControlMethod("addpayment");
                     strCurrent = "addpayment";
                 } else {
@@ -139,7 +139,11 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                         getPaymentMethods();
                     }
                 } else if (strScreen != null && strScreen.equals("addpay")) { //Added for Buy token navigation change while adding payment method
-                    paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        paymentMethodsResponse = objMyApplication.filterPaymentMethods(objMyApplication.getPaymentMethodsResponse());
+                    } else {
+                        paymentMethodsResponse = objMyApplication.businessPaymentMethods(objMyApplication.getPaymentMethodsResponse(), strMenu);
+                    }
                     ControlMethod("paymentMethods");
                     strCurrent = "paymentMethods";
                     paymentMethods();
@@ -208,7 +212,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
-                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) || strScreen.equals("buytoken")) {
+                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) || strScreen.equals("buytoken") || strScreen.equals("payRequest")) {
                     onBackPressed();
                 } else {
                     if (!objMyApplication.getBankSave()) {
@@ -576,6 +580,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                                     strCurrent = "signet";
                                     strOnPauseScreen = "";
                                     Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
+                                    i.putExtra("screen", strScreen);
                                     startActivityForResult(i, 2);
                                 }
                             }

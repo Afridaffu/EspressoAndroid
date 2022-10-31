@@ -1887,6 +1887,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                             if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
                                     && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 4);
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");

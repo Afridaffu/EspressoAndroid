@@ -72,34 +72,24 @@ public abstract class BaseActivity extends AppCompatActivity {
                     if (appUpdateResp == null) {
                         return;
                     }
-                    String version = getPackageManager().getPackageInfo(BaseActivity.this.getPackageName(), 0).versionName;
-                    int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-                    int versionName = Integer.parseInt(version.replace(".", ""));
-                    Context context = new ContextThemeWrapper(BaseActivity.this, R.style.Theme_Coyni_Update);
-                    if (versionName < Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
-                        if (!isBaseBiometric)
-                            Utils.showUpdateDialog(context);
-                    } else if (versionName == Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
-                        if (versionCode < Integer.parseInt(appUpdateResp.getData().getBuildNum().replace(".", ""))) {
+                    if (appUpdateResp.getData() != null) {
+                        String version = getPackageManager().getPackageInfo(BaseActivity.this.getPackageName(), 0).versionName;
+                        int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                        int versionName = Integer.parseInt(version.replace(".", ""));
+                        Context context = new ContextThemeWrapper(BaseActivity.this, R.style.Theme_Coyni_Update);
+                        if (versionName < Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
                             if (!isBaseBiometric)
                                 Utils.showUpdateDialog(context);
+                        } else if (versionName == Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
+                            if (versionCode < Integer.parseInt(appUpdateResp.getData().getBuildNum().replace(".", ""))) {
+                                if (!isBaseBiometric)
+                                    Utils.showUpdateDialog(context);
+                            }
                         }
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-
-        dashboardViewModel.getErrorRespMutableLiveData().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                try {
-                    if (s != null && !s.equals("")) {
-                        if (Utils.isValidJson(s) && new JSONObject(s).has("error") && new JSONObject(s).getString("error").equals("You do not have authorization to access the resource")) {
-                            showAccessRestricted();
-                        }
-                    }
+//                    else if (appUpdateResp.getError() != null && appUpdateResp.getError().getErrorCode().equals(getString(R.string.accessrestrictederrorcode))) {
+//                        showAccessRestricted();
+//                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
