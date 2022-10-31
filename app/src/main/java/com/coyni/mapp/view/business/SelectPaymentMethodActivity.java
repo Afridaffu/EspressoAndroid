@@ -110,7 +110,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     super.onBackPressed();
                 }
             } else {
-                if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                if (!strScreen.equals("payRequest") && (strCurrent.equals("debit") || strCurrent.equals("credit"))) {
                     ControlMethod("addpayment");
                     strCurrent = "addpayment";
                 } else {
@@ -138,6 +138,15 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     if (!isPayments) {
                         getPaymentMethods();
                     }
+                } else if (strScreen != null && strScreen.equals("addpay")) { //Added for Buy token navigation change while adding payment method
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        paymentMethodsResponse = objMyApplication.filterPaymentMethods(objMyApplication.getPaymentMethodsResponse());
+                    } else {
+                        paymentMethodsResponse = objMyApplication.businessPaymentMethods(objMyApplication.getPaymentMethodsResponse(), strMenu);
+                    }
+                    ControlMethod("paymentMethods");
+                    strCurrent = "paymentMethods";
+                    paymentMethods();
                 }
             }
         } catch (Exception ex) {
@@ -206,7 +215,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
-                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) || strScreen.equals("buytoken")) {
+                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) || strScreen.equals("buytoken") || strScreen.equals("payRequest")) {
                     onBackPressed();
                 } else {
                     if (!objMyApplication.getBankSave()) {
@@ -614,13 +623,14 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     try {
                         if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
-//                            if (!strMenu.equals("buy") || !strCurrent.equals("notokens")) {
-                            if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                                strCurrent = "Signet";
-                                strOnPauseScreen = "";
-                                Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
-                                i.putExtra("TYPE", "Signet");
-                                startActivityForResult(i, 2);
+                            if (!strMenu.equals("buy") && !strCurrent.equals("notokens") && tvSignetCS.getVisibility() == GONE) {
+                                if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                                    strCurrent = "signet";
+                                    strOnPauseScreen = "";
+                                    Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
+                                    i.putExtra("screen", strScreen);
+                                    startActivityForResult(i, 2);
+                                }
                             }
 //                            }
                         } else {
@@ -714,7 +724,11 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             }
 
             if (paymentMethodsResponse.getData().getSignetCount() >= paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
-                tvSignetError.setVisibility(View.VISIBLE);
+                if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
+                    tvSignetError.setVisibility(View.GONE);
+                } else {
+                    tvSignetError.setVisibility(View.VISIBLE);
+                }
                 tvSignetHead.setTextColor(getColor(R.color.light_gray));
                 tvSignetCount.setTextColor(getColor(R.color.light_gray));
                 tvSignetMsg.setTextColor(getColor(R.color.light_gray));

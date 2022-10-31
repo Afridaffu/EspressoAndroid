@@ -72,10 +72,10 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
     private CardView addCV;
     PaymentMethodsViewModel paymentMethodsViewModel;
     DashboardViewModel dashboardViewModel;
-    String strScreen = "";
+    String strScreen = "", convert = "";
     RelativeLayout lyAddBank, layoutLoader;
     Dialog bankStatusDialog;
-    private String convert = "";
+    Boolean isBuyFCEnabled = false, isWithFCEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,7 +268,8 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                                 layoutLoader.setVisibility(View.GONE);
                             }
                         }
-                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("withdraw"))) {
+                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("withdraw") || getIntent().getStringExtra("screen").equals("dashboard")
+                                || getIntent().getStringExtra("screen").equals("payRequest")|| getIntent().getStringExtra("screen").equals("ScreenCheckOut"))) {
                             dashboardViewModel.mePaymentMethods();
                         }
                         if (strScreen.equals("pay")) {
@@ -295,8 +296,20 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                     }
                     objMyApplication.setPaymentMethodsResponse(objResponse);
                     PaymentsList objData = objMyApplication.getPaymentMethodsResponse().getData().getData().get(0);
-                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
-                    objMyApplication.setSelectedCard(objData);
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
+                        isWithFCEnabled = objMyApplication.withFeatureCtrlEnabled(objData);
+                    }
+                    if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("dashboard")
+                            || getIntent().getStringExtra("screen").equals("payRequest")|| getIntent().getStringExtra("screen").equals("ScreenCheckOut"))) {
+                        isBuyFCEnabled = objMyApplication.buyFeatureCtrlEnabled(objData);
+                    }
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && objMyApplication.getGBTBalance() == 0) {
+                        isBuyFCEnabled = objMyApplication.buyFeatureCtrlEnabled(objData);
+                    }
+                    if (isWithFCEnabled || isBuyFCEnabled) {
+                        objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                        objMyApplication.setSelectedCard(objData);
+                    }
                 }
             }
         });
@@ -820,11 +833,18 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (manualBankResponse.getData() != null && !manualBankResponse.getData().getGiactFail()) {
                             objMyApplication.setBankSave(true);
-                            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("addpay")) {
+                            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("dashboard")
+                                    || getIntent().getStringExtra("screen").equals("payRequest") || getIntent().getStringExtra("screen").equals("ScreenCheckOut")) && isBuyFCEnabled) {
                                 Intent i = new Intent(AddManualBankAccount.this, BuyTokenActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(i);
-                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
-                                startActivity(new Intent(AddManualBankAccount.this, WithdrawTokenActivity.class));
+                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled && objMyApplication.getGBTBalance() != 0) {
+                                startActivity(new Intent(AddManualBankAccount.this, WithdrawTokenActivity.class)
+                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isBuyFCEnabled && objMyApplication.getGBTBalance() == 0) {
+                                Intent i = new Intent(AddManualBankAccount.this, BuyTokenActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(i);
                             } else {
                                 Intent i = new Intent();
                                 setResult(RESULT_OK, i);

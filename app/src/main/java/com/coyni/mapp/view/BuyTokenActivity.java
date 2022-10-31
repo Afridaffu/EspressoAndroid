@@ -112,7 +112,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
     SignOnData signOnData;
     float fontSize, dollarFont;
     Boolean isUSD = false, isCYN = false, isBank = false, isFaceLock = false, isTouchId = false, isBuyTokenAPICalled = false, isButtonClick = false, isMinimumError = false;
-    Boolean isPayment = false;
+    Boolean isPayment = false, isCvv = false;
     public static BuyTokenActivity buyTokenActivity;
     TextInputEditText etCVV;
     Long mLastClickTime = 0L;
@@ -260,6 +260,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
             if (requestCode == 3) {
                 if (objMyApplication.getCardSave()) {
                     objMyApplication.setCardSave(false);
+                    isCvv = true;
                     isPayment = true;
                 } else if (objMyApplication.getBankSave()) {
                     objMyApplication.setBankSave(false);
@@ -358,9 +359,9 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
 //            setFaceLock();
 //            setTouchId();
 
-            if (getIntent().getStringExtra("cvv") != null && getIntent().getStringExtra("cvv").equals("") && objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                displayCVV(selectedCard);
-            }
+//            if (getIntent().getStringExtra("cvv") != null && getIntent().getStringExtra("cvv").equals("") && objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                displayCVV(selectedCard);
+//            }
             objMyApplication.initializeDBHandler(BuyTokenActivity.this);
             isFaceLock = objMyApplication.setFaceLock();
             isTouchId = objMyApplication.setTouchId();
@@ -735,6 +736,14 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
 //                                objMyApplication.setSelectedCard(objData);
 //                                bindPayMethod(objData);
                                 bindPayMethod(previousSelectedCard(objData));
+                                if (isCvv) {
+                                    isCvv = false;
+                                    //displayCVV(objData);
+                                    if (objMyApplication.getStrCVV() != null && !objMyApplication.getStrCVV().equals("")) {
+                                        strCvv = objMyApplication.getStrCVV();
+                                        objMyApplication.setStrCVV("");
+                                    }
+                                }
                             }
                         }
                     }
@@ -1699,9 +1708,10 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 cvvDialog.dismiss();
                 strCvv = etCVV.getText().toString().trim();
                 bindPayMethod(objSelected);
-            } else {
-                Utils.displayAlert("Please enter CVV", BuyTokenActivity.this, "", "");
             }
+//            else {
+//                Utils.displayAlert("Please enter CVV", BuyTokenActivity.this, "", "");
+//            }
 
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -188,7 +188,6 @@ public class DashboardViewModel extends AndroidViewModel {
         return featureControlGlobalRespMutableLiveData;
     }
 
-
     public void meProfile() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -1139,6 +1138,17 @@ public class DashboardViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             AppUpdateResp obj = response.body();
                             appUpdateRespMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<AppUpdateResp>() {
+                            }.getType();
+                            AppUpdateResp errorResponse = null;
+                            try {
+                                errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            appUpdateRespMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

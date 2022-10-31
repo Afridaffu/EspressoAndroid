@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
@@ -15,19 +16,23 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.R;
 import com.coyni.mapp.model.appupdate.AppUpdateResp;
+import com.coyni.mapp.model.bank.ManualBankResponse;
 import com.coyni.mapp.model.check_out_transactions.CheckOutModel;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 
 import org.json.JSONException;
@@ -45,7 +50,7 @@ import okio.ByteString;
 public abstract class BaseActivity extends AppCompatActivity {
 
     public final String TAG = getClass().getName();
-    private Dialog dialog;
+    private Dialog dialog, accessRestrictDialog;
     private MyApplication myApplication;
     private BroadcastReceiver mReceiver;
     private IntentFilter mIntentFilter;
@@ -67,19 +72,24 @@ public abstract class BaseActivity extends AppCompatActivity {
                     if (appUpdateResp == null) {
                         return;
                     }
-                    String version = getPackageManager().getPackageInfo(BaseActivity.this.getPackageName(), 0).versionName;
-                    int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-                    int versionName = Integer.parseInt(version.replace(".", ""));
-                    Context context = new ContextThemeWrapper(BaseActivity.this, R.style.Theme_Coyni_Update);
-                    if (versionName < Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
-                        if (!isBaseBiometric)
-                            Utils.showUpdateDialog(context);
-                    } else if (versionName == Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
-                        if (versionCode < Integer.parseInt(appUpdateResp.getData().getBuildNum().replace(".", ""))) {
+                    if (appUpdateResp.getData() != null) {
+                        String version = getPackageManager().getPackageInfo(BaseActivity.this.getPackageName(), 0).versionName;
+                        int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                        int versionName = Integer.parseInt(version.replace(".", ""));
+                        Context context = new ContextThemeWrapper(BaseActivity.this, R.style.Theme_Coyni_Update);
+                        if (versionName < Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
                             if (!isBaseBiometric)
                                 Utils.showUpdateDialog(context);
+                        } else if (versionName == Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
+                            if (versionCode < Integer.parseInt(appUpdateResp.getData().getBuildNum().replace(".", ""))) {
+                                if (!isBaseBiometric)
+                                    Utils.showUpdateDialog(context);
+                            }
                         }
                     }
+//                    else if (appUpdateResp.getError() != null && appUpdateResp.getError().getErrorCode().equals(getString(R.string.accessrestrictederrorcode))) {
+//                        showAccessRestricted();
+//                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -314,4 +324,25 @@ public abstract class BaseActivity extends AppCompatActivity {
             Log.e("open", "keyboard");
         }
     }
+
+    private void showAccessRestricted() {
+        try {
+            accessRestrictDialog = new Dialog(BaseActivity.this);
+            accessRestrictDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            accessRestrictDialog.setContentView(R.layout.accessrestrictedlayout);
+            accessRestrictDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+
+            Window window = accessRestrictDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            accessRestrictDialog.setCanceledOnTouchOutside(false);
+            accessRestrictDialog.setCancelable(false);
+            accessRestrictDialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

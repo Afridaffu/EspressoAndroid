@@ -116,12 +116,8 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 } else if ((!strCurrent.equals("firstError")) || (strScreen.equals("dashboard") && strCurrent.equals("addpayment"))) {
                     super.onBackPressed();
                 }
-//                else if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {
-//                    ControlMethod("paymentMethods");
-//                    strCurrent = "paymentMethods";
-//                }
             } else {
-                if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                if (!strScreen.equals("payRequest") && (strCurrent.equals("debit") || strCurrent.equals("credit"))) {
                     ControlMethod("addpayment");
                     strCurrent = "addpayment";
                 } else {
@@ -148,6 +144,11 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 if (!isPayments) {
                     getPaymentMethods();
                 }
+            } else if (strScreen != null && strScreen.equals("addpay")) { //Added for Buy token navigation change while adding payment method
+                paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
+                ControlMethod("paymentMethods");
+                strCurrent = "paymentMethods";
+                paymentMethods();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -184,7 +185,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                     onBackPressed();
                 }
             } else if (requestCode == 4) {
-                if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+                if (strScreen.equals("withdraw") || strScreen.equals("buytoken") || strScreen.equals("payRequest")) {
                     onBackPressed();
                 } else if (!objMyApplication.getBankSave()) {
                     isDeCredit = true;

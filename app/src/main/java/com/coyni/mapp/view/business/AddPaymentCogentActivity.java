@@ -32,6 +32,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
+import com.coyni.mapp.model.paymentmethods.PaymentsList;
+import com.coyni.mapp.utils.CheckOutConstants;
+import com.coyni.mapp.view.BuyTokenActivity;
+import com.coyni.mapp.view.WithdrawTokenActivity;
+import com.coyni.mapp.viewmodel.DashboardViewModel;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.coyni.mapp.R;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
 import com.coyni.mapp.model.cogent.CogentResponse;
@@ -39,8 +47,8 @@ import com.coyni.mapp.model.cogent.CogentRequest;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.viewmodel.BusinessDashboardViewModel;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+import com.coyni.mapp.model.signet.SignetRequest;
+import com.coyni.mapp.model.signet.SignetResponse;
 
 public class AddPaymentCogentActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
     TextInputLayout etlName, etlWalletId, etlAddress1, etlAddress2, etlCity, etlState, etlZipCode;
@@ -50,12 +58,13 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
     CardView cvAdd;
     ConstraintLayout clStates;
     BusinessDashboardViewModel businessDashboardViewModel;
+    DashboardViewModel dashboardViewModel;
     Long mLastClickTime = 0L;
     Dialog progressDialog;
     Dialog preDialog;
-    Boolean isName, isWallet, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
-    TextView nameErrorTV, walletErrorTV, address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV, tvHead;
     String paymentType = "";
+    Boolean isName, isWallet, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false, isWithFCEnabled = false, isBuyFCEnabled = false;
+    TextView nameErrorTV, walletErrorTV, address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV, tvHead;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +88,7 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
         try {
             objMyApplication = (MyApplication) getApplicationContext();
             businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             layoutClose = findViewById(R.id.layoutClose);
             clStates = findViewById(R.id.clStates);
             nameErrorLL = findViewById(R.id.nameErrorLL);
@@ -233,10 +243,38 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
                 progressDialog.dismiss();
                 if (CogentResponse != null) {
                     if (CogentResponse.getStatus().toUpperCase().equals("SUCCESS")) {
+                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
+                            dashboardViewModel.mePaymentMethods();
+                        }
                         displaySuccess();
                     } else {
                         Utils.displayAlert(CogentResponse.getError().getErrorDescription(),
                                 AddPaymentCogentActivity.this, "", CogentResponse.getError().getFieldErrors().get(0));
+                    }
+                }
+            }
+        });
+
+        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+            @Override
+            public void onChanged(PaymentMethodsResponse payMethodsResponse) {
+                if (payMethodsResponse != null) {
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
+                        objMyApplication.setPaymentMethodsResponse(objResponse);
+                    } else {
+                        objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
+                    }
+                    PaymentsList objData = objMyApplication.getPaymentMethodsResponse().getData().getData().get(0);
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
+                        isWithFCEnabled = objMyApplication.withFeatureCtrlEnabled(objData);
+                    }
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && objMyApplication.getGBTBalance() == 0) {
+                        isBuyFCEnabled = objMyApplication.buyFeatureCtrlEnabled(objData);
+                    }
+                    if (isWithFCEnabled) {
+                        objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
+                        objMyApplication.setSelectedCard(objData);
                     }
                 }
             }
@@ -831,10 +869,6 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-//            WindowManager.LayoutParams lp = window.getAttributes();
-//            lp.dimAmount = 0.7f;
-//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            preDialog.getWindow().setAttributes(lp);
             preDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             preDialog.setCancelable(false);
@@ -855,8 +889,19 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
                         else if (paymentType.equalsIgnoreCase(getString(R.string.Signet)))
                             objMyApplication.setSignet(true);
 
-                        Intent i = new Intent();
-                        setResult(RESULT_OK, i);
+                        if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled && objMyApplication.getGBTBalance() != 0) {
+                            startActivity(new Intent(AddPaymentCogentActivity.this, WithdrawTokenActivity.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        }
+//                        else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isBuyFCEnabled && objMyApplication.getGBTBalance() != 0) {
+//                            Intent i = new Intent(AddPaymentSignetActivity.this, BuyTokenActivity.class);
+//                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            startActivity(i);
+//                        }
+                        else {
+                            Intent i = new Intent();
+                            setResult(RESULT_OK, i);
+                        }
                         finish();
                     } catch (Exception ex) {
                         ex.printStackTrace();

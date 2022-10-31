@@ -261,7 +261,12 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 //Added on 29-03-2022 - VT
             } else if (!isPayments) {
                 getPaymentMethods();
+            } else if (strScreen != null && strScreen.equals("withdrawmethod")) {
+                //Added for Withdraw token navigation change while adding payment method
+                ControlMethod("withdrawmethod");
+                selectWithdrawMethod();
             }
+
             super.onResume();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -856,6 +861,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                 strCurrent = "Signet";
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentCogentActivity.class);
                                 i.putExtra("TYPE", "Signet");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 4);
                             }
                         } else {
@@ -1994,6 +2000,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                     && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentCogentActivity.class);
                                 i.putExtra("TYPE", "Signet");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 4);
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");

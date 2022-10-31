@@ -698,6 +698,14 @@ public class MyApplication extends Application {
         mCurrentUserData.setAccountType(accountType);
     }
 
+    public String getStrCVV() {
+        return mCurrentUserData.getStrCVV();
+    }
+
+    public void setStrCVV(String strCVV) {
+        mCurrentUserData.setStrCVV(strCVV);
+    }
+
     public void setWalletResponseData(WalletResponseData walletResponseData) {
 
         List<WalletInfo> walletInfoList = walletResponseData.getWalletNames();
