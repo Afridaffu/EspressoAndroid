@@ -814,8 +814,8 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                 public void onChanged(APIError apiError) {
                     dismissDialog();
                     if (apiError != null) {
-                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
-                        //Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this, "", apiError.getError().getFieldErrors().get(0));
+//                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
+                        Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this, "", apiError.getError().getFieldErrors().get(0));
                     }
                 }
             });

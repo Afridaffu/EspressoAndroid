@@ -682,7 +682,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                     if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
                         isWithFCEnabled = objMyApplication.withFeatureCtrlEnabled(objData);
                     }
-                    if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("dashboard") || getIntent().getStringExtra("screen").equals("payRequest"))) {
+                    if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("dashboard")
+                            || getIntent().getStringExtra("screen").equals("payRequest")|| getIntent().getStringExtra("screen").equals("ScreenCheckOut")|| getIntent().getStringExtra("screen").equals("buytoken"))) {
                         isBuyFCEnabled = objMyApplication.buyFeatureCtrlEnabled(objData);
                     }
                     if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && objMyApplication.getGBTBalance() == 0) {
@@ -1735,7 +1736,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 preAuthDialog.dismiss();
             }
             if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("withdraw")
-                    || getIntent().getStringExtra("screen").equals("dashboard") || getIntent().getStringExtra("screen").equals("payRequest"))) {
+                    || getIntent().getStringExtra("screen").equals("dashboard") || getIntent().getStringExtra("screen").equals("payRequest")
+                    || getIntent().getStringExtra("screen").equals("ScreenCheckOut")|| getIntent().getStringExtra("screen").equals("buytoken"))) {
                 dashboardViewModel.mePaymentMethods();
             }
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
@@ -1756,7 +1758,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                     try {
                         //preDialog.dismiss();
                         objMyApplication.setCardSave(true);
-                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("dashboard") || getIntent().getStringExtra("screen").equals("payRequest")) && isBuyFCEnabled) {
+                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("dashboard")
+                                || getIntent().getStringExtra("screen").equals("payRequest")|| getIntent().getStringExtra("screen").equals("ScreenCheckOut")) && isBuyFCEnabled) {
                             Intent i = new Intent(AddCardActivity.this, BuyTokenActivity.class);
                             i.putExtra("cvv", strCvv);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -1775,7 +1778,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
                         } else {
-                            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("buytoken")) {
+                            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("buytoken") && isBuyFCEnabled) {
                                 objMyApplication.setStrCVV(strCvv);
                             }
                             Intent i = new Intent();
