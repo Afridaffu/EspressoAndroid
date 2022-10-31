@@ -243,7 +243,7 @@ public class DBAInfoDetails extends BaseActivity {
 //                            if (str != null && str.length() > 20) {
 //                                nameTV.setText(Utils.capitalize(str).substring(0, 20) + "...");
 //                            } else if (str != null) {
-                            nameTV.setText(Utils.capitalize(str));
+                            nameTV.setText(str);
 //                            }
                             if (dbaInfoResp.getData().getEmail() != null) {
                                 emailTV.setText(dbaInfoResp.getData().getEmail());
