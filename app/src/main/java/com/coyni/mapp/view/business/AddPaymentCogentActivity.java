@@ -47,8 +47,6 @@ import com.coyni.mapp.model.cogent.CogentRequest;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.viewmodel.BusinessDashboardViewModel;
-import com.coyni.mapp.model.signet.SignetRequest;
-import com.coyni.mapp.model.signet.SignetResponse;
 
 public class AddPaymentCogentActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
     TextInputLayout etlName, etlWalletId, etlAddress1, etlAddress2, etlCity, etlState, etlZipCode;

@@ -840,6 +840,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                 strCurrent = "Cogent";
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentCogentActivity.class);
                                 i.putExtra("TYPE", "Cogent");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 4);
                             }
                         } else {
