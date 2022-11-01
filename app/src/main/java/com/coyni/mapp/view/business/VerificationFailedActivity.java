@@ -62,7 +62,6 @@ public class VerificationFailedActivity extends AppCompatActivity {
                         spannableLegalName.setSpan(new CustomTypefaceSpan("", font), 11, legalName.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                         mTvLegalName.setText(spannableLegalName);
                     }
-
                     if (data.getDbaName() != null && !data.getDbaName().equals("")) {
                         String dbaName = getString(R.string.verification_dba_name, data.getDbaName());
                         SpannableStringBuilder spannableLegalName = new SpannableStringBuilder(dbaName);
@@ -77,9 +76,11 @@ public class VerificationFailedActivity extends AppCompatActivity {
                         spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                         mTvName.setText(spannableName);
                     }
+                    mTvLegalName.setText(" ");
+                    mTvDbaName.setText(" ");
 
-                    mTvDbaName.setVisibility(View.GONE);
-                    mTvLegalName.setVisibility(View.GONE);
+//                    mTvDbaName.setVisibility(View.GONE);
+//                    mTvLegalName.setVisibility(View.GONE);
                 }
             }
         }
