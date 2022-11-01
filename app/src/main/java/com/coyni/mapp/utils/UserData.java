@@ -35,6 +35,7 @@ import com.coyni.mapp.model.reguser.Contacts;
 import com.coyni.mapp.model.reguser.RegisteredUsersRequest;
 import com.coyni.mapp.model.retrieveemail.RetrieveUsersResponse;
 import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.model.signin.InitializeResponse;
 import com.coyni.mapp.model.submit.ApplicationSubmitResponseModel;
 import com.coyni.mapp.model.summary.BankAccount;
 import com.coyni.mapp.model.transaction.TransactionList;
@@ -110,6 +111,8 @@ public class UserData {
     private FeatureControlByUser featureControlGlobal;
     private WebSocketUrlResponseData webSocketUrlResponse;
     private BankAccount bankAccount;
+    private InitializeResponse initializeResponse;
+    private boolean isAgreementSigned = true;
 
     public OrderPayResponse getOrderPayResponse() {
         return orderPayResponse;
@@ -833,6 +836,22 @@ public class UserData {
 
     public void setSignetEnabled(boolean signetEnabled) {
         isSignetEnabled = signetEnabled;
+    }
+
+    public InitializeResponse getInitializeResponse() {
+        return initializeResponse;
+    }
+
+    public void setInitializeResponse(InitializeResponse initializeResponse) {
+        this.initializeResponse = initializeResponse;
+    }
+
+    public boolean isAgreementSigned() {
+        return isAgreementSigned;
+    }
+
+    public void setAgreementSigned(boolean agreementSigned) {
+        isAgreementSigned = agreementSigned;
     }
 
     public String getStrCVV() {

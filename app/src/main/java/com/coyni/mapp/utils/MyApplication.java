@@ -11,6 +11,7 @@ import android.util.Log;
 import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.fee.Fees;
 import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.model.signin.InitializeResponse;
 import com.coyni.mapp.model.summary.BankAccount;
 import com.coyni.mapp.model.websocket.WebSocketUrlResponseData;
 import com.google.gson.Gson;
@@ -1110,4 +1111,19 @@ public class MyApplication extends Application {
         return isValue;
     }
 
+    public InitializeResponse getInitializeResponse() {
+        return mCurrentUserData.getInitializeResponse();
+    }
+
+    public void setInitializeResponse(InitializeResponse initializeResponse) {
+        mCurrentUserData.setInitializeResponse(initializeResponse);
+    }
+
+    public boolean isAgreementSigned() {
+        return mCurrentUserData.isAgreementSigned();
+    }
+
+    public void setAgreementSigned(boolean value) {
+        mCurrentUserData.setAgreementSigned(value);
+    }
 }

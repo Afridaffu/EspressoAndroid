@@ -38,6 +38,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.view.business.SignAgreementsActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -846,7 +847,10 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                     objMyApplication.setIsLoggedIn(true);
-                                    launchDashboard();
+                                    if (!loginResponse.getData().isAgreementsSigned())
+                                        startActivity(new Intent(LoginActivity.this, SignAgreementsActivity.class));
+                                    else
+                                        launchDashboard();
                                 }
                             } else {
                                 if (loginResponse.getData() != null) {

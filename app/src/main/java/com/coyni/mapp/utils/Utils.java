@@ -167,18 +167,18 @@ public class Utils {
 
 
     public static enum STRING_PREFERENCE {
-        PST(0,"PST"),
-        MST(1,"America/Denver"),
-        CST(2,"CST"),
-        EST(3,"America/New_York"),
-        HST(4,"HST"),
-        AST(5,"AST"),
-        SST(6,"US/Samoa");
+        PST(0, "PST"),
+        MST(1, "America/Denver"),
+        CST(2, "CST"),
+        EST(3, "America/New_York"),
+        HST(4, "HST"),
+        AST(5, "AST"),
+        SST(6, "US/Samoa");
 
         int zoneID;
         String strPreference;
 
-        STRING_PREFERENCE(int zoneID,String strPreference){
+        STRING_PREFERENCE(int zoneID, String strPreference) {
             this.zoneID = zoneID;
             this.strPreference = strPreference;
         }
@@ -468,6 +468,8 @@ public class Utils {
     public static final int mPP = 1;
     public static final int mTOS = 0;
     public static final int mAgmt = 2;
+    public static final int ACTIVE_AGREEMENT = 0;
+    public static final int SCHEDULED_AGREEMENT = 3;
 
     public static Class<?> launchedActivity = OnboardActivity.class;
     public static final String NOTIFICATION_ACTION = "com.coyni.notification_received";
@@ -1734,6 +1736,20 @@ public class Utils {
         return strDate;
     }
 
+    public static String convertEffectiveDate(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MMMM dd, yyyy");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
+
     public static String convertTwoDecimalPoints(Double value) {
         return df.format(value);
     }
@@ -2943,5 +2959,4 @@ public class Utils {
         else
             return true;
     }
-
 }

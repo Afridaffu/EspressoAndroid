@@ -23,6 +23,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.view.business.SignAgreementsActivity;
 import com.google.gson.Gson;
 import com.coyni.mapp.R;
 import com.coyni.mapp.model.biometric.BiometricRequest;
@@ -497,12 +498,17 @@ public class EnableAuthID extends BaseActivity {
     }
 
     private void launchDashboard() {
-        if (objMyApplication.checkForDeclinedStatus()) {
-            objMyApplication.setIsLoggedIn(true);
-            objMyApplication.launchDeclinedActivity(this);
+        if (objMyApplication.isAgreementSigned()) {
+            if (objMyApplication.checkForDeclinedStatus()) {
+                objMyApplication.setIsLoggedIn(true);
+                objMyApplication.launchDeclinedActivity(this);
+            } else {
+                objMyApplication.setIsLoggedIn(true);
+                objMyApplication.launchDashboard(this, strScreen);
+            }
         } else {
-            objMyApplication.setIsLoggedIn(true);
-            objMyApplication.launchDashboard(this, strScreen);
+            startActivity(new Intent(EnableAuthID.this, SignAgreementsActivity.class));
+            finish();
         }
     }
 

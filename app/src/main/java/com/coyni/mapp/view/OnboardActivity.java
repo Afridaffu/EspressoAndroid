@@ -20,6 +20,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.view.business.SignAgreementsActivity;
+import com.coyni.mapp.view.business.VerificationFailedActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -287,7 +289,10 @@ public class OnboardActivity extends BaseActivity {
                             } else {
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                 objMyApplication.setIsLoggedIn(true);
-                                launchDashboard();
+                                if (!loginResponse.getData().isAgreementsSigned())
+                                    startActivity(new Intent(OnboardActivity.this, SignAgreementsActivity.class));
+                                else
+                                    launchDashboard();
                             }
                         } else {
                             if (loginResponse.getData() != null) {
