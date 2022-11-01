@@ -14,7 +14,7 @@ import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 
 
-public class AccountTypeActivity extends AppCompatActivity {
+public class AccountTypeActivity extends BaseActivity {
 
     LinearLayout personalAccontLL, layoutClose, businessAccontLL;
     Long mLastClickTime = 0L;
@@ -67,7 +67,7 @@ public class AccountTypeActivity extends AppCompatActivity {
         mLastClickTime = SystemClock.elapsedRealtime();
         objMyApplication.setAccountType(accountType);
         Intent createIntent = new Intent(AccountTypeActivity.this, CreateAccountActivity.class);
-        createIntent.putExtra(Utils.ACCOUNT_TYPE,accountType);
+        createIntent.putExtra(Utils.ACCOUNT_TYPE, accountType);
         startActivity(createIntent);
         finish();
         overridePendingTransition(0, 0);

@@ -1,61 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
     android:padding="@dimen/_21sdp">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_64sdp"
-        android:layout_marginTop="@dimen/_50sdp"
-        android:layout_marginBottom="@dimen/_34sdp"
-        android:src="@drawable/ic_caution_exclaimation_mark__icon" />
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/opensans_bold"
-        android:gravity="center"
-        android:text="Access Restricted"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_16ssp" />
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/_34sdp"
+            android:src="@drawable/ic_caution_exclaimation_mark__icon" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_88sdp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
+            android:text="Access Restricted"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_13sdp"
+            android:layout_marginRight="@dimen/_15sdp"
             android:fontFamily="@font/opensans_regular"
             android:gravity="center"
             android:text="@string/accessrestricted"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/nextCV"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_43sdp"
-            android:layout_alignParentBottom="true"
-            android:gravity="center"
-            app:cardBackgroundColor="@color/primary_green"
-            app:cardCornerRadius="@dimen/_21sdp">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvOK"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_43sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:gravity="center"
+        app:cardBackgroundColor="@color/primary_green"
+        app:cardCornerRadius="@dimen/_21sdp">
 
-            <TextView
-                android:id="@+id/mainpageTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/opensans_bold"
-                android:text="@string/try_again"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12ssp" />
-        </androidx.cardview.widget.CardView>
-    </RelativeLayout>
-</LinearLayout>
+        <TextView
+            android:id="@+id/mainpageTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/opensans_bold"
+            android:text="OK"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
