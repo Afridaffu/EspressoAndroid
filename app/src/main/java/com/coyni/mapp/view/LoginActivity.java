@@ -745,6 +745,16 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                             if (!login.getStatus().toLowerCase().equals("error")) {
                                 Utils.setStrAuth(login.getData().getJwtToken());
                                 objMyApplication.setStrEmail(login.getData().getEmail());
+                                try {
+                                    if (login.getData().getDbaName() != null && !login.getData().getDbaName().equals(""))
+                                        objMyApplication.setStrDBAName(login.getData().getDbaName());
+
+                                    if (login.getData().getFirstName() != null && !login.getData().getFirstName().equals("") &&
+                                            login.getData().getLastName() != null && !login.getData().getLastName().equals(""))
+                                        objMyApplication.setStrUserName(Utils.capitalize(login.getData().getFirstName() + " " + login.getData().getLastName()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 //                            objMyApplication.setUserId(login.getData().getUserId());
                                 objMyApplication.setLoginUserId(Integer.parseInt(String.valueOf(login.getData().getUserId())));
                                 objMyApplication.setLoginResponse(login);
@@ -830,6 +840,18 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                             if (!loginResponse.getStatus().toLowerCase().equals("error")) {
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                 objMyApplication.setStrEmail(loginResponse.getData().getEmail());
+
+                                try {
+                                    if (loginResponse.getData().getDbaName() != null && !loginResponse.getData().getDbaName().equals(""))
+                                        objMyApplication.setStrDBAName(loginResponse.getData().getDbaName());
+
+                                    if (loginResponse.getData().getFirstName() != null && !loginResponse.getData().getFirstName().equals("") &&
+                                            loginResponse.getData().getLastName() != null && !loginResponse.getData().getLastName().equals(""))
+                                        objMyApplication.setStrUserName(Utils.capitalize(loginResponse.getData().getFirstName() + " " + loginResponse.getData().getLastName()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
                                 //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
                                 objMyApplication.setLoginUserId(Integer.parseInt(String.valueOf(loginResponse.getData().getUserId())));
                                 objMyApplication.setLoginResponse(loginResponse);
