@@ -272,6 +272,18 @@ public class OnboardActivity extends BaseActivity {
                             if (!loginResponse.getStatus().toLowerCase().equals("error")) {
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                 objMyApplication.setStrEmail(loginResponse.getData().getEmail());
+
+                                try {
+                                    if (loginResponse.getData().getDbaName() != null && !loginResponse.getData().getDbaName().equals(""))
+                                        objMyApplication.setStrDBAName(loginResponse.getData().getDbaName());
+
+                                    if (loginResponse.getData().getFirstName() != null && !loginResponse.getData().getFirstName().equals("") &&
+                                            loginResponse.getData().getLastName() != null && !loginResponse.getData().getLastName().equals(""))
+                                        objMyApplication.setStrUserName(Utils.capitalize(loginResponse.getData().getFirstName() + " " + loginResponse.getData().getLastName()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
                                 //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
                                 objMyApplication.setLoginUserId(Integer.parseInt(String.valueOf(loginResponse.getData().getUserId())));
                                 objMyApplication.setLoginResponse(loginResponse);

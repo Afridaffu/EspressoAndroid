@@ -1086,4 +1086,13 @@ public class MyApplication extends Application {
     public void setAgreementSigned(boolean value) {
         mCurrentUserData.setAgreementSigned(value);
     }
+
+    public String getStrDBAName() {
+        return mCurrentUserData.getStrDBAName();
+    }
+
+    public void setStrDBAName(String value) {
+        mCurrentUserData.setStrDBAName(value);
+    }
+
 }

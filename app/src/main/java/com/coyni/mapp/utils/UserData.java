@@ -54,7 +54,7 @@ public class UserData {
 
     private AgreementsPdf agreementsPdf;
     private RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
-    private String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "CST", strInvite = "", strScreen = "";
+    private String strUserName = "",strDBAName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "CST", strInvite = "", strScreen = "";
     private Profile myProfile = new Profile();
     private Fees fees = new Fees();
     private UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
@@ -836,5 +836,13 @@ public class UserData {
 
     public void setStrCVV(String strCVV) {
         this.strCVV = strCVV;
+    }
+
+    public String getStrDBAName() {
+        return strDBAName;
+    }
+
+    public void setStrDBAName(String strDBAName) {
+        this.strDBAName = strDBAName;
     }
 }
