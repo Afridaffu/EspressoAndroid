@@ -2,6 +2,7 @@ package com.coyni.mapp.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -54,6 +55,7 @@ public class AgreementsActivity extends BaseActivity {
     TextView pastTV, activeTV;
     int i = 0;
     private String selectedAgreement = "";
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,7 +199,7 @@ public class AgreementsActivity extends BaseActivity {
                         LogUtils.v(TAG, agreements.getStatus());
                         if (agreements.getStatus().contains(Utils.SUCCESS)) {
                             processAgreements(agreements.getData());
-                        }else{
+                        } else {
                             Utils.displayAlert(agreements.getError().getErrorDescription(), AgreementsActivity.this, "", agreements.getError().getFieldErrors().get(0));
                         }
                     } catch (Exception ex) {
@@ -263,15 +265,23 @@ public class AgreementsActivity extends BaseActivity {
     }
 
     private void showAgreementData(Item item) {
-        showProgressDialog();
-        if (item.getSignatureType() == Utils.cTOS) {
-            selectedAgreement = getString(R.string.gbx_tos);
-        } else if (item.getSignatureType() == Utils.cPP) {
-            selectedAgreement = getString(R.string.gbx_pp);
-        } else if (item.getSignatureType() == Utils.mAgmt) {
-            selectedAgreement = getString(R.string.gbx_merchant);
+        try {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            showProgressDialog();
+            if (item.getSignatureType() == Utils.cTOS) {
+                selectedAgreement = getString(R.string.gbx_tos);
+            } else if (item.getSignatureType() == Utils.cPP) {
+                selectedAgreement = getString(R.string.gbx_pp);
+            } else if (item.getSignatureType() == Utils.mAgmt) {
+                selectedAgreement = getString(R.string.gbx_merchant);
+            }
+            dashboardViewModel.getAgreementUrlByDocumentNumber(item.getRefId());
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        dashboardViewModel.getAgreementUrlByDocumentNumber(item.getRefId());
     }
 
 }

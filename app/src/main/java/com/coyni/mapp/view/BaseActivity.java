@@ -55,7 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private BroadcastReceiver mReceiver;
     private IntentFilter mIntentFilter;
     DashboardViewModel dashboardViewModel;
-    public Boolean isBaseBiometric = false;
+    public Boolean isBaseBiometric = false, isAccess = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,10 +86,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                                     Utils.showUpdateDialog(context);
                             }
                         }
+                    } else if (appUpdateResp.getError() != null && appUpdateResp.getError().getErrorCode().equals(getString(R.string.accessrestrictederrorcode))) {
+                        showAccessRestricted();
                     }
-//                    else if (appUpdateResp.getError() != null && appUpdateResp.getError().getErrorCode().equals(getString(R.string.accessrestrictederrorcode))) {
-//                        showAccessRestricted();
-//                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -105,6 +104,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        LogUtils.e("BaseActivityOnResume", "" + getClass().getSimpleName());
+        if (Utils.checkInternet(BaseActivity.this)) {
+            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
+        } else {
+            Utils.displayAlert(getString(R.string.internet), BaseActivity.this, "", "");
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         if (isLaunchCheckoutFlow() && myApplication.isLoggedIn()) {
@@ -113,12 +123,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         createReceiver();
         registerReceiver(mReceiver, mIntentFilter);
-
-        if (Utils.checkInternet(BaseActivity.this)) {
-            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
-        } else {
-            Utils.displayAlert(getString(R.string.internet), BaseActivity.this, "", "");
-        }
+//        LogUtils.e("BaseActivityOnResume", "" + getClass().getSimpleName());
+//        if (Utils.checkInternet(BaseActivity.this)) {
+//            dashboardViewModel.getAppUpdate(getString(R.string.android_text));
+//        } else {
+//            Utils.displayAlert(getString(R.string.internet), BaseActivity.this, "", "");
+//        }
     }
 
     @Override
@@ -327,6 +337,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void showAccessRestricted() {
         try {
+            CardView cvOK;
             accessRestrictDialog = new Dialog(BaseActivity.this);
             accessRestrictDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             accessRestrictDialog.setContentView(R.layout.accessrestrictedlayout);
@@ -340,6 +351,16 @@ public abstract class BaseActivity extends AppCompatActivity {
             accessRestrictDialog.setCanceledOnTouchOutside(false);
             accessRestrictDialog.setCancelable(false);
             accessRestrictDialog.show();
+            isAccess = true;
+            cvOK = accessRestrictDialog.findViewById(R.id.cvOK);
+            cvOK.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BaseActivity.this.finish();
+                    moveTaskToBack(true);
+                }
+            });
+            Utils.hideKeypad(BaseActivity.this);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
