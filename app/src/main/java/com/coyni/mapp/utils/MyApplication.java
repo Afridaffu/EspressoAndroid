@@ -1050,6 +1050,12 @@ public class MyApplication extends Application {
                         isValue = true;
                     }
                     break;
+                case "cogent":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getBuyCogent() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getBuyCogent() && getFeatureControlByUser().getBuyCredit())) {
+                        isValue = true;
+                    }
+                    break;
                 case "debit":
                     if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getBuyDebit() != null && getFeatureControlByUser() != null
                             && (getFeatureControlGlobal().getBuyDebit() && getFeatureControlByUser().getBuyDebit())) {
@@ -1082,6 +1088,12 @@ public class MyApplication extends Application {
                 case "signet":
                     if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getWithSignet() != null && getFeatureControlByUser() != null
                             && (getFeatureControlGlobal().getWithSignet() && getFeatureControlByUser().getWithSignet())) {
+                        isValue = true;
+                    }
+                    break;
+                case "cogent":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getWithCogent() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getWithCogent() && getFeatureControlByUser().getWithCogent())) {
                         isValue = true;
                     }
                     break;

@@ -528,7 +528,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
             }
 
             //Comment below to Enable buy token cogent/signet
-            if (strMenu.equals("buy")) {
+            if (strMenu.equals("buy") || strCurrent.equals("notokens")) {
                 layoutCogent.setVisibility(GONE);
                 layoutSignet.setVisibility(GONE);
             } else {
@@ -599,15 +599,16 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     try {
                         if (objMyApplication.getFeatureControlGlobal().getPayCogent() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getPayCogent() && objMyApplication.getFeatureControlByUser().getPayCogent()) {
-//                            if (!strMenu.equals("buy") || !strCurrent.equals("notokens")) {
-                            if (paymentMethodsResponse.getData().getCogentCount() < paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
-                                strCurrent = "Cogent";
-                                strOnPauseScreen = "";
-                                Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
-                                i.putExtra("TYPE", "Cogent");
-                                startActivityForResult(i, 2);
+                            if (!strMenu.equals("buy") || !strCurrent.equals("notokens")) {
+                                if (paymentMethodsResponse.getData().getCogentCount() < paymentMethodsResponse.getData().getMaxCogentAccountsAllowed()) {
+                                    strCurrent = "Cogent";
+                                    strOnPauseScreen = "";
+                                    Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
+                                    i.putExtra("TYPE", strCurrent);
+                                    i.putExtra("screen", strScreen);
+                                    startActivityForResult(i, 2);
+                                }
                             }
-//                            }
                         } else {
                             Utils.displayAlert(getString(R.string.errormsg), SelectPaymentMethodActivity.this, "", "");
                         }
@@ -628,6 +629,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                                     strCurrent = "signet";
                                     strOnPauseScreen = "";
                                     Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
+                                    i.putExtra("TYPE", strCurrent);
                                     i.putExtra("screen", strScreen);
                                     startActivityForResult(i, 2);
                                 }

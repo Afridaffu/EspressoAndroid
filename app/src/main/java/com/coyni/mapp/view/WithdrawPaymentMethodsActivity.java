@@ -1992,6 +1992,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                                     && objMyApplication.getFeatureControlGlobal().getPayCogent() && objMyApplication.getFeatureControlByUser().getPayCogent()) {
                                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentCogentActivity.class);
                                 i.putExtra("TYPE", "Cogent");
+                                i.putExtra("screen", "withdraw");
                                 startActivityForResult(i, 4);
                             } else {
                                 Utils.displayAlert(getString(R.string.errormsg), WithdrawPaymentMethodsActivity.this, "", "");
