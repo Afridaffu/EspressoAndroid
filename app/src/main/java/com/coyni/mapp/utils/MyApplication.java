@@ -12,7 +12,6 @@ import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.fee.Fees;
 import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.model.signin.InitializeResponse;
-import com.coyni.mapp.model.signin.InitializeResponseData;
 import com.coyni.mapp.model.summary.BankAccount;
 import com.coyni.mapp.model.websocket.WebSocketUrlResponseData;
 import com.google.gson.Gson;
@@ -679,13 +678,22 @@ public class MyApplication extends Application {
         return mCurrentUserData.getAccountType();
     }
 
+    public Boolean getCogent() {
+        return mCurrentUserData.getCogent();
+    }
+
+    public void setCogent(Boolean Cogent) {
+        mCurrentUserData.setCogent(Cogent);
+    }
+
     public Boolean getSignet() {
         return mCurrentUserData.getSignet();
     }
 
-    public void setSignet(Boolean signet) {
-        mCurrentUserData.setSignet(signet);
+    public void setSignet(Boolean Signet) {
+        mCurrentUserData.setSignet(Signet);
     }
+
 
     public void setAccountType(int accountType) {
         mCurrentUserData.setAccountType(accountType);
@@ -924,7 +932,7 @@ public class MyApplication extends Application {
         try {
             if (objResponse != null && objResponse.getData() != null && objResponse.getData().getData() != null && objResponse.getData().getData().size() > 0) {
                 for (int i = 0; i < objResponse.getData().getData().size(); i++) {
-                    if (!objResponse.getData().getData().get(i).getPaymentMethod().equalsIgnoreCase("bank") && !objResponse.getData().getData().get(i).getPaymentMethod().equalsIgnoreCase("signet")) {
+                    if (!objResponse.getData().getData().get(i).getPaymentMethod().equalsIgnoreCase("bank") && !objResponse.getData().getData().get(i).getPaymentMethod().equalsIgnoreCase("Cogent")) {
                         listData.add(objResponse.getData().getData().get(i));
                     }
                 }
@@ -990,6 +998,25 @@ public class MyApplication extends Application {
 
     public void setWebSocketUrlResponse(WebSocketUrlResponseData webSocketUrlResponse) {
         mCurrentUserData.setWebSocketUrlResponse(webSocketUrlResponse);
+
+        //Save isCogentEnabled and isSignetEnabled keys
+        if (webSocketUrlResponse.getIsCogentEnabled().equalsIgnoreCase("true"))
+            mCurrentUserData.setCogentEnabled(true);
+        else if (webSocketUrlResponse.getIsCogentEnabled().equalsIgnoreCase("false"))
+            mCurrentUserData.setCogentEnabled(false);
+
+        if (webSocketUrlResponse.getIsSignetEnabled().equalsIgnoreCase("true"))
+            mCurrentUserData.setSignetEnabled(true);
+        else if (webSocketUrlResponse.getIsSignetEnabled().equalsIgnoreCase("false"))
+            mCurrentUserData.setSignetEnabled(false);
+    }
+
+    public boolean isCogentEnabled() {
+        return mCurrentUserData.isCogentEnabled();
+    }
+
+    public boolean isSignetEnabled() {
+        return mCurrentUserData.isSignetEnabled();
     }
 
     public String getCompanyName() {
@@ -1021,6 +1048,12 @@ public class MyApplication extends Application {
                 case "signet":
                     if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getBuySignet() != null && getFeatureControlByUser() != null
                             && (getFeatureControlGlobal().getBuySignet() && getFeatureControlByUser().getBuySignet())) {
+                        isValue = true;
+                    }
+                    break;
+                case "cogent":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getBuyCogent() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getBuyCogent() && getFeatureControlByUser().getBuyCredit())) {
                         isValue = true;
                     }
                     break;
@@ -1059,6 +1092,12 @@ public class MyApplication extends Application {
                         isValue = true;
                     }
                     break;
+                case "cogent":
+                    if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getWithCogent() != null && getFeatureControlByUser() != null
+                            && (getFeatureControlGlobal().getWithCogent() && getFeatureControlByUser().getWithCogent())) {
+                        isValue = true;
+                    }
+                    break;
                 case "debit":
                     if (getFeatureControlGlobal() != null && getFeatureControlGlobal().getWithInstant() != null && getFeatureControlByUser() != null
                             && (getFeatureControlGlobal().getWithInstant() && getFeatureControlByUser().getWithInstant())) {
@@ -1070,6 +1109,30 @@ public class MyApplication extends Application {
             ex.printStackTrace();
         }
         return isValue;
+    }
+
+    public InitializeResponse getInitializeResponse() {
+        return mCurrentUserData.getInitializeResponse();
+    }
+
+    public void setInitializeResponse(InitializeResponse initializeResponse) {
+        mCurrentUserData.setInitializeResponse(initializeResponse);
+    }
+
+    public boolean isAgreementSigned() {
+        return mCurrentUserData.isAgreementSigned();
+    }
+
+    public void setAgreementSigned(boolean value) {
+        mCurrentUserData.setAgreementSigned(value);
+    }
+
+    public String getStrDBAName() {
+        return mCurrentUserData.getStrDBAName();
+    }
+
+    public void setStrDBAName(String value) {
+        mCurrentUserData.setStrDBAName(value);
     }
 
 }

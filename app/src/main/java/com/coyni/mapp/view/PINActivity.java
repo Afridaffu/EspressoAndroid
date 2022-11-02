@@ -27,7 +27,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.model.States;
 import com.coyni.mapp.model.signin.InitializeResponse;
+import com.coyni.mapp.view.business.BusinessCreateAccountsActivity;
 import com.coyni.mapp.view.business.BusinessProfileActivity;
+import com.coyni.mapp.view.business.SignAgreementsActivity;
 import com.coyni.mapp.viewmodel.CustomerProfileViewModel;
 import com.google.gson.Gson;
 import com.coyni.mapp.R;
@@ -605,6 +607,15 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     if (stepUpResponse != null) {
                         if (!stepUpResponse.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(stepUpResponse.getData().getJwtToken());
+//                            if (initializeResponse.getData().getAccountType() == Utils.BUSINESS_ACCOUNT) {
+//                                if (!initializeResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                    loginViewModel.hasToSignAgreements();
+//                                }
+//                            } else if (initializeResponse.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                                if (!initializeResponse.getData().getTracker().isIsAgreementSigned()) {
+//                                    loginViewModel.hasToSignAgreements();
+//                                }
+//                            }
                             shakeAnimateUpDown();//new
                             new Handler().postDelayed(new Runnable() {
                                 @Override
@@ -622,6 +633,10 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 finish();
                                                 break;
                                             case "login":
+//                                                if (!objMyApplication.isAgreementSigned()) {
+//                                                    startActivity(new Intent(PINActivity.this, SignAgreementsActivity.class));
+//                                                    finish();
+//                                                } else {
                                                 if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
                                                     launchDashboard();
                                                 } else {
@@ -653,6 +668,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                         launchDashboard();
                                                     }
                                                 }
+//                                                }
                                                 break;
                                         }
                                     } catch (Exception ex) {
@@ -732,8 +748,21 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     if (initializeResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         if (initializeResponse.getData() != null) {
 
+                            objMyApplication.setInitializeResponse(initializeResponse);
+
                             if (initializeResponse.getData().getStateList() != null && initializeResponse.getData().getStateList().getUS() != null) {
                                 getStatesUrl(initializeResponse.getData().getStateList().getUS());
+                            }
+
+                            try {
+                                if (initializeResponse.getData().getDbaName() != null && !initializeResponse.getData().getDbaName().equals(""))
+                                    objMyApplication.setStrDBAName(initializeResponse.getData().getDbaName());
+
+                                if (initializeResponse.getData().getFirstName() != null && !initializeResponse.getData().getFirstName().equals("") &&
+                                        initializeResponse.getData().getLastName() != null && !initializeResponse.getData().getLastName().equals(""))
+                                    objMyApplication.setStrUserName(Utils.capitalize(initializeResponse.getData().getFirstName() + " " + initializeResponse.getData().getLastName()));
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
 
                             objMyApplication.setDbaOwnerId(initializeResponse.getData().getDbaOwnerId());
@@ -754,6 +783,12 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 
                             objMyApplication.setAccountType(initializeResponse.getData().getAccountType());
 
+//                            if (objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.BUSINESS_ACCOUNT ||
+//                                    objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.SHARED_ACCOUNT) {
+//                                objMyApplication.setAgreementSigned(objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned());
+//                            } else if (objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            objMyApplication.setAgreementSigned(objMyApplication.getInitializeResponse().getData().getTracker().isIsAgreementSigned());
+//                            }
                         }
 
                     }
@@ -1206,12 +1241,17 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void launchDashboard() {
-        if (objMyApplication.checkForDeclinedStatus()) {
-            objMyApplication.setIsLoggedIn(true);
-            objMyApplication.launchDeclinedActivity(this);
+        if (objMyApplication.isAgreementSigned()) {
+            if (objMyApplication.checkForDeclinedStatus()) {
+                objMyApplication.setIsLoggedIn(true);
+                objMyApplication.launchDeclinedActivity(this);
+            } else {
+                objMyApplication.setIsLoggedIn(true);
+                objMyApplication.launchDashboard(this, strScreen);
+            }
         } else {
-            objMyApplication.setIsLoggedIn(true);
-            objMyApplication.launchDashboard(this, strScreen);
+            startActivity(new Intent(PINActivity.this, SignAgreementsActivity.class));
+            finish();
         }
     }
 

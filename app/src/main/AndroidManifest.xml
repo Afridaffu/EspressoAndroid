@@ -220,7 +220,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".view.business.AddPaymentSignetActivity"
+            android:name=".view.business.AddPaymentCogentActivity"
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -800,6 +800,12 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.AcceptAgreementsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
+        <activity
+            android:name=".view.business.SignAgreementsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />

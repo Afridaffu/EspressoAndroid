@@ -37,8 +37,8 @@
         android:visibility="gone" />
 
     <include
-        android:id="@+id/buyTokenSignet"
-        layout="@layout/buy_token_signet_tdetails"
+        android:id="@+id/buyTokenCogent"
+        layout="@layout/buy_token_cogent_tdetails"
         android:visibility="gone" />
 
     <include

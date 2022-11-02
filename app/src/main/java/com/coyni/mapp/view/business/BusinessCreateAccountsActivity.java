@@ -41,6 +41,7 @@ import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.DashboardActivity;
+import com.coyni.mapp.view.PINActivity;
 import com.coyni.mapp.viewmodel.BusinessIdentityVerificationViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.IdentityVerificationViewModel;
@@ -385,6 +386,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         if (btResp.getData() != null)
                             myApplication.setCompanyName(btResp.getData().getCompanyName());
 
+                        myApplication.setAgreementSigned(btResp.getData().isAgreementSigned());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountType());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getDbaOwnerId());
@@ -401,14 +403,18 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         myApplication.setIsReserveEnabled(btResp.getData().isReserveEnabled());
                         myApplication.setIsLoggedIn(true);
 
-                        if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
-                            Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                        if (!btResp.getData().getAgreementsSigned()) {
+                            startActivity(new Intent(BusinessCreateAccountsActivity.this, SignAgreementsActivity.class));
                         } else {
-                            Intent intent = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
+                                Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
                         }
 
                     } else {

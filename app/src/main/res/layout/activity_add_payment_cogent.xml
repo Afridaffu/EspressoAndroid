@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
-    tools:context=".view.business.AddPaymentSignetActivity">
+    tools:context=".view.business.AddPaymentCogentActivity">
 
     <LinearLayout
         android:id="@+id/layoutDetails"
@@ -45,7 +45,7 @@
                 android:layout_marginTop="@dimen/_13sdp"
                 android:layout_marginEnd="@dimen/_21sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:text="@string/add_a_signet_account"
+                android:text="@string/add_a_Cogent_account"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16ssp" />
 
@@ -57,7 +57,7 @@
                 android:layout_marginTop="@dimen/_14sdp"
                 android:layout_marginEnd="@dimen/_21sdp"
                 android:fontFamily="@font/opensans_regular"
-                android:text="@string/please_enter_card_details"
+                android:text="@string/please_enter_account_details"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
         </LinearLayout>
@@ -81,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_21sdp"
-                    android:hint="@string/name_on_signet_account"
+                    android:hint="@string/name_on_Cogent_account"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
                     app:boxStrokeColor="@color/primary_green"
@@ -142,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_21sdp"
                     android:layout_marginTop="@dimen/_14sdp"
-                    android:hint="@string/signet_wallet_id"
+                    android:hint="@string/Cogent_wallet_id"
                     android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:hintTextColor="@color/primary_green">
