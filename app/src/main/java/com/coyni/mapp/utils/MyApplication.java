@@ -382,13 +382,6 @@ public class MyApplication extends Application {
         mCurrentUserData.setLoginResponse(loginResponse);
     }
 
-    public InitializeResponse getInitialResponse() {
-        return mCurrentUserData.getInitailResponse();
-    }
-
-    public void setInitialResponse(InitializeResponse initialResponse) {
-        mCurrentUserData.setInitialResponse(initialResponse);
-    }
     public TrackerResponse getTrackerResponse() {
         return mCurrentUserData.getTrackerResponse();
     }

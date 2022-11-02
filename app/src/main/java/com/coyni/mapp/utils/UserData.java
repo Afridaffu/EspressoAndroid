@@ -70,7 +70,6 @@ public class UserData {
     private String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
     private int timezoneID = 0, tempTimezoneID = 0, loginUserId, oldLoginUserID, accountType, dbaOwnerId = 0;
     private BiometricSignIn loginResponse;
-    private InitializeResponse initialResponse;
     private TransactionList transactionList;
     private PaymentsList selectedCard, prevSelectedCard;
     private TransferFeeResponse transferFeeResponse;
@@ -409,15 +408,6 @@ public class UserData {
     public void setLoginResponse(BiometricSignIn response) {
         this.loginResponse = response;
     }
-
-    public InitializeResponse getInitailResponse() {
-        return initialResponse;
-    }
-
-    public void setInitialResponse(InitializeResponse resp) {
-        this.initialResponse = resp;
-    }
-
 
     public int getAccountType() {
         return accountType;

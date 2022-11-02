@@ -525,7 +525,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             tvCompany.setText(profiles.getCompanyName());
             AccountsData accountsData = new AccountsData(profilesList);
             ArrayList<ProfilesResponse.Profiles> dBAList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(profiles.getId());
-            tvDBACount.setText("Total DBAs : " + dBAList.size());
+            if(dBAList != null) {
+                tvDBACount.setText("Total DBAs : " + dBAList.size());
+            }
 
             addDBACardView.setOnClickListener(new View.OnClickListener() {
                 @Override

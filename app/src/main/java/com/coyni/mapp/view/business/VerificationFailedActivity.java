@@ -30,7 +30,6 @@ public class VerificationFailedActivity extends AppCompatActivity {
     private CardView mCvDone;
     private ImageView mIvClose;
     private BiometricSignIn loginResponse;
-    private InitializeResponse initializeResponse;
     MyApplication myApplication;
 
     @Override
@@ -41,11 +40,11 @@ public class VerificationFailedActivity extends AppCompatActivity {
         initFields();
 
         MyApplication objMyApplication = (MyApplication) getApplicationContext();
-        initializeResponse = objMyApplication.getInitialResponse();
+        loginResponse = objMyApplication.getLoginResponse();
         Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
-        if (initializeResponse != null && initializeResponse.getStatus() != null
-                && initializeResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-            InitializeResponseData data = initializeResponse.getData();
+        if (loginResponse != null && loginResponse.getStatus() != null
+                && loginResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+            BiometricSignInData data = loginResponse.getData();
             if (data != null) {
                 if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                     if (data.getFirstName() != null && data.getLastName() != null) {
