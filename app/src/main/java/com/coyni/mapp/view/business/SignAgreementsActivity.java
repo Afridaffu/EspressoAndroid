@@ -95,7 +95,7 @@ public class SignAgreementsActivity extends BaseActivity {
     private String myUrl = "", MATERIAL = "M", NON_MATERIAL = "N";
     private boolean isActionEnabled = false;
     private MyApplication objMyApplication;
-    private int AGREE_TYPE, iterationCount = -1, currentIteration = 0;
+    private int AGREE_TYPE, iterationCount = 0, currentIteration = 0;
     private Long mLastClickTime = 0L;
     private DownloadManager manager;
     private Dialog downloadDialog;
@@ -430,7 +430,7 @@ public class SignAgreementsActivity extends BaseActivity {
 //                        //block section
 
 
-                        iterationCount = signAgreementsResp.getData().size() - 1;
+                        iterationCount = signAgreementsResp.getData().size();
                         if (iterationCount > 0) {
                             iterationCount--;
                             AGREE_TYPE = signAgreementsResp.getData().get(0).getAgreementType();
@@ -667,7 +667,7 @@ public class SignAgreementsActivity extends BaseActivity {
                             public void run() {
                                 try {
                                     dialog.dismiss();
-                                    if (iterationCount > -1) {
+                                    if (iterationCount > 0) {
                                         binding.webView.setVisibility(View.INVISIBLE);
                                         binding.webView.addJavascriptInterface(jsInterface, "JSInterface");
                                         binding.webView.loadUrl("file:///android_asset/pdfViewerScript.html");

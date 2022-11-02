@@ -403,7 +403,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         myApplication.setIsReserveEnabled(btResp.getData().isReserveEnabled());
                         myApplication.setIsLoggedIn(true);
 
-                        if (!btResp.getData().isAgreementSigned()) {
+                        if (!btResp.getData().getAgreementsSigned()) {
                             startActivity(new Intent(BusinessCreateAccountsActivity.this, SignAgreementsActivity.class));
                         } else {
                             if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {

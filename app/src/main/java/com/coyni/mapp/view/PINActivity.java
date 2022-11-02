@@ -637,37 +637,37 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 //                                                    startActivity(new Intent(PINActivity.this, SignAgreementsActivity.class));
 //                                                    finish();
 //                                                } else {
-                                                    if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
-                                                        launchDashboard();
-                                                    } else {
-                                                        if (!isDontRemind) {
-                                                            if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
-                                                                launchDashboard();
-                                                            } else if (Utils.checkBiometric(PINActivity.this)) {
-                                                                if (Utils.checkAuthentication(PINActivity.this)) {
-                                                                    if (Utils.isFingerPrint(PINActivity.this)) {
-                                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                                .putExtra("ENABLE_TYPE", "TOUCH")
-                                                                                .putExtra("screen", strScreen));
-                                                                    } else {
-                                                                        startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                                .putExtra("ENABLE_TYPE", "FACE")
-                                                                                .putExtra("screen", strScreen));
-                                                                    }
+                                                if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
+                                                    launchDashboard();
+                                                } else {
+                                                    if (!isDontRemind) {
+                                                        if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
+                                                            launchDashboard();
+                                                        } else if (Utils.checkBiometric(PINActivity.this)) {
+                                                            if (Utils.checkAuthentication(PINActivity.this)) {
+                                                                if (Utils.isFingerPrint(PINActivity.this)) {
+                                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                            .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                            .putExtra("screen", strScreen));
                                                                 } else {
                                                                     startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                            .putExtra("ENABLE_TYPE", "SUCCESS")
+                                                                            .putExtra("ENABLE_TYPE", "FACE")
                                                                             .putExtra("screen", strScreen));
                                                                 }
                                                             } else {
                                                                 startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                        .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                        .putExtra("ENABLE_TYPE", "SUCCESS")
                                                                         .putExtra("screen", strScreen));
                                                             }
                                                         } else {
-                                                            launchDashboard();
+                                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                    .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                    .putExtra("screen", strScreen));
                                                         }
+                                                    } else {
+                                                        launchDashboard();
                                                     }
+                                                }
 //                                                }
                                                 break;
                                         }
@@ -754,6 +754,17 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 getStatesUrl(initializeResponse.getData().getStateList().getUS());
                             }
 
+                            try {
+                                if (initializeResponse.getData().getDbaName() != null && !initializeResponse.getData().getDbaName().equals(""))
+                                    objMyApplication.setStrDBAName(initializeResponse.getData().getDbaName());
+
+                                if (initializeResponse.getData().getFirstName() != null && !initializeResponse.getData().getFirstName().equals("") &&
+                                        initializeResponse.getData().getLastName() != null && !initializeResponse.getData().getLastName().equals(""))
+                                    objMyApplication.setStrUserName(Utils.capitalize(initializeResponse.getData().getFirstName() + " " + initializeResponse.getData().getLastName()));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                             objMyApplication.setDbaOwnerId(initializeResponse.getData().getDbaOwnerId());
 
                             objMyApplication.setIsReserveEnabled(initializeResponse.getData().isReserveEnabled());
@@ -776,7 +787,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 //                                    objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.SHARED_ACCOUNT) {
 //                                objMyApplication.setAgreementSigned(objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned());
 //                            } else if (objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                                objMyApplication.setAgreementSigned(objMyApplication.getInitializeResponse().getData().getTracker().isIsAgreementSigned());
+                            objMyApplication.setAgreementSigned(objMyApplication.getInitializeResponse().getData().getTracker().isIsAgreementSigned());
 //                            }
                         }
 
