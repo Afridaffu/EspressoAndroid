@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -27,8 +28,9 @@ import com.coyni.mapp.utils.CustomTypefaceSpan;
 import com.coyni.mapp.utils.LogUtils;
 
 public class GetHelpActivity extends BaseActivity {
-    private TextView supportTv,supportDescClick;
+    private TextView supportTv, supportDescClick;
     private ImageView ivBackButton;
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class GetHelpActivity extends BaseActivity {
     }
 
     private void spannableText() {
-        final int startValue = 41,endValue = 71;
+        final int startValue = 41, endValue = 71;
         SpannableString spannableString = new SpannableString(getString(R.string.support_text));
         Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_regular.ttf");
 //        spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.balance)), startValue, endValue, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
@@ -65,21 +67,22 @@ public class GetHelpActivity extends BaseActivity {
         }, startValue, endValue, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         supportTv.setText(spannableString);
 
-        final int start =37,end=55;
+        final int start = 37, end = 55;
         Typeface font1 = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
         SpannableString spannableString1 = new SpannableString(getString(R.string.get_help_description));
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(@NonNull View view) {
                 try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     Intent intent = new Intent(Intent.ACTION_SENDTO);
                     intent.setData(Uri.parse("mailto:")); // only email apps should handle this
                     //intent.putExtra(Intent.EXTRA_EMAIL, "shivas@ideyalabs.com");
                     intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"support@coyni.com"});
-//                    intent.putExtra(Intent.EXTRA_SUBJECT, "Test Subject");
-//                    if (intent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(intent);
-//                    }
+                    startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
