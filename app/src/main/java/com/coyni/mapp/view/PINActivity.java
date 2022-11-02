@@ -731,6 +731,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 if (initializeResponse != null) {
                     if (initializeResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         if (initializeResponse.getData() != null) {
+                            objMyApplication.setInitialResponse(initializeResponse);
 
                             if (initializeResponse.getData().getStateList() != null && initializeResponse.getData().getStateList().getUS() != null) {
                                 getStatesUrl(initializeResponse.getData().getStateList().getUS());

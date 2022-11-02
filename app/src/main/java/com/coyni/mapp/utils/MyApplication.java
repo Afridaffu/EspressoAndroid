@@ -11,6 +11,8 @@ import android.util.Log;
 import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.fee.Fees;
 import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.model.signin.InitializeResponse;
+import com.coyni.mapp.model.signin.InitializeResponseData;
 import com.coyni.mapp.model.summary.BankAccount;
 import com.coyni.mapp.model.websocket.WebSocketUrlResponseData;
 import com.google.gson.Gson;
@@ -380,6 +382,13 @@ public class MyApplication extends Application {
         mCurrentUserData.setLoginResponse(loginResponse);
     }
 
+    public InitializeResponse getInitialResponse() {
+        return mCurrentUserData.getInitailResponse();
+    }
+
+    public void setInitialResponse(InitializeResponse initialResponse) {
+        mCurrentUserData.setInitialResponse(initialResponse);
+    }
     public TrackerResponse getTrackerResponse() {
         return mCurrentUserData.getTrackerResponse();
     }
