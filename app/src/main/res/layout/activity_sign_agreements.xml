@@ -69,7 +69,25 @@
                 android:background="@color/white"
                 android:backgroundTint="@color/white"
                 android:nestedScrollingEnabled="true"
-                android:visibility="visible" />
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/corner_bg_lt1"
+                android:layout_marginHorizontal="@dimen/_21sdp">
+
+                <TextView
+                    android:id="@+id/changeSummaryTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_14ssp"
+                    android:layout_margin="@dimen/_21sdp"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/bottomLL"
