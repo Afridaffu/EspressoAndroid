@@ -37,7 +37,12 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.dialogs.OnAgreementsAPIListener;
+import com.coyni.mapp.model.FilteredAgreements;
+import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.view.business.BusinessCreateAccountsActivity;
+import com.coyni.mapp.view.business.BusinessDashboardActivity;
 import com.coyni.mapp.view.business.SignAgreementsActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -105,6 +110,19 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             }
             initialization();
             initObserver();
+            setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
+                @Override
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                    dismissDialog();
+                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                    if (filteredAgreements.getAgreements().size() > 0) {
+                        Utils.launchAgreements(LoginActivity.this, filteredAgreements.isMerchantAgreement());
+                    } else {
+                        launchDasboardFromBase();
+                    }
+
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -869,9 +887,14 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                     objMyApplication.setIsLoggedIn(true);
-                                    if (!loginResponse.getData().isAgreementsSigned())
-                                        startActivity(new Intent(LoginActivity.this, SignAgreementsActivity.class));
-                                    else
+                                    if (!loginResponse.getData().getTracker().isIsAgreementSigned()) {
+                                        if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
+                                            Utils.launchAgreements(LoginActivity.this, false);
+                                        else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+                                            showProgressDialog();
+                                            callHasToSignAPI();
+                                        }
+                                    } else
                                         launchDashboard();
                                 }
                             } else {

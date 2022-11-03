@@ -19,7 +19,13 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.dialogs.OnAgreementsAPIListener;
+import com.coyni.mapp.dialogs.OnDialogClickListener;
+import com.coyni.mapp.model.FilteredAgreements;
+import com.coyni.mapp.model.RangeDates;
+import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.view.business.BusinessCreateAccountsActivity;
 import com.coyni.mapp.view.business.SignAgreementsActivity;
 import com.coyni.mapp.view.business.VerificationFailedActivity;
 import com.google.android.material.tabs.TabLayout;
@@ -64,7 +70,7 @@ public class OnboardActivity extends BaseActivity {
     private Boolean isBiometric = false;
     private RelativeLayout layoutOnBoarding, layoutAuth;
     private MyApplication objMyApplication;
-    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+//    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -136,7 +142,7 @@ public class OnboardActivity extends BaseActivity {
             }
 
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+//            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 
             AutoScrollPagerAdapter autoScrollPagerAdapter =
                     new AutoScrollPagerAdapter(getSupportFragmentManager());
@@ -191,6 +197,22 @@ public class OnboardActivity extends BaseActivity {
             });
 
             initObserver();
+
+            setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
+                @Override
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                    dismissDialog();
+                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                    if (filteredAgreements.getAgreements().size() > 0) {
+                        Utils.launchAgreements(OnboardActivity.this, filteredAgreements.isMerchantAgreement());
+                    } else {
+                        launchDasboardFromBase();
+                    }
+
+                }
+            });
+
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -290,7 +312,7 @@ public class OnboardActivity extends BaseActivity {
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
                                 objMyApplication.setDbaOwnerId(Integer.parseInt(String.valueOf(loginResponse.getData().getDbaOwnerId())));
-                                objMyApplication.setAgreementSigned(loginResponse.getData().isAgreementsSigned());
+                                objMyApplication.setAgreementSigned(loginResponse.getData().getTracker().isIsAgreementSigned());
                                 if (loginResponse.getData().isPasswordExpired()) {
 
                                     Intent i = new Intent(OnboardActivity.this, CreatePasswordActivity.class);
@@ -300,9 +322,14 @@ public class OnboardActivity extends BaseActivity {
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                     objMyApplication.setIsLoggedIn(true);
-                                    if (!loginResponse.getData().isAgreementsSigned())
-                                        startActivity(new Intent(OnboardActivity.this, SignAgreementsActivity.class));
-                                    else
+                                    if (!loginResponse.getData().getTracker().isIsAgreementSigned()) {
+                                        if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
+                                            Utils.launchAgreements(OnboardActivity.this, false);
+                                        else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+                                            showProgressDialog();
+                                            callHasToSignAPI();
+                                        }
+                                    } else
                                         launchDashboard();
                                 }
                             } else {
@@ -332,22 +359,22 @@ public class OnboardActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        try {
-            businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
-                @Override
-                public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
-
-                    if (businessTrackerResponse != null) {
-                        if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
-                            objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
-                            launchDashboard();
-                        }
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
+//                @Override
+//                public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
+//
+//                    if (businessTrackerResponse != null) {
+//                        if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
+//                            objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
+//                            launchDashboard();
+//                        }
+//                    }
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 

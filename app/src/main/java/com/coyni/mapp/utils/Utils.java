@@ -67,6 +67,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.coyni.mapp.model.FilteredAgreements;
+import com.coyni.mapp.model.SignAgreementData;
+import com.coyni.mapp.model.SignAgreementsResp;
+import com.coyni.mapp.view.business.BusinessCreateAccountsActivity;
+import com.coyni.mapp.view.business.SignAgreementsActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -2958,5 +2963,27 @@ public class Utils {
             return false;
         else
             return true;
+    }
+
+    public static FilteredAgreements getFilteredAgreements(List<SignAgreementData> agreementData) {
+        boolean isMerchantAgreement = false;
+        List<SignAgreementData> agreements = new ArrayList<>();
+        for (int i = 0; i < agreementData.size(); i++) {
+            if (agreementData.get(i).getAgreementType() != Utils.mAgmt)
+                agreements.add(agreementData.get(i));
+            else if (agreementData.get(i).getAgreementType() == Utils.mAgmt) {
+                isMerchantAgreement = true;
+            }
+        }
+        FilteredAgreements mFilteredAgreements = new FilteredAgreements();
+        mFilteredAgreements.setAgreements(agreements);
+        mFilteredAgreements.setMerchantAgreement(isMerchantAgreement);
+
+        return mFilteredAgreements;
+    }
+
+    public static void launchAgreements(Activity activity, boolean isMerchantRemove) {
+        activity.startActivity(new Intent(activity, SignAgreementsActivity.class)
+                .putExtra("REMOVE_MERCHANT", isMerchantRemove));
     }
 }
