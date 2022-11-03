@@ -18,7 +18,13 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
@@ -67,6 +73,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.coyni.mapp.R;
 import com.coyni.mapp.model.FilteredAgreements;
 import com.coyni.mapp.model.SignAgreementData;
 import com.coyni.mapp.model.SignAgreementsResp;
@@ -77,7 +84,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.BusinessTypeListAdapter;
 import com.coyni.mapp.adapters.CustomerTimeZonesAdapter;
 import com.coyni.mapp.adapters.StatesListAdapter;
@@ -1746,14 +1752,14 @@ public class Utils {
         try {
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("MMMM dd, yyyy");
+//            spf = new SimpleDateFormat("MMMM dd, yyyy");
+            spf = new SimpleDateFormat("MM/dd/yyyy");
             strDate = spf.format(newDate);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return strDate;
     }
-
 
     public static String convertTwoDecimalPoints(Double value) {
         return df.format(value);
@@ -2965,7 +2971,32 @@ public class Utils {
             return true;
     }
 
-    public static FilteredAgreements getFilteredAgreements(List<SignAgreementData> agreementData) {
+    public static Bitmap getRoundedCroppedBitmap(Bitmap bitmap) {
+
+        int widthLight = bitmap.getWidth();
+        int heightLight = bitmap.getHeight();
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+        Paint paintColor = new Paint();
+//        canvas.drawColor(Color.WHITE);
+        paintColor.setFlags(Paint.ANTI_ALIAS_FLAG);
+
+        RectF rectF = new RectF(new Rect(0, 0, widthLight, heightLight));
+
+        canvas.drawRoundRect(rectF, widthLight / 2, heightLight / 2, paintColor);
+
+        Paint paintImage = new Paint();
+        paintImage.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, 0, 0, paintImage);
+
+        return output;
+    }
+
+    public static FilteredAgreements getFilteredAgreements
+            (List<SignAgreementData> agreementData) {
         boolean isMerchantAgreement = false;
         List<SignAgreementData> agreements = new ArrayList<>();
         for (int i = 0; i < agreementData.size(); i++) {

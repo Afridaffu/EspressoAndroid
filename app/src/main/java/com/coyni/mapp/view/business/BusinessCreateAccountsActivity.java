@@ -184,9 +184,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             userNameTV.setText(getResources().getString(R.string.dba_name, userName));
 
             if (userName != null && userName.length() > 20) {
-                userNameTV.setText(Utils.capitalize(userName).substring(0, 20) + " ");
+                userNameTV.setText((userName).substring(0, 20) + " ");
             } else {
-                userNameTV.setText(Utils.capitalize(userName));
+                userNameTV.setText((userName));
             }
             if (firstName != null && !firstName.equals("") && lastName != null && !lastName.equals("")) {
                 char first = firstName.charAt(0);
@@ -199,9 +199,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
             userName = myApplication.getMyProfile().getData().getDbaName();
             if (userName != null && userName.length() > 20) {
-                userNameTV.setText(Utils.capitalize(userName).substring(0, 20) + " ");
+                userNameTV.setText((userName).substring(0, 20) + " ");
             } else if (userName != null) {
-                userNameTV.setText(Utils.capitalize(userName));
+                userNameTV.setText((userName));
             }
             imgProfile.setVisibility(View.VISIBLE);
             if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
@@ -226,9 +226,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                     userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
                 }
                 if (userName != null && userName.length() > 20) {
-                    userNameTV.setText(Utils.capitalize(userName).substring(0, 20) + " ");
+                    userNameTV.setText((userName).substring(0, 20) + " ");
                 } else {
-                    userNameTV.setText(Utils.capitalize(userName));
+                    userNameTV.setText(userName);
                 }
                 imgProfile.setVisibility(View.VISIBLE);
                 if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
@@ -252,17 +252,17 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             public void onClick(View view) {
                 if (userNameTV.getText().toString().contains("...")) {
                     if (userName.length() == 21 || userName.length() > 21) {
-                        userNameTV.setText(Utils.capitalize(userName).substring(0, 20));
+                        userNameTV.setText((userName).substring(0, 20));
                     } else {
-                        userNameTV.setText(Utils.capitalize(userName));
+                        userNameTV.setText(userName);
                     }
                 } else {
                     if (userName.length() == 21) {
-                        userNameTV.setText(Utils.capitalize(userName).substring(0, 20) + "...");
+                        userNameTV.setText((userName).substring(0, 20) + "...");
                     } else if (userName.length() > 21) {
-                        userNameTV.setText(Utils.capitalize(userName).substring(0, 21) + "...");
+                        userNameTV.setText((userName).substring(0, 21) + "...");
                     } else {
-                        userNameTV.setText(Utils.capitalize(userName));
+                        userNameTV.setText(userName);
                     }
                 }
             }
@@ -421,7 +421,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         myApplication.setIsReserveEnabled(btResp.getData().isReserveEnabled());
                         myApplication.setIsLoggedIn(true);
 
-                        if (!btResp.getData().getTracker().isIsAgreementSigned()) {
+//                        if (!btResp.getData().getTracker().isIsAgreementSigned()) {
+                        if (!btResp.getData().getTracker().isIsAgreementSigned() && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                                && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
                             if (btResp.getData().getBusinessTracker() == null || btResp.getData().getBusinessTracker().isIsAgreementSigned())
                                 Utils.launchAgreements(BusinessCreateAccountsActivity.this, false);
                             else if (!btResp.getData().getBusinessTracker().isIsAgreementSigned()) {
@@ -439,7 +441,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                                 startActivity(intent);
                             }
                         }
-
                     } else {
                         Utils.displayAlert(btResp.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", "");
                     }

@@ -1,6 +1,5 @@
 package com.coyni.mapp.view;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,7 +8,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
@@ -17,7 +15,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -28,17 +25,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.R;
 import com.coyni.mapp.dialogs.OnAgreementsAPIListener;
-import com.coyni.mapp.dialogs.OnDialogClickListener;
 import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.appupdate.AppUpdateResp;
-import com.coyni.mapp.model.bank.ManualBankResponse;
 import com.coyni.mapp.model.check_out_transactions.CheckOutModel;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
-import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.coyni.mapp.view.business.BusinessDashboardActivity;
-import com.coyni.mapp.view.business.SignAgreementsActivity;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.LoginViewModel;
 
