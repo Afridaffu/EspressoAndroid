@@ -72,6 +72,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.coyni.mapp.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -95,7 +97,6 @@ import com.coyni.mapp.view.PreferencesActivity;
 import com.coyni.mapp.view.WebViewActivity;
 import com.coyni.mapp.view.business.CompanyInformationActivity;
 import com.coyni.mapp.view.business.DBAInfoAcivity;
-import com.greenbox.coyni.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

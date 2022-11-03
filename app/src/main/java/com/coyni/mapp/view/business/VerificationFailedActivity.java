@@ -29,7 +29,7 @@ public class VerificationFailedActivity extends AppCompatActivity {
     private TextView mTvName, mTvDbaName, mTvLegalName, descTV;
     private CardView mCvDone;
     private ImageView mIvClose;
-    private BiometricSignIn loginResponse;
+    private InitializeResponse initializeResponse;
     MyApplication myApplication;
 
     @Override
@@ -40,11 +40,11 @@ public class VerificationFailedActivity extends AppCompatActivity {
         initFields();
 
         MyApplication objMyApplication = (MyApplication) getApplicationContext();
-        loginResponse = objMyApplication.getLoginResponse();
+        initializeResponse = objMyApplication.getInitializeResponse();
         Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
-        if (loginResponse != null && loginResponse.getStatus() != null
-                && loginResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-            BiometricSignInData data = loginResponse.getData();
+        if (initializeResponse != null && initializeResponse.getStatus() != null
+                && initializeResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+            InitializeResponseData data = initializeResponse.getData();
             if (data != null) {
                 if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                     if (data.getFirstName() != null && data.getLastName() != null) {
@@ -78,11 +78,8 @@ public class VerificationFailedActivity extends AppCompatActivity {
                         spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                         mTvName.setText(spannableName);
                     }
-                    mTvLegalName.setText(" ");
-                    mTvDbaName.setText(" ");
-
-//                    mTvDbaName.setVisibility(View.GONE);
-//                    mTvLegalName.setVisibility(View.GONE);
+                    mTvDbaName.setVisibility(View.GONE);
+                    mTvLegalName.setVisibility(View.GONE);
                 }
             }
         }
