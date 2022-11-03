@@ -63,6 +63,7 @@ import com.coyni.mapp.model.profile.DownloadDocumentResponse;
 import com.coyni.mapp.model.profile.DownloadImageData;
 import com.coyni.mapp.model.profile.DownloadImageResponse;
 import com.coyni.mapp.model.profile.DownloadUrlRequest;
+import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.model.submit.ApplicationSubmitResponseModel;
 import com.coyni.mapp.model.summary.Agreements;
 import com.coyni.mapp.model.summary.ApplicationSummaryModelResponse;
@@ -840,9 +841,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             }
         });
 
-        loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+        loginViewModel.postChangeAccountResponse().observe(this, new Observer<BiometricSignIn>() {
             @Override
-            public void onChanged(AddBusinessUserResponse btResp) {
+            public void onChanged(BiometricSignIn btResp) {
                 try {
                     dismissDialog();
                     if (btResp != null) {

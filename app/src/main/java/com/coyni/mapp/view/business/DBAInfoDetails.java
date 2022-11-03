@@ -36,6 +36,7 @@ import com.coyni.mapp.model.DBAInfo.DBAInfoResp;
 import com.coyni.mapp.model.profile.AddBusinessUserResponse;
 import com.coyni.mapp.model.profile.ImageResponse;
 import com.coyni.mapp.model.profile.Profile;
+import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.utils.DisplayImageUtility;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
@@ -397,9 +398,9 @@ public class DBAInfoDetails extends BaseActivity {
                 }
             });
 
-            loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+            loginViewModel.postChangeAccountResponse().observe(this, new Observer<BiometricSignIn>() {
                 @Override
-                public void onChanged(AddBusinessUserResponse btResp) {
+                public void onChanged(BiometricSignIn btResp) {
                     try {
                         dismissDialog();
                         if (btResp != null) {

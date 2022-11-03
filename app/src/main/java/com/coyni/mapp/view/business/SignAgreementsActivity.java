@@ -104,6 +104,7 @@ public class SignAgreementsActivity extends BaseActivity {
     private SignAgreementsResp agrementsResponse;
     private boolean isSignatureCaptured = false;
     private String filePath = null;
+    private boolean removeMerchant = false;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -112,6 +113,8 @@ public class SignAgreementsActivity extends BaseActivity {
             super.onCreate(savedInstanceState);
             binding = ActivitySignAgreementsBinding.inflate(getLayoutInflater());
             setContentView(binding.getRoot());
+
+            removeMerchant = getIntent().getBooleanExtra("REMOVE_MERCHANT", false);
 
             jsInterface = new JavaScriptInterface(this);
             WebSettings webSettings = binding.webView.getSettings();
@@ -316,7 +319,6 @@ public class SignAgreementsActivity extends BaseActivity {
                     binding.accknowledgeTV.setText("I agree to the " + getString(R.string.gbx_merchant) + " changes that take effect on " + effectiveDate);
                 }
             } else {
-                binding.agreeCB.setVisibility(View.VISIBLE);
                 binding.signatureEditLL.setVisibility(View.GONE);
                 setSpannableText(effectiveDate);
                 binding.infoTV.setVisibility(View.VISIBLE);
@@ -404,6 +406,8 @@ public class SignAgreementsActivity extends BaseActivity {
                 if (signAgreementsResp != null) {
                     agrementsResponse = signAgreementsResp;
                     if (signAgreementsResp.getStatus().equalsIgnoreCase("success")) {
+                        if (removeMerchant)
+                            agrementsResponse.setData(Utils.getFilteredAgreements(signAgreementsResp.getData()).getAgreements());
 //                        //block section
 //                        String resp = "{\"status\":\"SUCCESS\",\"timestamp\":\"2022-10-26T06:19:40.161+00:00\",\"" +
 //                                "data\":[" +
@@ -430,16 +434,18 @@ public class SignAgreementsActivity extends BaseActivity {
 //                        //block section
 
 
-                        iterationCount = signAgreementsResp.getData().size();
+                        iterationCount = agrementsResponse.getData().size();
                         if (iterationCount > 0) {
                             iterationCount--;
-                            AGREE_TYPE = signAgreementsResp.getData().get(0).getAgreementType();
-                            setupLablesAndUI(signAgreementsResp.getData().get(0).getMaterialType(),
-                                    Utils.convertEffectiveDate(signAgreementsResp.getData().get(0).getEffectiveDate()));
+                            AGREE_TYPE = agrementsResponse.getData().get(0).getAgreementType();
+                            setupLablesAndUI(agrementsResponse.getData().get(0).getMaterialType(),
+                                    Utils.convertEffectiveDate(agrementsResponse.getData().get(0).getEffectiveDate()));
                             currentIteration = 0;
                             dashboardViewModel.getDocumentUrl(AGREE_TYPE);
                         }
 
+                    } else {
+                        Utils.displayAlert(signAgreementsResp.getError().getErrorDescription(), SignAgreementsActivity.this, "", "");
                     }
                 } else {
                     Utils.displayAlert(signAgreementsResp.getError().getErrorDescription(), SignAgreementsActivity.this, "", "");

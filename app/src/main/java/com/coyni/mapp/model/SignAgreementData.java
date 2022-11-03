@@ -70,6 +70,10 @@ public class SignAgreementData {
     @Expose
     private String agreementFileRefPath;
 
+    @SerializedName("changeSummary")
+    @Expose
+    private String changeSummary;
+
     public int getId() {
         return id;
     }
@@ -196,5 +200,13 @@ public class SignAgreementData {
 
     public void setAgreementFileRefPath(String agreementFileRefPath) {
         this.agreementFileRefPath = agreementFileRefPath;
+    }
+
+    public String getChangeSummary() {
+        return changeSummary;
+    }
+
+    public void setChangeSummary(String changeSummary) {
+        this.changeSummary = changeSummary;
     }
 }
