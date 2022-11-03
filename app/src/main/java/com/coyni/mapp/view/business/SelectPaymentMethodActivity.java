@@ -31,15 +31,12 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.coyni.mapp.view.BuyTokenPaymentMethodsActivity;
+import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
 import com.google.android.material.textfield.TextInputEditText;
 import com.coyni.mapp.R;
-import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
 import com.coyni.mapp.model.APIError;
 import com.coyni.mapp.model.bank.BankDeleteResponseData;
-import com.coyni.mapp.model.bank.SignOn;
 import com.coyni.mapp.model.bank.SignOnData;
-import com.coyni.mapp.model.bank.SyncAccount;
 import com.coyni.mapp.model.cards.CardDeleteResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentsList;
@@ -136,6 +133,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     ControlMethod("addpayment");
                 } else if (strScreen != null && !strScreen.equals("addpay")) {
                     if (!isPayments) {
+                        paymentMethods();
                         getPaymentMethods();
                     }
                 } else if (strScreen != null && strScreen.equals("addpay")) { //Added for Buy token navigation change while adding payment method

@@ -31,16 +31,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
+import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
 import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.google.android.material.textfield.TextInputEditText;
 import com.coyni.mapp.R;
-import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
 import com.coyni.mapp.model.APIError;
 import com.coyni.mapp.model.bank.BankDeleteResponseData;
-import com.coyni.mapp.model.bank.SignOn;
 import com.coyni.mapp.model.bank.SignOnData;
-import com.coyni.mapp.model.bank.SyncAccount;
 import com.coyni.mapp.model.cards.CardDeleteResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentsList;
@@ -168,9 +165,10 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 }
             } else if (requestCode == 3) {
                 if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
-                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
-                        onBackPressed();
-                    } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+//                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+//                        onBackPressed();
+//                    } else
+                    if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                         if (!objMyApplication.getCardSave()) {
                             isDeCredit = true;
                             ControlMethod("addpayment");
@@ -185,9 +183,10 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                     onBackPressed();
                 }
             } else if (requestCode == 4) {
-                if (strScreen.equals("withdraw") || strScreen.equals("buytoken") || strScreen.equals("payRequest")) {
-                    onBackPressed();
-                } else if (!objMyApplication.getBankSave()) {
+//                if (strScreen.equals("withdraw") || strScreen.equals("buytoken") || strScreen.equals("payRequest")) {
+//                    onBackPressed();
+//                } else
+                if (!objMyApplication.getBankSave()) {
                     isDeCredit = true;
                     ControlMethod("addpayment");
                 } else {

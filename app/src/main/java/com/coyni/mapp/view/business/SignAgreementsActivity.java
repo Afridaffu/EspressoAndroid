@@ -591,7 +591,7 @@ public class SignAgreementsActivity extends BaseActivity {
         else if (AGREE_TYPE == Utils.mAgmt)
             agreeName = getString(R.string.gbx_merchant);
 
-        String formString = date + ", we’re making some changes to our " + agreeName +
+        String formString = "On "+date + ", we’re making some changes to our " + agreeName +
                 " These changes won’t affect the way you use our services, but they’ll make it easier for you to understand what to expect — and what we expect from you — as you use our services. You can review the new terms here. At a glance, here’s what this update means for you:";
         SpannableString ss = new SpannableString(formString);
         ClickableSpan clickableSpan = new ClickableSpan() {

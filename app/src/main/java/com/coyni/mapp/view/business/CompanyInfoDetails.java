@@ -133,7 +133,7 @@ public class CompanyInfoDetails extends BaseActivity {
 //                                    if (str.length() > 20) {
 //                                        nameTX.setText(Utils.getCapsSentences(str).substring(0, 20) + "...");
 //                                    } else {
-                                        nameTX.setText(Utils.getCapsSentences(str));
+                                        nameTX.setText(str);
 //                                    }
                                 }
                                 if (cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")) {

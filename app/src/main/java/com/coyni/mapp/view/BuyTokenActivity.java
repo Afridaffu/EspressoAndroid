@@ -9,13 +9,10 @@ import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -36,7 +33,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.lifecycle.Observer;
@@ -45,16 +41,14 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
 import com.coyni.mapp.model.bank.BankDeleteResponseData;
 import com.coyni.mapp.model.cards.CardDeleteResponse;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.coyni.mapp.R;
-import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
 import com.coyni.mapp.model.APIError;
-import com.coyni.mapp.model.bank.SignOn;
 import com.coyni.mapp.model.bank.SignOnData;
-import com.coyni.mapp.model.bank.SyncAccount;
 import com.coyni.mapp.model.biometric.BiometricTokenRequest;
 import com.coyni.mapp.model.biometric.BiometricTokenResponse;
 import com.coyni.mapp.model.buytoken.BuyTokenRequest;
@@ -736,14 +730,14 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
 //                                objMyApplication.setSelectedCard(objData);
 //                                bindPayMethod(objData);
                                 bindPayMethod(previousSelectedCard(objData));
-                                if (isCvv) {
-                                    isCvv = false;
-                                    //displayCVV(objData);
-                                    if (objMyApplication.getStrCVV() != null && !objMyApplication.getStrCVV().equals("")) {
-                                        strCvv = objMyApplication.getStrCVV();
-                                        objMyApplication.setStrCVV("");
-                                    }
-                                }
+//                                if (isCvv) {
+//                                    isCvv = false;
+//                                    //displayCVV(objData);
+//                                    if (objMyApplication.getStrCVV() != null && !objMyApplication.getStrCVV().equals("")) {
+//                                        strCvv = objMyApplication.getStrCVV();
+//                                        objMyApplication.setStrCVV("");
+//                                    }
+//                                }
                             }
                         }
                     }
@@ -976,7 +970,8 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                         if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             Intent i = new Intent(BuyTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
                             i.putExtra("screen", "buytoken");
-                            startActivityForResult(i, 3);
+//                            startActivityForResult(i, 3);
+                            startActivity(i);
                         } else {
                             Intent i = new Intent(BuyTokenActivity.this, SelectPaymentMethodActivity.class);
                             i.putExtra("screen", "buytoken");

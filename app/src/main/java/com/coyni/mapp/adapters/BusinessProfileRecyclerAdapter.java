@@ -115,9 +115,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 ////            }
             if (detailInfo.getDbaName() != null) {
                 if (detailInfo.getDbaName().length() > 20) {
-                    childItem.setText(Utils.capitalize(detailInfo.getDbaName().substring(0, 20) + "..."));
+                    childItem.setText(detailInfo.getDbaName().substring(0, 20) + "...");
                 } else {
-                    childItem.setText(Utils.capitalize(detailInfo.getDbaName()));
+                    childItem.setText(detailInfo.getDbaName());
                 }
             } else {
                 childItem.setText("[Dba Name]");
@@ -138,9 +138,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         } else if (detailInfo.getAccountType().equals(Utils.BUSINESS)) {
             if (detailInfo.getDbaName() != null) {
                 if (detailInfo.getDbaName().length() > 20) {
-                    childItem.setText(Utils.capitalize(detailInfo.getDbaName().substring(0, 20) + "..."));
+                    childItem.setText(detailInfo.getDbaName().substring(0, 20) + "...");
                 } else {
-                    childItem.setText(Utils.capitalize(detailInfo.getDbaName()));
+                    childItem.setText(detailInfo.getDbaName());
                 }
             } else {
                 childItem.setText("[Dba Name]");
@@ -393,7 +393,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 //                if (headerInfo.getCompanyName().length() > 21) {
 //                    heading.setText(Utils.capitalize(headerInfo.getCompanyName().substring(0, 20)));
 //                } else {
-                heading.setText(Utils.capitalize(headerInfo.getCompanyName()));
+                heading.setText(headerInfo.getCompanyName());
 //                }
             } else {
                 heading.setText("[Company Name]");
