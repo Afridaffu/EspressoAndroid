@@ -101,7 +101,8 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<UpdatePhoneResponse> updatePhoneValidateResponse = new MutableLiveData<>();
     private MutableLiveData<ManagePasswordResponse> managePasswordResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailExistsResponse> emailExistsResponseMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<AddBusinessUserResponse> postChangeAccountResponse = new MutableLiveData<>();
+//    private MutableLiveData<AddBusinessUserResponse> postChangeAccountResponse = new MutableLiveData<>();
+    private MutableLiveData<BiometricSignIn> postChangeAccountResponse = new MutableLiveData<>();
     private MutableLiveData<UpdateResendOTPResponse> updateResendOTPMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<LoginResponse> authenticatePasswordResponse = new MutableLiveData<>();
     private MutableLiveData<LogoutResponse> logoutLiveData = new MutableLiveData<>();
@@ -163,7 +164,11 @@ public class LoginViewModel extends AndroidViewModel {
         return emailresendMutableLiveData;
     }
 
-    public MutableLiveData<AddBusinessUserResponse> postChangeAccountResponse() {
+//    public MutableLiveData<AddBusinessUserResponse> postChangeAccountResponse() {
+//        return postChangeAccountResponse;
+//    }
+
+    public MutableLiveData<BiometricSignIn> postChangeAccountResponse() {
         return postChangeAccountResponse;
     }
 
@@ -1136,23 +1141,62 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
+//    public void postChangeAccount(int loginUsedId) {
+//        try {
+//            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+//            Call<AddBusinessUserResponse> mCall = apiService.getChangeAccount(loginUsedId);
+//            mCall.enqueue(new Callback<AddBusinessUserResponse>() {
+//                @Override
+//                public void onResponse(Call<AddBusinessUserResponse> call, Response<AddBusinessUserResponse> response) {
+//                    try {
+//                        LogUtils.d("LOGINVIEW", "MOdel" + response);
+//                        if (response.isSuccessful()) {
+//                            AddBusinessUserResponse obj = response.body();
+//                            postChangeAccountResponse.setValue(obj);
+//                        } else {
+//                            Gson gson = new Gson();
+//                            Type type = new TypeToken<AddBusinessUserResponse>() {
+//                            }.getType();
+//                            AddBusinessUserResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+//                            if (errorResponse != null) {
+//                                postChangeAccountResponse.setValue(errorResponse);
+//                            }
+//                        }
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                        apiErrorMutableLiveData.setValue(null);
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<AddBusinessUserResponse> call, Throwable t) {
+//                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+//                    apiErrorMutableLiveData.setValue(null);
+//                }
+//            });
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//
+//    }
+
     public void postChangeAccount(int loginUsedId) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<AddBusinessUserResponse> mCall = apiService.getChangeAccount(loginUsedId);
-            mCall.enqueue(new Callback<AddBusinessUserResponse>() {
+            Call<BiometricSignIn> mCall = apiService.getChangeAccount(loginUsedId);
+            mCall.enqueue(new Callback<BiometricSignIn>() {
                 @Override
-                public void onResponse(Call<AddBusinessUserResponse> call, Response<AddBusinessUserResponse> response) {
+                public void onResponse(Call<BiometricSignIn> call, Response<BiometricSignIn> response) {
                     try {
                         LogUtils.d("LOGINVIEW", "MOdel" + response);
                         if (response.isSuccessful()) {
-                            AddBusinessUserResponse obj = response.body();
+                            BiometricSignIn obj = response.body();
                             postChangeAccountResponse.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<AddBusinessUserResponse>() {
+                            Type type = new TypeToken<BiometricSignIn>() {
                             }.getType();
-                            AddBusinessUserResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            BiometricSignIn errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                             if (errorResponse != null) {
                                 postChangeAccountResponse.setValue(errorResponse);
                             }
@@ -1164,7 +1208,7 @@ public class LoginViewModel extends AndroidViewModel {
                 }
 
                 @Override
-                public void onFailure(Call<AddBusinessUserResponse> call, Throwable t) {
+                public void onFailure(Call<BiometricSignIn> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

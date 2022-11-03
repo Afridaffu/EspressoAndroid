@@ -23,6 +23,11 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.dialogs.OnAgreementsAPIListener;
+import com.coyni.mapp.model.FilteredAgreements;
+import com.coyni.mapp.model.SignAgreementsResp;
+import com.coyni.mapp.view.business.BusinessCreateAccountsActivity;
+import com.coyni.mapp.view.business.BusinessDashboardActivity;
 import com.coyni.mapp.view.business.SignAgreementsActivity;
 import com.google.gson.Gson;
 import com.coyni.mapp.R;
@@ -293,6 +298,21 @@ public class EnableAuthID extends BaseActivity {
                 }
             });
 
+            setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
+                @Override
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                    dismissDialog();
+                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                    if (filteredAgreements.getAgreements().size() > 0) {
+                        Utils.launchAgreements(EnableAuthID.this, filteredAgreements.isMerchantAgreement());
+                        finish();
+                    } else {
+                        launchDasboardFromBase();
+                    }
+
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -507,8 +527,12 @@ public class EnableAuthID extends BaseActivity {
                 objMyApplication.launchDashboard(this, strScreen);
             }
         } else {
-            startActivity(new Intent(EnableAuthID.this, SignAgreementsActivity.class));
-            finish();
+            if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+                Utils.launchAgreements(EnableAuthID.this, false);
+            else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+                showProgressDialog();
+                callHasToSignAPI();
+            }
         }
     }
 

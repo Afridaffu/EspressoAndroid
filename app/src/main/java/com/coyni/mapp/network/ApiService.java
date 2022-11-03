@@ -296,7 +296,10 @@ public interface ApiService {
     @POST("api/v2/user/biometric")
     Call<BiometricResponse> saveBiometric(@Body BiometricRequest request);
 
-    @POST("api/v2/user/biometric/login")
+//    @POST("api/v2/user/biometric/login")
+//    Call<BiometricSignIn> biometricLogin(@Body BiometricLoginRequest request);
+
+    @POST("api/v2/user/biometric/signin")
     Call<BiometricSignIn> biometricLogin(@Body BiometricLoginRequest request);
 
     @GET("api/v2/profile/me")
@@ -370,8 +373,8 @@ public interface ApiService {
     @POST("api/v2/transactions/token/info")
     Call<TransactionDetails> getTransactionDt();
 
-    @POST("api/v2/user/change-account")
-    Call<AddBusinessUserResponse> getChangeAccount(@Query("userId") int loginUsedId);
+    @POST("api/v2/user/switch-account")
+    Call<BiometricSignIn> getChangeAccount(@Query("userId") int loginUsedId);
 
     @POST("api/v2/transactions/me/pending-posted-txns")
     Call<TransactionList> meTransactionList(@Body TransactionListRequest request);

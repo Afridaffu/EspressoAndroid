@@ -25,9 +25,13 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.dialogs.OnAgreementsAPIListener;
+import com.coyni.mapp.model.FilteredAgreements;
+import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.States;
 import com.coyni.mapp.model.signin.InitializeResponse;
 import com.coyni.mapp.view.business.BusinessCreateAccountsActivity;
+import com.coyni.mapp.view.business.BusinessDashboardActivity;
 import com.coyni.mapp.view.business.BusinessProfileActivity;
 import com.coyni.mapp.view.business.SignAgreementsActivity;
 import com.coyni.mapp.viewmodel.CustomerProfileViewModel;
@@ -65,7 +69,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-public class PINActivity extends AppCompatActivity implements View.OnClickListener {
+public class PINActivity extends BaseActivity implements View.OnClickListener {
     private View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
     private TextView keyZeroTV, keyOneTV, keyTwoTV, keyThreeTV, keyFourTV, keyFiveTV, keySixTV, keySevenTV, keyEightTV, keyNineTV;
     private ImageView backActionIV, imgBack;
@@ -116,6 +120,21 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             SetDontRemind();
             initObserver();
+
+            setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
+                @Override
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                    dismissDialog();
+                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                    if (filteredAgreements.getAgreements().size() > 0) {
+                        Utils.launchAgreements(PINActivity.this, filteredAgreements.isMerchantAgreement());
+                        finish();
+                    } else {
+                        launchDasboardFromBase();
+                    }
+
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -633,10 +652,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 finish();
                                                 break;
                                             case "login":
-//                                                if (!objMyApplication.isAgreementSigned()) {
-//                                                    startActivity(new Intent(PINActivity.this, SignAgreementsActivity.class));
-//                                                    finish();
-//                                                } else {
                                                 if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
                                                     launchDashboard();
                                                 } else {
@@ -668,7 +683,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                         launchDashboard();
                                                     }
                                                 }
-//                                                }
                                                 break;
                                         }
                                     } catch (Exception ex) {
@@ -1250,8 +1264,12 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 objMyApplication.launchDashboard(this, strScreen);
             }
         } else {
-            startActivity(new Intent(PINActivity.this, SignAgreementsActivity.class));
-            finish();
+            if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+                Utils.launchAgreements(PINActivity.this, false);
+            else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+                showProgressDialog();
+                callHasToSignAPI();
+            }
         }
     }
 
