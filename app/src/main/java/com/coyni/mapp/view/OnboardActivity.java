@@ -317,7 +317,9 @@ public class OnboardActivity extends BaseActivity {
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                     objMyApplication.setIsLoggedIn(true);
-                                    if (!loginResponse.getData().getTracker().isIsAgreementSigned()) {
+                                    if (!loginResponse.getData().getTracker().isIsAgreementSigned()
+                                    && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                                            && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
                                         if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
                                             Utils.launchAgreements(OnboardActivity.this, false);
                                         else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {

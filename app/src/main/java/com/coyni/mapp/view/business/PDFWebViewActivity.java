@@ -43,6 +43,8 @@ public class PDFWebViewActivity extends BaseActivity {
         webView.setVerticalScrollBarEnabled(true);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
+        webSettings.setSupportZoom(true);
+        webSettings.setBuiltInZoomControls(true);
         showProgressDialog();
 
         webView.setWebViewClient(new WebViewClient() {

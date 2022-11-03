@@ -1060,7 +1060,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         try {
             BitmapDrawable drawable = (BitmapDrawable) userProfileIV.getDrawable();
             Bitmap bitmap = drawable.getBitmap();
-            bitmap = Utils.getRoundedCroppedBitmap(bitmap);
+//            bitmap = Utils.getRoundedCroppedBitmap(bitmap);
 
             //Compress the image size
             int nh = (int) (bitmap.getHeight() * (512.0 / bitmap.getWidth()));

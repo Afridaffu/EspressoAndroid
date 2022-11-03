@@ -515,20 +515,21 @@ public class EnableAuthID extends BaseActivity {
     }
 
     private void launchDashboard() {
-        if (objMyApplication.isAgreementSigned()) {
+        if (!objMyApplication.isAgreementSigned() && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+            if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+                Utils.launchAgreements(EnableAuthID.this, false);
+            else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+                showProgressDialog();
+                callHasToSignAPI();
+            }
+        } else {
             if (objMyApplication.checkForDeclinedStatus()) {
                 objMyApplication.setIsLoggedIn(true);
                 objMyApplication.launchDeclinedActivity(this);
             } else {
                 objMyApplication.setIsLoggedIn(true);
                 objMyApplication.launchDashboard(this, strScreen);
-            }
-        } else {
-            if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
-                Utils.launchAgreements(EnableAuthID.this, false);
-            else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
-                showProgressDialog();
-                callHasToSignAPI();
             }
         }
     }

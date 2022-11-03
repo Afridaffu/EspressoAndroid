@@ -13,6 +13,8 @@ import com.coyni.mapp.model.UpdateSignAgreementsResp;
 import com.coyni.mapp.model.UpdateSignRequest;
 import com.coyni.mapp.model.coynipin.StepUpOTPResponse;
 import com.coyni.mapp.model.identity_verification.IdentityImageResponse;
+import com.coyni.mapp.model.profile.DownloadImageResponse;
+import com.coyni.mapp.model.profile.DownloadUrlRequest;
 import com.coyni.mapp.model.register.OTPResendRequest;
 import com.coyni.mapp.model.register.OTPValidateRequest;
 import com.coyni.mapp.model.register.OTPValidateResponse;
@@ -67,6 +69,7 @@ import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Singleton;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -101,7 +104,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<UpdatePhoneResponse> updatePhoneValidateResponse = new MutableLiveData<>();
     private MutableLiveData<ManagePasswordResponse> managePasswordResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailExistsResponse> emailExistsResponseMutableLiveData = new MutableLiveData<>();
-//    private MutableLiveData<AddBusinessUserResponse> postChangeAccountResponse = new MutableLiveData<>();
+    //    private MutableLiveData<AddBusinessUserResponse> postChangeAccountResponse = new MutableLiveData<>();
     private MutableLiveData<BiometricSignIn> postChangeAccountResponse = new MutableLiveData<>();
     private MutableLiveData<UpdateResendOTPResponse> updateResendOTPMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<LoginResponse> authenticatePasswordResponse = new MutableLiveData<>();
@@ -115,6 +118,11 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<SignAgreementsResp> hasToSignResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UpdateSignAgreementsResp> updatedSignAgreementLiveData = new MutableLiveData<>();
     private MutableLiveData<UpdateSignAgreementsResp> uploadSignAgreementLiveData = new MutableLiveData<>();
+    private MutableLiveData<DownloadImageResponse> downloadUrlLiveData = new MutableLiveData<>();
+
+    public MutableLiveData<DownloadImageResponse> getDownloadUrlLiveData() {
+        return downloadUrlLiveData;
+    }
 
     public MutableLiveData<UpdateSignAgreementsResp> getUploadSignAgreementLiveData() {
         return uploadSignAgreementLiveData;
@@ -1629,5 +1637,38 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
+    public void getDownloadUrl(List<DownloadUrlRequest> downloadUrlRequestList) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<DownloadImageResponse> mCall = apiService.getDownloadUrl(downloadUrlRequestList);
+            mCall.enqueue(new Callback<DownloadImageResponse>() {
+                @Override
+                public void onResponse(Call<DownloadImageResponse> call, Response<DownloadImageResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            DownloadImageResponse obj = response.body();
+                            downloadUrlLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<DownloadImageResponse>() {
+                            }.getType();
+                            DownloadImageResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                downloadUrlLiveData.setValue(errorResponse);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DownloadImageResponse> call, Throwable t) {
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
 }

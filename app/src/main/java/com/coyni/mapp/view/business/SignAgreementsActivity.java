@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -55,6 +56,9 @@ import com.coyni.mapp.model.UpdateSignAgreementsResp;
 import com.coyni.mapp.model.UpdateSignRequest;
 import com.coyni.mapp.model.profile.DownloadDocumentData;
 import com.coyni.mapp.model.profile.DownloadDocumentResponse;
+import com.coyni.mapp.model.profile.DownloadImageData;
+import com.coyni.mapp.model.profile.DownloadImageResponse;
+import com.coyni.mapp.model.profile.DownloadUrlRequest;
 import com.coyni.mapp.model.register.OTPValidateResponse;
 import com.coyni.mapp.model.register.SignAgreementRequest;
 import com.coyni.mapp.model.register.SignAgreementResponse;
@@ -63,6 +67,7 @@ import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.utils.download.DownloadTask;
+import com.coyni.mapp.view.AgreementsActivity;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.DashboardActivity;
 import com.coyni.mapp.view.EnableAuthID;
@@ -90,7 +95,7 @@ import okhttp3.RequestBody;
 public class SignAgreementsActivity extends BaseActivity {
 
     private ActivitySignAgreementsBinding binding;
-    private DashboardViewModel dashboardViewModel;
+    //    private DashboardViewModel dashboardViewModel;
     private LoginViewModel loginViewModel;
     private String myUrl = "", MATERIAL = "M", NON_MATERIAL = "N";
     private boolean isActionEnabled = false;
@@ -140,7 +145,7 @@ public class SignAgreementsActivity extends BaseActivity {
         try {
             showProgressDialog();
             objMyApplication = (MyApplication) getApplicationContext();
-            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+//            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             loginViewModel.hasToSignAgreements();
             binding.webView.setWebChromeClient(new WebChromeClient() {
@@ -152,7 +157,7 @@ public class SignAgreementsActivity extends BaseActivity {
                         result.cancel();
                         binding.accknowledgeTV.setTextColor(getColor(R.color.black));
                         binding.actionCV.setVisibility(View.VISIBLE);
-                        binding.actionCV.setClickable(true);
+//                        binding.actionCV.setClickable(true);
                         binding.agreeCB.setEnabled(true);
                         binding.signatureTV.setTextColor(getColor(R.color.black));
                         if (!isSignatureCaptured)
@@ -236,6 +241,24 @@ public class SignAgreementsActivity extends BaseActivity {
                 }
             });
 
+            binding.dismissLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(MATERIAL) &&
+                                (agrementsResponse.getData().get(currentIteration).getStatus() == Utils.SCHEDULED_AGREEMENT)) {
+                            loadNextOrDashboard(false);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -267,8 +290,6 @@ public class SignAgreementsActivity extends BaseActivity {
                 binding.actionCV.setVisibility(View.VISIBLE);
                 isActionEnabled = true;
                 binding.actionCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-//                showProgressDialog();
-//                sendSignatureRequest();
             }
         }
     }
@@ -277,6 +298,8 @@ public class SignAgreementsActivity extends BaseActivity {
     private void setupLablesAndUI(String materialType, String effectiveDate) {
         try {
             if (materialType.equalsIgnoreCase(MATERIAL)) {
+                binding.webView.setVisibility(View.VISIBLE);
+                binding.changeSummaryLL.setVisibility(View.GONE);
                 binding.infoTV.setVisibility(View.GONE);
                 isActionEnabled = false;
                 binding.actionCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
@@ -286,24 +309,10 @@ public class SignAgreementsActivity extends BaseActivity {
                 binding.thankyouTV.setVisibility(View.GONE);
                 binding.actionTV.setText("Agree");
                 if (AGREE_TYPE == Utils.cTOS) {
-//                    binding.signatureTV.setTextColor(getColor(R.color.light_gray));
-//                    binding.signatureEditIV.setImageDrawable(getDrawable(R.drawable.ic_sign_gray));
-//                    binding.signatureEditLL.setClickable(false);
-//                    binding.signatureEditLL.setEnabled(false);
-//                    binding.signatureEditLL.setVisibility(View.VISIBLE);
-//                    binding.agreeCB.setVisibility(View.GONE);
-
                     binding.signatureEditLL.setVisibility(View.GONE);
                     binding.agreNameTV.setText(getString(R.string.gbx_tos) + " Update");
                     binding.accknowledgeTV.setText("I agree to the " + getString(R.string.gbx_tos) + " changes that take effect on " + effectiveDate);
                 } else if (AGREE_TYPE == Utils.cPP) {
-//                    binding.signatureTV.setTextColor(getColor(R.color.light_gray));
-//                    binding.signatureEditIV.setImageDrawable(getDrawable(R.drawable.ic_sign_gray));
-//                    binding.signatureEditLL.setClickable(false);
-//                    binding.signatureEditLL.setEnabled(false);
-//                    binding.signatureEditLL.setVisibility(View.VISIBLE);
-//                    binding.agreeCB.setVisibility(View.GONE);
-
                     binding.signatureEditLL.setVisibility(View.GONE);
                     binding.agreNameTV.setText(getString(R.string.gbx_pp) + " Update");
                     binding.accknowledgeTV.setText("I agree to the " + getString(R.string.gbx_pp) + " changes that take effect on " + effectiveDate);
@@ -319,6 +328,8 @@ public class SignAgreementsActivity extends BaseActivity {
                     binding.accknowledgeTV.setText("I agree to the " + getString(R.string.gbx_merchant) + " changes that take effect on " + effectiveDate);
                 }
             } else {
+                binding.webView.setVisibility(View.GONE);
+                binding.changeSummaryLL.setVisibility(View.VISIBLE);
                 binding.signatureEditLL.setVisibility(View.GONE);
                 setSpannableText(effectiveDate);
                 binding.infoTV.setVisibility(View.VISIBLE);
@@ -342,19 +353,53 @@ public class SignAgreementsActivity extends BaseActivity {
     }
 
     private void initObservers() {
-        dashboardViewModel.getDownloadDocumentResponse().observe(this, new Observer<DownloadDocumentResponse>() {
+//        dashboardViewModel.getDownloadDocumentResponse().observe(this, new Observer<DownloadDocumentResponse>() {
+//            @Override
+//            public void onChanged(DownloadDocumentResponse downloadDocumentResponse) {
+//                try {
+//                    dismissDialog();
+//                    if (downloadDocumentResponse != null && downloadDocumentResponse.getStatus() != null) {
+//                        if (downloadDocumentResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+//                            DownloadDocumentData data = downloadDocumentResponse.getData();
+//                            if (data != null) {
+//                                if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
+//                                    myUrl = data.getDownloadUrl();
+//                                    binding.webView.setVisibility(View.VISIBLE);
+//                                    binding.webView.loadUrl("file:///android_asset/pdfViewerScript.html");
+//
+//                                } else {
+//                                    Utils.displayAlert(getString(R.string.unable_to_get_document), SignAgreementsActivity.this, "", "");
+//                                }
+//                            }
+//                        } else {
+////                            binding.webView.loadUrl("file:///android_asset/pdfViewerScript.html");
+//
+//                            Utils.displayAlert(downloadDocumentResponse.getError().getErrorDescription(), SignAgreementsActivity.this, "", "");
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
+
+        loginViewModel.getDownloadUrlLiveData().observe(this, new Observer<DownloadImageResponse>() {
             @Override
-            public void onChanged(DownloadDocumentResponse downloadDocumentResponse) {
+            public void onChanged(DownloadImageResponse downloadDocumentResponse) {
                 try {
                     dismissDialog();
                     if (downloadDocumentResponse != null && downloadDocumentResponse.getStatus() != null) {
                         if (downloadDocumentResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                            DownloadDocumentData data = downloadDocumentResponse.getData();
+                            DownloadImageData data = downloadDocumentResponse.getData().get(0);
                             if (data != null) {
                                 if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
                                     myUrl = data.getDownloadUrl();
-                                    binding.webView.setVisibility(View.VISIBLE);
-                                    binding.webView.loadUrl("file:///android_asset/pdfViewerScript.html");
+                                    if (agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(NON_MATERIAL)) {
+                                        launchDocumentUrl(data.getDownloadUrl());
+                                    } else {
+                                        binding.webView.setVisibility(View.VISIBLE);
+                                        binding.webView.loadUrl("file:///android_asset/pdfViewerScript.html");
+                                    }
 
                                 } else {
                                     Utils.displayAlert(getString(R.string.unable_to_get_document), SignAgreementsActivity.this, "", "");
@@ -405,6 +450,7 @@ public class SignAgreementsActivity extends BaseActivity {
             public void onChanged(SignAgreementsResp signAgreementsResp) {
                 if (signAgreementsResp != null) {
                     agrementsResponse = signAgreementsResp;
+                    dismissDialog();
                     if (signAgreementsResp.getStatus().equalsIgnoreCase("success")) {
                         if (removeMerchant)
                             agrementsResponse.setData(Utils.getFilteredAgreements(signAgreementsResp.getData()).getAgreements());
@@ -435,14 +481,15 @@ public class SignAgreementsActivity extends BaseActivity {
 
 
                         iterationCount = agrementsResponse.getData().size();
-                        if (iterationCount > 0) {
-                            iterationCount--;
-                            AGREE_TYPE = agrementsResponse.getData().get(0).getAgreementType();
-                            setupLablesAndUI(agrementsResponse.getData().get(0).getMaterialType(),
-                                    Utils.convertEffectiveDate(agrementsResponse.getData().get(0).getEffectiveDate()));
-                            currentIteration = 0;
-                            dashboardViewModel.getDocumentUrl(AGREE_TYPE);
-                        }
+                        loadNextOrDashboard(true);
+//                        if (iterationCount > 0) {
+//                            iterationCount--;
+//                            AGREE_TYPE = agrementsResponse.getData().get(0).getAgreementType();
+//                            setupLablesAndUI(agrementsResponse.getData().get(0).getMaterialType(),
+//                                    Utils.convertEffectiveDate(agrementsResponse.getData().get(0).getEffectiveDate()));
+//                            currentIteration = 0;
+//                            dashboardViewModel.getDocumentUrl(AGREE_TYPE);
+//                        }
 
                     } else {
                         Utils.displayAlert(signAgreementsResp.getError().getErrorDescription(), SignAgreementsActivity.this, "", "");
@@ -575,7 +622,7 @@ public class SignAgreementsActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(NON_MATERIAL) ||
+        if (agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(MATERIAL) &&
                 (agrementsResponse.getData().get(currentIteration).getStatus() == Utils.SCHEDULED_AGREEMENT)) {
             launchDashboard();
         }
@@ -591,7 +638,10 @@ public class SignAgreementsActivity extends BaseActivity {
         else if (AGREE_TYPE == Utils.mAgmt)
             agreeName = getString(R.string.gbx_merchant);
 
-        String formString = "On "+date + ", we’re making some changes to our " + agreeName +
+        binding.changeSummaryHeaderTV.setText(agreeName + " Update Summary");
+        binding.changeSummarySubHeaderTV.setText("Here is a brief summary of the " + agreeName + " changes that go into effect on " + date + ":");
+        binding.changeSummaryTV.setText(Html.fromHtml(agrementsResponse.getData().get(currentIteration).getChangeSummary()));
+        String formString = "On " + date + ", we’re making some changes to our " + agreeName +
                 " These changes won’t affect the way you use our services, but they’ll make it easier for you to understand what to expect — and what we expect from you — as you use our services. You can review the new terms here. At a glance, here’s what this update means for you:";
         SpannableString ss = new SpannableString(formString);
         ClickableSpan clickableSpan = new ClickableSpan() {
@@ -602,6 +652,13 @@ public class SignAgreementsActivity extends BaseActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+
+                showProgressDialog();
+                List<DownloadUrlRequest> requests = new ArrayList<>();
+                DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
+                downloadUrlRequest.setKey(agrementsResponse.getData().get(currentIteration).getAgreementFileRefPath());
+                requests.add(downloadUrlRequest);
+                loginViewModel.getDownloadUrl(requests);
             }
 
             @Override
@@ -619,6 +676,8 @@ public class SignAgreementsActivity extends BaseActivity {
         binding.infoTV.setText(ss);
         binding.infoTV.setMovementMethod(LinkMovementMethod.getInstance());
         binding.infoTV.setHighlightColor(Color.TRANSPARENT);
+
+
     }
 
     public void showToast(final Context context, String text, int imageID, String strScreen) {
@@ -673,26 +732,7 @@ public class SignAgreementsActivity extends BaseActivity {
                             public void run() {
                                 try {
                                     dialog.dismiss();
-                                    if (iterationCount > 0) {
-                                        binding.webView.setVisibility(View.INVISIBLE);
-                                        binding.webView.addJavascriptInterface(jsInterface, "JSInterface");
-                                        binding.webView.loadUrl("file:///android_asset/pdfViewerScript.html");
-                                        binding.accknowledgeTV.setTextColor(getColor(R.color.light_gray));
-                                        binding.actionCV.setVisibility(View.INVISIBLE);
-                                        binding.actionCV.setClickable(false);
-                                        binding.agreeCB.setEnabled(false);
-                                        binding.agreeCB.setChecked(false);
-                                        isSignatureCaptured = false;
-
-                                        iterationCount--;
-                                        currentIteration++;
-                                        AGREE_TYPE = agrementsResponse.getData().get(currentIteration).getAgreementType();
-                                        setupLablesAndUI(agrementsResponse.getData().get(currentIteration).getMaterialType(),
-                                                Utils.convertEffectiveDate(agrementsResponse.getData().get(currentIteration).getEffectiveDate()));
-                                        dashboardViewModel.getDocumentUrl(AGREE_TYPE);
-                                    } else {
-                                        launchDashboard();
-                                    }
+                                    loadNextOrDashboard(false);
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
                                 }
@@ -718,6 +758,57 @@ public class SignAgreementsActivity extends BaseActivity {
             Intent intent = new Intent(SignAgreementsActivity.this, DashboardActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+        }
+    }
+
+    public void loadNextOrDashboard(boolean isFirst) {
+        if (iterationCount > 0) {
+            binding.webView.setVisibility(View.INVISIBLE);
+            binding.accknowledgeTV.setTextColor(getColor(R.color.light_gray));
+            binding.actionCV.setVisibility(View.INVISIBLE);
+//            binding.actionCV.setClickable(false);
+            binding.agreeCB.setEnabled(false);
+            binding.agreeCB.setChecked(false);
+            isSignatureCaptured = false;
+
+            iterationCount--;
+            if (!isFirst)
+                currentIteration++;
+            AGREE_TYPE = agrementsResponse.getData().get(currentIteration).getAgreementType();
+            setupLablesAndUI(agrementsResponse.getData().get(currentIteration).getMaterialType(),
+                    Utils.convertEffectiveDate(agrementsResponse.getData().get(currentIteration).getEffectiveDate()));
+
+            if (agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(MATERIAL)) {
+                binding.webView.addJavascriptInterface(jsInterface, "JSInterface");
+                binding.webView.loadUrl("file:///android_asset/pdfViewerScript.html");
+//                dashboardViewModel.getDocumentUrl(AGREE_TYPE);
+
+                showProgressDialog();
+                List<DownloadUrlRequest> requests = new ArrayList<>();
+                DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
+                downloadUrlRequest.setKey(agrementsResponse.getData().get(currentIteration).getAgreementFileRefPath());
+                requests.add(downloadUrlRequest);
+                loginViewModel.getDownloadUrl(requests);
+            }
+        } else {
+            launchDashboard();
+        }
+    }
+
+    private void launchDocumentUrl(String url) {
+        try {
+            String agreeName = "";
+            if (AGREE_TYPE == Utils.cTOS)
+                agreeName = getString(R.string.gbx_tos);
+            else if (AGREE_TYPE == Utils.cPP)
+                agreeName = getString(R.string.gbx_pp);
+            else if (AGREE_TYPE == Utils.mAgmt)
+                agreeName = getString(R.string.gbx_merchant);
+            startActivity(new Intent(SignAgreementsActivity.this, PDFWebViewActivity.class)
+                    .putExtra("URL", url)
+                    .putExtra("NAME", agreeName));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

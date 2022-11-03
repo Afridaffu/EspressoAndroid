@@ -72,61 +72,67 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogUtils.d(TAG, getClass().getName());
-        Utils.launchedActivity = getClass();
-        myApplication = (MyApplication) getApplicationContext();
-        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        try {
+            LogUtils.d(TAG, getClass().getName());
+            Utils.launchedActivity = getClass();
+            myApplication = (MyApplication) getApplicationContext();
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
-        dashboardViewModel.getAppUpdateRespMutableLiveData().observe(this, new Observer<AppUpdateResp>() {
-            @Override
-            public void onChanged(AppUpdateResp appUpdateResp) {
-                try {
-                    if (appUpdateResp == null) {
-                        return;
-                    }
-                    if (appUpdateResp.getData() != null) {
-                        String version = getPackageManager().getPackageInfo(BaseActivity.this.getPackageName(), 0).versionName;
-                        int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-                        int versionName = Integer.parseInt(version.replace(".", ""));
-                        Context context = new ContextThemeWrapper(BaseActivity.this, R.style.Theme_Coyni_Update);
-                        if (versionName < Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
-                            if (!isBaseBiometric)
-                                Utils.showUpdateDialog(context);
-                        } else if (versionName == Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
-                            if (versionCode < Integer.parseInt(appUpdateResp.getData().getBuildNum().replace(".", ""))) {
-                                if (!isBaseBiometric)
-                                    Utils.showUpdateDialog(context);
-                            }
-                        }
-                    } else if (appUpdateResp.getError() != null && appUpdateResp.getError().getErrorCode().equals(getString(R.string.accessrestrictederrorcode))) {
-                        showAccessRestricted();
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-
-        loginViewModel.getHasToSignResponseMutableLiveData().observe(this, new Observer<SignAgreementsResp>() {
-            @Override
-            public void onChanged(SignAgreementsResp signAgreementsResp) {
-                if (signAgreementsResp != null) {
-                    if (signAgreementsResp.getStatus().equalsIgnoreCase("success")) {
+//            runOnUiThread(() -> {
+                dashboardViewModel.getAppUpdateRespMutableLiveData().observe(this, new Observer<AppUpdateResp>() {
+                    @Override
+                    public void onChanged(AppUpdateResp appUpdateResp) {
                         try {
-                            //This may give exception when has to sign up API called in the SignAgreement Screen
-                            getOnAgreementsAPIListener().onAgreementsAPIResponse(signAgreementsResp);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            if (appUpdateResp == null) {
+                                return;
+                            }
+                            if (appUpdateResp.getData() != null) {
+                                String version = getPackageManager().getPackageInfo(BaseActivity.this.getPackageName(), 0).versionName;
+                                int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                                int versionName = Integer.parseInt(version.replace(".", ""));
+                                Context context = new ContextThemeWrapper(BaseActivity.this, R.style.Theme_Coyni_Update);
+                                if (versionName < Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
+                                    if (!isBaseBiometric)
+                                        Utils.showUpdateDialog(context);
+                                } else if (versionName == Integer.parseInt(appUpdateResp.getData().getVersion().replace(".", ""))) {
+                                    if (versionCode < Integer.parseInt(appUpdateResp.getData().getBuildNum().replace(".", ""))) {
+                                        if (!isBaseBiometric)
+                                            Utils.showUpdateDialog(context);
+                                    }
+                                }
+                            } else if (appUpdateResp.getError() != null && appUpdateResp.getError().getErrorCode().equals(getString(R.string.accessrestrictederrorcode))) {
+                                showAccessRestricted();
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+//            });
+
+            loginViewModel.getHasToSignResponseMutableLiveData().observe(this, new Observer<SignAgreementsResp>() {
+                @Override
+                public void onChanged(SignAgreementsResp signAgreementsResp) {
+                    if (signAgreementsResp != null) {
+                        if (signAgreementsResp.getStatus().equalsIgnoreCase("success")) {
+                            try {
+                                //This may give exception when has to sign up API called in the SignAgreement Screen
+                                getOnAgreementsAPIListener().onAgreementsAPIResponse(signAgreementsResp);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Utils.displayAlert(signAgreementsResp.getError().getErrorDescription(), BaseActivity.this, "", "");
                         }
                     } else {
                         Utils.displayAlert(signAgreementsResp.getError().getErrorDescription(), BaseActivity.this, "", "");
                     }
-                } else {
-                    Utils.displayAlert(signAgreementsResp.getError().getErrorDescription(), BaseActivity.this, "", "");
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
