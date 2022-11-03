@@ -376,17 +376,17 @@ public class BusinessProfileActivity extends BaseActivity {
             userFullname.setOnClickListener(view -> {
                 if (userFullname.getText().toString().contains("...")) {
                     if (fullname.length() == 21 || fullname.length() > 21) {
-                        userFullname.setText(Utils.capitalize(fullname).substring(0, 20));
+                        userFullname.setText((fullname).substring(0, 20));
                     } else {
-                        userFullname.setText(Utils.capitalize(fullname));
+                        userFullname.setText(fullname);
                     }
                 } else {
                     if (fullname.length() == 21) {
-                        userFullname.setText(Utils.capitalize(fullname).substring(0, 20) + "...");
+                        userFullname.setText((fullname).substring(0, 20) + "...");
                     } else if (fullname.length() > 21) {
-                        userFullname.setText(Utils.capitalize(fullname).substring(0, 21) + "...");
+                        userFullname.setText((fullname).substring(0, 21) + "...");
                     } else {
-                        userFullname.setText(Utils.capitalize(fullname));
+                        userFullname.setText((fullname));
                     }
                 }
             });
@@ -559,9 +559,9 @@ public class BusinessProfileActivity extends BaseActivity {
                         fullname = Utils.capitalize(myApplication.getMyProfile().getData().getDbaName());
                     }
                     if (fullname.length() > 20) {
-                        userFullname.setText(Utils.capitalize(fullname).substring(0, 20) + " ");
+                        userFullname.setText((fullname).substring(0, 20) + " ");
                     } else {
-                        userFullname.setText(Utils.capitalize(fullname));
+                        userFullname.setText((fullname));
                     }
 
                 } catch (Resources.NotFoundException e) {
@@ -790,9 +790,9 @@ public class BusinessProfileActivity extends BaseActivity {
                                 } else if (profile.getData().getDbaName() != null) {
                                     fullname = profile.getData().getDbaName();
                                     if (fullname != null && fullname.length() > 20) {
-                                        userFullname.setText(Utils.capitalize(fullname).substring(0, 20) + " ");
+                                        userFullname.setText((fullname).substring(0, 20) + " ");
                                     } else {
-                                        userFullname.setText(Utils.capitalize(fullname));
+                                        userFullname.setText((fullname));
                                     }
                                 }
 //                                userFullname.setText(fullname);
@@ -916,9 +916,9 @@ public class BusinessProfileActivity extends BaseActivity {
                 userFullname.setText(getResources().getString(R.string.dba_name, userName));
 
                 if (userName != null && userName.length() > 20) {
-                    userFullname.setText(Utils.capitalize(userName).substring(0, 20) + " ");
+                    userFullname.setText((userName).substring(0, 20) + " ");
                 } else {
-                    userFullname.setText(Utils.capitalize(userName));
+                    userFullname.setText((userName));
                 }
                 if (firstName != null && !firstName.equals("") && lastName != null && !lastName.equals("")) {
                     char first = firstName.charAt(0);
@@ -931,9 +931,9 @@ public class BusinessProfileActivity extends BaseActivity {
             } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
                 userName = myApplication.getMyProfile().getData().getDbaName();
                 if (userName != null && userName.length() > 20) {
-                    userFullname.setText(Utils.capitalize(userName).substring(0, 20) + " ");
+                    userFullname.setText((userName).substring(0, 20) + " ");
                 } else if (userName != null) {
-                    userFullname.setText(Utils.capitalize(userName));
+                    userFullname.setText((userName));
                 }
                 profileImage.setVisibility(View.VISIBLE);
                 if (myApplication.getAccountType() == Utils.SHARED_ACCOUNT) {

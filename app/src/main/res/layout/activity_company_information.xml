@@ -128,7 +128,7 @@
                         android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="text|textNoSuggestions|textCapSentences"
+                        android:inputType="text|textNoSuggestions"
                         android:maxLength="50"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
