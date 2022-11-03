@@ -1752,14 +1752,14 @@ public class Utils {
         try {
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("MMMM dd, yyyy");
+//            spf = new SimpleDateFormat("MMMM dd, yyyy");
+            spf = new SimpleDateFormat("MM/dd/yyyy");
             strDate = spf.format(newDate);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return strDate;
     }
-
 
     public static String convertTwoDecimalPoints(Double value) {
         return df.format(value);
@@ -2995,26 +2995,26 @@ public class Utils {
         return output;
     }
 
-        public static FilteredAgreements getFilteredAgreements
-        (List < SignAgreementData > agreementData) {
-            boolean isMerchantAgreement = false;
-            List<SignAgreementData> agreements = new ArrayList<>();
-            for (int i = 0; i < agreementData.size(); i++) {
-                if (agreementData.get(i).getAgreementType() != Utils.mAgmt)
-                    agreements.add(agreementData.get(i));
-                else if (agreementData.get(i).getAgreementType() == Utils.mAgmt) {
-                    isMerchantAgreement = true;
-                }
+    public static FilteredAgreements getFilteredAgreements
+            (List<SignAgreementData> agreementData) {
+        boolean isMerchantAgreement = false;
+        List<SignAgreementData> agreements = new ArrayList<>();
+        for (int i = 0; i < agreementData.size(); i++) {
+            if (agreementData.get(i).getAgreementType() != Utils.mAgmt)
+                agreements.add(agreementData.get(i));
+            else if (agreementData.get(i).getAgreementType() == Utils.mAgmt) {
+                isMerchantAgreement = true;
             }
-            FilteredAgreements mFilteredAgreements = new FilteredAgreements();
-            mFilteredAgreements.setAgreements(agreements);
-            mFilteredAgreements.setMerchantAgreement(isMerchantAgreement);
-
-            return mFilteredAgreements;
         }
+        FilteredAgreements mFilteredAgreements = new FilteredAgreements();
+        mFilteredAgreements.setAgreements(agreements);
+        mFilteredAgreements.setMerchantAgreement(isMerchantAgreement);
 
-        public static void launchAgreements (Activity activity,boolean isMerchantRemove){
-            activity.startActivity(new Intent(activity, SignAgreementsActivity.class)
-                    .putExtra("REMOVE_MERCHANT", isMerchantRemove));
-        }
+        return mFilteredAgreements;
     }
+
+    public static void launchAgreements(Activity activity, boolean isMerchantRemove) {
+        activity.startActivity(new Intent(activity, SignAgreementsActivity.class)
+                .putExtra("REMOVE_MERCHANT", isMerchantRemove));
+    }
+}

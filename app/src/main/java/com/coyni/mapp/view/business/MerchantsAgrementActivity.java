@@ -82,11 +82,10 @@ public class MerchantsAgrementActivity extends BaseActivity {
         webView.invalidate();
         webSettings.setJavaScriptEnabled(true);
         webView.setVerticalScrollBarEnabled(true);
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setUseWideViewPort(true);
         showProgressDialog();
         dashboardViewModel.getDocumentUrl(Utils.mAgmt);
-//        String fileURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
-//        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL);
-
 
         webView.setWebViewClient(new WebViewClient() {
             @Override

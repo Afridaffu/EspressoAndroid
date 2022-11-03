@@ -20,14 +20,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.dialogs.OnAgreementsAPIListener;
-import com.coyni.mapp.dialogs.OnDialogClickListener;
 import com.coyni.mapp.model.FilteredAgreements;
-import com.coyni.mapp.model.RangeDates;
 import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.signin.BiometricSignIn;
-import com.coyni.mapp.view.business.BusinessCreateAccountsActivity;
-import com.coyni.mapp.view.business.SignAgreementsActivity;
-import com.coyni.mapp.view.business.VerificationFailedActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

@@ -165,9 +165,10 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 }
             } else if (requestCode == 3) {
                 if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
-                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
-                        onBackPressed();
-                    } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+//                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+//                        onBackPressed();
+//                    } else
+                    if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                         if (!objMyApplication.getCardSave()) {
                             isDeCredit = true;
                             ControlMethod("addpayment");
@@ -182,9 +183,10 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                     onBackPressed();
                 }
             } else if (requestCode == 4) {
-                if (strScreen.equals("withdraw") || strScreen.equals("buytoken") || strScreen.equals("payRequest")) {
-                    onBackPressed();
-                } else if (!objMyApplication.getBankSave()) {
+//                if (strScreen.equals("withdraw") || strScreen.equals("buytoken") || strScreen.equals("payRequest")) {
+//                    onBackPressed();
+//                } else
+                if (!objMyApplication.getBankSave()) {
                     isDeCredit = true;
                     ControlMethod("addpayment");
                 } else {

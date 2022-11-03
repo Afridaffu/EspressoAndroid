@@ -730,14 +730,14 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
 //                                objMyApplication.setSelectedCard(objData);
 //                                bindPayMethod(objData);
                                 bindPayMethod(previousSelectedCard(objData));
-                                if (isCvv) {
-                                    isCvv = false;
-                                    //displayCVV(objData);
-                                    if (objMyApplication.getStrCVV() != null && !objMyApplication.getStrCVV().equals("")) {
-                                        strCvv = objMyApplication.getStrCVV();
-                                        objMyApplication.setStrCVV("");
-                                    }
-                                }
+//                                if (isCvv) {
+//                                    isCvv = false;
+//                                    //displayCVV(objData);
+//                                    if (objMyApplication.getStrCVV() != null && !objMyApplication.getStrCVV().equals("")) {
+//                                        strCvv = objMyApplication.getStrCVV();
+//                                        objMyApplication.setStrCVV("");
+//                                    }
+//                                }
                             }
                         }
                     }
@@ -970,7 +970,8 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                         if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             Intent i = new Intent(BuyTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
                             i.putExtra("screen", "buytoken");
-                            startActivityForResult(i, 3);
+//                            startActivityForResult(i, 3);
+                            startActivity(i);
                         } else {
                             Intent i = new Intent(BuyTokenActivity.this, SelectPaymentMethodActivity.class);
                             i.putExtra("screen", "buytoken");

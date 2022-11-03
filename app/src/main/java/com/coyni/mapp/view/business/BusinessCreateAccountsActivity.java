@@ -421,7 +421,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         myApplication.setIsReserveEnabled(btResp.getData().isReserveEnabled());
                         myApplication.setIsLoggedIn(true);
 
-                        if (!btResp.getData().getTracker().isIsAgreementSigned()) {
+//                        if (!btResp.getData().getTracker().isIsAgreementSigned()) {
+                        if (!btResp.getData().getTracker().isIsAgreementSigned() && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                                && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
                             if (btResp.getData().getBusinessTracker() == null || btResp.getData().getBusinessTracker().isIsAgreementSigned())
                                 Utils.launchAgreements(BusinessCreateAccountsActivity.this, false);
                             else if (!btResp.getData().getBusinessTracker().isIsAgreementSigned()) {
@@ -439,7 +441,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                                 startActivity(intent);
                             }
                         }
-
                     } else {
                         Utils.displayAlert(btResp.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", "");
                     }
