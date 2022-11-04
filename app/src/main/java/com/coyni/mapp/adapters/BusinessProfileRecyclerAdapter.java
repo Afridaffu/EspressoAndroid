@@ -282,7 +282,8 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (listener != null) {
 //                    listener.onAddDbaClicked(detailInfo.getAccountType(), groupProfile.getId());
-                    listener.onAddDbaClicked(detailInfo, groupProfile.getId());
+//                    listener.onAddDbaClicked(detailInfo, groupProfile.getId());
+                    listener.onAddDbaClicked(groupProfile, groupProfile.getId());
                 }
             }
         });
@@ -451,7 +452,8 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         void onChildClicked(ProfilesResponse.Profiles detailInfo);
 
         //        void onAddDbaClicked(String accountType, Integer id);
-        void onAddDbaClicked(ProfilesResponse.Profiles profiles, Integer id);
+//        void onAddDbaClicked(ProfilesResponse.Profiles profiles, Integer id);
+        void onAddDbaClicked(BaseProfile profiles, Integer id);
     }
 
 

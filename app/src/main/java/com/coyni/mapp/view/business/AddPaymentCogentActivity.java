@@ -218,6 +218,11 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
                                 obj.setBankAccountName(getString(R.string.Signet));
                                 obj.setBankName(getString(R.string.Signet));
                             }
+                            if (getIntent().getStringExtra("screen") != null) {
+                                obj.setFromTxnScreen(getIntent().getStringExtra("screen"));
+                            } else {
+                                obj.setFromTxnScreen("");
+                            }
                             if (Utils.checkInternet(AddPaymentCogentActivity.this)) {
                                 businessDashboardViewModel.saveCogentBank(obj);
                             } else {
@@ -318,7 +323,7 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
                         imm.showSoftInput(etName, 0);
                         nameErrorLL.setVisibility(GONE);
                     }
-                        enableOrDisableNext();
+                    enableOrDisableNext();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

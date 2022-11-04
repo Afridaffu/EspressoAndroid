@@ -28,11 +28,12 @@ public class PastAgreeListAdapter extends RecyclerView.Adapter<PastAgreeListAdap
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView listagreementsTV;
+        public TextView listagreementsTV, listDocsTV;
 
         public MyViewHolder(View view) {
             super(view);
             listagreementsTV = (TextView) view.findViewById(R.id.listagreementsTV);
+            listDocsTV = (TextView) view.findViewById(R.id.listDocsTV);
         }
     }
 
@@ -57,11 +58,18 @@ public class PastAgreeListAdapter extends RecyclerView.Adapter<PastAgreeListAdap
         try {
             Item objData = items.get(position);
             if (objData.getSignatureType() == Utils.cPP) {
-                holder.listagreementsTV.setText("Privacy Policy " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+//                holder.listagreementsTV.setText("Privacy Policy " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+                holder.listagreementsTV.setText("Privacy Policy " + " ");
             } else if (objData.getSignatureType() == Utils.cTOS) {
-                holder.listagreementsTV.setText("Terms of Service " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+//                holder.listagreementsTV.setText("Terms of Service " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+                holder.listagreementsTV.setText("Terms of Service " + " ");
             } else if (objData.getSignatureType() == Utils.mAgmt) {
-                holder.listagreementsTV.setText("Merchant’s Agreement " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+//                holder.listagreementsTV.setText("Merchant’s Agreement " + objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+                holder.listagreementsTV.setText("Merchant’s Agreement " + " ");
+            }
+
+            if (objData.getDocumentVersion() != null && !objData.getDocumentVersion().equals("")) {
+                holder.listDocsTV.setText(objData.getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
             }
             holder.itemView.setTag(objData);
             holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -495,7 +495,8 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
 
 
             @Override
-            public void onAddDbaClicked(ProfilesResponse.Profiles profiles, Integer id) {
+//            public void onAddDbaClicked(ProfilesResponse.Profiles profiles, Integer id) {
+            public void onAddDbaClicked(BaseProfile profiles, Integer id) {
                 LogUtils.v("PreferencesActivity", "account type " + profiles.getAccountType() + "    id: " + id);
                 //childid = id;
             }

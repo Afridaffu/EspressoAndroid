@@ -635,7 +635,8 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
 
             @Override
-            public void onAddDbaClicked(ProfilesResponse.Profiles profiles, Integer id) {
+//            public void onAddDbaClicked(ProfilesResponse.Profiles profiles, Integer id) {
+            public void onAddDbaClicked(BaseProfile profiles, Integer id) {
                 LogUtils.v("PreferencesActivity", "account type " + profiles.getAccountType() + "    id: " + id);
                 //accountTypeId = id;
             }

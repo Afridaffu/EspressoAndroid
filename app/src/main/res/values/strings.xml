@@ -714,6 +714,7 @@
     <string name="gbx_tos">Terms of Service</string>
     <string name="gbx_pp">Privacy Policy</string>
     <string name="gbx_merchant">Merchant Agreement</string>
+    <string name="gbx_merchant1">Merchant</string>
 
     <string name="complete_idve">Please complete your Identity Verification process.</string>
     <string name="otp_retry_error">Looks like something went wrong. Please try again</string>

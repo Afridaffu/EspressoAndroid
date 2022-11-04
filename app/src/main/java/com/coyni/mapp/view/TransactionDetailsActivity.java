@@ -1791,20 +1791,32 @@ public class TransactionDetailsActivity extends BaseActivity {
             withBankNameOnAccount.setText(objData.getNameOnBank());
         }
 
-        if (objData.getTransactionSubtype().equalsIgnoreCase("cogent"))
+        if (objData.getTransactionSubtype().equalsIgnoreCase("cogent")) {
             CogentTextTV.setText("Cogent Wallet ID");
-        else if (objData.getTransactionSubtype().equalsIgnoreCase("signet"))
+            if (objData.getBankAccountNumber() != null) {
+                if (objData.getBankAccountNumber().length() > 20) {
+                    withBankName.setText(objData.getBankAccountNumber().substring(0, 20) + "...");
+                } else {
+                    withBankName.setText(objData.getBankAccountNumber());
+                }
+            }
+        } else if (objData.getTransactionSubtype().equalsIgnoreCase("signet")) {
             CogentTextTV.setText("Signet Wallet ID");
-//        CogentTextTV.setPadding(0, 0, 0, 20);
-//        findViewById(R.id.nameOnAccount).setPadding(0, 10, 0, 0);
-//        findViewById(R.id.withdrawIDTV).setPadding(30, 30, 0, 0);
-        if (objData.getWalletId() != null) {
-            if (objData.getWalletId().length() > 20) {
-                withBankName.setText(objData.getWalletId().substring(0, 20) + "...");
-            } else {
-                withBankName.setText(objData.getWalletId());
+            if (objData.getWalletId() != null) {
+                if (objData.getWalletId().length() > 20) {
+                    withBankName.setText(objData.getWalletId().substring(0, 20) + "...");
+                } else {
+                    withBankName.setText(objData.getWalletId());
+                }
             }
         }
+//        if (objData.getWalletId() != null) {
+//            if (objData.getWalletId().length() > 20) {
+//                withBankName.setText(objData.getWalletId().substring(0, 20) + "...");
+//            } else {
+//                withBankName.setText(objData.getWalletId());
+//            }
+//        }
 
         findViewById(R.id.bankAccountLL).setVisibility(View.GONE);
 

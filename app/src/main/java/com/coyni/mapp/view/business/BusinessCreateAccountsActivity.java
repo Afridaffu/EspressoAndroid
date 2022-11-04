@@ -329,7 +329,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
 
             @Override
-            public void onAddDbaClicked(ProfilesResponse.Profiles profiles, Integer id) {
+//            public void onAddDbaClicked(ProfilesResponse.Profiles profiles, Integer id) {
+            public void onAddDbaClicked(BaseProfile profiles, Integer id) {
                 if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
                     return;
                 }
@@ -540,7 +541,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         startActivity(inNewAccount);
     }
 
-    private void displayDBAAlert(ProfilesResponse.Profiles profiles, Integer id) {
+    //    private void displayDBAAlert(ProfilesResponse.Profiles profiles, Integer id) {
+    private void displayDBAAlert(BaseProfile profiles, Integer id) {
         try {
             // custom dialog
             final Dialog dialog = new Dialog(BusinessCreateAccountsActivity.this);
@@ -555,7 +557,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             tvCompany.setText(profiles.getCompanyName());
             AccountsData accountsData = new AccountsData(profilesList);
             ArrayList<ProfilesResponse.Profiles> dBAList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(profiles.getId());
-            tvDBACount.setText("Total DBAs : " + dBAList.size());
+            if (dBAList != null) {
+                tvDBACount.setText("Total DBAs : " + dBAList.size());
+            }
 
             addDBACardView.setOnClickListener(new View.OnClickListener() {
                 @Override

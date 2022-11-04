@@ -162,8 +162,10 @@ public class SignAgreementsActivity extends BaseActivity {
                         binding.signatureTV.setTextColor(getColor(R.color.black));
                         if (!isSignatureCaptured)
                             binding.signatureEditIV.setImageDrawable(getDrawable(R.drawable.ic_sign));
-                        binding.signatureEditLL.setClickable(true);
-                        binding.signatureEditLL.setEnabled(true);
+//                        binding.signatureEditLL.setClickable(true);
+//                        binding.signatureEditLL.setEnabled(true);
+                        binding.signatureEditIV.setClickable(true);
+                        binding.signatureEditIV.setEnabled(true);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -201,7 +203,7 @@ public class SignAgreementsActivity extends BaseActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (isActionEnabled) {
-                            if (AGREE_TYPE == Utils.mAgmt) {
+                            if (AGREE_TYPE == Utils.mAgmt && agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(MATERIAL)) {
                                 showProgressDialog();
                                 File doc = new File(filePath);
                                 RequestBody requestBody = null;
@@ -228,7 +230,8 @@ public class SignAgreementsActivity extends BaseActivity {
                 }
             });
 
-            binding.signatureEditLL.setOnClickListener(new View.OnClickListener() {
+//            binding.signatureEditLL.setOnClickListener(new View.OnClickListener() {
+            binding.signatureEditIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -319,12 +322,15 @@ public class SignAgreementsActivity extends BaseActivity {
                 } else if (AGREE_TYPE == Utils.mAgmt) {
                     binding.signatureTV.setTextColor(getColor(R.color.light_gray));
                     binding.signatureEditIV.setImageDrawable(getDrawable(R.drawable.ic_sign_gray));
-                    binding.signatureEditLL.setClickable(false);
-                    binding.signatureEditLL.setEnabled(false);
+//                    binding.signatureEditLL.setClickable(false);
+//                    binding.signatureEditLL.setEnabled(false);
+                    binding.signatureEditIV.setClickable(false);
+                    binding.signatureEditIV.setEnabled(false);
                     binding.signatureEditLL.setVisibility(View.VISIBLE);
                     binding.agreeCB.setVisibility(View.GONE);
 
-                    binding.agreNameTV.setText(getString(R.string.gbx_merchant) + " Update");
+//                    binding.agreNameTV.setText(getString(R.string.gbx_merchant) + " Update");
+                    binding.agreNameTV.setText(getString(R.string.gbx_merchant1) + " Update");
                     binding.accknowledgeTV.setText("I agree to the " + getString(R.string.gbx_merchant) + " changes that take effect on " + effectiveDate);
                 }
             } else {

@@ -16,6 +16,7 @@ public class CogentRequest {
     private String routingNumber;
     private String state;
     private String zipCode;
+    private String fromTxnScreen;
 
     public String getAccountCategory() {
         return accountCategory;
@@ -135,6 +136,14 @@ public class CogentRequest {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public String getFromTxnScreen() {
+        return fromTxnScreen;
+    }
+
+    public void setFromTxnScreen(String fromTxnScreen) {
+        this.fromTxnScreen = fromTxnScreen;
     }
 }
 
