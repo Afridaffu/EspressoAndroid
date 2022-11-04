@@ -71,7 +71,7 @@ public class BiometricSignInData {
         private StateList stateList;
         @SerializedName("ownerDetails")
         @Expose
-        private OwnerDetailsData ownerDetails;
+        private BiometricSignInData ownerDetails;
         @SerializedName("coyniPin")
         @Expose
         private boolean coyniPin;
@@ -293,11 +293,11 @@ public class BiometricSignInData {
         this.stateList = stateList;
     }
 
-    public OwnerDetailsData getOwnerDetails() {
+    public BiometricSignInData getOwnerDetails() {
         return ownerDetails;
     }
 
-    public void setOwnerDetails(OwnerDetailsData ownerDetails) {
+    public void setOwnerDetails(BiometricSignInData ownerDetails) {
         this.ownerDetails = ownerDetails;
     }
 

@@ -297,18 +297,27 @@ public class EnableAuthID extends BaseActivity {
 
             setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
                 @Override
-                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp, boolean isMerchantHide) {
                     dismissDialog();
-                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
-                    if (filteredAgreements.getAgreements().size() > 0) {
-                        Utils.launchAgreements(EnableAuthID.this, filteredAgreements.isMerchantAgreement());
-                        finish();
+                    if (isMerchantHide) {
+                        FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                        if (filteredAgreements.getAgreements().size() > 0) {
+                            objMyApplication.setHasToSignAgreements(filteredAgreements.getAgreements());
+                            Utils.launchAgreements(EnableAuthID.this, isMerchantHide);
+                        } else {
+                            launchDasboardFromBase();
+                        }
                     } else {
-                        launchDasboardFromBase();
+                        if (signAgreementsResp.getData().size() > 0) {
+                            objMyApplication.setHasToSignAgreements(signAgreementsResp.getData());
+                            Utils.launchAgreements(EnableAuthID.this, isMerchantHide);
+                        } else {
+                            launchDasboardFromBase();
+                        }
                     }
-
                 }
             });
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -517,12 +526,20 @@ public class EnableAuthID extends BaseActivity {
     private void launchDashboard() {
         if (!objMyApplication.isAgreementSigned() && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
                 && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+
+//            if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+//                Utils.launchAgreements(EnableAuthID.this, false);
+//            else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+//                showProgressDialog();
+//                callHasToSignAPI();
+//            }
+            showProgressDialog();
             if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
-                Utils.launchAgreements(EnableAuthID.this, false);
+                callHasToSignAPI(false);
             else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
-                showProgressDialog();
-                callHasToSignAPI();
+                callHasToSignAPI(true);
             }
+
         } else {
             if (objMyApplication.checkForDeclinedStatus()) {
                 objMyApplication.setIsLoggedIn(true);

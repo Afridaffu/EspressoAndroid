@@ -109,15 +109,24 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             initObserver();
             setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
                 @Override
-                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp, boolean isMerchantHide) {
                     dismissDialog();
-                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
-                    if (filteredAgreements.getAgreements().size() > 0) {
-                        Utils.launchAgreements(LoginActivity.this, filteredAgreements.isMerchantAgreement());
+                    if (isMerchantHide) {
+                        FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                        if (filteredAgreements.getAgreements().size() > 0) {
+                            objMyApplication.setHasToSignAgreements(filteredAgreements.getAgreements());
+                            Utils.launchAgreements(LoginActivity.this, isMerchantHide);
+                        } else {
+                            launchDasboardFromBase();
+                        }
                     } else {
-                        launchDasboardFromBase();
+                        if (signAgreementsResp.getData().size() > 0) {
+                            objMyApplication.setHasToSignAgreements(signAgreementsResp.getData());
+                            Utils.launchAgreements(LoginActivity.this, isMerchantHide);
+                        } else {
+                            launchDasboardFromBase();
+                        }
                     }
-
                 }
             });
         } catch (Exception ex) {
@@ -887,12 +896,19 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                     if (!loginResponse.getData().getTracker().isIsAgreementSigned()
                                             && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
                                             && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+//                                        if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
+//                                            Utils.launchAgreements(LoginActivity.this, false);
+//                                        else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                            showProgressDialog();
+//                                            callHasToSignAPI();
+//                                        }
+                                        showProgressDialog();
                                         if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
-                                            Utils.launchAgreements(LoginActivity.this, false);
+                                            callHasToSignAPI(false);
                                         else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
-                                            showProgressDialog();
-                                            callHasToSignAPI();
+                                            callHasToSignAPI(true);
                                         }
+
                                     } else
                                         launchDashboard();
                                 }
