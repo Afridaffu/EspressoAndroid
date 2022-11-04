@@ -556,7 +556,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_18sdp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -575,6 +576,32 @@
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_18sdp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="Cogent Account"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/TV_B_BuyCogentAccount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -671,13 +698,18 @@
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
 
+                    <View
+                        android:id="@+id/signetView"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_15sdp"
+                        android:visibility="gone"/>
+
                     <LinearLayout
+                        android:id="@+id/signetLL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginBottom="@dimen/_24sdp"
                         android:orientation="horizontal"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="0dp"
@@ -696,6 +728,38 @@
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/cogentLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="visible"
+                        android:layout_marginTop="@dimen/_15sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="Cogent Account"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/TV_B_WithdrawCogentAccount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_24sdp" />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

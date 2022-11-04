@@ -181,7 +181,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 //            }
             if (userDetails != null && userDetails.getData() != null && userDetails.getData().getDbaName() != null) {
                 if (userDetails.getData().getDbaName().length() >= 21) {
-                    tvName.setText(Utils.capitalize(userDetails.getData().getDbaName().substring(0, 21)) + "...");
+                    tvName.setText((userDetails.getData().getDbaName().substring(0, 21)) + "...");
                 } else {
                     tvName.setText(userDetails.getData().getDbaName());
                 }

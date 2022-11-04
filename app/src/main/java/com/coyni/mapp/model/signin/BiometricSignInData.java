@@ -87,6 +87,9 @@ public class BiometricSignInData {
         @SerializedName("passwordExpired")
         @Expose
         private boolean passwordExpired;
+        @SerializedName("agreementsSigned")
+        @Expose
+        private boolean agreementsSigned;
         @SerializedName("ownerImage")
         @Expose
         private String ownerImage;
@@ -344,5 +347,13 @@ public class BiometricSignInData {
 
     public void setOwnerImage(String ownerImage) {
         this.ownerImage = ownerImage;
+    }
+
+    public boolean isAgreementsSigned() {
+        return agreementsSigned;
+    }
+
+    public void setAgreementsSigned(boolean agreementsSigned) {
+        this.agreementsSigned = agreementsSigned;
     }
 }

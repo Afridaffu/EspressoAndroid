@@ -18,7 +18,13 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
@@ -67,12 +73,17 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.coyni.mapp.R;
+import com.coyni.mapp.model.FilteredAgreements;
+import com.coyni.mapp.model.SignAgreementData;
+import com.coyni.mapp.model.SignAgreementsResp;
+import com.coyni.mapp.view.business.BusinessCreateAccountsActivity;
+import com.coyni.mapp.view.business.SignAgreementsActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.BusinessTypeListAdapter;
 import com.coyni.mapp.adapters.CustomerTimeZonesAdapter;
 import com.coyni.mapp.adapters.StatesListAdapter;
@@ -167,18 +178,18 @@ public class Utils {
 
 
     public static enum STRING_PREFERENCE {
-        PST(0,"PST"),
-        MST(1,"America/Denver"),
-        CST(2,"CST"),
-        EST(3,"America/New_York"),
-        HST(4,"HST"),
-        AST(5,"AST"),
-        SST(6,"US/Samoa");
+        PST(0, "PST"),
+        MST(1, "America/Denver"),
+        CST(2, "CST"),
+        EST(3, "America/New_York"),
+        HST(4, "HST"),
+        AST(5, "AST"),
+        SST(6, "US/Samoa");
 
         int zoneID;
         String strPreference;
 
-        STRING_PREFERENCE(int zoneID,String strPreference){
+        STRING_PREFERENCE(int zoneID, String strPreference) {
             this.zoneID = zoneID;
             this.strPreference = strPreference;
         }
@@ -250,6 +261,7 @@ public class Utils {
     public static final String instantType = "1";
     public static final String giftcardType = "6";
     public static final String signetType = "7";
+    public static final String CogentType = "14";
     public static final String payType = "12";
     public static final String businessType = "19";
     public static final String tokenType = "11";
@@ -335,7 +347,8 @@ public class Utils {
     public static final int bankAccount = 0;
     public static final int creditCard = 2;
     public static final int debitCard = 3;
-    public static final int signet = 7;
+    public static final int Cogent = 14;
+    public static final int Signet = 7;
     public static final int instantPay = 1;
     public static final int giftCard = 6;
     public static final int saleOrderToken = 11; //need to confirm
@@ -466,6 +479,8 @@ public class Utils {
     public static final int mPP = 1;
     public static final int mTOS = 0;
     public static final int mAgmt = 2;
+    public static final int ACTIVE_AGREEMENT = 0;
+    public static final int SCHEDULED_AGREEMENT = 3;
 
     public static Class<?> launchedActivity = OnboardActivity.class;
     public static final String NOTIFICATION_ACTION = "com.coyni.notification_received";
@@ -484,10 +499,12 @@ public class Utils {
     public static final String buyBankEnable = "token account.buy tokens.external bank account";
     public static final String buyDebitEnable = "token account.buy tokens.debit card";
     public static final String buyCreditEnable = "token account.buy token.credit card";
+    public static final String buyCogentEnable = "token account.buy token.cogent account";
     public static final String buySignetEnable = "token account.buy token.signet account";
     public static final String withBankEnable = "token account.withdrawals.external bank account";
     public static final String withInstantEnable = "token account.withdrawals.instant pay";
     public static final String withGiftEnable = "token account.withdrawals.gift card";
+    public static final String withCogentEnable = "token account.withdrawals.cogent account";
     public static final String withSignetEnable = "token account.withdrawals.signet account";
     public static final String saleOrderEnable = "token account.sale orders.token";
     public static final String payEnable = "token account.pay/request.pay";
@@ -495,6 +512,7 @@ public class Utils {
     public static final String payBankEnable = "token account.payment methods.external bank account";
     public static final String payDebitEnable = "token account.payment methods.debit card";
     public static final String payCreditEnable = "token account.payment methods.credit card";
+    public static final String payCogentEnable = "token account.payment methods.cogent account";
     public static final String paySignetEnable = "token account.payment methods.signet account";
     public static final String allControlsEnable = "token account.all controls";
 
@@ -1729,6 +1747,20 @@ public class Utils {
         return strDate;
     }
 
+    public static String convertEffectiveDate(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+//            spf = new SimpleDateFormat("MMMM dd, yyyy");
+            spf = new SimpleDateFormat("MM/dd/yyyy");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
     public static String convertTwoDecimalPoints(Double value) {
         return df.format(value);
     }
@@ -2141,7 +2173,7 @@ public class Utils {
         try {
             if (objResponse != null && objResponse.getData() != null && objResponse.getData().getData() != null && objResponse.getData().getData().size() > 0) {
                 for (int i = 0; i < objResponse.getData().getData().size(); i++) {
-                    if (!objResponse.getData().getData().get(i).getPaymentMethod().toLowerCase().equals("signet")) {
+                    if (!objResponse.getData().getData().get(i).getPaymentMethod().toLowerCase().equals("Cogent")) {
                         listData.add(objResponse.getData().getData().get(i));
                     }
                 }
@@ -2184,14 +2216,15 @@ public class Utils {
                 if (listPayments != null && listPayments.size() > 0) {
                     for (int i = 0; i < listPayments.size(); i++) {
 //                        if (listPayments.get(i).getPaymentMethod() != null
-//                                && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
+//                                && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("Cogent"))) {
 //                        if (listPayments.get(i).getPaymentMethod() != null && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank"))) {
                         if (strScreen.equals("")) {
                             if (listPayments.get(i).getPaymentMethod() != null && (!listPayments.get(i).getPaymentMethod().toLowerCase().equals("credit"))) {
                                 listBusPayments.add(listPayments.get(i));
                             }
                         } else {
-//                            if (listPayments.get(i).getPaymentMethod() != null && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
+//                            if (listPayments.get(i).getPaymentMethod() != null && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank")
+//                                    || listPayments.get(i).getPaymentMethod().toLowerCase().equalsIgnoreCase("Cogent")) || listPayments.get(i).getPaymentMethod().toLowerCase().equalsIgnoreCase("Signet")) {
                             if (listPayments.get(i).getPaymentMethod() != null && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank"))) {
                                 listBusPayments.add(listPayments.get(i));
                             }
@@ -2938,4 +2971,50 @@ public class Utils {
             return true;
     }
 
+    public static Bitmap getRoundedCroppedBitmap(Bitmap bitmap) {
+
+        int widthLight = bitmap.getWidth();
+        int heightLight = bitmap.getHeight();
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+        Paint paintColor = new Paint();
+//        canvas.drawColor(Color.WHITE);
+        paintColor.setFlags(Paint.ANTI_ALIAS_FLAG);
+
+        RectF rectF = new RectF(new Rect(0, 0, widthLight, heightLight));
+
+        canvas.drawRoundRect(rectF, widthLight / 2, heightLight / 2, paintColor);
+
+        Paint paintImage = new Paint();
+        paintImage.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, 0, 0, paintImage);
+
+        return output;
+    }
+
+    public static FilteredAgreements getFilteredAgreements
+            (List<SignAgreementData> agreementData) {
+        boolean isMerchantAgreement = false;
+        List<SignAgreementData> agreements = new ArrayList<>();
+        for (int i = 0; i < agreementData.size(); i++) {
+            if (agreementData.get(i).getAgreementType() != Utils.mAgmt)
+                agreements.add(agreementData.get(i));
+            else if (agreementData.get(i).getAgreementType() == Utils.mAgmt) {
+                isMerchantAgreement = true;
+            }
+        }
+        FilteredAgreements mFilteredAgreements = new FilteredAgreements();
+        mFilteredAgreements.setAgreements(agreements);
+        mFilteredAgreements.setMerchantAgreement(isMerchantAgreement);
+
+        return mFilteredAgreements;
+    }
+
+    public static void launchAgreements(Activity activity, boolean isMerchantRemove) {
+        activity.startActivity(new Intent(activity, SignAgreementsActivity.class)
+                .putExtra("REMOVE_MERCHANT", isMerchantRemove));
+    }
 }

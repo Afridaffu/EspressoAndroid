@@ -27,6 +27,7 @@ import com.coyni.mapp.model.AccountsData;
 import com.coyni.mapp.model.preferences.BaseProfile;
 import com.coyni.mapp.model.preferences.ProfilesResponse;
 import com.coyni.mapp.model.profile.AddBusinessUserResponse;
+import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
@@ -283,9 +284,9 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         }
 
         try {
-            loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+            loginViewModel.postChangeAccountResponse().observe(this, new Observer<BiometricSignIn>() {
                 @Override
-                public void onChanged(AddBusinessUserResponse btResp) {
+                public void onChanged(BiometricSignIn btResp) {
                     dismissDialog();
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {

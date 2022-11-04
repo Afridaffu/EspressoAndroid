@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,19 +29,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.AddNewBusinessAccountDBAAdapter;
 import com.coyni.mapp.adapters.BusinessProfileRecyclerAdapter;
+import com.coyni.mapp.dialogs.OnAgreementsAPIListener;
 import com.coyni.mapp.model.AccountsData;
+import com.coyni.mapp.model.FilteredAgreements;
+import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.businesswallet.WalletResponseData;
 import com.coyni.mapp.model.preferences.BaseProfile;
 import com.coyni.mapp.model.preferences.ProfilesResponse;
 import com.coyni.mapp.model.profile.AddBusinessUserResponse;
 import com.coyni.mapp.model.profile.Profile;
+import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.utils.DisplayImageUtility;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.DashboardActivity;
+import com.coyni.mapp.view.PINActivity;
 import com.coyni.mapp.viewmodel.BusinessIdentityVerificationViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.IdentityVerificationViewModel;
@@ -97,6 +103,20 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                     }
                     mLastClickTimeQA = SystemClock.elapsedRealtime();
                     openNewAccount();
+                }
+            });
+
+            setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
+                @Override
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                    dismissDialog();
+                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                    if (filteredAgreements.getAgreements().size() > 0) {
+                        Utils.launchAgreements(BusinessCreateAccountsActivity.this, filteredAgreements.isMerchantAgreement());
+                    } else {
+                        launchDasboardFromBase();
+                    }
+
                 }
             });
         } catch (Exception e) {
@@ -164,9 +184,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             userNameTV.setText(getResources().getString(R.string.dba_name, userName));
 
             if (userName != null && userName.length() > 20) {
-                userNameTV.setText(Utils.capitalize(userName).substring(0, 20) + " ");
+                userNameTV.setText((userName).substring(0, 20) + " ");
             } else {
-                userNameTV.setText(Utils.capitalize(userName));
+                userNameTV.setText((userName));
             }
             if (firstName != null && !firstName.equals("") && lastName != null && !lastName.equals("")) {
                 char first = firstName.charAt(0);
@@ -179,9 +199,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
             userName = myApplication.getMyProfile().getData().getDbaName();
             if (userName != null && userName.length() > 20) {
-                userNameTV.setText(Utils.capitalize(userName).substring(0, 20) + " ");
+                userNameTV.setText((userName).substring(0, 20) + " ");
             } else if (userName != null) {
-                userNameTV.setText(Utils.capitalize(userName));
+                userNameTV.setText((userName));
             }
             imgProfile.setVisibility(View.VISIBLE);
             if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
@@ -206,9 +226,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                     userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
                 }
                 if (userName != null && userName.length() > 20) {
-                    userNameTV.setText(Utils.capitalize(userName).substring(0, 20) + " ");
+                    userNameTV.setText((userName).substring(0, 20) + " ");
                 } else {
-                    userNameTV.setText(Utils.capitalize(userName));
+                    userNameTV.setText(userName);
                 }
                 imgProfile.setVisibility(View.VISIBLE);
                 if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
@@ -232,17 +252,17 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             public void onClick(View view) {
                 if (userNameTV.getText().toString().contains("...")) {
                     if (userName.length() == 21 || userName.length() > 21) {
-                        userNameTV.setText(Utils.capitalize(userName).substring(0, 20));
+                        userNameTV.setText((userName).substring(0, 20));
                     } else {
-                        userNameTV.setText(Utils.capitalize(userName));
+                        userNameTV.setText(userName);
                     }
                 } else {
                     if (userName.length() == 21) {
-                        userNameTV.setText(Utils.capitalize(userName).substring(0, 20) + "...");
+                        userNameTV.setText((userName).substring(0, 20) + "...");
                     } else if (userName.length() > 21) {
-                        userNameTV.setText(Utils.capitalize(userName).substring(0, 21) + "...");
+                        userNameTV.setText((userName).substring(0, 21) + "...");
                     } else {
-                        userNameTV.setText(Utils.capitalize(userName));
+                        userNameTV.setText(userName);
                     }
                 }
             }
@@ -375,16 +395,16 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             }
         });
 
-        loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+        loginViewModel.postChangeAccountResponse().observe(this, new Observer<BiometricSignIn>() {
             @Override
-            public void onChanged(AddBusinessUserResponse btResp) {
+            public void onChanged(BiometricSignIn btResp) {
                 dismissDialog();
                 if (btResp != null) {
                     if (btResp.getStatus().toLowerCase().equals("success")) {
-
                         if (btResp.getData() != null)
                             myApplication.setCompanyName(btResp.getData().getCompanyName());
 
+                        myApplication.setAgreementSigned(btResp.getData().getTracker().isIsAgreementSigned());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountType());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getDbaOwnerId());
@@ -394,23 +414,33 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                             myApplication.setOwnerImage(btResp.getData().getOwnerImage());
                         }
                         Utils.setStrAuth(btResp.getData().getJwtToken());
-                        myApplication.setLoginUserId(btResp.getData().getUserId());
+                        myApplication.setLoginUserId(Integer.parseInt(String.valueOf(btResp.getData().getUserId())));
                         myApplication.setStrEmail(btResp.getData().getEmail());
                         myApplication.setAccountType(btResp.getData().getAccountType());
-                        myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
+                        myApplication.setDbaOwnerId(Integer.parseInt(String.valueOf(btResp.getData().getDbaOwnerId())));
                         myApplication.setIsReserveEnabled(btResp.getData().isReserveEnabled());
                         myApplication.setIsLoggedIn(true);
 
-                        if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
-                            Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+//                        if (!btResp.getData().getTracker().isIsAgreementSigned()) {
+                        if (!btResp.getData().getTracker().isIsAgreementSigned() && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                                && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                            if (btResp.getData().getBusinessTracker() == null || btResp.getData().getBusinessTracker().isIsAgreementSigned())
+                                Utils.launchAgreements(BusinessCreateAccountsActivity.this, false);
+                            else if (!btResp.getData().getBusinessTracker().isIsAgreementSigned()) {
+                                showProgressDialog();
+                                callHasToSignAPI();
+                            }
                         } else {
-                            Intent intent = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
+                                Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
                         }
-
                     } else {
                         Utils.displayAlert(btResp.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", "");
                     }

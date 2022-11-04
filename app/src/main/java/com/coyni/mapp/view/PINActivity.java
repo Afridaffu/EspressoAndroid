@@ -25,6 +25,9 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.dialogs.OnAgreementsAPIListener;
+import com.coyni.mapp.model.FilteredAgreements;
+import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.States;
 import com.coyni.mapp.model.signin.InitializeResponse;
 import com.coyni.mapp.view.business.BusinessProfileActivity;
@@ -63,7 +66,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-public class PINActivity extends AppCompatActivity implements View.OnClickListener {
+public class PINActivity extends BaseActivity implements View.OnClickListener {
     private View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
     private TextView keyZeroTV, keyOneTV, keyTwoTV, keyThreeTV, keyFourTV, keyFiveTV, keySixTV, keySevenTV, keyEightTV, keyNineTV;
     private ImageView backActionIV, imgBack;
@@ -114,6 +117,21 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             SetDontRemind();
             initObserver();
+
+            setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
+                @Override
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                    dismissDialog();
+                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                    if (filteredAgreements.getAgreements().size() > 0) {
+                        Utils.launchAgreements(PINActivity.this, filteredAgreements.isMerchantAgreement());
+                        finish();
+                    } else {
+                        launchDasboardFromBase();
+                    }
+
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -732,8 +750,21 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     if (initializeResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         if (initializeResponse.getData() != null) {
 
+                            objMyApplication.setInitializeResponse(initializeResponse);
+
                             if (initializeResponse.getData().getStateList() != null && initializeResponse.getData().getStateList().getUS() != null) {
                                 getStatesUrl(initializeResponse.getData().getStateList().getUS());
+                            }
+
+                            try {
+                                if (initializeResponse.getData().getDbaName() != null && !initializeResponse.getData().getDbaName().equals(""))
+                                    objMyApplication.setStrDBAName(initializeResponse.getData().getDbaName());
+
+                                if (initializeResponse.getData().getFirstName() != null && !initializeResponse.getData().getFirstName().equals("") &&
+                                        initializeResponse.getData().getLastName() != null && !initializeResponse.getData().getLastName().equals(""))
+                                    objMyApplication.setStrUserName(Utils.capitalize(initializeResponse.getData().getFirstName() + " " + initializeResponse.getData().getLastName()));
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
 
                             objMyApplication.setDbaOwnerId(initializeResponse.getData().getDbaOwnerId());
@@ -754,6 +785,12 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
 
                             objMyApplication.setAccountType(initializeResponse.getData().getAccountType());
 
+//                            if (objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.BUSINESS_ACCOUNT ||
+//                                    objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.SHARED_ACCOUNT) {
+//                                objMyApplication.setAgreementSigned(objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned());
+//                            } else if (objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            objMyApplication.setAgreementSigned(objMyApplication.getInitializeResponse().getData().getTracker().isIsAgreementSigned());
+//                            }
                         }
 
                     }
@@ -1206,12 +1243,21 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void launchDashboard() {
-        if (objMyApplication.checkForDeclinedStatus()) {
-            objMyApplication.setIsLoggedIn(true);
-            objMyApplication.launchDeclinedActivity(this);
+        if (objMyApplication.isAgreementSigned()) {
+            if (objMyApplication.checkForDeclinedStatus()) {
+                objMyApplication.setIsLoggedIn(true);
+                objMyApplication.launchDeclinedActivity(this);
+            } else {
+                objMyApplication.setIsLoggedIn(true);
+                objMyApplication.launchDashboard(this, strScreen);
+            }
         } else {
-            objMyApplication.setIsLoggedIn(true);
-            objMyApplication.launchDashboard(this, strScreen);
+            if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+                Utils.launchAgreements(PINActivity.this, false);
+            else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+                showProgressDialog();
+                callHasToSignAPI();
+            }
         }
     }
 

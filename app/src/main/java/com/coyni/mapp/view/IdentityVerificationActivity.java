@@ -46,6 +46,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -1278,9 +1279,9 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             e.printStackTrace();
         }
         try {
-            loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+            loginViewModel.postChangeAccountResponse().observe(this, new Observer<BiometricSignIn>() {
                 @Override
-                public void onChanged(AddBusinessUserResponse btResp) {
+                public void onChanged(BiometricSignIn btResp) {
                     LogUtils.d("addBusiness", "addBusiness" + btResp);
                     if (btResp != null) {
                         LogUtils.d("afternulll", "addBusiness" + btResp.getStatus());
@@ -1288,10 +1289,10 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             LogUtils.d("btResp", "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
                             myApplicationObj.setMyProfile(null);
-                            myApplicationObj.setLoginUserId(btResp.getData().getUserId());
+                            myApplicationObj.setLoginUserId(Integer.parseInt(String.valueOf(btResp.getData().getUserId())));
                             myApplicationObj.setStrEmail(btResp.getData().getEmail());
                             myApplicationObj.setAccountType(btResp.getData().getAccountType());
-                            myApplicationObj.setDbaOwnerId(btResp.getData().getDbaOwnerId());
+                            myApplicationObj.setDbaOwnerId(Integer.parseInt(String.valueOf(btResp.getData().getDbaOwnerId())));
                             myApplicationObj.setIsReserveEnabled(btResp.getData().isReserveEnabled());
                             finish();
                         } else {

@@ -27,6 +27,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.view.DashboardActivity;
 import com.google.gson.Gson;
 import com.coyni.mapp.R;
@@ -410,18 +411,18 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
         }
 
         try {
-            loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+            loginViewModel.postChangeAccountResponse().observe(this, new Observer<BiometricSignIn>() {
                 @Override
-                public void onChanged(AddBusinessUserResponse btResp) {
+                public void onChanged(BiometricSignIn btResp) {
                     dismissDialog();
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             LogUtils.d("btResp", "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
-                            objMyApplication.setLoginUserId(btResp.getData().getUserId());
+                            objMyApplication.setLoginUserId(Integer.parseInt(String.valueOf(btResp.getData().getUserId())));
                             objMyApplication.setAccountType(btResp.getData().getAccountType());
                             objMyApplication.setCompanyName(btResp.getData().getCompanyName());
-                            objMyApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
+                            objMyApplication.setDbaOwnerId(Integer.parseInt(String.valueOf(btResp.getData().getDbaOwnerId())));
                             isAddBusinessCalled = false;
                             isAddDbaCalled = false;
 //                            finish();

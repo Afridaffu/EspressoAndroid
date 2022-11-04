@@ -36,6 +36,7 @@ import com.coyni.mapp.model.DBAInfo.DBAInfoResp;
 import com.coyni.mapp.model.profile.AddBusinessUserResponse;
 import com.coyni.mapp.model.profile.ImageResponse;
 import com.coyni.mapp.model.profile.Profile;
+import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.utils.DisplayImageUtility;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.MyApplication;
@@ -243,7 +244,7 @@ public class DBAInfoDetails extends BaseActivity {
 //                            if (str != null && str.length() > 20) {
 //                                nameTV.setText(Utils.capitalize(str).substring(0, 20) + "...");
 //                            } else if (str != null) {
-                            nameTV.setText(Utils.capitalize(str));
+                            nameTV.setText(str);
 //                            }
                             if (dbaInfoResp.getData().getEmail() != null) {
                                 emailTV.setText(dbaInfoResp.getData().getEmail());
@@ -397,9 +398,9 @@ public class DBAInfoDetails extends BaseActivity {
                 }
             });
 
-            loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+            loginViewModel.postChangeAccountResponse().observe(this, new Observer<BiometricSignIn>() {
                 @Override
-                public void onChanged(AddBusinessUserResponse btResp) {
+                public void onChanged(BiometricSignIn btResp) {
                     try {
                         dismissDialog();
                         if (btResp != null) {

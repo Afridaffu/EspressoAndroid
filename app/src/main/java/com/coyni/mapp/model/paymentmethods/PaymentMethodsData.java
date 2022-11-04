@@ -1,5 +1,7 @@
 package com.coyni.mapp.model.paymentmethods;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class PaymentMethodsData {
@@ -7,10 +9,12 @@ public class PaymentMethodsData {
     private int creditCardCount;
     private int debitCardCount;
     private int bankCount;
+    private int cogentCount;
     private int signetCount;
     private int maxDebitCardsAllowed;
     private int maxCreditCardsAllowed;
     private int maxBankAccountsAllowed;
+    private int maxCogentAccountsAllowed;
     private int maxSignetAccountsAllowed;
 
     public List<PaymentsList> getData() {
@@ -67,6 +71,22 @@ public class PaymentMethodsData {
 
     public void setMaxBankAccountsAllowed(int maxBankAccountsAllowed) {
         this.maxBankAccountsAllowed = maxBankAccountsAllowed;
+    }
+
+    public int getCogentCount() {
+        return cogentCount;
+    }
+
+    public void setCogentCount(int cogentCount) {
+        this.cogentCount = cogentCount;
+    }
+
+    public int getMaxCogentAccountsAllowed() {
+        return maxCogentAccountsAllowed;
+    }
+
+    public void setMaxCogentAccountsAllowed(int maxCogentAccountsAllowed) {
+        this.maxCogentAccountsAllowed = maxCogentAccountsAllowed;
     }
 
     public int getSignetCount() {

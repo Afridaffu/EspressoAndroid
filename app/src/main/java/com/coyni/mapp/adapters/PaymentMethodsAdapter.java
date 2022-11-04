@@ -86,7 +86,28 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                 } else {
                     holder.tvAccNumber.setText(objData.getAccountNumber());
                 }
-            } else if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equals("signet")) {
+            } else if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
+                holder.tvBankHead.setText("Cogent Account");
+                holder.layoutBank.setVisibility(View.VISIBLE);
+                holder.tvCardNumber.setVisibility(View.GONE);
+                if (!objData.getRelink()) {
+                    holder.tvBankExpire.setVisibility(View.GONE);
+                    holder.layoutBack.setBackgroundResource(R.drawable.ic_activecogent);
+                    holder.imgBankIcon.setImageResource(R.drawable.ic_cogentactive_colored);
+                    holder.imgBankIcon.setVisibility(View.VISIBLE);
+                } else {
+                    holder.tvBankExpire.setVisibility(View.VISIBLE);
+                    holder.layoutBack.setBackgroundResource(R.drawable.ic_issuecogent);
+                    holder.imgBankIcon.setImageResource(R.drawable.ic_cogentinactive);
+                    holder.imgBankIcon.setVisibility(View.VISIBLE);
+                }
+                holder.tvAccNumber.setVisibility(View.GONE);
+                if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
+                    holder.tvBankName.setText(objData.getAccountNumber().substring(0, 10) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                } else {
+                    holder.tvBankName.setText(objData.getAccountNumber());
+                }
+            } else if (objData.getPaymentMethod() != null && objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("signet")) {
                 holder.tvBankHead.setText("Signet Account");
                 holder.layoutBank.setVisibility(View.VISIBLE);
                 holder.tvCardNumber.setVisibility(View.GONE);
@@ -214,7 +235,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                                 }
                             }
                         } else {
-//                            if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
+//                            if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("Cogent")) {
                             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                 if (objMyApplication.getFeatureControlGlobal().getPayBank() != null && objMyApplication.getFeatureControlByUser() != null
                                         && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
@@ -227,7 +248,14 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                                 } else {
                                     Utils.displayAlert(mContext.getString(R.string.errormsg), ((BusinessPaymentMethodsActivity) mContext), "", "");
                                 }
-                            } else if (objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                            } else if (objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")) {
+                                if (objMyApplication.getFeatureControlGlobal().getPayCogent() != null && objMyApplication.getFeatureControlByUser() != null
+                                        && objMyApplication.getFeatureControlGlobal().getPayCogent() && objMyApplication.getFeatureControlByUser().getPayCogent()) {
+                                    ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);
+                                } else {
+                                    Utils.displayAlert(mContext.getString(R.string.errormsg), ((BusinessPaymentMethodsActivity) mContext), "", "");
+                                }
+                            } else if (objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("signet")) {
                                 if (objMyApplication.getFeatureControlGlobal().getPaySignet() != null && objMyApplication.getFeatureControlByUser() != null
                                         && objMyApplication.getFeatureControlGlobal().getPaySignet() && objMyApplication.getFeatureControlByUser().getPaySignet()) {
                                     ((BusinessPaymentMethodsActivity) mContext).deleteBank(objData);

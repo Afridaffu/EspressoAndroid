@@ -106,6 +106,7 @@
     <color name="profile_gray">#f0f4f5</color>
     <color name="loader_color">#0F6764</color>
     <color name="mb_transparent">#00FFFFFF</color>
+    <color name="non_material_bg">#fafbfb</color>
 
 
 </resources>

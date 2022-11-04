@@ -1,10 +1,10 @@
-package com.coyni.mapp.model.signet;
+package com.coyni.mapp.model.cogent;
 import com.coyni.mapp.model.Error;
 
-public class SignetResponse {
+public class CogentResponse {
     private String status;
     private String timestamp;
-    private SignetResponseData data;
+    private CogentResponseData data;
     private Error error;
 
     public String getStatus() {
@@ -23,11 +23,11 @@ public class SignetResponse {
         this.timestamp = timestamp;
     }
 
-    public SignetResponseData getData() {
+    public CogentResponseData getData() {
         return data;
     }
 
-    public void setData(SignetResponseData data) {
+    public void setData(CogentResponseData data) {
         this.data = data;
     }
 

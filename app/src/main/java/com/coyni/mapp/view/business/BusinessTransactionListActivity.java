@@ -463,9 +463,11 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         Chip transSubTypeBA = dialog.findViewById(R.id.transSubTypeBA);
 //        Chip transSubTypeCC = dialog.findViewById(R.id.transSubTypeCC);
 //        Chip transSubTypeDC = dialog.findViewById(R.id.transSubTypeDC);
+        Chip transSubTypeCogent = dialog.findViewById(R.id.transSubTypeCogent);
         Chip transSubTypeSignet = dialog.findViewById(R.id.transSubTypeSignet);
         Chip transSubTypeIP = dialog.findViewById(R.id.transSubTypeIP);
         Chip transSubTypeGiftCard = dialog.findViewById(R.id.transSubTypeGiftCard);
+        Chip transSubTypeGiftCardNew = dialog.findViewById(R.id.transSubTypeGiftCardNew);
 //        Chip transSubTypeSOToken = dialog.findViewById(R.id.transSubTypeSOToken);
 //        Chip transSubTypeFW = dialog.findViewById(R.id.transSubTypeFW);
 //        Chip transSubTypeCW = dialog.findViewById(R.id.transSubTypeCW);
@@ -476,17 +478,64 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         Chip transStatusInProgress = dialog.findViewById(R.id.transStatusInProgress);
         Chip transStatusFailed = dialog.findViewById(R.id.transStatusFailed);
 
+        Chip emptyChip = dialog.findViewById(R.id.emptyChip);
+
         EditText transAmountStartET = dialog.findViewById(R.id.transAmountStartET);
         EditText transAmountEndET = dialog.findViewById(R.id.transAmountEndET);
 //
         CardView applyFilterBtnCV = dialog.findViewById(R.id.applyFilterBtnCV);
         LinearLayout dateRangePickerLL = dialog.findViewById(R.id.dateRangePickerLL);
+        LinearLayout cogentGCLL = dialog.findViewById(R.id.cogentGCLL);
+        LinearLayout signetLL = dialog.findViewById(R.id.signetLL);
         EditText getDateFromPickerET = dialog.findViewById(R.id.datePickET);
         TextView resetFiltersTV = dialog.findViewById(R.id.resetFiltersTV);
+
         tempTransactionType = new ArrayList<Integer>();
         tempTransactionSubType = new ArrayList<Integer>();
         tempTxnStatus = new ArrayList<Integer>();
 
+        if (objMyApplication.isCogentEnabled() && objMyApplication.isSignetEnabled()) {
+            cogentGCLL.setVisibility(View.VISIBLE);
+            signetLL.setVisibility(View.VISIBLE);
+            transSubTypeGiftCardNew.setVisibility(View.INVISIBLE);
+            transSubTypeGiftCardNew.setClickable(false);
+
+            emptyChip.setVisibility(View.GONE);
+            transSubTypeCogent.setVisibility(View.VISIBLE);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+            params.setMargins(0, 0, 0, 0);
+            transSubTypeGiftCard.setLayoutParams(params);
+        } else if (objMyApplication.isCogentEnabled() && !objMyApplication.isSignetEnabled()) {
+            cogentGCLL.setVisibility(View.VISIBLE);
+            signetLL.setVisibility(View.GONE);
+        } else if (!objMyApplication.isCogentEnabled() && objMyApplication.isSignetEnabled()) {
+            cogentGCLL.setVisibility(View.GONE);
+            signetLL.setVisibility(View.VISIBLE);
+            transSubTypeGiftCardNew.setVisibility(View.VISIBLE);
+            transSubTypeGiftCardNew.setClickable(true);
+        } else if (!objMyApplication.isCogentEnabled() && !objMyApplication.isSignetEnabled()) {
+            cogentGCLL.setVisibility(View.VISIBLE);
+            signetLL.setVisibility(View.GONE);
+
+            emptyChip.setVisibility(View.INVISIBLE);
+            transSubTypeCogent.setVisibility(View.GONE);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+            params.setMargins(0, 0, 35, 0);
+            transSubTypeGiftCard.setLayoutParams(params);
+        }
+//        if (objMyApplication.isCogentEnabled()) {
+//            emptyChip.setVisibility(View.GONE);
+//            transSubTypeCogent.setVisibility(View.VISIBLE);
+//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//            params.setMargins(0, 0, 0, 0);
+//            transSubTypeGiftCard.setLayoutParams(params);
+//        } else {
+//            emptyChip.setVisibility(View.INVISIBLE);
+//            transSubTypeCogent.setVisibility(View.GONE);
+//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+//            params.setMargins(0, 0, 35, 0);
+//            transSubTypeGiftCard.setLayoutParams(params);
+//        }
         if (isFilters) {
             tempTransactionType.clear();
             tempTransactionType.addAll(transactionType);
@@ -554,7 +603,10 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 //                            transSubTypeDC.setChecked(true);
 //                            break;
 
-                        case Utils.signet:
+                        case Utils.Cogent:
+                            transSubTypeCogent.setChecked(true);
+                            break;
+                        case Utils.Signet:
                             transSubTypeSignet.setChecked(true);
                             break;
 
@@ -564,6 +616,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 //
                         case Utils.giftCard:
                             transSubTypeGiftCard.setChecked(true);
+                            transSubTypeGiftCardNew.setChecked(true);
                             break;
 
 //                    case Utils.saleOrderToken:
@@ -720,9 +773,11 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
             transSubTypeBA.setChecked(false);
 //            transSubTypeCC.setChecked(false);
 //            transSubTypeDC.setChecked(false);
+            transSubTypeCogent.setChecked(false);
             transSubTypeSignet.setChecked(false);
             transSubTypeIP.setChecked(false);
             transSubTypeGiftCard.setChecked(false);
+            transSubTypeGiftCardNew.setChecked(false);
 //            transSubTypeSOToken.setChecked(false);
 //            transSubTypeFW.setChecked(false);
 //            transSubTypeCW.setChecked(false);
@@ -974,15 +1029,32 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 //            }
 //        });
 //
+        transSubTypeCogent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    tempTransactionSubType.add(Utils.Cogent);
+                } else {
+                    for (int i = 0; i < tempTransactionSubType.size(); i++) {
+                        if (tempTransactionSubType.get(i) == Utils.Cogent) {
+                            tempTransactionSubType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
         transSubTypeSignet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    tempTransactionSubType.add(Utils.signet);
+                    tempTransactionSubType.add(Utils.Signet);
                 } else {
                     for (int i = 0; i < tempTransactionSubType.size(); i++) {
-                        if (tempTransactionSubType.get(i) == Utils.signet) {
+                        if (tempTransactionSubType.get(i) == Utils.Signet) {
                             tempTransactionSubType.remove(i);
                             break;
                         }
@@ -1009,6 +1081,23 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         });
 //
         transSubTypeGiftCard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    tempTransactionSubType.add(Utils.giftCard);
+                } else {
+                    for (int i = 0; i < tempTransactionSubType.size(); i++) {
+                        if (tempTransactionSubType.get(i) == Utils.giftCard) {
+                            tempTransactionSubType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transSubTypeGiftCardNew.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 

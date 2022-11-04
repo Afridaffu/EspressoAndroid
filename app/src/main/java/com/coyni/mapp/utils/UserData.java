@@ -35,6 +35,7 @@ import com.coyni.mapp.model.reguser.Contacts;
 import com.coyni.mapp.model.reguser.RegisteredUsersRequest;
 import com.coyni.mapp.model.retrieveemail.RetrieveUsersResponse;
 import com.coyni.mapp.model.signin.BiometricSignIn;
+import com.coyni.mapp.model.signin.InitializeResponse;
 import com.coyni.mapp.model.submit.ApplicationSubmitResponseModel;
 import com.coyni.mapp.model.summary.BankAccount;
 import com.coyni.mapp.model.transaction.TransactionList;
@@ -53,7 +54,7 @@ public class UserData {
 
     private AgreementsPdf agreementsPdf;
     private RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
-    private String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "CST", strInvite = "", strScreen = "";
+    private String strUserName = "",strDBAName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "CST", strInvite = "", strScreen = "";
     private Profile myProfile = new Profile();
     private Fees fees = new Fees();
     private UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
@@ -62,7 +63,7 @@ public class UserData {
     private List<States> listStates = new ArrayList<>();
     private LatestTxnResponse listLatestTxn;
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
-    private Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false, isBankSave = false;
+    private Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isCogent = false, isSignet = false, isBankSave = false;
     private PaymentMethodsResponse paymentMethodsResponse;
     //    WalletResponse walletResponse;
     private String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
@@ -102,7 +103,7 @@ public class UserData {
     private List<Earning> earningList;
     boolean isReserveEnabled = false;
     private String strToken;
-    private boolean isLoggedIn = false;
+    private boolean isLoggedIn = false, isCogentEnabled = false, isSignetEnabled = false;
     private String businessUserID = "";
     private String ownerImage = "", companyName = "", strCVV = "";
     private List<BatchPayoutListItems> batchPayList = new ArrayList<>();
@@ -110,6 +111,8 @@ public class UserData {
     private FeatureControlByUser featureControlGlobal;
     private WebSocketUrlResponseData webSocketUrlResponse;
     private BankAccount bankAccount;
+    private InitializeResponse initializeResponse;
+    private boolean isAgreementSigned = true;
 
     public OrderPayResponse getOrderPayResponse() {
         return orderPayResponse;
@@ -295,12 +298,20 @@ public class UserData {
         isCardSave = cardSave;
     }
 
+    public Boolean getCogent() {
+        return isCogent;
+    }
+
+    public void setCogent(Boolean Cogent) {
+        isCogent = Cogent;
+    }
+
     public Boolean getSignet() {
         return isSignet;
     }
 
-    public void setSignet(Boolean signet) {
-        isSignet = signet;
+    public void setSignet(Boolean Signet) {
+        isSignet = Signet;
     }
 
     public Boolean getBankSave() {
@@ -811,11 +822,51 @@ public class UserData {
         this.companyName = companyName;
     }
 
+    public boolean isCogentEnabled() {
+        return isCogentEnabled;
+    }
+
+    public void setCogentEnabled(boolean cogentEnabled) {
+        isCogentEnabled = cogentEnabled;
+    }
+
+    public boolean isSignetEnabled() {
+        return isSignetEnabled;
+    }
+
+    public void setSignetEnabled(boolean signetEnabled) {
+        isSignetEnabled = signetEnabled;
+    }
+
+    public InitializeResponse getInitializeResponse() {
+        return initializeResponse;
+    }
+
+    public void setInitializeResponse(InitializeResponse initializeResponse) {
+        this.initializeResponse = initializeResponse;
+    }
+
+    public boolean isAgreementSigned() {
+        return isAgreementSigned;
+    }
+
+    public void setAgreementSigned(boolean agreementSigned) {
+        isAgreementSigned = agreementSigned;
+    }
+
     public String getStrCVV() {
         return strCVV;
     }
 
     public void setStrCVV(String strCVV) {
         this.strCVV = strCVV;
+    }
+
+    public String getStrDBAName() {
+        return strDBAName;
+    }
+
+    public void setStrDBAName(String strDBAName) {
+        this.strDBAName = strDBAName;
     }
 }

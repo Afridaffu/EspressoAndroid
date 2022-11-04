@@ -19,6 +19,9 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.dialogs.OnAgreementsAPIListener;
+import com.coyni.mapp.model.FilteredAgreements;
+import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
@@ -62,7 +65,7 @@ public class OnboardActivity extends BaseActivity {
     private Boolean isBiometric = false;
     private RelativeLayout layoutOnBoarding, layoutAuth;
     private MyApplication objMyApplication;
-    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+//    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,7 +137,7 @@ public class OnboardActivity extends BaseActivity {
             }
 
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+//            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 
             AutoScrollPagerAdapter autoScrollPagerAdapter =
                     new AutoScrollPagerAdapter(getSupportFragmentManager());
@@ -189,6 +192,22 @@ public class OnboardActivity extends BaseActivity {
             });
 
             initObserver();
+
+            setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
+                @Override
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                    dismissDialog();
+                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                    if (filteredAgreements.getAgreements().size() > 0) {
+                        Utils.launchAgreements(OnboardActivity.this, filteredAgreements.isMerchantAgreement());
+                    } else {
+                        launchDasboardFromBase();
+                    }
+
+                }
+            });
+
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -249,12 +268,10 @@ public class OnboardActivity extends BaseActivity {
                     }
                 });
             } else {
-                if (!isAccess) {
-                    Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
-                    i.putExtra("auth", "cancel");
-                    startActivity(i);
-                    finish();
-                }
+                Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
+                i.putExtra("auth", "cancel");
+                startActivity(i);
+                finish();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -262,68 +279,99 @@ public class OnboardActivity extends BaseActivity {
     }
 
     private void initObserver() {
-        loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricSignIn>() {
-            @Override
-            public void onChanged(BiometricSignIn loginResponse) {
-                dismissDialog();
-                try {
-                    if (loginResponse != null) {
-                        if (!loginResponse.getStatus().toLowerCase().equals("error")) {
-                            Utils.setStrAuth(loginResponse.getData().getJwtToken());
-                            objMyApplication.setStrEmail(loginResponse.getData().getEmail());
-                            objMyApplication.setLoginUserId(Integer.parseInt(String.valueOf(loginResponse.getData().getUserId())));
-                            objMyApplication.setLoginResponse(loginResponse);
-                            Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
-                            objMyApplication.setStrEmail(loginResponse.getData().getEmail());
-                            objMyApplication.setBiometric(loginResponse.getData().isBiometricEnabled());
-                            getStatesUrl(loginResponse.getData().getStateList().getUS());
-                            objMyApplication.setAccountType(loginResponse.getData().getAccountType());
-                            objMyApplication.setDbaOwnerId(Integer.parseInt(String.valueOf(loginResponse.getData().getDbaOwnerId())));
-                            if (loginResponse.getData().isPasswordExpired()) {
-                                Intent i = new Intent(OnboardActivity.this, CreatePasswordActivity.class);
-                                i.putExtra("screen", "loginExpiry");
-                                startActivity(i);
-                                finish();
-                            } else {
+        try {
+            loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricSignIn>() {
+                @Override
+                public void onChanged(BiometricSignIn loginResponse) {
+                    dismissDialog();
+                    try {
+                        if (loginResponse != null) {
+                            if (!loginResponse.getStatus().toLowerCase().equals("error")) {
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
-                                objMyApplication.setIsLoggedIn(true);
-                                launchDashboard();
-                            }
-                        } else {
-                            if (loginResponse.getData() != null) {
-                                if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
-                                    Utils.emailPasswordIncorrectDialog("", OnboardActivity.this, "");
+                                objMyApplication.setStrEmail(loginResponse.getData().getEmail());
+                                try {
+                                    if (loginResponse.getData().getDbaName() != null && !loginResponse.getData().getDbaName().equals(""))
+                                        objMyApplication.setStrDBAName(loginResponse.getData().getDbaName());
+
+                                    if (loginResponse.getData().getFirstName() != null && !loginResponse.getData().getFirstName().equals("") &&
+                                            loginResponse.getData().getLastName() != null && !loginResponse.getData().getLastName().equals(""))
+                                        objMyApplication.setStrUserName(Utils.capitalize(loginResponse.getData().getFirstName() + " " + loginResponse.getData().getLastName()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                objMyApplication.setLoginUserId(Integer.parseInt(String.valueOf(loginResponse.getData().getUserId())));
+                                objMyApplication.setLoginResponse(loginResponse);
+                                Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
+                                objMyApplication.setStrEmail(loginResponse.getData().getEmail());
+                                objMyApplication.setBiometric(loginResponse.getData().isBiometricEnabled());
+                                getStatesUrl(loginResponse.getData().getStateList().getUS());
+                                objMyApplication.setAccountType(loginResponse.getData().getAccountType());
+                                objMyApplication.setDbaOwnerId(Integer.parseInt(String.valueOf(loginResponse.getData().getDbaOwnerId())));
+                                objMyApplication.setAgreementSigned(loginResponse.getData().getTracker().isIsAgreementSigned());
+                                if (loginResponse.getData().isPasswordExpired()) {
+
+                                    Intent i = new Intent(OnboardActivity.this, CreatePasswordActivity.class);
+                                    i.putExtra("screen", "loginExpiry");
+                                    startActivity(i);
+                                    finish();
+                                } else {
+                                    Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                                    objMyApplication.setIsLoggedIn(true);
+                                    if (!loginResponse.getData().getTracker().isIsAgreementSigned()
+                                    && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                                            && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                                        if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
+                                            Utils.launchAgreements(OnboardActivity.this, false);
+                                        else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+                                            showProgressDialog();
+                                            callHasToSignAPI();
+                                        }
+                                    } else
+                                        launchDashboard();
                                 }
                             } else {
-                                if (loginResponse.getError() != null && !loginResponse.getError().getErrorCode().equals(getString(R.string.accessrestrictederrorcode))) {
-                                    Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(i);
+                                if (loginResponse.getData() != null) {
+                                    if (!loginResponse.getData().getMessage().equals("") && loginResponse.getData().getPasswordFailedAttempts() > 0) {
+                                        //                                    Login_EmPaIncorrect_BottomSheet emailpass_incorrect = new Login_EmPaIncorrect_BottomSheet();
+                                        //                                    emailpass_incorrect.show(getSupportFragmentManager(), emailpass_incorrect.getTag());
+
+                                        Utils.emailPasswordIncorrectDialog("", OnboardActivity.this, "");
+                                    }
+                                } else {
+                                    if (loginResponse.getError() != null && !loginResponse.getError().getErrorCode().equals(getString(R.string.accessrestrictederrorcode))) {
+                                        Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(i);
+                                    }
+//                                    Utils.displayAlert(loginResponse.getError().getErrorDescription(), OnboardActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
                                 }
                             }
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
-            @Override
-            public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
-                try {
-                    if (businessTrackerResponse != null) {
-                        if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
-                            objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
-                            launchDashboard();
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        try {
+//            businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
+//                @Override
+//                public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
+//
+//                    if (businessTrackerResponse != null) {
+//                        if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
+//                            objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
+//                            launchDashboard();
+//                        }
+//                    }
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 

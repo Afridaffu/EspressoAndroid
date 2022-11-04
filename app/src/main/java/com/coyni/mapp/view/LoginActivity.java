@@ -37,6 +37,9 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.coyni.mapp.dialogs.OnAgreementsAPIListener;
+import com.coyni.mapp.model.FilteredAgreements;
+import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -104,6 +107,19 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             }
             initialization();
             initObserver();
+            setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
+                @Override
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                    dismissDialog();
+                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                    if (filteredAgreements.getAgreements().size() > 0) {
+                        Utils.launchAgreements(LoginActivity.this, filteredAgreements.isMerchantAgreement());
+                    } else {
+                        launchDasboardFromBase();
+                    }
+
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -744,6 +760,16 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                             if (!login.getStatus().toLowerCase().equals("error")) {
                                 Utils.setStrAuth(login.getData().getJwtToken());
                                 objMyApplication.setStrEmail(login.getData().getEmail());
+                                try {
+                                    if (login.getData().getDbaName() != null && !login.getData().getDbaName().equals(""))
+                                        objMyApplication.setStrDBAName(login.getData().getDbaName());
+
+                                    if (login.getData().getFirstName() != null && !login.getData().getFirstName().equals("") &&
+                                            login.getData().getLastName() != null && !login.getData().getLastName().equals(""))
+                                        objMyApplication.setStrUserName(Utils.capitalize(login.getData().getFirstName() + " " + login.getData().getLastName()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 //                            objMyApplication.setUserId(login.getData().getUserId());
                                 objMyApplication.setLoginUserId(Integer.parseInt(String.valueOf(login.getData().getUserId())));
                                 objMyApplication.setLoginResponse(login);
@@ -829,6 +855,18 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                             if (!loginResponse.getStatus().toLowerCase().equals("error")) {
                                 Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                 objMyApplication.setStrEmail(loginResponse.getData().getEmail());
+
+                                try {
+                                    if (loginResponse.getData().getDbaName() != null && !loginResponse.getData().getDbaName().equals(""))
+                                        objMyApplication.setStrDBAName(loginResponse.getData().getDbaName());
+
+                                    if (loginResponse.getData().getFirstName() != null && !loginResponse.getData().getFirstName().equals("") &&
+                                            loginResponse.getData().getLastName() != null && !loginResponse.getData().getLastName().equals(""))
+                                        objMyApplication.setStrUserName(Utils.capitalize(loginResponse.getData().getFirstName() + " " + loginResponse.getData().getLastName()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
                                 //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
                                 objMyApplication.setLoginUserId(Integer.parseInt(String.valueOf(loginResponse.getData().getUserId())));
                                 objMyApplication.setLoginResponse(loginResponse);
@@ -846,7 +884,17 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                     objMyApplication.setIsLoggedIn(true);
-                                    launchDashboard();
+                                    if (!loginResponse.getData().getTracker().isIsAgreementSigned()
+                                            && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                                            && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                                        if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
+                                            Utils.launchAgreements(LoginActivity.this, false);
+                                        else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+                                            showProgressDialog();
+                                            callHasToSignAPI();
+                                        }
+                                    } else
+                                        launchDashboard();
                                 }
                             } else {
                                 if (loginResponse.getData() != null) {

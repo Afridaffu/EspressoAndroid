@@ -255,7 +255,7 @@
                     android:src="@drawable/ic_signetactive" />
 
                 <LinearLayout
-                    android:id="@+id/layoutSDetails"
+                    android:id="@+id/layoutSignetDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_20sdp"
@@ -328,6 +328,102 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_chevron_right" />
             </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutCogent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/paymentsborder"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/_11sdp"
+                android:paddingTop="@dimen/_16sdp"
+                android:paddingRight="@dimen/_7sdp"
+                android:paddingBottom="@dimen/_20sdp">
+
+                <ImageView
+                    android:id="@+id/imgCogentLogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/_12sdp"
+                    android:src="@drawable/ic_cogentactive" />
+
+                <LinearLayout
+                    android:id="@+id/layoutSDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_toLeftOf="@+id/imgCogentArrow"
+                    android:layout_toRightOf="@+id/imgCogentLogo"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvCogentHead"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Cogent Account"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_12ssp" />
+
+                        <TextView
+                            android:id="@+id/tvCogentCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="(0/0)"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_12ssp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvCogentMsg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="Used for buying tokens or withdrawing funds."
+                        android:textColor="@color/dark_grey"
+                        android:textSize="@dimen/_9sdp" />
+
+                    <TextView
+                        android:id="@+id/tvCogentCS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="Coming soon"
+                        android:textColor="@color/primary_color"
+                        android:textSize="@dimen/_9sdp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvCogentError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="This method has reached maximum 4 cards"
+                        android:textColor="@color/error"
+                        android:textSize="@dimen/_9sdp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imgCogentArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_chevron_right" />
+            </RelativeLayout>
+
         </LinearLayout>
 
     </ScrollView>

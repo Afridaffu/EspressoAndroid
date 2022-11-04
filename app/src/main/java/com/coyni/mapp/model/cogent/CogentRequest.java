@@ -1,6 +1,6 @@
-package com.coyni.mapp.model.signet;
+package com.coyni.mapp.model.cogent;
 
-public class SignetRequest {
+public class CogentRequest {
     private String accountCategory;
     private String accountName;
     private String accountNumber;

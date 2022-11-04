@@ -17,6 +17,8 @@ import com.coyni.mapp.model.login.LoginData;
 import com.coyni.mapp.model.login.LoginResponse;
 import com.coyni.mapp.model.signin.BiometricSignIn;
 import com.coyni.mapp.model.signin.BiometricSignInData;
+import com.coyni.mapp.model.signin.InitializeResponse;
+import com.coyni.mapp.model.signin.InitializeResponseData;
 import com.coyni.mapp.utils.CustomTypefaceSpan;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
@@ -27,7 +29,7 @@ public class VerificationFailedActivity extends AppCompatActivity {
     private TextView mTvName, mTvDbaName, mTvLegalName, descTV;
     private CardView mCvDone;
     private ImageView mIvClose;
-    private BiometricSignIn loginResponse;
+    private InitializeResponse initializeResponse;
     MyApplication myApplication;
 
     @Override
@@ -38,11 +40,11 @@ public class VerificationFailedActivity extends AppCompatActivity {
         initFields();
 
         MyApplication objMyApplication = (MyApplication) getApplicationContext();
-        loginResponse = objMyApplication.getLoginResponse();
+        initializeResponse = objMyApplication.getInitializeResponse();
         Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
-        if (loginResponse != null && loginResponse.getStatus() != null
-                && loginResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-            BiometricSignInData data = loginResponse.getData();
+        if (initializeResponse != null && initializeResponse.getStatus() != null
+                && initializeResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+            InitializeResponseData data = initializeResponse.getData();
             if (data != null) {
                 if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                     if (data.getFirstName() != null && data.getLastName() != null) {
@@ -62,7 +64,6 @@ public class VerificationFailedActivity extends AppCompatActivity {
                         spannableLegalName.setSpan(new CustomTypefaceSpan("", font), 11, legalName.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                         mTvLegalName.setText(spannableLegalName);
                     }
-
                     if (data.getDbaName() != null && !data.getDbaName().equals("")) {
                         String dbaName = getString(R.string.verification_dba_name, data.getDbaName());
                         SpannableStringBuilder spannableLegalName = new SpannableStringBuilder(dbaName);
@@ -77,7 +78,6 @@ public class VerificationFailedActivity extends AppCompatActivity {
                         spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                         mTvName.setText(spannableName);
                     }
-
                     mTvDbaName.setVisibility(View.GONE);
                     mTvLegalName.setVisibility(View.GONE);
                 }

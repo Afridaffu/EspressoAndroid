@@ -80,7 +80,7 @@ public class AddBusinessUserResponse {
         private String companyName;
         private String firstName;
         private String lastName;
-        private String agreementsSigned;
+        private boolean agreementsSigned;
         private String ownerImage;
 
         public boolean isReserveEnabled() {
@@ -252,11 +252,11 @@ public class AddBusinessUserResponse {
             this.lastName = lastName;
         }
 
-        public String getAgreementsSigned() {
+        public boolean getAgreementsSigned() {
             return agreementsSigned;
         }
 
-        public void setAgreementsSigned(String agreementsSigned) {
+        public void setAgreementsSigned(boolean agreementsSigned) {
             this.agreementsSigned = agreementsSigned;
         }
 

@@ -50,6 +50,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postedInnerRV"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_10sdp"></androidx.recyclerview.widget.RecyclerView>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

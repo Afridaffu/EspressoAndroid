@@ -2,6 +2,7 @@ package com.coyni.mapp.model.featurecontrols;
 
 public class FeatureControlByUser {
     private Boolean isSaleOrder = true;
+    private Boolean isBuyCogent = true;
     private Boolean isBuySignet = true;
     private Boolean isBuyBank = true;
     private Boolean isBuyDebit = true;
@@ -9,7 +10,9 @@ public class FeatureControlByUser {
     private Boolean isWithGift = true;
     private Boolean isWithBank = true;
     private Boolean isWithInstant = true;
+    private Boolean isWithCogent = true;
     private Boolean isWithSignet = true;
+    private Boolean isPayCogent = true;
     private Boolean isPaySignet = true;
     private Boolean isPayBank = true;
     private Boolean isPayCredit = true;
@@ -26,12 +29,12 @@ public class FeatureControlByUser {
         isSaleOrder = saleOrder;
     }
 
-    public Boolean getBuySignet() {
-        return isBuySignet;
+    public Boolean getBuyCogent() {
+        return isBuyCogent;
     }
 
-    public void setBuySignet(Boolean buySignet) {
-        isBuySignet = buySignet;
+    public void setBuyCogent(Boolean buyCogent) {
+        isBuyCogent = buyCogent;
     }
 
     public Boolean getBuyBank() {
@@ -82,20 +85,20 @@ public class FeatureControlByUser {
         isWithInstant = withInstant;
     }
 
-    public Boolean getWithSignet() {
-        return isWithSignet;
+    public Boolean getWithCogent() {
+        return isWithCogent;
     }
 
-    public void setWithSignet(Boolean withSignet) {
-        isWithSignet = withSignet;
+    public void setWithCogent(Boolean withCogent) {
+        isWithCogent = withCogent;
     }
 
-    public Boolean getPaySignet() {
-        return isPaySignet;
+    public Boolean getPayCogent() {
+        return isPayCogent;
     }
 
-    public void setPaySignet(Boolean paySignet) {
-        isPaySignet = paySignet;
+    public void setPayCogent(Boolean payCogent) {
+        isPayCogent = payCogent;
     }
 
     public Boolean getPayBank() {
@@ -144,5 +147,29 @@ public class FeatureControlByUser {
 
     public void setAllControls(Boolean allControls) {
         isAllControls = allControls;
+    }
+
+    public Boolean getBuySignet() {
+        return isBuySignet;
+    }
+
+    public void setBuySignet(Boolean buySignet) {
+        isBuySignet = buySignet;
+    }
+
+    public Boolean getWithSignet() {
+        return isWithSignet;
+    }
+
+    public void setWithSignet(Boolean withSignet) {
+        isWithSignet = withSignet;
+    }
+
+    public Boolean getPaySignet() {
+        return isPaySignet;
+    }
+
+    public void setPaySignet(Boolean paySignet) {
+        isPaySignet = paySignet;
     }
 }

@@ -548,9 +548,9 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             }
             if (userDetails.getData() != null && userDetails.getData().getDbaName() != null) {
                 if (userDetails.getData().getDbaName().length() >= 21) {
-                    tvName.setText(Utils.capitalize(userDetails.getData().getDbaName()).substring(0, 21) + "...");
+                    tvName.setText((userDetails.getData().getDbaName()).substring(0, 21) + "...");
                 } else {
-                    tvName.setText(Utils.capitalize(userDetails.getData().getDbaName()));
+                    tvName.setText((userDetails.getData().getDbaName()));
                 }
             }
 //            tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));

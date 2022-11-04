@@ -58,19 +58,19 @@ public class WithdrawRequest {
         this.remarks = remarks;
     }
 
-    public String getSignetWalletId() {
-        return signetWalletId;
-    }
-
-    public void setSignetWalletId(String signetWalletId) {
-        this.signetWalletId = signetWalletId;
-    }
-
     public String getRequestToken() {
         return requestToken;
     }
 
     public void setRequestToken(String requestToken) {
         this.requestToken = requestToken;
+    }
+
+    public String getSignetWalletId() {
+        return signetWalletId;
+    }
+
+    public void setSignetWalletId(String signetWalletId) {
+        this.signetWalletId = signetWalletId;
     }
 }
