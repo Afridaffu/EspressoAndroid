@@ -1951,6 +1951,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
 
             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 etCVV.setText("");
+            } else {
+                isCardClear = false;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
