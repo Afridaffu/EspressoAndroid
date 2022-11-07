@@ -410,7 +410,7 @@ public class DBAInfoDetails extends BaseActivity {
 
                                 if (btResp.getData() != null) {
                                     objMyApplication.setBusinessUserID(String.valueOf(btResp.getData().getBusinessUserId()));
-                                    objMyApplication.setOwnerImage(btResp.getData().getOwnerImage());
+                                    objMyApplication.setOwnerImage(btResp.getData().getImage());
                                     bindImage();
                                 }
                             }

@@ -423,7 +423,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         myApplication.clearUserData();
                         if (btResp.getData() != null) {
                             myApplication.setBusinessUserID(String.valueOf(btResp.getData().getBusinessUserId()));
-                            myApplication.setOwnerImage(btResp.getData().getOwnerImage());
+                            myApplication.setOwnerImage(btResp.getData().getImage());
                         }
                         Utils.setStrAuth(btResp.getData().getJwtToken());
                         myApplication.setLoginUserId(Integer.parseInt(String.valueOf(btResp.getData().getUserId())));
@@ -439,16 +439,16 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 //                            !btResp.getData().getTracker().isIsAgreementSigned() &&
                             if (btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
                                 if (btResp.getData().getOwnerDetails() != null && !btResp.getData().getOwnerDetails().getTracker().isIsAgreementSigned()) {
-                                    //-------------------------------------------------------------------
-                                    if (btResp.getData().getOwnerDetails().getBusinessTracker() == null || btResp.getData().getOwnerDetails().getBusinessTracker().isIsAgreementSigned())
-                                        callHasToSignAPI(false);
-                                    else if (!btResp.getData().getOwnerDetails().getBusinessTracker().isIsAgreementSigned()) {
-                                        callHasToSignAPI(true);
-                                    }
-                                    //-------------------------------------------------------------------
+//                                    //-------------------------------------------------------------------
+//                                    if (btResp.getData().getOwnerDetails().getBusinessTracker() == null || btResp.getData().getOwnerDetails().getBusinessTracker().isIsAgreementSigned())
+//                                        callHasToSignAPI(false);
+//                                    else if (!btResp.getData().getOwnerDetails().getBusinessTracker().isIsAgreementSigned()) {
+//                                        callHasToSignAPI(true);
+//                                    }
+//                                    //-------------------------------------------------------------------
 
                                     //Comment Above section and uncomment below line to avoid merchant agreement for shared account
-//                                    callHasToSignAPI(true);
+                                    callHasToSignAPI(true);
                                 } else {
                                     launchDasboardFromBase();
                                 }

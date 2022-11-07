@@ -887,6 +887,10 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
 //                    b_address1ErrorTV.setText("Field Required");
 //                    isAddress1 = false;
                 }
+                if (b_address1ET.getText().toString().contains("  ")) {
+                    b_address1ET.setText(b_address1ET.getText().toString().replace("  ", " "));
+                    b_address1ET.setSelection(b_address1ET.getText().length());
+                }
                 b_enableOrDisableSave();
 
             }
@@ -930,6 +934,10 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
 //                    b_cityErrorLL.setVisibility(VISIBLE);
 //                    b_cityErrorTV.setText("Field Required");
                     isCity = false;
+                }
+                if (b_cityET.getText().toString().contains("  ")) {
+                    b_cityET.setText(b_cityET.getText().toString().replace("  ", " "));
+                    b_cityET.setSelection(b_cityET.getText().length());
                 }
                 b_enableOrDisableSave();
             }

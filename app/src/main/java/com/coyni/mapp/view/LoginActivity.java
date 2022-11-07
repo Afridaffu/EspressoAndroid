@@ -893,22 +893,30 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                     objMyApplication.setIsLoggedIn(true);
-                                    if (!loginResponse.getData().getTracker().isIsAgreementSigned()
-                                            && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
-                                            && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
-//                                        if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
-//                                            Utils.launchAgreements(LoginActivity.this, false);
-//                                        else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
-//                                            showProgressDialog();
-//                                            callHasToSignAPI();
-//                                        }
-                                        showProgressDialog();
-                                        if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
-                                            callHasToSignAPI(false);
-                                        else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
-                                            callHasToSignAPI(true);
-                                        }
 
+                                    if (!loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                                                    && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                                                    && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+
+                                        if (loginResponse.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
+                                            if (loginResponse.getData().getOwnerDetails() != null && !loginResponse.getData().getOwnerDetails().getTracker().isIsAgreementSigned()) {
+                                                showProgressDialog();
+                                                callHasToSignAPI(true);
+                                            } else {
+                                                launchDashboard();
+                                            }
+                                        } else {
+                                            if (!loginResponse.getData().getTracker().isIsAgreementSigned()) {
+                                                showProgressDialog();
+                                                if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
+                                                    callHasToSignAPI(false);
+                                                else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+                                                    callHasToSignAPI(true);
+                                                }
+                                            } else {
+                                                launchDashboard();
+                                            }
+                                        }
                                     } else
                                         launchDashboard();
                                 }

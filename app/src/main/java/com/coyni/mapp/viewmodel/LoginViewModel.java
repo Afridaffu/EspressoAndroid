@@ -937,7 +937,7 @@ public class LoginViewModel extends AndroidViewModel {
                         BiometricSignIn obj = response.body();
                         if (obj != null && obj.getData() != null) {
                             objMyApplication.setBusinessUserID(String.valueOf(obj.getData().getBusinessUserId()));
-                            objMyApplication.setOwnerImage(obj.getData().getOwnerImage());
+                            objMyApplication.setOwnerImage(obj.getData().getImage());
                         }
                         biometricResponseMutableLiveData.setValue(obj);
                         Log.e("Bio Success", new Gson().toJson(obj));
