@@ -237,11 +237,16 @@ public class DashboardViewModel extends AndroidViewModel {
                             Agreements obj = response.body();
                             agreementsMutableLiveData.setValue(obj);
                         } else {
+//                            Gson gson = new Gson();
+//                            Type type = new TypeToken<APIError>() {
+//                            }.getType();
+//                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+//                            apiErrorMutableLiveData.setValue(errorResponse);
                             Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
+                            Type type = new TypeToken<Agreements>() {
                             }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                            Agreements errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            agreementsMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
