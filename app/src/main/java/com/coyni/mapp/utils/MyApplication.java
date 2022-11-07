@@ -77,6 +77,7 @@ public class MyApplication extends Application {
     private String strMobileToken = "";
     private DatabaseHandler dbHandler;
     private String totalBuyAmountWithFee;
+    private double processingFee;
 
     @Override
     public void onCreate() {
@@ -99,6 +100,14 @@ public class MyApplication extends Application {
 
     public void setTotalBuyAmountWithFee(String totalBuyAmountWithFee) {
         this.totalBuyAmountWithFee = totalBuyAmountWithFee;
+    }
+
+    public double getProcessingFee() {
+        return processingFee;
+    }
+
+    public void setProcessingFee(double processingFee) {
+        this.processingFee = processingFee;
     }
 
     public static Context getContext() {
