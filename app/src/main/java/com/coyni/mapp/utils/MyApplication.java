@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.coyni.mapp.model.SignAgreementData;
 import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.fee.Fees;
 import com.coyni.mapp.model.signin.BiometricSignIn;
@@ -1133,6 +1134,14 @@ public class MyApplication extends Application {
 
     public void setStrDBAName(String value) {
         mCurrentUserData.setStrDBAName(value);
+    }
+
+    public List<SignAgreementData> getHasToSignAgreements() {
+        return mCurrentUserData.getHasToSignAgreements();
+    }
+
+    public void setHasToSignAgreements(List<SignAgreementData> value) {
+        mCurrentUserData.setHasToSignAgreements(value);
     }
 
 }

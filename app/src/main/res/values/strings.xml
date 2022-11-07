@@ -463,7 +463,8 @@
     <string name="phonenumber_curr">Current Phone Number</string>
     <string name="scan_to_make_a_payment">Scan to make a payment.</string>
     <string name="receive_payments">Receive payments for goods and services.</string>
-    <string name="buy_token_with">Buy token with bank account or Cogent account.</string>
+<!--    <string name="buy_token_with">Buy token with bank account or Cogent account.</string>-->
+    <string name="buy_token_with">Buy token with bank account.</string>
     <string name="withdraw_token_to_usd">Withdraw token to USD.</string>
     <string name="authorization_failed">Authorization Failed</string>
     <string name="card_authorization_failed">The card authorization failed due to error \ncode: {error code - error code \ndescription}. Please try again.</string>

@@ -555,6 +555,11 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
                     } else {
                         isName = false;
                     }
+
+                    if (etName.getText().toString().contains("  ")) {
+                        etName.setText(etName.getText().toString().replace("  ", " "));
+                        etName.setSelection(etName.getText().length());
+                    }
                     enableOrDisableNext();
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -609,6 +614,11 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
                     } else {
                         isWallet = false;
                     }
+
+                    if (etWalletId.getText().toString().contains("  ")) {
+                        etWalletId.setText(etWalletId.getText().toString().replace("  ", " "));
+                        etWalletId.setSelection(etWalletId.getText().length());
+                    }
                     enableOrDisableNext();
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -656,6 +666,12 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
                     } else {
                         isAddress1 = false;
                     }
+
+                    if (etAddress1.getText().toString().contains("  ")) {
+                        etAddress1.setText(etAddress1.getText().toString().replace("  ", " "));
+                        etAddress1.setSelection(etAddress1.getText().length());
+                    }
+
                     enableOrDisableNext();
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -683,6 +699,7 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
                 }
             }
         });
+
         etAddress2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -716,6 +733,11 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
 //                            address1ErrorLL.setVisibility(GONE);
                     }
 
+                    if (etAddress2.getText().toString().contains("  ")) {
+                        etAddress2.setText(etAddress2.getText().toString().replace("  ", " "));
+                        etAddress2.setSelection(etAddress2.getText().length());
+                    }
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -738,6 +760,11 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
                         Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_green));
                     } else {
                         isCity = false;
+                    }
+
+                    if (etCity.getText().toString().contains("  ")) {
+                        etCity.setText(etCity.getText().toString().replace("  ", " "));
+                        etCity.setSelection(etCity.getText().length());
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
