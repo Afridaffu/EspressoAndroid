@@ -211,8 +211,10 @@ public class AcceptAgreementsActivity extends BaseActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
 
-                    if (Utils.checkAndRequestStoragePermission(AcceptAgreementsActivity.this))
-                        downloadPDFPopup(AcceptAgreementsActivity.this);
+                    if (!myUrl.equals("")) {
+                        if (Utils.checkAndRequestStoragePermission(AcceptAgreementsActivity.this))
+                            downloadPDFPopup(AcceptAgreementsActivity.this);
+                    }
                 }
             });
 
@@ -278,7 +280,8 @@ public class AcceptAgreementsActivity extends BaseActivity {
                             }
                         } else {
 //                            binding.webView.loadUrl("file:///android_asset/pdfViewerScript.html");
-
+                            myUrl = "";
+                            binding.webView.setVisibility(View.INVISIBLE);
                             Utils.displayAlert(downloadDocumentResponse.getError().getErrorDescription(), AcceptAgreementsActivity.this, "", "");
                         }
                     }
