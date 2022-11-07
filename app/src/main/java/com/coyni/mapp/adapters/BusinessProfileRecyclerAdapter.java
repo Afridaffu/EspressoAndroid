@@ -172,7 +172,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             childItem.setTextColor(context.getColor(R.color.primary_color));
 
             if (!detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                        || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())
+                        || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_failed_bg));
                     statusTV.setText(detailInfo.getAccountStatus());
@@ -205,7 +207,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             imvTickIcon.setVisibility(View.GONE);
             childItem.setTextColor(context.getColor(R.color.primary_black));
             if (!detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                        || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())
+                        || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_failed_bg));
                     statusTV.setText(detailInfo.getAccountStatus());
@@ -366,7 +370,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 //                String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
 //                personalText.setText(userName);
             }
-            if (headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) || headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+            if (headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                    || headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())
+                    || headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
                 arrowImg.setVisibility(View.GONE);
                 status.setVisibility(View.VISIBLE);
                 status.setBackground(context.getDrawable(R.drawable.txn_failed_bg));

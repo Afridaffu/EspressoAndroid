@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.coyni.mapp.view.LoginActivity;
 import com.google.android.gms.common.util.ArrayUtils;
 import com.google.gson.Gson;
 import com.coyni.mapp.BuildConfig;
@@ -116,6 +117,12 @@ public class CustomEncryptionHandler implements Interceptor {
                         response = response.newBuilder()
                                 .body(ResponseBody.create("", mediaType))
                                 .build();
+                        launchOnboarding(MyApplication.getContext());
+                    } else if (resp != null && resp.getError() != null
+                            && (resp.getError().getErrorDescription().equalsIgnoreCase(Utils.INVALID_TOKEN))) {
+                        response = response.newBuilder()
+                                .body(ResponseBody.create("", mediaType))
+                                .build();
                         launchLogin(MyApplication.getContext());
                     }
                 }
@@ -176,9 +183,15 @@ public class CustomEncryptionHandler implements Interceptor {
         return uuid.toString();
     }
 
-    private void launchLogin(Context context) {
+    private void launchOnboarding(Context context) {
         Utils.setStrAuth("");
         Intent i = new Intent(context, OnboardActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(i);
+    }
+
+    private void launchLogin(Context context) {
+        Intent i = new Intent(context, LoginActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(i);
     }

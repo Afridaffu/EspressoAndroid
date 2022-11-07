@@ -106,7 +106,7 @@ public class SignAgreementsActivity extends BaseActivity {
     private Dialog downloadDialog;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
     private JavaScriptInterface jsInterface;
-    private SignAgreementsResp agrementsResponse;
+    private SignAgreementsResp agrementsResponse = new SignAgreementsResp();
     private boolean isSignatureCaptured = false;
     private String filePath = null;
     private boolean removeMerchant = false;
@@ -119,6 +119,7 @@ public class SignAgreementsActivity extends BaseActivity {
             binding = ActivitySignAgreementsBinding.inflate(getLayoutInflater());
             setContentView(binding.getRoot());
 
+            objMyApplication = (MyApplication) getApplicationContext();
             removeMerchant = getIntent().getBooleanExtra("REMOVE_MERCHANT", false);
 
             jsInterface = new JavaScriptInterface(this);
@@ -143,11 +144,14 @@ public class SignAgreementsActivity extends BaseActivity {
 
     private void initFields() {
         try {
-            showProgressDialog();
-            objMyApplication = (MyApplication) getApplicationContext();
+//            showProgressDialog();
 //            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-            loginViewModel.hasToSignAgreements();
+//            loginViewModel.hasToSignAgreements();
+            agrementsResponse.setData(objMyApplication.getHasToSignAgreements());
+            iterationCount = agrementsResponse.getData().size();
+            loadNextOrDashboard(true);
+
             binding.webView.setWebChromeClient(new WebChromeClient() {
                 @Override
                 public boolean onJsAlert(WebView view, final String url, String message, JsResult result) {
@@ -451,60 +455,60 @@ public class SignAgreementsActivity extends BaseActivity {
             }
         });
 
-        loginViewModel.getHasToSignResponseMutableLiveData().observe(this, new Observer<SignAgreementsResp>() {
-            @Override
-            public void onChanged(SignAgreementsResp signAgreementsResp) {
-                if (signAgreementsResp != null) {
-                    agrementsResponse = signAgreementsResp;
-                    dismissDialog();
-                    if (signAgreementsResp.getStatus().equalsIgnoreCase("success")) {
-                        if (removeMerchant)
-                            agrementsResponse.setData(Utils.getFilteredAgreements(signAgreementsResp.getData()).getAgreements());
-//                        //block section
-//                        String resp = "{\"status\":\"SUCCESS\",\"timestamp\":\"2022-10-26T06:19:40.161+00:00\",\"" +
-//                                "data\":[" +
+//        loginViewModel.getHasToSignResponseMutableLiveData().observe(this, new Observer<SignAgreementsResp>() {
+//            @Override
+//            public void onChanged(SignAgreementsResp signAgreementsResp) {
+//                if (signAgreementsResp != null) {
+//                    agrementsResponse = signAgreementsResp;
+//                    dismissDialog();
+//                    if (signAgreementsResp.getStatus().equalsIgnoreCase("success")) {
+//                        if (removeMerchant)
+//                            agrementsResponse.setData(Utils.getFilteredAgreements(signAgreementsResp.getData()).getAgreements());
+////                        //block section
+////                        String resp = "{\"status\":\"SUCCESS\",\"timestamp\":\"2022-10-26T06:19:40.161+00:00\",\"" +
+////                                "data\":[" +
+////
+////                                "{\"id\":147,\"version\":\"v1.76\",\"startDate\":\"2022-10-25 07:00:00\",\"status\":0," +
+////                                "\"effectiveDate\":\"2022-10-26 05:00:00\",\"materialType\":\"M\",\"agreementType\":1," +
+////                                "\"agreementFileRefPath\":\"YWdyZWVtZW50cy8xNjY2NzU3NDc1NjE1X0dyZWVuYm94K1BPUytHRFBSK1ByaXZhY3krUG9saWN5LnBkZg==\"}," +
+////
+////                                "{\"id\":146,\"version\":\"v1.76\",\"startDate\":\"2022-10-25 07:00:00\",\"status\":3,\"" +
+////                                "effectiveDate\":\"2022-10-26 05:00:00\",\"materialType\":\"M\",\"agreementType\":0,\"" +
+////                                "agreementFileRefPath\":\"YWdyZWVtZW50cy8xNjY2NzU3NDIzNDc4XzEwN19HZW4rMytWMStUT1MrdjYucGRm\"}," +
+////                                "" +
+////                                "{\"id\":145,\"version\":\"v1.74\",\"startDate\":\"2022-10-22 07:00:00\",\"status\":0,\"" +
+////                                "effectiveDate\":\"2022-10-23 07:00:00\",\"materialType\":\"M\",\"agreementType\":0,\"" +
+////                                "agreementFileRefPath\":\"YWdyZWVtZW50cy8xNjY2MzM3NjYxMzE5X0dyZWVuQm94LVRlcm1zIG9mIFNlcnZpY2UgQWdyZWVtZW50LnBkZg==\"}" +
+////
+////                                "],\"error\":null}";
+////                        Gson gson = new Gson();
+////                        Type type = new TypeToken<SignAgreementsResp>() {
+////                        }.getType();
+////                        signAgreementsResp = gson.fromJson(resp, type);
+////                        agrementsResponse = signAgreementsResp;
+////                        Log.e("response", signAgreementsResp.getData().get(0).getAgreementFileRefPath() + "");
+////                        //block section
 //
-//                                "{\"id\":147,\"version\":\"v1.76\",\"startDate\":\"2022-10-25 07:00:00\",\"status\":0," +
-//                                "\"effectiveDate\":\"2022-10-26 05:00:00\",\"materialType\":\"M\",\"agreementType\":1," +
-//                                "\"agreementFileRefPath\":\"YWdyZWVtZW50cy8xNjY2NzU3NDc1NjE1X0dyZWVuYm94K1BPUytHRFBSK1ByaXZhY3krUG9saWN5LnBkZg==\"}," +
 //
-//                                "{\"id\":146,\"version\":\"v1.76\",\"startDate\":\"2022-10-25 07:00:00\",\"status\":3,\"" +
-//                                "effectiveDate\":\"2022-10-26 05:00:00\",\"materialType\":\"M\",\"agreementType\":0,\"" +
-//                                "agreementFileRefPath\":\"YWdyZWVtZW50cy8xNjY2NzU3NDIzNDc4XzEwN19HZW4rMytWMStUT1MrdjYucGRm\"}," +
-//                                "" +
-//                                "{\"id\":145,\"version\":\"v1.74\",\"startDate\":\"2022-10-22 07:00:00\",\"status\":0,\"" +
-//                                "effectiveDate\":\"2022-10-23 07:00:00\",\"materialType\":\"M\",\"agreementType\":0,\"" +
-//                                "agreementFileRefPath\":\"YWdyZWVtZW50cy8xNjY2MzM3NjYxMzE5X0dyZWVuQm94LVRlcm1zIG9mIFNlcnZpY2UgQWdyZWVtZW50LnBkZg==\"}" +
+//                        iterationCount = agrementsResponse.getData().size();
+//                        loadNextOrDashboard(true);
+////                        if (iterationCount > 0) {
+////                            iterationCount--;
+////                            AGREE_TYPE = agrementsResponse.getData().get(0).getAgreementType();
+////                            setupLablesAndUI(agrementsResponse.getData().get(0).getMaterialType(),
+////                                    Utils.convertEffectiveDate(agrementsResponse.getData().get(0).getEffectiveDate()));
+////                            currentIteration = 0;
+////                            dashboardViewModel.getDocumentUrl(AGREE_TYPE);
+////                        }
 //
-//                                "],\"error\":null}";
-//                        Gson gson = new Gson();
-//                        Type type = new TypeToken<SignAgreementsResp>() {
-//                        }.getType();
-//                        signAgreementsResp = gson.fromJson(resp, type);
-//                        agrementsResponse = signAgreementsResp;
-//                        Log.e("response", signAgreementsResp.getData().get(0).getAgreementFileRefPath() + "");
-//                        //block section
-
-
-                        iterationCount = agrementsResponse.getData().size();
-                        loadNextOrDashboard(true);
-//                        if (iterationCount > 0) {
-//                            iterationCount--;
-//                            AGREE_TYPE = agrementsResponse.getData().get(0).getAgreementType();
-//                            setupLablesAndUI(agrementsResponse.getData().get(0).getMaterialType(),
-//                                    Utils.convertEffectiveDate(agrementsResponse.getData().get(0).getEffectiveDate()));
-//                            currentIteration = 0;
-//                            dashboardViewModel.getDocumentUrl(AGREE_TYPE);
-//                        }
-
-                    } else {
-                        Utils.displayAlert(signAgreementsResp.getError().getErrorDescription(), SignAgreementsActivity.this, "", "");
-                    }
-                } else {
-                    Utils.displayAlert(signAgreementsResp.getError().getErrorDescription(), SignAgreementsActivity.this, "", "");
-                }
-            }
-        });
+//                    } else {
+//                        Utils.displayAlert(signAgreementsResp.getError().getErrorDescription(), SignAgreementsActivity.this, "", "");
+//                    }
+//                } else {
+//                    Utils.displayAlert(signAgreementsResp.getError().getErrorDescription(), SignAgreementsActivity.this, "", "");
+//                }
+//            }
+//        });
     }
 
     private void downloadPDFPopup(final Context context) {
@@ -569,61 +573,6 @@ public class SignAgreementsActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         binding.webView.loadUrl("file:///android_asset/pdfViewerScript.html");
-    }
-
-    public class HttpGetRequest extends AsyncTask<String, Void, String> {
-        public static final String REQUEST_METHOD = "GET";
-        public static final int READ_TIMEOUT = 15000;
-        public static final int CONNECTION_TIMEOUT = 15000;
-
-        @Override
-        protected String doInBackground(String... params) {
-            String stringUrl = params[0];
-            String result;
-            String inputLine;
-            try {
-                //Create a URL object holding our url
-                URL myUrl = new URL(objMyApplication.getStrStatesUrl());
-                //Create a connection
-                HttpURLConnection connection = (HttpURLConnection)
-                        myUrl.openConnection();
-                //Set methods and timeouts
-                connection.setRequestMethod(REQUEST_METHOD);
-                connection.setReadTimeout(READ_TIMEOUT);
-                connection.setConnectTimeout(CONNECTION_TIMEOUT);
-
-                //Connect to our url
-                connection.connect();
-                //Create a new InputStreamReader
-                InputStreamReader streamReader = new
-                        InputStreamReader(connection.getInputStream());
-                //Create a new buffered reader and String Builder
-                BufferedReader reader = new BufferedReader(streamReader);
-                StringBuilder stringBuilder = new StringBuilder();
-                //Check if the line we are reading is not null
-                while ((inputLine = reader.readLine()) != null) {
-                    stringBuilder.append(inputLine);
-                }
-                //Close our InputStream and Buffered reader
-                reader.close();
-                streamReader.close();
-                //Set our result equal to our stringBuilder
-                result = stringBuilder.toString();
-            } catch (IOException e) {
-                e.printStackTrace();
-                result = null;
-            }
-            return result;
-        }
-
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Gson gson = new Gson();
-            Type type = new TypeToken<List<States>>() {
-            }.getType();
-            List<States> listStates = gson.fromJson(result, type);
-            objMyApplication.setListStates(listStates);
-        }
     }
 
     @Override

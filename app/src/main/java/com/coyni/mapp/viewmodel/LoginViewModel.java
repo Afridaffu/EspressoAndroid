@@ -116,6 +116,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<SignAgreementResponse> signAgreementPPotpLiveData = new MutableLiveData<>();
     private MutableLiveData<InitializeResponse> initializeResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SignAgreementsResp> hasToSignResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<SignAgreementsResp> hasToSignSkipMerchantResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UpdateSignAgreementsResp> updatedSignAgreementLiveData = new MutableLiveData<>();
     private MutableLiveData<UpdateSignAgreementsResp> uploadSignAgreementLiveData = new MutableLiveData<>();
     private MutableLiveData<DownloadImageResponse> downloadUrlLiveData = new MutableLiveData<>();
@@ -130,6 +131,10 @@ public class LoginViewModel extends AndroidViewModel {
 
     public MutableLiveData<UpdateSignAgreementsResp> getUpdatedSignAgreementLiveData() {
         return updatedSignAgreementLiveData;
+    }
+
+    public MutableLiveData<SignAgreementsResp> getHasToSignSkipMerchantResponseMutableLiveData() {
+        return hasToSignSkipMerchantResponseMutableLiveData;
     }
 
     public MutableLiveData<SignAgreementsResp> getHasToSignResponseMutableLiveData() {
@@ -932,7 +937,7 @@ public class LoginViewModel extends AndroidViewModel {
                         BiometricSignIn obj = response.body();
                         if (obj != null && obj.getData() != null) {
                             objMyApplication.setBusinessUserID(String.valueOf(obj.getData().getBusinessUserId()));
-                            objMyApplication.setOwnerImage(obj.getData().getOwnerImage());
+                            objMyApplication.setOwnerImage(obj.getData().getImage());
                         }
                         biometricResponseMutableLiveData.setValue(obj);
                         Log.e("Bio Success", new Gson().toJson(obj));
@@ -1490,6 +1495,60 @@ public class LoginViewModel extends AndroidViewModel {
                 public void onFailure(Call<SignAgreementsResp> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     hasToSignResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void hasToSignAgreementsSkipMerchant() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<SignAgreementsResp> mCall = apiService.hasToSignAgreements();
+            mCall.enqueue(new Callback<SignAgreementsResp>() {
+                @Override
+                public void onResponse(Call<SignAgreementsResp> call, Response<SignAgreementsResp> response) {
+                    try {
+                        String strResponse = "";
+                        if (response.isSuccessful()) {
+                            SignAgreementsResp obj = response.body();
+                            hasToSignSkipMerchantResponseMutableLiveData.setValue(obj);
+                        } else if (response.code() == 500) {
+                            strResponse = response.errorBody().string();
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<SignAgreementsResp>() {
+                            }.getType();
+                            SignAgreementsResp errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                            if (errorResponse != null) {
+                                hasToSignSkipMerchantResponseMutableLiveData.setValue(errorResponse);
+                            } else {
+                                SignAgreementsResp errorResponse1 = gson.fromJson(strResponse, type);
+                                hasToSignSkipMerchantResponseMutableLiveData.setValue(errorResponse1);
+                            }
+                        } else {
+                            strResponse = response.errorBody().string();
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<APIError>() {
+                            }.getType();
+                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            if (errorResponse != null) {
+                                apiErrorMutableLiveData.setValue(errorResponse);
+                            } else {
+                                APIError errorResponse1 = gson.fromJson(strResponse, type);
+                                apiErrorMutableLiveData.setValue(errorResponse1);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        apiErrorMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SignAgreementsResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    hasToSignSkipMerchantResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

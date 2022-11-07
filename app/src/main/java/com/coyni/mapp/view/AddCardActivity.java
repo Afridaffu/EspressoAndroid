@@ -1118,6 +1118,10 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         isName = false;
                     }
 
+                    if (etName.getText().toString().contains("  ")) {
+                        etName.setText(etName.getText().toString().replace("  ", " "));
+                        etName.setSelection(etName.getText().length());
+                    }
 
                     enableOrDisableNext();
                 } catch (Exception ex) {
@@ -1272,6 +1276,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                     } else {
                         isAddress1 = false;
                     }
+
+                    if (etAddress1.getText().toString().contains("  ")) {
+                        etAddress1.setText(etAddress1.getText().toString().replace("  ", " "));
+                        etAddress1.setSelection(etAddress1.getText().length());
+                    }
                     enableOrDisableNext();
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1299,6 +1308,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 }
             }
         });
+
         etAddress2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -1319,7 +1329,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.light_gray));
                             etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.light_gray));
                         }
+                    }
 
+                    if (etAddress2.getText().toString().contains("  ")) {
+                        etAddress2.setText(etAddress2.getText().toString().replace("  ", " "));
+                        etAddress2.setSelection(etAddress2.getText().length());
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1375,6 +1389,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         }
                     } else {
                         isCity = false;
+                    }
+
+                    if (etCity.getText().toString().contains("  ")) {
+                        etCity.setText(etCity.getText().toString().replace("  ", " "));
+                        etCity.setSelection(etCity.getText().length());
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {

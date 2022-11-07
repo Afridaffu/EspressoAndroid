@@ -1802,13 +1802,20 @@ public class TransactionDetailsActivity extends BaseActivity {
             }
         } else if (objData.getTransactionSubtype().equalsIgnoreCase("signet")) {
             CogentTextTV.setText("Signet Wallet ID");
-            if (objData.getWalletId() != null) {
-                if (objData.getWalletId().length() > 20) {
-                    withBankName.setText(objData.getWalletId().substring(0, 20) + "...");
+            if (objData.getBankAccountNumber() != null) {
+                if (objData.getBankAccountNumber().length() > 20) {
+                    withBankName.setText(objData.getBankAccountNumber().substring(0, 20) + "...");
                 } else {
-                    withBankName.setText(objData.getWalletId());
+                    withBankName.setText(objData.getBankAccountNumber());
                 }
             }
+//            if (objData.getWalletId() != null) {
+//                if (objData.getWalletId().length() > 20) {
+//                    withBankName.setText(objData.getWalletId().substring(0, 20) + "...");
+//                } else {
+//                    withBankName.setText(objData.getWalletId());
+//                }
+//            }
         }
 //        if (objData.getWalletId() != null) {
 //            if (objData.getWalletId().length() > 20) {
