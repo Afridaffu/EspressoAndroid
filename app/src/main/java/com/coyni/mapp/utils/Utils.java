@@ -429,6 +429,7 @@ public class Utils {
     public static final String IS_FIRST_DBA = "is_first_dba";
     public static final String NEW_DBA = "NEW DBA";
     public static final String ACCESS_TOKEN_EXPIRED = "Access token expired";
+    public static final String INVALID_TOKEN = "Invalid Token";
     public static final String TIME_EXCEEDED = "User inactive time exceeded";
     public static final String RE_CREATE = "User activation time expired, kindly re-create the process.";
 

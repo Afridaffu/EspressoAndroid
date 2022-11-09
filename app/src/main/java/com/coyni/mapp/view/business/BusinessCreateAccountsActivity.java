@@ -46,6 +46,7 @@ import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.DashboardActivity;
+import com.coyni.mapp.view.OnboardActivity;
 import com.coyni.mapp.view.PINActivity;
 import com.coyni.mapp.viewmodel.BusinessIdentityVerificationViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
@@ -108,17 +109,27 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
             setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
                 @Override
-                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp, boolean isMerchantHide) {
                     dismissDialog();
-                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
-                    if (filteredAgreements.getAgreements().size() > 0) {
-                        Utils.launchAgreements(BusinessCreateAccountsActivity.this, filteredAgreements.isMerchantAgreement());
+                    if (isMerchantHide) {
+                        FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                        if (filteredAgreements.getAgreements().size() > 0) {
+                            myApplication.setHasToSignAgreements(filteredAgreements.getAgreements());
+                            Utils.launchAgreements(BusinessCreateAccountsActivity.this, isMerchantHide);
+                        } else {
+                            launchDasboardFromBase();
+                        }
                     } else {
-                        launchDasboardFromBase();
+                        if (signAgreementsResp.getData().size() > 0) {
+                            myApplication.setHasToSignAgreements(signAgreementsResp.getData());
+                            Utils.launchAgreements(BusinessCreateAccountsActivity.this, isMerchantHide);
+                        } else {
+                            launchDasboardFromBase();
+                        }
                     }
-
                 }
             });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -412,7 +423,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         myApplication.clearUserData();
                         if (btResp.getData() != null) {
                             myApplication.setBusinessUserID(String.valueOf(btResp.getData().getBusinessUserId()));
-                            myApplication.setOwnerImage(btResp.getData().getOwnerImage());
+                            myApplication.setOwnerImage(btResp.getData().getImage());
                         }
                         Utils.setStrAuth(btResp.getData().getJwtToken());
                         myApplication.setLoginUserId(Integer.parseInt(String.valueOf(btResp.getData().getUserId())));
@@ -422,25 +433,43 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         myApplication.setIsReserveEnabled(btResp.getData().isReserveEnabled());
                         myApplication.setIsLoggedIn(true);
 
-//                        if (!btResp.getData().getTracker().isIsAgreementSigned()) {
-                        if (!btResp.getData().getTracker().isIsAgreementSigned() && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
-                                && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
-                            if (btResp.getData().getBusinessTracker() == null || btResp.getData().getBusinessTracker().isIsAgreementSigned())
-                                Utils.launchAgreements(BusinessCreateAccountsActivity.this, false);
-                            else if (!btResp.getData().getBusinessTracker().isIsAgreementSigned()) {
-                                showProgressDialog();
-                                callHasToSignAPI();
+                        if (!btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                                && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                                && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+//                            !btResp.getData().getTracker().isIsAgreementSigned() &&
+                            if (btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
+                                if (btResp.getData().getOwnerDetails() != null && !btResp.getData().getOwnerDetails().getTracker().isIsAgreementSigned()) {
+//                                    //-------------------------------------------------------------------
+//                                    if (btResp.getData().getOwnerDetails().getBusinessTracker() == null || btResp.getData().getOwnerDetails().getBusinessTracker().isIsAgreementSigned())
+//                                        callHasToSignAPI(false);
+//                                    else if (!btResp.getData().getOwnerDetails().getBusinessTracker().isIsAgreementSigned()) {
+//                                        callHasToSignAPI(true);
+//                                    }
+//                                    //-------------------------------------------------------------------
+
+                                    //Comment Above section and uncomment below line to avoid merchant agreement for shared account
+                                    callHasToSignAPI(true);
+                                } else {
+                                    launchDasboardFromBase();
+                                }
+                            } else {
+                                if (!btResp.getData().getTracker().isIsAgreementSigned()) {
+//                                    if (btResp.getData().getBusinessTracker() == null || btResp.getData().getBusinessTracker().isIsAgreementSigned())
+//                                        callHasToSignAPI(false);
+//                                    else if (!btResp.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                        callHasToSignAPI(true);
+//                                    }
+                                    if (btResp.getData().getBusinessTracker() == null || !btResp.getData().getBusinessTracker().isIsAgreementSigned())
+                                        callHasToSignAPI(true);
+                                    else if (btResp.getData().getBusinessTracker().isIsAgreementSigned()) {
+                                        callHasToSignAPI(false);
+                                    }
+                                } else {
+                                    launchDasboardFromBase();
+                                }
                             }
                         } else {
-                            if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
-                                Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                            } else {
-                                Intent intent = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                            }
+                            launchDasboardFromBase();
                         }
                     } else {
                         Utils.displayAlert(btResp.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", "");

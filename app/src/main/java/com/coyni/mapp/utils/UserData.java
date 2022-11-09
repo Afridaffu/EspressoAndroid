@@ -6,6 +6,7 @@ import com.coyni.mapp.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.coyni.mapp.model.CompanyInfo.CompanyInfoResp;
 import com.coyni.mapp.model.DBAInfo.BusinessTypeResp;
 import com.coyni.mapp.model.DBAInfo.DBAInfoResp;
+import com.coyni.mapp.model.SignAgreementData;
 import com.coyni.mapp.model.States;
 import com.coyni.mapp.model.bank.ManualBankRequest;
 import com.coyni.mapp.model.bank.SignOnData;
@@ -113,6 +114,7 @@ public class UserData {
     private BankAccount bankAccount;
     private InitializeResponse initializeResponse;
     private boolean isAgreementSigned = true;
+    private List<SignAgreementData> hasToSignAgreements = new ArrayList<>();
 
     public OrderPayResponse getOrderPayResponse() {
         return orderPayResponse;
@@ -868,5 +870,13 @@ public class UserData {
 
     public void setStrDBAName(String strDBAName) {
         this.strDBAName = strDBAName;
+    }
+
+    public List<SignAgreementData> getHasToSignAgreements() {
+        return hasToSignAgreements;
+    }
+
+    public void setHasToSignAgreements(List<SignAgreementData> hasToSignAgreements) {
+        this.hasToSignAgreements = hasToSignAgreements;
     }
 }

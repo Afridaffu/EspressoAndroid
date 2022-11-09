@@ -120,16 +120,24 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
 
             setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
                 @Override
-                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp, boolean isMerchantHide) {
                     dismissDialog();
-                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
-                    if (filteredAgreements.getAgreements().size() > 0) {
-                        Utils.launchAgreements(PINActivity.this, filteredAgreements.isMerchantAgreement());
-                        finish();
+                    if (isMerchantHide) {
+                        FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                        if (filteredAgreements.getAgreements().size() > 0) {
+                            objMyApplication.setHasToSignAgreements(filteredAgreements.getAgreements());
+                            Utils.launchAgreements(PINActivity.this, isMerchantHide);
+                        } else {
+                            launchDasboardFromBase();
+                        }
                     } else {
-                        launchDasboardFromBase();
+                        if (signAgreementsResp.getData().size() > 0) {
+                            objMyApplication.setHasToSignAgreements(signAgreementsResp.getData());
+                            Utils.launchAgreements(PINActivity.this, isMerchantHide);
+                        } else {
+                            launchDasboardFromBase();
+                        }
                     }
-
                 }
             });
         } catch (Exception ex) {
@@ -225,6 +233,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             }
 
             if (getIntent().getStringExtra("screen").equals("login")) {
+//            if (getIntent().getStringExtra("screen").equals("login") || getIntent().getStringExtra("screen").equals("SignUp")) {
                 loginViewModel.initialize();
             }
 
@@ -1252,12 +1261,46 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                 objMyApplication.launchDashboard(this, strScreen);
             }
         } else {
-            if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
-                Utils.launchAgreements(PINActivity.this, false);
-            else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
-                showProgressDialog();
-                callHasToSignAPI();
-            }
+            if (!objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+
+                if (objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.SHARED_ACCOUNT) {
+                    if (objMyApplication.getInitializeResponse().getData().getOwnerDetails() != null && !objMyApplication.getInitializeResponse().getData().getOwnerDetails().getTracker().isIsAgreementSigned()) {
+                        showProgressDialog();
+                        callHasToSignAPI(true);
+                    } else {
+                        dashboard();
+                    }
+                } else {
+                    if (!objMyApplication.getInitializeResponse().getData().getTracker().isIsAgreementSigned()) {
+                        showProgressDialog();
+//                        if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+//                            callHasToSignAPI(false);
+//                        else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+//                            callHasToSignAPI(true);
+//                        }
+                        if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || !objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+                            callHasToSignAPI(true);
+                        else if (objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+                            callHasToSignAPI(false);
+                        }
+                    } else {
+                        dashboard();
+                    }
+                }
+            } else
+                dashboard();
+        }
+    }
+
+    public void dashboard() {
+        if (objMyApplication.checkForDeclinedStatus()) {
+            objMyApplication.setIsLoggedIn(true);
+            objMyApplication.launchDeclinedActivity(this);
+        } else {
+            objMyApplication.setIsLoggedIn(true);
+            objMyApplication.launchDashboard(this, strScreen);
         }
     }
 

@@ -114,8 +114,14 @@ public class AgreementsActivity extends BaseActivity {
                         if (existingItem.getSignatureType() == item.getSignatureType()) {
                             if (existingItem.getDocumentVersion() != null && !existingItem.getDocumentVersion().trim().equals("")
                                     && item.getDocumentVersion() != null && !item.getDocumentVersion().trim().equals("")) {
-                                double existingVersion = Utils.doubleParsing(existingItem.getDocumentVersion().toLowerCase().replaceAll("[a-zA-Z]", "").replace(" ", "").trim());
-                                double itemVersion = Utils.doubleParsing(item.getDocumentVersion().toLowerCase().replaceAll("[a-zA-Z]", "").replace(" ", "").trim());
+                                double existingVersion = 0;
+                                double itemVersion = 0;
+                                try {
+                                    existingVersion = Utils.doubleParsing(existingItem.getDocumentVersion().toLowerCase().replaceAll("[a-zA-Z]", "").replace(" ", "").trim());
+                                    itemVersion = Utils.doubleParsing(item.getDocumentVersion().toLowerCase().replaceAll("[a-zA-Z]", "").replace(" ", "").trim());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 if (existingVersion < itemVersion) {
                                     pastItems.add(existingItem);
                                     activeItems.remove(existingItem);

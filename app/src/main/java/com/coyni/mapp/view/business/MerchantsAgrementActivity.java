@@ -84,6 +84,9 @@ public class MerchantsAgrementActivity extends BaseActivity {
         webView.setVerticalScrollBarEnabled(true);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
+        webSettings.setSupportZoom(true);
+        webSettings.setBuiltInZoomControls(true);
+
         showProgressDialog();
         dashboardViewModel.getDocumentUrl(Utils.mAgmt);
 

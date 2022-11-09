@@ -297,18 +297,27 @@ public class EnableAuthID extends BaseActivity {
 
             setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
                 @Override
-                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp) {
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp, boolean isMerchantHide) {
                     dismissDialog();
-                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
-                    if (filteredAgreements.getAgreements().size() > 0) {
-                        Utils.launchAgreements(EnableAuthID.this, filteredAgreements.isMerchantAgreement());
-                        finish();
+                    if (isMerchantHide) {
+                        FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                        if (filteredAgreements.getAgreements().size() > 0) {
+                            objMyApplication.setHasToSignAgreements(filteredAgreements.getAgreements());
+                            Utils.launchAgreements(EnableAuthID.this, isMerchantHide);
+                        } else {
+                            launchDasboardFromBase();
+                        }
                     } else {
-                        launchDasboardFromBase();
+                        if (signAgreementsResp.getData().size() > 0) {
+                            objMyApplication.setHasToSignAgreements(signAgreementsResp.getData());
+                            Utils.launchAgreements(EnableAuthID.this, isMerchantHide);
+                        } else {
+                            launchDasboardFromBase();
+                        }
                     }
-
                 }
             });
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -515,22 +524,52 @@ public class EnableAuthID extends BaseActivity {
     }
 
     private void launchDashboard() {
-        if (!objMyApplication.isAgreementSigned() && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
-                && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
-            if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
-                Utils.launchAgreements(EnableAuthID.this, false);
-            else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
-                showProgressDialog();
-                callHasToSignAPI();
-            }
-        } else {
-            if (objMyApplication.checkForDeclinedStatus()) {
-                objMyApplication.setIsLoggedIn(true);
-                objMyApplication.launchDeclinedActivity(this);
+        try {
+            if (objMyApplication.getInitializeResponse() != null && objMyApplication.getInitializeResponse().getData() != null
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+
+                if (objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.SHARED_ACCOUNT) {
+                    if (objMyApplication.getInitializeResponse().getData().getOwnerDetails() != null && !objMyApplication.getInitializeResponse().getData().getOwnerDetails().getTracker().isIsAgreementSigned()) {
+                        showProgressDialog();
+                        callHasToSignAPI(true);
+                    } else {
+                        dashboard();
+                    }
+                } else {
+                    if (!objMyApplication.getInitializeResponse().getData().getTracker().isIsAgreementSigned()) {
+                        showProgressDialog();
+//                        if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+//                            callHasToSignAPI(false);
+//                        else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+//                            callHasToSignAPI(true);
+//                        }
+                        if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || !objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+                            callHasToSignAPI(true);
+                        else if (objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+                            callHasToSignAPI(false);
+                        }
+                    } else {
+                        dashboard();
+                    }
+                }
+
             } else {
-                objMyApplication.setIsLoggedIn(true);
-                objMyApplication.launchDashboard(this, strScreen);
+                dashboard();
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void dashboard() {
+        if (objMyApplication.checkForDeclinedStatus()) {
+            objMyApplication.setIsLoggedIn(true);
+            objMyApplication.launchDeclinedActivity(this);
+        } else {
+            objMyApplication.setIsLoggedIn(true);
+            objMyApplication.launchDashboard(this, strScreen);
         }
     }
 
