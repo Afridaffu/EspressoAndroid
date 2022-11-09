@@ -524,32 +524,42 @@ public class EnableAuthID extends BaseActivity {
     }
 
     private void launchDashboard() {
-        if (!objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
-                && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
-                && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+        try {
+            if (objMyApplication.getInitializeResponse() != null && objMyApplication.getInitializeResponse().getData() != null
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
 
-            if (objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.SHARED_ACCOUNT) {
-                if (objMyApplication.getInitializeResponse().getData().getOwnerDetails() != null && !objMyApplication.getInitializeResponse().getData().getOwnerDetails().getTracker().isIsAgreementSigned()) {
-                    showProgressDialog();
-                    callHasToSignAPI(true);
-                } else {
-                    dashboard();
-                }
-            } else {
-                if (!objMyApplication.getInitializeResponse().getData().getTracker().isIsAgreementSigned()) {
-                    showProgressDialog();
-                    if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
-                        callHasToSignAPI(false);
-                    else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+                if (objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.SHARED_ACCOUNT) {
+                    if (objMyApplication.getInitializeResponse().getData().getOwnerDetails() != null && !objMyApplication.getInitializeResponse().getData().getOwnerDetails().getTracker().isIsAgreementSigned()) {
+                        showProgressDialog();
                         callHasToSignAPI(true);
+                    } else {
+                        dashboard();
                     }
                 } else {
-                    dashboard();
+                    if (!objMyApplication.getInitializeResponse().getData().getTracker().isIsAgreementSigned()) {
+                        showProgressDialog();
+//                        if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+//                            callHasToSignAPI(false);
+//                        else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+//                            callHasToSignAPI(true);
+//                        }
+                        if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || !objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+                            callHasToSignAPI(true);
+                        else if (objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+                            callHasToSignAPI(false);
+                        }
+                    } else {
+                        dashboard();
+                    }
                 }
-            }
 
-        } else {
-            dashboard();
+            } else {
+                dashboard();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

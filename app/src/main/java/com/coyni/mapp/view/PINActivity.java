@@ -233,6 +233,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             }
 
             if (getIntent().getStringExtra("screen").equals("login")) {
+//            if (getIntent().getStringExtra("screen").equals("login") || getIntent().getStringExtra("screen").equals("SignUp")) {
                 loginViewModel.initialize();
             }
 
@@ -1260,7 +1261,6 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                 objMyApplication.launchDashboard(this, strScreen);
             }
         } else {
-
             if (!objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
                     && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                     && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
@@ -1275,10 +1275,15 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     if (!objMyApplication.getInitializeResponse().getData().getTracker().isIsAgreementSigned()) {
                         showProgressDialog();
-                        if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
-                            callHasToSignAPI(false);
-                        else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+//                        if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+//                            callHasToSignAPI(false);
+//                        else if (!objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+//                            callHasToSignAPI(true);
+//                        }
+                        if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || !objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
                             callHasToSignAPI(true);
+                        else if (objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+                            callHasToSignAPI(false);
                         }
                     } else {
                         dashboard();

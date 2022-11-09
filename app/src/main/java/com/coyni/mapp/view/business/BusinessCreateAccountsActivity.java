@@ -454,10 +454,15 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                                 }
                             } else {
                                 if (!btResp.getData().getTracker().isIsAgreementSigned()) {
-                                    if (btResp.getData().getBusinessTracker() == null || btResp.getData().getBusinessTracker().isIsAgreementSigned())
-                                        callHasToSignAPI(false);
-                                    else if (!btResp.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                    if (btResp.getData().getBusinessTracker() == null || btResp.getData().getBusinessTracker().isIsAgreementSigned())
+//                                        callHasToSignAPI(false);
+//                                    else if (!btResp.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                        callHasToSignAPI(true);
+//                                    }
+                                    if (btResp.getData().getBusinessTracker() == null || !btResp.getData().getBusinessTracker().isIsAgreementSigned())
                                         callHasToSignAPI(true);
+                                    else if (btResp.getData().getBusinessTracker().isIsAgreementSigned()) {
+                                        callHasToSignAPI(false);
                                     }
                                 } else {
                                     launchDasboardFromBase();

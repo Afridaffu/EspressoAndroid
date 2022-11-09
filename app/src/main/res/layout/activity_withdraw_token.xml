@@ -161,6 +161,7 @@
                         android:layout_toRightOf="@+id/imgBankIcon"
                         android:fontFamily="@font/opensans_regular"
                         android:textColor="@color/xdark_gray"
+                        android:visibility="gone"
                         android:textSize="@dimen/_9ssp" />
 
                     <TextView

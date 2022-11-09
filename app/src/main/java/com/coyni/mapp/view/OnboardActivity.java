@@ -341,10 +341,15 @@ public class OnboardActivity extends BaseActivity {
                                         } else {
                                             if (!loginResponse.getData().getTracker().isIsAgreementSigned()) {
                                                 showProgressDialog();
-                                                if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
-                                                    callHasToSignAPI(false);
-                                                else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                                if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
+//                                                    callHasToSignAPI(false);
+//                                                else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                                    callHasToSignAPI(true);
+//                                                }
+                                                if (loginResponse.getData().getBusinessTracker() == null || !loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
                                                     callHasToSignAPI(true);
+                                                else if (loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+                                                    callHasToSignAPI(false);
                                                 }
                                             } else {
                                                 launchDashboard();
