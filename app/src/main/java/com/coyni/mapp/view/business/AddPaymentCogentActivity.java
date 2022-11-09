@@ -278,6 +278,7 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
                     if (isWithFCEnabled) {
                         objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                         objMyApplication.setSelectedCard(objData);
+                        objMyApplication.setSelectedButTokenType(objData.getPaymentMethod().toLowerCase());
                     }
                 }
             }

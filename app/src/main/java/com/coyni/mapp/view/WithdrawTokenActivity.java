@@ -792,7 +792,8 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                                 Intent i = new Intent(WithdrawTokenActivity.this, SelectPaymentMethodActivity.class);
                                 i.putExtra("screen", "withdraw");
                                 i.putExtra("subtype", "add");
-                                startActivityForResult(i, 3);
+//                                startActivityForResult(i, 3);
+                                startActivity(i);
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
