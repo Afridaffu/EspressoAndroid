@@ -509,7 +509,6 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                             tvFeePer.setText(feeString);
                         } else {
                             tvFeePer.setVisibility(View.GONE);
-                            alignControls();
                         }
                         if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Utils.doubleParsing(etAmount.getText().toString().replace(",", "")) > 0) {
                             isUSD = true;
@@ -1953,25 +1952,6 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     } else {
                         lyBalance.setVisibility(View.VISIBLE);
                     }
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void alignControls() {
-        try {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
-            params.addRule(RelativeLayout.RIGHT_OF, imgBankIcon.getId());
-            params.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
-            params.setMargins(Utils.convertPxtoDP(10), Utils.convertPxtoDP(5), 0, 0);
-            if (tvLimit.getVisibility() == View.GONE && tvFeePer.getVisibility() == View.GONE) {
-                if (lyBDetails.getVisibility() == View.VISIBLE && lyCDetails.getVisibility() == View.GONE) {
-                    lyBDetails.setLayoutParams(params);
-                } else if (lyBDetails.getVisibility() == View.GONE && lyCDetails.getVisibility() == View.VISIBLE) {
-                    lyCDetails.setLayoutParams(params);
                 }
             }
         } catch (Exception ex) {
