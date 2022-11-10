@@ -1249,13 +1249,13 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
     }
 
     public void initObservers() {
-        try {
-            identityVerificationViewModel.getUploadIdentityImageResponse().observe(this, new Observer<IdentityImageResponse>() {
-                @Override
-                public void onChanged(IdentityImageResponse identityImageResponse) {
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
+        identityVerificationViewModel.getUploadIdentityImageResponse().observe(this, new Observer<IdentityImageResponse>() {
+            @Override
+            public void onChanged(IdentityImageResponse identityImageResponse) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                try {
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
 //                        firstIVeri.setVisibility(GONE);
 //                        secondIVeri.setVisibility(VISIBLE);
@@ -1273,15 +1273,16 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            loginViewModel.postChangeAccountResponse().observe(this, new Observer<BiometricSignIn>() {
-                @Override
-                public void onChanged(BiometricSignIn btResp) {
+            }
+        });
+
+        loginViewModel.postChangeAccountResponse().observe(this, new Observer<BiometricSignIn>() {
+            @Override
+            public void onChanged(BiometricSignIn btResp) {
+                try {
                     LogUtils.d("addBusiness", "addBusiness" + btResp);
                     if (btResp != null) {
                         LogUtils.d("afternulll", "addBusiness" + btResp.getStatus());
@@ -1299,16 +1300,16 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             LogUtils.d("elseeeee", "addBusiness" + btResp);
                         }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            identityVerificationViewModel.getRemoveIdentityImageResponse().observe(this, new Observer<RemoveIdentityResponse>() {
-                @Override
-                public void onChanged(RemoveIdentityResponse imageResponse) {
+        identityVerificationViewModel.getRemoveIdentityImageResponse().observe(this, new Observer<RemoveIdentityResponse>() {
+            @Override
+            public void onChanged(RemoveIdentityResponse imageResponse) {
+                try {
                     if (imageResponse != null) {
                         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), identityFile);
                         MultipartBody.Part idFile = MultipartBody.Part.createFormData("identityFile", identityFile.getName(), requestBody);
@@ -1316,85 +1317,88 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         RequestBody idNumber = RequestBody.create(MediaType.parse("text/plain"), ssnET.getText().toString().trim());
                         identityVerificationViewModel.uploadIdentityImage(idFile, idType, idNumber);
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            identityVerificationViewModel.getUploadIdentityAddressResponse().observe(this, new Observer<IdentityAddressResponse>() {
-                @Override
-                public void onChanged(IdentityAddressResponse identityAddressResponse) {
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
+        identityVerificationViewModel.getUploadIdentityAddressResponse().observe(this, new Observer<IdentityAddressResponse>() {
+            @Override
+            public void onChanged(IdentityAddressResponse identityAddressResponse) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                try {
                     if (identityAddressResponse.getStatus().equalsIgnoreCase("success")) {
                         LogUtils.d("addBusiness", "addBusiness" + addBusiness);
                         respCode = identityAddressResponse.getData().getGiactResponseName();
-                        if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
-                                || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
-                                || respCode.equalsIgnoreCase("CI24")) {
-                            //Success
-                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                    .putExtra("screen", "SUCCESS"));
-                        } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
-                            //SSN Error
-                            startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class)
-                                    .putExtra("from", "IDVE"));
+//                        if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
+//                                || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
+//                                || respCode.equalsIgnoreCase("CI24")) {
+//                            //Success
+//                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+//                                    .putExtra("screen", "SUCCESS"));
+//                        } else if (respCode.equalsIgnoreCase("CA22") || respCode.equalsIgnoreCase("CI22")) {
+//                            //SSN Error
+//                            startActivity(new Intent(IdentityVerificationActivity.this, IdVeAdditionalActionActivity.class)
+//                                    .putExtra("from", "IDVE"));
+//
+//                        } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
+//                                || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
+//                                || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
+//                                || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
+//                                || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
+//                            //Under Review
+//                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+//                                    .putExtra("screen", "UNDER_REVIEW"));
+//                        } else {
+//                            //Failed
+//                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+//                                    .putExtra("screen", "FAILED"));
+//                        }
 
-                        } else if (respCode.equalsIgnoreCase("CA25") || respCode.equalsIgnoreCase("CI25")
-                                || respCode.equalsIgnoreCase("CA21") || respCode.equalsIgnoreCase("CI21")
-                                || respCode.equalsIgnoreCase("CA01") || respCode.equalsIgnoreCase("CI01")
-                                || respCode.equalsIgnoreCase("CA30") || respCode.equalsIgnoreCase("CI30")
-                                || respCode.equalsIgnoreCase("CA23") || respCode.equalsIgnoreCase("CI23")) {
-                            //Under Review
-                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                    .putExtra("screen", "UNDER_REVIEW"));
-                        } else {
-                            //Failed
-                            startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                    .putExtra("screen", "FAILED"));
-                        }
+                        //Under Review
+                        startActivity(new Intent(IdentityVerificationActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                .putExtra("screen", "UNDER_REVIEW"));
 
                     } else {
                         Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "", identityAddressResponse.getError().getFieldErrors().get(0));
                     }
 
                     identityVerificationViewModel.getStatusTracker();
-
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            identityVerificationViewModel.getGetStatusTracker().observe(this, new Observer<TrackerResponse>() {
-                @Override
-                public void onChanged(TrackerResponse trackerResponse) {
+        identityVerificationViewModel.getGetStatusTracker().observe(this, new Observer<TrackerResponse>() {
+            @Override
+            public void onChanged(TrackerResponse trackerResponse) {
+                try {
                     if (trackerResponse != null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
                         myApplicationObj.setTrackerResponse(trackerResponse);
-
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
-        try {
-            dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
-                @Override
-                public void onChanged(Profile profile) {
+        dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
+            @Override
+            public void onChanged(Profile profile) {
+                try {
                     if (profile != null && profile.getStatus().equalsIgnoreCase("success")) {
                         myApplicationObj.setMyProfile(profile);
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
+
 
     }
 
