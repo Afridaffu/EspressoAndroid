@@ -692,6 +692,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                     if (isWithFCEnabled || isBuyFCEnabled) {
                         objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                         objMyApplication.setSelectedCard(objData);
+                        objMyApplication.setSelectedButTokenType(objData.getPaymentMethod().toLowerCase());
                     }
                 }
             }

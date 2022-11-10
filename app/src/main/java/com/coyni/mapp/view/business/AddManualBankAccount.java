@@ -309,6 +309,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                     if (isWithFCEnabled || isBuyFCEnabled) {
                         objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                         objMyApplication.setSelectedCard(objData);
+                        objMyApplication.setSelectedButTokenType(objData.getPaymentMethod().toLowerCase());
                     }
                 }
             }
