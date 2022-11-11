@@ -305,8 +305,13 @@ public class DashboardActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-
-                    startActivity(new Intent(DashboardActivity.this, ScanActivity.class));
+                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())
+                            || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
+                            && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
+                        Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
+                    } else {
+                        startActivity(new Intent(DashboardActivity.this, ScanActivity.class));
+                    }
                 }
             });
 
@@ -380,17 +385,17 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                        return;
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    Intent i = new Intent(DashboardActivity.this, AddRecipientActivity.class);
-//                    startActivity(i);
                         if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
                             return;
                         }
                         mLastClickTimeQA = SystemClock.elapsedRealtime();
-                        requestPermission();
+                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())
+                                || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
+                                && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
+                            Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
+                        } else {
+                            requestPermission();
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
