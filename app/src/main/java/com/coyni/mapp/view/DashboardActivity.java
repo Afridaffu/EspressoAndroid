@@ -309,6 +309,9 @@ public class DashboardActivity extends BaseActivity {
                             || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
                             && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
                         Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
+                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                            objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                        Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve1), 0, "");
                     } else {
                         startActivity(new Intent(DashboardActivity.this, ScanActivity.class));
                     }
@@ -393,6 +396,9 @@ public class DashboardActivity extends BaseActivity {
                                 || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
                                 && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
                             Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                            Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve1), 0, "");
                         } else {
                             requestPermission();
                         }

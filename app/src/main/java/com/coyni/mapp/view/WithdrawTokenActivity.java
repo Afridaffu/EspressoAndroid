@@ -741,19 +741,30 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             String strPaymentMethod = "";
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 for (int i = 0; i < paymentMethodsResponse.getData().getData().size(); i++) {
-//                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-//                        if (!paymentMethodsResponse.getData().getData().get(i).getPaymentMethod().toLowerCase().equals("credit")) {
-//                            listPayments.add(paymentMethodsResponse.getData().getData().get(i));
-//                        }
-//                    } else {
-//                        strPaymentMethod = paymentMethodsResponse.getData().getData().get(i).getPaymentMethod();
-//                        if (strPaymentMethod != null && (strPaymentMethod.toLowerCase().equals("bank") || strPaymentMethod.toLowerCase().equals("Cogent"))) {
-//                            listPayments.add(paymentMethodsResponse.getData().getData().get(i));
-//                        }
-//                    }
                     strPaymentMethod = paymentMethodsResponse.getData().getData().get(i).getPaymentMethod();
-                    if (strPaymentMethod != null && !strPaymentMethod.toLowerCase().equals("credit")) {
-                        listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+//                    if (strPaymentMethod != null && !strPaymentMethod.toLowerCase().equals("credit")
+//                            || (objMyApplication.isCogentEnabled() && strPaymentMethod.toLowerCase().equals("cogent"))
+//                            || (objMyApplication.isSignetEnabled() && strPaymentMethod.toLowerCase().equals("signet"))) {
+//                        listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+//                    }
+                    if (strPaymentMethod != null) {
+                        switch (strPaymentMethod.toLowerCase()) {
+                            case "bank":
+                            case "debit": {
+                                listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+                            }
+                            break;
+                            case "cogent":
+                                if (objMyApplication.isCogentEnabled()) {
+                                    listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+                                }
+                                break;
+                            case "signet":
+                                if (objMyApplication.isSignetEnabled()) {
+                                    listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+                                }
+                                break;
+                        }
                     }
                 }
                 if (listPayments != null && listPayments.size() > 0) {

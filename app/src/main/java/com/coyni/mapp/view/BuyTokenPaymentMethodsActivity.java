@@ -1051,9 +1051,10 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, BuyTokenActivity.class);
                 i.putExtra("cvv", etCVV.getText().toString().trim());
                 startActivity(i);
-            } else {
-                Utils.displayAlert("Please enter CVV", BuyTokenPaymentMethodsActivity.this, "", "");
             }
+//            else {
+//                Utils.displayAlert("Please enter CVV", BuyTokenPaymentMethodsActivity.this, "", "");
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

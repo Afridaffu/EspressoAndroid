@@ -711,15 +711,15 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                 try {
                                     if (objMyApplication.getFeatureControlGlobal().getPay() != null && objMyApplication.getFeatureControlGlobal().getPay()
                                             && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
-                                        cynValue = Utils.doubleParsing(strQRAmount.toString().trim().replace(",", ""));
-                                        calculateCustomerFee(Utils.USNumberFormat(cynValue));
-                                        showPayToMerchantWithAmountDialog(strQRAmount, userDetails, avaBal, businessTypeValue);
-                                        dashboardViewModel.getFeatureControlByUser(userDetails.getData().getUserId());
-//                                        Intent i = new Intent(ScanActivity.this, PayToPersonalActivity.class);
-//                                        i.putExtra("walletId", strScanWallet);
-//                                        i.putExtra("amount", strQRAmount);
-//                                        i.putExtra("screen", "scan");
-//                                        startActivity(i);
+//                                        cynValue = Utils.doubleParsing(strQRAmount.toString().trim().replace(",", ""));
+//                                        calculateCustomerFee(Utils.USNumberFormat(cynValue));
+//                                        showPayToMerchantWithAmountDialog(strQRAmount, userDetails, avaBal, businessTypeValue);
+//                                        dashboardViewModel.getFeatureControlByUser(userDetails.getData().getUserId());
+                                        Intent i = new Intent(ScanActivity.this, PayToPersonalActivity.class);
+                                        i.putExtra("walletId", strScanWallet);
+                                        i.putExtra("amount", strQRAmount);
+                                        i.putExtra("screen", "scan");
+                                        startActivity(i);
                                     } else {
                                         if (mcodeScanner != null) {
                                             mcodeScanner.startPreview();
