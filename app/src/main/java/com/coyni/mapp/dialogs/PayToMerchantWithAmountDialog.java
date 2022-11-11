@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 
 import com.coyni.mapp.R;
+import com.coyni.mapp.model.payrequest.TransferPayRequest;
 import com.coyni.mapp.model.wallet.UserDetails;
 import com.coyni.mapp.utils.DisplayImageUtility;
 import com.coyni.mapp.utils.LogUtils;
@@ -30,7 +31,8 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     private MotionLayout slideToConfirm;
     private CardView im_lock_;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
-    private final String pay = "payTransaction";
+    private final String pay = "paidOrder";
+    private final String payPersonal = "payPersonal";
     private double balance;
     private MyApplication myApplication;
     private String businessTypeValue;
@@ -63,6 +65,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 
         bindUserInfo(userDetails);
 
+
         if (amount != null) {
             amount = amount.replace(",", "").trim();
             payAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(amount)));
@@ -83,6 +86,13 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             } else {
                 userName.setText("Paying " + userDetails.getData().getDbaName());
             }
+        } else if (userDetails != null && userDetails.getData() != null && userDetails.getData().getFullName() != null) {
+            String fullName = userDetails.getData().getFullName();
+            if (fullName.length() > 21) {
+                userName.setText("Paying " + fullName.substring(0, 21) + "...");
+            } else {
+                userName.setText("Paying " + fullName);
+            }
         }
 //        if (businessTypeValue != null) {
 //            if (businessTypeValue.length() >= 21) {
@@ -91,14 +101,16 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 //                bTypeValue.setText(businessTypeValue);
 //            }
 //        }
-        for (int i = 0; i < myApplication.getBusinessTypeResp().getData().size(); i++) {
-            try {
-                if (userDetails != null && userDetails.getData().getBusinessType().toLowerCase().trim().equals(myApplication.getBusinessTypeResp().getData().get(i).getKey().toLowerCase().trim())) {
-                    businessTypeValue = myApplication.getBusinessTypeResp().getData().get(i).getValue();
-                    break;
+        if (myApplication.getBusinessTypeResp() != null && myApplication.getBusinessTypeResp().getData() != null) {
+            for (int i = 0; i < myApplication.getBusinessTypeResp().getData().size(); i++) {
+                try {
+                    if (userDetails != null && userDetails.getData() != null && userDetails.getData().getBusinessType() != null && userDetails.getData().getBusinessType().toLowerCase().trim().equals(myApplication.getBusinessTypeResp().getData().get(i).getKey().toLowerCase().trim())) {
+                        businessTypeValue = myApplication.getBusinessTypeResp().getData().get(i).getValue();
+                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         if (businessTypeValue != null && businessTypeValue.length() > 0) {
@@ -133,7 +145,12 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 //                        tv_lable.setVisibility(View.GONE);
 //                        tv_lable_verify.setVisibility(View.VISIBLE);
                         dismiss();
-                        getOnDialogClickListener().onDialogClicked(pay, null);
+                        if (Utils.PERSONAL_ACCOUNT == userDetails.getData().getAccountType()) {
+                            payTransactionRequest();
+                            getOnDialogClickListener().onDialogClicked(payPersonal, null);
+                        } else {
+                            getOnDialogClickListener().onDialogClicked(pay, null);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -160,6 +177,8 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             TextView tvName;
             ImageView userProfile;
             tvName = findViewById(R.id.payingDbaNameTV);
+            LinearLayout feeLL = findViewById(R.id.processing_fee_ll);
+            TextView proc_fee = findViewById(R.id.processing_fees);
 //            userName = findViewById(R.id.userProfileTextTV);
             userProfile = findViewById(R.id.userProfileIV);
 
@@ -179,11 +198,24 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 //                    tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
 //                }
 //            }
-            if (userDetails != null && userDetails.getData() != null && userDetails.getData().getDbaName() != null) {
-                if (userDetails.getData().getDbaName().length() >= 21) {
-                    tvName.setText((userDetails.getData().getDbaName().substring(0, 21)) + "...");
+            if (userDetails != null && userDetails.getData() != null) {
+                if (userDetails.getData().getDbaName() != null) {
+                    if (userDetails.getData().getDbaName().length() >= 21) {
+                        tvName.setText((userDetails.getData().getDbaName().substring(0, 21)) + "...");
+                    } else {
+                        tvName.setText(userDetails.getData().getDbaName());
+                    }
                 } else {
-                    tvName.setText(userDetails.getData().getDbaName());
+                    tvName.setText(userDetails.getData().getFirstName().concat(" " + userDetails.getData().getLastName()));
+                }
+
+                if (Utils.PERSONAL_ACCOUNT == userDetails.getData().getAccountType()) {
+                    feeLL.setVisibility(View.VISIBLE);
+                    proc_fee.setText(Utils.convertBigDecimalUSDC(String.valueOf(myApplication.getProcessingFee())));
+                }
+
+                if (userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT){
+                    accountType.setText("Token Account");
                 }
 
             }
@@ -217,6 +249,19 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
                 }
             });
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void payTransactionRequest() {
+        try {
+            TransferPayRequest request = new TransferPayRequest();
+            request.setTokens(payAmount.getText().toString().trim().replace(",", ""));
+            request.setRemarks("");
+            request.setRecipientWalletId(recipientAddress);
+            myApplication.setTransferPayRequest(request);
+            myApplication.setWithdrawAmount(Double.parseDouble(amount));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

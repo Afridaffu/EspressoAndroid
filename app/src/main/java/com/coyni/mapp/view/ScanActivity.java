@@ -10,6 +10,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.model.businesswallet.WalletInfo;
+import com.coyni.mapp.model.payrequest.PayRequestResponse;
+import com.coyni.mapp.model.payrequest.TransferPayRequest;
 import com.coyni.mapp.view.business.SelectPaymentMethodActivity;
 import com.google.zxing.Reader;
 import com.coyni.mapp.dialogs.OnDialogClickListener;
@@ -161,6 +163,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private String businessTypeValue = "";
     private boolean slideActionEnabled = false;
+    private final String payPersonal = "payPersonal";
+    private Boolean isPayRequest = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -655,6 +659,34 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     }
 
     private void initObserveres() {
+
+        payViewModel.getPayRequestResponseMutableLiveData().observe(this, new Observer<PayRequestResponse>() {
+            @Override
+            public void onChanged(PayRequestResponse payRequestResponse) {
+                try {
+                    if (payRequestResponse != null) {
+//                        Utils.setStrToken("");
+                        objMyApplication.clearStrToken();
+                        objMyApplication.setPayRequestResponse(payRequestResponse);
+                        if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
+                            startActivity(new Intent(ScanActivity.this, GiftCardBindingLayoutActivity.class)
+                                    .putExtra("status", "success")
+                                    .putExtra("subtype", "pay"));
+
+                        } else {
+                            startActivity(new Intent(ScanActivity.this, GiftCardBindingLayoutActivity.class)
+                                    .putExtra("status", "failed")
+                                    .putExtra("subtype", "pay"));
+                        }
+                    } else {
+                        Utils.displayAlert("something went wrong", ScanActivity.this, "", "");
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         dashboardViewModel.getUserDetailsMutableLiveData().observe(this, new Observer<UserDetails>() {
             @Override
             public void onChanged(UserDetails userDetails) {
@@ -663,6 +695,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 }
                 try {
                     if (userDetails.getStatus().equalsIgnoreCase("SUCCESS")) {
+                        objMyApplication.setUserDetails(userDetails);
                         if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT && userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             if (strQRAmount.equals("")) {
                                 try {
@@ -678,11 +711,15 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                 try {
                                     if (objMyApplication.getFeatureControlGlobal().getPay() != null && objMyApplication.getFeatureControlGlobal().getPay()
                                             && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
-                                        Intent i = new Intent(ScanActivity.this, PayToPersonalActivity.class);
-                                        i.putExtra("walletId", strScanWallet);
-                                        i.putExtra("amount", strQRAmount);
-                                        i.putExtra("screen", "scan");
-                                        startActivity(i);
+                                        cynValue = Utils.doubleParsing(strQRAmount.toString().trim().replace(",", ""));
+                                        calculateCustomerFee(Utils.USNumberFormat(cynValue));
+                                        showPayToMerchantWithAmountDialog(strQRAmount, userDetails, avaBal, businessTypeValue);
+                                        dashboardViewModel.getFeatureControlByUser(userDetails.getData().getUserId());
+//                                        Intent i = new Intent(ScanActivity.this, PayToPersonalActivity.class);
+//                                        i.putExtra("walletId", strScanWallet);
+//                                        i.putExtra("amount", strQRAmount);
+//                                        i.putExtra("screen", "scan");
+//                                        startActivity(i);
                                     } else {
                                         if (mcodeScanner != null) {
                                             mcodeScanner.startPreview();
@@ -795,6 +832,19 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 feeInAmount = transferFeeResponse.getData().getFeeInAmount();
                 feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
                 pfee = transferFeeResponse.getData().getFee();
+                if (objMyApplication.getUserDetails().getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    objMyApplication.setProcessingFee(feeInAmount);
+                    if (Utils.checkInternet(ScanActivity.this)) {
+                        TransactionLimitRequest obj = new TransactionLimitRequest();
+                        obj.setTransactionType(Integer.parseInt(Utils.payType));
+                        obj.setTransactionSubType(Integer.parseInt(Utils.paySubType));
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                        } else {
+                            buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
+                        }
+                    }
+                }
 
             }
         });
@@ -832,7 +882,11 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                     if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
                         objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                     }
-                    payTransaction();
+                    if (objMyApplication.getUserDetails().getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        payTransaction();
+                    } else {
+                        saleTransaction();
+                    }
                 }
             }
         });
@@ -845,6 +899,9 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 objResponse = transactionLimitResponse;
                 if (transactionLimitResponse.getData() != null) {
                     setDailyWeekLimit(objResponse.getData());
+                }
+                if (objMyApplication.getUserDetails().getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    showPayToMerchantWithAmountDialog(strQRAmount, details, avaBal, "");
                 }
             }
         });
@@ -869,6 +926,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                             for (int i = 0; i < obj.getPermissionResponseList().size(); i++) {
                                 if (obj.getPermissionResponseList().get(i).getFeatureName().toLowerCase().equals(Utils.saleOrderEnable)) {
                                     isSaleOrder = obj.getPermissionResponseList().get(i).getPermission();
+                                } else if (obj.getPermissionResponseList().get(i).getFeatureName().equalsIgnoreCase(Utils.payEnable)) {
+                                    isPayRequest = obj.getPermissionResponseList().get(i).getPermission();
                                 }
                             }
                         }
@@ -1353,7 +1412,11 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 request.setDeviceId(Utils.getDeviceID());
 //                    request.setMobileToken(strToken);
                 request.setMobileToken(objMyApplication.getStrMobileToken());
-                request.setActionType(Utils.paidActionType);
+                if (objMyApplication.getUserDetails().getData().getAccountType() != Utils.PERSONAL_ACCOUNT) {
+                    request.setActionType(Utils.paidActionType);
+                } else {
+                    request.setActionType(Utils.sendActionType);
+                }
                 coyniViewModel.biometricToken(request);
                 if (mcodeScanner != null && mcodeScanner.isPreviewActive()) {
                     mcodeScanner.stopPreview();
@@ -1367,11 +1430,17 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         } else if (requestCode == 251 && resultCode == RESULT_CANCELED) {
             try {
 //                    payTransaction();
-                startActivity(new Intent(ScanActivity.this, PINActivity.class)
-                        .putExtra("TYPE", "ENTER")
-                        .putExtra("screen", "Paid")
-                        .putExtra(Utils.wallet, strScanWallet)
-                        .putExtra(Utils.amount, strQRAmount.replace(",", "").trim()));
+                if (objMyApplication.getUserDetails().getData().getAccountType() != Utils.PERSONAL_ACCOUNT) {
+                    startActivity(new Intent(ScanActivity.this, PINActivity.class)
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("screen", "Paid")
+                            .putExtra(Utils.wallet, strScanWallet)
+                            .putExtra(Utils.amount, strQRAmount.replace(",", "").trim()));
+                } else {
+                    startActivity(new Intent(ScanActivity.this, PINActivity.class)
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("screen", "Pay"));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1726,6 +1795,33 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                         }
                     }
                     LogUtils.v("Scan", "onDialog Clicked " + action);
+                } else if (action.equalsIgnoreCase(payPersonal)) {
+                    if (!isAuthenticationCalled) {
+                        isAuthenticationCalled = true;
+                        if (isPayRequest) {
+                            if (payValidation()) {
+                                if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
+                                    if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
+                                        Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                    } else {
+                                        //                                isCancel = true;
+                                        //                                prevDialog.dismiss();
+                                        startActivity(new Intent(ScanActivity.this, PINActivity.class)
+                                                .putExtra("TYPE", "ENTER")
+                                                .putExtra("screen", "Pay"));
+                                    }
+                                } else {
+                                    //                            isCancel = true;
+                                    //                            prevDialog.dismiss();
+                                    startActivity(new Intent(ScanActivity.this, PINActivity.class)
+                                            .putExtra("TYPE", "ENTER")
+                                            .putExtra("screen", "Pay"));
+                                }
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.errormsg), ScanActivity.this, "", "");
+                        }
+                    }
                 }
 
             }
@@ -1808,7 +1904,23 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         }
     }
 
-    private void payTransaction() {
+    private void calculateCustomerFee(String strAmount) {
+        try {
+            TransferFeeRequest request = new TransferFeeRequest();
+            request.setTokens(strAmount.trim().replace(",", ""));
+            request.setTxnType(Utils.payType);
+            request.setTxnSubType(Utils.paySubType);
+            if (Utils.PERSONAL_ACCOUNT == objMyApplication.getAccountType()) {
+                if (Utils.checkInternet(ScanActivity.this)) {
+                    buyTokenViewModel.transferFee(request);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void saleTransaction() {
         try {
 //            TransferPayRequest request = new TransferPayRequest();
 //            request.setTokens(strQRAmount.trim().replace(",", ""));
@@ -1833,6 +1945,24 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             ex.printStackTrace();
         }
     }
+
+    private void payTransaction() {
+        try {
+            TransferPayRequest request = new TransferPayRequest();
+            request.setTokens(strQRAmount.replace(",", ""));
+            request.setRemarks("");
+            request.setRecipientWalletId(objMyApplication.getUserDetails().getData().getWalletId());
+//            request.setSourceWalletId(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletId());
+            objMyApplication.setTransferPayRequest(request);
+            objMyApplication.setWithdrawAmount(cynValue);
+            if (Utils.checkInternet(ScanActivity.this)) {
+                payViewModel.sendTokens(request, objMyApplication.getStrToken());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
     private Boolean payValidation() {
         boolean value = false;
@@ -1925,5 +2055,6 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             e.printStackTrace();
         }
     }
+
 
 }
