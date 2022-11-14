@@ -355,7 +355,8 @@ public class SignAgreementsActivity extends BaseActivity {
                 else if (AGREE_TYPE == Utils.cPP)
                     binding.agreNameTV.setText(getString(R.string.gbx_pp) + " Update");
                 else if (AGREE_TYPE == Utils.mAgmt)
-                    binding.agreNameTV.setText(getString(R.string.gbx_merchant) + " Update");
+//                    binding.agreNameTV.setText(getString(R.string.gbx_merchant) + " Update");
+                    binding.agreNameTV.setText(getString(R.string.gbx_merchant1) + " Update");
             }
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
@@ -585,15 +586,21 @@ public class SignAgreementsActivity extends BaseActivity {
 
     public void setSpannableText(String date) {
 
-        String agreeName = "";
+        String agreeName = "", agreeName1 = "";
         if (AGREE_TYPE == Utils.cTOS)
             agreeName = getString(R.string.gbx_tos);
         else if (AGREE_TYPE == Utils.cPP)
             agreeName = getString(R.string.gbx_pp);
-        else if (AGREE_TYPE == Utils.mAgmt)
+        else if (AGREE_TYPE == Utils.mAgmt) {
             agreeName = getString(R.string.gbx_merchant);
+            agreeName1 = getString(R.string.gbx_merchant1);
 
-        binding.changeSummaryHeaderTV.setText(agreeName + " Update Summary");
+        }
+        if (AGREE_TYPE == Utils.mAgmt) {
+            binding.changeSummaryHeaderTV.setText(agreeName1 + " Update Summary");
+        } else {
+            binding.changeSummaryHeaderTV.setText(agreeName + " Update Summary");
+        }
         binding.changeSummarySubHeaderTV.setText("Here is a brief summary of the " + agreeName + " changes that go into effect on " + date + ":");
         binding.changeSummaryTV.setText(Html.fromHtml(agrementsResponse.getData().get(currentIteration).getChangeSummary()));
         String formString = "On " + date + ", we’re making some changes to our " + agreeName +
