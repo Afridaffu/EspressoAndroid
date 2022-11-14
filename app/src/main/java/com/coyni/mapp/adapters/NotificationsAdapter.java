@@ -240,10 +240,10 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                                     if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())
                                             || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
                                             && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
-                                        Utils.showCustomToast(mContext, mContext.getString(R.string.complete_idve), 0, "");
+                                        Utils.showCustomToast(mContext, mContext.getString(R.string.complete_idve1), 0, "");
                                     } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
                                             objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                                        Utils.showCustomToast(mContext, mContext.getString(R.string.complete_idve1), 0, "");
+                                        Utils.showCustomToast(mContext, mContext.getString(R.string.complete_idve), 0, "");
                                     } else {
                                         ((NotificationsActivity) mContext).selectedRow = position + "";
 

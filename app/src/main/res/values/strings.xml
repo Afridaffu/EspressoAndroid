@@ -463,7 +463,7 @@
     <string name="phonenumber_curr">Current Phone Number</string>
     <string name="scan_to_make_a_payment">Scan to make a payment.</string>
     <string name="receive_payments">Receive payments for goods and services.</string>
-<!--    <string name="buy_token_with">Buy token with bank account or Cogent account.</string>-->
+    <!--    <string name="buy_token_with">Buy token with bank account or Cogent account.</string>-->
     <string name="buy_token_with">Buy token with bank account.</string>
     <string name="withdraw_token_to_usd">Withdraw token to USD.</string>
     <string name="authorization_failed">Authorization Failed</string>
@@ -708,17 +708,17 @@
     <string name="allow_access_header">Allow Access to your Camera</string>
     <string name="camera_permission_desc">You are not allowing to access the Camera. Please go to Settings and enable the Camera permission.</string>
 
-<!--    <string name="gbx_tos">GreenBox-Terms of Service</string>-->
-<!--    <string name="gbx_pp">GreenBox-Privacy Policy</string>-->
-<!--    <string name="gbx_merchant">GreenBox-Merchant</string>-->
+    <!--    <string name="gbx_tos">GreenBox-Terms of Service</string>-->
+    <!--    <string name="gbx_pp">GreenBox-Privacy Policy</string>-->
+    <!--    <string name="gbx_merchant">GreenBox-Merchant</string>-->
 
     <string name="gbx_tos">Terms of Service</string>
     <string name="gbx_pp">Privacy Policy</string>
     <string name="gbx_merchant">Merchant Agreement</string>
     <string name="gbx_merchant1">Merchant</string>
 
-    <string name="complete_idve"> Your Account is Under Review, please contact Customer support</string>
-    <string name="complete_idve1">Please complete your Identity Verification process.</string>
+    <string name="complete_idve">Please complete your Identity Verification process.</string>
+    <string name="complete_idve1">Your Account is Under Review, please contact Customer support.</string>
     <string name="otp_retry_error">Looks like something went wrong. Please try again</string>
 
     <string name="alert">Alert</string>
