@@ -432,7 +432,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         myApplication.setDbaOwnerId(Integer.parseInt(String.valueOf(btResp.getData().getDbaOwnerId())));
                         myApplication.setIsReserveEnabled(btResp.getData().isReserveEnabled());
                         myApplication.setIsLoggedIn(true);
-
+                        myApplication.setLoginResponse(btResp);
                         if (!btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
                                 && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                                 && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
@@ -469,7 +469,11 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                                 }
                             }
                         } else {
-                            launchDasboardFromBase();
+                            if (btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                                myApplication.launchDeclinedActivity(BusinessCreateAccountsActivity.this);
+                            } else {
+                                launchDasboardFromBase();
+                            }
                         }
                     } else {
                         Utils.displayAlert(btResp.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", "");

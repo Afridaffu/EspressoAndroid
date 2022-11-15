@@ -876,7 +876,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                     e.printStackTrace();
                                 }
 
-                                //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
                                 objMyApplication.setLoginUserId(Integer.parseInt(String.valueOf(loginResponse.getData().getUserId())));
                                 objMyApplication.setLoginResponse(loginResponse);
                                 Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
@@ -893,10 +892,9 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                     objMyApplication.setIsLoggedIn(true);
-
                                     if (!loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
-                                                    && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
-                                                    && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                                            && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                                            && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
 
                                         if (loginResponse.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
                                             if (loginResponse.getData().getOwnerDetails() != null && !loginResponse.getData().getOwnerDetails().getTracker().isIsAgreementSigned()) {
