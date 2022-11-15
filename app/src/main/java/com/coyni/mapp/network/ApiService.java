@@ -51,7 +51,6 @@ import com.coyni.mapp.model.business_activity.BusinessActivityResp;
 import com.coyni.mapp.model.business_id_verification.BusinessTrackerResponse;
 import com.coyni.mapp.model.business_id_verification.CancelApplicationResponse;
 import com.coyni.mapp.model.businesswallet.BusinessWalletResponse;
-import com.coyni.mapp.model.businesswallet.WalletRequest;
 import com.coyni.mapp.model.buytoken.BuyTokenRequest;
 import com.coyni.mapp.model.buytoken.BuyTokenResponse;
 import com.coyni.mapp.model.buytoken.CancelBuyTokenResponse;
@@ -411,6 +410,9 @@ public interface ApiService {
 
     @DELETE("api/v2/profile/me/remove-identity")
     Call<RemoveIdentityResponse> removeIdentityImage(@Query("identityType") String identityType);
+
+    @DELETE("api/v2/profile/remove-identity/{identityId}")
+    Call<RemoveIdentityResponse> removeImageMultiDocs(@Path("identityId") String identityType);
 
     @POST("api/v2/profile/identity")
     Call<IdentityAddressResponse> uploadIdentityAddress(@Body IdentityAddressRequest identityAddressRequest);
@@ -792,5 +794,10 @@ public interface ApiService {
     @POST("api/v2/profile/update-agreement/{agreementId}")
     Call<UpdateSignAgreementsResp> signUpdatedAgreementDoc(@Path("agreementId") Integer agreementId, @Part MultipartBody.Part filee);
 
+    @Multipart
+    @POST("api/v2/underwriting/upload-docs")
+    Call<IdentityImageResponse> uploadActionRequiredDoc(@Part MultipartBody.Part filee,
+                                                        @Part("identityType") RequestBody type,
+                                                        @Part("uwDocId") RequestBody docID);
 }
 

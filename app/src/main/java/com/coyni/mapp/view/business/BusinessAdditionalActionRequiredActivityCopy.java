@@ -1,7 +1,5 @@
 package com.coyni.mapp.view.business;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 import static com.coyni.mapp.custom_camera.CameraUtility.BROWSE;
 import static com.coyni.mapp.custom_camera.CameraUtility.CHOOSE_LIBRARY;
 import static com.coyni.mapp.custom_camera.CameraUtility.TAKE_PHOTO;
@@ -12,14 +10,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.Log;
@@ -33,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -56,7 +50,6 @@ import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
 import com.coyni.mapp.model.DialogAttributes;
 import com.coyni.mapp.model.DocLayout;
 import com.coyni.mapp.model.identity_verification.IdentityImageResponse;
-import com.coyni.mapp.model.identity_verification.RemoveIdentityResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.underwriting.ActionRequiredResponse;
 import com.coyni.mapp.model.underwriting.ActionRequiredSubmitResponse;
@@ -87,7 +80,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class BusinessAdditionalActionRequiredActivity extends BaseActivity implements OnKeyboardVisibilityListener {
+public class BusinessAdditionalActionRequiredActivityCopy extends BaseActivity implements OnKeyboardVisibilityListener {
     public ScrollView scrollview;
     private LinearLayout additionReservedLL, llApprovedReserved, llHeading, llBottomView, additionalDocumentRequiredLL,
             websiteRevisionRequiredLL, informationRevisionLL, bank_information;
@@ -96,7 +89,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     private static final int ACTIVITY_CHOOSE_FILE = 3;
     private static final int PICK_IMAGE_REQUEST = 4;
     private Long mLastClickTime = 0L;
-    public static BusinessAdditionalActionRequiredActivity businessAdditionalActionRequired;
+    public static BusinessAdditionalActionRequiredActivityCopy businessAdditionalActionRequired;
     public static File additional2fFle = null, businessLicenceFile = null;
     public boolean isSubmitEnabled = false;
     public CardView submitCV;
@@ -171,7 +164,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         filesToUpload = new HashMap<Integer, File>();
         documentsFIle = new ArrayList<>();
 
-        setKeyboardVisibilityListener(BusinessAdditionalActionRequiredActivity.this);
+        setKeyboardVisibilityListener(BusinessAdditionalActionRequiredActivityCopy.this);
         businessDashboardViewModel.meBusinessPaymentMethods();
 
         imvCLose.setOnClickListener(new View.OnClickListener() {
@@ -376,7 +369,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                         errorMessage = actionRequiredSubmitResponse.getError().getErrorDescription();
                     }
                     Utils.displayAlert(errorMessage,
-                            BusinessAdditionalActionRequiredActivity.this, "", "");
+                            BusinessAdditionalActionRequiredActivityCopy.this, "", "");
 
                 }
             }
@@ -388,7 +381,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     public void onChanged(ActionRequiredResponse actionRequiredResponse) {
                         try {
                             dismissDialog();
-                            additionalActionRL.setVisibility(VISIBLE);
+                            additionalActionRL.setVisibility(View.VISIBLE);
                             // LogUtils.d(TAG, "ActionRequiredResponse" + actionRequiredResponse.getData().getWebsiteChange().size());
                             actionRequired = actionRequiredResponse;
                             if (actionRequiredResponse != null && actionRequiredResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
@@ -416,7 +409,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
 
                             } else {
                                 Utils.displayAlert(actionRequiredResponse.getError().getErrorDescription(),
-                                        BusinessAdditionalActionRequiredActivity.this, "",
+                                        BusinessAdditionalActionRequiredActivityCopy.this, "",
                                         actionRequiredResponse.getError().getFieldErrors().get(0));
                             }
 
@@ -442,20 +435,14 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     dismissDialog();
                     if (identityImageResponse != null && identityImageResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
                         if (uploadedLayout != null) {
-                            uploadedLayout.setVisibility(VISIBLE);
-                            selectedText.setVisibility(GONE);
-                        }
-                        for (int l = 0; l < listOfDocLayouts.size(); l++) {
-                            if (listOfDocLayouts.get(l).getId() == actionRequired.getData().getAdditionalDocument().get((int) uploadedLayout.getTag()).getId()) {
-                                listOfDocLayouts.get(l).setUploaded(true);
-                                break;
-                            }
+                            uploadedLayout.setVisibility(View.VISIBLE);
+                            selectedText.setVisibility(View.GONE);
                         }
                         enableOrDisableNext();
 
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(),
-                                BusinessAdditionalActionRequiredActivity.this, "",
+                                BusinessAdditionalActionRequiredActivityCopy.this, "",
                                 identityImageResponse.getError().getFieldErrors().get(0));
                     }
 
@@ -464,148 +451,296 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 }
             }
         });
-
-        try {
-            identityVerificationViewModel.getRemoveIdentityImageResponse().observe(this, new Observer<RemoveIdentityResponse>() {
-                @Override
-                public void onChanged(RemoveIdentityResponse imageResponse) {
-                    if (imageResponse != null) {
-//                        uploadDoc(mediaFile);
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void additionalRequiredDocuments(ActionRequiredResponse actionRequiredResponse) {
 
-        try {
-            additionalDocumentRequiredLL.setVisibility(VISIBLE);
-            for (int i = 0; i < actionRequiredResponse.getData().getAdditionalDocument().size(); i++) {
-                int count = actionRequiredResponse.getData().getAdditionalDocument().get(i).getUploadDocs().size();
-                if (count > 0) {
-                    for (int j = 0; j < count; j++) {
-                        addDynamicView(i, j, true, count, getVisibility(j, count));
-                        if (j == 2)
-                            break;
-                    }
-                } else {
-                    addDynamicView(i, 0, false, count, true);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+        additionalDocumentRequiredLL.setVisibility(View.VISIBLE);
+        for (int i = 0; i < actionRequiredResponse.getData().getAdditionalDocument().size(); i++) {
+//            View inf = getLayoutInflater().inflate(R.layout.additional_document_item, null);
+//
+//            LinearLayout documentRequiredLL = inf.findViewById(R.id.documentRequired);
+//            documentRequiredLL.setVisibility(View.VISIBLE);
+//            documentRequiredLL.setTag(i);
+//            LinearLayout sscFileUploadLL = inf.findViewById(R.id.sscFileUploadLL);
+//            sscFileUploadLL.setTag(i);
+//            LinearLayout sscfileUploadedLL = inf.findViewById(R.id.sscfileUploadedLL);
+//            TextView sscuploadFileTV = inf.findViewById(R.id.sscuploadFileTV);
+//            TextView sscfileUpdatedOnTV = inf.findViewById(R.id.sscfileUpdatedOnTV);
+//            sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
+//            LinearLayout additionalDocLL = inf.findViewById(R.id.additionalDocLL);
+//            additionalDocLL.setVisibility(View.VISIBLE);
+//            TextView positionTV = inf.findViewById(R.id.positionTV);
+//            positionTV.setText("0");
+//            TextView documentName = inf.findViewById(R.id.tvdocumentName);
+//            documentName.setText(actionRequiredResponse.getData().getAdditionalDocument().get(i).getDocumentName());
+//
+//            additionalDocumentRequiredLL.addView(inf, layoutParamss);
+//            DocLayout docLayout = new DocLayout();
+//            docLayout.setId(actionRequiredResponse.getData().getAdditionalDocument().get(i).getId());
+//            docLayout.setLinearLayout(documentRequiredLL);
+//            listOfDocLayouts.add(docLayout);
+//
+////            fileUpload.put(actionRequiredResponse.getData().getAdditionalDocument().get(i).getId(), null);
+////            filesToUpload.put(actionRequiredResponse.getData().getAdditionalDocument().get(i).getId(), null);
+//
+//            sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    int pos = (int) view.getTag();
+//                    documentID = actionRequiredResponse.getData().getAdditionalDocument().get(pos).getId();
+//                    uploadedLayout = sscfileUploadedLL;
+//                    selectedLayout = documentRequiredLL;
+//                    selectedText = sscuploadFileTV;
+//                    if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
+//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                            return;
+//                        }
+//                        mLastClickTime = SystemClock.elapsedRealtime();
+//                        if (Utils.isKeyboardVisible)
+//                            Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+//                        chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
+//
+//                    }
+//                }
+//            });
+//
+//            additionalDocLL.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    additionalDocLL.setVisibility(View.GONE);
+//                    int innerPosition = Integer.parseInt(positionTV.getText().toString());
+//                    int mainObjPos = (int) sscFileUploadLL.getTag();
+//                    createDynamicView(actionRequiredResponse, mainObjPos, innerPosition + 1);
+//                }
+//            });
+//            enableOrDisableNext();
 
-    private void addDynamicView(int mainDocPos, int subDocPos, boolean isExist, int count, boolean isVisible) {
-        try {
-            ActionRequiredResponse actionRequiredResponse = actionRequired;
-            View inf = getLayoutInflater().inflate(R.layout.additional_document_item, null);
-            LinearLayout documentRequiredLL = inf.findViewById(R.id.documentRequired);
-            documentRequiredLL.setVisibility(VISIBLE);
-            //Setting object position
-            documentRequiredLL.setTag(mainDocPos);
-            LinearLayout sscFileUploadLL = inf.findViewById(R.id.sscFileUploadLL);
-            //Setting document position
-            sscFileUploadLL.setTag(subDocPos);
-            LinearLayout sscfileUploadedLL = inf.findViewById(R.id.sscfileUploadedLL);
-            TextView sscuploadFileTV = inf.findViewById(R.id.sscuploadFileTV);
-            TextView sscfileUpdatedOnTV = inf.findViewById(R.id.sscfileUpdatedOnTV);
-            LinearLayout additionalDocLL = inf.findViewById(R.id.additionalDocLL);
-            TextView documentName = inf.findViewById(R.id.tvdocumentName);
-            documentName.setText(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getDocumentName());
-
-            if (actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().size() > 0)
-                sscuploadFileTV.setTag(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().get(subDocPos).getDocId());
-            else
-                sscuploadFileTV.setTag(0);
-
-            additionalDocLL.setVisibility(getVisibility(subDocPos, count) ? VISIBLE : GONE);
-
-            if (isExist) {
-                sscfileUploadedLL.setVisibility(VISIBLE);
-                sscuploadFileTV.setVisibility(GONE);
-                sscfileUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().get(subDocPos).getUploadDate()));
-                //            sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
-                documentName.setVisibility(GONE);
-//                additionalDocLL.setVisibility(GONE);
-                if (subDocPos == 0) {
-                    documentName.setVisibility(VISIBLE);
-                }
-
-//                if (subDocPos == 1 && count < 3)
-//                    additionalDocLL.setVisibility(VISIBLE);
-
-            } else {
-                if (subDocPos == 0)
-                    documentName.setVisibility(VISIBLE);
-                else
-                    documentName.setVisibility(GONE);
-
-//                additionalDocLL.setVisibility(VISIBLE);
-                sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
-            }
-
-//            if (subDocPos == 2)
-//                additionalDocLL.setVisibility(GONE);
-
-            if (subDocPos == 0) {
-                additionalDocumentRequiredLL.addView(inf, layoutParamss);
-                DocLayout docLayout = new DocLayout();
-                docLayout.setId(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId());
-                docLayout.setLinearLayouts(documentRequiredLL);
-                listOfDocLayouts.add(docLayout);
-            } else {
-                for (int l = 0; l < listOfDocLayouts.size(); l++) {
-                    if (listOfDocLayouts.get(l).getId() == actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId()) {
-                        listOfDocLayouts.get(l).getLinearLayouts().addView(inf, layoutParamss);
+            if (actionRequiredResponse.getData().getAdditionalDocument().get(i).getUploadDocs().size() > 0) {
+                for (int j = 0; j < actionRequiredResponse.getData().getAdditionalDocument().size(); j++) {
+                    addDynamicView(i, j, true, false);
+                    if (j == 3)
                         break;
-                    }
                 }
+            } else {
+                addDynamicView(i, 0, false, false);
             }
-
-            sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    documentID = actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId();
-                    uploadedLayout = sscFileUploadLL;
-                    selectedLayout = documentRequiredLL;
-                    selectedText = sscuploadFileTV;
-                    lastUploadedDoc = (int) sscuploadFileTV.getTag();
-                    if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        if (Utils.isKeyboardVisible)
-                            Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
-                        chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
-
-                    }
-
-                    Log.e("Main Doc pos, sub doc pos, ID", (int) selectedLayout.getTag() + " " + uploadedLayout.getTag() + " " + selectedText.getTag());
-                }
-            });
-
-            additionalDocLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    additionalDocLL.setVisibility(GONE);
-//                    boolean isVisible = false;
-//                    if (subDocPos == 0 || subDocPos == 1)
-//                        isVisible = true;
-                    addDynamicView((int) documentRequiredLL.getTag(), subDocPos + 1, false, count, isVisible);
-                }
-            });
-
-            enableOrDisableNext();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
+
+    private void addDynamicView(int mainDocPos, int subDocPos, boolean isExist, boolean addClicked) {
+        ActionRequiredResponse actionRequiredResponse = actionRequired;
+        View inf = getLayoutInflater().inflate(R.layout.additional_document_item, null);
+        LinearLayout mainLL = inf.findViewById(R.id.mainLL);
+        LinearLayout documentRequiredLL = inf.findViewById(R.id.documentRequired);
+        documentRequiredLL.setVisibility(View.VISIBLE);
+        documentRequiredLL.setTag(mainDocPos);
+        LinearLayout sscFileUploadLL = inf.findViewById(R.id.sscFileUploadLL);
+        sscFileUploadLL.setTag(subDocPos);
+        LinearLayout sscfileUploadedLL = inf.findViewById(R.id.sscfileUploadedLL);
+        TextView sscuploadFileTV = inf.findViewById(R.id.sscuploadFileTV);
+        TextView sscfileUpdatedOnTV = inf.findViewById(R.id.sscfileUpdatedOnTV);
+        LinearLayout additionalDocLL = inf.findViewById(R.id.additionalDocLL);
+//        TextView positionTV = inf.findViewById(R.id.positionTV);
+//        positionTV.setText(String.valueOf(subDocPos));
+        TextView documentName = inf.findViewById(R.id.tvdocumentName);
+        documentName.setText(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getDocumentName());
+
+        if (isExist) {
+            sscfileUploadedLL.setVisibility(View.VISIBLE);
+            sscuploadFileTV.setVisibility(View.GONE);
+            sscfileUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().get(subDocPos).getUploadDate()));
+//            sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
+            documentName.setVisibility(View.GONE);
+            additionalDocLL.setVisibility(View.GONE);
+            if (subDocPos == 0)
+                documentName.setVisibility(View.VISIBLE);
+            if (subDocPos == 1)
+                additionalDocLL.setVisibility(View.VISIBLE);
+
+        } else {
+            if (subDocPos == 0)
+                documentName.setVisibility(View.VISIBLE);
+            else
+                documentName.setVisibility(View.GONE);
+
+            additionalDocLL.setVisibility(View.VISIBLE);
+            sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
+        }
+
+        if (subDocPos == 2)
+            additionalDocLL.setVisibility(View.GONE);
+        if (subDocPos == 0) {
+            additionalDocumentRequiredLL.addView(inf, layoutParamss);
+            DocLayout docLayout = new DocLayout();
+            docLayout.setId(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId());
+            docLayout.setLinearLayouts(documentRequiredLL);
+            listOfDocLayouts.add(docLayout);
+        } else {
+            for (int l = 0; l < listOfDocLayouts.size(); l++) {
+                if (listOfDocLayouts.get(l).getId() == actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId()) {
+                    listOfDocLayouts.get(l).getLinearLayouts().addView(inf, layoutParamss);
+                    break;
+                }
+            }
+        }
+
+
+//        if (!addClicked) {
+//            additionalDocumentRequiredLL.addView(inf, layoutParamss);
+//            DocLayout docLayout = new DocLayout();
+//            docLayout.setId(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId());
+//            docLayout.getLinearLayouts().add(documentRequiredLL);
+//            listOfDocLayouts.add(docLayout);
+//        } else {
+//            try {
+//                listOfDocLayouts.get(mainDocPos).getLinearLayouts().get(0).addView(inf, layoutParamss);
+//                listOfDocLayouts.get(mainDocPos).getLinearLayouts().add(documentRequiredLL);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                additionalDocumentRequiredLL.addView(inf, layoutParamss);
+//                DocLayout docLayout = new DocLayout();
+//                docLayout.setId(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId());
+//                docLayout.getLinearLayouts().add(documentRequiredLL);
+//                listOfDocLayouts.add(docLayout);
+//
+//            }
+//        }
+
+        sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pos = (int) view.getTag();
+                documentID = actionRequiredResponse.getData().getAdditionalDocument().get(pos).getId();
+                uploadedLayout = sscfileUploadedLL;
+                selectedLayout = documentRequiredLL;
+                selectedText = sscuploadFileTV;
+                if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivityCopy.this)) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivityCopy.this);
+                    chooseFilePopup(BusinessAdditionalActionRequiredActivityCopy.this, selectedDocType);
+
+                }
+            }
+        });
+
+        additionalDocLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                additionalDocLL.setVisibility(View.GONE);
+                addDynamicView((int) documentRequiredLL.getTag(), subDocPos + 1, false, true);
+                Log.e("mainDoc", mainDocPos + "");
+//                int innerPosition = (int) sscFileUploadLL.getTag();
+//                int mainObjPos = (int) sscFileUploadLL.getTag();
+//                createDynamicView(actionRequiredResponse, mainObjPos, innerPosition + 1);
+            }
+        });
+
+        enableOrDisableNext();
+    }
+
+//    private void addDynamicView(int mainDocPos, int subDocPos, boolean isExist, boolean addClicked) {
+//        ActionRequiredResponse actionRequiredResponse = actionRequired;
+//        View inf = getLayoutInflater().inflate(R.layout.additional_document_item, null);
+//        LinearLayout documentRequiredLL = inf.findViewById(R.id.documentRequired);
+//        documentRequiredLL.setVisibility(View.VISIBLE);
+//        documentRequiredLL.setTag(mainDocPos);
+//        LinearLayout sscFileUploadLL = inf.findViewById(R.id.sscFileUploadLL);
+//        sscFileUploadLL.setTag(subDocPos);
+//        LinearLayout sscfileUploadedLL = inf.findViewById(R.id.sscfileUploadedLL);
+//        TextView sscuploadFileTV = inf.findViewById(R.id.sscuploadFileTV);
+//        TextView sscfileUpdatedOnTV = inf.findViewById(R.id.sscfileUpdatedOnTV);
+//        LinearLayout additionalDocLL = inf.findViewById(R.id.additionalDocLL);
+////        TextView positionTV = inf.findViewById(R.id.positionTV);
+////        positionTV.setText(String.valueOf(subDocPos));
+//        TextView documentName = inf.findViewById(R.id.tvdocumentName);
+//        documentName.setText(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getDocumentName());
+//
+//        if (isExist) {
+//            sscfileUploadedLL.setVisibility(View.VISIBLE);
+//            sscuploadFileTV.setVisibility(View.GONE);
+////            sscfileUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().get(subDocPos).getCreatedAt()));
+//            sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
+//            documentName.setVisibility(View.GONE);
+//            additionalDocLL.setVisibility(View.GONE);
+//            if (subDocPos == 0)
+//                documentName.setVisibility(View.VISIBLE);
+//            if (subDocPos == 1)
+//                additionalDocLL.setVisibility(View.VISIBLE);
+//
+//        } else {
+//            if (subDocPos == 0)
+//                documentName.setVisibility(View.VISIBLE);
+//            else
+//                documentName.setVisibility(View.GONE);
+//
+//            additionalDocLL.setVisibility(View.VISIBLE);
+//            sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
+//        }
+//
+//        if (subDocPos == 2)
+//            additionalDocLL.setVisibility(View.GONE);
+//
+//        if (!addClicked) {
+//            additionalDocumentRequiredLL.addView(inf, layoutParamss);
+//            DocLayout docLayout = new DocLayout();
+//            docLayout.setId(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId());
+//            docLayout.getLinearLayouts().add(documentRequiredLL);
+//            listOfDocLayouts.add(docLayout);
+//        } else {
+//            try {
+//                listOfDocLayouts.get(mainDocPos).getLinearLayouts().get(0).addView(inf, layoutParamss);
+//                listOfDocLayouts.get(mainDocPos).getLinearLayouts().add(documentRequiredLL);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                additionalDocumentRequiredLL.addView(inf, layoutParamss);
+//                DocLayout docLayout = new DocLayout();
+//                docLayout.setId(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId());
+//                docLayout.getLinearLayouts().add(documentRequiredLL);
+//                listOfDocLayouts.add(docLayout);
+//
+//            }
+//        }
+//
+//        sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                int pos = (int) view.getTag();
+//                documentID = actionRequiredResponse.getData().getAdditionalDocument().get(pos).getId();
+//                uploadedLayout = sscfileUploadedLL;
+//                selectedLayout = documentRequiredLL;
+//                selectedText = sscuploadFileTV;
+//                if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivityCopy.this)) {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivityCopy.this);
+//                    chooseFilePopup(BusinessAdditionalActionRequiredActivityCopy.this, selectedDocType);
+//
+//                }
+//            }
+//        });
+//
+//        additionalDocLL.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                additionalDocLL.setVisibility(View.GONE);
+//                addDynamicView((int) documentRequiredLL.getTag(), subDocPos + 1, false, true);
+//                Log.e("mainDoc", mainDocPos + "");
+////                int innerPosition = (int) sscFileUploadLL.getTag();
+////                int mainObjPos = (int) sscFileUploadLL.getTag();
+////                createDynamicView(actionRequiredResponse, mainObjPos, innerPosition + 1);
+//            }
+//        });
+//
+//        enableOrDisableNext();
+//    }
 
 //    private void createDynamicView(ActionRequiredResponse actionRequiredResponse, int mainObjPos, int innerPosition) {
 //        try {
@@ -676,7 +811,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
 //    }
 
     private void websiteChanges(ActionRequiredResponse actionRequiredResponse) {
-        websiteRevisionRequiredLL.setVisibility(VISIBLE);
+        websiteRevisionRequiredLL.setVisibility(View.VISIBLE);
 
         LinearLayout.LayoutParams layoutParamss1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         ArrayList<DisplayImageUtility.ImageHolder> imagesList = new ArrayList<>();
@@ -751,7 +886,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     } else {
                         List<ProposalsPropertiesData> proposalsPropertiesData = data.getProperties();
                         if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
-                            informationRevisionLL.setVisibility(VISIBLE);
+                            informationRevisionLL.setVisibility(View.VISIBLE);
                             for (int i = 0; i < proposalsPropertiesData.size(); i++) {
                                 View inf1 = getLayoutInflater().inflate(R.layout.additional_information_change, null);
                                 LinearLayout websiteChangeLL = inf1.findViewById(R.id.informationChange);
@@ -801,10 +936,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                 llAccept.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        imvAcceptTick.setVisibility(VISIBLE);
-                                        tvAcceptMsg.setVisibility(VISIBLE);
-                                        llAccept.setVisibility(GONE);
-                                        llDecline.setVisibility(GONE);
+                                        imvAcceptTick.setVisibility(View.VISIBLE);
+                                        tvAcceptMsg.setVisibility(View.VISIBLE);
+                                        llAccept.setVisibility(View.GONE);
+                                        llDecline.setVisibility(View.GONE);
                                         tvAcceptMsg.setText(getResources().getString(R.string.Accepted) + " " + Utils.getCurrentDate());
                                         View v = (View) view.getTag();
                                         TextView tv = v.findViewById(R.id.type_nameTV);
@@ -833,7 +968,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                         View v = (View) view.getTag();
                                         showCommentDialog(v);
                                         if (!Utils.isKeyboardVisible)
-                                            Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
+                                            Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivityCopy.this);
                                     }
                                 });
                             }
@@ -847,7 +982,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
 
     private void bankInformation(ProposalsData data) {
         try {
-            bank_information.setVisibility(VISIBLE);
+            bank_information.setVisibility(View.VISIBLE);
             LinearLayout verificationFailLL, editLL;
             TextView errorDescrptnTV, resubmitTV, editTextTV, nameOnAccTV, routingNumTV, accNumberTV;
             errorDescrptnTV = findViewById(R.id.errorDescrptnTV);
@@ -859,16 +994,16 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             routingNumTV = findViewById(R.id.routingNumTV);
             accNumberTV = findViewById(R.id.accNumberTV);
             if (objMyApplication.getBankAccount() == null) {
-                verificationFailLL.setVisibility(VISIBLE);
-                editLL.setVisibility(GONE);
+                verificationFailLL.setVisibility(View.VISIBLE);
+                editLL.setVisibility(View.GONE);
                 if (data != null && data.getProperties() != null && data.getProperties().size() > 0) {
                     errorDescrptnTV.setText(data.getProperties().get(0).getGiactResponse());
                 }
             } else {
                 fileUpload.put(bankProposal.getDbId(), "true");
                 String convert = "";
-                verificationFailLL.setVisibility(GONE);
-                editLL.setVisibility(VISIBLE);
+                verificationFailLL.setVisibility(View.GONE);
+                editLL.setVisibility(View.VISIBLE);
                 nameOnAccTV.setText(objMyApplication.getBankAccount().getAccountName());
                 routingNumTV.setText(objMyApplication.getBankAccount().getRoutingNumber());
                 if (objMyApplication.getBankAccount().getAccountNumber() != null && objMyApplication.getBankAccount().getAccountNumber().length() > 4) {
@@ -888,7 +1023,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class);
+                    Intent i = new Intent(BusinessAdditionalActionRequiredActivityCopy.this, AddManualBankAccount.class);
                     i.putExtra("From", "Resubmit");
                     startActivityForResult(i, 5);
 
@@ -901,7 +1036,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Intent i = new Intent(BusinessAdditionalActionRequiredActivity.this, AddManualBankAccount.class);
+                    Intent i = new Intent(BusinessAdditionalActionRequiredActivityCopy.this, AddManualBankAccount.class);
                     i.putExtra("From", "Edit");
                     i.putExtra("bankObject", objMyApplication.getBankAccount());
                     startActivityForResult(i, 5);
@@ -913,7 +1048,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     }
 
     private DisplayImageUtility.ImageHolder displayWebsiteImage(String imageId, ImageView iv) {
-        iv.setVisibility(VISIBLE);
+        iv.setVisibility(View.VISIBLE);
         iv.setTag(imageId);
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -922,7 +1057,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                ShowFullPageImageDialog showImgDialog = new ShowFullPageImageDialog(BusinessAdditionalActionRequiredActivity.this, (String) v.getTag());
+                ShowFullPageImageDialog showImgDialog = new ShowFullPageImageDialog(BusinessAdditionalActionRequiredActivityCopy.this, (String) v.getTag());
                 showImgDialog.show();
             }
         });
@@ -951,20 +1086,20 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         LinearLayout llDecline = view.findViewById(R.id.declineLL);
         LinearLayout llAccept = view.findViewById(R.id.acceptLL);
         TextView tvDeclinedMsg = view.findViewById(R.id.declineMsgTV);
-        AddCommentsDialog dialog = new AddCommentsDialog(BusinessAdditionalActionRequiredActivity.this, null);
+        AddCommentsDialog dialog = new AddCommentsDialog(BusinessAdditionalActionRequiredActivityCopy.this, null);
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(Utils.COMMENT_ACTION) && tv.getText() != null) {
                     String comm = (String) value;
                     tvRemarks.setText("\"" + comm + "\"");
-                    imvAcceptTick.setVisibility(VISIBLE);
+                    imvAcceptTick.setVisibility(View.VISIBLE);
                     imvAcceptTick.setImageDrawable(getResources().getDrawable(R.drawable.ic_decline));
-                    tvRemarks.setVisibility(VISIBLE);
-                    llAccept.setVisibility(GONE);
-                    tvDeclinedMsg.setVisibility(VISIBLE);
+                    tvRemarks.setVisibility(View.VISIBLE);
+                    llAccept.setVisibility(View.GONE);
+                    tvDeclinedMsg.setVisibility(View.VISIBLE);
                     tvDeclinedMsg.setText(getString(R.string.Decline) + " " + Utils.getCurrentDate() + " due to: ");
-                    llDecline.setVisibility(GONE);
+                    llDecline.setVisibility(View.GONE);
                     //String verificationKey = displayNameTV.getText().toString() + "" + tv.getText().toString();
                     String verificationKey = (String) tv.getTag();
                     if (proposalsMap.get(verificationKey) != null) {
@@ -987,17 +1122,17 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 if (Utils.isKeyboardVisible) {
-                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivityCopy.this);
                 }
             }
         });
     }
 
     private void showReserveRule(ActionRequiredResponse actionRequiredResponse) {
-        llHeading.setVisibility(GONE);
-        llBottomView.setVisibility(GONE);
-        scrollview.setVisibility(GONE);
-        llApprovedReserved.setVisibility(VISIBLE);
+        llHeading.setVisibility(View.GONE);
+        llBottomView.setVisibility(View.GONE);
+        scrollview.setVisibility(View.GONE);
+        llApprovedReserved.setVisibility(View.VISIBLE);
         reservedRule = true;
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -1045,7 +1180,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                ApplicationApprovedDialog dialog = new ApplicationApprovedDialog(BusinessAdditionalActionRequiredActivity.this);
+                ApplicationApprovedDialog dialog = new ApplicationApprovedDialog(BusinessAdditionalActionRequiredActivityCopy.this);
                 dialog.show();
             }
         });
@@ -1081,18 +1216,18 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     public static boolean checkAndRequestPermissions(final Activity context) {
         try {
             int WExtstorePermission = ContextCompat.checkSelfPermission(context,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
             int cameraPermission = ContextCompat.checkSelfPermission(context,
-                    android.Manifest.permission.CAMERA);
+                    Manifest.permission.CAMERA);
             int internalStorage = ContextCompat.checkSelfPermission(context,
                     Manifest.permission.READ_EXTERNAL_STORAGE);
             List<String> listPermissionsNeeded = new ArrayList<>();
             if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
-                listPermissionsNeeded.add(android.Manifest.permission.CAMERA);
+                listPermissionsNeeded.add(Manifest.permission.CAMERA);
             }
             if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
                 listPermissionsNeeded
-                        .add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                        .add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
             if (!listPermissionsNeeded.isEmpty()) {
                 androidx.core.app.ActivityCompat.requestPermissions(context, listPermissionsNeeded
@@ -1107,7 +1242,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
         try {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             switch (requestCode) {
@@ -1115,20 +1251,20 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 //                        Utils.displayAlert("Requires Access to Camera.", BusinessAdditionalActionRequiredActivity.this, "", "");
-                        Utils.showDialogPermission(BusinessAdditionalActionRequiredActivity.this, getString(R.string.allow_access_header), getString(R.string.camera_permission_desc));
+                        Utils.showDialogPermission(BusinessAdditionalActionRequiredActivityCopy.this, getString(R.string.allow_access_header), getString(R.string.camera_permission_desc));
 
                     } else if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Your Storage.", BusinessAdditionalActionRequiredActivity.this, "", "");
+                        Utils.displayAlert("Requires Access to Your Storage.", BusinessAdditionalActionRequiredActivityCopy.this, "", "");
 
                     } else if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Your Storage.", BusinessAdditionalActionRequiredActivity.this, "", "");
+                        Utils.displayAlert("Requires Access to Your Storage.", BusinessAdditionalActionRequiredActivityCopy.this, "", "");
 
                     } else {
                         chooseFilePopup(this, selectedDocType);
                         if (Utils.isKeyboardVisible)
-                            Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                            Utils.hideKeypad(BusinessAdditionalActionRequiredActivityCopy.this);
                     }
                     break;
             }
@@ -1159,8 +1295,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         pickerDialog.show();
     }
 
-    private void launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR action, String type) {
-        Intent camIntent = new Intent(BusinessAdditionalActionRequiredActivity.this, CameraHandlerActivity.class);
+    private void launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR action, String
+            type) {
+        Intent camIntent = new Intent(BusinessAdditionalActionRequiredActivityCopy.this, CameraHandlerActivity.class);
         camIntent.putExtra(CameraUtility.CAMERA_ACTION, action);
         camIntent.putExtra(CameraUtility.SELECTING_ID, type);
         imageChooserActivityLauncher.launch(camIntent);
@@ -1212,10 +1349,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 }
 
                 if (lastUploadedDoc != 0)
-//                    identityVerificationViewModel.removeIdentityImage(lastUploadedDoc + "");
-                    identityVerificationViewModel.removeImageMultiDocs(lastUploadedDoc + "");
-                else
-                    uploadDoc(mediaFile);
+                    identityVerificationViewModel.removeIdentityImage(lastUploadedDoc + "");
+                uploadDoc(mediaFile);
+                LogUtils.d(TAG, "fileUpload" + fileUpload);
             } else {
                 Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "", "");
             }
@@ -1230,7 +1366,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         DialogAttributes attributes = new DialogAttributes(getString(R.string.decline_reserve_rules),
                 getString(R.string.decline_reserve_rules_message), getString(R.string.yes),
                 getString(R.string.no_go_back));
-        CustomConfirmationDialog dialog = new CustomConfirmationDialog(BusinessAdditionalActionRequiredActivity.this, attributes);
+        CustomConfirmationDialog dialog = new CustomConfirmationDialog(BusinessAdditionalActionRequiredActivityCopy.this, attributes);
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
@@ -1264,7 +1400,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         }
     }
 
-    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+    private void setKeyboardVisibilityListener(
+            final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
         final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
         parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
@@ -1308,27 +1445,4 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         underwritingUserActionRequiredViewModel.uploadActionRequiredDoc(idFile, idType, docID);
     }
 
-    private boolean getVisibility(int j, int count) {
-        boolean isVisible = false;
-        switch (j) {
-            case 0:
-                if (count == 1)
-                    isVisible = true;
-                else if (count == 2)
-                    isVisible = false;
-                else if (count == 3)
-                    isVisible = false;
-                break;
-            case 1:
-                if (count == 2)
-                    isVisible = true;
-                else if (count == 3)
-                    isVisible = false;
-                break;
-            case 2:
-                isVisible = false;
-                break;
-        }
-        return isVisible;
-    }
 }

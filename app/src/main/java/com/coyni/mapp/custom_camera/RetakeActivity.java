@@ -115,10 +115,12 @@ public class RetakeActivity extends AppCompatActivity {
                 } else if (from.equals("ADD_BO")) {
                     AddBeneficialOwnerActivity.addBeneficialOwnerActivity.setDocSelected();
                     AddBeneficialOwnerActivity.enableOrDisableNext();
-                } else if (from.equals("BAARA")) {
-                    BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.saveFileFromCamera(ImageUtility.mediaFile);
-                    // BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(0);
-                } else if (from.equals("AAR-FBL")) {
+                }
+//                else if (from.equals("BAARA")) {
+//                    BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.saveFileFromCamera(ImageUtility.mediaFile);
+//                    // BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(0);
+//                }
+                else if (from.equals("AAR-FBL")) {
                     //  BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(3);
                 } else if (from.equals("AAR-securityCard")) {
                     AdditionalInformationRequiredActivity.additionalInformationRequiredActivity.removeAndUploadAdditionalDoc(0);
