@@ -31,7 +31,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     private MotionLayout slideToConfirm;
     private CardView im_lock_;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
-    private final String pay = "paidOrder";
+    private final String pay = "payTransaction";
     private final String payPersonal = "payPersonal";
     private double balance;
     private MyApplication myApplication;
@@ -214,7 +214,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
                     proc_fee.setText(Utils.convertBigDecimalUSDC(String.valueOf(myApplication.getProcessingFee())));
                 }
 
-                if (userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT){
+                if (userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     accountType.setText("Token Account");
                 }
 

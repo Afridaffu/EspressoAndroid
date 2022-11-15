@@ -718,7 +718,7 @@
     <string name="gbx_merchant1">Merchant</string>
 
     <string name="complete_idve">Please complete your Identity Verification process.</string>
-    <string name="complete_idve1">Your Account is Under Review, please contact Customer support.</string>
+    <string name="complete_idve1">Your Account is Under Review, please contact customer support.</string>
     <string name="otp_retry_error">Looks like something went wrong. Please try again</string>
 
     <string name="alert">Alert</string>
