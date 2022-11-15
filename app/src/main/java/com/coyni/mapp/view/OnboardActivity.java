@@ -326,7 +326,6 @@ public class OnboardActivity extends BaseActivity {
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                     objMyApplication.setIsLoggedIn(true);
-
                                     if (!loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
                                             && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                                             && !loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
@@ -341,10 +340,15 @@ public class OnboardActivity extends BaseActivity {
                                         } else {
                                             if (!loginResponse.getData().getTracker().isIsAgreementSigned()) {
                                                 showProgressDialog();
-                                                if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
-                                                    callHasToSignAPI(false);
-                                                else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                                if (loginResponse.getData().getBusinessTracker() == null || loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
+//                                                    callHasToSignAPI(false);
+//                                                else if (!loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                                    callHasToSignAPI(true);
+//                                                }
+                                                if (loginResponse.getData().getBusinessTracker() == null || !loginResponse.getData().getBusinessTracker().isIsAgreementSigned())
                                                     callHasToSignAPI(true);
+                                                else if (loginResponse.getData().getBusinessTracker().isIsAgreementSigned()) {
+                                                    callHasToSignAPI(false);
                                                 }
                                             } else {
                                                 launchDashboard();

@@ -17,7 +17,9 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.View;
@@ -26,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
@@ -445,7 +448,47 @@ public class AdditionalActionUploadActivity extends BaseActivity {
 
             setSpannableText(sscuploadFileTV, actionRqrdResponse.getData().getAdditionalDocument().get(i).getDocumentName(), R.color.black);
 
-            setSpannableText(uploadedTV, actionRqrdResponse.getData().getAdditionalDocument().get(i).getDocumentName(), R.color.primary_color);
+            //setSpannableText(uploadedTV, actionRqrdResponse.getData().getAdditionalDocument().get(i).getDocumentName(), R.color.primary_color);
+            SpannableString ss = new SpannableString("Upload " + actionRqrdResponse.getData().getAdditionalDocument().get(i).getDocumentName());
+            int color = R.color.primary_color;
+            Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
+            SpannableStringBuilder SS = new SpannableStringBuilder(ss);
+            ClickableSpan cs = new ClickableSpan() {
+                @Override
+                public void onClick(@NonNull View view) {
+                    try {
+                        if (view != null) {
+                            int pos = (int) sscFileUploadLL.getTag();
+                            documentID = actionRqrdResponse.getData().getAdditionalDocument().get(pos).getDocumentId();
+                            selectedLayout = sscfileUploadedLL;
+                            selectedText = sscuploadFileTV;
+                            if (checkAndRequestPermissions(AdditionalActionUploadActivity.this)) {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                chooseFilePopup(AdditionalActionUploadActivity.this, selectedDocType);
+
+                            }
+
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void updateDrawState(@NonNull TextPaint ds) {
+                    ds.setUnderlineText(false);
+                }
+            };
+            SS.setSpan(new CustomTypefaceSpan("", font), 7, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            SS.setSpan(new ForegroundColorSpan(getColor(color)), 0, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            SS.setSpan(cs, 0, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            uploadedTV.setText(SS);
+            uploadedTV.setMovementMethod(LinkMovementMethod.getInstance());
+            uploadedTV.setHighlightColor(Color.TRANSPARENT);
 
             sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
                 @Override

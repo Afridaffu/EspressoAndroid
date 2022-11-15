@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.coyni.mapp.adapters.SelectedPaymentMethodsAdapter;
+import com.coyni.mapp.view.WithdrawPaymentMethodsActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.coyni.mapp.R;
 import com.coyni.mapp.model.APIError;
@@ -213,7 +214,12 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                     getPaymentMethods();
                 }
             } else if (requestCode == 4) {
-                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) || strScreen.equals("buytoken") || strScreen.equals("payRequest")) {
+//                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) || strScreen.equals("buytoken") || strScreen.equals("payRequest")) {
+                if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add"))) {
+                    Intent i = new Intent(SelectPaymentMethodActivity.this, WithdrawPaymentMethodsActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                } else if ((strScreen.equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("notokens")) || strScreen.equals("buytoken") || strScreen.equals("payRequest")) {
                     onBackPressed();
                 } else {
                     if (!objMyApplication.getBankSave()) {

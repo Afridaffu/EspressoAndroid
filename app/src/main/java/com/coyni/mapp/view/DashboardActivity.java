@@ -238,12 +238,20 @@ public class DashboardActivity extends BaseActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+//                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+//                            showQuickAction(DashboardActivity.this);
+//                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+//                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+//                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+//                            Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
+//                        }
                         if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                             showQuickAction(DashboardActivity.this);
                         } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
                                 objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                             Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
+                            Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve1), 0, "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -297,8 +305,16 @@ public class DashboardActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-
-                    startActivity(new Intent(DashboardActivity.this, ScanActivity.class));
+                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())
+                            || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
+                            && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
+                        Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve1), 0, "");
+                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                            objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                        Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
+                    } else {
+                        startActivity(new Intent(DashboardActivity.this, ScanActivity.class));
+                    }
                 }
             });
 
@@ -372,17 +388,20 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                        return;
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime();
-//                    Intent i = new Intent(DashboardActivity.this, AddRecipientActivity.class);
-//                    startActivity(i);
                         if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
                             return;
                         }
                         mLastClickTimeQA = SystemClock.elapsedRealtime();
-                        requestPermission();
+                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())
+                                || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
+                                && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
+                            Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve1), 0, "");
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                            Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
+                        } else {
+                            requestPermission();
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -554,7 +573,7 @@ public class DashboardActivity extends BaseActivity {
                 }
                 if (businessWalletResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                     tokenWalletData(businessWalletResponse);
-                    if (businessWalletResponse.getData()!=null){
+                    if (businessWalletResponse.getData() != null) {
                         objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                     }
                 }
@@ -756,7 +775,7 @@ public class DashboardActivity extends BaseActivity {
                             objMyApplication.setTempTimezone(getString(R.string.AST));
                             objMyApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.AST.getZoneID());
                             objMyApplication.setStrPreference(Utils.STRING_PREFERENCE.AST.getStrPreference());
-                        }else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.SST.getZoneID()) {
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.SST.getZoneID()) {
                             objMyApplication.setTempTimezone(getString(R.string.SST));
                             objMyApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.SST.getZoneID());
                             objMyApplication.setStrPreference(Utils.STRING_PREFERENCE.SST.getStrPreference());

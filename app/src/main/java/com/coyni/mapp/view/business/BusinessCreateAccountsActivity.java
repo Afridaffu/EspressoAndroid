@@ -432,7 +432,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         myApplication.setDbaOwnerId(Integer.parseInt(String.valueOf(btResp.getData().getDbaOwnerId())));
                         myApplication.setIsReserveEnabled(btResp.getData().isReserveEnabled());
                         myApplication.setIsLoggedIn(true);
-
+                        myApplication.setLoginResponse(btResp);
                         if (!btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
                                 && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                                 && !btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
@@ -454,17 +454,26 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                                 }
                             } else {
                                 if (!btResp.getData().getTracker().isIsAgreementSigned()) {
-                                    if (btResp.getData().getBusinessTracker() == null || btResp.getData().getBusinessTracker().isIsAgreementSigned())
-                                        callHasToSignAPI(false);
-                                    else if (!btResp.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                    if (btResp.getData().getBusinessTracker() == null || btResp.getData().getBusinessTracker().isIsAgreementSigned())
+//                                        callHasToSignAPI(false);
+//                                    else if (!btResp.getData().getBusinessTracker().isIsAgreementSigned()) {
+//                                        callHasToSignAPI(true);
+//                                    }
+                                    if (btResp.getData().getBusinessTracker() == null || !btResp.getData().getBusinessTracker().isIsAgreementSigned())
                                         callHasToSignAPI(true);
+                                    else if (btResp.getData().getBusinessTracker().isIsAgreementSigned()) {
+                                        callHasToSignAPI(false);
                                     }
                                 } else {
                                     launchDasboardFromBase();
                                 }
                             }
                         } else {
-                            launchDasboardFromBase();
+                            if (btResp.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                                myApplication.launchDeclinedActivity(BusinessCreateAccountsActivity.this);
+                            } else {
+                                launchDasboardFromBase();
+                            }
                         }
                     } else {
                         Utils.displayAlert(btResp.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", "");

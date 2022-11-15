@@ -24,6 +24,7 @@ import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.utils.swipelayout.RecyclerSwipeAdapter;
 import com.coyni.mapp.utils.swipelayout.SwipeLayout;
+import com.coyni.mapp.view.DashboardActivity;
 import com.coyni.mapp.view.NotificationsActivity;
 
 import java.util.ArrayList;
@@ -236,14 +237,23 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             if (objMyApplication.getFeatureControlGlobal().getPay() != null && objMyApplication.getFeatureControlGlobal().getPay()
                                     && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
                                 if (notifications.get(position).getAmount() <= objMyApplication.getCurrentUserData().getTokenWalletResponse().getExchangeAmount()) {
-                                    ((NotificationsActivity) mContext).selectedRow = position + "";
+                                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())
+                                            || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
+                                            && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
+                                        Utils.showCustomToast(mContext, mContext.getString(R.string.complete_idve1), 0, "");
+                                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                                            objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                                        Utils.showCustomToast(mContext, mContext.getString(R.string.complete_idve), 0, "");
+                                    } else {
+                                        ((NotificationsActivity) mContext).selectedRow = position + "";
 
-                                    TransferPayRequest request = new TransferPayRequest();
-                                    request.setTokens(Utils.convertTwoDecimal(notifications.get(position).getAmount().toString()));
-                                    request.setRemarks(notifications.get(position).getRemarks());
-                                    request.setRecipientWalletId(notifications.get(position).getRequesterWalletId());
+                                        TransferPayRequest request = new TransferPayRequest();
+                                        request.setTokens(Utils.convertTwoDecimal(notifications.get(position).getAmount().toString()));
+                                        request.setRemarks(notifications.get(position).getRemarks());
+                                        request.setRecipientWalletId(notifications.get(position).getRequesterWalletId());
 
-                                    ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
+                                        ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
+                                    }
                                 } else {
                                     Utils.displayAlert("Amount exceeds available balance\nAvailable: " + Utils.convertBigDecimalUSD(String.valueOf(objMyApplication.getCurrentUserData().getTokenWalletResponse().getExchangeAmount())) + " CYN", (Activity) mContext, "", "");
                                 }

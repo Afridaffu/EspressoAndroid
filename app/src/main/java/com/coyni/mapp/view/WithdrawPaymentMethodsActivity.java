@@ -1148,6 +1148,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         MatomoUtility.getInstance().trackEvent(MatomoConstants.EXTERNAL_BANK, MatomoConstants.EXTERNAL_BANK_CLICKED);
                         if (bankList != null && bankList.size() > 0) {
                             selectPayMethod(bankList);
@@ -1164,11 +1168,11 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        MatomoUtility.getInstance().trackEvent(MatomoConstants.INSTANT_PAY, MatomoConstants.INSTANT_PAY_CLICKED);
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        MatomoUtility.getInstance().trackEvent(MatomoConstants.INSTANT_PAY, MatomoConstants.INSTANT_PAY_CLICKED);
                         if (cardList != null && cardList.size() > 0) {
                             selectPayMethod(cardList);
                         } else {
@@ -1185,6 +1189,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (objMyApplication.getFeatureControlGlobal().getWithGift() != null && objMyApplication.getFeatureControlByUser() != null
                                 && objMyApplication.getFeatureControlGlobal().getWithGift() && objMyApplication.getFeatureControlByUser().getWithGift()) {
                             MatomoUtility.getInstance().trackEvent(MatomoConstants.GIFT_CARD, MatomoConstants.GIFT_CARD_CLICKED);
@@ -1202,6 +1210,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         MatomoUtility.getInstance().trackEvent(MatomoConstants.Cogent_ACCOUNT, MatomoConstants.Cogent_ACCOUNT_CLICKED);
                         if (CogentList != null && CogentList.size() > 0) {
                             selectPayMethod(CogentList);
@@ -1219,6 +1231,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         MatomoUtility.getInstance().trackEvent(MatomoConstants.Signet_ACCOUNT, MatomoConstants.Signet_ACCOUNT_CLICKED);
                         if (SignetList != null && SignetList.size() > 0) {
                             selectPayMethod(SignetList);

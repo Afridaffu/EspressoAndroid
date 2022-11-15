@@ -269,7 +269,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                             }
                         }
                         if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("withdraw") || getIntent().getStringExtra("screen").equals("dashboard")
-                                || getIntent().getStringExtra("screen").equals("payRequest") || getIntent().getStringExtra("screen").equals("ScreenCheckOut"))) {
+                                || getIntent().getStringExtra("screen").equals("buytoken") || getIntent().getStringExtra("screen").equals("payRequest") || getIntent().getStringExtra("screen").equals("ScreenCheckOut"))) {
                             dashboardViewModel.mePaymentMethods();
                         }
                         if (strScreen.equals("pay")) {
@@ -309,6 +309,7 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                     if (isWithFCEnabled || isBuyFCEnabled) {
                         objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                         objMyApplication.setSelectedCard(objData);
+                        objMyApplication.setSelectedButTokenType(objData.getPaymentMethod().toLowerCase());
                     }
                 }
             }

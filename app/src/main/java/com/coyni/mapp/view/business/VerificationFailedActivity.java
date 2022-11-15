@@ -38,49 +38,52 @@ public class VerificationFailedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_verification_failed);
         myApplication = (MyApplication) getApplicationContext();
         initFields();
-
         MyApplication objMyApplication = (MyApplication) getApplicationContext();
         initializeResponse = objMyApplication.getInitializeResponse();
         Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
+        InitializeResponseData data = null;
         if (initializeResponse != null && initializeResponse.getStatus() != null
                 && initializeResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-            InitializeResponseData data = initializeResponse.getData();
-            if (data != null) {
-                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-                    if (data.getFirstName() != null && data.getLastName() != null) {
-                        String name = getString(R.string.dear_name, data.getFirstName() + " " + data.getLastName());
-                        SpannableStringBuilder spannableName = new SpannableStringBuilder(name);
-                        spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-                        mTvName.setText(spannableName);
-                    }
-                    if (data.getCompanyName() != null && !data.getCompanyName().equals("")) {
-//                        String name = getString(R.string.dear_name, data.getCompanyName());
-//                        SpannableStringBuilder spannableName = new SpannableStringBuilder(name);
-//                        spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-//                        mTvName.setText(spannableName);
-
-                        String legalName = getString(R.string.legal_name_name, data.getCompanyName());
-                        SpannableStringBuilder spannableLegalName = new SpannableStringBuilder(legalName);
-                        spannableLegalName.setSpan(new CustomTypefaceSpan("", font), 11, legalName.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-                        mTvLegalName.setText(spannableLegalName);
-                    }
-                    if (data.getDbaName() != null && !data.getDbaName().equals("")) {
-                        String dbaName = getString(R.string.verification_dba_name, data.getDbaName());
-                        SpannableStringBuilder spannableLegalName = new SpannableStringBuilder(dbaName);
-                        spannableLegalName.setSpan(new CustomTypefaceSpan("", font), 5, dbaName.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-                        mTvDbaName.setText(spannableLegalName);
-                    }
-                } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                    if (data.getEmail() != null && !data.getEmail().equals("")) {
-
-                        String name = getString(R.string.dear_name, data.getFirstName() + " " + data.getLastName());
-                        SpannableStringBuilder spannableName = new SpannableStringBuilder(name);
-                        spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-                        mTvName.setText(spannableName);
-                    }
-                    mTvDbaName.setVisibility(View.GONE);
-                    mTvLegalName.setVisibility(View.GONE);
+            data = initializeResponse.getData();
+        } else if (objMyApplication.getLoginResponse() != null) {
+            BiometricSignInData biometricData = objMyApplication.getLoginResponse().getData();
+            data = new InitializeResponseData();
+            data.setFirstName(biometricData.getFirstName());
+            data.setLastName(biometricData.getLastName());
+            data.setCompanyName(biometricData.getCompanyName());
+            data.setDbaName(biometricData.getDbaName());
+            data.setEmail(biometricData.getEmail());
+        }
+        if (data != null) {
+            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+                if (data.getFirstName() != null && data.getLastName() != null) {
+                    String name = getString(R.string.dear_name, data.getFirstName() + " " + data.getLastName());
+                    SpannableStringBuilder spannableName = new SpannableStringBuilder(name);
+                    spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                    mTvName.setText(spannableName);
                 }
+                if (data.getCompanyName() != null && !data.getCompanyName().equals("")) {
+                    String legalName = getString(R.string.legal_name_name, data.getCompanyName());
+                    SpannableStringBuilder spannableLegalName = new SpannableStringBuilder(legalName);
+                    spannableLegalName.setSpan(new CustomTypefaceSpan("", font), 11, legalName.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                    mTvLegalName.setText(spannableLegalName);
+                }
+                if (data.getDbaName() != null && !data.getDbaName().equals("")) {
+                    String dbaName = getString(R.string.verification_dba_name, data.getDbaName());
+                    SpannableStringBuilder spannableLegalName = new SpannableStringBuilder(dbaName);
+                    spannableLegalName.setSpan(new CustomTypefaceSpan("", font), 5, dbaName.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                    mTvDbaName.setText(spannableLegalName);
+                }
+            } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                if (data.getEmail() != null && !data.getEmail().equals("")) {
+
+                    String name = getString(R.string.dear_name, data.getFirstName() + " " + data.getLastName());
+                    SpannableStringBuilder spannableName = new SpannableStringBuilder(name);
+                    spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                    mTvName.setText(spannableName);
+                }
+                mTvDbaName.setVisibility(View.GONE);
+                mTvLegalName.setVisibility(View.GONE);
             }
         }
 

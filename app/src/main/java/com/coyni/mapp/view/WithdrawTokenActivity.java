@@ -107,7 +107,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
     public static WithdrawTokenActivity withdrawTokenActivity;
     Long mLastClickTime = 0L, bankId, cardId;
     Boolean isUSD = false, isCYN = false, isBank = false, isButtonClick = false, isMinimumError = false;
-    Boolean isFaceLock = false, isTouchId = false, isPayment = false;
+    Boolean isFaceLock = false, isTouchId = false, isPayment = false, isAlert = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     boolean isAuthenticationCalled = false;
 
@@ -448,13 +448,23 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     pDialog.dismiss();
                 }
                 if (transactionLimitResponse != null) {
-                    objResponse = transactionLimitResponse;
-                    setDailyWeekLimit(transactionLimitResponse.getData());
-                    if (etAmount.getText().toString().trim().length() > 0) {
-                        if (validation()) {
-                            ctKey.enableButton();
+                    if (!transactionLimitResponse.getStatus().toLowerCase().equals("error")) {
+                        objResponse = transactionLimitResponse;
+                        setDailyWeekLimit(transactionLimitResponse.getData());
+                        if (etAmount.getText().toString().trim().length() > 0) {
+                            if (validation()) {
+                                ctKey.enableButton();
+                            } else {
+                                ctKey.disableButton();
+                            }
+                        }
+                    } else {
+                        tvLimit.setVisibility(View.GONE);
+                        if (!isAlert) {
+                            isAlert = true;
+                            Utils.displayAlert(transactionLimitResponse.getError().getErrorDescription(), WithdrawTokenActivity.this, "", transactionLimitResponse.getError().getFieldErrors().get(0));
                         } else {
-                            ctKey.disableButton();
+                            isAlert = false;
                         }
                     }
                 }
@@ -497,9 +507,9 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         if (!feeString.equals("Fees: ")) {
                             tvFeePer.setVisibility(View.VISIBLE);
                             tvFeePer.setText(feeString);
-                        } else
+                        } else {
                             tvFeePer.setVisibility(View.GONE);
-
+                        }
                         if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Utils.doubleParsing(etAmount.getText().toString().replace(",", "")) > 0) {
                             isUSD = true;
                             convertUSDValue();
@@ -731,19 +741,30 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             String strPaymentMethod = "";
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 for (int i = 0; i < paymentMethodsResponse.getData().getData().size(); i++) {
-//                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-//                        if (!paymentMethodsResponse.getData().getData().get(i).getPaymentMethod().toLowerCase().equals("credit")) {
-//                            listPayments.add(paymentMethodsResponse.getData().getData().get(i));
-//                        }
-//                    } else {
-//                        strPaymentMethod = paymentMethodsResponse.getData().getData().get(i).getPaymentMethod();
-//                        if (strPaymentMethod != null && (strPaymentMethod.toLowerCase().equals("bank") || strPaymentMethod.toLowerCase().equals("Cogent"))) {
-//                            listPayments.add(paymentMethodsResponse.getData().getData().get(i));
-//                        }
-//                    }
                     strPaymentMethod = paymentMethodsResponse.getData().getData().get(i).getPaymentMethod();
-                    if (strPaymentMethod != null && !strPaymentMethod.toLowerCase().equals("credit")) {
-                        listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+//                    if (strPaymentMethod != null && !strPaymentMethod.toLowerCase().equals("credit")
+//                            || (objMyApplication.isCogentEnabled() && strPaymentMethod.toLowerCase().equals("cogent"))
+//                            || (objMyApplication.isSignetEnabled() && strPaymentMethod.toLowerCase().equals("signet"))) {
+//                        listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+//                    }
+                    if (strPaymentMethod != null) {
+                        switch (strPaymentMethod.toLowerCase()) {
+                            case "bank":
+                            case "debit": {
+                                listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+                            }
+                            break;
+                            case "cogent":
+                                if (objMyApplication.isCogentEnabled()) {
+                                    listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+                                }
+                                break;
+                            case "signet":
+                                if (objMyApplication.isSignetEnabled()) {
+                                    listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+                                }
+                                break;
+                        }
                     }
                 }
                 if (listPayments != null && listPayments.size() > 0) {
@@ -782,7 +803,8 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                                 Intent i = new Intent(WithdrawTokenActivity.this, SelectPaymentMethodActivity.class);
                                 i.putExtra("screen", "withdraw");
                                 i.putExtra("subtype", "add");
-                                startActivityForResult(i, 3);
+//                                startActivityForResult(i, 3);
+                                startActivity(i);
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -801,10 +823,11 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
         try {
             tvLimit.setVisibility(View.VISIBLE);
             String strCurrency = "", strAmount = "";
-            if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().toLowerCase().equals("NA") && !objLimit.getTransactionLimit().toLowerCase().equals("unlimited")) {
-                maxValue = Utils.doubleParsing(objLimit.getTransactionLimit());
-            }
-            strCurrency = " " + getString(R.string.currency);
+            if (objLimit != null) {
+                if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().toLowerCase().equals("NA") && !objLimit.getTransactionLimit().toLowerCase().equals("unlimited")) {
+                    maxValue = Utils.doubleParsing(objLimit.getTransactionLimit());
+                }
+                strCurrency = " " + getString(R.string.currency);
 //                if ((week == 0 || week < 0) && daily > 0) {
 //                    strLimit = "daily";
 //                    maxValue = daily;
@@ -824,29 +847,31 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
 //                    strAmount = Utils.convertBigDecimalUSD(String.valueOf(daily));
 //                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
 //                }
-            if (objLimit.getLimitType().toLowerCase().equals("daily")) {
-                strLimit = "daily";
-                strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
-                tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
-            } else if (objLimit.getLimitType().toLowerCase().equals("weekly")) {
-                strLimit = "week";
-                strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
-                tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
-            } else if (objLimit.getLimitType().toLowerCase().equals("per transaction")) {
-                strLimit = "per transaction";
-                strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
-                tvLimit.setText("Your per transaction limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
-            }
+                if (objLimit.getLimitType().toLowerCase().equals("daily")) {
+                    strLimit = "daily";
+                    strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
+                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
+                } else if (objLimit.getLimitType().toLowerCase().equals("weekly")) {
+                    strLimit = "week";
+                    strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
+                    tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
+                } else if (objLimit.getLimitType().toLowerCase().equals("per transaction")) {
+                    strLimit = "per transaction";
+                    strAmount = Utils.convertBigDecimalUSD(String.valueOf(maxValue));
+                    tvLimit.setText("Your per transaction limit is " + Utils.USNumberFormat(Utils.doubleParsing(strAmount)) + strCurrency);
+                }
 //            else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
 //                tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
 //                strLimit = "unlimited";
 //            }
-            else {
+                else {
 //                strLimit = "";
-                strLimit = objLimit.getLimitType().toLowerCase();
+                    strLimit = objLimit.getLimitType().toLowerCase();
+                    tvLimit.setVisibility(View.GONE);
+                }
+            } else {
                 tvLimit.setVisibility(View.GONE);
             }
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
