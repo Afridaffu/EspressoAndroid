@@ -657,6 +657,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         dashboardViewModel.getTransactionListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<TransactionList>() {
             @Override
             public void onChanged(TransactionList transactionList) {
+                myApplication.setTransactionList(transactionList);
                 if (transactionList.getData().getItems().getPostedTransactions().size() > 0) {
                     if (transactionList.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         LogUtils.d(TAG, "list" + transactionList.getData().getItems().getPostedTransactions());
@@ -668,6 +669,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     mTvMerchantTransactions.setTextColor(getResources().getColor(R.color.dark_gray));
                     mTvMerchantTransactions.setClickable(false);
                     monthlyVolumeViewLl.setVisibility(View.VISIBLE);
+
                 }
             }
         });
@@ -745,7 +747,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                             myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.AST.getZoneID());
                             myApplication.setStrPreference(Utils.STRING_PREFERENCE.AST.getStrPreference());
                             localPreferenceValue = "AST";
-                        }else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.SST.getZoneID()) {
+                        } else if (preferences.getData().getTimeZone() == Utils.STRING_PREFERENCE.SST.getZoneID()) {
                             myApplication.setTempTimezone(getString(R.string.SST));
                             myApplication.setTempTimezoneID(Utils.STRING_PREFERENCE.SST.getZoneID());
                             myApplication.setStrPreference(Utils.STRING_PREFERENCE.SST.getStrPreference());
@@ -781,7 +783,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setMonthlyVolumeData() {
-        monthlyVolumeViewLl.setVisibility(View.VISIBLE);
+        monthlyVolumeViewLl.setVisibility(myApplication.getTransactionList().getData().getItems().getPostedTransactions().size() > 0 ? View.GONE : View.VISIBLE);
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getCompanyName() != null) {
             mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, myApplication.getMyProfile().getData().getCompanyName()));
@@ -1094,7 +1096,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 boolean isOpen = false, isPaid = false;
                 setSpannableTextView();
                 while (i < listItems.size()) {
-                    if(listItems.size() == 1 && listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN)){
+                    if (listItems.size() == 1 && listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN)) {
                         batchNoTransaction.setVisibility(View.VISIBLE);
                     }
                     if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
