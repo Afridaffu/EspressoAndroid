@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -657,19 +658,23 @@ public class BusinessDashboardFragment extends BaseFragment {
         dashboardViewModel.getTransactionListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<TransactionList>() {
             @Override
             public void onChanged(TransactionList transactionList) {
-                myApplication.setTransactionList(transactionList);
-                if (transactionList.getData().getItems().getPostedTransactions().size() > 0) {
-                    if (transactionList.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        LogUtils.d(TAG, "list" + transactionList.getData().getItems().getPostedTransactions());
-                        mTvMerchantTransactions.setTextColor(getResources().getColor(R.color.primary_color));
-                        mTvMerchantTransactions.setClickable(true);
-                        monthlyVolumeViewLl.setVisibility(View.GONE);
-                    }
-                } else {
-                    mTvMerchantTransactions.setTextColor(getResources().getColor(R.color.dark_gray));
-                    mTvMerchantTransactions.setClickable(false);
-                    monthlyVolumeViewLl.setVisibility(View.VISIBLE);
+                try {
+                    myApplication.setTransactionList(transactionList);
+                    if (transactionList.getData().getItems().getPostedTransactions().size() > 0) {
+                        if (transactionList.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                            LogUtils.d(TAG, "list" + transactionList.getData().getItems().getPostedTransactions());
+                            mTvMerchantTransactions.setTextColor(getResources().getColor(R.color.primary_color));
+                            mTvMerchantTransactions.setClickable(true);
+                            monthlyVolumeViewLl.setVisibility(View.GONE);
+                        }
+                    } else {
+                        mTvMerchantTransactions.setTextColor(getResources().getColor(R.color.dark_gray));
+                        mTvMerchantTransactions.setClickable(false);
+                        monthlyVolumeViewLl.setVisibility(View.VISIBLE);
 
+                    }
+                } catch (Resources.NotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         });
