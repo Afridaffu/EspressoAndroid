@@ -1940,7 +1940,11 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
             TextView tvMessage = prevDialog.findViewById(R.id.tvMessage);
             CardView cvTryAgain = prevDialog.findViewById(R.id.cvTryAgain);
 
-            tvMessage.setText("The transaction failed due to error code:\n" + objData.getError().getErrorCode() + " - " + objData.getError().getErrorDescription() + ". Please try again.");
+            if (objData.getError() != null) {
+                tvMessage.setText("The transaction failed due to error code:\n" + objData.getError().getErrorCode() + " - " + objData.getError().getErrorDescription() + ". Please try again.");
+            } else {
+                tvMessage.setText("");
+            }
             Window window = prevDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 //
