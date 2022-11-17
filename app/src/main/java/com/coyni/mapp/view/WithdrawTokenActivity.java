@@ -1127,7 +1127,11 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     || selectedCard.getPaymentMethod().toLowerCase().equalsIgnoreCase("signet")) {
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
-                tvBankName.setText(selectedCard.getBankName());
+                if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
+                    tvBankName.setText(selectedCard.getBankName());
+                } else {
+                    tvBankName.setText(selectedCard.getBankName().replace("Account", "") + " Account");
+                }
                 if (selectedCard.getAccountNumber() != null && selectedCard.getAccountNumber().length() > 4) {
                     tvAccount.setText(getString(R.string.dot) + selectedCard.getAccountNumber().substring(selectedCard.getAccountNumber().length() - 4));
                 } else {
@@ -1361,7 +1365,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);
                     layoutBank.setVisibility(View.GONE);
-                    tvCardNumber.setText(getString(R.string.dots)+ objPayment.getLastFour());
+                    tvCardNumber.setText(getString(R.string.dots) + objPayment.getLastFour());
                     switch (objPayment.getCardBrand().toUpperCase().replace(" ", "")) {
                         case "VISA":
                             tvCardName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
