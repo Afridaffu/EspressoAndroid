@@ -807,7 +807,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
             selectedCard = objData;
             TransactionLimitRequest obj = new TransactionLimitRequest();
             obj.setTransactionType(Integer.parseInt(Utils.addType));
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                 strType = "bank";
                 strBankId = String.valueOf(objData.getId());
@@ -815,7 +815,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 obj.setTransactionSubType(Integer.parseInt(Utils.bankType));
                 lyBDetails.setVisibility(View.VISIBLE);
                 lyCDetails.setVisibility(View.GONE);
-                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
+//                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
                 imgBankIcon.setImageResource(R.drawable.ic_bankactive);
                 if (objData.getBankName().length() > 15) {
                     tvBankName.setText(objData.getBankName().substring(0, 15) + "...");
@@ -834,7 +834,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 obj.setTransactionSubType(Integer.parseInt(Utils.CogentType));
                 lyBDetails.setVisibility(View.VISIBLE);
                 lyCDetails.setVisibility(View.GONE);
-                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
+//                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
                 imgBankIcon.setImageResource(R.drawable.ic_cogentactive);
                 if (objData.getBankName().length() > 15) {
                     tvBankName.setText(objData.getBankName().substring(0, 15) + "...");
@@ -853,7 +853,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 obj.setTransactionSubType(Integer.parseInt(Utils.signetType));
                 lyBDetails.setVisibility(View.VISIBLE);
                 lyCDetails.setVisibility(View.GONE);
-                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
+//                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
                 imgBankIcon.setImageResource(R.drawable.ic_signetactive);
                 if (objData.getBankName().length() > 15) {
                     tvBankName.setText(objData.getBankName().substring(0, 15) + "...");
@@ -876,7 +876,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                     strSubType = Utils.creditType;
                     obj.setTransactionSubType(Integer.parseInt(Utils.creditType));
                 }
-                params.addRule(RelativeLayout.BELOW, lyCDetails.getId());
+//                params.addRule(RelativeLayout.BELOW, lyCDetails.getId());
                 lyBDetails.setVisibility(View.GONE);
                 lyCDetails.setVisibility(View.VISIBLE);
                 tvAccNumber.setText(getString(R.string.dots) + objData.getLastFour());
@@ -899,10 +899,10 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                         break;
                 }
             }
-            params.addRule(RelativeLayout.RIGHT_OF, imgBankIcon.getId());
-            params.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
-            params.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
-            tvLimit.setLayoutParams(params);
+//            params.addRule(RelativeLayout.RIGHT_OF, imgBankIcon.getId());
+//            params.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
+//            params.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
+//            tvLimit.setLayoutParams(params);
             if (Utils.checkInternet(BuyTokenActivity.this)) {
                 //buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {

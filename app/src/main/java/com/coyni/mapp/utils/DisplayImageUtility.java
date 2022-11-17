@@ -172,8 +172,11 @@ public class DisplayImageUtility {
                 inputStream = new java.net.URL(url).openStream();
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 LogUtils.v(TAG, url + " - Glide Image resource ready " + key);
-                if(key != null && bitmap != null) {
-                    imageCache.put(key, bitmap);
+
+                int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+                Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+                if (key != null && scaled != null) {
+                    imageCache.put(key, scaled);
                 }
             } catch (IOException e) {
                 LogUtils.v(TAG, "Glide IOException " + url);

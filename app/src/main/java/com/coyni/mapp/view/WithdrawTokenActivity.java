@@ -907,8 +907,8 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
             selectedCard = objData;
             TransactionLimitRequest obj = new TransactionLimitRequest();
             obj.setTransactionType(Integer.parseInt(Utils.withdrawType));
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//            RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             if (objData.getPaymentMethod().toLowerCase().equals("bank")
                     || objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("cogent")
                     || objData.getPaymentMethod().toLowerCase().equalsIgnoreCase("signet")) {
@@ -932,7 +932,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 obj.setTransactionSubType(Integer.parseInt(strSubType));
                 lyBDetails.setVisibility(View.VISIBLE);
                 lyCDetails.setVisibility(View.GONE);
-                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
+//                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
                 if (objData.getBankName().length() > 15) {
                     tvBankName.setText(objData.getBankName().substring(0, 15) + "...");
                 } else {
@@ -954,7 +954,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                     strSubType = Utils.instantType;
                     obj.setTransactionSubType(Integer.parseInt(Utils.instantType));
                 }
-                params.addRule(RelativeLayout.BELOW, lyCDetails.getId());
+//                params.addRule(RelativeLayout.BELOW, lyCDetails.getId());
                 lyBDetails.setVisibility(View.GONE);
                 lyCDetails.setVisibility(View.VISIBLE);
                 tvAccNumber.setText(getString(R.string.dots) + objData.getLastFour());
@@ -977,15 +977,15 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                         break;
                 }
             }
-            params.addRule(RelativeLayout.RIGHT_OF, imgBankIcon.getId());
-            params.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
-            params.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
-            tvLimit.setLayoutParams(params);
-            params1.addRule(RelativeLayout.BELOW, tvLimit.getId());
-            params1.addRule(RelativeLayout.RIGHT_OF, imgBankIcon.getId());
-            params1.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
-            params1.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
-            tvFeePer.setLayoutParams(params1);
+//            params.addRule(RelativeLayout.RIGHT_OF, imgBankIcon.getId());
+//            params.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
+//            params.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
+//            tvLimit.setLayoutParams(params);
+//            params1.addRule(RelativeLayout.BELOW, tvLimit.getId());
+//            params1.addRule(RelativeLayout.RIGHT_OF, imgBankIcon.getId());
+//            params1.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
+//            params1.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
+//            tvFeePer.setLayoutParams(params1);
             if (Utils.checkInternet(WithdrawTokenActivity.this)) {
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
