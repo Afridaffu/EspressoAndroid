@@ -82,7 +82,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                 }
                 holder.tvBankName.setText(objData.getBankName());
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
-                    holder.tvAccNumber.setText("**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                    holder.tvAccNumber.setText(mContext.getString(R.string.dot) + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
                     holder.tvAccNumber.setText(objData.getAccountNumber());
                 }
@@ -103,7 +103,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                 }
                 holder.tvAccNumber.setVisibility(View.GONE);
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
-                    holder.tvBankName.setText(objData.getAccountNumber().substring(0, 10) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                    holder.tvBankName.setText(objData.getAccountNumber().substring(0, 10) + mContext.getString(R.string.dots) + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
                     holder.tvBankName.setText(objData.getAccountNumber());
                 }
@@ -124,14 +124,14 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                 }
                 holder.tvAccNumber.setVisibility(View.GONE);
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
-                    holder.tvBankName.setText(objData.getAccountNumber().substring(0, 10) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                    holder.tvBankName.setText(objData.getAccountNumber().substring(0, 10) + mContext.getString(R.string.dots) + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
                     holder.tvBankName.setText(objData.getAccountNumber());
                 }
             } else {
                 holder.layoutBank.setVisibility(View.GONE);
                 holder.tvCardNumber.setVisibility(View.VISIBLE);
-                holder.tvCardNumber.setText(objData.getFirstSix().replace(" ", "").replaceAll("(.{4})", "$1 ").trim() + " ****" + objData.getLastFour());
+                holder.tvCardNumber.setText(objData.getFirstSix().replace(" ", "").replaceAll("(.{4})", "$1 ").trim() + mContext.getString(R.string.dots) + objData.getLastFour());
                 if (!objData.getExpired()) {
                     holder.tvBankExpire.setVisibility(View.GONE);
                     switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {

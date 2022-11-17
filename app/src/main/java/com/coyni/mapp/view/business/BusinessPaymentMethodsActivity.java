@@ -841,7 +841,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                     imgBankIcon.setImageResource(R.drawable.ic_bankactive);
                     tvBankName.setText(objPayment.getBankName());
                     if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 4) {
-                        tvAccount.setText("**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                        tvAccount.setText(getString(R.string.dots) + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
@@ -851,7 +851,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                     imgBankIcon.setImageResource(R.drawable.ic_cogentactive);
                     tvAccount.setVisibility(View.GONE);
                     if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
-                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + getString(R.string.dots) + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
                     } else {
                         tvBankName.setText(objPayment.getAccountNumber());
                     }
@@ -861,14 +861,14 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
                     imgBankIcon.setImageResource(R.drawable.ic_signetactive);
                     tvAccount.setVisibility(View.GONE);
                     if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
-                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + getString(R.string.dots) + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
                     } else {
                         tvBankName.setText(objPayment.getAccountNumber());
                     }
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);
                     layoutBank.setVisibility(View.GONE);
-                    tvCardNumber.setText("****" + objPayment.getLastFour());
+                    tvCardNumber.setText(getString(R.string.dots) + objPayment.getLastFour());
                     switch (objPayment.getCardBrand().toUpperCase().replace(" ", "")) {
                         case "VISA":
                             tvCardName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));

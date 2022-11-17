@@ -294,7 +294,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Used for buying tokens or withdrawing funds."
+                        android:text="Used for withdrawing funds."
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_9sdp" />
 

@@ -1397,7 +1397,8 @@ public class CustomerProfileActivity extends BaseActivity {
                 if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                     tvACStatus.setTextColor(getResources().getColor(R.color.active_green));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.active_green));
-                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                        || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                     tvACStatus.setTextColor(getResources().getColor(R.color.orange));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.orange));
                 } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {

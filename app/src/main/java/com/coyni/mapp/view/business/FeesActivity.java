@@ -19,7 +19,7 @@ import com.coyni.mapp.viewmodel.BusinessDashboardViewModel;
 
 public class
 FeesActivity extends BaseActivity {
-    private LinearLayout bpbackBtn,wdSignetLL,wdCogentLL;
+    private LinearLayout bpbackBtn, wdSignetLL, wdCogentLL;
     private TextView salesOrderDollTV, salesOrderPerTV, refundDollTV, refundPerTV, tvEBADoll, tvEBAPer, instantPayDollTV, instantPayPerTV, CogentAccDollTV, CogentAccPerTV, SignetAccDollTV, SignetAccPerTV,
             giftCardDollTV, giftCardPerTV, fdwDollTV, fdwPerTV, buyTokenEBADollTV, buyTokenEBAPerTV, buytokenCogentDollTV, buytokenCogentPerTV, buytokenSignetDollTV, buytokenSignetPerTV, monthlyFeeDollTV, monthlyFeePerTV;
     private BusinessDashboardViewModel viewModel;
@@ -100,73 +100,73 @@ FeesActivity extends BaseActivity {
                             if (fees.getData().getWithdrawalBankFeeInDollar() != null) {
                                 tvEBADoll.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalBankFeeInDollar()))));
                             } else {
-                                tvEBADoll.setText("");
+                                tvEBADoll.setText("$ 0.00");
                             }
 
                             if (fees.getData().getWithdrawalBankFeeInPercent() != null) {
                                 tvEBAPer.setText(Utils.convertBigDecimalUSDC((fees.getData().getWithdrawalBankFeeInPercent())) + "%");
                             } else {
-                                tvEBAPer.setText("");
+                                tvEBAPer.setText("0.00%");
                             }
 
                             if (fees.getData().getWithdrawalInstantFeeInDollar() != null) {
                                 instantPayDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalInstantFeeInDollar()))));
                             } else {
-                                instantPayDollTV.setText("");
+                                instantPayDollTV.setText("$ 0.00");
                             }
 
                             if (fees.getData().getWithdrawalInstantFeeInPercent() != null) {
                                 instantPayPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalInstantFeeInPercent()) + "%");
                             } else {
-                                instantPayPerTV.setText("");
+                                instantPayPerTV.setText("0.00%");
                             }
 
                             if (fees.getData().getWithdrawalCogentFeeInDollar() != null) {
                                 CogentAccDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalCogentFeeInDollar()))));
                             } else {
-                                CogentAccDollTV.setText("");
+                                CogentAccDollTV.setText("$ 0.00");
                             }
 
                             if (fees.getData().getWithdrawalCogentFeeInPercent() != null) {
                                 CogentAccPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalCogentFeeInPercent()) + "%");
                             } else {
-                                CogentAccPerTV.setText("");
+                                CogentAccPerTV.setText("0.00%");
                             }
 
                             if (fees.getData().getWithdrawalSignetFeeInDollar() != null) {
                                 SignetAccDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalSignetFeeInDollar()))));
                             } else {
-                                SignetAccDollTV.setText("");
+                                SignetAccDollTV.setText("$ 0.00");
                             }
 
                             if (fees.getData().getWithdrawalSignetFeeInPercent() != null) {
                                 SignetAccPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalSignetFeeInPercent()) + "%");
                             } else {
-                                SignetAccPerTV.setText("");
+                                SignetAccPerTV.setText("0.00%");
                             }
 
                             if (fees.getData().getWithdrawalGiftcardFeeInDollar() != null) {
                                 giftCardDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalGiftcardFeeInDollar()))));
                             } else {
-                                giftCardDollTV.setText("");
+                                giftCardDollTV.setText("$ 0.00");
                             }
 
                             if (fees.getData().getWithdrawalGiftcardFeeInPercent() != null) {
                                 giftCardPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalGiftcardFeeInPercent()) + "%");
                             } else {
-                                giftCardPerTV.setText("");
+                                giftCardPerTV.setText("0.00%");
                             }
 
                             if (fees.getData().getWithdrawalFailedBankFeeInDollar() != null) {
                                 fdwDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalFailedBankFeeInDollar()))));
                             } else {
-                                fdwDollTV.setText("");
+                                fdwDollTV.setText("$ 0.00");
                             }
 
                             if (fees.getData().getWithdrawalFailedBankFeeInPercent() != null) {
                                 fdwPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalFailedBankFeeInPercent()) + "%");
                             } else {
-                                fdwPerTV.setText("");
+                                fdwPerTV.setText("0.00%");
                             }
 
                             //buy token
@@ -174,75 +174,76 @@ FeesActivity extends BaseActivity {
                             if (fees.getData().getBuyTokenBankFeeInDollar() != null) {
                                 buyTokenEBADollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenBankFeeInDollar()))));
                             } else {
-                                buyTokenEBADollTV.setText("");
+                                buyTokenEBADollTV.setText("$ 0.00");
                             }
 
                             if (fees.getData().getBuyTokenBankFeeInPercent() != null) {
                                 buyTokenEBAPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenBankFeeInPercent()) + "%");
                             } else {
-                                buyTokenEBAPerTV.setText("");
+                                buyTokenEBAPerTV.setText("0.00%");
                             }
 
                             if (fees.getData().getBuyTokenCogentFeeInDollar() != null) {
                                 buytokenCogentDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenCogentFeeInDollar()))));
                             } else {
-                                buytokenCogentDollTV.setText("");
+                                buytokenCogentDollTV.setText("$ 0.00");
                             }
 
                             if (fees.getData().getBuyTokenCogentFeeInPercent() != null) {
                                 buytokenCogentPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenCogentFeeInPercent()) + "%");
                             } else {
-                                buytokenCogentPerTV.setText("");
+                                buytokenCogentPerTV.setText("0.00%");
                             }
 
                             if (fees.getData().getBuyTokenSignetFeeInDollar() != null) {
                                 buytokenSignetDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenSignetFeeInDollar()))));
                             } else {
-                                buytokenSignetDollTV.setText("");
+                                buytokenSignetDollTV.setText("$ 0.00");
                             }
 
                             if (fees.getData().getBuyTokenSignetFeeInPercent() != null) {
                                 buytokenSignetPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getBuyTokenSignetFeeInPercent()) + "%");
                             } else {
-                                buytokenSignetPerTV.setText("");
+                                buytokenSignetPerTV.setText("0.00%");
                             }
 
                             //other fees
                             if (fees.getData().getMonthlyServiceFeeInDollar() != null) {
                                 monthlyFeeDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getMonthlyServiceFeeInDollar()))));
                             } else {
-                                monthlyFeeDollTV.setText("");
+                                monthlyFeeDollTV.setText("$ 0.00");
                             }
 
                             if (fees.getData().getMonthlyServiceFeeInPercent() != null) {
                                 monthlyFeePerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getMonthlyServiceFeeInPercent()) + "%");
                             } else {
-                                monthlyFeePerTV.setText("");
+                                monthlyFeePerTV.setText("0.00%");
                             }
 
                             //transactions
                             if (fees.getData().getTransactionSaleOrderTokenFeeInDollar() != null) {
                                 salesOrderDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInDollar()))));
                             } else {
-                                salesOrderDollTV.setText("");
+                                salesOrderDollTV.setText("$ 0.00");
                             }
 
                             if (fees.getData().getTransactionSaleOrderTokenFeeInPercent() != null) {
                                 salesOrderPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInPercent()) + "%");
                             } else {
-                                salesOrderPerTV.setText("");
+                                salesOrderPerTV.setText("0.00%");
                             }
 
                             if (fees.getData().getTransactionRefundFeeInDollar() != null) {
                                 refundDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getTransactionRefundFeeInDollar()))));
                             } else {
-                                refundDollTV.setText("");
+                                refundDollTV.setText("$ 0.00");
                             }
 
-                            if (fees.getData().getTransactionSaleOrderTokenFeeInPercent() != null) {
+//                            if (fees.getData().getTransactionSaleOrderTokenFeeInPercent() != null) {
+                            if (fees.getData().getTransactionRefundFeeInPercent() != null) {
                                 refundPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getTransactionRefundFeeInPercent()) + "%");
                             } else {
-                                refundPerTV.setText("");
+                                refundPerTV.setText("0.00%");
                             }
 
                         } catch (NumberFormatException e) {
