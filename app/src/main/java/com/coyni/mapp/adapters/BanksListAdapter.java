@@ -60,7 +60,7 @@ public class BanksListAdapter extends RecyclerSwipeAdapter<BanksListAdapter.MyVi
             BankItem objData = listBanks.get(position);
             holder.tvBankName.setText(objData.getBankName());
             if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
-                holder.tvAccount.setText("**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                holder.tvAccount.setText(mContext.getString(R.string.dot) + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
             } else {
                 holder.tvAccount.setText(objData.getAccountNumber());
             }

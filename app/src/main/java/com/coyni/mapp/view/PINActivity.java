@@ -232,8 +232,9 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                 imgBack.setImageResource(R.drawable.ic_back);
             }
 
-            if (getIntent().getStringExtra("screen").equals("login")) {
+//            if (getIntent().getStringExtra("screen").equals("login")) {
 //            if (getIntent().getStringExtra("screen").equals("login") || getIntent().getStringExtra("screen").equals("SignUp")) {
+            if (getIntent().getStringExtra("screen").equals("login") || getIntent().getStringExtra("screen").equals("login_SET_PIN")) {
                 loginViewModel.initialize();
             }
 
