@@ -1729,6 +1729,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                 if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
                                     if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
                                         Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                        mcodeScanner.stopPreview();
                                     } else {
                                         startActivity(new Intent(ScanActivity.this, PINActivity.class)
                                                 .putExtra("TYPE", "ENTER")
@@ -1760,16 +1761,13 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                 if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
                                     if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
                                         Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                        mcodeScanner.stopPreview();
                                     } else {
-                                        //                                isCancel = true;
-                                        //                                prevDialog.dismiss();
                                         startActivity(new Intent(ScanActivity.this, PINActivity.class)
                                                 .putExtra("TYPE", "ENTER")
                                                 .putExtra("screen", "Pay"));
                                     }
                                 } else {
-                                    //                            isCancel = true;
-                                    //                            prevDialog.dismiss();
                                     startActivity(new Intent(ScanActivity.this, PINActivity.class)
                                             .putExtra("TYPE", "ENTER")
                                             .putExtra("screen", "Pay"));

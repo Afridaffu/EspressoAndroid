@@ -657,7 +657,8 @@
     <string name="reserve_detail">Reserve Detail</string>
     <string name="daily_batch_ids">Daily Batch IDs</string>
     <string name="release_on">Release On</string>
-    <string name="appUpdate">There is an update available for coyni App. Please install the same to proceed further.</string>
+    <!--    <string name="appUpdate">There is an update available for coyni App. Please install the same to proceed further.</string>-->
+    <string name="appUpdate">An update is required to continue using the coyni app.</string>
     <string name="appname">coyni</string>
     <string name="amount_released">Amount Released</string>
     <string name="reserve_canceled_description">Release Scheduled for %1$s for the amount of %2$s has been canceled due to lack of funds in the reserve balance.</string>
@@ -840,5 +841,6 @@
     <string name="accessrestrictederrorcode">CY30200302</string>
     <string name="dots">\u0020••••</string>
     <string name="dot">••••</string>
+    <string name="updateTitle">Update Required</string>
 
 </resources>

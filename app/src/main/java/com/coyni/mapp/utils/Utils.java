@@ -2949,7 +2949,7 @@ public class Utils {
 
     public static void showUpdateDialog(Context context) {
         new MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.app_name)
+                .setTitle(R.string.updateTitle)
                 .setMessage(context.getString(R.string.appUpdate))
                 .setCancelable(false)
                 .setPositiveButton("Update", (dialog, which) -> {
