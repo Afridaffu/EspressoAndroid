@@ -43,13 +43,13 @@
                 android:layout_below="@+id/tvHead"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="center"
-                android:text="The amount you have entered is incorrect. If you wish to continue, please add an external bank account."
+                android:text="Your account has been locked due to an excessive number of unsuccessful attempts. Please contact coyni Customer Support to reactivate."
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cvAddBank"
+                android:id="@+id/cvOK"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_43sdp"
                 android:layout_alignParentBottom="true"
@@ -65,7 +65,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/opensans_bold"
                     android:gravity="center"
-                    android:text="Add Bank Account"
+                    android:text="OK"
                     android:textColor="@color/white" />
             </androidx.cardview.widget.CardView>
 

@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,6 +45,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentsList;
 import com.coyni.mapp.utils.CheckOutConstants;
+import com.coyni.mapp.utils.DatabaseHandler;
+import com.coyni.mapp.utils.DisplayImageUtility;
 import com.coyni.mapp.view.business.AddManualBankAccount;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.view.business.AddManualBankAccount;
@@ -54,6 +57,7 @@ import com.getbouncer.scan.ui.CancellationReason;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.internal.LinkedTreeMap;
 import com.coyni.mapp.R;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
@@ -130,7 +134,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     //    private BlinkCardRecognizer mRecognizer;
 //    private RecognizerBundle mRecognizerBundle;
     CustomKeyboard ctKey;
-
+    private DatabaseHandler dbHandler;
+    private DisplayImageUtility displayImageUtility;
     IdentityPagerAdapter identityPagerAdapter;
     static AutoScrollViewPager viewPager;
     int pagerPosition = 0, diffMonths = -1;
@@ -1831,7 +1836,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             if (preAuthDialog != null) {
                 preAuthDialog.dismiss();
             }
-            CardView cvAddBank;
+            CardView cvOK;
             preDialog = new Dialog(AddCardActivity.this);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preDialog.setContentView(R.layout.preauthfailed);
@@ -1840,21 +1845,17 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-//            WindowManager.LayoutParams lp = window.getAttributes();
-//            lp.dimAmount = 0.7f;
-//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            preDialog.getWindow().setAttributes(lp);
             preAuthDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             preDialog.setCancelable(false);
             preDialog.show();
-            cvAddBank = preDialog.findViewById(R.id.cvAddBank);
+            cvOK = preDialog.findViewById(R.id.cvOK);
 
-            cvAddBank.setOnClickListener(new View.OnClickListener() {
+            cvOK.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //preDialog.dismiss();
-                    onBackPressed();
-                    finish();
+//                    onBackPressed();
+//                    finish();
+                    logoutUser();
                 }
             });
             preDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
@@ -2216,5 +2217,35 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(reason.getMessage());
         builder.show();
+    }
+
+    private void logoutUser() {
+        try {
+            displayImageUtility = DisplayImageUtility.getInstance(this);
+            objMyApplication.setStrRetrEmail("");
+            objMyApplication.clearUserData();
+            dropAllTables();
+            displayImageUtility.clearCache();
+            FirebaseMessaging.getInstance().deleteToken();
+            Utils.setStrAuth("");
+            Intent i = new Intent(AddCardActivity.this, OnboardActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void dropAllTables() {
+        try {
+            dbHandler = DatabaseHandler.getInstance(AddCardActivity.this);
+            dbHandler.clearAllTables();
+            SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.clear();
+            editor.apply();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

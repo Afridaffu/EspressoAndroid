@@ -1447,7 +1447,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
             if (preAuthDialog != null) {
                 preAuthDialog.dismiss();
             }
-            CardView cvAddBank;
+            CardView cvOK;
             preDialog = new Dialog(BusinessAddCardActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preDialog.setContentView(R.layout.preauthfailed);
@@ -1464,9 +1464,9 @@ public class BusinessAddCardActivity extends AppCompatActivity {
 
             preDialog.setCancelable(false);
             preDialog.show();
-            cvAddBank = preDialog.findViewById(R.id.cvAddBank);
+            cvOK = preDialog.findViewById(R.id.cvOK);
 
-            cvAddBank.setOnClickListener(new View.OnClickListener() {
+            cvOK.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //preDialog.dismiss();
