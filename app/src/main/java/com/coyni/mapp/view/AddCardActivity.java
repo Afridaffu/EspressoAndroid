@@ -521,17 +521,17 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         if (errData == null || cardResponse.getStatus().toString().toLowerCase().equals("success")) {
                             if (cardResponseData.getProcessor_response_text() != null && (cardResponseData.getProcessor_response_text().toLowerCase().contains("cvv mismatch") || cardResponseData.getProcessor_response_text().toLowerCase().contains("wrong card details")
                                     || cardResponseData.getProcessor_response_text().toLowerCase().contains("fraud card"))) {
-                                displayAlert("Card details are invalid, please try with a valid card", "");
+                                displayAlert("Card details are invalid, please try with a valid card", "", "");
                             } else if (cardResponseData.getStatus().toLowerCase().contains("authorize") || cardResponseData.getStatus().toLowerCase().contains("approve") || cardResponseData.getStatus().toLowerCase().equals("pending_settlement")) {
                                 displayPreAuth();
                             } else if (cardResponseData.getStatus().toLowerCase().equals("failed") || (cardResponseData.getResponse() != null && cardResponseData.getResponse().toLowerCase().equals("declined"))) {
-                                displayAlert("Card details are invalid, please try with a valid card", "");
+                                displayAlert("Card details are invalid, please try with a valid card", "", "");
                             }
                         } else {
                             if (errData != null && !errData.getErrorDescription().equals("")) {
-                                displayAlert(errData.getErrorDescription(), "");
+                                displayAlert(errData.getErrorDescription(), "", "customer");
                             } else {
-                                displayAlert(cardResponse.getError().getFieldErrors().get(0), "");
+                                displayAlert(cardResponse.getError().getFieldErrors().get(0), "", "customer");
                             }
                         }
                     }
@@ -671,7 +671,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 if (businessCardResponse != null && businessCardResponse.getStatus().toString().toLowerCase().equals("success")) {
                     displayPreAuthSuccess();
                 } else {
-                    displayCardFail(businessCardResponse);
+                    //displayCardFail(businessCardResponse);
+                    displayAlert(businessCardResponse.getError().getErrorDescription(), "", "merchant");
                 }
             }
         });
@@ -734,15 +735,15 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 return value = false;
             } else if (!objCard.getData().getValid()) {
 //                Utils.displayAlert("Invalid request! Please check the card and try again.", AddCardActivity.this, "", "");
-                displayAlert("Invalid request! Please check the card and try again.", "");
+                displayAlert("Invalid request! Please check the card and try again.", "", "");
                 return value = false;
             } else if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit") && objCard.getData().getCardType().toLowerCase().equals("credit")) {
 //                Utils.displayAlert("Invalid request! Please add Debit Card only.", AddCardActivity.this, "", "");
-                displayAlert("Invalid request! Please add Debit Card only.", "");
+                displayAlert("Invalid request! Please add Debit Card only.", "", "");
                 return value = false;
             } else if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("credit") && objCard.getData().getCardType().toLowerCase().equals("debit")) {
 //                Utils.displayAlert("Invalid request! Please add Credit Card only.", AddCardActivity.this, "", "");
-                displayAlert("Invalid request! Please add Credit Card only.", "");
+                displayAlert("Invalid request! Please add Credit Card only.", "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
                 Utils.displayAlert("coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
@@ -1980,7 +1981,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
         }
     }
 
-    private void displayAlert(String msg, String headerText) {
+    private void displayAlert(String msg, String headerText, String strFrom) {
         // custom dialog
         final Dialog dialog = new Dialog(AddCardActivity.this);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -2003,15 +2004,9 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
         actionCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                    return;
-//                }
-//                mLastClickTime = SystemClock.elapsedRealtime();
                 try {
                     dialog.dismiss();
-                    if (layoutAddress.getVisibility() == View.VISIBLE) {
-//                        layoutCard.setVisibility(View.VISIBLE);
-//                        layoutAddress.setVisibility(View.GONE);
+                    if (layoutAddress.getVisibility() == View.VISIBLE && strFrom.equals("")) {
                         viewPager.setCurrentItem(0);
                         divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                         divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
@@ -2043,6 +2038,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
 
                         Utils.setUpperHintColor(etlCVV, getColor(R.color.light_gray));
                         cvvErrorLL.setVisibility(GONE);
+                    } else {
+                        finish();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

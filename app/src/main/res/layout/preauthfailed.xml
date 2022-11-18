@@ -43,7 +43,7 @@
                 android:layout_below="@+id/tvHead"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="center"
-                android:text="Your account has been locked due to an excessive number of unsuccessful attempts. Please contact coyni Customer Support to reactivate."
+                android:text="Your account has been locked due to an excessive number of unsuccessful attempts. Please contact coyni customer support to reactivate."
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 

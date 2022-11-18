@@ -838,6 +838,10 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                 buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
                             }
                         }
+                    } else {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
                     }
 
                 }
@@ -1092,7 +1096,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         try {
 
@@ -1708,7 +1713,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         dialog.show();
     }
 
-    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, Double balance, String btypeValue) {
+    private void showPayToMerchantWithAmountDialog(String amount, UserDetails
+            userDetails, Double balance, String btypeValue) {
         isQRScan = false;
         isOnResumeCamera = true;
         isSlideActionClicked = false;
@@ -1758,10 +1764,10 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                         isAuthenticationCalled = true;
                         if (isPayRequest) {
                             if (payValidation()) {
+                                isSlideActionClicked = true;
                                 if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
                                     if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
                                         Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                                        mcodeScanner.stopPreview();
                                     } else {
                                         startActivity(new Intent(ScanActivity.this, PINActivity.class)
                                                 .putExtra("TYPE", "ENTER")
@@ -1794,7 +1800,6 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                     mcodeScanner.stopPreview();
                     scannerLayout.setVisibility(View.GONE);
                 }
-
             }
         });
 
@@ -1951,9 +1956,6 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().equalsIgnoreCase("NA") && !objLimit.getTransactionLimit().equalsIgnoreCase("unlimited")) {
                 maxValue = Utils.doubleParsing(objLimit.getTransactionLimit());
             }
-//                if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getDailyAccountLimit().equalsIgnoreCase("unlimited")) {
-//                    daily = Utils.doubleParsing(objLimit.getDailyAccountLimit());
-//                }
             if (maxValue > 0) {
                 if (objLimit.getLimitType().equalsIgnoreCase("daily")) {
                     strLimit = "daily";
@@ -1971,7 +1973,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         }
     }
 
-    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+    private void setKeyboardVisibilityListener(
+            final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
         final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
         parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
