@@ -154,7 +154,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
 
                 holder.tvBankName.setText(objData.getBankName());
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
-                    holder.tvAccount.setText("**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                    holder.tvAccount.setText(mContext.getString(R.string.dots) + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
                     holder.tvAccount.setText(objData.getAccountNumber());
                 }
@@ -227,7 +227,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
 //                }
                 holder.tvBankName.setVisibility(View.GONE);
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
-                    holder.tvAccount.setText("Cogent Account " + objData.getAccountNumber().substring(0, 5) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+//                    holder.tvAccount.setText("Cogent Account " + objData.getAccountNumber().substring(0, 5) + "****" + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                    holder.tvAccount.setText("Cogent Account " + mContext.getString(R.string.dots) + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
                     holder.tvAccount.setText("Cogent Account " + objData.getAccountNumber());
                 }
@@ -300,14 +301,15 @@ public class SelectedPaymentMethodsAdapter extends RecyclerSwipeAdapter<Selected
 //                }
                 holder.tvBankName.setVisibility(View.GONE);
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
-                    holder.tvAccount.setText("Signet Account " + objData.getAccountNumber().substring(0, 5) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+//                    holder.tvAccount.setText("Signet Account " + objData.getAccountNumber().substring(0, 5) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                    holder.tvAccount.setText("Signet Account " + mContext.getString(R.string.dots) + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
                     holder.tvAccount.setText("Signet Account " + objData.getAccountNumber());
                 }
             } else {
                 holder.layoutBank.setVisibility(View.GONE);
                 holder.layoutCard.setVisibility(View.VISIBLE);
-                holder.tvCardNumber.setText("****" + objData.getLastFour());
+                holder.tvCardNumber.setText(mContext.getString(R.string.dots) + objData.getLastFour());
                 if (strScreen.equals("withdraw")) {
                     holder.imgCardArrow.setVisibility(View.VISIBLE);
                 } else {

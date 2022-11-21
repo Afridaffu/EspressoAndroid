@@ -251,7 +251,7 @@ public class GiftCardBindingLayoutActivity extends BaseActivity {
             tvMessage.setText(
                     "The transaction failed due to error code:\n" +
                             objMyApplication.getPaidOrderResp().getError().getErrorCode() + " - " +
-                            objMyApplication.getPaidOrderResp().getError().getErrorDescription() + ". Please try again.");
+                            objMyApplication.getPaidOrderResp().getError().getErrorDescription().replace(".", "") + ". Please try again.");
         }
 
 
@@ -273,7 +273,7 @@ public class GiftCardBindingLayoutActivity extends BaseActivity {
             tvMessage.setText(
                     "The transaction failed due to error code:\n" +
                             objMyApplication.getOrderPayResponse().getError().getErrorCode() + " - " +
-                            objMyApplication.getOrderPayResponse().getError().getErrorDescription() + ". Please try again.");
+                            objMyApplication.getOrderPayResponse().getError().getErrorDescription().replace(".", "") + ". Please try again.");
         }
 
         if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
@@ -753,11 +753,11 @@ public class GiftCardBindingLayoutActivity extends BaseActivity {
                 if (objMyApplication.getWithdrawResponse() != null) {
                     tvMessage.setText("The transaction failed due to error code:\n" +
                             objMyApplication.getWithdrawResponse().getError().getErrorCode() + " - " +
-                            objMyApplication.getWithdrawResponse().getError().getErrorDescription() + ". Please try again.");
+                            objMyApplication.getWithdrawResponse().getError().getErrorDescription().replace(".", "") + ". Please try again.");
                 } else if (objMyApplication.getBuyTokenResponse() != null && type.equals("buy")) {
                     tvMessage.setText("The transaction failed due to error code:\n" +
                             objMyApplication.getBuyTokenResponse().getError().getErrorCode() + " - " +
-                            objMyApplication.getBuyTokenResponse().getError().getErrorDescription() + ". Please try again.");
+                            objMyApplication.getBuyTokenResponse().getError().getErrorDescription().replace(".", "") + ". Please try again.");
                 }
 
                 cvTryAgain.setOnClickListener(new View.OnClickListener() {
@@ -784,7 +784,7 @@ public class GiftCardBindingLayoutActivity extends BaseActivity {
                 if (objMyApplication.getPayRequestResponse() != null) {
                     tvMessage.setText("The transaction failed due to error code:\n" +
                             objMyApplication.getPayRequestResponse().getError().getErrorCode() + " - " +
-                            objMyApplication.getPayRequestResponse().getError().getErrorDescription() + ". Please try again.");
+                            objMyApplication.getPayRequestResponse().getError().getErrorDescription().replace(".", "") + ". Please try again.");
                 }
 
                 cvTryAgain.setOnClickListener(new View.OnClickListener() {

@@ -807,7 +807,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
             selectedCard = objData;
             TransactionLimitRequest obj = new TransactionLimitRequest();
             obj.setTransactionType(Integer.parseInt(Utils.addType));
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                 strType = "bank";
                 strBankId = String.valueOf(objData.getId());
@@ -815,7 +815,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 obj.setTransactionSubType(Integer.parseInt(Utils.bankType));
                 lyBDetails.setVisibility(View.VISIBLE);
                 lyCDetails.setVisibility(View.GONE);
-                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
+//                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
                 imgBankIcon.setImageResource(R.drawable.ic_bankactive);
                 if (objData.getBankName().length() > 15) {
                     tvBankName.setText(objData.getBankName().substring(0, 15) + "...");
@@ -823,7 +823,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                     tvBankName.setText(objData.getBankName());
                 }
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 4) {
-                    tvBAccNumber.setText("**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                    tvBAccNumber.setText(getString(R.string.dots) + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
                     tvBAccNumber.setText(objData.getAccountNumber());
                 }
@@ -834,7 +834,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 obj.setTransactionSubType(Integer.parseInt(Utils.CogentType));
                 lyBDetails.setVisibility(View.VISIBLE);
                 lyCDetails.setVisibility(View.GONE);
-                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
+//                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
                 imgBankIcon.setImageResource(R.drawable.ic_cogentactive);
                 if (objData.getBankName().length() > 15) {
                     tvBankName.setText(objData.getBankName().substring(0, 15) + "...");
@@ -842,7 +842,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                     tvBankName.setText(objData.getBankName());
                 }
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
-                    tvBAccNumber.setText(objData.getAccountNumber().substring(0, 10) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                    tvBAccNumber.setText(objData.getAccountNumber().substring(0, 10) + getString(R.string.dots) + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
                     tvBAccNumber.setText(objData.getAccountNumber());
                 }
@@ -853,7 +853,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 obj.setTransactionSubType(Integer.parseInt(Utils.signetType));
                 lyBDetails.setVisibility(View.VISIBLE);
                 lyCDetails.setVisibility(View.GONE);
-                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
+//                params.addRule(RelativeLayout.BELOW, lyBDetails.getId());
                 imgBankIcon.setImageResource(R.drawable.ic_signetactive);
                 if (objData.getBankName().length() > 15) {
                     tvBankName.setText(objData.getBankName().substring(0, 15) + "...");
@@ -861,7 +861,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                     tvBankName.setText(objData.getBankName());
                 }
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
-                    tvBAccNumber.setText(objData.getAccountNumber().substring(0, 10) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                    tvBAccNumber.setText(objData.getAccountNumber().substring(0, 10) + getString(R.string.dots) + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
                     tvBAccNumber.setText(objData.getAccountNumber());
                 }
@@ -876,10 +876,10 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                     strSubType = Utils.creditType;
                     obj.setTransactionSubType(Integer.parseInt(Utils.creditType));
                 }
-                params.addRule(RelativeLayout.BELOW, lyCDetails.getId());
+//                params.addRule(RelativeLayout.BELOW, lyCDetails.getId());
                 lyBDetails.setVisibility(View.GONE);
                 lyCDetails.setVisibility(View.VISIBLE);
-                tvAccNumber.setText("****" + objData.getLastFour());
+                tvAccNumber.setText(getString(R.string.dots) + objData.getLastFour());
                 switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {
                     case "VISA":
                         tvPayHead.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType()));
@@ -899,10 +899,10 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                         break;
                 }
             }
-            params.addRule(RelativeLayout.RIGHT_OF, imgBankIcon.getId());
-            params.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
-            params.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
-            tvLimit.setLayoutParams(params);
+//            params.addRule(RelativeLayout.RIGHT_OF, imgBankIcon.getId());
+//            params.addRule(RelativeLayout.LEFT_OF, imgArrow.getId());
+//            params.setMargins(Utils.convertPxtoDP(15), Utils.convertPxtoDP(5), 0, 0);
+//            tvLimit.setLayoutParams(params);
             if (Utils.checkInternet(BuyTokenActivity.this)) {
                 //buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
@@ -1189,7 +1189,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 layoutCard.setVisibility(View.GONE);
                 tvBankName.setText(selectedCard.getBankName());
                 if (selectedCard.getAccountNumber() != null && selectedCard.getAccountNumber().length() > 4) {
-                    tvAccount.setText("**** " + selectedCard.getAccountNumber().substring(selectedCard.getAccountNumber().length() - 4));
+                    tvAccount.setText(getString(R.string.dot) + selectedCard.getAccountNumber().substring(selectedCard.getAccountNumber().length() - 4));
                 } else {
                     tvAccount.setText(selectedCard.getAccountNumber());
                 }
@@ -1199,7 +1199,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 layoutCard.setVisibility(View.GONE);
                 tvBankName.setText(selectedCard.getBankName());
                 if (selectedCard.getAccountNumber() != null && selectedCard.getAccountNumber().length() > 4) {
-                    tvAccount.setText("**** " + selectedCard.getAccountNumber().substring(selectedCard.getAccountNumber().length() - 4));
+                    tvAccount.setText(getString(R.string.dots) + selectedCard.getAccountNumber().substring(selectedCard.getAccountNumber().length() - 4));
                 } else {
                     tvAccount.setText(selectedCard.getAccountNumber());
                 }
@@ -1209,7 +1209,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 layoutCard.setVisibility(View.GONE);
                 tvBankName.setText(selectedCard.getBankName());
                 if (selectedCard.getAccountNumber() != null && selectedCard.getAccountNumber().length() > 4) {
-                    tvAccount.setText("**** " + selectedCard.getAccountNumber().substring(selectedCard.getAccountNumber().length() - 4));
+                    tvAccount.setText(getString(R.string.dots) + selectedCard.getAccountNumber().substring(selectedCard.getAccountNumber().length() - 4));
                 } else {
                     tvAccount.setText(selectedCard.getAccountNumber());
                 }
@@ -1217,7 +1217,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                 MatomoUtility.getInstance().trackEvent(MatomoConstants.BUY_TOKEN_CARD, MatomoConstants.BUY_TOKEN_CARD_CLICKED);
                 layoutBank.setVisibility(View.GONE);
                 layoutCard.setVisibility(View.VISIBLE);
-                tvPayMethod.setText("****" + selectedCard.getLastFour());
+                tvPayMethod.setText(getString(R.string.dots) + selectedCard.getLastFour());
                 switch (selectedCard.getCardBrand().toUpperCase().replace(" ", "")) {
                     case "VISA":
                         imgCardType.setImageResource(R.drawable.ic_visa1);
@@ -1832,7 +1832,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                     imgBankIcon.setImageResource(R.drawable.ic_bankactive);
                     tvBankName.setText(objPayment.getBankName());
                     if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 4) {
-                        tvAccount.setText("**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                        tvAccount.setText(getString(R.string.dots) + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
@@ -1845,7 +1845,7 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                     imgBankIcon.setImageResource(R.drawable.ic_cogentactive);
                     tvAccount.setVisibility(View.GONE);
                     if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
-                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + getString(R.string.dots) + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
                     } else {
                         tvBankName.setText(objPayment.getAccountNumber());
                     }
@@ -1858,14 +1858,14 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                     imgBankIcon.setImageResource(R.drawable.ic_signetactive);
                     tvAccount.setVisibility(View.GONE);
                     if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 14) {
-                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + "**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                        tvBankName.setText(objPayment.getAccountNumber().substring(0, 10) + getString(R.string.dots) + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
                     } else {
                         tvBankName.setText(objPayment.getAccountNumber());
                     }
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);
                     layoutBank.setVisibility(View.GONE);
-                    tvCardNumber.setText("****" + objPayment.getLastFour());
+                    tvCardNumber.setText(getString(R.string.dots) + objPayment.getLastFour());
                     switch (objPayment.getCardBrand().toUpperCase().replace(" ", "")) {
                         case "VISA":
                             tvCardName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
@@ -1940,7 +1940,11 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
             TextView tvMessage = prevDialog.findViewById(R.id.tvMessage);
             CardView cvTryAgain = prevDialog.findViewById(R.id.cvTryAgain);
 
-            tvMessage.setText("The transaction failed due to error code:\n" + objData.getError().getErrorCode() + " - " + objData.getError().getErrorDescription() + ". Please try again.");
+            if (objData.getError() != null) {
+                tvMessage.setText("The transaction failed due to error code:\n" + objData.getError().getErrorCode() + " - " + objData.getError().getErrorDescription().replace(".", "") + ". Please try again.");
+            } else {
+                tvMessage.setText("");
+            }
             Window window = prevDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 //

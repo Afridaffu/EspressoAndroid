@@ -115,7 +115,8 @@
     <string name="pptext">Passport</string>
     <string name="sic">State-Issued Card</string>
 
-    <string name="ivunder_review">Thank you for your interest in coyni. Please allow us up to 72 business hours for further review of your account. Within that time you may receive a notification and/or email if further information is needed.</string>
+    <!--    <string name="ivunder_review">Thank you for your interest in coyni. Please allow us up to 72 business hours for further review of your account. Within that time you may receive a notification and/or email if further information is needed.</string>-->
+    <string name="ivunder_review">Thank you for your interest in coyni. Please allow us up to 3 business days for further review of your account. Within that time you may receive a notification and/or email if further information is needed.</string>
     <string name="ivtitle">Identity Verification Under Review</string>
     <string name="done">Done</string>
     <string name="customer_under_review">Our team is still reviewing your account. This process may take up to 3 business days.</string>
@@ -656,7 +657,8 @@
     <string name="reserve_detail">Reserve Detail</string>
     <string name="daily_batch_ids">Daily Batch IDs</string>
     <string name="release_on">Release On</string>
-    <string name="appUpdate">There is an update available for coyni App. Please install the same to proceed further.</string>
+    <!--    <string name="appUpdate">There is an update available for coyni App. Please install the same to proceed further.</string>-->
+    <string name="appUpdate">An update is required to continue using the coyni app.</string>
     <string name="appname">coyni</string>
     <string name="amount_released">Amount Released</string>
     <string name="reserve_canceled_description">Release Scheduled for %1$s for the amount of %2$s has been canceled due to lack of funds in the reserve balance.</string>
@@ -727,7 +729,8 @@
     <string name="dot_value">…</string>
     <string name="please_try_after">Looks like we are having an issue, please try after sometime.</string>
     <string name="action_required_msg_SSN">Social Security number verification.</string>
-    <string name="action_required_msg_upload">The coyni team requires you to upload your documents within 30 days to further verify you.</string>
+    <!--    <string name="action_required_msg_upload">The coyni team requires you to upload your documents within 30 days to further verify you.</string>-->
+    <string name="action_required_msg_upload">The coyni team requires you to upload your document(s) within 30 days to further verify you.</string>
 
     <string name="user_pressed_back">User pressed back</string>
     <string name="scan_canceled">Scan canceled</string>
@@ -836,6 +839,9 @@
     <string name="addNewdbaaccount">You are about to add a new DBA for the following company.\n\nYou will need to complete a new Merchant Application for each DBA you add. Would you like to continue?</string>
     <string name="accessrestricted">coyni is unavailable in your region. We restrict access only to areas inside the United States. If you are using a VPN, please turn it off and try again.</string>
     <string name="accessrestrictederrorcode">CY30200302</string>
+    <string name="dots">\u0020••••</string>
+    <string name="dot">••••</string>
+    <string name="updateTitle">Update Required</string>
 
     <string name="choose_library">Choose From Library</string>
     <string name="take_photo">Take a Photo</string>

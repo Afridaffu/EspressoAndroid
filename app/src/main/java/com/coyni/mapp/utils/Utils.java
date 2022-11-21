@@ -328,6 +328,7 @@ public class Utils {
 //    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+skkD6XebOu1kYPMIy3HJXuIErNxvYkSdOTdpwY0Pn49l1koS9o2CfCe9Fa01YifNtCgXc37XRU5Di4z/Sspcjs9qrHOS0RFiGtmr5BaQcKjpuy/r5ukCVuNMHEK++HZYlahdIqFxGLjSll50XTn3j+YZFvIMd7CcXCmx9UP+zkdtcr5ib3+AyVdC/w5JKAMVRuNpN6PEGC02woYfYHB/uJmBZw==";
 //    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+smkG6e3GUWZyfYVqd79iVH7r6ZTsAAIna1uwZpVc86X6m0Bzjc8ut7V9K68Yzb4Khc1TVrsMgFpVsfwwBpFIqWAKSmjf+rMxdY7uHkkJfitfKGg8NOO1Cu2L+Qx4epOpghSkMw/c9Q7ORSIacDj0moI1AoPyVTzSehuNWGx17g3iQXD7E4HznTwkU2H0I9Zst23aWvZbiBQGVCZ9ChQvM3at2A==";
     public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+slEG6YrzB7khwY4q3StoNVUaCKdKVX2LzHaHhDz0MHkzRYMij/AYdyN6dsbX0w2EdCaLdY/wnQFmstU00LwMMm0LH2kvrwC14uwYF+DWsnakPr6ZXO+zR6B76tN53aS47Aa2P2qwbBt2pG/XHNNMcdJ0TbXxsZlZm8/o3F4t6yEqFppMuqaK0wfmfj95CAdT2S1SamGUHQeFONGL6hzGY38NbA==";
+    public static String dots = "\u2022\u2022\u2022\u2022";
 
     public static final int payRequest = 12;
     public static final int buyTokens = 2;
@@ -2948,7 +2949,7 @@ public class Utils {
 
     public static void showUpdateDialog(Context context) {
         new MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.app_name)
+                .setTitle(R.string.updateTitle)
                 .setMessage(context.getString(R.string.appUpdate))
                 .setCancelable(false)
                 .setPositiveButton("Update", (dialog, which) -> {

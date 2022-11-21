@@ -973,14 +973,14 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                     imgBankIcon.setImageResource(R.drawable.ic_bankactive);
                     tvBankName.setText(objPayment.getBankName());
                     if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 4) {
-                        tvAccount.setText("**** " + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                        tvAccount.setText(getString(R.string.dots)+ objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);
                     layoutBank.setVisibility(View.GONE);
-                    tvCardNumber.setText("****" + objPayment.getLastFour());
+                    tvCardNumber.setText(getString(R.string.dots) + objPayment.getLastFour());
                     switch (objPayment.getCardBrand().toUpperCase().replace(" ", "")) {
                         case "VISA":
                             tvCardName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));
