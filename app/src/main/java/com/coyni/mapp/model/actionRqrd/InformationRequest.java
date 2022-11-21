@@ -2,11 +2,13 @@ package com.coyni.mapp.model.actionRqrd;
 
 import java.util.List;
 
+import retrofit2.http.Body;
+
 public class InformationRequest {
     private List<Integer> websiteUpdates;
     private List<ProposalRequest> proposals;
     private BankRequest bankRequest;
-    private boolean reserveRuleAccepted;
+    private Boolean reserveRuleAccepted;
 
     public List<Integer> getWebsiteUpdates() {
         return websiteUpdates;

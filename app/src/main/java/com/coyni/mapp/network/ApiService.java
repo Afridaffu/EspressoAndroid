@@ -666,6 +666,9 @@ public interface ApiService {
     @POST("api/v2/underwriting/user/business/action-required")
     Call<ActionRequiredSubmitResponse> submitMerchantActionRequired(@Body InformationRequest type);
 
+    @POST("api/v2/underwriting/user/business/action-required")
+    Call<ActionRequiredSubmitResponse> submitMerchantActionRequired(@Body RequestBody data);
+
     @GET("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutListData();
 

@@ -1,5 +1,7 @@
 package com.coyni.mapp.view;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.coyni.mapp.custom_camera.CameraUtility.BROWSE;
 import static com.coyni.mapp.custom_camera.CameraUtility.CHOOSE_LIBRARY;
 import static com.coyni.mapp.custom_camera.CameraUtility.TAKE_PHOTO;
@@ -49,6 +51,7 @@ import com.coyni.mapp.dialogs.OnDialogClickListener;
 import com.coyni.mapp.model.DocLayout;
 import com.coyni.mapp.model.actionRqrd.ActionRqrdResponse;
 import com.coyni.mapp.model.actionRqrd.SubmitActionRqrdResponse;
+import com.coyni.mapp.model.identity_verification.IdentityImageResponse;
 import com.coyni.mapp.utils.CustomTypefaceSpan;
 import com.coyni.mapp.utils.FileUtils;
 import com.coyni.mapp.utils.LogUtils;
@@ -74,20 +77,14 @@ import okhttp3.RequestBody;
 public class AdditionalActionUploadActivity extends BaseActivity {
     LinearLayout ssnCloseLL;
     private UnderwritingUserActionRequiredViewModel underwritingUserActionRequiredViewModel;
-
     private String selectedDocType = "";
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
-    private static final int ACTIVITY_CHOOSE_FILE = 3;
-    private static final int PICK_IMAGE_REQUEST = 4;
     private Long mLastClickTime = 0L;
     private int documentID;
     private LinearLayout selectedLayout = null;
     private TextView selectedText = null, adminMessageTV;
-    public static ArrayList<File> documentsFIle;
     private File mediaFile;
     private LinearLayout additionalDocumentRequiredLL;
-    private HashMap<Integer, File> filesToUpload;
-    public static AdditionalActionUploadActivity additionalActionUploadActivity;
     public boolean isSubmitEnabled = false;
     public CardView submitCV;
     private IdentityVerificationViewModel identityVerificationViewModel;
@@ -105,7 +102,6 @@ public class AdditionalActionUploadActivity extends BaseActivity {
 
     private void initFields() {
 
-        additionalActionUploadActivity = this;
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         ssnCloseLL = findViewById(R.id.ssnCloseLL);
@@ -119,14 +115,9 @@ public class AdditionalActionUploadActivity extends BaseActivity {
         identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
         underwritingUserActionRequiredViewModel.getActionRequiredCustData();
         identityVerificationViewModel.removeImageMultiDocs(lastUploadedDoc + "");
-//        fileUpload = new HashMap<Integer, String>();
-        filesToUpload = new HashMap<Integer, File>();
-        documentsFIle = new ArrayList<>();
-
         submitCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LogUtils.d(TAG, "submitCV" + filesToUpload);
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
@@ -193,6 +184,31 @@ public class AdditionalActionUploadActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        underwritingUserActionRequiredViewModel.getActRqrdDocUploadMutableLiveData().observe(this, new Observer<IdentityImageResponse>() {
+            @Override
+            public void onChanged(IdentityImageResponse identityImageResponse) {
+                try {
+                    dismissDialog();
+                    if (identityImageResponse != null && identityImageResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
+                        if (selectedLayout != null) {
+                            selectedLayout.setVisibility(VISIBLE);
+                            selectedText.setVisibility(GONE);
+                        }
+                        setUploadedTrue((int) selectedLayout.getTag());
+                        enableOrDisableNext();
+                    } else {
+                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(),
+                                AdditionalActionUploadActivity.this, "",
+                                identityImageResponse.getError().getFieldErrors().get(0));
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
     }
 
     public static boolean checkAndRequestPermissions(final Activity context) {
@@ -255,54 +271,6 @@ public class AdditionalActionUploadActivity extends BaseActivity {
 
     }
 
-//    private void chooseFilePopup(final Context context, String type) {
-//        try {
-//            Dialog chooseFile = new Dialog(context);
-//            chooseFile.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            chooseFile.setContentView(R.layout.activity_choose_file_botm_sheet);
-//            chooseFile.setCancelable(true);
-//            Window window = chooseFile.getWindow();
-//            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-//            chooseFile.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-//            WindowManager.LayoutParams wlp = window.getAttributes();
-//            wlp.gravity = Gravity.BOTTOM;
-//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            window.setAttributes(wlp);
-//            chooseFile.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-//            TextView libraryTV = chooseFile.findViewById(R.id.libraryTV);
-//            TextView takePhotoTV = chooseFile.findViewById(R.id.takePhotoTV);
-//            TextView browseFileTV = chooseFile.findViewById(R.id.browseFileTV);
-//
-//            libraryTV.setOnClickListener(view -> {
-//                chooseFile.dismiss();
-//                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-//                photoPickerIntent.setType("image/*");
-//                startActivityForResult(photoPickerIntent, PICK_IMAGE_REQUEST);
-//
-//            });
-//            takePhotoTV.setOnClickListener(view -> {
-//                chooseFile.dismiss();
-//                startActivity(new Intent(AdditionalActionUploadActivity.this, CameraActivity.class).putExtra("FROM", "ActRqrdDocs"));
-//            });
-//            browseFileTV.setOnClickListener(view -> {
-//                chooseFile.dismiss();
-//                Intent pickIntent = new Intent();
-//                pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
-//                pickIntent.setType("*/*");
-//                String[] extraMimeTypes = {"application/pdf", "image/*"};
-//                pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
-//                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-//                Intent chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
-//                startActivityForResult(chooserIntent, ACTIVITY_CHOOSE_FILE);
-//            });
-//            chooseFile.show();
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//
-//        }
-//    }
-
     private void chooseFilePopup(final Context context, String type) {
         FilePickerDialog pickerDialog = new FilePickerDialog(context, true);
         pickerDialog.setOnDialogClickListener(new OnDialogClickListener() {
@@ -342,72 +310,6 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                 }
             });
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            super.onActivityResult(requestCode, resultCode, data);
-            if (resultCode != RESULT_OK) return;
-            String path = "";
-            LogUtils.d(TAG, "onActivityResult" + data.getData());
-//            if (requestCode == ACTIVITY_CHOOSE_FILE) {
-//                LogUtils.d(TAG, "ACTIVITYs_CHOOSE_FILE" + data.getData());
-//                uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
-//            } else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
-//                LogUtils.d(TAG, "PICK_IMAGE_REQUEST" + data.getData());
-//                uploadDocumentFromLibrary(data.getData(), PICK_IMAGE_REQUEST);
-//            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-    }
-
-    public String getRealPathFromURI(Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if (cursor == null) return null;
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-
-    }
-
-    public void saveFileFromCamera(File cameraFIle) {
-
-        LogUtils.d(TAG, "camera" + cameraFIle);
-
-        String FilePath = String.valueOf(cameraFIle);
-
-        mediaFile = new File(FilePath);
-
-        if (Utils.isValidFileSize(mediaFile)) {
-
-            LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
-            LogUtils.d(TAG, "documentID" + documentID);
-
-//        if (fileUpload.containsKey(documentID)) {
-//            fileUpload.replace(documentID, mediaFile.getAbsolutePath());
-//            documentsFIle.add(mediaFile);
-//        }
-            if (filesToUpload.containsKey(documentID)) {
-                filesToUpload.replace(documentID, mediaFile);
-                documentsFIle.add(mediaFile);
-            }
-
-            if (selectedLayout != null) {
-                selectedLayout.setVisibility(View.VISIBLE);
-                selectedText.setVisibility(View.GONE);
-            }
-            enableOrDisableNext();
-            LogUtils.d(TAG, "fileUpload" + filesToUpload);
-        } else {
-            Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
-        }
-
-
-    }
-
     private void uploadDocumentFromLibrary(String filePath) {
         try {
 
@@ -430,50 +332,6 @@ public class AdditionalActionUploadActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
-
-
-//    public void uploadDocumentFromLibrary(Uri uri, int reqType) {
-//        try {
-//            String FilePath = "";
-//            if (reqType == ACTIVITY_CHOOSE_FILE) {
-//                FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
-//            } else {
-//                FilePath = getRealPathFromURI(uri);
-//            }
-//            mediaFile = new File(FilePath);
-//            if (Utils.isValidFileSize(mediaFile)) {
-//
-//                LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
-//                LogUtils.d(TAG, "documentID" + documentID);
-//
-////            if (fileUpload.containsKey(documentID)) {
-////                fileUpload.replace(documentID, mediaFile.getAbsolutePath());
-////                documentsFIle.add(mediaFile);
-////            }
-//
-//                if (filesToUpload.containsKey(documentID)) {
-//                    filesToUpload.replace(documentID, mediaFile);
-//                    documentsFIle.add(mediaFile);
-//                }
-//
-//                if (selectedLayout != null) {
-//                    selectedLayout.setVisibility(View.VISIBLE);
-//                    selectedText.setVisibility(View.GONE);
-//
-//                }
-//                enableOrDisableNext();
-//                LogUtils.d(TAG, "fileUpload" + filesToUpload);
-//            } else {
-//                Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
-//            }
-//
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//
-//        }
-//
-//    }
 
     public void enableOrDisableNext() {
 
@@ -531,8 +389,20 @@ public class AdditionalActionUploadActivity extends BaseActivity {
             sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
             sscFileUploadLL.setTag(i);
             sscuploadFileTV.setTag(i);
+            sscfileUploadedLL.setTag(i);
 
-            filesToUpload.put(actionRqrdResponse.getData().getAdditionalDocument().get(i).getDocumentId(), null);
+            DocLayout docLayout = new DocLayout();
+            docLayout.setId(actionRqrdResponse.getData().getAdditionalDocument().get(i).getId());
+            docLayout.setLinearLayouts(documentRequiredLL);
+            listOfDocLayouts.add(docLayout);
+
+            if (actionRqrdResponse.getData().getAdditionalDocument().get(i).getUploadDocs().size() > 0) {
+                setUploadedTrue(i);
+                sscfileUploadedLL.setVisibility(VISIBLE);
+                sscuploadFileTV.setVisibility(GONE);
+                sscfileUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(actionRqrdResponse.getData().getAdditionalDocument().get(i).getUploadDocs().get(i).getUploadDate()));
+
+            }
 
             setSpannableText(sscuploadFileTV, actionRqrdResponse.getData().getAdditionalDocument().get(i).getDocumentName(), R.color.black);
 
@@ -547,7 +417,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                     try {
                         if (view != null) {
                             int pos = (int) sscFileUploadLL.getTag();
-                            documentID = actionRqrdResponse.getData().getAdditionalDocument().get(pos).getDocumentId();
+                            documentID = actionRqrdResponse.getData().getAdditionalDocument().get(pos).getId();
                             selectedLayout = sscfileUploadedLL;
                             selectedText = sscuploadFileTV;
                             if (checkAndRequestPermissions(AdditionalActionUploadActivity.this)) {
@@ -582,7 +452,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     int pos = (int) view.getTag();
-                    documentID = actionRqrdResponse.getData().getAdditionalDocument().get(pos).getDocumentId();
+                    documentID = actionRqrdResponse.getData().getAdditionalDocument().get(pos).getId();
                     selectedLayout = sscfileUploadedLL;
                     selectedText = sscuploadFileTV;
                     if (checkAndRequestPermissions(AdditionalActionUploadActivity.this)) {
@@ -600,7 +470,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     int pos = (int) view.getTag();
-                    documentID = actionRqrdResponse.getData().getAdditionalDocument().get(pos).getDocumentId();
+                    documentID = actionRqrdResponse.getData().getAdditionalDocument().get(pos).getId();
                     selectedLayout = sscfileUploadedLL;
                     selectedText = sscuploadFileTV;
                     if (checkAndRequestPermissions(AdditionalActionUploadActivity.this)) {
@@ -620,12 +490,6 @@ public class AdditionalActionUploadActivity extends BaseActivity {
     public void setSpannableText(TextView sscuploadFileTV, String documentName, int color) {
 
         SpannableString ss = new SpannableString("Upload " + documentName);
-
-//        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
-//        ss.setSpan(new RelativeSizeSpan(1f), 7, ss.length(), 0);
-//        ss.setSpan(bss, 7, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        ss.setSpan(new ForegroundColorSpan(getColor(color)), 7, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
         Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
         SpannableStringBuilder SS = new SpannableStringBuilder(ss);
         SS.setSpan(new CustomTypefaceSpan("", font), 7, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
@@ -636,73 +500,10 @@ public class AdditionalActionUploadActivity extends BaseActivity {
         sscuploadFileTV.setHighlightColor(Color.TRANSPARENT);
     }
 
-    //    private void postSubmitAPiCall() {
-//        try {
-//
-//            List<MultipartBody.Part> multiparts = new ArrayList<>();
-//            JSONArray documents = new JSONArray();
-//            JSONObject underwritingActionRequiredJSON = new JSONObject();
-//
-//            for (Map.Entry<Integer, File> entry : filesToUpload.entrySet()) {
-//                RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), entry.getValue());
-//                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData(String.valueOf(entry.getKey()),
-//                        entry.getValue().getName(), requestBody);
-//                multiparts.add(fileToUpload);
-//            }
-//
-//
-//            underwritingActionRequiredJSON.put("documentIdList", documents);
-////            underwritingActionRequiredJSON.put("userId", objMyApplication.getCurrentUserData().getLoginUserId());
-//
-//            MultipartBody.Builder buildernew = new MultipartBody.Builder()
-//                    .setType(MultipartBody.FORM)
-//                    .addFormDataPart("underwritingActionRequired", null,
-//                            RequestBody.create(underwritingActionRequiredJSON.toString().getBytes(), MediaType.parse("application/json")));
-//
-//            for (Map.Entry<Integer, File> entry : filesToUpload.entrySet()) {
-//                documents.put(entry.getKey());
-//                buildernew.addFormDataPart("documentList ", entry.getValue().getName() + ".jpg",
-//                        RequestBody.create(MediaType.parse("multipart/form-data"), entry.getValue()));
-//            }
-//
-//            MultipartBody requestBody = buildernew.build();
-//
-//            underwritingUserActionRequiredViewModel.submitActionRequiredCustomer(requestBody);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
     private void postSubmitAPiCall() {
         try {
-            showProgressDialog();
-//            List<MultipartBody.Part> multiparts = new ArrayList<>();
-//            JSONArray documents = new JSONArray();
-//            JSONObject underwritingActionRequiredJSON = new JSONObject();
-//
-//            MultipartBody.Part[] docs = new MultipartBody.Part[filesToUpload.size()];
-//
-//            Map<Integer, File> map = new TreeMap<Integer, File>(filesToUpload);
-//
-//            for (Map.Entry<Integer, File> entry : map.entrySet()) {
-//                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), entry.getValue());
-//                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("documentList",
-//                        entry.getValue().getName(), requestBody);
-//                multiparts.add(fileToUpload);
-//                LogUtils.e("Key and Name", "" + entry.getKey() + " - " + entry.getValue().getName());
-//                documents.put(entry.getKey());
-//            }
-//
-//            for (int i = 0; i < multiparts.size(); i++) {
-//                docs[i] = multiparts.get(i);
-//            }
-//
-//            underwritingActionRequiredJSON.put("documentIdList", documents);
-//
-//            RequestBody underwritingActionRequired = RequestBody.create(MediaType.parse("application/json"),
-//                    String.valueOf(underwritingActionRequiredJSON));
-            underwritingUserActionRequiredViewModel.submitActionRequiredCustomer();
-
+//            showProgressDialog();
+//            underwritingUserActionRequiredViewModel.submitActionRequiredCustomer();
         } catch (Exception e) {
             e.printStackTrace();
             dismissDialog();
@@ -722,4 +523,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
         underwritingUserActionRequiredViewModel.uploadActionRequiredDoc(idFile, idType, docID);
     }
 
+    private void setUploadedTrue(int pos) {
+        listOfDocLayouts.get(pos).setUploaded(true);
+    }
 }

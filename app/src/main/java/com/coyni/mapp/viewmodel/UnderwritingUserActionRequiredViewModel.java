@@ -135,7 +135,8 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
         }
     }
 
-    public void submitMerchantActionRequired(InformationRequest underWriting) {
+//    public void submitMerchantActionRequired(InformationRequest underWriting) {
+    public void submitMerchantActionRequired(RequestBody underWriting) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<ActionRequiredSubmitResponse> mCall = apiService.submitMerchantActionRequired(underWriting);

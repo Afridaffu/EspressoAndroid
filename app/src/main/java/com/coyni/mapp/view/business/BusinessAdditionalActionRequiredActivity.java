@@ -90,29 +90,22 @@ import okhttp3.RequestBody;
 
 public class BusinessAdditionalActionRequiredActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     public ScrollView scrollview;
-    private LinearLayout additionReservedLL, llApprovedReserved, llHeading, llBottomView, additionalDocumentRequiredLL,
-            websiteRevisionRequiredLL, informationRevisionLL, bank_information;
+    private LinearLayout llApprovedReserved, llHeading, llBottomView, additionalDocumentRequiredLL,
+            websiteRevisionRequiredLL, informationRevisionLL, bank_information, uploadLayout = null;
     private String selectedDocType = "";
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
-    private static final int ACTIVITY_CHOOSE_FILE = 3;
-    private static final int PICK_IMAGE_REQUEST = 4;
     private Long mLastClickTime = 0L;
-    public static BusinessAdditionalActionRequiredActivity businessAdditionalActionRequired;
-    public static File additional2fFle = null, businessLicenceFile = null;
     public boolean isSubmitEnabled = false;
     public CardView submitCV;
     private UnderwritingUserActionRequiredViewModel underwritingUserActionRequiredViewModel;
     private IdentityVerificationViewModel identityVerificationViewModel;
     private HashMap<Integer, String> fileUpload;
-    private HashMap<Integer, File> filesToUpload;
     private ActionRequiredResponse actionRequired;
     private int documentID;
-    private LinearLayout uploadLayout = null;
     private RelativeLayout additionalActionRL;
     private TextView selectedText = null;
-    public static ArrayList<File> documentsFIle;
-    //    private JSONObject informationJSON;
-    private InformationRequest informationJSON;
+    private JSONObject informationJSON;
+    //    private InformationRequest informationJSON;
     private File mediaFile;
     private boolean reservedRuleAccepted = false;
     private boolean reservedRule = false;
@@ -130,7 +123,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_additional_action_required);
-        businessAdditionalActionRequired = this;
         initFields();
         initObserver();
     }
@@ -150,7 +142,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
 
     private void initFields() {
         objMyApplication = (MyApplication) getApplicationContext();
-        additionReservedLL = findViewById(R.id.lladditionReserve);
         llApprovedReserved = findViewById(R.id.llapprovedreserved);
         scrollview = findViewById(R.id.scrollview);
         llHeading = findViewById(R.id.llHeading);
@@ -170,8 +161,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         underwritingUserActionRequiredViewModel.getAdditionalActionRequiredData();
 
         fileUpload = new HashMap<Integer, String>();
-        filesToUpload = new HashMap<Integer, File>();
-        documentsFIle = new ArrayList<>();
 
         setKeyboardVisibilityListener(BusinessAdditionalActionRequiredActivity.this);
         businessDashboardViewModel.meBusinessPaymentMethods();
@@ -196,55 +185,225 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         });
     }
 
+////     Keep this code for future use
+//    private void postSubmitAPiCall() {
+//        showProgressDialog();
+//
+////        informationJSON = new JSONObject();
+//        informationJSON = new InformationRequest();
+//
+//        try {
+////            JSONArray documents = new JSONArray();
+////            JSONArray website = new JSONArray();
+//            List<Integer> website = new ArrayList<>();
+////            JSONObject bankRequest = new JSONObject();
+//            BankRequest bankRequest = new BankRequest();
+//
+////            if (actionRequired.getData().getAdditionalDocument() != null) {
+////                for (int i = 0; i <= actionRequired.getData().getAdditionalDocument().size() - 1; i++) {
+////                    documents.put(actionRequired.getData().getAdditionalDocument().get(i).getId());
+////                }
+////            }
+//            if (actionRequired.getData().getWebsiteChange() != null) {
+//                for (int i = 0; i <= actionRequired.getData().getWebsiteChange().size() - 1; i++) {
+////                    website.put(actionRequired.getData().getWebsiteChange().get(i).getId());
+//                    website.add(actionRequired.getData().getWebsiteChange().get(i).getId());
+//                }
+//            }
+//            if (actionRequired.getData().getReserveRule() != null) {
+//                informationJSON.setReserveRuleAccepted(reservedRuleAccepted);
+//            }
+//
+//            if (objMyApplication.getBankAccount() != null) {
+//                bankRequest.setAccountName(objMyApplication.getBankAccount().getAccountName());
+//                bankRequest.setAccountNumber(objMyApplication.getBankAccount().getAccountNumber());
+//                if (bankID != 0) {
+//                    bankRequest.setBankId(bankID);
+//                } else {
+//                    bankRequest.setBankId(bankProposal.getDbId());
+//                }
+//                bankRequest.setGiactReq(true);
+//                bankRequest.setRoutingNumber(objMyApplication.getBankAccount().getRoutingNumber());
+//            }
+////            informationJSON.put("documentIdList", documents);
+//            informationJSON.setWebsiteUpdates(website);
+//            if (bankRequest.getAccountName() != null) {
+//                informationJSON.setBankRequest(bankRequest);
+//            } else {
+//                informationJSON.setBankRequest(null);
+//            }
+//
+////            JSONArray proposals = new JSONArray();
+//            List<ProposalRequest> proposals = new ArrayList<>();
+//
+//            if (actionRequired.getData().getInformationChange() != null) {
+//                for (int i = 0; i < actionRequired.getData().getInformationChange().size(); i++) {
+//                    InformationChangeData data = actionRequired.getData().getInformationChange().get(i);
+//                    List<ProposalsData> proposalsData = data.getProposals();
+//                    for (int j = 0; j < proposalsData.size(); j++) {
+//                        ProposalsData proposal = proposalsData.get(j);
+//                        String type = proposal.getType();
+////                        JSONObject proposalsObj = new JSONObject();
+//                        ProposalRequest proposalsObj = new ProposalRequest();
+////                        JSONArray proposalsArray = new JSONArray();
+//                        List<PropertyRequest> proposalsArray = new ArrayList<>();
+////                        JSONArray bankProposalsArray = new JSONArray();
+//                        List<PropertyRequest> bankProposalsArray = new ArrayList<>();
+//                        if (type.toLowerCase().equals("bank")) {
+//                            if (proposal != null && proposal.getProperties() != null && proposal.getProperties().size() > 0) {
+//                                for (int k = 0; k < proposal.getProperties().size(); k++) {
+//                                    ProposalsPropertiesData property = proposal.getProperties().get(k);
+////                                    JSONObject propertyObj = new JSONObject();
+//                                    PropertyRequest propertyObj = new PropertyRequest();
+//                                    if (bankProposal.getProperties().get(0).getAdminMessage() != null) {
+//                                        propertyObj.setAdminMessage(bankProposal.getProperties().get(0).getAdminMessage());
+//                                    } else {
+//                                        propertyObj.setAdminMessage(null);
+//                                    }
+//                                    if (bankProposal.getProperties().get(0).getDisplayName() != null) {
+//                                        propertyObj.setDisplayName(bankProposal.getProperties().get(0).getDisplayName());
+//                                    } else {
+//                                        propertyObj.setDisplayName(null);
+//                                    }
+//                                    propertyObj.setUserAccepted(true);
+//                                    propertyObj.setName(bankProposal.getProperties().get(0).getName());
+//                                    if (bankProposal.getProperties().get(0).getOriginalValue() != null) {
+//                                        propertyObj.setOriginalValue(bankProposal.getProperties().get(0).getOriginalValue());
+//                                    } else {
+//                                        propertyObj.setOriginalValue(null);
+//                                    }
+//                                    if (bankProposal.getProperties().get(0).getProposedValue() != null) {
+//                                        propertyObj.setProposedValue(bankProposal.getProperties().get(0).getProposedValue());
+//                                    } else {
+//                                        propertyObj.setProposedValue(null);
+//                                    }
+//                                    if (bankProposal.getProperties().get(0).getUserMessage() != null) {
+//                                        propertyObj.setUserMessage(bankProposal.getProperties().get(0).getUserMessage());
+//                                    } else {
+//                                        propertyObj.setUserMessage(null);
+//                                    }
+//                                    bankProposalsArray.add(propertyObj);
+//                                }
+//                            }
+//
+//                            if (bankID != 0) {
+//                                proposalsObj.setDbId(bankID);
+//                            } else {
+//                                proposalsObj.setDbId(proposal.getDbId());
+//                            }
+//                            if (bankProposal.getDisplayName() != null) {
+//                                proposalsObj.setDisplayName(bankProposal.getDisplayName());
+//                            } else {
+//                                proposalsObj.setDisplayName(null);
+//                            }
+//                            if (bankProposal.getFirstName() != null) {
+//                                proposalsObj.setFirstName(bankProposal.getFirstName());
+//                            } else {
+//                                proposalsObj.setFirstName(null);
+//                            }
+//                            if (bankProposal.getLastName() != null) {
+//                                proposalsObj.setLastName(bankProposal.getLastName());
+//                            } else {
+//                                proposalsObj.setLastName(null);
+//                            }
+//                            proposalsObj.setType(proposal.getType());
+//                            proposalsObj.setProperties(bankProposalsArray);
+//                        } else {
+//                            if (proposal != null && proposal.getProperties() != null && proposal.getProperties().size() > 0) {
+//                                for (int k = 0; k < proposal.getProperties().size(); k++) {
+//                                    ProposalsPropertiesData property = proposal.getProperties().get(k);
+////                                    JSONObject propertyObj = new JSONObject();
+//                                    PropertyRequest propertyObj = new PropertyRequest();
+//                                    String verificationKey = type + "" + property.getName();
+//                                    propertyObj.setUserAccepted(proposalsMap.get(verificationKey).isUserAccepted());
+//                                    propertyObj.setName(property.getName());
+//                                    propertyObj.setUserMessage(proposalsMap.get(verificationKey).getUserMessage());
+//                                    proposalsArray.add(propertyObj);
+//                                }
+//                            }
+//
+//                            proposalsObj.setDbId(proposal.getDbId());
+//                            proposalsObj.setType(proposal.getType());
+//                            proposalsObj.setProperties(proposalsArray);
+//                        }
+//                        proposals.add(proposalsObj);
+//                        informationJSON.setProposals(proposals);
+//                    }
+//
+//                }
+//            }
+//
+//
+//            // new code
+////            List<MultipartBody.Part> multiparts = new ArrayList<>();
+////
+////            MultipartBody.Part[] docs = new MultipartBody.Part[filesToUpload.size()];
+////
+////            Map<Integer, File> map = new TreeMap<Integer, File>(filesToUpload);
+////
+////            for (Map.Entry<Integer, File> entry : map.entrySet()) {
+////                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), entry.getValue());
+////                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("documents",
+////                        entry.getValue().getName(), requestBody);
+////                multiparts.add(fileToUpload);
+////                LogUtils.e("Key and Name", "" + entry.getKey() + " - " + entry.getValue().getName());
+////            }
+////
+////            for (int i = 0; i < multiparts.size(); i++) {
+////                docs[i] = multiparts.get(i);
+////            }
+////
+////            RequestBody underwritingActionRequired = RequestBody.create(MediaType.parse("application/json"),
+////                    String.valueOf(informationJSON));
+////            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), informationJSON.toString());
+//
+////            underwritingUserActionRequiredViewModel.submitActionRequired(docs, underwritingActionRequired);
+//            Log.e("JSON",new Gson().toJson(informationJSON));
+////            underwritingUserActionRequiredViewModel.submitMerchantActionRequired(informationJSON);
+//
+//            Log.e("JSON", informationJSON.toString());
+//            //new code
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            dismissDialog();
+//        }
+//    }
+
     private void postSubmitAPiCall() {
         showProgressDialog();
 
-//        informationJSON = new JSONObject();
-        informationJSON = new InformationRequest();
-
+        informationJSON = new JSONObject();
         try {
-//            JSONArray documents = new JSONArray();
-//            JSONArray website = new JSONArray();
-            List<Integer> website = new ArrayList<>();
-//            JSONObject bankRequest = new JSONObject();
-            BankRequest bankRequest = new BankRequest();
-
-//            if (actionRequired.getData().getAdditionalDocument() != null) {
-//                for (int i = 0; i <= actionRequired.getData().getAdditionalDocument().size() - 1; i++) {
-//                    documents.put(actionRequired.getData().getAdditionalDocument().get(i).getId());
-//                }
-//            }
+            JSONArray website = new JSONArray();
+            JSONObject bankRequest = new JSONObject();
             if (actionRequired.getData().getWebsiteChange() != null) {
                 for (int i = 0; i <= actionRequired.getData().getWebsiteChange().size() - 1; i++) {
-//                    website.put(actionRequired.getData().getWebsiteChange().get(i).getId());
-                    website.add(actionRequired.getData().getWebsiteChange().get(i).getId());
+                    website.put(actionRequired.getData().getWebsiteChange().get(i).getId());
                 }
             }
             if (actionRequired.getData().getReserveRule() != null) {
-                informationJSON.setReserveRuleAccepted(reservedRuleAccepted);
+                informationJSON.put("reserveRuleAccepted", reservedRuleAccepted);
             }
 
             if (objMyApplication.getBankAccount() != null) {
-                bankRequest.setAccountName(objMyApplication.getBankAccount().getAccountName());
-                bankRequest.setAccountNumber(objMyApplication.getBankAccount().getAccountNumber());
+                bankRequest.put("accountName", objMyApplication.getBankAccount().getAccountName());
+                bankRequest.put("accountNumber", objMyApplication.getBankAccount().getAccountNumber());
                 if (bankID != 0) {
-                    bankRequest.setBankId(bankID);
+                    bankRequest.put("bankId", bankID);
                 } else {
-                    bankRequest.setBankId(bankProposal.getDbId());
+                    bankRequest.put("bankId", bankProposal.getDbId());
                 }
-                bankRequest.setGiactReq(true);
-                bankRequest.setRoutingNumber(objMyApplication.getBankAccount().getRoutingNumber());
+                bankRequest.put("giactReq", true);
+                bankRequest.put("routingNumber", objMyApplication.getBankAccount().getRoutingNumber());
             }
-//            informationJSON.put("documentIdList", documents);
-            informationJSON.setWebsiteUpdates(website);
-            if (bankRequest.getAccountName() != null) {
-                informationJSON.setBankRequest(bankRequest);
+            informationJSON.put("websiteUpdates", website);
+            if (bankRequest.length() > 0) {
+                informationJSON.put("bankRequest", bankRequest);
             } else {
-                informationJSON.setBankRequest(null);
+                informationJSON.put("bankRequest", JSONObject.NULL);
             }
 
-//            JSONArray proposals = new JSONArray();
-            List<ProposalRequest> proposals = new ArrayList<>();
+            JSONArray proposals = new JSONArray();
 
             if (actionRequired.getData().getInformationChange() != null) {
                 for (int i = 0; i < actionRequired.getData().getInformationChange().size(); i++) {
@@ -253,131 +412,102 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     for (int j = 0; j < proposalsData.size(); j++) {
                         ProposalsData proposal = proposalsData.get(j);
                         String type = proposal.getType();
-//                        JSONObject proposalsObj = new JSONObject();
-                        ProposalRequest proposalsObj = new ProposalRequest();
-//                        JSONArray proposalsArray = new JSONArray();
-                        List<PropertyRequest> proposalsArray = new ArrayList<>();
-//                        JSONArray bankProposalsArray = new JSONArray();
-                        List<PropertyRequest> bankProposalsArray = new ArrayList<>();
+                        JSONObject proposalsObj = new JSONObject();
+                        JSONArray proposalsArray = new JSONArray();
+                        JSONArray bankProposalsArray = new JSONArray();
                         if (type.toLowerCase().equals("bank")) {
                             if (proposal != null && proposal.getProperties() != null && proposal.getProperties().size() > 0) {
                                 for (int k = 0; k < proposal.getProperties().size(); k++) {
                                     ProposalsPropertiesData property = proposal.getProperties().get(k);
-//                                    JSONObject propertyObj = new JSONObject();
-                                    PropertyRequest propertyObj = new PropertyRequest();
+                                    JSONObject propertyObj = new JSONObject();
                                     if (bankProposal.getProperties().get(0).getAdminMessage() != null) {
-                                        propertyObj.setAdminMessage(bankProposal.getProperties().get(0).getAdminMessage());
+                                        propertyObj.put("adminMessage", bankProposal.getProperties().get(0).getAdminMessage());
                                     } else {
-                                        propertyObj.setAdminMessage(null);
+                                        propertyObj.put("adminMessage", JSONObject.NULL);
                                     }
                                     if (bankProposal.getProperties().get(0).getDisplayName() != null) {
-                                        propertyObj.setDisplayName(bankProposal.getProperties().get(0).getDisplayName());
+                                        propertyObj.put("displayName", bankProposal.getProperties().get(0).getDisplayName());
                                     } else {
-                                        propertyObj.setDisplayName(null);
+                                        propertyObj.put("displayName", JSONObject.NULL);
                                     }
-                                    propertyObj.setUserAccepted(true);
-                                    propertyObj.setName(bankProposal.getProperties().get(0).getName());
+                                    propertyObj.put("isUserAccepted", true);
+                                    propertyObj.put("name", bankProposal.getProperties().get(0).getName());
                                     if (bankProposal.getProperties().get(0).getOriginalValue() != null) {
-                                        propertyObj.setOriginalValue(bankProposal.getProperties().get(0).getOriginalValue());
+                                        propertyObj.put("originalValue", bankProposal.getProperties().get(0).getOriginalValue());
                                     } else {
-                                        propertyObj.setOriginalValue(null);
+                                        propertyObj.put("originalValue", JSONObject.NULL);
                                     }
                                     if (bankProposal.getProperties().get(0).getProposedValue() != null) {
-                                        propertyObj.setProposedValue(bankProposal.getProperties().get(0).getProposedValue());
+                                        propertyObj.put("proposedValue", bankProposal.getProperties().get(0).getProposedValue());
                                     } else {
-                                        propertyObj.setProposedValue(null);
+                                        propertyObj.put("proposedValue", JSONObject.NULL);
                                     }
                                     if (bankProposal.getProperties().get(0).getUserMessage() != null) {
-                                        propertyObj.setUserMessage(bankProposal.getProperties().get(0).getUserMessage());
+                                        propertyObj.put("userMessage", bankProposal.getProperties().get(0).getUserMessage());
                                     } else {
-                                        propertyObj.setUserMessage(null);
+                                        propertyObj.put("userMessage", JSONObject.NULL);
                                     }
-                                    bankProposalsArray.add(propertyObj);
+                                    bankProposalsArray.put(propertyObj);
                                 }
                             }
 
                             if (bankID != 0) {
-                                proposalsObj.setDbId(bankID);
+                                proposalsObj.put("dbId", bankID);
                             } else {
-                                proposalsObj.setDbId(proposal.getDbId());
+                                proposalsObj.put("dbId", proposal.getDbId());
                             }
                             if (bankProposal.getDisplayName() != null) {
-                                proposalsObj.setDisplayName(bankProposal.getDisplayName());
+                                proposalsObj.put("displayName", bankProposal.getDisplayName());
                             } else {
-                                proposalsObj.setDisplayName(null);
+                                proposalsObj.put("displayName", JSONObject.NULL);
                             }
                             if (bankProposal.getFirstName() != null) {
-                                proposalsObj.setFirstName(bankProposal.getFirstName());
+                                proposalsObj.put("firstName", bankProposal.getFirstName());
                             } else {
-                                proposalsObj.setFirstName(null);
+                                proposalsObj.put("firstName", JSONObject.NULL);
                             }
                             if (bankProposal.getLastName() != null) {
-                                proposalsObj.setLastName(bankProposal.getLastName());
+                                proposalsObj.put("lastName", bankProposal.getLastName());
                             } else {
-                                proposalsObj.setLastName(null);
+                                proposalsObj.put("lastName", JSONObject.NULL);
                             }
-                            proposalsObj.setType(proposal.getType());
-                            proposalsObj.setProperties(bankProposalsArray);
+                            proposalsObj.put("type", proposal.getType());
+                            proposalsObj.put("properties", bankProposalsArray);
                         } else {
                             if (proposal != null && proposal.getProperties() != null && proposal.getProperties().size() > 0) {
                                 for (int k = 0; k < proposal.getProperties().size(); k++) {
                                     ProposalsPropertiesData property = proposal.getProperties().get(k);
-//                                    JSONObject propertyObj = new JSONObject();
-                                    PropertyRequest propertyObj = new PropertyRequest();
+                                    JSONObject propertyObj = new JSONObject();
                                     String verificationKey = type + "" + property.getName();
-                                    propertyObj.setUserAccepted(proposalsMap.get(verificationKey).isUserAccepted());
-                                    propertyObj.setName(property.getName());
-                                    propertyObj.setUserMessage(proposalsMap.get(verificationKey).getUserMessage());
-                                    proposalsArray.add(propertyObj);
+                                    propertyObj.put("isUserAccepted", proposalsMap.get(verificationKey).isUserAccepted());
+                                    propertyObj.put("name", property.getName());
+                                    propertyObj.put("userMessage", proposalsMap.get(verificationKey).getUserMessage());
+                                    proposalsArray.put(propertyObj);
                                 }
                             }
 
-                            proposalsObj.setDbId(proposal.getDbId());
-                            proposalsObj.setType(proposal.getType());
-                            proposalsObj.setProperties(proposalsArray);
+                            proposalsObj.put("dbId", proposal.getDbId());
+                            proposalsObj.put("type", proposal.getType());
+                            proposalsObj.put("properties", proposalsArray);
                         }
-                        proposals.add(proposalsObj);
-                        informationJSON.setProposals(proposals);
+                        proposals.put(proposalsObj);
+                        informationJSON.put("proposals", proposals);
                     }
 
                 }
             }
 
+            RequestBody underwritingActionRequired = RequestBody.create(MediaType.parse("application/json"),
+                    String.valueOf(informationJSON));
+            Log.e("JSN", informationJSON.toString());
+            underwritingUserActionRequiredViewModel.submitMerchantActionRequired(underwritingActionRequired);
 
-            // new code
-//            List<MultipartBody.Part> multiparts = new ArrayList<>();
-//
-//            MultipartBody.Part[] docs = new MultipartBody.Part[filesToUpload.size()];
-//
-//            Map<Integer, File> map = new TreeMap<Integer, File>(filesToUpload);
-//
-//            for (Map.Entry<Integer, File> entry : map.entrySet()) {
-//                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), entry.getValue());
-//                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("documents",
-//                        entry.getValue().getName(), requestBody);
-//                multiparts.add(fileToUpload);
-//                LogUtils.e("Key and Name", "" + entry.getKey() + " - " + entry.getValue().getName());
-//            }
-//
-//            for (int i = 0; i < multiparts.size(); i++) {
-//                docs[i] = multiparts.get(i);
-//            }
-//
-//            RequestBody underwritingActionRequired = RequestBody.create(MediaType.parse("application/json"),
-//                    String.valueOf(informationJSON));
-//            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), informationJSON.toString());
-
-//            underwritingUserActionRequiredViewModel.submitActionRequired(docs, underwritingActionRequired);
-            Log.e("JSON",new Gson().toJson(informationJSON));
-            underwritingUserActionRequiredViewModel.submitMerchantActionRequired(informationJSON);
-
-            Log.e("JSON", informationJSON.toString());
-            //new code
         } catch (Exception e) {
             e.printStackTrace();
             dismissDialog();
         }
     }
+
 
     private void initObserver() {
         underwritingUserActionRequiredViewModel.getActionRequiredSubmitResponseMutableLiveData().observe(this, new Observer<ActionRequiredSubmitResponse>() {
@@ -496,12 +626,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
 
     private void setUploadedTrue(int pos) {
         listOfDocLayouts.get(pos).setUploaded(true);
-//        for (int l = 0; l < listOfDocLayouts.size(); l++) {
-//            if (listOfDocLayouts.get(l).getId() == actionRequired.getData().getAdditionalDocument().get(pos).getId()) {
-//                listOfDocLayouts.get(l).setUploaded(true);
-//                break;
-//            }
-//        }
     }
 
     private void additionalRequiredDocuments(ActionRequiredResponse actionRequiredResponse) {
@@ -574,7 +698,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
 
                             }
 
-                            Log.e("Main Doc pos, ID", uploadLayout.getTag() + " " + selectedText.getTag());
                         }
                     });
 
@@ -614,8 +737,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                             chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
 
                         }
-
-                        Log.e("Main Doc pos, ID", uploadLayout.getTag() + " " + selectedText.getTag());
                     }
                 });
             }
@@ -662,8 +783,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                     chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
 
                                 }
-
-                                Log.e("Main Doc pos, sub doc pos, ID", uploadLayout.getTag() + " " + selectedText.getTag());
                             }
                         });
 
@@ -937,16 +1056,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         return holder;
     }
 
-    private String capFirstLetter(String text) {
-        if (text == null || text.equals("")) {
-            return "";
-        }
-        if (text.length() == 1) {
-            return text.toUpperCase();
-        }
-        return text.substring(0, 1).toUpperCase() + text.substring(1);
-    }
-
     private void showCommentDialog(final View view) {
         TextView tv = view.findViewById(R.id.type_nameTV);
         //TextView displayNameTV = view.findViewById(R.id.display_nameTV);
@@ -1206,15 +1315,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             LogUtils.d(TAG, "documentID" + documentID);
 
             if (Utils.isValidFileSize(mediaFile)) {
-                if (fileUpload.containsKey(documentID)) {
-                    fileUpload.replace(documentID, mediaFile.getAbsolutePath());
-                    documentsFIle.add(mediaFile);
-                }
-
-                if (filesToUpload.containsKey(documentID)) {
-                    filesToUpload.replace(documentID, mediaFile);
-                }
-
                 if (lastUploadedDoc != 0)
 //                    identityVerificationViewModel.removeIdentityImage(lastUploadedDoc + "");
                     identityVerificationViewModel.removeImageMultiDocs(lastUploadedDoc + "");
