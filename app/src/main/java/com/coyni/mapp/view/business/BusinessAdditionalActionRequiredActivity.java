@@ -12,14 +12,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.Log;
@@ -33,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -55,6 +51,10 @@ import com.coyni.mapp.dialogs.ShowFullPageImageDialog;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
 import com.coyni.mapp.model.DialogAttributes;
 import com.coyni.mapp.model.DocLayout;
+import com.coyni.mapp.model.actionRqrd.BankRequest;
+import com.coyni.mapp.model.actionRqrd.InformationRequest;
+import com.coyni.mapp.model.actionRqrd.PropertyRequest;
+import com.coyni.mapp.model.actionRqrd.ProposalRequest;
 import com.coyni.mapp.model.identity_verification.IdentityImageResponse;
 import com.coyni.mapp.model.identity_verification.RemoveIdentityResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
@@ -72,6 +72,7 @@ import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.viewmodel.BusinessDashboardViewModel;
 import com.coyni.mapp.viewmodel.IdentityVerificationViewModel;
 import com.coyni.mapp.viewmodel.UnderwritingUserActionRequiredViewModel;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -106,11 +107,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     private HashMap<Integer, File> filesToUpload;
     private ActionRequiredResponse actionRequired;
     private int documentID;
-    private LinearLayout uploadedLayout = null, selectedLayout = null;
+    private LinearLayout uploadLayout = null;
     private RelativeLayout additionalActionRL;
     private TextView selectedText = null;
     public static ArrayList<File> documentsFIle;
-    private JSONObject informationJSON;
+    //    private JSONObject informationJSON;
+    private InformationRequest informationJSON;
     private File mediaFile;
     private boolean reservedRuleAccepted = false;
     private boolean reservedRule = false;
@@ -197,45 +199,52 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     private void postSubmitAPiCall() {
         showProgressDialog();
 
-        informationJSON = new JSONObject();
+//        informationJSON = new JSONObject();
+        informationJSON = new InformationRequest();
+
         try {
-            JSONArray documents = new JSONArray();
-            JSONArray website = new JSONArray();
-            JSONObject bankRequest = new JSONObject();
-            if (actionRequired.getData().getAdditionalDocument() != null) {
-                for (int i = 0; i <= actionRequired.getData().getAdditionalDocument().size() - 1; i++) {
-                    documents.put(actionRequired.getData().getAdditionalDocument().get(i).getId());
-                }
-            }
+//            JSONArray documents = new JSONArray();
+//            JSONArray website = new JSONArray();
+            List<Integer> website = new ArrayList<>();
+//            JSONObject bankRequest = new JSONObject();
+            BankRequest bankRequest = new BankRequest();
+
+//            if (actionRequired.getData().getAdditionalDocument() != null) {
+//                for (int i = 0; i <= actionRequired.getData().getAdditionalDocument().size() - 1; i++) {
+//                    documents.put(actionRequired.getData().getAdditionalDocument().get(i).getId());
+//                }
+//            }
             if (actionRequired.getData().getWebsiteChange() != null) {
                 for (int i = 0; i <= actionRequired.getData().getWebsiteChange().size() - 1; i++) {
-                    website.put(actionRequired.getData().getWebsiteChange().get(i).getId());
+//                    website.put(actionRequired.getData().getWebsiteChange().get(i).getId());
+                    website.add(actionRequired.getData().getWebsiteChange().get(i).getId());
                 }
             }
             if (actionRequired.getData().getReserveRule() != null) {
-                informationJSON.put("reserveRuleAccepted", reservedRuleAccepted);
+                informationJSON.setReserveRuleAccepted(reservedRuleAccepted);
             }
 
             if (objMyApplication.getBankAccount() != null) {
-                bankRequest.put("accountName", objMyApplication.getBankAccount().getAccountName());
-                bankRequest.put("accountNumber", objMyApplication.getBankAccount().getAccountNumber());
+                bankRequest.setAccountName(objMyApplication.getBankAccount().getAccountName());
+                bankRequest.setAccountNumber(objMyApplication.getBankAccount().getAccountNumber());
                 if (bankID != 0) {
-                    bankRequest.put("bankId", bankID);
+                    bankRequest.setBankId(bankID);
                 } else {
-                    bankRequest.put("bankId", bankProposal.getDbId());
+                    bankRequest.setBankId(bankProposal.getDbId());
                 }
-                bankRequest.put("giactReq", true);
-                bankRequest.put("routingNumber", objMyApplication.getBankAccount().getRoutingNumber());
+                bankRequest.setGiactReq(true);
+                bankRequest.setRoutingNumber(objMyApplication.getBankAccount().getRoutingNumber());
             }
-            informationJSON.put("documentIdList", documents);
-            informationJSON.put("websiteUpdates", website);
-            if (bankRequest.length() > 0) {
-                informationJSON.put("bankRequest", bankRequest);
+//            informationJSON.put("documentIdList", documents);
+            informationJSON.setWebsiteUpdates(website);
+            if (bankRequest.getAccountName() != null) {
+                informationJSON.setBankRequest(bankRequest);
             } else {
-                informationJSON.put("bankRequest", JSONObject.NULL);
+                informationJSON.setBankRequest(null);
             }
 
-            JSONArray proposals = new JSONArray();
+//            JSONArray proposals = new JSONArray();
+            List<ProposalRequest> proposals = new ArrayList<>();
 
             if (actionRequired.getData().getInformationChange() != null) {
                 for (int i = 0; i < actionRequired.getData().getInformationChange().size(); i++) {
@@ -244,86 +253,91 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     for (int j = 0; j < proposalsData.size(); j++) {
                         ProposalsData proposal = proposalsData.get(j);
                         String type = proposal.getType();
-                        JSONObject proposalsObj = new JSONObject();
-                        JSONArray proposalsArray = new JSONArray();
-                        JSONArray bankProposalsArray = new JSONArray();
+//                        JSONObject proposalsObj = new JSONObject();
+                        ProposalRequest proposalsObj = new ProposalRequest();
+//                        JSONArray proposalsArray = new JSONArray();
+                        List<PropertyRequest> proposalsArray = new ArrayList<>();
+//                        JSONArray bankProposalsArray = new JSONArray();
+                        List<PropertyRequest> bankProposalsArray = new ArrayList<>();
                         if (type.toLowerCase().equals("bank")) {
                             if (proposal != null && proposal.getProperties() != null && proposal.getProperties().size() > 0) {
                                 for (int k = 0; k < proposal.getProperties().size(); k++) {
                                     ProposalsPropertiesData property = proposal.getProperties().get(k);
-                                    JSONObject propertyObj = new JSONObject();
+//                                    JSONObject propertyObj = new JSONObject();
+                                    PropertyRequest propertyObj = new PropertyRequest();
                                     if (bankProposal.getProperties().get(0).getAdminMessage() != null) {
-                                        propertyObj.put("adminMessage", bankProposal.getProperties().get(0).getAdminMessage());
+                                        propertyObj.setAdminMessage(bankProposal.getProperties().get(0).getAdminMessage());
                                     } else {
-                                        propertyObj.put("adminMessage", JSONObject.NULL);
+                                        propertyObj.setAdminMessage(null);
                                     }
                                     if (bankProposal.getProperties().get(0).getDisplayName() != null) {
-                                        propertyObj.put("displayName", bankProposal.getProperties().get(0).getDisplayName());
+                                        propertyObj.setDisplayName(bankProposal.getProperties().get(0).getDisplayName());
                                     } else {
-                                        propertyObj.put("displayName", JSONObject.NULL);
+                                        propertyObj.setDisplayName(null);
                                     }
-                                    propertyObj.put("isUserAccepted", true);
-                                    propertyObj.put("name", bankProposal.getProperties().get(0).getName());
+                                    propertyObj.setUserAccepted(true);
+                                    propertyObj.setName(bankProposal.getProperties().get(0).getName());
                                     if (bankProposal.getProperties().get(0).getOriginalValue() != null) {
-                                        propertyObj.put("originalValue", bankProposal.getProperties().get(0).getOriginalValue());
+                                        propertyObj.setOriginalValue(bankProposal.getProperties().get(0).getOriginalValue());
                                     } else {
-                                        propertyObj.put("originalValue", JSONObject.NULL);
+                                        propertyObj.setOriginalValue(null);
                                     }
                                     if (bankProposal.getProperties().get(0).getProposedValue() != null) {
-                                        propertyObj.put("proposedValue", bankProposal.getProperties().get(0).getProposedValue());
+                                        propertyObj.setProposedValue(bankProposal.getProperties().get(0).getProposedValue());
                                     } else {
-                                        propertyObj.put("proposedValue", JSONObject.NULL);
+                                        propertyObj.setProposedValue(null);
                                     }
                                     if (bankProposal.getProperties().get(0).getUserMessage() != null) {
-                                        propertyObj.put("userMessage", bankProposal.getProperties().get(0).getUserMessage());
+                                        propertyObj.setUserMessage(bankProposal.getProperties().get(0).getUserMessage());
                                     } else {
-                                        propertyObj.put("userMessage", JSONObject.NULL);
+                                        propertyObj.setUserMessage(null);
                                     }
-                                    bankProposalsArray.put(propertyObj);
+                                    bankProposalsArray.add(propertyObj);
                                 }
                             }
 
                             if (bankID != 0) {
-                                proposalsObj.put("dbId", bankID);
+                                proposalsObj.setDbId(bankID);
                             } else {
-                                proposalsObj.put("dbId", proposal.getDbId());
+                                proposalsObj.setDbId(proposal.getDbId());
                             }
                             if (bankProposal.getDisplayName() != null) {
-                                proposalsObj.put("displayName", bankProposal.getDisplayName());
+                                proposalsObj.setDisplayName(bankProposal.getDisplayName());
                             } else {
-                                proposalsObj.put("displayName", JSONObject.NULL);
+                                proposalsObj.setDisplayName(null);
                             }
                             if (bankProposal.getFirstName() != null) {
-                                proposalsObj.put("firstName", bankProposal.getFirstName());
+                                proposalsObj.setFirstName(bankProposal.getFirstName());
                             } else {
-                                proposalsObj.put("firstName", JSONObject.NULL);
+                                proposalsObj.setFirstName(null);
                             }
                             if (bankProposal.getLastName() != null) {
-                                proposalsObj.put("lastName", bankProposal.getLastName());
+                                proposalsObj.setLastName(bankProposal.getLastName());
                             } else {
-                                proposalsObj.put("lastName", JSONObject.NULL);
+                                proposalsObj.setLastName(null);
                             }
-                            proposalsObj.put("type", proposal.getType());
-                            proposalsObj.put("properties", bankProposalsArray);
+                            proposalsObj.setType(proposal.getType());
+                            proposalsObj.setProperties(bankProposalsArray);
                         } else {
                             if (proposal != null && proposal.getProperties() != null && proposal.getProperties().size() > 0) {
                                 for (int k = 0; k < proposal.getProperties().size(); k++) {
                                     ProposalsPropertiesData property = proposal.getProperties().get(k);
-                                    JSONObject propertyObj = new JSONObject();
+//                                    JSONObject propertyObj = new JSONObject();
+                                    PropertyRequest propertyObj = new PropertyRequest();
                                     String verificationKey = type + "" + property.getName();
-                                    propertyObj.put("isUserAccepted", proposalsMap.get(verificationKey).isUserAccepted());
-                                    propertyObj.put("name", property.getName());
-                                    propertyObj.put("userMessage", proposalsMap.get(verificationKey).getUserMessage());
-                                    proposalsArray.put(propertyObj);
+                                    propertyObj.setUserAccepted(proposalsMap.get(verificationKey).isUserAccepted());
+                                    propertyObj.setName(property.getName());
+                                    propertyObj.setUserMessage(proposalsMap.get(verificationKey).getUserMessage());
+                                    proposalsArray.add(propertyObj);
                                 }
                             }
 
-                            proposalsObj.put("dbId", proposal.getDbId());
-                            proposalsObj.put("type", proposal.getType());
-                            proposalsObj.put("properties", proposalsArray);
+                            proposalsObj.setDbId(proposal.getDbId());
+                            proposalsObj.setType(proposal.getType());
+                            proposalsObj.setProperties(proposalsArray);
                         }
-                        proposals.put(proposalsObj);
-                        informationJSON.put("proposals", proposals);
+                        proposals.add(proposalsObj);
+                        informationJSON.setProposals(proposals);
                     }
 
                 }
@@ -331,28 +345,33 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
 
 
             // new code
-            List<MultipartBody.Part> multiparts = new ArrayList<>();
+//            List<MultipartBody.Part> multiparts = new ArrayList<>();
+//
+//            MultipartBody.Part[] docs = new MultipartBody.Part[filesToUpload.size()];
+//
+//            Map<Integer, File> map = new TreeMap<Integer, File>(filesToUpload);
+//
+//            for (Map.Entry<Integer, File> entry : map.entrySet()) {
+//                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), entry.getValue());
+//                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("documents",
+//                        entry.getValue().getName(), requestBody);
+//                multiparts.add(fileToUpload);
+//                LogUtils.e("Key and Name", "" + entry.getKey() + " - " + entry.getValue().getName());
+//            }
+//
+//            for (int i = 0; i < multiparts.size(); i++) {
+//                docs[i] = multiparts.get(i);
+//            }
+//
+//            RequestBody underwritingActionRequired = RequestBody.create(MediaType.parse("application/json"),
+//                    String.valueOf(informationJSON));
+//            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), informationJSON.toString());
 
-            MultipartBody.Part[] docs = new MultipartBody.Part[filesToUpload.size()];
+//            underwritingUserActionRequiredViewModel.submitActionRequired(docs, underwritingActionRequired);
+            Log.e("JSON",new Gson().toJson(informationJSON));
+            underwritingUserActionRequiredViewModel.submitMerchantActionRequired(informationJSON);
 
-            Map<Integer, File> map = new TreeMap<Integer, File>(filesToUpload);
-
-            for (Map.Entry<Integer, File> entry : map.entrySet()) {
-                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), entry.getValue());
-                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("documents",
-                        entry.getValue().getName(), requestBody);
-                multiparts.add(fileToUpload);
-                LogUtils.e("Key and Name", "" + entry.getKey() + " - " + entry.getValue().getName());
-            }
-
-            for (int i = 0; i < multiparts.size(); i++) {
-                docs[i] = multiparts.get(i);
-            }
-
-            RequestBody underwritingActionRequired = RequestBody.create(MediaType.parse("application/json"),
-                    String.valueOf(informationJSON));
-            underwritingUserActionRequiredViewModel.submitActionRequired(docs, underwritingActionRequired);
-
+            Log.e("JSON", informationJSON.toString());
             //new code
         } catch (Exception e) {
             e.printStackTrace();
@@ -441,16 +460,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 try {
                     dismissDialog();
                     if (identityImageResponse != null && identityImageResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        if (uploadedLayout != null) {
-                            uploadedLayout.setVisibility(VISIBLE);
+                        if (uploadLayout != null) {
+                            uploadLayout.setVisibility(VISIBLE);
                             selectedText.setVisibility(GONE);
                         }
-                        for (int l = 0; l < listOfDocLayouts.size(); l++) {
-                            if (listOfDocLayouts.get(l).getId() == actionRequired.getData().getAdditionalDocument().get((int) uploadedLayout.getTag()).getId()) {
-                                listOfDocLayouts.get(l).setUploaded(true);
-                                break;
-                            }
-                        }
+                        setUploadedTrue((int) uploadLayout.getTag());
+
                         enableOrDisableNext();
 
                     } else {
@@ -470,7 +485,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 @Override
                 public void onChanged(RemoveIdentityResponse imageResponse) {
                     if (imageResponse != null) {
-//                        uploadDoc(mediaFile);
+                        uploadDoc(mediaFile);
                     }
                 }
             });
@@ -479,125 +494,182 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         }
     }
 
-    private void additionalRequiredDocuments(ActionRequiredResponse actionRequiredResponse) {
+    private void setUploadedTrue(int pos) {
+        listOfDocLayouts.get(pos).setUploaded(true);
+//        for (int l = 0; l < listOfDocLayouts.size(); l++) {
+//            if (listOfDocLayouts.get(l).getId() == actionRequired.getData().getAdditionalDocument().get(pos).getId()) {
+//                listOfDocLayouts.get(l).setUploaded(true);
+//                break;
+//            }
+//        }
+    }
 
+    private void additionalRequiredDocuments(ActionRequiredResponse actionRequiredResponse) {
         try {
+            additionalDocumentRequiredLL.removeAllViews();
             additionalDocumentRequiredLL.setVisibility(VISIBLE);
             for (int i = 0; i < actionRequiredResponse.getData().getAdditionalDocument().size(); i++) {
-                int count = actionRequiredResponse.getData().getAdditionalDocument().get(i).getUploadDocs().size();
-                if (count > 0) {
-                    for (int j = 0; j < count; j++) {
-                        addDynamicView(i, j, true, count, getVisibility(j, count));
-                        if (j == 2)
-                            break;
-                    }
-                } else {
-                    addDynamicView(i, 0, false, count, true);
-                }
+                addDynamicView(i);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void addDynamicView(int mainDocPos, int subDocPos, boolean isExist, int count, boolean isVisible) {
+    private void addDynamicView(int mainDocPos) {
         try {
             ActionRequiredResponse actionRequiredResponse = actionRequired;
             View inf = getLayoutInflater().inflate(R.layout.additional_document_item, null);
             LinearLayout documentRequiredLL = inf.findViewById(R.id.documentRequired);
-            documentRequiredLL.setVisibility(VISIBLE);
             //Setting object position
             documentRequiredLL.setTag(mainDocPos);
-            LinearLayout sscFileUploadLL = inf.findViewById(R.id.sscFileUploadLL);
-            //Setting document position
-            sscFileUploadLL.setTag(subDocPos);
-            LinearLayout sscfileUploadedLL = inf.findViewById(R.id.sscfileUploadedLL);
-            TextView sscuploadFileTV = inf.findViewById(R.id.sscuploadFileTV);
-            TextView sscfileUpdatedOnTV = inf.findViewById(R.id.sscfileUpdatedOnTV);
+            LinearLayout containerLL = inf.findViewById(R.id.containerLL);
             LinearLayout additionalDocLL = inf.findViewById(R.id.additionalDocLL);
             TextView documentName = inf.findViewById(R.id.tvdocumentName);
             documentName.setText(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getDocumentName());
 
-            if (actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().size() > 0)
-                sscuploadFileTV.setTag(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().get(subDocPos).getDocId());
-            else
+            additionalDocumentRequiredLL.addView(inf, layoutParamss);
+            DocLayout docLayout = new DocLayout();
+            docLayout.setId(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId());
+            docLayout.setLinearLayouts(documentRequiredLL);
+            listOfDocLayouts.add(docLayout);
+
+            if (actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().size() > 0) {
+                setUploadedTrue(mainDocPos);
+                for (int i = 0; i < actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().size(); i++) {
+                    View docInf = getLayoutInflater().inflate(R.layout.doc_item, null);
+                    LinearLayout sscFileUploadLL = docInf.findViewById(R.id.sscFileUploadLL);
+                    LinearLayout sscfileUploadedLL = docInf.findViewById(R.id.sscfileUploadedLL);
+                    //Setting document position
+                    sscfileUploadedLL.setTag(mainDocPos);
+                    TextView sscuploadFileTV = docInf.findViewById(R.id.sscuploadFileTV);
+                    TextView sscfileUpdatedOnTV = docInf.findViewById(R.id.sscfileUpdatedOnTV);
+
+                    if (actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().size() > 0)
+                        sscuploadFileTV.setTag(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().get(i).getDocId());
+                    else
+                        sscuploadFileTV.setTag(0);
+
+                    sscfileUploadedLL.setVisibility(VISIBLE);
+                    sscuploadFileTV.setVisibility(GONE);
+                    sscfileUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().get(i).getUploadDate()));
+
+                    containerLL.addView(docInf, layoutParamss);
+
+                    sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            documentID = actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId();
+                            uploadLayout = sscfileUploadedLL;
+                            selectedText = sscuploadFileTV;
+                            lastUploadedDoc = (int) sscuploadFileTV.getTag();
+                            if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                if (Utils.isKeyboardVisible)
+                                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                                chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
+
+                            }
+
+                            Log.e("Main Doc pos, ID", uploadLayout.getTag() + " " + selectedText.getTag());
+                        }
+                    });
+
+                }
+                if (containerLL.getChildCount() > 2)
+                    additionalDocLL.setVisibility(GONE);
+            } else {
+                View docInf = getLayoutInflater().inflate(R.layout.doc_item, null);
+                LinearLayout sscFileUploadLL = docInf.findViewById(R.id.sscFileUploadLL);
+                LinearLayout sscfileUploadedLL = docInf.findViewById(R.id.sscfileUploadedLL);
+                //Setting document position
+                sscfileUploadedLL.setTag(mainDocPos);
+                TextView sscuploadFileTV = docInf.findViewById(R.id.sscuploadFileTV);
+                TextView sscfileUpdatedOnTV = docInf.findViewById(R.id.sscfileUpdatedOnTV);
                 sscuploadFileTV.setTag(0);
 
-            additionalDocLL.setVisibility(getVisibility(subDocPos, count) ? VISIBLE : GONE);
-
-            if (isExist) {
-                sscfileUploadedLL.setVisibility(VISIBLE);
-                sscuploadFileTV.setVisibility(GONE);
-                sscfileUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().get(subDocPos).getUploadDate()));
-                //            sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
-                documentName.setVisibility(GONE);
-//                additionalDocLL.setVisibility(GONE);
-                if (subDocPos == 0) {
-                    documentName.setVisibility(VISIBLE);
-                }
-
-//                if (subDocPos == 1 && count < 3)
-//                    additionalDocLL.setVisibility(VISIBLE);
-
-            } else {
-                if (subDocPos == 0)
-                    documentName.setVisibility(VISIBLE);
-                else
-                    documentName.setVisibility(GONE);
-
-//                additionalDocLL.setVisibility(VISIBLE);
+                sscfileUploadedLL.setVisibility(GONE);
+                sscuploadFileTV.setVisibility(VISIBLE);
                 sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
-            }
 
-//            if (subDocPos == 2)
-//                additionalDocLL.setVisibility(GONE);
+                containerLL.addView(docInf, layoutParamss);
 
-            if (subDocPos == 0) {
-                additionalDocumentRequiredLL.addView(inf, layoutParamss);
-                DocLayout docLayout = new DocLayout();
-                docLayout.setId(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId());
-                docLayout.setLinearLayouts(documentRequiredLL);
-                listOfDocLayouts.add(docLayout);
-            } else {
-                for (int l = 0; l < listOfDocLayouts.size(); l++) {
-                    if (listOfDocLayouts.get(l).getId() == actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId()) {
-                        listOfDocLayouts.get(l).getLinearLayouts().addView(inf, layoutParamss);
-                        break;
-                    }
-                }
-            }
+                sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        documentID = actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId();
+                        uploadLayout = sscfileUploadedLL;
+                        selectedText = sscuploadFileTV;
+                        lastUploadedDoc = (int) sscuploadFileTV.getTag();
+                        if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            if (Utils.isKeyboardVisible)
+                                Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                            chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
 
-            sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    documentID = actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId();
-                    uploadedLayout = sscFileUploadLL;
-                    selectedLayout = documentRequiredLL;
-                    selectedText = sscuploadFileTV;
-                    lastUploadedDoc = (int) sscuploadFileTV.getTag();
-                    if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        if (Utils.isKeyboardVisible)
-                            Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
-                        chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
 
+                        Log.e("Main Doc pos, ID", uploadLayout.getTag() + " " + selectedText.getTag());
                     }
-
-                    Log.e("Main Doc pos, sub doc pos, ID", (int) selectedLayout.getTag() + " " + uploadedLayout.getTag() + " " + selectedText.getTag());
-                }
-            });
+                });
+            }
 
             additionalDocLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    additionalDocLL.setVisibility(GONE);
-//                    boolean isVisible = false;
-//                    if (subDocPos == 0 || subDocPos == 1)
-//                        isVisible = true;
-                    addDynamicView((int) documentRequiredLL.getTag(), subDocPos + 1, false, count, isVisible);
+
+                    try {
+                        Log.e("count", containerLL.getChildCount() + "");
+
+                        if (containerLL.getChildCount() >= 2)
+                            additionalDocLL.setVisibility(GONE);
+
+                        View docInf = getLayoutInflater().inflate(R.layout.doc_item, null);
+                        LinearLayout sscFileUploadLL = docInf.findViewById(R.id.sscFileUploadLL);
+                        LinearLayout sscfileUploadedLL = docInf.findViewById(R.id.sscfileUploadedLL);
+                        //Setting document position
+                        sscfileUploadedLL.setTag(mainDocPos);
+                        TextView sscuploadFileTV = docInf.findViewById(R.id.sscuploadFileTV);
+                        TextView sscfileUpdatedOnTV = docInf.findViewById(R.id.sscfileUpdatedOnTV);
+                        sscuploadFileTV.setTag(0);
+
+                        sscfileUploadedLL.setVisibility(GONE);
+                        sscuploadFileTV.setVisibility(VISIBLE);
+                        sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
+
+                        containerLL.addView(docInf, layoutParamss);
+
+                        sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                documentID = actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId();
+                                uploadLayout = sscfileUploadedLL;
+                                selectedText = sscuploadFileTV;
+                                lastUploadedDoc = (int) sscuploadFileTV.getTag();
+                                if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
+                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                        return;
+                                    }
+                                    mLastClickTime = SystemClock.elapsedRealtime();
+                                    if (Utils.isKeyboardVisible)
+                                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                                    chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
+
+                                }
+
+                                Log.e("Main Doc pos, sub doc pos, ID", uploadLayout.getTag() + " " + selectedText.getTag());
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -606,74 +678,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             e.printStackTrace();
         }
     }
-
-//    private void createDynamicView(ActionRequiredResponse actionRequiredResponse, int mainObjPos, int innerPosition) {
-//        try {
-//            LinearLayout.LayoutParams layoutParamss = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//            for (int i = 0; i < listOfDocLayouts.size(); i++) {
-//                if ((int) listOfDocLayouts.get(i).getId() == mainObjPos) {
-//                    View inf = getLayoutInflater().inflate(R.layout.additional_document_item, null);
-//                    LinearLayout documentRequiredLL = inf.findViewById(R.id.documentRequired);
-//                    documentRequiredLL.setVisibility(View.VISIBLE);
-//                    LinearLayout sscFileUploadLL = inf.findViewById(R.id.sscFileUploadLL);
-//                    LinearLayout sscfileUploadedLL = inf.findViewById(R.id.sscfileUploadedLL);
-//                    TextView sscuploadFileTV = inf.findViewById(R.id.sscuploadFileTV);
-//                    TextView sscfileUpdatedOnTV = inf.findViewById(R.id.sscfileUpdatedOnTV);
-//                    LinearLayout additionalDocLL = inf.findViewById(R.id.additionalDocLL);
-//                    TextView positionTV = inf.findViewById(R.id.positionTV);
-//                    TextView documentName = inf.findViewById(R.id.tvdocumentName);
-//                    documentName.setVisibility(View.GONE);
-//                    if (innerPosition == 2)
-//                        additionalDocLL.setVisibility(View.GONE);
-//                    else
-//                        additionalDocLL.setVisibility(View.VISIBLE);
-//
-//                    positionTV.setText(String.valueOf(innerPosition));
-//                    sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
-//                    sscFileUploadLL.setTag(mainObjPos);
-//                    listOfDocLayouts.get(mainObjPos).get.addView(inf, layoutParamss);
-//
-//                    fileUpload.put(actionRequiredResponse.getData().getAdditionalDocument().get(mainObjPos).getId(), null);
-//                    filesToUpload.put(actionRequiredResponse.getData().getAdditionalDocument().get(mainObjPos).getId(), null);
-//
-//                    sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            int pos = (int) view.getTag();
-//                            documentID = actionRequiredResponse.getData().getAdditionalDocument().get(mainObjPos).getId();
-//                            uploadedLayout = sscfileUploadedLL;
-//                            selectedLayout = documentRequiredLL;
-//                            selectedText = sscuploadFileTV;
-//                            if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
-//                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                                    return;
-//                                }
-//                                mLastClickTime = SystemClock.elapsedRealtime();
-//                                if (Utils.isKeyboardVisible)
-//                                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
-//                                chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
-//
-//                            }
-//                            // chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
-//                        }
-//                    });
-//
-//                    additionalDocLL.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            createDynamicView(actionRequiredResponse, mainObjPos, innerPosition + 1);
-//                            additionalDocLL.setVisibility(View.GONE);
-//                        }
-//                    });
-//                    enableOrDisableNext();
-//                    break;
-//                }
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     private void websiteChanges(ActionRequiredResponse actionRequiredResponse) {
         websiteRevisionRequiredLL.setVisibility(VISIBLE);
@@ -1245,9 +1249,17 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     }
 
     public void enableOrDisableNext() {
+
+        boolean isDocs = true;
+        for (int l = 0; l < listOfDocLayouts.size(); l++) {
+            if (!listOfDocLayouts.get(l).isUploaded()) {
+                isDocs = false;
+                break;
+            }
+        }
         try {
             LogUtils.d(TAG, "fileUpload" + fileUpload);
-            if (fileUpload.containsValue(null)) {
+            if (!isDocs || fileUpload.containsValue(null)) {
                 isSubmitEnabled = false;
                 submitCV.setClickable(false);
                 submitCV.setEnabled(false);
@@ -1308,27 +1320,4 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         underwritingUserActionRequiredViewModel.uploadActionRequiredDoc(idFile, idType, docID);
     }
 
-    private boolean getVisibility(int j, int count) {
-        boolean isVisible = false;
-        switch (j) {
-            case 0:
-                if (count == 1)
-                    isVisible = true;
-                else if (count == 2)
-                    isVisible = false;
-                else if (count == 3)
-                    isVisible = false;
-                break;
-            case 1:
-                if (count == 2)
-                    isVisible = true;
-                else if (count == 3)
-                    isVisible = false;
-                break;
-            case 2:
-                isVisible = false;
-                break;
-        }
-        return isVisible;
-    }
 }

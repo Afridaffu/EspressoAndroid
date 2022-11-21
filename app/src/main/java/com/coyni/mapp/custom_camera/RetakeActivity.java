@@ -86,7 +86,7 @@ public class RetakeActivity extends AppCompatActivity {
                 } else if (from.equals("AAR-actionReq2File")) {
                     AdditionalInformationRequiredActivity.actionReq2File = null;
                 } else if (from.equals("ActRqrdDocs")) {
-                    AdditionalActionUploadActivity.mediaFile = null;
+//                    AdditionalActionUploadActivity.mediaFile = null;
                 }
                 finish();
             }
@@ -163,7 +163,7 @@ public class RetakeActivity extends AppCompatActivity {
                 } else if (from.equals("AAR-actionReq2File")) {
                     AdditionalInformationRequiredActivity.actionReq2File = null;
                 } else if (from.equals("ActRqrdDocs")) {
-                    AdditionalActionUploadActivity.mediaFile = null;
+//                    AdditionalActionUploadActivity.mediaFile = null;
                 }
             }
         });

@@ -1,5 +1,9 @@
 package com.coyni.mapp.view;
 
+import static com.coyni.mapp.custom_camera.CameraUtility.BROWSE;
+import static com.coyni.mapp.custom_camera.CameraUtility.CHOOSE_LIBRARY;
+import static com.coyni.mapp.custom_camera.CameraUtility.TAKE_PHOTO;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
@@ -28,6 +32,8 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -36,12 +42,19 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.R;
 import com.coyni.mapp.custom_camera.CameraActivity;
+import com.coyni.mapp.custom_camera.CameraHandlerActivity;
+import com.coyni.mapp.custom_camera.CameraUtility;
+import com.coyni.mapp.dialogs.FilePickerDialog;
+import com.coyni.mapp.dialogs.OnDialogClickListener;
+import com.coyni.mapp.model.DocLayout;
 import com.coyni.mapp.model.actionRqrd.ActionRqrdResponse;
 import com.coyni.mapp.model.actionRqrd.SubmitActionRqrdResponse;
 import com.coyni.mapp.utils.CustomTypefaceSpan;
 import com.coyni.mapp.utils.FileUtils;
 import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.view.business.BusinessAdditionalActionRequiredActivity;
+import com.coyni.mapp.viewmodel.IdentityVerificationViewModel;
 import com.coyni.mapp.viewmodel.UnderwritingUserActionRequiredViewModel;
 
 import org.json.JSONArray;
@@ -71,12 +84,15 @@ public class AdditionalActionUploadActivity extends BaseActivity {
     private LinearLayout selectedLayout = null;
     private TextView selectedText = null, adminMessageTV;
     public static ArrayList<File> documentsFIle;
-    public static File mediaFile;
+    private File mediaFile;
     private LinearLayout additionalDocumentRequiredLL;
     private HashMap<Integer, File> filesToUpload;
     public static AdditionalActionUploadActivity additionalActionUploadActivity;
     public boolean isSubmitEnabled = false;
     public CardView submitCV;
+    private IdentityVerificationViewModel identityVerificationViewModel;
+    private int lastUploadedDoc = 0;
+    private List<DocLayout> listOfDocLayouts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +116,9 @@ public class AdditionalActionUploadActivity extends BaseActivity {
         additionalDocumentRequiredLL = findViewById(R.id.ll_document_required);
         showProgressDialog();
         underwritingUserActionRequiredViewModel = new ViewModelProvider(this).get(UnderwritingUserActionRequiredViewModel.class);
+        identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
         underwritingUserActionRequiredViewModel.getActionRequiredCustData();
-
+        identityVerificationViewModel.removeImageMultiDocs(lastUploadedDoc + "");
 //        fileUpload = new HashMap<Integer, String>();
         filesToUpload = new HashMap<Integer, File>();
         documentsFIle = new ArrayList<>();
@@ -238,53 +255,92 @@ public class AdditionalActionUploadActivity extends BaseActivity {
 
     }
 
+//    private void chooseFilePopup(final Context context, String type) {
+//        try {
+//            Dialog chooseFile = new Dialog(context);
+//            chooseFile.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//            chooseFile.setContentView(R.layout.activity_choose_file_botm_sheet);
+//            chooseFile.setCancelable(true);
+//            Window window = chooseFile.getWindow();
+//            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//            chooseFile.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//            WindowManager.LayoutParams wlp = window.getAttributes();
+//            wlp.gravity = Gravity.BOTTOM;
+//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            window.setAttributes(wlp);
+//            chooseFile.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//            TextView libraryTV = chooseFile.findViewById(R.id.libraryTV);
+//            TextView takePhotoTV = chooseFile.findViewById(R.id.takePhotoTV);
+//            TextView browseFileTV = chooseFile.findViewById(R.id.browseFileTV);
+//
+//            libraryTV.setOnClickListener(view -> {
+//                chooseFile.dismiss();
+//                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+//                photoPickerIntent.setType("image/*");
+//                startActivityForResult(photoPickerIntent, PICK_IMAGE_REQUEST);
+//
+//            });
+//            takePhotoTV.setOnClickListener(view -> {
+//                chooseFile.dismiss();
+//                startActivity(new Intent(AdditionalActionUploadActivity.this, CameraActivity.class).putExtra("FROM", "ActRqrdDocs"));
+//            });
+//            browseFileTV.setOnClickListener(view -> {
+//                chooseFile.dismiss();
+//                Intent pickIntent = new Intent();
+//                pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
+//                pickIntent.setType("*/*");
+//                String[] extraMimeTypes = {"application/pdf", "image/*"};
+//                pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
+//                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+//                Intent chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
+//                startActivityForResult(chooserIntent, ACTIVITY_CHOOSE_FILE);
+//            });
+//            chooseFile.show();
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//
+//        }
+//    }
+
     private void chooseFilePopup(final Context context, String type) {
-        try {
-            Dialog chooseFile = new Dialog(context);
-            chooseFile.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            chooseFile.setContentView(R.layout.activity_choose_file_botm_sheet);
-            chooseFile.setCancelable(true);
-            Window window = chooseFile.getWindow();
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-            chooseFile.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            WindowManager.LayoutParams wlp = window.getAttributes();
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
-            chooseFile.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-            TextView libraryTV = chooseFile.findViewById(R.id.libraryTV);
-            TextView takePhotoTV = chooseFile.findViewById(R.id.takePhotoTV);
-            TextView browseFileTV = chooseFile.findViewById(R.id.browseFileTV);
-
-            libraryTV.setOnClickListener(view -> {
-                chooseFile.dismiss();
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, PICK_IMAGE_REQUEST);
-
-            });
-            takePhotoTV.setOnClickListener(view -> {
-                chooseFile.dismiss();
-                startActivity(new Intent(AdditionalActionUploadActivity.this, CameraActivity.class).putExtra("FROM", "ActRqrdDocs"));
-            });
-            browseFileTV.setOnClickListener(view -> {
-                chooseFile.dismiss();
-                Intent pickIntent = new Intent();
-                pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                pickIntent.setType("*/*");
-                String[] extraMimeTypes = {"application/pdf", "image/*"};
-                pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
-                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-                Intent chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
-                startActivityForResult(chooserIntent, ACTIVITY_CHOOSE_FILE);
-            });
-            chooseFile.show();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-        }
+        FilePickerDialog pickerDialog = new FilePickerDialog(context, true);
+        pickerDialog.setOnDialogClickListener(new OnDialogClickListener() {
+            @Override
+            public void onDialogClicked(String action, Object value) {
+                switch (action) {
+                    case CHOOSE_LIBRARY:
+                        launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR.GALLERY, type);
+                        break;
+                    case TAKE_PHOTO:
+                        launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR.CAMERA_RETAKE, type);
+                        break;
+                    case BROWSE:
+                        launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR.BROWSE, type);
+                        break;
+                }
+            }
+        });
+        pickerDialog.show();
     }
+
+    private void launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR action, String type) {
+        Intent camIntent = new Intent(AdditionalActionUploadActivity.this, CameraHandlerActivity.class);
+        camIntent.putExtra(CameraUtility.CAMERA_ACTION, action);
+        camIntent.putExtra(CameraUtility.SELECTING_ID, type);
+        imageChooserActivityLauncher.launch(camIntent);
+    }
+
+    ActivityResultLauncher<Intent> imageChooserActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    uploadDocumentFromLibrary(result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+                    LogUtils.e(TAG, result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+                } else {
+                    LogUtils.e(TAG, "Error while selecting photo");
+                }
+            });
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -293,13 +349,13 @@ public class AdditionalActionUploadActivity extends BaseActivity {
             if (resultCode != RESULT_OK) return;
             String path = "";
             LogUtils.d(TAG, "onActivityResult" + data.getData());
-            if (requestCode == ACTIVITY_CHOOSE_FILE) {
-                LogUtils.d(TAG, "ACTIVITYs_CHOOSE_FILE" + data.getData());
-                uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
-            } else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
-                LogUtils.d(TAG, "PICK_IMAGE_REQUEST" + data.getData());
-                uploadDocumentFromLibrary(data.getData(), PICK_IMAGE_REQUEST);
-            }
+//            if (requestCode == ACTIVITY_CHOOSE_FILE) {
+//                LogUtils.d(TAG, "ACTIVITYs_CHOOSE_FILE" + data.getData());
+//                uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
+//            } else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
+//                LogUtils.d(TAG, "PICK_IMAGE_REQUEST" + data.getData());
+//                uploadDocumentFromLibrary(data.getData(), PICK_IMAGE_REQUEST);
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -352,53 +408,85 @@ public class AdditionalActionUploadActivity extends BaseActivity {
 
     }
 
-    public void uploadDocumentFromLibrary(Uri uri, int reqType) {
+    private void uploadDocumentFromLibrary(String filePath) {
         try {
-            String FilePath = "";
-            if (reqType == ACTIVITY_CHOOSE_FILE) {
-                FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
-            } else {
-                FilePath = getRealPathFromURI(uri);
-            }
-            mediaFile = new File(FilePath);
+
+            mediaFile = new File(filePath);
+
+            LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
+            LogUtils.d(TAG, "documentID" + documentID);
+
             if (Utils.isValidFileSize(mediaFile)) {
-
-                LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
-                LogUtils.d(TAG, "documentID" + documentID);
-
-//            if (fileUpload.containsKey(documentID)) {
-//                fileUpload.replace(documentID, mediaFile.getAbsolutePath());
-//                documentsFIle.add(mediaFile);
-//            }
-
-                if (filesToUpload.containsKey(documentID)) {
-                    filesToUpload.replace(documentID, mediaFile);
-                    documentsFIle.add(mediaFile);
-                }
-
-                if (selectedLayout != null) {
-                    selectedLayout.setVisibility(View.VISIBLE);
-                    selectedText.setVisibility(View.GONE);
-
-                }
-                enableOrDisableNext();
-                LogUtils.d(TAG, "fileUpload" + filesToUpload);
+                if (lastUploadedDoc != 0)
+                    identityVerificationViewModel.removeImageMultiDocs(lastUploadedDoc + "");
+                else
+                    uploadDoc(mediaFile);
             } else {
-                Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
+                Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "", "");
             }
 
 
         } catch (Exception e) {
             e.printStackTrace();
-
         }
-
     }
 
+
+//    public void uploadDocumentFromLibrary(Uri uri, int reqType) {
+//        try {
+//            String FilePath = "";
+//            if (reqType == ACTIVITY_CHOOSE_FILE) {
+//                FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
+//            } else {
+//                FilePath = getRealPathFromURI(uri);
+//            }
+//            mediaFile = new File(FilePath);
+//            if (Utils.isValidFileSize(mediaFile)) {
+//
+//                LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
+//                LogUtils.d(TAG, "documentID" + documentID);
+//
+////            if (fileUpload.containsKey(documentID)) {
+////                fileUpload.replace(documentID, mediaFile.getAbsolutePath());
+////                documentsFIle.add(mediaFile);
+////            }
+//
+//                if (filesToUpload.containsKey(documentID)) {
+//                    filesToUpload.replace(documentID, mediaFile);
+//                    documentsFIle.add(mediaFile);
+//                }
+//
+//                if (selectedLayout != null) {
+//                    selectedLayout.setVisibility(View.VISIBLE);
+//                    selectedText.setVisibility(View.GONE);
+//
+//                }
+//                enableOrDisableNext();
+//                LogUtils.d(TAG, "fileUpload" + filesToUpload);
+//            } else {
+//                Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
+//            }
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//
+//        }
+//
+//    }
+
     public void enableOrDisableNext() {
+
+        boolean isDocs = true;
+        for (int l = 0; l < listOfDocLayouts.size(); l++) {
+            if (!listOfDocLayouts.get(l).isUploaded()) {
+                isDocs = false;
+                break;
+            }
+        }
+
         try {
-            LogUtils.d(TAG, "fileUpload" + filesToUpload);
-            if (filesToUpload.containsValue(null)) {
+            if (isDocs) {
                 isSubmitEnabled = false;
                 submitCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                 submitCV.setClickable(false);
@@ -588,36 +676,50 @@ public class AdditionalActionUploadActivity extends BaseActivity {
     private void postSubmitAPiCall() {
         try {
             showProgressDialog();
-            List<MultipartBody.Part> multiparts = new ArrayList<>();
-            JSONArray documents = new JSONArray();
-            JSONObject underwritingActionRequiredJSON = new JSONObject();
-
-            MultipartBody.Part[] docs = new MultipartBody.Part[filesToUpload.size()];
-
-            Map<Integer, File> map = new TreeMap<Integer, File>(filesToUpload);
-
-            for (Map.Entry<Integer, File> entry : map.entrySet()) {
-                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), entry.getValue());
-                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("documentList",
-                        entry.getValue().getName(), requestBody);
-                multiparts.add(fileToUpload);
-                LogUtils.e("Key and Name", "" + entry.getKey() + " - " + entry.getValue().getName());
-                documents.put(entry.getKey());
-            }
-
-            for (int i = 0; i < multiparts.size(); i++) {
-                docs[i] = multiparts.get(i);
-            }
-
-            underwritingActionRequiredJSON.put("documentIdList", documents);
-
-            RequestBody underwritingActionRequired = RequestBody.create(MediaType.parse("application/json"),
-                    String.valueOf(underwritingActionRequiredJSON));
-            underwritingUserActionRequiredViewModel.submitActionRequiredCustomer(docs, underwritingActionRequired);
+//            List<MultipartBody.Part> multiparts = new ArrayList<>();
+//            JSONArray documents = new JSONArray();
+//            JSONObject underwritingActionRequiredJSON = new JSONObject();
+//
+//            MultipartBody.Part[] docs = new MultipartBody.Part[filesToUpload.size()];
+//
+//            Map<Integer, File> map = new TreeMap<Integer, File>(filesToUpload);
+//
+//            for (Map.Entry<Integer, File> entry : map.entrySet()) {
+//                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), entry.getValue());
+//                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("documentList",
+//                        entry.getValue().getName(), requestBody);
+//                multiparts.add(fileToUpload);
+//                LogUtils.e("Key and Name", "" + entry.getKey() + " - " + entry.getValue().getName());
+//                documents.put(entry.getKey());
+//            }
+//
+//            for (int i = 0; i < multiparts.size(); i++) {
+//                docs[i] = multiparts.get(i);
+//            }
+//
+//            underwritingActionRequiredJSON.put("documentIdList", documents);
+//
+//            RequestBody underwritingActionRequired = RequestBody.create(MediaType.parse("application/json"),
+//                    String.valueOf(underwritingActionRequiredJSON));
+            underwritingUserActionRequiredViewModel.submitActionRequiredCustomer();
 
         } catch (Exception e) {
             e.printStackTrace();
             dismissDialog();
         }
     }
+
+    private void uploadDoc(File file) {
+        showProgressDialog();
+        RequestBody requestBody = null;
+        MultipartBody.Part idFile = null;
+
+        requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        idFile = MultipartBody.Part.createFormData("document", file.getName(), requestBody);
+
+        RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), "100");
+        RequestBody docID = RequestBody.create(MediaType.parse("text/plain"), documentID + "");
+        underwritingUserActionRequiredViewModel.uploadActionRequiredDoc(idFile, idType, docID);
+    }
+
 }

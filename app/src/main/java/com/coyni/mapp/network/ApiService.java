@@ -34,6 +34,7 @@ import com.coyni.mapp.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.coyni.mapp.model.UpdateSignAgreementsResp;
 import com.coyni.mapp.model.UpdateSignRequest;
 import com.coyni.mapp.model.actionRqrd.ActionRqrdResponse;
+import com.coyni.mapp.model.actionRqrd.InformationRequest;
 import com.coyni.mapp.model.actionRqrd.SubmitActionRqrdResponse;
 import com.coyni.mapp.model.activtity_log.ActivityLogResp;
 import com.coyni.mapp.model.appupdate.AppUpdateResp;
@@ -662,6 +663,9 @@ public interface ApiService {
     Call<ActionRequiredSubmitResponse> submitActionRequired(@Part MultipartBody.Part[] body,
                                                             @Part("information") RequestBody type);
 
+    @POST("api/v2/underwriting/user/business/action-required")
+    Call<ActionRequiredSubmitResponse> submitMerchantActionRequired(@Body InformationRequest type);
+
     @GET("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutListData();
 
@@ -732,6 +736,9 @@ public interface ApiService {
     @POST("api/v2/underwriting/user/customer/action-required")
     Call<SubmitActionRqrdResponse> submitActRqrd(@Part MultipartBody.Part[] body,
                                                  @Part("underwritingActionRequired") RequestBody type);
+
+    @POST("api/v2/underwriting/user/customer/action-required")
+    Call<SubmitActionRqrdResponse> submitCustomerActRqrd();
 
     @POST("api/v2/logs/transaction")
     Call<ActivityLogResp> activityLog(@Query("txnId") String txnId, @Query("userType") String userType);

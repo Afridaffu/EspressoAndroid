@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.coyni.mapp.model.actionRqrd.InformationRequest;
 import com.coyni.mapp.model.identity_verification.IdentityImageResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -134,6 +135,40 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
         }
     }
 
+    public void submitMerchantActionRequired(InformationRequest underWriting) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<ActionRequiredSubmitResponse> mCall = apiService.submitMerchantActionRequired(underWriting);
+            mCall.enqueue(new Callback<ActionRequiredSubmitResponse>() {
+                @Override
+                public void onResponse(Call<ActionRequiredSubmitResponse> call, Response<ActionRequiredSubmitResponse> response) {
+                    LogUtils.d(TAG, "submitActionRequired" + response);
+                    if (response.isSuccessful()) {
+                        ActionRequiredSubmitResponse obj = response.body();
+                        ActionRequiredSubmitResponseMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ActionRequiredSubmitResponse>() {
+                        }.getType();
+                        ActionRequiredSubmitResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            ActionRequiredSubmitResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ActionRequiredSubmitResponse> call, Throwable t) {
+                    LogUtils.d(TAG, "submitActionRequired" + t.getMessage());
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public void getActionRequiredCustData() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -170,11 +205,13 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
         }
     }
 
-    public void submitActionRequiredCustomer(MultipartBody.Part[] requestBody, RequestBody underWriting) {
+//    public void submitActionRequiredCustomer(MultipartBody.Part[] requestBody, RequestBody underWriting) {
+    public void submitActionRequiredCustomer() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
 //            LogUtils.d(TAG, "submitActionRequired" + documentsImageList);
-            Call<SubmitActionRqrdResponse> mCall = apiService.submitActRqrd(requestBody, underWriting);
+//            Call<SubmitActionRqrdResponse> mCall = apiService.submitActRqrd(requestBody, underWriting);
+            Call<SubmitActionRqrdResponse> mCall = apiService.submitCustomerActRqrd();
 
             mCall.enqueue(new Callback<SubmitActionRqrdResponse>() {
                 @Override
