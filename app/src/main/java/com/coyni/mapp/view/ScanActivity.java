@@ -152,7 +152,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     boolean isAuthenticationCalled = false;
-    Boolean isFaceLock = false, isTouchId = false, isAlbumClicked = false;
+    Boolean isFaceLock = false, isTouchId = false, isAlbumClicked = false, isPayReq = false;
 
     Double cynValue = 0.0, avaBal = 0.0;
     Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
@@ -699,6 +699,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                         if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT && userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             if (strQRAmount.equals("")) {
                                 try {
+                                    isPayReq = true;
                                     Intent i = new Intent(ScanActivity.this, PayRequestActivity.class);
                                     i.putExtra("walletId", strScanWallet);
                                     i.putExtra("amount", strQRAmount);
@@ -1161,7 +1162,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             super.onResume();
             isQRScan = false;
 
-            if (Utils.isSettingsBtnClicked && ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+//            if (Utils.isSettingsBtnClicked && ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            if ((isPayReq || Utils.isSettingsBtnClicked) && ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 StartScanner();
                 mycodeScannerView.setVisibility(View.VISIBLE);
                 mDenyAccessScreen.setVisibility(View.GONE);
@@ -1170,6 +1172,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 closeBtnScanCode.setVisibility(View.VISIBLE);
                 flashLL.setVisibility(View.VISIBLE);
                 Utils.isSettingsBtnClicked = false;
+                isPayReq = false;
             }
             if (!isAlbumClicked && !isOnResumeCamera) {
                 if (ContextCompat.checkSelfPermission(this,
