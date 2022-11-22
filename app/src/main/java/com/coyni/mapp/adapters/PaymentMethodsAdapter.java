@@ -132,7 +132,7 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                 holder.layoutBank.setVisibility(View.GONE);
                 holder.tvCardNumber.setVisibility(View.VISIBLE);
                 holder.tvCardNumber.setText(objData.getFirstSix().replace(" ", "").replaceAll("(.{4})", "$1 ").trim() + mContext.getString(R.string.dots) + objData.getLastFour());
-                if (!objData.getExpired()) {
+                if (!objData.getExpired() && !objData.getBlacklisted()) {
                     holder.tvBankExpire.setVisibility(View.GONE);
                     switch (objData.getCardBrand().toUpperCase().replace(" ", "")) {
                         case "VISA":
@@ -158,7 +158,11 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                     }
                 } else {
                     holder.tvBankExpire.setVisibility(View.VISIBLE);
-                    holder.tvBankExpire.setText("Expired");
+                    if (objData.getBlacklisted()) {
+                        holder.tvBankExpire.setText(mContext.getString(R.string.block));
+                    } else if (objData.getExpired()) {
+                        holder.tvBankExpire.setText("Expired");
+                    }
                     switch (objData.getCardBrand().toUpperCase()) {
                         case "VISA":
                             holder.tvBankHead.setText(Utils.capitalize(objData.getCardBrand() + " " + objData.getCardType() + " Card"));
@@ -209,12 +213,14 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                                 if (objData.getCardType().toLowerCase().equals("debit")) {
                                     if (objMyApplication.getFeatureControlGlobal().getPayDebit() != null && objMyApplication.getFeatureControlByUser() != null
                                             && objMyApplication.getFeatureControlGlobal().getPayDebit() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
-                                        if (!objData.getExpired()) {
-                                            objMyApplication.setSelectedCard(objData);
-                                            ((PaymentMethodsActivity) mContext).editCard();
-                                        } else {
-                                            objMyApplication.setSelectedCard(objData);
-                                            ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+                                        if (!objData.getBlacklisted()) {
+                                            if (!objData.getExpired()) {
+                                                objMyApplication.setSelectedCard(objData);
+                                                ((PaymentMethodsActivity) mContext).editCard();
+                                            } else {
+                                                objMyApplication.setSelectedCard(objData);
+                                                ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+                                            }
                                         }
                                     } else {
                                         Utils.displayAlert(mContext.getString(R.string.errormsg), ((PaymentMethodsActivity) mContext), "", "");
@@ -222,12 +228,14 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                                 } else {
                                     if (objMyApplication.getFeatureControlGlobal().getPayCredit() != null && objMyApplication.getFeatureControlByUser() != null
                                             && objMyApplication.getFeatureControlGlobal().getPayCredit() && objMyApplication.getFeatureControlByUser().getPayCredit()) {
-                                        if (!objData.getExpired()) {
-                                            objMyApplication.setSelectedCard(objData);
-                                            ((PaymentMethodsActivity) mContext).editCard();
-                                        } else {
-                                            objMyApplication.setSelectedCard(objData);
-                                            ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+                                        if (!objData.getBlacklisted()) {
+                                            if (!objData.getExpired()) {
+                                                objMyApplication.setSelectedCard(objData);
+                                                ((PaymentMethodsActivity) mContext).editCard();
+                                            } else {
+                                                objMyApplication.setSelectedCard(objData);
+                                                ((PaymentMethodsActivity) mContext).expiry(mContext, objData);
+                                            }
                                         }
                                     } else {
                                         Utils.displayAlert(mContext.getString(R.string.errormsg), ((PaymentMethodsActivity) mContext), "", "");
@@ -266,12 +274,14 @@ public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAd
                                 if (objData.getCardType().toLowerCase().equals("debit")) {
                                     if (objMyApplication.getFeatureControlGlobal().getPayDebit() != null && objMyApplication.getFeatureControlByUser() != null
                                             && objMyApplication.getFeatureControlGlobal().getPayDebit() && objMyApplication.getFeatureControlByUser().getPayDebit()) {
-                                        if (!objData.getExpired()) {
-                                            objMyApplication.setSelectedCard(objData);
-                                            ((BusinessPaymentMethodsActivity) mContext).editCard();
-                                        } else {
-                                            objMyApplication.setSelectedCard(objData);
-                                            ((BusinessPaymentMethodsActivity) mContext).expiry(objData);
+                                        if (!objData.getBlacklisted()) {
+                                            if (!objData.getExpired()) {
+                                                objMyApplication.setSelectedCard(objData);
+                                                ((BusinessPaymentMethodsActivity) mContext).editCard();
+                                            } else {
+                                                objMyApplication.setSelectedCard(objData);
+                                                ((BusinessPaymentMethodsActivity) mContext).expiry(objData);
+                                            }
                                         }
                                     } else {
                                         Utils.displayAlert(mContext.getString(R.string.errormsg), ((BusinessPaymentMethodsActivity) mContext), "", "");

@@ -1266,7 +1266,9 @@ public class Utils {
 
         displayAlertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        displayAlertDialog.setCanceledOnTouchOutside(true);
+//        displayAlertDialog.setCanceledOnTouchOutside(true);
+        displayAlertDialog.setCanceledOnTouchOutside(false);
+        displayAlertDialog.setCancelable(false);
         displayAlertDialog.show();
     }
 

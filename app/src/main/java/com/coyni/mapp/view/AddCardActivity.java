@@ -2059,7 +2059,9 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
 
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        dialog.setCanceledOnTouchOutside(true);
+//        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         dialog.show();
     }
 

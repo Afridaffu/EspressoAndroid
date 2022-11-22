@@ -30,6 +30,8 @@ public class PaymentsList {
     private Boolean active;
     private Boolean expired;
     private Boolean defaultForAllWithDrawals;
+    private Boolean isBlacklisted;
+    private String reason;
 
     public int getId() {
         return id;
@@ -261,5 +263,21 @@ public class PaymentsList {
 
     public void setDefaultForAllWithDrawals(Boolean defaultForAllWithDrawals) {
         this.defaultForAllWithDrawals = defaultForAllWithDrawals;
+    }
+
+    public Boolean getBlacklisted() {
+        return isBlacklisted;
+    }
+
+    public void setBlacklisted(Boolean blacklisted) {
+        isBlacklisted = blacklisted;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }
