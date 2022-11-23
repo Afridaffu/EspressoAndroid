@@ -8,7 +8,8 @@ public class BusinessActivityData implements Serializable {
     private String transactionSubType;
     private String totalAmount;
     private int count;
-    private int percentage;
+//    private int percentage;
+    private Double percentage;
     private String fee;
     private String highTicket;
     private String createdAt;
@@ -45,7 +46,10 @@ public class BusinessActivityData implements Serializable {
         this.count = count;
     }
 
-    public void setPercentage(int percentage) {
+//    public void setPercentage(int percentage) {
+//        this.percentage = percentage;
+//    }
+    public void setPercentage(Double percentage) {
         this.percentage = percentage;
     }
 
@@ -53,7 +57,10 @@ public class BusinessActivityData implements Serializable {
         this.fee = fee;
     }
 
-    public int getPercentage() {
+//    public int getPercentage() {
+//        return percentage;
+//    }
+    public Double getPercentage() {
         return percentage;
     }
 
