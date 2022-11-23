@@ -518,6 +518,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddManualBankAccount.class);
                                 i.putExtra("From", "pay");
                                 i.putExtra("screen", strScreen);
+                                i.putExtra("subtype", getIntent().getStringExtra("subtype"));
                                 startActivityForResult(i, 4);
                             }
                         } else {
@@ -540,6 +541,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "debit");
                                 i.putExtra("screen", strScreen);
+                                i.putExtra("subtype", getIntent().getStringExtra("subtype"));
                                 startActivityForResult(i, 3);
                             }
                         } else {
@@ -562,6 +564,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "credit");
                                 i.putExtra("screen", strScreen);
+                                i.putExtra("subtype", getIntent().getStringExtra("subtype"));
                                 startActivityForResult(i, 3);
                             }
                         } else {
@@ -973,7 +976,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
                     imgBankIcon.setImageResource(R.drawable.ic_bankactive);
                     tvBankName.setText(objPayment.getBankName());
                     if (objPayment.getAccountNumber() != null && objPayment.getAccountNumber().length() > 4) {
-                        tvAccount.setText(getString(R.string.dots)+ objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
+                        tvAccount.setText(getString(R.string.dots) + objPayment.getAccountNumber().substring(objPayment.getAccountNumber().length() - 4));
                     } else {
                         tvAccount.setText(objPayment.getAccountNumber());
                     }
