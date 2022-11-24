@@ -593,9 +593,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                         if (uploadLayout != null) {
                             uploadLayout.setVisibility(VISIBLE);
                             selectedText.setVisibility(GONE);
+                            selectedText.setTag(identityImageResponse.getData().getId());
                         }
                         setUploadedTrue((int) uploadLayout.getTag());
-
                         enableOrDisableNext();
 
                     } else {

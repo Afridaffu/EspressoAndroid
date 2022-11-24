@@ -99,11 +99,15 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             llOpenAccount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
-                        return;
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                            return;
+                        }
+                        mLastClickTimeQA = SystemClock.elapsedRealtime();
+                        openNewAccount();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    mLastClickTimeQA = SystemClock.elapsedRealtime();
-                    openNewAccount();
                 }
             });
 
@@ -562,16 +566,18 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     }
 
     public void openNewAccount() {
-//        Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class);
-        Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, AddNewAccountActivity.class);
-        for (ProfilesResponse.Profiles profile : profilesList) {
-            if (profile.getAccountType().equals(Utils.PERSONAL)) {
-                inNewAccount.putExtra("PersonalAccount", "true");
-                break;
+        try {
+            Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, AddNewAccountActivity.class);
+            for (ProfilesResponse.Profiles profile : profilesList) {
+                if (profile.getAccountType().equals(Utils.PERSONAL)) {
+                    inNewAccount.putExtra("PersonalAccount", "true");
+                    break;
+                }
             }
+            startActivity(inNewAccount);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        //showProgressDialog();
-        startActivity(inNewAccount);
     }
 
     //    private void displayDBAAlert(ProfilesResponse.Profiles profiles, Integer id) {

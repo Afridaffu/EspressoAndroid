@@ -27,6 +27,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -52,6 +53,7 @@ import com.coyni.mapp.model.DocLayout;
 import com.coyni.mapp.model.actionRqrd.ActionRqrdResponse;
 import com.coyni.mapp.model.actionRqrd.SubmitActionRqrdResponse;
 import com.coyni.mapp.model.identity_verification.IdentityImageResponse;
+import com.coyni.mapp.model.identity_verification.RemoveIdentityResponse;
 import com.coyni.mapp.utils.CustomTypefaceSpan;
 import com.coyni.mapp.utils.FileUtils;
 import com.coyni.mapp.utils.LogUtils;
@@ -114,7 +116,6 @@ public class AdditionalActionUploadActivity extends BaseActivity {
         underwritingUserActionRequiredViewModel = new ViewModelProvider(this).get(UnderwritingUserActionRequiredViewModel.class);
         identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
         underwritingUserActionRequiredViewModel.getActionRequiredCustData();
-        identityVerificationViewModel.removeImageMultiDocs(lastUploadedDoc + "");
         submitCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,6 +195,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                         if (selectedLayout != null) {
                             selectedLayout.setVisibility(VISIBLE);
                             selectedText.setVisibility(GONE);
+                            selectedText.setTag(Integer.parseInt(identityImageResponse.getData().getId()));
                         }
                         setUploadedTrue((int) selectedLayout.getTag());
                         enableOrDisableNext();
@@ -209,6 +211,18 @@ public class AdditionalActionUploadActivity extends BaseActivity {
             }
         });
 
+        try {
+            identityVerificationViewModel.getRemoveIdentityImageResponse().observe(this, new Observer<RemoveIdentityResponse>() {
+                @Override
+                public void onChanged(RemoveIdentityResponse imageResponse) {
+                    if (imageResponse != null) {
+                        uploadDoc(mediaFile);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean checkAndRequestPermissions(final Activity context) {
@@ -319,7 +333,8 @@ public class AdditionalActionUploadActivity extends BaseActivity {
             LogUtils.d(TAG, "documentID" + documentID);
 
             if (Utils.isValidFileSize(mediaFile)) {
-                if (lastUploadedDoc != 0)
+                LogUtils.d(TAG, "selectedID" + selectedText.getTag());
+                if (selectedText != null && (int) selectedText.getTag() != 0)
                     identityVerificationViewModel.removeImageMultiDocs(lastUploadedDoc + "");
                 else
                     uploadDoc(mediaFile);
@@ -344,7 +359,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
         }
 
         try {
-            if (isDocs) {
+            if (!isDocs) {
                 isSubmitEnabled = false;
                 submitCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                 submitCV.setClickable(false);
@@ -365,13 +380,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
     private void additionalRequiredDocuments(ActionRqrdResponse actionRqrdResponse) {
 
         additionalDocumentRequiredLL.removeAllViews();
-//        for (int i = 0; i < additionalDocumentRequiredLL.getChildCount(); i++) {
-//            View child = additionalDocumentRequiredLL.getChildAt(i);
-//            additionalDocumentRequiredLL.removeAllViews();
-//        }
-
         additionalDocumentRequiredLL.setVisibility(View.VISIBLE);
-//        adminMsgTV.setText(getResources().getString(R.string.please_click_the_upload_button_below_to_proceed));
         adminMessageTV.setText(actionRqrdResponse.getData().getMessage());
         LinearLayout.LayoutParams layoutParamss = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < actionRqrdResponse.getData().getAdditionalDocument().size(); i++) {
@@ -388,25 +397,23 @@ public class AdditionalActionUploadActivity extends BaseActivity {
             additionalDocumentRequiredLL.addView(inf, layoutParamss);
             sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
             sscFileUploadLL.setTag(i);
-            sscuploadFileTV.setTag(i);
             sscfileUploadedLL.setTag(i);
 
             DocLayout docLayout = new DocLayout();
             docLayout.setId(actionRqrdResponse.getData().getAdditionalDocument().get(i).getId());
             docLayout.setLinearLayouts(documentRequiredLL);
             listOfDocLayouts.add(docLayout);
-
             if (actionRqrdResponse.getData().getAdditionalDocument().get(i).getUploadDocs().size() > 0) {
                 setUploadedTrue(i);
                 sscfileUploadedLL.setVisibility(VISIBLE);
                 sscuploadFileTV.setVisibility(GONE);
-                sscfileUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(actionRqrdResponse.getData().getAdditionalDocument().get(i).getUploadDocs().get(i).getUploadDate()));
+                sscfileUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(actionRqrdResponse.getData().getAdditionalDocument().get(i).getUploadDocs().get(0).getUploadDate()));
+                sscuploadFileTV.setTag(actionRqrdResponse.getData().getAdditionalDocument().get(i).getUploadDocs().get(0).getDocId());
+            } else
+                sscuploadFileTV.setTag(0);
 
-            }
 
             setSpannableText(sscuploadFileTV, actionRqrdResponse.getData().getAdditionalDocument().get(i).getDocumentName(), R.color.black);
-
-            //setSpannableText(uploadedTV, actionRqrdResponse.getData().getAdditionalDocument().get(i).getDocumentName(), R.color.primary_color);
             SpannableString ss = new SpannableString("Upload " + actionRqrdResponse.getData().getAdditionalDocument().get(i).getDocumentName());
             int color = R.color.primary_color;
             Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
@@ -420,6 +427,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                             documentID = actionRqrdResponse.getData().getAdditionalDocument().get(pos).getId();
                             selectedLayout = sscfileUploadedLL;
                             selectedText = sscuploadFileTV;
+                            lastUploadedDoc = (int) sscuploadFileTV.getTag();
                             if (checkAndRequestPermissions(AdditionalActionUploadActivity.this)) {
                                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                     return;
@@ -451,10 +459,11 @@ public class AdditionalActionUploadActivity extends BaseActivity {
             sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int pos = (int) view.getTag();
+                    int pos = (int) sscFileUploadLL.getTag();
                     documentID = actionRqrdResponse.getData().getAdditionalDocument().get(pos).getId();
                     selectedLayout = sscfileUploadedLL;
                     selectedText = sscuploadFileTV;
+                    lastUploadedDoc = (int) sscuploadFileTV.getTag();
                     if (checkAndRequestPermissions(AdditionalActionUploadActivity.this)) {
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
@@ -469,10 +478,11 @@ public class AdditionalActionUploadActivity extends BaseActivity {
             sscuploadFileTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int pos = (int) view.getTag();
+                    int pos = (int) sscFileUploadLL.getTag();
                     documentID = actionRqrdResponse.getData().getAdditionalDocument().get(pos).getId();
                     selectedLayout = sscfileUploadedLL;
                     selectedText = sscuploadFileTV;
+                    lastUploadedDoc = (int) sscuploadFileTV.getTag();
                     if (checkAndRequestPermissions(AdditionalActionUploadActivity.this)) {
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
@@ -483,8 +493,8 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                     }
                 }
             });
-            enableOrDisableNext();
         }
+        enableOrDisableNext();
     }
 
     public void setSpannableText(TextView sscuploadFileTV, String documentName, int color) {
@@ -502,8 +512,8 @@ public class AdditionalActionUploadActivity extends BaseActivity {
 
     private void postSubmitAPiCall() {
         try {
-//            showProgressDialog();
-//            underwritingUserActionRequiredViewModel.submitActionRequiredCustomer();
+            showProgressDialog();
+            underwritingUserActionRequiredViewModel.submitActionRequiredCustomer();
         } catch (Exception e) {
             e.printStackTrace();
             dismissDialog();
@@ -511,6 +521,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
     }
 
     private void uploadDoc(File file) {
+        Log.e("Document ID", documentID + "");
         showProgressDialog();
         RequestBody requestBody = null;
         MultipartBody.Part idFile = null;
