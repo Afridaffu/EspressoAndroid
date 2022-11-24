@@ -593,7 +593,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                         if (uploadLayout != null) {
                             uploadLayout.setVisibility(VISIBLE);
                             selectedText.setVisibility(GONE);
-                            selectedText.setTag(identityImageResponse.getData().getId());
+                            selectedText.setTag(Integer.parseInt(identityImageResponse.getData().getId()));
                         }
                         setUploadedTrue((int) uploadLayout.getTag());
                         enableOrDisableNext();
@@ -630,7 +630,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
 
     private void additionalRequiredDocuments(ActionRequiredResponse actionRequiredResponse) {
         try {
-            additionalDocumentRequiredLL.removeAllViews();
+//            additionalDocumentRequiredLL.removeAllViews();
             additionalDocumentRequiredLL.setVisibility(VISIBLE);
             for (int i = 0; i < actionRequiredResponse.getData().getAdditionalDocument().size(); i++) {
                 addDynamicView(i);
@@ -683,19 +683,23 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            documentID = actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId();
-                            uploadLayout = sscfileUploadedLL;
-                            selectedText = sscuploadFileTV;
-                            lastUploadedDoc = (int) sscuploadFileTV.getTag();
-                            if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
-                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                    return;
-                                }
-                                mLastClickTime = SystemClock.elapsedRealtime();
-                                if (Utils.isKeyboardVisible)
-                                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
-                                chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
+                            try {
+                                documentID = actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId();
+                                uploadLayout = sscfileUploadedLL;
+                                selectedText = sscuploadFileTV;
+                                lastUploadedDoc = (int) sscuploadFileTV.getTag();
+                                if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
+                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                        return;
+                                    }
+                                    mLastClickTime = SystemClock.elapsedRealtime();
+                                    if (Utils.isKeyboardVisible)
+                                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                                    chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
 
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
 
                         }
@@ -723,19 +727,23 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        documentID = actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId();
-                        uploadLayout = sscfileUploadedLL;
-                        selectedText = sscuploadFileTV;
-                        lastUploadedDoc = (int) sscuploadFileTV.getTag();
-                        if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
-                            if (Utils.isKeyboardVisible)
-                                Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
-                            chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
+                        try {
+                            documentID = actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId();
+                            uploadLayout = sscfileUploadedLL;
+                            selectedText = sscuploadFileTV;
+                            lastUploadedDoc = (int) sscuploadFileTV.getTag();
+                            if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                if (Utils.isKeyboardVisible)
+                                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                                chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
 
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -769,19 +777,23 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                         sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                documentID = actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId();
-                                uploadLayout = sscfileUploadedLL;
-                                selectedText = sscuploadFileTV;
-                                lastUploadedDoc = (int) sscuploadFileTV.getTag();
-                                if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
-                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                        return;
-                                    }
-                                    mLastClickTime = SystemClock.elapsedRealtime();
-                                    if (Utils.isKeyboardVisible)
-                                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
-                                    chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
+                                try {
+                                    documentID = actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getId();
+                                    uploadLayout = sscfileUploadedLL;
+                                    selectedText = sscuploadFileTV;
+                                    lastUploadedDoc = (int) sscuploadFileTV.getTag();
+                                    if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
+                                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                            return;
+                                        }
+                                        mLastClickTime = SystemClock.elapsedRealtime();
+                                        if (Utils.isKeyboardVisible)
+                                            Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                                        chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
 
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                             }
                         });

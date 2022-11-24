@@ -257,7 +257,8 @@ public interface ApiService {
     @POST("api/v2/user/email-otp/validate")
     Call<EmailValidateResponse> emailotpValidate(@Body SmsRequest smsRequest);
 
-    @PATCH("api/v2/register/set-password")
+//    @PATCH("api/v2/register/set-password")
+    @PATCH("api/v2/register/users/set-password")
     Call<SetPasswordResponse> setpassword(@Body SetPassword setPassword);
 
     @POST("api/v2/register/initialize/customer")

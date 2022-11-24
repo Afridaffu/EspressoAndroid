@@ -140,7 +140,7 @@ public class FileUtils {
                         if (cursor == null) return null;
                         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
                         cursor.moveToFirst();
-                        Log.e("path", cursor.getString(column_index));
+//                        Log.e("path", cursor.getString(column_index));
                     } while (cursor.moveToNext());
 
 
