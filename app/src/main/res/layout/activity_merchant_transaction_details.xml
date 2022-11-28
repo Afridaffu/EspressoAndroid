@@ -23,4 +23,9 @@
         layout="@layout/activity_merchant_payout"
         android:visibility="gone" />
 
+    <include
+        android:id="@+id/MTReserveRelease"
+        layout="@layout/activity_reserve_payout"
+        android:visibility="gone" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

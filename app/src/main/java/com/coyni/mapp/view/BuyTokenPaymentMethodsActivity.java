@@ -168,7 +168,10 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
 //                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
 //                        onBackPressed();
 //                    } else
-                    if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")
+                            && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
+                        onBackPressed();
+                    } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                         if (!objMyApplication.getCardSave()) {
                             isDeCredit = true;
                             ControlMethod("addpayment");

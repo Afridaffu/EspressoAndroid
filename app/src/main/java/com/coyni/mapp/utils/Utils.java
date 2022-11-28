@@ -291,6 +291,7 @@ public class Utils {
     public static final String monthlyServiceFeetxntype = "monthly service fee";
     public static final String businessPayouttxntype = "business payout";
     public static final String merchantPayouttxntype = "merchant payout";
+    public static final String reserveReleasetxntype = "reserve release";
     public static final String tokensub = "token";
     public static final String transfersub = "transfer";
     public static final String Success = "Success";
@@ -424,6 +425,7 @@ public class Utils {
     public static final String Refund = "Refund";
     public static final String MerchantPayout = "Merchant Payout";
     public static final String MonthlyServiceFee = "Monthly Service Fee";
+    public static final String ReserveRelease = "Reserve Release";
 
     public static final String ADD_BUSINESS = "ADDBUSINESS";
     public static final String ADD_DBA = "ADD_DBA";

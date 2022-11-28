@@ -64,7 +64,12 @@
     <include
         android:id="@+id/TTDrefund"
         layout="@layout/activity_business_refund"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/MTDservicefee"
+        layout="@layout/activity_monthly_service_fee"
+        android:visibility="gone" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
