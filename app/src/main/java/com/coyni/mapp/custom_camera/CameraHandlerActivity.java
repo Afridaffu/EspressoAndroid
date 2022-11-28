@@ -81,7 +81,7 @@ public class CameraHandlerActivity extends BaseActivity implements OnPictureTake
     }
 
     public void openGalleryForImage() {
-        finish();
+//        finish();
         Intent i = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
         galleryActionLauncher.launch(i);
     }
