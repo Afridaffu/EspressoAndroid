@@ -44,13 +44,22 @@ public class FileUtils {
         if (!isReadablePath(path)) {
             int index = path.lastIndexOf("/");
             String name = path.substring(index + 1);
-            String dstPath = context.getCacheDir().getAbsolutePath() + File.separator + name;
+            String dstPath = getCacheTempDirectory(context) + name;
             if (copyFile(context, uri, dstPath)) {
                 path = dstPath;
                 Log.d(TAG, "copy file success: " + path);
             } else {
                 Log.d(TAG, "copy file fail!");
             }
+        }
+        return path;
+    }
+
+    public static String getCacheTempDirectory(Context context) {
+        String path = context.getCacheDir().getAbsolutePath() + File.separator + "temp" + File.separator;
+        File f = new File(path);
+        if (!f.exists()) {
+            f.mkdirs();
         }
         return path;
     }
@@ -70,7 +79,7 @@ public class FileUtils {
                 }
             } else if (isDownloadsDocument(uri)) {
 
-                String dstPath = context.getCacheDir().getAbsolutePath() + File.separator + getFileName(context, uri);
+                String dstPath = getCacheTempDirectory(context) + getFileName(context, uri);
 
                 if (copyFile(context, uri, dstPath)) {
                     Log.d(TAG, "copy file success: " + dstPath);
@@ -131,7 +140,7 @@ public class FileUtils {
                         if (cursor == null) return null;
                         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
                         cursor.moveToFirst();
-                        Log.e("path", cursor.getString(column_index));
+//                        Log.e("path", cursor.getString(column_index));
                     } while (cursor.moveToNext());
 
 
@@ -181,6 +190,14 @@ public class FileUtils {
         return cursor.getString(nameindex);
     }
 
+    public static void cleanUpTempDirectory(Context context) {
+        File file = new File(getCacheTempDirectory(context));
+        if (file.exists() && file.isDirectory() && file.listFiles() != null) {
+            for (File f : file.listFiles()) {
+                f.delete();
+            }
+        }
+    }
 
     private static String getDataColumn(Context context, Uri uri, String selection,
                                         String[] selectionArgs) {

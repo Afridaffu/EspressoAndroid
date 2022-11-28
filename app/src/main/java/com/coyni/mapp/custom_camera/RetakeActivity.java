@@ -86,7 +86,7 @@ public class RetakeActivity extends AppCompatActivity {
                 } else if (from.equals("AAR-actionReq2File")) {
                     AdditionalInformationRequiredActivity.actionReq2File = null;
                 } else if (from.equals("ActRqrdDocs")) {
-                    AdditionalActionUploadActivity.mediaFile = null;
+//                    AdditionalActionUploadActivity.mediaFile = null;
                 }
                 finish();
             }
@@ -115,17 +115,19 @@ public class RetakeActivity extends AppCompatActivity {
                 } else if (from.equals("ADD_BO")) {
                     AddBeneficialOwnerActivity.addBeneficialOwnerActivity.setDocSelected();
                     AddBeneficialOwnerActivity.enableOrDisableNext();
-                } else if (from.equals("BAARA")) {
-                    BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.saveFileFromCamera(ImageUtility.mediaFile);
-                    // BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(0);
-                } else if (from.equals("AAR-FBL")) {
+                }
+//                else if (from.equals("BAARA")) {
+//                    BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.saveFileFromCamera(ImageUtility.mediaFile);
+//                    // BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(0);
+//                }
+                else if (from.equals("AAR-FBL")) {
                     //  BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(3);
                 } else if (from.equals("AAR-securityCard")) {
                     AdditionalInformationRequiredActivity.additionalInformationRequiredActivity.removeAndUploadAdditionalDoc(0);
                 } else if (from.equals("AAR-actionReq2File")) {
                     AdditionalInformationRequiredActivity.additionalInformationRequiredActivity.removeAndUploadAdditionalDoc(0);
                 } else if (from.equals("ActRqrdDocs")) {
-                    AdditionalActionUploadActivity.additionalActionUploadActivity.saveFileFromCamera(ImageUtility.mediaFile);
+//                    AdditionalActionUploadActivity.additionalActionUploadActivity.saveFileFromCamera(ImageUtility.mediaFile);
                 }
             }
         });
@@ -153,15 +155,15 @@ public class RetakeActivity extends AppCompatActivity {
                 } else if (from.equals("BAARA")) {
                     //BusinessAdditionalActionRequiredActivity.adtionalSscFile = null;
                 } else if (from.equals("AAR-SecFile")) {
-                    BusinessAdditionalActionRequiredActivity.additional2fFle = null;
+//                    BusinessAdditionalActionRequiredActivity.additional2fFle = null;
                 } else if (from.equals("AAR-FBL")) {
-                    BusinessAdditionalActionRequiredActivity.businessLicenceFile = null;
+//                    BusinessAdditionalActionRequiredActivity.businessLicenceFile = null;
                 } else if (from.equals("AAR-securityCard")) {
                     AdditionalInformationRequiredActivity.securityFile = null;
                 } else if (from.equals("AAR-actionReq2File")) {
                     AdditionalInformationRequiredActivity.actionReq2File = null;
                 } else if (from.equals("ActRqrdDocs")) {
-                    AdditionalActionUploadActivity.mediaFile = null;
+//                    AdditionalActionUploadActivity.mediaFile = null;
                 }
             }
         });
@@ -291,9 +293,9 @@ public class RetakeActivity extends AppCompatActivity {
                 } else if (from.equals("BAARA")) {
 //                    BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.saveFileFromCamera(mediaFile);
                 } else if (from.equals("AAR-SecFile")) {
-                    BusinessAdditionalActionRequiredActivity.additional2fFle = mediaFile;
+//                    BusinessAdditionalActionRequiredActivity.additional2fFle = mediaFile;
                 } else if (from.equals("AAR-FBL")) {
-                    BusinessAdditionalActionRequiredActivity.businessLicenceFile = mediaFile;
+//                    BusinessAdditionalActionRequiredActivity.businessLicenceFile = mediaFile;
                 } else if (from.equals("AAR-securityCard")) {
                     AdditionalInformationRequiredActivity.securityFile = mediaFile;
                 } else if (from.equals("AAR-actionReq2File")) {

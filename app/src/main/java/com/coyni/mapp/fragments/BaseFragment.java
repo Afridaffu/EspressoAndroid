@@ -10,4 +10,8 @@ public abstract class BaseFragment extends Fragment {
     public void onNotificationUpdate() {
 
     }
+
+    public void onBackPressed() {
+
+    }
 }

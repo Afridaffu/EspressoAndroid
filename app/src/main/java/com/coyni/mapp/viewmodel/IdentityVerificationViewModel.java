@@ -147,6 +147,41 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
         }
     }
 
+    public void removeImageMultiDocs(String identityType) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<RemoveIdentityResponse> mCall = apiService.removeImageMultiDocs(identityType);
+            mCall.enqueue(new Callback<RemoveIdentityResponse>() {
+                @Override
+                public void onResponse(Call<RemoveIdentityResponse> call, Response<RemoveIdentityResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            RemoveIdentityResponse obj = response.body();
+                            removeIdentityImageResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<RemoveIdentityResponse>() {
+                            }.getType();
+                            RemoveIdentityResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            removeIdentityImageResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        removeIdentityImageResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RemoveIdentityResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public void uploadIdentityAddress(IdentityAddressRequest identityAddressRequest) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);

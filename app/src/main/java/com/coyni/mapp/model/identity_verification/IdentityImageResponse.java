@@ -44,6 +44,8 @@ public class IdentityImageResponse {
     public class Daata {
         private String identityUrl;
         private String message;
+        private String id;
+        private String documentSize;
 
         public String getMessage() {
             return message;
@@ -59,6 +61,22 @@ public class IdentityImageResponse {
 
         public void setIdentityUrl(String identityUrl) {
             this.identityUrl = identityUrl;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getDocumentSize() {
+            return documentSize;
+        }
+
+        public void setDocumentSize(String documentSize) {
+            this.documentSize = documentSize;
         }
     }
 }

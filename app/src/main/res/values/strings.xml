@@ -844,4 +844,8 @@
     <string name="updateTitle">Update Required</string>
     <string name="block">Blocked</string>
 
+    <string name="choose_library">Choose From Library</string>
+    <string name="take_photo">Take a Photo</string>
+    <string name="browse_files">Browse Files</string>
+
 </resources>

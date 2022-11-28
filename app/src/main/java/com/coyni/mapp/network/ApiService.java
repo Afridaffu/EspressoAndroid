@@ -34,6 +34,7 @@ import com.coyni.mapp.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.coyni.mapp.model.UpdateSignAgreementsResp;
 import com.coyni.mapp.model.UpdateSignRequest;
 import com.coyni.mapp.model.actionRqrd.ActionRqrdResponse;
+import com.coyni.mapp.model.actionRqrd.InformationRequest;
 import com.coyni.mapp.model.actionRqrd.SubmitActionRqrdResponse;
 import com.coyni.mapp.model.activtity_log.ActivityLogResp;
 import com.coyni.mapp.model.appupdate.AppUpdateResp;
@@ -51,7 +52,6 @@ import com.coyni.mapp.model.business_activity.BusinessActivityResp;
 import com.coyni.mapp.model.business_id_verification.BusinessTrackerResponse;
 import com.coyni.mapp.model.business_id_verification.CancelApplicationResponse;
 import com.coyni.mapp.model.businesswallet.BusinessWalletResponse;
-import com.coyni.mapp.model.businesswallet.WalletRequest;
 import com.coyni.mapp.model.buytoken.BuyTokenRequest;
 import com.coyni.mapp.model.buytoken.BuyTokenResponse;
 import com.coyni.mapp.model.buytoken.CancelBuyTokenResponse;
@@ -257,7 +257,8 @@ public interface ApiService {
     @POST("api/v2/user/email-otp/validate")
     Call<EmailValidateResponse> emailotpValidate(@Body SmsRequest smsRequest);
 
-    @PATCH("api/v2/register/set-password")
+//    @PATCH("api/v2/register/set-password")
+    @PATCH("api/v2/register/users/set-password")
     Call<SetPasswordResponse> setpassword(@Body SetPassword setPassword);
 
     @POST("api/v2/register/initialize/customer")
@@ -411,6 +412,9 @@ public interface ApiService {
 
     @DELETE("api/v2/profile/me/remove-identity")
     Call<RemoveIdentityResponse> removeIdentityImage(@Query("identityType") String identityType);
+
+    @DELETE("api/v2/profile/remove-identity/{identityId}")
+    Call<RemoveIdentityResponse> removeImageMultiDocs(@Path("identityId") String identityType);
 
     @POST("api/v2/profile/identity")
     Call<IdentityAddressResponse> uploadIdentityAddress(@Body IdentityAddressRequest identityAddressRequest);
@@ -660,6 +664,12 @@ public interface ApiService {
     Call<ActionRequiredSubmitResponse> submitActionRequired(@Part MultipartBody.Part[] body,
                                                             @Part("information") RequestBody type);
 
+    @POST("api/v2/underwriting/user/business/action-required")
+    Call<ActionRequiredSubmitResponse> submitMerchantActionRequired(@Body InformationRequest type);
+
+    @POST("api/v2/underwriting/user/business/action-required")
+    Call<ActionRequiredSubmitResponse> submitMerchantActionRequired(@Body RequestBody data);
+
     @GET("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutListData();
 
@@ -731,6 +741,9 @@ public interface ApiService {
     Call<SubmitActionRqrdResponse> submitActRqrd(@Part MultipartBody.Part[] body,
                                                  @Part("underwritingActionRequired") RequestBody type);
 
+    @POST("api/v2/underwriting/user/customer/action-required")
+    Call<SubmitActionRqrdResponse> submitCustomerActRqrd();
+
     @POST("api/v2/logs/transaction")
     Call<ActivityLogResp> activityLog(@Query("txnId") String txnId, @Query("userType") String userType);
 
@@ -792,5 +805,10 @@ public interface ApiService {
     @POST("api/v2/profile/update-agreement/{agreementId}")
     Call<UpdateSignAgreementsResp> signUpdatedAgreementDoc(@Path("agreementId") Integer agreementId, @Part MultipartBody.Part filee);
 
+    @Multipart
+    @POST("api/v2/underwriting/upload-docs")
+    Call<IdentityImageResponse> uploadActionRequiredDoc(@Part MultipartBody.Part filee,
+                                                        @Part("identityType") RequestBody type,
+                                                        @Part("uwDocId") RequestBody docID);
 }
 

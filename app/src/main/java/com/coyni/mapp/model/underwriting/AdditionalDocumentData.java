@@ -3,6 +3,9 @@ package com.coyni.mapp.model.underwriting;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AdditionalDocumentData {
 
     @SerializedName("id")
@@ -32,6 +35,10 @@ public class AdditionalDocumentData {
     @SerializedName("isAccepted")
     @Expose
     private String isAccepted;
+
+    @SerializedName("uploadDocs")
+    @Expose
+    private List<DocumentData> uploadDocs = new ArrayList<>();
 
     private boolean isSelected;
 
@@ -97,5 +104,75 @@ public class AdditionalDocumentData {
 
     public void setIsAccepted(String isAccepted) {
         this.isAccepted = isAccepted;
+    }
+
+    public List<DocumentData> getUploadDocs() {
+        return uploadDocs;
+    }
+
+    public void setUploadDocs(List<DocumentData> uploadDocs) {
+        this.uploadDocs = uploadDocs;
+    }
+
+    public class DocumentData {
+        @SerializedName("docId")
+        @Expose
+        private int docId;
+
+        @SerializedName("documentSize")
+        @Expose
+        private int documentSize;
+
+        @SerializedName("fileName")
+        @Expose
+        private String fileName;
+
+        @SerializedName("documentUrl")
+        @Expose
+        private String documentUrl;
+
+        @SerializedName("uploadDate")
+        @Expose
+        private String uploadDate;
+
+        public int getDocId() {
+            return docId;
+        }
+
+        public void setDocId(int docId) {
+            this.docId = docId;
+        }
+
+        public int getDocumentSize() {
+            return documentSize;
+        }
+
+        public void setDocumentSize(int documentSize) {
+            this.documentSize = documentSize;
+        }
+
+        public String getFileName() {
+            return fileName;
+        }
+
+        public void setFileName(String fileName) {
+            this.fileName = fileName;
+        }
+
+        public String getDocumentUrl() {
+            return documentUrl;
+        }
+
+        public void setDocumentUrl(String documentUrl) {
+            this.documentUrl = documentUrl;
+        }
+
+        public String getUploadDate() {
+            return uploadDate;
+        }
+
+        public void setUploadDate(String uploadDate) {
+            this.uploadDate = uploadDate;
+        }
     }
 }
