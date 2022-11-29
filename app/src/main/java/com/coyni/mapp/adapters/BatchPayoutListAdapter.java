@@ -65,7 +65,9 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
             @Override
             public void onClick(View v) {
                 try {
-                    listener.onItemClick(position, listItems.get(position));
+                    if (Double.parseDouble(listItems.get(position).getTotalAmount()) > 0) {
+                        listener.onItemClick(position, listItems.get(position));
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -76,7 +78,7 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
         BatchPayoutListItems objData = listItems.get(position);
 
         if (objData.getSentTo() != null && !objData.getSentTo().equals("")) {
-            holder.payoutSentTextTV.setText("Sent to" + " " +objData.getSentTo());
+            holder.payoutSentTextTV.setText("Sent to" + " " + objData.getSentTo());
         }
         if (objData.getTotalAmount() != null && !objData.getTotalAmount().equals("")) {
             holder.payoutMoneyTV.setText(Utils.convertTwoDecimal(objData.getTotalAmount()));
