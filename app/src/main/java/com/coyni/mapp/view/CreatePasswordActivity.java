@@ -646,12 +646,12 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
 //                            request.setPassword(passwordET.getText().toString().trim());
 //                            loginViewModel.setExpiryPassword(request);
 
-//                            // new update - using same API for forgot pass and expiry password.
-//                            SetPassword setPassword = new SetPassword();
-//                            setPassword.setCode(strCode);
-//                            setPassword.setPasswordExpired(true);
-//                            setPassword.setPassword(passwordET.getText().toString().trim());
-//                            loginViewModel.setPassword(setPassword);
+                            // new update - using same API for forgot pass and expiry password.
+                            SetPassword setPassword = new SetPassword();
+                            setPassword.setCode(strCode);
+                            setPassword.setPasswordExpired(true);
+                            setPassword.setPassword(passwordET.getText().toString().trim());
+                            loginViewModel.setPassword(setPassword);
                         } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword")) {
                             ChangePasswordRequest request = new ChangePasswordRequest();
                             request.setOldPassword(getIntent().getStringExtra("oldpassword"));

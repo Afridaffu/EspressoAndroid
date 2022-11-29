@@ -128,7 +128,7 @@
 
             <LinearLayout
                 android:id="@+id/additionalDocLL"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -150,11 +150,10 @@
                     android:src="@drawable/ic_plus" />
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_50sdp"
                     android:layout_weight="1"
                     android:fontFamily="@font/opensans_regular"
                     android:text="Upload Additional"

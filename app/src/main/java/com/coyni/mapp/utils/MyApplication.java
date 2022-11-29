@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.coyni.mapp.model.FetchAddressResp;
 import com.coyni.mapp.model.SignAgreementData;
 import com.coyni.mapp.model.businesswallet.WalletInfo;
 import com.coyni.mapp.model.fee.Fees;
@@ -245,6 +246,14 @@ public class MyApplication extends Application {
 
     public void setMyProfile(Profile myProfile) {
         mCurrentUserData.setMyProfile(myProfile);
+    }
+
+    public FetchAddressResp getMyAddress() {
+        return mCurrentUserData.getMyAddress();
+    }
+
+    public void setMyAddress(FetchAddressResp address) {
+        mCurrentUserData.setMyAddress(address);
     }
 
     public UpdateEmailResponse getUpdateEmailResponse() {

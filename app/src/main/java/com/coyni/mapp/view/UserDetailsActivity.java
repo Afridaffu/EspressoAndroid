@@ -46,6 +46,7 @@ import com.coyni.mapp.adapters.BusinessProfileRecyclerAdapter;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
 import com.coyni.mapp.model.APIError;
 import com.coyni.mapp.model.AccountsData;
+import com.coyni.mapp.model.FetchAddressResp;
 import com.coyni.mapp.model.States;
 import com.coyni.mapp.model.preferences.BaseProfile;
 import com.coyni.mapp.model.preferences.Preferences;
@@ -399,6 +400,17 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 //                } else {
 //                    business_defaultaccountET.setText(fullname);
 //                }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            if (myApplicationObj.getMyAddress().getData().getAddressLine1() != null) {
+
+                try {
+                    FetchAddressResp profile = myApplicationObj.getMyAddress();
 
                     String addressFormatted = "";
                     if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
@@ -441,6 +453,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
 
             }
+
 
             if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT
                     || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
@@ -664,6 +677,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                                     myApplicationObj.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                             imageTextTV.setText(imageTextNew);
                             dashboardViewModel.meProfile();
+                            dashboardViewModel.fetchUserAddress();
                             Utils.showCustomToast(UserDetailsActivity.this, imageResponse.getData().getMessage(), R.drawable.ic_custom_tick, "");
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -764,41 +778,89 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                             business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                             userPhoneNumTV.setText(phoneFormat);
                             business_userPhneNoTV.setText(phoneFormat);
-                            String addressFormatted = "";
-                            if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
-                                addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
-                            }
-                            if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
-                                addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
-                            }
-                            if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
-                                addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
-                            }
-                            if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-                                String stateCode = Utils.getStateCode(profile.getData().getState().toLowerCase(), myApplicationObj.getListStates());
-                                if (stateCode != null && !stateCode.equals("")) {
-                                    addressFormatted = addressFormatted + stateCode + ", ";
-                                }
-                            }
-                            if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
-                                addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
-                            }
+//                            String addressFormatted = "";
+//                            if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
+//                                addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
+//                            }
+//                            if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
+//                                addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
+//                            }
+//                            if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
+//                                addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
+//                            }
+//                            if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+//                                String stateCode = Utils.getStateCode(profile.getData().getState().toLowerCase(), myApplicationObj.getListStates());
+//                                if (stateCode != null && !stateCode.equals("")) {
+//                                    addressFormatted = addressFormatted + stateCode + ", ";
+//                                }
+//                            }
+//                            if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
+//                                addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
+//                            }
+//
+//                            if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
+//                                addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
+//                            }
+//
+//                            if (addressFormatted.equals("")) {
+//                                addressFormatted = addressFormatted + "United States";
+//                                userAddressTV.setText(addressFormatted);
+//                                business_userAddreTV.setText(addressFormatted);
+//                                address = addressFormatted;
+//                            } else {
+//                                userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+//                                business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+//                                address = addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
+//                            }
 
-                            if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
-                                addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
-                            }
+                        }
 
-                            if (addressFormatted.equals("")) {
-                                addressFormatted = addressFormatted + "United States";
-                                userAddressTV.setText(addressFormatted);
-                                business_userAddreTV.setText(addressFormatted);
-                                address = addressFormatted;
-                            } else {
-                                userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                                business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                                address = addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
-                            }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
+        dashboardViewModel.getFetchAddressMutableLiveData().observe(this, new Observer<FetchAddressResp>() {
+            @Override
+            public void onChanged(FetchAddressResp profile) {
+                try {
+                    dismissDialog();
+                    if (profile != null && profile.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        String addressFormatted = "";
+                        if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
+                            addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
+                        }
+                        if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
+                            addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
+                        }
+                        if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
+                            addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
+                        }
+                        if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+                            String stateCode = Utils.getStateCode(profile.getData().getState().toLowerCase(), myApplicationObj.getListStates());
+                            if (stateCode != null && !stateCode.equals("")) {
+                                addressFormatted = addressFormatted + stateCode + ", ";
+                            }
+                        }
+                        if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
+                            addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
+                        }
+
+                        if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
+                            addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
+                        }
+
+                        if (addressFormatted.equals("")) {
+                            addressFormatted = addressFormatted + "United States";
+                            userAddressTV.setText(addressFormatted);
+                            business_userAddreTV.setText(addressFormatted);
+                            address = addressFormatted;
+                        } else {
+                            userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                            business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                            address = addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
                         }
 
                     }
