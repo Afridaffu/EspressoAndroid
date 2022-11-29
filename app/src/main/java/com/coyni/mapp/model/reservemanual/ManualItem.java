@@ -8,7 +8,8 @@ public class ManualItem {
 
     private String sentTo;
 
-    private int amount;
+    //    private int amount;
+    private Double amount;
 
     private String reason;
 
@@ -36,11 +37,19 @@ public class ManualItem {
         this.sentTo = sentTo;
     }
 
-    public int getAmount() {
+//    public int getAmount() {
+//        return amount;
+//    }
+//
+//    public void setAmount(int amount) {
+//        this.amount = amount;
+//    }
+
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
