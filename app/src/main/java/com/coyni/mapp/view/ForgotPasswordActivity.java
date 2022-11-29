@@ -252,7 +252,11 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
                         i.putExtra("screen", getIntent().getStringExtra("screen"));
                         startActivity(i);
                     } else {
-                        Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this, "", "");
+                        etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                        Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                        layoutEmailError.setVisibility(VISIBLE);
+                        tvEmailError.setText(emailResponse.getError().getErrorDescription());
+                        etEmail.clearFocus();
 //                        if (emailResponse.getError().getErrorDescription().toLowerCase().contains("inactive")) {
 //                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
 //                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));

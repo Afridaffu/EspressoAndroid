@@ -374,6 +374,14 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
             userDetailsCloseLL.setOnClickListener(view -> finish());
 
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT
+                    || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
+                findViewById(R.id.businessUserDetailsLL).setVisibility(View.VISIBLE);
+                findViewById(R.id.personalUserDetailsCV).setVisibility(View.GONE);
+            } else if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                findViewById(R.id.businessUserDetailsLL).setVisibility(View.GONE);
+                findViewById(R.id.personalUserDetailsCV).setVisibility(View.VISIBLE);
+            }
 
             if (myApplicationObj.getMyProfile().getData().getFirstName() != null) {
 
@@ -452,16 +460,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 }
 
 
-            }
-
-
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT
-                    || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
-                findViewById(R.id.businessUserDetailsLL).setVisibility(View.VISIBLE);
-                findViewById(R.id.personalUserDetailsCV).setVisibility(View.GONE);
-            } else if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                findViewById(R.id.businessUserDetailsLL).setVisibility(View.GONE);
-                findViewById(R.id.personalUserDetailsCV).setVisibility(View.VISIBLE);
             }
 
 
@@ -828,6 +826,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 try {
                     dismissDialog();
                     if (profile != null && profile.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        myApplicationObj.setMyAddress(profile);
                         String addressFormatted = "";
                         if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
                             addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
@@ -1303,6 +1302,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         super.onResume();
         try {
             dashboardViewModel.meProfile();
+            dashboardViewModel.fetchUserAddress();
             if (Utils.isKeyboardVisible) {
                 Utils.hideKeypad(UserDetailsActivity.this);
             }

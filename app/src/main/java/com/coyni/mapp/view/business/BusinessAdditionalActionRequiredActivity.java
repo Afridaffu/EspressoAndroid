@@ -537,11 +537,11 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     public void onChanged(ActionRequiredResponse actionRequiredResponse) {
                         try {
                             dismissDialog();
-                            additionalActionRL.setVisibility(VISIBLE);
+
                             // LogUtils.d(TAG, "ActionRequiredResponse" + actionRequiredResponse.getData().getWebsiteChange().size());
                             actionRequired = actionRequiredResponse;
                             if (actionRequiredResponse != null && actionRequiredResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
-
+                                additionalActionRL.setVisibility(VISIBLE);
                                 if (actionRequiredResponse != null && actionRequiredResponse.getData() != null) {
                                     if (actionRequiredResponse.getData().getMessage() != null) {
                                         adminMessageTV.setText(actionRequiredResponse.getData().getMessage());
