@@ -79,6 +79,7 @@ import retrofit2.Response;
 
 public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<EmailResendResponse> emailresendMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<EmailResendResponse> forgotPassOTPSendMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<OTPValidateResponse> regEmailOTPResendLiveData = new MutableLiveData<>();
     private MutableLiveData<OTPValidateResponse> regPhoneOTPResendLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
@@ -177,7 +178,11 @@ public class LoginViewModel extends AndroidViewModel {
         return emailresendMutableLiveData;
     }
 
-//    public MutableLiveData<AddBusinessUserResponse> postChangeAccountResponse() {
+    public MutableLiveData<EmailResendResponse> getForgotPassOTPSendMutableLiveData() {
+        return forgotPassOTPSendMutableLiveData;
+    }
+
+    //    public MutableLiveData<AddBusinessUserResponse> postChangeAccountResponse() {
 //        return postChangeAccountResponse;
 //    }
 
@@ -353,6 +358,39 @@ public class LoginViewModel extends AndroidViewModel {
                 public void onFailure(Call<EmailResendResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void forgotPasswordOTPSend(EmailRequest request) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<EmailResendResponse> mCall = apiService.forgotPasswordOTPSend(request);
+            mCall.enqueue(new Callback<EmailResendResponse>() {
+                @Override
+                public void onResponse(Call<EmailResendResponse> call, Response<EmailResendResponse> response) {
+                    if (response.isSuccessful()) {
+                        EmailResendResponse obj = response.body();
+                        forgotPassOTPSendMutableLiveData.setValue(obj);
+                        Log.e("Email Resend Resp", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<EmailResendResponse>() {
+                        }.getType();
+                        EmailResendResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            forgotPassOTPSendMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<EmailResendResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    forgotPassOTPSendMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {

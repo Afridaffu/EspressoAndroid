@@ -1000,6 +1000,12 @@ public class CustomerProfileActivity extends BaseActivity {
             }
         });
 
+        dashboardViewModel.getFetchAddressMutableLiveData().observe(this,  addressResp -> {
+            if (addressResp != null) {
+                objMyApplication.setMyAddress(addressResp);
+            }
+        });
+
         coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
             @Override
             public void onChanged(BiometricTokenResponse biometricTokenResponse) {
@@ -1321,6 +1327,7 @@ public class CustomerProfileActivity extends BaseActivity {
         try {
             super.onResume();
             dashboardViewModel.meProfile();
+            dashboardViewModel.fetchUserAddress();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.coyni.mapp.model.FetchAddressResp;
 import com.coyni.mapp.model.appupdate.AppUpdateResp;
 import com.coyni.mapp.network.ApiClient;
 import com.google.gson.Gson;
@@ -56,6 +57,7 @@ import retrofit2.Response;
 public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Profile> profileMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<FetchAddressResp> fetchAddressMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<PaymentMethodsResponse> paymentMethodsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ImageResponse> imageResponseMutableLiveData = new MutableLiveData<>();
 //    private MutableLiveData<WalletResponse> walletResponseMutableLiveData = new MutableLiveData<>();
@@ -87,6 +89,10 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<TransactionList> transactionListMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CancelBuyTokenResponse> cancelBuyTokenResponseMutableLiveData = new MutableLiveData<>();
 
+
+    public MutableLiveData<FetchAddressResp> getFetchAddressMutableLiveData() {
+        return fetchAddressMutableLiveData;
+    }
 
     public MutableLiveData<ActivityLogResp> getActivityLogRespMutableLiveData() {
         return activityLogRespMutableLiveData;
@@ -223,6 +229,43 @@ public class DashboardViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
+    public void fetchUserAddress() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<FetchAddressResp> mCall = apiService.fetchAddress();
+            mCall.enqueue(new Callback<FetchAddressResp>() {
+                @Override
+                public void onResponse(Call<FetchAddressResp> call, Response<FetchAddressResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            FetchAddressResp obj = response.body();
+                            fetchAddressMutableLiveData.setValue(obj);
+
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<FetchAddressResp>() {
+                            }.getType();
+                            FetchAddressResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            fetchAddressMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        fetchAddressMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<FetchAddressResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    fetchAddressMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
     public void meAgreementsById() {
         try {

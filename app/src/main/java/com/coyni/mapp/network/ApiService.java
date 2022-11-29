@@ -28,6 +28,7 @@ import com.coyni.mapp.model.DBAInfo.DBAInfoUpdateResp;
 import com.coyni.mapp.model.DashboardReserveList.ReserveListResponse;
 import com.coyni.mapp.model.EmailRequest;
 import com.coyni.mapp.model.EmptyRequest;
+import com.coyni.mapp.model.FetchAddressResp;
 import com.coyni.mapp.model.SearchKeyRequest;
 import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.UpdateSignAgree.UpdateSignAgreementsResponse;
@@ -214,6 +215,9 @@ public interface ApiService {
 
     @POST("api/v2/user/email-otp/resend")
     Call<EmailResendResponse> emailotpresend(@Body EmailRequest emailRequest);
+
+    @POST("api/v2/user/forgot-password/otp/send")
+    Call<EmailResendResponse> forgotPasswordOTPSend(@Body EmailRequest emailRequest);
 
     @POST("api/v2/user/register/email-otp/validate")
     Call<EmailResponse> emailotp(@Body SmsRequest smsRequest);
@@ -810,5 +814,8 @@ public interface ApiService {
     Call<IdentityImageResponse> uploadActionRequiredDoc(@Part MultipartBody.Part filee,
                                                         @Part("identityType") RequestBody type,
                                                         @Part("uwDocId") RequestBody docID);
+
+    @GET("api/v2/profile/fetch-address")
+    Call<FetchAddressResp> fetchAddress();
 }
 

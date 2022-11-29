@@ -209,7 +209,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
                                 EmailRequest emailRequest = new EmailRequest();
                                 emailRequest.setEmail(etEmail.getText().toString().trim());
 //                                loginViewModel.emailotpresend(etEmail.getText().toString().trim());
-                                loginViewModel.emailotpresend(emailRequest);
+                                loginViewModel.forgotPasswordOTPSend(emailRequest);
                             } else if (etEmail.getText().toString().trim().length() > 0 && etEmail.getText().toString().trim().length() <= 5) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
@@ -240,7 +240,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
     }
 
     private void initObserver() {
-        loginViewModel.getEmailresendMutableLiveData().observe(this, new Observer<EmailResendResponse>() {
+        loginViewModel.getForgotPassOTPSendMutableLiveData().observe(this, new Observer<EmailResendResponse>() {
             @Override
             public void onChanged(EmailResendResponse emailResponse) {
                 dialog.dismiss();
@@ -252,7 +252,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
                         i.putExtra("screen", getIntent().getStringExtra("screen"));
                         startActivity(i);
                     } else {
-                        if (emailResponse.getError().getErrorDescription().toLowerCase().contains("not found")) {
+                        if (emailResponse.getError().getErrorDescription().toLowerCase().contains("inactive")) {
                             etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                             layoutEmailError.setVisibility(VISIBLE);
