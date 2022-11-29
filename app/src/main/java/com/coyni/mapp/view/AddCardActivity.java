@@ -1798,15 +1798,23 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                                 Intent i = new Intent();
                                 setResult(RESULT_OK, i);
                             }
+                        } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add") && !isWithFCEnabled) {
+                            if (getIntent().getStringExtra("card") != null && !getIntent().getStringExtra("card").equals("credit")) {
+                                startActivity(new Intent(AddCardActivity.this, WithdrawPaymentMethodsActivity.class)
+                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            } else {
+                                Intent i = new Intent();
+                                setResult(RESULT_OK, i);
+                            }
                         } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isBuyFCEnabled && objMyApplication.getGBTBalance() == 0) {
                             Intent i = new Intent(AddCardActivity.this, BuyTokenActivity.class);
                             i.putExtra("cvv", strCvv);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
+                        } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("buytoken") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add") && !isBuyFCEnabled) {
+                            startActivity(new Intent(AddCardActivity.this, BuyTokenPaymentMethodsActivity.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         } else {
-//                            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("buytoken") && isBuyFCEnabled) {
-//                                objMyApplication.setStrCVV(strCvv);
-//                            }
                             Intent i = new Intent();
                             setResult(RESULT_OK, i);
                         }

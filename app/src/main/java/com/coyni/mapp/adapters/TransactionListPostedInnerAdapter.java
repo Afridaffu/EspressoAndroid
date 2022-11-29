@@ -101,19 +101,15 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             strType = objData.getTxnTypeDn().toLowerCase();
         }
 
-        if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid")) {
+//        if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid")) {
+        if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid") || strType.equals("monthly service fee")) {
             holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN", "").trim());
             holder.amount.setTextColor(mContext.getResources().getColor(R.color.black));
-
-//        } else if (strType.contains("buy") || strType.equals("receive") || strType.equals("refund")) {
         } else {
             holder.amount.setText("+" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN", "").trim());
             holder.amount.setTextColor(mContext.getResources().getColor(R.color.active_green));
 
         }
-//        else{
-//            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN", "").trim());
-//        }
 
         if (strSubtype.equalsIgnoreCase("Sent")) {
             holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()).split(" ")[0]);

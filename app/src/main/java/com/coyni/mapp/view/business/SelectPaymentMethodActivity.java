@@ -564,6 +564,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                                 Intent i = new Intent(SelectPaymentMethodActivity.this, AddManualBankAccount.class);
                                 i.putExtra("From", "pay");
                                 i.putExtra("screen", strScreen);
+                                i.putExtra("subtype", getIntent().getStringExtra("subtype"));
                                 startActivityForResult(i, 4);
                             }
                         } else {
@@ -586,6 +587,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                                 Intent i = new Intent(SelectPaymentMethodActivity.this, AddCardActivity.class);
                                 i.putExtra("card", "debit");
                                 i.putExtra("screen", strScreen);
+                                i.putExtra("subtype", getIntent().getStringExtra("subtype"));
                                 startActivityForResult(i, 3);
                             }
                         } else {
@@ -610,6 +612,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                                     Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentCogentActivity.class);
                                     i.putExtra("TYPE", strCurrent);
                                     i.putExtra("screen", strScreen);
+                                    i.putExtra("subtype", getIntent().getStringExtra("subtype"));
                                     startActivityForResult(i, 2);
                                 }
                             }
@@ -1097,7 +1100,7 @@ public class SelectPaymentMethodActivity extends BaseActivity {
                 } else {
                     layoutCard.setVisibility(View.VISIBLE);
                     layoutBank.setVisibility(View.GONE);
-                    tvCardNumber.setText(getString(R.string.dots)+ objPayment.getLastFour());
+                    tvCardNumber.setText(getString(R.string.dots) + objPayment.getLastFour());
                     switch (objPayment.getCardBrand().toUpperCase().replace(" ", "")) {
                         case "VISA":
                             tvCardName.setText(Utils.capitalize(objPayment.getCardBrand() + " " + objPayment.getCardType()));

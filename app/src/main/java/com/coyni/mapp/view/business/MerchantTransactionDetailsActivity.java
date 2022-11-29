@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,6 +21,7 @@ import com.coyni.mapp.model.transaction.TransactionDetails;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
+import com.coyni.mapp.view.TransactionDetailsActivity;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 
 public class MerchantTransactionDetailsActivity extends BaseActivity {
@@ -83,6 +85,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     case Utils.merchantPayouttxntype:
                         txnType = Utils.merchantPayout;
                         break;
+                    case Utils.reserveReleasetxntype:
+                        txnType = Utils.reserveRelease;
+                        break;
                 }
             }
             if (txnSubTypeStr != null) {
@@ -141,6 +146,10 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                             case Utils.businessPayouttxntype:
                                 controlMethod(Utils.merchantpayoutCM);
                                 merchantPayout(transactionDetails);
+                                break;
+                            case Utils.reserveReleasetxntype:
+                                controlMethod(Utils.reserveReleasetxntype);
+                                reserveRelease(transactionDetails.getData());
                                 break;
                         }
 
@@ -314,7 +323,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
     private void saleOrderMerchant(TransactionDetails objData) {
         try {
             ImageView refundIV;
-            TextView salesheaderTV, salesAmount_TV, salesStatusTV, salesDatetimeTV, salesReferenceidTV, salesfeesTV,RefundTV, salesreserveTV, salesnetamountTV, salesMerchantBalanceTV, salessendernameTVTV, salessenderemailTV;
+            TextView salesheaderTV, salesAmount_TV, salesStatusTV, salesDatetimeTV, salesReferenceidTV, salesfeesTV, RefundTV, salesreserveTV, salesnetamountTV, salesMerchantBalanceTV, salessendernameTVTV, salessenderemailTV;
             LinearLayout saleorderclosell, SalesReferencecopyLL, salesreserveLL;
 
             SalesReferencecopyLL = findViewById(R.id.SalesReferenceCopyLL);
@@ -351,8 +360,8 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     case Utils.refundd: {
                         salesStatusTV.setTextColor(getResources().getColor(R.color.pending_status));
                         salesStatusTV.setBackgroundResource(R.drawable.txn_pending_bg);
-                           refundIV.setEnabled(false);
-                           refundIV.setImageResource(R.drawable.refund_disable_icon);
+                        refundIV.setEnabled(false);
+                        refundIV.setImageResource(R.drawable.refund_disable_icon);
                         RefundTV.setTextColor(getColor(R.color.light_gray));
                         break;
                     }
@@ -412,15 +421,15 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     finish();
                 }
             });
-                refundIV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MerchantTransactionDetailsActivity.this, RefundTransactionActivity.class);
-                        intent.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION, transactionData);
-                        intent.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, gbxID);
-                        startActivity(intent);
-                    }
-                });
+            refundIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MerchantTransactionDetailsActivity.this, RefundTransactionActivity.class);
+                    intent.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION, transactionData);
+                    intent.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, gbxID);
+                    startActivity(intent);
+                }
+            });
 
             SalesReferencecopyLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -632,6 +641,122 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
         }
     }
 
+    private void reserveRelease(TransactionData reserveData) {
+        try {
+            TextView type, reserveAmount, status, date, referenceId, reserveRules, depositTo, tokenType;
+            TextView reserveHeld, reservedOn, reserveId;
+
+            LinearLayout reserveIDCopy, mCloseButton;
+
+            type = findViewById(R.id.reserve_type);
+            reserveAmount = findViewById(R.id.reserve_amount);
+            status = findViewById(R.id.reserve_status);
+            date = findViewById(R.id.released_on);
+            referenceId = findViewById(R.id.ref_id);
+            reserveRules = findViewById(R.id.reserve_rules);
+            depositTo = findViewById(R.id.deposit_to);
+            tokenType = findViewById(R.id.token_account_type);
+
+            reserveHeld = findViewById(R.id.reserve_held_amount);
+            reservedOn = findViewById(R.id.reserved_on_date);
+            reserveId = findViewById(R.id.reserve_id);
+
+            reserveIDCopy = findViewById(R.id.reserve_id_copy);
+            mCloseButton = findViewById(R.id.reserve_close_button);
+
+
+            if (reserveData.getTransactionType() != null) {
+                type.setText(reserveData.getTransactionType());
+            }
+            if (reserveData.getStatus() != null) {
+                status.setText(reserveData.getStatus());
+
+                switch (reserveData.getStatus().toLowerCase()) {
+                    case Utils.transCompleted:
+                        status.setTextColor(getResources().getColor(R.color.completed_status));
+                        status.setBackgroundResource(R.drawable.txn_completed_bg);
+                        break;
+                    case Utils.transinprogress:
+                        status.setTextColor(getResources().getColor(R.color.inprogress_status));
+                        status.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                        break;
+                    case Utils.transPending:
+                        status.setTextColor(getResources().getColor(R.color.pending_status));
+                        status.setBackgroundResource(R.drawable.txn_pending_bg);
+                        break;
+                    case Utils.transFailed:
+                    case Utils.transCancelled:
+                        status.setTextColor(getResources().getColor(R.color.failed_status));
+                        status.setBackgroundResource(R.drawable.txn_failed_bg);
+                        break;
+                }
+            }
+
+            if (reserveData.getReleasedDate() != null) {
+                date.setText(objMyApplication.convertZoneLatestTxn(reserveData.getReleasedDate()));
+            }
+
+            if (reserveData.getReferenceId() != null) {
+                if (reserveData.getReferenceId().length() > 10) {
+                    referenceId.setText(reserveData.getReferenceId().substring(0, 10) + "...");
+                } else {
+                    referenceId.setText(reserveData.getReferenceId());
+                }
+            }
+
+            if (reserveData.getReserveRule() != null) {
+                reserveRules.setText(reserveData.getReserveRule());
+            }
+
+            if (reserveData.getDepositTo() != null) {
+                if (reserveData.getDepositTo().length() > 14) {
+                    depositTo.setText(reserveData.getDepositTo().substring(0, 14) + "...");
+                    depositTo.setPaintFlags(depositTo.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+                } else {
+                    depositTo.setText(reserveData.getDepositTo());
+                    depositTo.setPaintFlags(depositTo.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                }
+            }
+
+            if (reserveData.getTotalAmount() != null) {
+                if (reserveData.getTotalAmount().contains("CYN"))
+                    reserveAmount.setText(Utils.convertTwoDecimal(reserveData.getTotalAmount().replace("CYN", "").trim()));
+                else
+                    reserveAmount.setText(Utils.convertTwoDecimal(reserveData.getTotalAmount().replace("USD", "").trim()));
+            }
+
+            if (reserveData.getAmountReleased() != null) {
+                if (reserveData.getAmountReleased().contains("CYN"))
+                    reserveHeld.setText(Utils.convertTwoDecimal(reserveData.getAmountReleased().replace("CYN", "").trim()) + " CYN");
+                else
+                    reserveHeld.setText(Utils.convertTwoDecimal(reserveData.getAmountReleased().replace("USD", "").trim()) + " CYN");
+            }
+
+            if (reserveData.getReservedOn() != null) {
+                reservedOn.setText(objMyApplication.convertZoneLatestTxn(reserveData.getReservedOn()));
+            }
+
+            String reserveID = "";
+            if (reserveData.getReserveId() != null) {
+                if (reserveData.getReserveId().length() > 10) {
+                    reserveID = reserveData.getReserveId().substring(0, 10) + "...";
+                    reserveId.setText(Html.fromHtml("<u>" + reserveID + "</u>"));
+                } else {
+                    reserveID = reserveData.getReserveId();
+                    reserveId.setText(Html.fromHtml("<u>" + reserveID + "</u>"));
+                }
+            }
+
+            reserveIDCopy.setOnClickListener(view -> Utils.copyText(reserveData.getReferenceId(), MerchantTransactionDetailsActivity.this));
+
+            mCloseButton.setOnClickListener(view -> finish());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
 
     private void controlMethod(String methodToShow) {
         try {
@@ -641,6 +766,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.MTDsalesorder).setVisibility(View.GONE);
                     findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                     findViewById(R.id.MTDmerchantPayout).setVisibility(View.GONE);
+                    findViewById(R.id.MTReserveRelease).setVisibility(View.GONE);
                 }
                 break;
                 case Utils.saleorderCM: {
@@ -648,6 +774,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.MTDsalesorder).setVisibility(View.VISIBLE);
                     findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                     findViewById(R.id.MTDmerchantPayout).setVisibility(View.GONE);
+                    findViewById(R.id.MTReserveRelease).setVisibility(View.GONE);
                 }
                 break;
                 case Utils.monthlyservicefeeCM: {
@@ -655,6 +782,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.MTDsalesorder).setVisibility(View.GONE);
                     findViewById(R.id.MTDservicefee).setVisibility(View.VISIBLE);
                     findViewById(R.id.MTDmerchantPayout).setVisibility(View.GONE);
+                    findViewById(R.id.MTReserveRelease).setVisibility(View.GONE);
                 }
                 break;
                 case Utils.merchantpayoutCM: {
@@ -662,6 +790,15 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.MTDsalesorder).setVisibility(View.GONE);
                     findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                     findViewById(R.id.MTDmerchantPayout).setVisibility(View.VISIBLE);
+                    findViewById(R.id.MTReserveRelease).setVisibility(View.GONE);
+                }
+                break;
+                case Utils.reserveReleasetxntype: {
+                    findViewById(R.id.MTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDsalesorder).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
+                    findViewById(R.id.MTDmerchantPayout).setVisibility(View.GONE);
+                    findViewById(R.id.MTReserveRelease).setVisibility(View.VISIBLE);
                 }
                 break;
             }

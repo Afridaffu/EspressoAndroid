@@ -798,6 +798,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                                 Intent i = new Intent(WithdrawTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
                                 i.putExtra("screen", "withdraw");
+                                i.putExtra("subtype", "add");
                                 startActivityForResult(i, 3);
                             } else {
                                 Intent i = new Intent(WithdrawTokenActivity.this, SelectPaymentMethodActivity.class);
