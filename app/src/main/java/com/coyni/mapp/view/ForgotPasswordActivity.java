@@ -252,19 +252,20 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
                         i.putExtra("screen", getIntent().getStringExtra("screen"));
                         startActivity(i);
                     } else {
-                        if (emailResponse.getError().getErrorDescription().toLowerCase().contains("inactive")) {
-                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
-                            layoutEmailError.setVisibility(VISIBLE);
-                            tvEmailError.setText("Incorrect information");
-                            etEmail.clearFocus();
-                        } else {
-                            String message = getString(R.string.something_went_wrong);
-                            if (emailResponse.getError().getFieldErrors().size() > 0) {
-                                message = emailResponse.getError().getFieldErrors().get(0);
-                            }
-                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this, "", message);
-                        }
+                        Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this, "", "");
+//                        if (emailResponse.getError().getErrorDescription().toLowerCase().contains("inactive")) {
+//                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+//                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+//                            layoutEmailError.setVisibility(VISIBLE);
+//                            tvEmailError.setText("Incorrect information");
+//                            etEmail.clearFocus();
+//                        } else {
+//                            String message = getString(R.string.something_went_wrong);
+//                            if (emailResponse.getError().getFieldErrors().size() > 0) {
+//                                message = emailResponse.getError().getFieldErrors().get(0);
+//                            }
+//                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this, "", message);
+//                        }
 
                     }
                 }

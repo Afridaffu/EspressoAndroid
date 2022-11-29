@@ -676,7 +676,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
 
                     sscfileUploadedLL.setVisibility(VISIBLE);
                     sscuploadFileTV.setVisibility(GONE);
-                    sscfileUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().get(i).getUploadDate()));
+                    sscfileUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedNewFormat(actionRequiredResponse.getData().getAdditionalDocument().get(mainDocPos).getUploadDocs().get(i).getUploadDate()));
 
                     containerLL.addView(docInf, layoutParamss);
 

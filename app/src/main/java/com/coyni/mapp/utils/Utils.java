@@ -779,12 +779,12 @@ public class Utils {
         return strDate;
     }
 
-    public static String convertDocUploadedDateAPITime(String date) {
+    public static String convertDocUploadedNewFormat(String date) {
         String strDate = "";
         try {
-            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("dd/MM/yyyy");
+            spf = new SimpleDateFormat("MM/dd/yyyy");
             strDate = spf.format(newDate);
         } catch (Exception ex) {
             ex.printStackTrace();
