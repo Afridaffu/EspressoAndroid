@@ -65,7 +65,7 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
             @Override
             public void onClick(View v) {
                 try {
-                    if (Double.parseDouble(listItems.get(position).getTotalAmount()) > 0) {
+                    if (Double.parseDouble(listItems.get(position).getTotalAmount()) != 0) {
                         listener.onItemClick(position, listItems.get(position));
                     }
                 } catch (Exception e) {
