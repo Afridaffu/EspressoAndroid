@@ -646,6 +646,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                             case "loginExpiry":
                                                 Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
                                                 i.putExtra("screen", getIntent().getStringExtra("screen"));
+                                                i.putExtra("code", getIntent().getStringExtra("code"));
                                                 startActivity(i);
                                                 finish();
                                                 break;

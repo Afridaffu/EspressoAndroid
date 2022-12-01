@@ -642,9 +642,16 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
                         dialog = Utils.showProgressDialog(CreatePasswordActivity.this);
                         strNewPwd = passwordET.getText().toString().trim();
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
-                            ManagePasswordRequest request = new ManagePasswordRequest();
-                            request.setPassword(passwordET.getText().toString().trim());
-                            loginViewModel.setExpiryPassword(request);
+//                            ManagePasswordRequest request = new ManagePasswordRequest();
+//                            request.setPassword(passwordET.getText().toString().trim());
+//                            loginViewModel.setExpiryPassword(request);
+
+                            // new update - using same API for forgot pass and expiry password.
+                            SetPassword setPassword = new SetPassword();
+                            setPassword.setCode(strCode);
+                            setPassword.setPasswordExpired(true);
+                            setPassword.setPassword(passwordET.getText().toString().trim());
+                            loginViewModel.setPassword(setPassword);
                         } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ConfirmPassword")) {
                             ChangePasswordRequest request = new ChangePasswordRequest();
                             request.setOldPassword(getIntent().getStringExtra("oldpassword"));

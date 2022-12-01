@@ -800,6 +800,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                     isExpiry = true;
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("screen", "loginExpiry");
+                                    i.putExtra("code", login.getData().getRequestToken());
                                     i.putExtra("TYPE", "ENTER");
                                     startActivity(i);
                                 } else {

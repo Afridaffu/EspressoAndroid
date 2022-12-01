@@ -18,6 +18,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
@@ -26,8 +27,10 @@ import android.view.inputmethod.InputConnection;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.coyni.mapp.view.BuyTokenActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.coyni.mapp.R;
 import com.coyni.mapp.dialogs.OnDialogClickListener;
@@ -75,7 +78,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
     CoyniViewModel coyniViewModel;
-    LinearLayout lyPayClose, lyBalance;
+    LinearLayout lyPayClose, lyBalance,layoutETAmount;
     ImageView imgConvert;
     TextView tvCurrency, coyniTV, availBal, addNoteTV, tvError;
     TransactionLimitResponse objResponse;
@@ -132,15 +135,63 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     payET.setHint("");
                     convertUSDValue();
-                    if (editable.length() > 8) {
-                        payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    } else if (editable.length() > 5) {
-                        payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                    } else {
-                        payET.setTextSize(Utils.pixelsToSp(PayToMerchantActivity.this, fontSize));
-                        tvCurrency.setTextSize(Utils.pixelsToSp(PayToMerchantActivity.this, dollarFont));
+//                    if (editable.length() > 8) {
+//                        payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//                    } else if (editable.length() > 5) {
+//                        payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                    } else {
+//                        payET.setTextSize(Utils.pixelsToSp(PayToMerchantActivity.this, fontSize));
+//                        tvCurrency.setTextSize(Utils.pixelsToSp(PayToMerchantActivity.this, dollarFont));
+//                    }
+
+                    try {
+                        if (editable.length() == 5 || editable.length() == 6) {
+                            payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
+                            layoutETAmount.setPadding(0, 0, 0, 0);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(15, 6, 0, 0);
+                            imgConvert.setLayoutParams(params);
+                            tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                            LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params1.setMargins(0, 0, 0, 12);
+                            tvCurrency.setLayoutParams(params1);
+
+                        } else if (editable.length() == 7 || editable.length() == 8) {
+                            payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                            layoutETAmount.setPadding(0, 0, 0, 0);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(15, 0, 0, 0);
+                            imgConvert.setLayoutParams(params);
+                            tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                            LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params1.setMargins(0, 0, 0, 10);
+                            tvCurrency.setLayoutParams(params1);
+
+                        } else if (editable.length() >= 9) {
+                            payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                            layoutETAmount.setPadding(0, 0, 0, 0);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(15, 6, 0, 0);
+                            imgConvert.setLayoutParams(params);
+                            tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                            LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params1.setMargins(0, 0, 0, 10);
+                            tvCurrency.setLayoutParams(params1);
+                        } else if (editable.length() <= 4) {
+                            payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                            layoutETAmount.setPadding(0, 0, 0, 0);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(15, 13, 0, 0);
+                            imgConvert.setLayoutParams(params);
+                            tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                            LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params1.setMargins(0, 0, 0, 25);
+                            tvCurrency.setLayoutParams(params1);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                     if (validation()) {
@@ -172,6 +223,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                     disableButtons(true);
                     cKey.clearData();
                 }
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -232,6 +284,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+            layoutETAmount = findViewById(R.id.lyamountview1);
 
             fontSize = payET.getTextSize();
             dollarFont = tvCurrency.getTextSize();
@@ -660,32 +713,32 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     }
 
 
-    private void changeTextSize(String editable) {
-        try {
-            InputFilter[] FilterArray = new InputFilter[1];
-            if (editable.length() > 12) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-            } else if (editable.length() > 8) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-            } else if (editable.length() > 5) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-            } else {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
-                payET.setTextSize(Utils.pixelsToSp(PayToMerchantActivity.this, fontSize));
-                tvCurrency.setTextSize(Utils.pixelsToSp(PayToMerchantActivity.this, dollarFont));
-            }
-            payET.setFilters(FilterArray);
-            payET.setSelection(payET.getText().length());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    private void changeTextSize(String editable) {
+//        try {
+//            InputFilter[] FilterArray = new InputFilter[1];
+//            if (editable.length() > 12) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+//                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//            } else if (editable.length() > 8) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//            } else if (editable.length() > 5) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+//                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//            } else {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+//                payET.setTextSize(Utils.pixelsToSp(PayToMerchantActivity.this, fontSize));
+//                tvCurrency.setTextSize(Utils.pixelsToSp(PayToMerchantActivity.this, dollarFont));
+//            }
+//            payET.setFilters(FilterArray);
+//            payET.setSelection(payET.getText().length());
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     private void setDefaultLength() {
         try {
@@ -774,6 +827,11 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             strReturn = Utils.USNumberFormat(Utils.doubleParsing(strAmount));
             changeTextSize(strReturn);
             setDefaultLength();
+            if (Double.parseDouble(strAmount) <= 0) {
+                tvError.setText("Amount should be greater than zero.");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -995,6 +1053,57 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         }
     }
 
+    private void changeTextSize(String editable) {
+        try {
+            InputFilter[] FilterArray = new InputFilter[1];
+
+            if (editable.length() == 5 || editable.length() == 6) {
+                payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 6, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 12);
+                tvCurrency.setLayoutParams(params1);
+
+            } else if (editable.length() == 7 || editable.length() == 8) {
+                payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 0, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 10);
+                tvCurrency.setLayoutParams(params1);
+
+            } else if (editable.length() >= 9) {
+                payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 6, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 10);
+                tvCurrency.setLayoutParams(params1);
+
+            } else if (editable.length() <= 4) {
+                payET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 13, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 25);
+                tvCurrency.setLayoutParams(params1);
+
+            }
+
+            payET.setFilters(FilterArray);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, boolean isPayToMerchantActivity, Double balance) {
         PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(PayToMerchantActivity.this, amount, userDetails, isPayToMerchantActivity, balance, objMyApplication);

@@ -25,6 +25,7 @@ import com.coyni.mapp.model.CompanyInfo.CompanyInfoResp;
 import com.coyni.mapp.model.DBAInfo.DBAInfoResp;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.view.business.MerchantTransactionListActivity;
 import com.coyni.mapp.viewmodel.BusinessIdentityVerificationViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 
@@ -280,48 +281,49 @@ public class BusinessUserDetailsPreviewActivity extends BaseActivity implements 
     private void initObservers() {
         dashboardViewModel.getProfileMutableLiveData().observe(BusinessUserDetailsPreviewActivity.this, profile -> {
             myApplicationObj.setMyProfile(profile);
-            if (getIntent().getStringExtra("title") != null && getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
-                String addressFormatted = "";
-                if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
-                    addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
-                }
-                if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
-                    addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
-                }
-                if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
-                    addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
-                }
-//                if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-//                    addressFormatted = addressFormatted + profile.getData().getState() + ", ";
+//            if (getIntent().getStringExtra("title") != null && getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
+//                String addressFormatted = "";
+//                if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
+//                    addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
 //                }
-                if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-                    state = profile.getData().getState().toLowerCase();
-                    String stateCode = Utils.getStateCode(state, myApplicationObj.getListStates());
-                    if (stateCode != null && !stateCode.equals("")) {
-                        addressFormatted = addressFormatted + stateCode + ", ";
-                    }
-                }
-                if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
-                    addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
-                }
-
-                if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
-                    addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
-                }
-
-                if (addressFormatted.equals("")) {
-                    addressFormatted = addressFormatted + "United States";
-                    value.setText(addressFormatted);
-//                    business_userAddreTV.setText(addressFormatted);
-//                    address=addressFormatted;
-                } else {
-                    value.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-//                    business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-//                    address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
-                }
-
-//                value.setText(addressFormatted.substring(0, addressFormatted.trim().length() - 1) + ".");
-            }
+//                if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
+//                    addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
+//                }
+//                if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
+//                    addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
+//                }
+////                if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+////                    addressFormatted = addressFormatted + profile.getData().getState() + ", ";
+////                }
+//                if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+//                    state = profile.getData().getState().toLowerCase();
+//                    String stateCode = Utils.getStateCode(state, myApplicationObj.getListStates());
+//                    if (stateCode != null && !stateCode.equals("")) {
+//                        addressFormatted = addressFormatted + stateCode + ", ";
+//                    }
+//                }
+//                if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
+//                    addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
+//                }
+//
+//                if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
+//                    addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
+//                }
+//
+//                if (addressFormatted.equals("")) {
+//                    addressFormatted = addressFormatted + "United States";
+//                    value.setText(addressFormatted);
+////                    business_userAddreTV.setText(addressFormatted);
+////                    address=addressFormatted;
+//                } else {
+//                    value.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+////                    business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+////                    address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
+//                }
+//
+////                value.setText(addressFormatted.substring(0, addressFormatted.trim().length() - 1) + ".");
+//            }
+//
             if (getIntent().getStringExtra("title") != null && getIntent().getStringExtra("title").equalsIgnoreCase("EMAIL")) {
                 value.setText(profile.getData().getEmail());
             }
@@ -330,6 +332,54 @@ public class BusinessUserDetailsPreviewActivity extends BaseActivity implements 
                 phne_number = "(" + phne_number.substring(0, 3) + ") " + phne_number.substring(3, 6) + "-" + phne_number.substring(6, 10);
                 phoneFormat = phne_number;
                 value.setText(phne_number);
+            }
+
+        });
+
+        dashboardViewModel.getFetchAddressMutableLiveData().observe(BusinessUserDetailsPreviewActivity.this, profile -> {
+
+            if (profile.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                if (getIntent().getStringExtra("title") != null && getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
+                    String addressFormatted = "";
+                    if (profile.getData() != null && !profile.getData().getAddressLine1().equals("")) {
+                        addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
+                    }
+                    if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
+                        addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
+                    }
+                    if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
+                        addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
+                    }
+                    if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+                        state = profile.getData().getState().toLowerCase();
+                        String stateCode = Utils.getStateCode(state, myApplicationObj.getListStates());
+                        if (stateCode != null && !stateCode.equals("")) {
+                            addressFormatted = addressFormatted + stateCode + ", ";
+                        }
+                    }
+                    if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
+                        addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
+                    }
+
+                    if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
+                        addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
+                    }
+
+                    if (addressFormatted.equals("")) {
+                        addressFormatted = addressFormatted + "United States";
+                        value.setText(addressFormatted);
+//                    business_userAddreTV.setText(addressFormatted);
+//                    address=addressFormatted;
+                    } else {
+                        value.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+//                    business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+//                    address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
+                    }
+
+//                value.setText(addressFormatted.substring(0, addressFormatted.trim().length() - 1) + ".");
+                }
+            } else {
+                Utils.displayAlert(profile.getError().getErrorDescription(), BusinessUserDetailsPreviewActivity.this, "", profile.getError().getFieldErrors().get(0));
             }
 
         });
@@ -433,6 +483,7 @@ public class BusinessUserDetailsPreviewActivity extends BaseActivity implements 
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         try {
             dashboardViewModel.meProfile();
+            dashboardViewModel.fetchUserAddress();
             if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplicationObj.getAccountType() == Utils.SHARED_ACCOUNT) {
                 businessIdentityVerificationViewModel.getDBAInfo();
                 businessIdentityVerificationViewModel.getCompanyInfo();

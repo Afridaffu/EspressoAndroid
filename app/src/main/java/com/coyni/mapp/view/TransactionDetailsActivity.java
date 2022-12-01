@@ -33,6 +33,7 @@ import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.ActivityLogAdapter;
 import com.coyni.mapp.model.activtity_log.ActivityLogResp;
 import com.coyni.mapp.model.transaction.TransactionData;
+import com.coyni.mapp.model.transaction.TransactionDetails;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.business.MerchantTransactionDetailsActivity;
@@ -69,6 +70,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     private static final String REFUND_RECEIVED = "RefundReceived";
     private static final String REFUND_SENT = "RefundSent";
     private static final String RESERVE_RELEASE = "ReserveRelease";
+    private static final String Monthly_Service_Fee = "MonthlyServiceFee";
 
     // Transaction Types
     private static final String pay_request = "pay / request";
@@ -81,6 +83,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     private static final String paid_order = "paid order";
     private static final String refund = "refund";
     private static final String reserve_release = "reserve release";
+    private static final String monthly_service_fee = "monthly service fee";
 
     // Transaction SubTypes
     private static final String sent = "sent";
@@ -149,6 +152,9 @@ public class TransactionDetailsActivity extends BaseActivity {
                         break;
                     case refund:
                         txnType = Utils.refund;
+                        break;
+                    case monthly_service_fee:
+                        txnType = Utils.monthlyServiceFee;
                         break;
                     case reserve_release:
                         txnType = Utils.reserveRelease;
@@ -287,13 +293,6 @@ public class TransactionDetailsActivity extends BaseActivity {
                         paidOrderToken(transactionDetails.getData());
                         break;
                     case refund:
-//                        if (received.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
-//                            ControlMethod(REFUND_RECEIVED);
-//                            paidOrderToken(transactionDetails.getData());
-//                        } else if (sent.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
-//                            ControlMethod(REFUND_SENT);
-//                            refundtoken(transactionDetails.getData());
-//                        }
                         switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
                             case received:
                                 ControlMethod(REFUND_RECEIVED);
@@ -318,6 +317,11 @@ public class TransactionDetailsActivity extends BaseActivity {
                     case Utils.merchantPayouttxntype: {
                         ControlMethod(BUSINESS_PAYOUT);
                         businessPayout(transactionDetails.getData());
+                    }
+                    break;
+                    case Utils.monthlyServiceFeetxntype: {
+                        ControlMethod(Monthly_Service_Fee);
+                        monthlyServiceFeeMerchant(transactionDetails);
                     }
                     break;
                 }
@@ -2236,6 +2240,80 @@ public class TransactionDetailsActivity extends BaseActivity {
 
     }
 
+    private void monthlyServiceFeeMerchant(TransactionDetails objData) {
+        try {
+            ImageView msFeecopyIV;
+            TextView MSFheadertv, MSFamounttv, MSFstatustv, MSFdatetv, MSfreferenceIdtv, MSFmerchantbalancetv;
+            LinearLayout msfeeclosell, msFeecopyLL;
+
+            msFeecopyLL = findViewById(R.id.MSFeecopyLL);
+            msfeeclosell = findViewById(R.id.Msfeeclosell);
+            MSFheadertv = findViewById(R.id.MSFheaderTV);
+            MSFamounttv = findViewById(R.id.MSFamountTV);
+            MSFstatustv = findViewById(R.id.MSFstatusTV);
+            MSFdatetv = findViewById(R.id.MSFdateTV);
+            MSfreferenceIdtv = findViewById(R.id.MSfreferenceIdTV);
+            MSFmerchantbalancetv = findViewById(R.id.MSFmerchantbalanceTV);
+            if (objData.getData().getTransactionType() != null) {
+                MSFheadertv.setText(objData.getData().getTransactionType());
+            }
+            if (objData.getData().getStatus() != null) {
+                MSFstatustv.setText(objData.getData().getStatus());
+                switch (objData.getData().getStatus().toLowerCase()) {
+                    case Utils.transCompleted:
+                        MSFstatustv.setTextColor(getResources().getColor(R.color.completed_status));
+                        MSFstatustv.setBackgroundResource(R.drawable.txn_completed_bg);
+                        break;
+                    case Utils.transinprogress:
+                        MSFstatustv.setTextColor(getResources().getColor(R.color.inprogress_status));
+                        MSFstatustv.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                        break;
+                    case Utils.transPending:
+                        MSFstatustv.setTextColor(getResources().getColor(R.color.pending_status));
+                        MSFstatustv.setBackgroundResource(R.drawable.txn_pending_bg);
+                        break;
+                    case Utils.transCancelled:
+                    case Utils.transFailed: {
+                        MSFstatustv.setTextColor(getResources().getColor(R.color.failed_status));
+                        MSFstatustv.setBackgroundResource(R.drawable.txn_failed_bg);
+                        break;
+                    }
+                }
+            }
+            if (objData.getData().getGrossAmount() != null) {
+                MSFamounttv.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
+            }
+            if (objData.getData().getReferenceId() != null) {
+                if (objData.getData().getReferenceId().length() > 10) {
+                    MSfreferenceIdtv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+                } else {
+                    MSfreferenceIdtv.setText(objData.getData().getReferenceId());
+                }
+            }
+            if (objData.getData().getCreatedDate() != null) {
+                MSFdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
+            }
+            if (objData.getData().getAccountBalance() != null) {
+                MSFmerchantbalancetv.setText(Utils.convertTwoDecimal(objData.getData().getAccountBalance().replace("CYN", "").trim()));
+            }
+
+            msfeeclosell.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            msFeecopyLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.copyText(objData.getData().getReferenceId(), TransactionDetailsActivity.this);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void ControlMethod(String methodToShow) {
         try {
             View view = null;
@@ -2254,6 +2332,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                 }
                 break;
                 case BUY_TOKEN: {
@@ -2270,6 +2349,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                 }
                 break;
                 case BUY_BANK: {
@@ -2286,6 +2366,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                 }
                 break;
                 case BUY_Signet:
@@ -2303,6 +2384,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                 }
                 break;
                 case WITH_GIFT: {
@@ -2319,6 +2401,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                 }
                 break;
                 case WITH_Instant: {
@@ -2335,6 +2418,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                 }
                 break;
                 case WITH_BANK:
@@ -2353,6 +2437,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                 }
                 break;
                 case BUSINESS_PAYOUT: {
@@ -2369,6 +2454,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                 }
                 break;
                 case CANCELLED_WITH:
@@ -2386,6 +2472,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                 }
                 break;
                 case PAID_ORDER_TOKEN:
@@ -2403,6 +2490,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     view.setVisibility(View.VISIBLE);
                     findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                 }
                 break;
                 case RESERVE_RELEASE: {
@@ -2419,6 +2507,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     view = findViewById(R.id.reserve_release_details);
                     view.setVisibility(View.VISIBLE);
                     findViewById(R.id.TTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                 }
                 break;
                 case REFUND_SENT: {
@@ -2435,6 +2524,23 @@ public class TransactionDetailsActivity extends BaseActivity {
                     view = findViewById(R.id.reserve_release_details);
                     view.setVisibility(View.VISIBLE);
                     findViewById(R.id.TTDrefund).setVisibility(View.VISIBLE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
+                }
+                break;
+                case Monthly_Service_Fee: {
+                    findViewById(R.id.payrequest).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenCD).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenBank).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawGift).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenCogent).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                    findViewById(R.id.TTDrefund).setVisibility(View.GONE);
+                    findViewById(R.id.MTDservicefee).setVisibility(View.VISIBLE);
                 }
                 break;
             }

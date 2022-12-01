@@ -36,6 +36,7 @@ import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentsList;
 import com.coyni.mapp.utils.CheckOutConstants;
 import com.coyni.mapp.view.BuyTokenActivity;
+import com.coyni.mapp.view.WithdrawPaymentMethodsActivity;
 import com.coyni.mapp.view.WithdrawTokenActivity;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.google.android.material.textfield.TextInputEditText;
@@ -929,7 +930,10 @@ public class AddPaymentCogentActivity extends AppCompatActivity implements OnKey
 //                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                            startActivity(i);
 //                        }
-                        else {
+                        else if (getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add") && !isWithFCEnabled) {
+                            startActivity(new Intent(AddPaymentCogentActivity.this, WithdrawPaymentMethodsActivity.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        } else {
                             Intent i = new Intent();
                             setResult(RESULT_OK, i);
                         }

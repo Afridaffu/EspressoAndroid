@@ -54,6 +54,7 @@ import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.BuyTokenActivity;
 import com.coyni.mapp.view.BuyTokenPaymentMethodsActivity;
+import com.coyni.mapp.view.WithdrawPaymentMethodsActivity;
 import com.coyni.mapp.view.WithdrawTokenActivity;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 import com.coyni.mapp.viewmodel.PaymentMethodsViewModel;
@@ -841,6 +842,9 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                                 startActivity(i);
                             } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled && objMyApplication.getGBTBalance() != 0) {
                                 startActivity(new Intent(AddManualBankAccount.this, WithdrawTokenActivity.class)
+                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            } else if (getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add") && !isWithFCEnabled) {
+                                startActivity(new Intent(AddManualBankAccount.this, WithdrawPaymentMethodsActivity.class)
                                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isBuyFCEnabled && objMyApplication.getGBTBalance() == 0) {
                                 Intent i = new Intent(AddManualBankAccount.this, BuyTokenActivity.class);

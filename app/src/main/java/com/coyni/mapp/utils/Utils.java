@@ -291,6 +291,7 @@ public class Utils {
     public static final String monthlyServiceFeetxntype = "monthly service fee";
     public static final String businessPayouttxntype = "business payout";
     public static final String merchantPayouttxntype = "merchant payout";
+    public static final String reserveReleasetxntype = "reserve release";
     public static final String tokensub = "token";
     public static final String transfersub = "transfer";
     public static final String Success = "Success";
@@ -424,6 +425,7 @@ public class Utils {
     public static final String Refund = "Refund";
     public static final String MerchantPayout = "Merchant Payout";
     public static final String MonthlyServiceFee = "Monthly Service Fee";
+    public static final String ReserveRelease = "Reserve Release";
 
     public static final String ADD_BUSINESS = "ADDBUSINESS";
     public static final String ADD_DBA = "ADD_DBA";
@@ -779,12 +781,12 @@ public class Utils {
         return strDate;
     }
 
-    public static String convertDocUploadedDateAPITime(String date) {
+    public static String convertDocUploadedNewFormat(String date) {
         String strDate = "";
         try {
-            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("dd/MM/yyyy");
+            spf = new SimpleDateFormat("MM/dd/yyyy");
             strDate = spf.format(newDate);
         } catch (Exception ex) {
             ex.printStackTrace();

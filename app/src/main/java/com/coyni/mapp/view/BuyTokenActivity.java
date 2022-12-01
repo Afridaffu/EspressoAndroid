@@ -970,12 +970,13 @@ public class BuyTokenActivity extends BaseActivity implements TextWatcher {
                         if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             Intent i = new Intent(BuyTokenActivity.this, BuyTokenPaymentMethodsActivity.class);
                             i.putExtra("screen", "buytoken");
-//                            startActivityForResult(i, 3);
+                            i.putExtra("subtype", "add");
                             startActivity(i);
                         } else {
                             Intent i = new Intent(BuyTokenActivity.this, SelectPaymentMethodActivity.class);
                             i.putExtra("screen", "buytoken");
                             i.putExtra("menuitem", "buy");
+                            i.putExtra("subtype", "add");
                             startActivityForResult(i, 3);
                         }
                     } catch (Exception ex) {

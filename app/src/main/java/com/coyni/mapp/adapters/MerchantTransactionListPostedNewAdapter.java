@@ -189,6 +189,10 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
             holder.txnTypeDn.setText(objData.getTxnTypeDn());
             holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN", ""));
             holder.amount.setTextColor(Color.parseColor("#000000"));
+        }else if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.ReserveRelease)) {
+            holder.txnTypeDn.setText(objData.getTxnTypeDn());
+            holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN", ""));
+            holder.amount.setTextColor(Color.parseColor("#000000"));
         }
         if (objData.getCreatedAt() != null && !objData.getCreatedAt().equals("")) {
             String date = objData.getCreatedAt();

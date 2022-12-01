@@ -112,7 +112,8 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                 strType = latestTxns.getData().get(position).getTxnTypeDn().toLowerCase();
             }
 
-            if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid")) {
+//            if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid")) {
+            if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid") || strType.equals("monthly service fee")) {
                 holder.amountTV.setText("-" + Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()).split(" ")[0]);
             } else {
                 holder.amountTV.setText("+" + Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()).split(" ")[0]);
@@ -142,10 +143,6 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                 holder.statusTV.setTextColor(mContext.getColor(R.color.under_review_blue));
                 holder.statusLL.setBackground(mContext.getDrawable(R.drawable.txn_inprogress_bg));
 
-                // comment
-//                holder.statusLL.setVisibility(View.GONE);
-//                holder.dateTV.setVisibility(View.VISIBLE);
-//                holder.dateTV.setText(objMyApplication.convertZoneLatestTxn(latestTxns.getData().get(position).getUpdatedAt()));
             } else if (latestTxns.getData().get(position).getTxnStatusDn().equalsIgnoreCase("Pending")) {
                 holder.statusTV.setText(latestTxns.getData().get(position).getTxnStatusDn());
                 holder.statusTV.setTextColor(mContext.getColor(R.color.orange));

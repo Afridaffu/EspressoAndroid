@@ -263,13 +263,16 @@ public class ReserveDetailsActivity extends BaseActivity {
 
     private void addData(DetailsResponse detailsResponse) {
         if (detailsResponse.getData().getPayoutReferenceId() != null && !detailsResponse.getData().getPayoutReferenceId().equals("")) {
+            releasedIDcopy.setVisibility(View.VISIBLE);
             if (detailsResponse.getData().getPayoutReferenceId().length() > 14) {
-                transID.setText(Html.fromHtml("<u>"+detailsResponse.getData().getPayoutReferenceId().substring(0, 14) + "..."+"</u>"));
+                transID.setText(Html.fromHtml("<u>" + detailsResponse.getData().getPayoutReferenceId().substring(0, 14) + "..." + "</u>"));
             } else {
-                transID.setText(Html.fromHtml("<u>"+detailsResponse.getData().getPayoutReferenceId()+"</u>"));
+                transID.setText(Html.fromHtml("<u>" + detailsResponse.getData().getPayoutReferenceId() + "</u>"));
             }
             releasedIDcopy.setOnClickListener(v -> Utils.copyText(detailsResponse.getData().getPayoutReferenceId(), ReserveDetailsActivity.this));
 
+        } else {
+            releasedIDcopy.setVisibility(View.GONE);
         }
     }
 
@@ -312,9 +315,9 @@ public class ReserveDetailsActivity extends BaseActivity {
             lycopy.setOnClickListener(v -> Utils.copyText(batchId, ReserveDetailsActivity.this));
 
             if (batchId.length() > 14) {
-                reserveIDTV.setText(Html.fromHtml("<u>"+batchId.substring(0, 14) + "..."+"</u>"));
+                reserveIDTV.setText(Html.fromHtml("<u>" + batchId.substring(0, 14) + "..." + "</u>"));
             } else {
-                reserveIDTV.setText(Html.fromHtml("<u>"+batchId+"</u>"));
+                reserveIDTV.setText(Html.fromHtml("<u>" + batchId + "</u>"));
             }
         }
         getDateDescription();
@@ -341,9 +344,9 @@ public class ReserveDetailsActivity extends BaseActivity {
                     Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
 
                     spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), 22, 22 + time.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                    spannableString.setSpan(new CustomTypefaceSpan("",font), 22, 22 + time.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new CustomTypefaceSpan("", font), 22, 22 + time.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                     spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), onHold_desc.length() - (1 + amt.length()), onHold_desc.length() - 1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                    spannableString.setSpan(new CustomTypefaceSpan("",font), onHold_desc.length() - (1 + amt.length()), onHold_desc.length() - 1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new CustomTypefaceSpan("", font), onHold_desc.length() - (1 + amt.length()), onHold_desc.length() - 1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                     onHoldAmt.setText(spannableString);
                     statusTV.setText(status);
                     statusTV.setTextColor(getColor(R.color.pending_color));
@@ -359,9 +362,9 @@ public class ReserveDetailsActivity extends BaseActivity {
                     Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
 
                     spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), 22, 22 + time.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                    spannableString.setSpan(new CustomTypefaceSpan("",font), 22, 22 + time.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new CustomTypefaceSpan("", font), 22, 22 + time.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                     spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), cancel_desc.length() - (63 + amt.length()), cancel_desc.length() - 63, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                    spannableString.setSpan(new CustomTypefaceSpan("",font), cancel_desc.length() - (63 + amt.length()), cancel_desc.length() - 63, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new CustomTypefaceSpan("", font), cancel_desc.length() - (63 + amt.length()), cancel_desc.length() - 63, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
                     cancel.setText(spannableString);
                     statusTV.setText(status);
@@ -373,7 +376,7 @@ public class ReserveDetailsActivity extends BaseActivity {
 
         //Released Details
         if (selected != null && selected.getReserveAmount() != null) {
-            releasedAMT.setText(Utils.convertTwoDecimal(selected.getReserveAmount())+ " CYN");
+            releasedAMT.setText(Utils.convertTwoDecimal(selected.getReserveAmount()) + " CYN");
             amount.setText(Utils.convertTwoDecimal(selected.getReserveAmount()) + " CYN");
         } else {
             releasedAMT.setText("0.00 CYN");

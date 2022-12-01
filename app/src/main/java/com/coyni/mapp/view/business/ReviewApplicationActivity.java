@@ -122,7 +122,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private LoginViewModel loginViewModel;
     private MyApplication objMyApplication;
     private String mCompanyName = "", mBusinessEntity = "", mEIN = "", mEmail = "", mPhoneNumber = "", mAddress = "", mArticleDate = "", mEINDate = "", mW9Date = "";
-    private String mDbName = "", mBusinessType = "",accountNumber = "", convert = "", mTimeZone = "", mWebsite = "", mMonthlyProcVolume = "", mHighTicket = "", mAverageTicket = "", mCustomerServiceEmail = "", mCustomerServicePhone = "", mDbAddressLine = "", mDbFillingDate = "";
+    private String mDbName = "", mBusinessType = "", accountNumber = "", convert = "", mTimeZone = "", mWebsite = "", mMonthlyProcVolume = "", mHighTicket = "", mAverageTicket = "", mCustomerServiceEmail = "", mCustomerServicePhone = "", mDbAddressLine = "", mDbFillingDate = "";
     private Boolean addBusiness = false;
     private Boolean addDBA = false;
     private BankAccountsViewModel bankAccountsViewModel;
@@ -631,6 +631,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     mTimeZoneTx.setText(R.string.AST);
                                 } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("4")) {
                                     mTimeZoneTx.setText(R.string.HST);
+                                } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("6")) {
+                                    mTimeZoneTx.setText(R.string.SST);
                                 }
                             }
                             if (dbaInfo.getIdentificationType() == 8) {

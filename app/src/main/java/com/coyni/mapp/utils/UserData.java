@@ -6,6 +6,7 @@ import com.coyni.mapp.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.coyni.mapp.model.CompanyInfo.CompanyInfoResp;
 import com.coyni.mapp.model.DBAInfo.BusinessTypeResp;
 import com.coyni.mapp.model.DBAInfo.DBAInfoResp;
+import com.coyni.mapp.model.FetchAddressResp;
 import com.coyni.mapp.model.SignAgreementData;
 import com.coyni.mapp.model.States;
 import com.coyni.mapp.model.bank.ManualBankRequest;
@@ -57,6 +58,7 @@ public class UserData {
     private RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
     private String strUserName = "",strDBAName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "CST", strInvite = "", strScreen = "";
     private Profile myProfile = new Profile();
+    private FetchAddressResp myAddress = new FetchAddressResp();
     private Fees fees = new Fees();
     private UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
     private UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
@@ -226,6 +228,14 @@ public class UserData {
 
     public void setMyProfile(Profile myProfile) {
         this.myProfile = myProfile;
+    }
+
+    public FetchAddressResp getMyAddress() {
+        return myAddress;
+    }
+
+    public void setMyAddress(FetchAddressResp myAddress) {
+        this.myAddress = myAddress;
     }
 
     public UpdateEmailResponse getUpdateEmailResponse() {
