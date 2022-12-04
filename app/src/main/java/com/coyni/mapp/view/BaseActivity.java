@@ -238,7 +238,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    private void launchCheckout() {
+    protected void launchCheckout() {
         if (myApplication.getCheckOutModel() != null) {
             CheckOutModel checkOutModel = myApplication.getCheckOutModel();
             if (checkOutModel.isCheckOutFlag()) {
@@ -412,14 +412,19 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void launchDasboardFromBase() {
-        if (myApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
-            Intent intent = new Intent(this, BusinessDashboardActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+        if (myApplication.getCheckOutModel() != null) {
+            launchCheckout();
         } else {
-            Intent intent = new Intent(this, DashboardActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            if (myApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || myApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
+                Intent intent = new Intent(this, BusinessDashboardActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this, DashboardActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
         }
+
     }
 }

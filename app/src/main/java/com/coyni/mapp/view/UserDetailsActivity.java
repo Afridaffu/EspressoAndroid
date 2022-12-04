@@ -346,7 +346,10 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     String face = String.valueOf(isFaceLock);
                     String touch = String.valueOf(isTouchId);
 
-                    startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", address).putExtra("touch", touch).putExtra("face", face));
+                    startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class)
+                            .putExtra("screen", "UserDetails")
+                            .putExtra("title", authenticateType)
+                            .putExtra("value", address).putExtra("touch", touch).putExtra("face", face));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -382,90 +385,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 findViewById(R.id.businessUserDetailsLL).setVisibility(View.GONE);
                 findViewById(R.id.personalUserDetailsCV).setVisibility(View.VISIBLE);
             }
-
-            if (myApplicationObj.getMyProfile().getData().getFirstName() != null) {
-
-                try {
-                    Profile profile = myApplicationObj.getMyProfile();
-
-                    phoneNumber = profile.getData().getPhoneNumber().split(" ")[1];
-                    phoneFormat = "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
-                    bindImage(myApplicationObj.getMyProfile().getData().getImage());
-                    strFileName = myApplicationObj.getMyProfile().getData().getImage();
-                    userEmailIdTV.setText(profile.getData().getEmail());
-                    business_emailIdTV.setText(profile.getData().getEmail());
-                    userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
-                    business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
-                    userPhoneNumTV.setText(phoneFormat);
-                    business_userPhneNoTV.setText(phoneFormat);
-
-                    LogUtils.d(TAG, "profiledata" + profile);
-
-//                String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-//
-//                if (fullname.length() > 30) {
-//                    business_defaultaccountET.setText(fullname.substring(0, 30).trim() + "...");
-//                } else {
-//                    business_defaultaccountET.setText(fullname);
-//                }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-
-            try {
-                if (myApplicationObj.getMyAddress().getData().getAddressLine1() != null) {
-
-                    try {
-                        FetchAddressResp profile = myApplicationObj.getMyAddress();
-
-                        String addressFormatted = "";
-                        if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
-                            addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
-                        }
-                        if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
-                            addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
-                        }
-                        if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
-                            addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
-                        }
-    //                    if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-    //                        addressFormatted = addressFormatted + profile.getData().getState() + ", ";
-    //                    }
-                        if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-                            state = profile.getData().getState().toLowerCase();
-                            String stateCode = Utils.getStateCode(state, myApplicationObj.getListStates());
-                            if (stateCode != null && !stateCode.equals("")) {
-                                addressFormatted = addressFormatted + stateCode + ", ";
-                            }
-                        }
-                        if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
-                            addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
-                        }
-                        if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
-                            addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
-                        }
-
-                        if (addressFormatted.equals("")) {
-                            addressFormatted = addressFormatted + "United States";
-                            userAddressTV.setText(addressFormatted);
-                            business_userAddreTV.setText(addressFormatted);
-                        } else {
-                            userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                            business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
 
             business_defaultaccountET.setOnClickListener(view -> {
                 try {
@@ -540,6 +459,35 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     e.printStackTrace();
                 }
             });
+
+            if (myApplicationObj.getMyProfile().getData().getFirstName() != null) {
+
+                try {
+                    Profile profile = myApplicationObj.getMyProfile();
+
+                    phoneNumber = profile.getData().getPhoneNumber().split(" ")[1];
+                    phoneFormat = "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
+                    bindImage(myApplicationObj.getMyProfile().getData().getImage());
+                    strFileName = myApplicationObj.getMyProfile().getData().getImage();
+                    userEmailIdTV.setText(profile.getData().getEmail());
+                    business_emailIdTV.setText(profile.getData().getEmail());
+                    userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                    business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                    userPhoneNumTV.setText(phoneFormat);
+                    business_userPhneNoTV.setText(phoneFormat);
+                    LogUtils.d(TAG, "profiledata" + profile);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            try {
+                setupAddress(myApplicationObj.getMyAddress());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
         } catch (Exception e) {
@@ -659,7 +607,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         profilesListView.setAdapter(profilesListAdapter);
 
     }
-
 
     public void initObservers() {
 
@@ -830,46 +777,12 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 try {
                     dismissDialog();
                     if (profile != null && profile.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        myApplicationObj.setMyAddress(profile);
                         try {
-                            String addressFormatted = "";
-                            if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
-                                addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
-                            }
-                            if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
-                                addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
-                            }
-                            if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
-                                addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
-                            }
-                            if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-                                String stateCode = Utils.getStateCode(profile.getData().getState().toLowerCase(), myApplicationObj.getListStates());
-                                if (stateCode != null && !stateCode.equals("")) {
-                                    addressFormatted = addressFormatted + stateCode + ", ";
-                                }
-                            }
-                            if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
-                                addressFormatted = addressFormatted + profile.getData().getCountry() + ", ";
-                            }
-
-                            if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
-                                addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
-                            }
-
-                            if (addressFormatted.equals("")) {
-                                addressFormatted = addressFormatted + "United States";
-                                userAddressTV.setText(addressFormatted);
-                                business_userAddreTV.setText(addressFormatted);
-                                address = addressFormatted;
-                            } else {
-                                userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                                business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                                address = addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
-                            }
+                            myApplicationObj.setMyAddress(profile);
+                            setupAddress(profile);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1496,4 +1409,50 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         }
     }
 
+    private void setupAddress(FetchAddressResp profile) {
+        try {
+            if (profile.getData() != null && profile.getData().getAddressLine1() != null) {
+                String addressFormatted = "";
+                if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
+                }
+                if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
+                }
+                if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
+                }
+                if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+                    String stateCode = Utils.getStateCode(profile.getData().getState().toLowerCase(), myApplicationObj.getListStates());
+                    if (stateCode != null && !stateCode.equals("")) {
+                        addressFormatted = addressFormatted + stateCode + ", ";
+                    }
+                }
+                if (profile.getData().getCountry() != null && !profile.getData().getCountry().equals("")) {
+                    addressFormatted = addressFormatted + getResources().getString(R.string.united_states) + ", ";
+                }
+
+                if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
+                    addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
+                }
+
+                if (addressFormatted.equals("")) {
+                    addressFormatted = addressFormatted + getResources().getString(R.string.united_states);
+                    userAddressTV.setText(addressFormatted);
+                    business_userAddreTV.setText(addressFormatted);
+                    address = addressFormatted;
+                } else {
+                    userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                    business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                    address = addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
+                }
+            } else {
+                userAddressTV.setText(getString(R.string.united_states));
+                business_userAddreTV.setText(getString(R.string.united_states));
+                address = getString(R.string.united_states);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

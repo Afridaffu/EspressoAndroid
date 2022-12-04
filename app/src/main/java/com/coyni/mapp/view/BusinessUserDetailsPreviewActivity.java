@@ -104,9 +104,9 @@ public class BusinessUserDetailsPreviewActivity extends BaseActivity implements 
         } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("UserDetails") && getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
             heading.setText(getString(R.string.address));
             title.setText(getString(R.string.address_curr));
-            if (value.getText().toString().equals("")) {
-                value.setText(getIntent().getStringExtra("value"));
-            }
+//            if (value.getText().toString().equals("")) {
+            value.setText(getIntent().getStringExtra("value"));
+//            }
             authenticateType = getIntent().getStringExtra("title");
             isTouchId = Boolean.parseBoolean(getIntent().getStringExtra("touch"));
             isFaceLock = Boolean.parseBoolean(getIntent().getStringExtra("face"));
