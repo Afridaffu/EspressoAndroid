@@ -112,7 +112,8 @@ public class DashboardActivity extends BaseActivity {
             initObserver();
 
             if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
-                showProgressDialog("connecting...");
+//                showProgressDialog("connecting...");
+                showProgressDialog();
             }
             firebaseToken();
         } catch (Exception ex) {

@@ -321,6 +321,7 @@ public class OnboardActivity extends BaseActivity {
 
                                     Intent i = new Intent(OnboardActivity.this, CreatePasswordActivity.class);
                                     i.putExtra("screen", "loginExpiry");
+                                    i.putExtra("code", loginResponse.getData().getRequestToken());
                                     startActivity(i);
                                     finish();
                                 } else {
