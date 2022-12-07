@@ -407,7 +407,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                 setUploadedTrue(i);
                 sscfileUploadedLL.setVisibility(VISIBLE);
                 sscuploadFileTV.setVisibility(GONE);
-                sscfileUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(actionRqrdResponse.getData().getAdditionalDocument().get(i).getUploadDocs().get(0).getUploadDate()));
+                sscfileUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedNewFormat(actionRqrdResponse.getData().getAdditionalDocument().get(i).getUploadDocs().get(0).getUploadDate()));
                 sscuploadFileTV.setTag(actionRqrdResponse.getData().getAdditionalDocument().get(i).getUploadDocs().get(0).getDocId());
             } else
                 sscuploadFileTV.setTag(0);
