@@ -83,11 +83,11 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<OTPValidateResponse> regEmailOTPResendLiveData = new MutableLiveData<>();
     private MutableLiveData<OTPValidateResponse> regPhoneOTPResendLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<EmailResponse> emailotpLiveData = new MutableLiveData<>();
+//    private MutableLiveData<EmailResponse> emailotpLiveData = new MutableLiveData<>();
     private MutableLiveData<OTPValidateResponse> regEmailOTPValidateLiveData = new MutableLiveData<>();
     private MutableLiveData<EmailValidateResponse> emailValidateResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SMSResponse> smsresendMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<SMSValidate> smsotpLiveData = new MutableLiveData<>();
+//    private MutableLiveData<SMSValidate> smsotpLiveData = new MutableLiveData<>();
     private MutableLiveData<OTPValidateResponse> regMobileOTPLiveData = new MutableLiveData<>();
     private MutableLiveData<LoginResponse> loginLiveData = new MutableLiveData<>();
     private MutableLiveData<BiometricSignIn> loginNewLiveData = new MutableLiveData<>();
@@ -194,17 +194,17 @@ public class LoginViewModel extends AndroidViewModel {
         return apiErrorMutableLiveData;
     }
 
-    public MutableLiveData<EmailResponse> getEmailotpLiveData() {
-        return emailotpLiveData;
-    }
+//    public MutableLiveData<EmailResponse> getEmailotpLiveData() {
+//        return emailotpLiveData;
+//    }
 
     public MutableLiveData<SMSResponse> getSmsresendMutableLiveData() {
         return smsresendMutableLiveData;
     }
 
-    public MutableLiveData<SMSValidate> getSmsotpLiveData() {
-        return smsotpLiveData;
-    }
+//    public MutableLiveData<SMSValidate> getSmsotpLiveData() {
+//        return smsotpLiveData;
+//    }
 
     public MutableLiveData<OTPValidateResponse> getRegMobileOTPLiveData() {
         return regMobileOTPLiveData;
@@ -398,38 +398,38 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
-    public void emailotp(SmsRequest smsRequest) {
-        try {
-            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
-            Call<EmailResponse> mCall = apiService.emailotp(smsRequest);
-            mCall.enqueue(new Callback<EmailResponse>() {
-                @Override
-                public void onResponse(Call<EmailResponse> call, Response<EmailResponse> response) {
-                    if (response.isSuccessful()) {
-                        EmailResponse obj = response.body();
-                        emailotpLiveData.setValue(obj);
-                        Log.e("Email Validate Resp", new Gson().toJson(obj));
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<EmailResponse>() {
-                        }.getType();
-                        EmailResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                        if (errorResponse != null) {
-                            emailotpLiveData.setValue(errorResponse);
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<EmailResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public void emailotp(SmsRequest smsRequest) {
+//        try {
+//            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+//            Call<EmailResponse> mCall = apiService.emailotp(smsRequest);
+//            mCall.enqueue(new Callback<EmailResponse>() {
+//                @Override
+//                public void onResponse(Call<EmailResponse> call, Response<EmailResponse> response) {
+//                    if (response.isSuccessful()) {
+//                        EmailResponse obj = response.body();
+//                        emailotpLiveData.setValue(obj);
+//                        Log.e("Email Validate Resp", new Gson().toJson(obj));
+//                    } else {
+//                        Gson gson = new Gson();
+//                        Type type = new TypeToken<EmailResponse>() {
+//                        }.getType();
+//                        EmailResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+//                        if (errorResponse != null) {
+//                            emailotpLiveData.setValue(errorResponse);
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<EmailResponse> call, Throwable t) {
+//                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+//                    apiErrorMutableLiveData.setValue(null);
+//                }
+//            });
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public void validateRegisterEmailOTP(OTPValidateRequest OTPValidateRequest) {
         try {
@@ -465,38 +465,38 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
 
-    public void smsotp(SmsRequest smsRequest) {
-        try {
-            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
-            Call<SMSValidate> mCall = apiService.smsotp(smsRequest);
-            mCall.enqueue(new Callback<SMSValidate>() {
-                @Override
-                public void onResponse(Call<SMSValidate> call, Response<SMSValidate> response) {
-                    if (response.isSuccessful()) {
-                        SMSValidate obj = response.body();
-                        smsotpLiveData.setValue(obj);
-                        Log.e("SMS Validate Resp", new Gson().toJson(obj));
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<SMSValidate>() {
-                        }.getType();
-                        SMSValidate errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                        if (errorResponse != null) {
-                            smsotpLiveData.setValue(errorResponse);
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<SMSValidate> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public void smsotp(SmsRequest smsRequest) {
+//        try {
+//            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+//            Call<SMSValidate> mCall = apiService.smsotp(smsRequest);
+//            mCall.enqueue(new Callback<SMSValidate>() {
+//                @Override
+//                public void onResponse(Call<SMSValidate> call, Response<SMSValidate> response) {
+//                    if (response.isSuccessful()) {
+//                        SMSValidate obj = response.body();
+//                        smsotpLiveData.setValue(obj);
+//                        Log.e("SMS Validate Resp", new Gson().toJson(obj));
+//                    } else {
+//                        Gson gson = new Gson();
+//                        Type type = new TypeToken<SMSValidate>() {
+//                        }.getType();
+//                        SMSValidate errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+//                        if (errorResponse != null) {
+//                            smsotpLiveData.setValue(errorResponse);
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<SMSValidate> call, Throwable t) {
+//                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+//                    apiErrorMutableLiveData.setValue(null);
+//                }
+//            });
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public void validateRegisterMobileOTP(OTPValidateRequest OTPValidateRequest) {
         try {
@@ -531,38 +531,38 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
-    public void smsotpLoginValidate(SmsRequest smsRequest) {
-        try {
-            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
-            Call<SMSValidate> mCall = apiService.smsotpLogin(smsRequest);
-            mCall.enqueue(new Callback<SMSValidate>() {
-                @Override
-                public void onResponse(Call<SMSValidate> call, Response<SMSValidate> response) {
-                    if (response.isSuccessful()) {
-                        SMSValidate obj = response.body();
-                        smsotpLiveData.setValue(obj);
-                        Log.e("SMS Validate Resp", new Gson().toJson(obj));
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<SMSValidate>() {
-                        }.getType();
-                        SMSValidate errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-                        if (errorResponse != null) {
-                            smsotpLiveData.setValue(errorResponse);
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<SMSValidate> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public void smsotpLoginValidate(SmsRequest smsRequest) {
+//        try {
+//            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+//            Call<SMSValidate> mCall = apiService.smsotpLogin(smsRequest);
+//            mCall.enqueue(new Callback<SMSValidate>() {
+//                @Override
+//                public void onResponse(Call<SMSValidate> call, Response<SMSValidate> response) {
+//                    if (response.isSuccessful()) {
+//                        SMSValidate obj = response.body();
+//                        smsotpLiveData.setValue(obj);
+//                        Log.e("SMS Validate Resp", new Gson().toJson(obj));
+//                    } else {
+//                        Gson gson = new Gson();
+//                        Type type = new TypeToken<SMSValidate>() {
+//                        }.getType();
+//                        SMSValidate errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+//                        if (errorResponse != null) {
+//                            smsotpLiveData.setValue(errorResponse);
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<SMSValidate> call, Throwable t) {
+//                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+//                    apiErrorMutableLiveData.setValue(null);
+//                }
+//            });
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public void logout() {
         try {
