@@ -51,6 +51,7 @@ import com.coyni.mapp.utils.CheckOutConstants;
 import com.coyni.mapp.utils.EmojiFilter;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.view.AddCardActivity;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.BuyTokenActivity;
 import com.coyni.mapp.view.BuyTokenPaymentMethodsActivity;
@@ -840,6 +841,14 @@ public class AddManualBankAccount extends BaseActivity implements OnKeyboardVisi
                                 Intent i = new Intent(AddManualBankAccount.this, BuyTokenActivity.class);
                                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(i);
+                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("buytoken") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add") && !isBuyFCEnabled) {
+                                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                                    startActivity(new Intent(AddManualBankAccount.this, BuyTokenPaymentMethodsActivity.class)
+                                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                } else {
+                                    startActivity(new Intent(AddManualBankAccount.this, SelectPaymentMethodActivity.class)
+                                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                }
                             } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled && objMyApplication.getGBTBalance() != 0) {
                                 startActivity(new Intent(AddManualBankAccount.this, WithdrawTokenActivity.class)
                                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
