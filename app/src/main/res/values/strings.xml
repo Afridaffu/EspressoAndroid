@@ -132,6 +132,7 @@
 
     <string name="iv_failed">Identity Verification Canceled</string>
     <string name="iv_declined">Identity Verification Failed</string>
+    <string name="acc_terminated_content">Please contact coyni customer support if you need further assistance.</string>
     <string name="iv_verification_failed_content">Thank you for your interest in coyni. Please contact coyni customer support if you need further assistance.</string>
     <string name="iv_verification_declined_content">Thank you for your interest in coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
     <string name="iv_failedcontentextention"> If you need any help please</string>
@@ -696,6 +697,7 @@
     <string name="please_click_the_upload_button_below_to_proceed">Please click the “Upload” button below to proceed.</string>
     <string name="canceled_text">Application Canceled</string>
     <string name="declined_text">Application Declined</string>
+    <string name="terminated_text">Account Terminated</string>
     <string name="act_rqrd_description">Thank you for your interest in coyni. After reviewing your account, the coyni team requires you to upload the following documentation within 30 days to continue account verification.</string>
     <string name="default_notification_channel_id">Channel ID</string>
     <string name="extBankMsg">coyni uses Fiserv to verify bank account \ninformation. Fiserv may also check you \nbalance(s) to ensure that you have enough \nfunds to cover requested transactions. By \nclicking below you agree to link your bank \naccount.</string>
