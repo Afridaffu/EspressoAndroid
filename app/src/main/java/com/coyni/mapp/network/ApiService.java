@@ -213,18 +213,18 @@ import retrofit2.http.Query;
 
 public interface ApiService {
 
-//    @POST("api/v2/user/email-otp/resend")
+    //    @POST("api/v2/user/email-otp/resend")
     @POST("api/v2/otp/email-otp/resend")
     Call<EmailResendResponse> emailotpresend(@Body EmailRequest emailRequest);
 
-//    @POST("api/v2/user/forgot-password/otp/send")
+    //    @POST("api/v2/user/forgot-password/otp/send")
     @POST("api/v2/otp/forgot-password/otp/send")
     Call<EmailResendResponse> forgotPasswordOTPSend(@Body EmailRequest emailRequest);
 
 //    @POST("api/v2/user/register/email-otp/validate")
 //    Call<EmailResponse> emailotp(@Body SmsRequest smsRequest);
 
-//    @POST("api/v2/user/sms-otp/resend")
+    //    @POST("api/v2/user/sms-otp/resend")
     @POST("api/v2/otp/sms-otp/resend")
     Call<SMSResponse> smsotpresend(@Body SMSResend resend);
 
@@ -259,11 +259,11 @@ public interface ApiService {
     Call<CustRegisterResponse> registerNew(@Body CustRegisRequest custRegisRequest);
 
 
-//    @POST("api/v2/user/verify/email-otp/registration")
+    //    @POST("api/v2/user/verify/email-otp/registration")
     @POST("api/v2/otp/verify/email-otp/registration")
     Call<OTPValidateResponse> validateRegisterEmailOTP(@Body OTPValidateRequest OTPValidateRequest);
 
-//    @POST("api/v2/user/email-otp/validate")
+    //    @POST("api/v2/user/email-otp/validate")
     @POST("api/v2/otp/email-otp/validate")
     Call<EmailValidateResponse> emailotpValidate(@Body SmsRequest smsRequest);
 
@@ -274,14 +274,15 @@ public interface ApiService {
     @POST("api/v2/register/initialize/customer")
     Call<InitializeCustomerResponse> initializeCustomer(@Body InitCustomerRequest initCustomerRequest);
 
-//    @POST("api/v2/user/forgot-email/otp/send")
+    //    @POST("api/v2/user/forgot-email/otp/send")
     @POST("api/v2/otp/forgot-email/otp/send")
     Call<RetrieveEmailResponse> retrieveEmail(@Body RetrieveEmailRequest request);
 
     @PATCH("api/v2/coyni-pin/validate")
     Call<ValidateResponse> validateCoyniPin(@Body ValidateRequest request);
 
-    @GET("api/v2/profile/me/accountlimits/{userType}")
+//    @GET("api/v2/profile/me/accountlimits/{userType}")
+    @GET("api/v2/accountlimits/me/{userType}")
     Call<AccountLimits> meAccountLimits(@Path("userType") int userType);
 
     @GET("api/v2/profile/me/signedagreements")
@@ -302,7 +303,7 @@ public interface ApiService {
     @PATCH("api/v2/register/newcustomer")
     Call<CustRegisterResponse> custRegisterPatch(@Body CustRegisRequest custRegisRequest, @Query("id") int id);
 
-//    @POST("api/v2/user/forgot-email/retrieve-users")
+    //    @POST("api/v2/user/forgot-email/retrieve-users")
     @POST("api/v2/otp/forgot-email/retrieve-users")
     Call<RetrieveUsersResponse> retrieveUsers(@Body RetrieveUsersRequest request, @Query("otp") String otp);
 
@@ -318,29 +319,30 @@ public interface ApiService {
     @GET("api/v2/profile/me")
     Call<Profile> meProfile();
 
-//    @POST("api/v2/user/update-email/otp/send")
+    //    @POST("api/v2/user/update-email/otp/send")
     @POST("api/v2/otp/update-email/otp/send")
     Call<UpdateEmailResponse> updateEmailSendOTP(@Body UpdateEmailRequest request);
 
-//    @POST("api/v2/user/update-email/otp-validate")
+    //    @POST("api/v2/user/update-email/otp-validate")
     @POST("api/v2/otp/update-email/otp-validate")
     Call<UpdateEmailResponse> updateEmailValidateOTP(@Body UpdateEmailValidateRequest request);
 
     @PATCH("api/v2/user/set-password")
     Call<ManagePasswordResponse> setExpiryPassword(@Body ManagePasswordRequest request);
 
-//    @POST("api/v2/user/validate-email")
+    //    @POST("api/v2/user/validate-email")
     @POST("api/v2/otp/validate-email")
     Call<EmailExistsResponse> validateEmail(@Body EmailRequest emailRequest);
 
-    @GET("api/v2/profile/payment-methods")
+    //    @GET("api/v2/profile/payment-methods")
+    @GET("api/v2/payment-methods")
     Call<PaymentMethodsResponse> mePaymentMethods();
 
-//    @POST("api/v2/user/update-phone/otp/send")
+    //    @POST("api/v2/user/update-phone/otp/send")
     @POST("api/v2/otp/update-phone/otp/send")
     Call<UpdatePhoneResponse> updatePhoneSendOTP(@Body UpdatePhoneRequest request);
 
-//    @POST("api/v2/user/update-phone/otp/validate")
+    //    @POST("api/v2/user/update-phone/otp/validate")
     @POST("api/v2/otp/update-phone/otp/validate")
     Call<UpdatePhoneResponse> updatePhoneValidateOTP(@Body UpdatePhoneValidateRequest request);
 
@@ -382,7 +384,7 @@ public interface ApiService {
 //    @POST("api/v2/fiserv/signon")
 //    Call<SignOn> meSignOn();
 
-//    @POST("api/v2/user/update/otp/resend")
+    //    @POST("api/v2/user/update/otp/resend")
     @POST("api/v2/otp/update/otp/resend")
     Call<UpdateResendOTPResponse> updateOtpResend(@Body UpdateResendRequest request);
 

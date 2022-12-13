@@ -26,7 +26,7 @@ import com.coyni.mapp.view.business.BusinessDashboardActivity;
 public class VerificationFailedFragment extends BaseFragment {
 
     private View mCurrentView;
-    private TextView mIdVeriStatus, mTvContactUs;
+    private TextView mIdVeriStatus, mTvContactUs, failedcontent;
     private Long mLastClickTimeQA = 0L;
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
@@ -49,6 +49,7 @@ public class VerificationFailedFragment extends BaseFragment {
         mTvUserIconText = mCurrentView.findViewById(R.id.tv_user_icon_text);
         mIdVeriStatus = mCurrentView.findViewById(R.id.idVeriStatus);
         mTvContactUs = mCurrentView.findViewById(R.id.contactUSTV);
+        failedcontent = mCurrentView.findViewById(R.id.failedcontent);
         mIvNotifications = mCurrentView.findViewById(R.id.iv_notifications);
         mUserIconRelativeLayout = mCurrentView.findViewById(R.id.rl_user_icon_layout);
     }
@@ -60,8 +61,13 @@ public class VerificationFailedFragment extends BaseFragment {
         String accountStatus = profile.getData().getAccountStatus();
         if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
             mIdVeriStatus.setText(R.string.declined_text);
+            failedcontent.setText(R.string.iv_verification_failed_content);
         } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())) {
             mIdVeriStatus.setText(R.string.canceled_text);
+            failedcontent.setText(R.string.iv_verification_failed_content);
+        } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
+            mIdVeriStatus.setText(R.string.terminated_text);
+            failedcontent.setText(R.string.acc_terminated_content);
         }
 
         mTvContactUs.setOnClickListener(v -> {
