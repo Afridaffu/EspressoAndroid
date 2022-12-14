@@ -388,7 +388,8 @@ public interface ApiService {
     @POST("api/v2/otp/update/otp/resend")
     Call<UpdateResendOTPResponse> updateOtpResend(@Body UpdateResendRequest request);
 
-    @GET("api/v2/user-requests/user-details/{walletId}")
+//    @GET("api/v2/user-requests/user-details/{walletId}")
+    @GET("api/v2/wallets/user-details/{walletId}")
     Call<UserDetails> getUserDetails(@Path("walletId") String walletId);
 
     @POST("api/v2/transactions/token/info")
@@ -564,7 +565,7 @@ public interface ApiService {
     @PATCH("api/v2/business/company-info")
     Call<CompanyInfoUpdateResp> updateCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
 
-    @PATCH("/api/v2/business/contact-info")
+    @PATCH("api/v2/business/contact-info")
     Call<CompanyInfoUpdateResp> updateContactInforamtion(@Body ContactInfoRequest contactInfoRequest);
 
     @PATCH("api/v2/business/dba-info")
@@ -574,7 +575,8 @@ public interface ApiService {
     Call<DBAInfoUpdateResp> postDBAInforamtion(@Body DBAInfoRequest dbaInfoRequest);
 
 
-    @GET("api/v2/business/payment-methods")
+//    @GET("api/v2/business/payment-methods")
+    @GET("api/v2/payment-methods")
     Call<PaymentMethodsResponse> meBusinessPaymentMethods();
 
     @POST("api/v2/banks/me")
@@ -593,7 +595,8 @@ public interface ApiService {
 //    @GET("api/v2/profile/me/{walletType}")
 //    Call<BusinessWalletResponse> meMerchantWallet(@Path("walletType") String walletType);
 
-    @GET("api/v2/profile/wallets")
+//    @GET("api/v2/profile/wallets")
+    @GET("api/v2/wallets/wallets")
     Call<BusinessWalletResponse> meWallets();
 
     @GET("api/v2/lov/BT")
@@ -602,7 +605,8 @@ public interface ApiService {
     @POST("api/v2/node/cancel-buytoken/{gbxTxnId}")
     Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
 
-    @GET("/api/v2/profile/fee-type/{feeStructureId}")
+//    @GET("/api/v2/profile/fee-type/{feeStructureId}")
+    @GET("api/v2/fees/fees-details/{feeStructureId}")
     Call<Fees> meFees(@Path("feeStructureId") int feeStructureId);
 
     @POST("api/v2/cards/merchant/addcard")

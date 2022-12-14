@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.coyni.mapp.R;
 import com.coyni.mapp.model.activtity_log.ActivityLogResp;
 import com.coyni.mapp.utils.MyApplication;
+import com.coyni.mapp.utils.Utils;
+
+import java.util.Locale;
 
 public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.MyViewHolder> {
 
@@ -50,7 +53,9 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
             holder.messageTv.setText(str);
         }
 
-        if (respList.getData().get(position).getTxnType() != null && respList.getData().get(position).getTxnSubType() != null) {
+        if (respList.getData().get(position).getTxnType().equalsIgnoreCase(Utils.withdrawType)) {
+            holder.type.setText("Withdraw");
+        } else if (respList.getData().get(position).getTxnType() != null && respList.getData().get(position).getTxnSubType() != null) {
             holder.type.setText("Purchase");
         } else {
             holder.type.setText("Chargeback");

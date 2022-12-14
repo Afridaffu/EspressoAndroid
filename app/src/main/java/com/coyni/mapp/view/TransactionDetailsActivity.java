@@ -434,7 +434,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     status.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
-            getActivityLogAPICall();
+//            getActivityLogAPICall();
         }
 
         if (reserveData.getReleasedDate() != null) {
@@ -577,7 +577,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     mPaidStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
-            getActivityLogAPICall();
+//            getActivityLogAPICall();
         }
 
         if (paidOrderData.getCreatedDate() != null) {
@@ -739,7 +739,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     break;
                 }
             }
-            getActivityLogAPICall();
+//            getActivityLogAPICall();
         }
         if (refundsentdata.getRefundAmount() != null) {
             refundamounttv.setText(Utils.convertTwoDecimal(refundsentdata.getRefundAmount().replace("CYN", "").trim()));
@@ -920,7 +920,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                         completed.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
                 }
-                getActivityLogAPICall();
+//                getActivityLogAPICall();
             }
 
             lyPRClose.setOnClickListener(view -> onBackPressed());
@@ -1300,7 +1300,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     status.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
-            getActivityLogAPICall();
+//            getActivityLogAPICall();
         }
 
         if (objData.getGiftCardName() != null) {
@@ -1432,7 +1432,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     withStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
-            getActivityLogAPICall();
+//            getActivityLogAPICall();
         }
 
         if (objData.getCreatedDate() != null) {
@@ -1736,7 +1736,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     withBankStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
-            getActivityLogAPICall();
+//            getActivityLogAPICall();
         }
 
         if (objData.getCreatedDate() != null) {
@@ -1901,7 +1901,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                         statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
                 }
-                getActivityLogAPICall();
+//                getActivityLogAPICall();
             }
 
             if (businessPayoutData.getCreatedDate() != null) {
@@ -2042,7 +2042,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                         statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
                 }
-                getActivityLogAPICall();
+//                getActivityLogAPICall();
             }
 
             if (failedData.getCreatedDate() != null) {
@@ -2167,7 +2167,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                         statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
                 }
-                getActivityLogAPICall();
+//                getActivityLogAPICall();
             }
 
 
