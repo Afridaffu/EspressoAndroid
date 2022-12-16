@@ -281,7 +281,7 @@ public interface ApiService {
     @PATCH("api/v2/coyni-pin/validate")
     Call<ValidateResponse> validateCoyniPin(@Body ValidateRequest request);
 
-//    @GET("api/v2/profile/me/accountlimits/{userType}")
+    //    @GET("api/v2/profile/me/accountlimits/{userType}")
     @GET("api/v2/accountlimits/me/{userType}")
     Call<AccountLimits> meAccountLimits(@Path("userType") int userType);
 
@@ -388,7 +388,7 @@ public interface ApiService {
     @POST("api/v2/otp/update/otp/resend")
     Call<UpdateResendOTPResponse> updateOtpResend(@Body UpdateResendRequest request);
 
-//    @GET("api/v2/user-requests/user-details/{walletId}")
+    //    @GET("api/v2/user-requests/user-details/{walletId}")
     @GET("api/v2/wallets/user-details/{walletId}")
     Call<UserDetails> getUserDetails(@Path("walletId") String walletId);
 
@@ -575,7 +575,7 @@ public interface ApiService {
     Call<DBAInfoUpdateResp> postDBAInforamtion(@Body DBAInfoRequest dbaInfoRequest);
 
 
-//    @GET("api/v2/business/payment-methods")
+    //    @GET("api/v2/business/payment-methods")
     @GET("api/v2/payment-methods")
     Call<PaymentMethodsResponse> meBusinessPaymentMethods();
 
@@ -595,7 +595,7 @@ public interface ApiService {
 //    @GET("api/v2/profile/me/{walletType}")
 //    Call<BusinessWalletResponse> meMerchantWallet(@Path("walletType") String walletType);
 
-//    @GET("api/v2/profile/wallets")
+    //    @GET("api/v2/profile/wallets")
     @GET("api/v2/wallets/wallets")
     Call<BusinessWalletResponse> meWallets();
 
@@ -605,7 +605,7 @@ public interface ApiService {
     @POST("api/v2/node/cancel-buytoken/{gbxTxnId}")
     Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
 
-//    @GET("/api/v2/profile/fee-type/{feeStructureId}")
+    //    @GET("/api/v2/profile/fee-type/{feeStructureId}")
     @GET("api/v2/fees/fees-details/{feeStructureId}")
     Call<Fees> meFees(@Path("feeStructureId") int feeStructureId);
 
@@ -793,11 +793,11 @@ public interface ApiService {
     Call<DeviceInitializeResponse> initializedevice(@Query("fcmToken") String fcmToken);
 
     //    @POST("api/v2/user/stepup/email")
-    @POST("api/v2/otp/stepup/email")
+    @POST("api/v2/user/step-up/email")
     Call<StepUpOTPResponse> stepUpEmailOTP(@Body SmsRequest request);
 
     //    @POST("api/v2/user/stepup/phone")
-    @POST("api/v2/otp/stepup/phone")
+    @POST("api/v2/user/step-up/phone")
     Call<StepUpOTPResponse> stepUpPhoneOTP(@Body SmsRequest request);
 
     @POST("api/v2/user/start")

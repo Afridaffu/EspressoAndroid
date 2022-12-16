@@ -9,7 +9,6 @@
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.AgreementsActivity">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,9 +21,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_13sdp"
-            android:padding="@dimen/_8sdp"
             android:layout_marginTop="@dimen/_43sdp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="@dimen/_8sdp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -42,12 +41,12 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_16ssp" />
 
-
     </LinearLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fillViewport="true"
         android:scrollbars="none">
 
         <LinearLayout
@@ -65,19 +64,19 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="@string/cpactive_agreements"
-                android:visibility="gone"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
+                android:textSize="@dimen/_12ssp"
+                android:visibility="gone" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvActive"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:cardBackgroundColor="@color/white"
                 android:layout_marginStart="@dimen/_2sdp"
                 android:layout_marginTop="@dimen/_11sdp"
                 android:layout_marginEnd="@dimen/_2sdp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -95,6 +94,7 @@
                 android:layout_height="@dimen/_2sdp" />
 
             <TextView
+                android:id="@+id/pastTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -103,17 +103,16 @@
                 android:text="@string/pastagree"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp"
-                android:visibility="gone"
-                android:id="@+id/pastTV"/>
+                android:visibility="gone" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvPast"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
                 android:visibility="gone"
                 app:cardBackgroundColor="@color/white"
-                android:layout_marginBottom="@dimen/_2sdp"
                 app:cardCornerRadius="@dimen/_11sdp">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -131,9 +130,9 @@
                 android:layout_marginLeft="@dimen/_1sdp"
                 android:layout_marginTop="@dimen/_11sdp"
                 android:layout_marginRight="@dimen/_1sdp"
-                app:cardBackgroundColor="@color/white"
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:visibility="gone"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/_11sdp">
 
                 <TextView
@@ -148,6 +147,6 @@
 
             </androidx.cardview.widget.CardView>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

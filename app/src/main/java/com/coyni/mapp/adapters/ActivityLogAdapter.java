@@ -53,7 +53,7 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
             holder.messageTv.setText(str);
         }
 
-        if (respList.getData().get(position).getTxnType().equalsIgnoreCase(Utils.withdrawType)) {
+        if (respList.getData().get(position).getTxnType() != null && respList.getData().get(position).getTxnType().equalsIgnoreCase(Utils.withdrawType)) {
             holder.type.setText("Withdraw");
         } else if (respList.getData().get(position).getTxnType() != null && respList.getData().get(position).getTxnSubType() != null) {
             holder.type.setText("Purchase");

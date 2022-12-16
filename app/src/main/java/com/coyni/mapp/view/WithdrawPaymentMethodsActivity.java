@@ -1373,6 +1373,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenPaymentMethodsActivity.class);
                             i.putExtra("screen", "withdraw");
+                            i.putExtra("subtype", "notokens");
                             startActivity(i);
                         } else {
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, SelectPaymentMethodActivity.class);

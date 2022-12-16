@@ -169,7 +169,7 @@ public class BuyTokenPaymentMethodsActivity extends BaseActivity {
 //                        onBackPressed();
 //                    } else
                     if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")
-                            && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add")) {
+                            && getIntent().getStringExtra("subtype") != null && (getIntent().getStringExtra("subtype").equals("add") || getIntent().getStringExtra("subtype").equals("notokens"))) {
                         onBackPressed();
                     } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                         if (!objMyApplication.getCardSave()) {
