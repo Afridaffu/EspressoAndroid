@@ -885,10 +885,14 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
                                 objMyApplication.setDbaOwnerId(Integer.parseInt(String.valueOf(loginResponse.getData().getDbaOwnerId())));
                                 if (loginResponse.getData().isPasswordExpired()) {
-                                    Intent i = new Intent(LoginActivity.this, PINActivity.class);
+//                                    Intent i = new Intent(LoginActivity.this, PINActivity.class);
+//                                    i.putExtra("screen", "loginExpiry");
+//                                    i.putExtra("TYPE", "ENTER");
+//                                    i.putExtra(Utils.ACCOUNT_TYPE, loginResponse.getData().getAccountType());
+//                                    startActivity(i);
+                                    Intent i = new Intent(LoginActivity.this, CreatePasswordActivity.class);
                                     i.putExtra("screen", "loginExpiry");
-                                    i.putExtra("TYPE", "ENTER");
-                                    i.putExtra(Utils.ACCOUNT_TYPE, loginResponse.getData().getAccountType());
+                                    i.putExtra("code", loginResponse.getData().getRequestToken());
                                     startActivity(i);
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());

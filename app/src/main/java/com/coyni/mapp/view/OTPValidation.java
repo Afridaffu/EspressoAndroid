@@ -1502,6 +1502,9 @@ public class OTPValidation extends BaseActivity implements OnKeyboardVisibilityL
 //                    startActivity(intent);
                         break;
                     case "OTP": {
+                        if (Utils.isKeyboardVisible) {
+                            Utils.hideKeypad(OTPValidation.this);
+                        }
                         super.onBackPressed();
                         break;
                     }
