@@ -413,26 +413,30 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                         try {
                                             if (getIntent().getStringExtra("screenFrom") != null && getIntent().getStringExtra("screenFrom").equals("login")) {
 //                                                launchDashboard();
-                                                if (Utils.checkBiometric(PINActivity.this)) {
-                                                    if (Utils.checkAuthentication(PINActivity.this)) {
-                                                        if (Utils.isFingerPrint(PINActivity.this)) {
-                                                            startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                    .putExtra("ENABLE_TYPE", "TOUCH")
-                                                                    .putExtra("screen", getIntent().getStringExtra("screen")));
+                                                if (!objMyApplication.getLocalBiometric()) {
+                                                    if (Utils.checkBiometric(PINActivity.this)) {
+                                                        if (Utils.checkAuthentication(PINActivity.this)) {
+                                                            if (Utils.isFingerPrint(PINActivity.this)) {
+                                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                        .putExtra("ENABLE_TYPE", "TOUCH")
+                                                                        .putExtra("screen", getIntent().getStringExtra("screen")));
+                                                            } else {
+                                                                startActivity(new Intent(PINActivity.this, EnableAuthID.class)
+                                                                        .putExtra("ENABLE_TYPE", "FACE")
+                                                                        .putExtra("screen", getIntent().getStringExtra("screen")));
+                                                            }
                                                         } else {
                                                             startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                    .putExtra("ENABLE_TYPE", "FACE")
+                                                                    .putExtra("ENABLE_TYPE", "SUCCESS")
                                                                     .putExtra("screen", getIntent().getStringExtra("screen")));
                                                         }
                                                     } else {
                                                         startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                                .putExtra("ENABLE_TYPE", "SUCCESS")
+                                                                .putExtra("ENABLE_TYPE", "TOUCH")
                                                                 .putExtra("screen", getIntent().getStringExtra("screen")));
                                                     }
                                                 } else {
-                                                    startActivity(new Intent(PINActivity.this, EnableAuthID.class)
-                                                            .putExtra("ENABLE_TYPE", "TOUCH")
-                                                            .putExtra("screen", getIntent().getStringExtra("screen")));
+                                                    launchDashboard();
                                                 }
                                             } else if (getIntent().getStringExtra("screenFrom") != null && getIntent().getStringExtra("screenFrom").equals("ResetPIN")) {
                                                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
@@ -447,13 +451,6 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                             } else {
                                                 finish();
                                             }
-//                                            dbHandler.clearAllTables();
-//                                            Utils.setStrAuth("");
-//                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
-//                                            objMyApplication.setStrRetrEmail("");
-////                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
-//                                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                            startActivity(i);
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }
@@ -461,7 +458,6 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                 }, 2000);
 
                             } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ResetPIN")) {
-//                                Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
                                 Utils.showCustomToast(PINActivity.this, "PIN code has been updated", R.drawable.ic_custom_tick, "pin");
 
                                 new Handler().postDelayed(new Runnable() {
