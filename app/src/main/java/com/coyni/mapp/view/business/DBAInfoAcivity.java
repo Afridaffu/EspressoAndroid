@@ -3,6 +3,10 @@ package com.coyni.mapp.view.business;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import static com.coyni.mapp.custom_camera.CameraUtility.BROWSE;
+import static com.coyni.mapp.custom_camera.CameraUtility.CHOOSE_LIBRARY;
+import static com.coyni.mapp.custom_camera.CameraUtility.TAKE_PHOTO;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -36,6 +40,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -45,6 +53,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.coyni.mapp.custom_camera.CameraHandlerActivity;
+import com.coyni.mapp.custom_camera.CameraUtility;
+import com.coyni.mapp.dialogs.FilePickerDialog;
+import com.coyni.mapp.dialogs.OnDialogClickListener;
 import com.coyni.mapp.utils.EmojiFilter;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -92,13 +104,13 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     CompanyOutLineBoxPhoneNumberEditText dbaPhoneOET;
     ImageView backIV, eCommerceIV, retailIV;
     public WebsiteOutlineEditText websiteOET;
-    public LinearLayout dbanameLL, dbaemailLL, customerphonenumLL, eCommerceLL, retailLL, dbaFillingUploadedLL, dbaFillingLL, closeIV;
+    public LinearLayout dbanameLL, dbaemailLL, customerphonenumLL, eCommerceLL, retailLL, dbaFillingUploadedLL, dbaFillingLL, licesnseUploadLL, licenseUploadedLL, closeIV;
     public VolumeEditText mpvOET, highTicketOET, avgTicketOET;
-    public TextView dbanameTV, dbaemailTV, customernumTV, dbaFillinguploadTV, dbaFillingUpdatedOnTV;
+    public TextView dbanameTV, dbaemailTV, customernumTV, dbaFillinguploadTV, licenseUpdatedOnTV, dbaFillingUpdatedOnTV, licesnseUploadTV;
     public CardView dbaNextCV, addressNextCV;
     public static DBAInfoAcivity dbaInfoAcivity;
     public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isECommerce = false, isRetail = false,
-            isWebsite = true, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false;
+            isWebsite = true, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isBLUploaded = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false;
     ConstraintLayout businessTypeCL, timeZoneCL, stateCL;
     public View viewBarLeft, viewBarRight, pageOneView, pageTwoView;
     Long mLastClickTime = 0L, mLastClickTimeAddr = 0L;
@@ -108,6 +120,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     private boolean isAddDBA = false, addBusiness = false;
     private boolean isAddDBAAPICalled = false;
     private int companyID = 0;
+//    public int docTypeID = 0;
 
     //Address
     TextInputLayout companyaddresstil, companyaddress2til, citytil, statetil, zipcodetil, countryTIL;
@@ -125,12 +138,13 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     BusinessTypeResp btResponse;
     public String type = "", selectedBTKey = "";
     IdentityVerificationViewModel identityVerificationViewModel;
-    public static File dbaFile = null;
+    public static File dbaFile = null, businessLicenseFile = null;
     private static final int ACTIVITY_CHOOSE_FILE = 3;
     private static final int PICK_IMAGE_REQUEST = 4;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
     DBAInfoAcivity myActivity;
-    String prevDBAName = "";
+    String prevDBAName = "", selectedDocType;
+    private int DocID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,6 +294,9 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             timeZoneCL = findViewById(R.id.timeZoneCL);
 
             dbaFillingLL = findViewById(R.id.dbaFillingLL);
+            licesnseUploadTV = findViewById(R.id.licesnseUploadTV);
+            licenseUploadedLL = findViewById(R.id.licenseUploadedLL);
+            licenseUpdatedOnTV = findViewById(R.id.licenseUpdatedOnTV);
             dbaFillingUploadedLL = findViewById(R.id.dbaFillingUploadedLL);
             dbaFillinguploadTV = findViewById(R.id.dbaFillinguploadTV);
             dbaFillingUpdatedOnTV = findViewById(R.id.dbaFillingUpdatedOnTV);
@@ -439,8 +456,6 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 if (Utils.isKeyboardVisible)
                     Utils.hideKeypad(this);
                 Utils.populateBusinessTypes(this, businessTypeET, objMyApplication, "DBA_INFO");
-
-
             });
 
             businessTypeET.setOnClickListener(view -> {
@@ -513,18 +528,30 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
             });
 
-            dbaFillingLL.setOnClickListener(v -> {
-                if (checkAndRequestPermissions(DBAInfoAcivity.this)) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(this);
-                    chooseFilePopup(DBAInfoAcivity.this);
-                }
-
-            });
+//            dbaFillingLL.setOnClickListener(v -> {
+//                if (checkAndRequestPermissions(DBAInfoAcivity.this)) {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(this);
+//                    chooseFilePopup(DBAInfoAcivity.this);
+//                }
+//
+//            });
+//            dbaFillingLL.setOnClickListener(v -> {
+//                if (checkAndRequestPermissions(DBAInfoAcivity.this)) {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(this);
+//                    chooseFilePopup(DBAInfoAcivity.this);
+//                }
+//
+//            });
 
             stateET.setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -586,6 +613,87 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
     }
 
+    public void blicenseClick(View view) {
+        selectedDocType = "B-LICENCE";
+        if (checkAndRequestPermissions(DBAInfoAcivity.this)) {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(DBAInfoAcivity.this);
+            chooseFile(this, selectedDocType);
+        }
+    }
+
+    public void dbaFillClick(View view) {
+        selectedDocType = "DBA";
+        if (checkAndRequestPermissions(DBAInfoAcivity.this)) {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(DBAInfoAcivity.this);
+            chooseFile(this, selectedDocType);
+        }
+    }
+
+    private void chooseFile(final Context context, String type) {
+        FilePickerDialog pickerDialog = new FilePickerDialog(context, true);
+        pickerDialog.setOnDialogClickListener(new OnDialogClickListener() {
+            @Override
+            public void onDialogClicked(String action, Object value) {
+                switch (action) {
+                    case CHOOSE_LIBRARY:
+                        launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR.GALLERY, type);
+                        break;
+                    case TAKE_PHOTO:
+                        launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR.CAMERA_RETAKE, type);
+                        break;
+                    case BROWSE:
+                        launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR.BROWSE, type);
+                        break;
+                }
+            }
+        });
+        pickerDialog.show();
+    }
+
+    private void launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR action, String
+            type) {
+        Intent camIntent = new Intent(DBAInfoAcivity.this, CameraHandlerActivity.class);
+        camIntent.putExtra(CameraUtility.CAMERA_ACTION, action);
+        camIntent.putExtra(CameraUtility.SELECTING_ID, type);
+        imageChooserActivityLauncher.launch(camIntent);
+    }
+
+    ActivityResultLauncher<Intent> imageChooserActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        uploadFile(result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+                        //setImageFromFilePath(result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+                        LogUtils.e(TAG, result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+                    } else {
+                        LogUtils.e(TAG, "Error while selecting photo");
+                    }
+                }
+            });
+
+    private void uploadFile(String filePath) {
+        File mediaFile = new File(filePath);
+        if (selectedDocType.equals("B-LICENCE")) {
+            businessLicenseFile = mediaFile;
+            removeAndUploadAdditionalDoc(12);
+        } else if (selectedDocType.equals("DBA")) {
+            dbaFile = mediaFile;
+            removeAndUploadAdditionalDoc(8);
+        }
+    }
+
     private void initObservers() {
         try {
             businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
@@ -643,13 +751,20 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onChanged(IdentityImageResponse identityImageResponse) {
                     dismissDialog();
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
-
-                        dbaFillinguploadTV.setVisibility(GONE);
-                        dbaFillingUploadedLL.setVisibility(VISIBLE);
-                        String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
-                        dbaFillingUpdatedOnTV.setText("Uploaded on " + dateString);
-                        isDBAFiling = true;
-
+                        if (DocID == 12) {
+                            licesnseUploadTV.setVisibility(GONE);
+                            licenseUploadedLL.setVisibility(VISIBLE);
+                            String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
+                            licenseUpdatedOnTV.setText("Uploaded on " + dateString);
+                            licenseUpdatedOnTV.setVisibility(VISIBLE);
+                            isBLUploaded = true;
+                        } else if (DocID == 8) {
+                            dbaFillinguploadTV.setVisibility(GONE);
+                            dbaFillingUploadedLL.setVisibility(VISIBLE);
+                            String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
+                            dbaFillingUpdatedOnTV.setText("Uploaded on " + dateString);
+                            isDBAFiling = true;
+                        }
                         enableOrDisableNext();
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), DBAInfoAcivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
@@ -666,21 +781,24 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onChanged(RemoveIdentityResponse imageResponse) {
                     if (imageResponse != null) {
 
-                        dbaFillinguploadTV.setVisibility(VISIBLE);
-                        dbaFillingUploadedLL.setVisibility(GONE);
-                        dbaFillingUpdatedOnTV.setText("");
-                        isDBAFiling = false;
-                        enableOrDisableNext();
+//                        dbaFillinguploadTV.setVisibility(VISIBLE);
+//                        dbaFillingUploadedLL.setVisibility(GONE);
+//                        dbaFillingUpdatedOnTV.setText("");
+//                        isDBAFiling = false;
+//                        enableOrDisableNext();
 
                         showProgressDialog();
 
                         RequestBody requestBody = null;
                         MultipartBody.Part idFile = null;
-
-                        requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), dbaFile);
-                        idFile = MultipartBody.Part.createFormData("identityFile", dbaFile.getName(), requestBody);
-
-                        RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), identificationType + "");
+                        if (DocID == 12) {
+                            requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), businessLicenseFile);
+                            idFile = MultipartBody.Part.createFormData("identityFile", businessLicenseFile.getName(), requestBody);
+                        } else if (DocID == 8) {
+                            requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), dbaFile);
+                            idFile = MultipartBody.Part.createFormData("identityFile", dbaFile.getName(), requestBody);
+                        }
+                        RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), DocID + "");
 
                         RequestBody idNumber;
                         if (objMyApplication.getCompanyInfoResp().getData().getSsnOrEin() != null) {
@@ -1605,15 +1723,25 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 //                    }
 
                     if (cir.getRequiredDocuments().size() > 0) {
-                        dbaFillingLL.setVisibility(VISIBLE);
-                        dbaFillinguploadTV.setVisibility(GONE);
-                        dbaFillingUploadedLL.setVisibility(VISIBLE);
-                        dbaFillingUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(0).getUpdatedAt()));
-                        isDBAFiling = true;
-
+                        for (int i = 0; i < cir.getRequiredDocuments().size(); i++) {
+                            if (cir.getRequiredDocuments().get(i).getIdentityId() == 8) {
+                                dbaFillingLL.setVisibility(VISIBLE);
+                                dbaFillinguploadTV.setVisibility(GONE);
+                                dbaFillingUploadedLL.setVisibility(VISIBLE);
+                                dbaFillingUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(0).getUpdatedAt()));
+                                isDBAFiling = true;
+                            } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 12) {
+                                licesnseUploadTV.setVisibility(GONE);
+                                licenseUploadedLL.setVisibility(VISIBLE);
+                                licenseUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(0).getUpdatedAt()));
+                                licenseUpdatedOnTV.setVisibility(VISIBLE);
+                                isBLUploaded = true;
+                            }
+                        }
                     } else {
                         dbaFillingLL.setVisibility(GONE);
                         isDBAFiling = false;
+                        isBLUploaded = false;
                     }
 
                     if (isCopyCompanyInfo) {
@@ -1845,7 +1973,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                     } else {
 //                        startActivity(new Intent(this, CameraActivity.class));
-                        chooseFilePopup(this);
+                        chooseFile(this, selectedDocType);
                     }
                     break;
             }
@@ -1855,111 +1983,119 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     }
 
     public void removeAndUploadAdditionalDoc(int docID) {
-        if (Utils.isValidFileSize(dbaFile)) {
-            identityVerificationViewModel.removeIdentityImage(docID + "");
+        DocID = docID;
+        boolean isValid = false;
+        if (selectedDocType.equals("B-LICENCE")) {
+            isValid = Utils.isValidFileSize(businessLicenseFile);
+        } else if (selectedDocType.equals("DBA")) {
+            isValid = Utils.isValidFileSize(dbaFile);
+        }
+//        if (Utils.isValidFileSize(dbaFile)) {
+        if (isValid) {
+            identityVerificationViewModel.removeIdentityImage(DocID + "");
         } else {
             Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
         }
     }
 
-    private void chooseFilePopup(final Context context) {
-        try {
-            Dialog chooseFile = new Dialog(context);
-            chooseFile.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            chooseFile.setContentView(R.layout.activity_choose_file_botm_sheet);
-            chooseFile.setCancelable(true);
-            Window window = chooseFile.getWindow();
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-            chooseFile.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            WindowManager.LayoutParams wlp = window.getAttributes();
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
-            chooseFile.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-            TextView libraryTV = chooseFile.findViewById(R.id.libraryTV);
-            TextView takePhotoTV = chooseFile.findViewById(R.id.takePhotoTV);
-            TextView browseFileTV = chooseFile.findViewById(R.id.browseFileTV);
-
-            libraryTV.setOnClickListener(view -> {
-                chooseFile.dismiss();
-
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, PICK_IMAGE_REQUEST);
-            });
-
-            takePhotoTV.setOnClickListener(view -> {
-                chooseFile.dismiss();
-                startActivity(new Intent(DBAInfoAcivity.this, CameraActivity.class).putExtra("FROM", "DBA_INFO"));
-
-            });
-
-            browseFileTV.setOnClickListener(view -> {
-                chooseFile.dismiss();
-
-                Intent pickIntent = new Intent();
-                pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                pickIntent.setType("*/*");
-                String[] extraMimeTypes = {"application/pdf", "image/*"};
-//                String[] extraMimeTypes = {"application/pdf", "image/*", "text/csv", "application/msword",
-//                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
-                pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
-                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-                Intent chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
-                startActivityForResult(chooserIntent, ACTIVITY_CHOOSE_FILE);
-
-            });
-
-            chooseFile.show();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            super.onActivityResult(requestCode, resultCode, data);
-            if (resultCode != RESULT_OK) return;
-            String path = "";
-            if (requestCode == ACTIVITY_CHOOSE_FILE) {
-                uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
-            } else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
-                uploadDocumentFromLibrary(data.getData(), PICK_IMAGE_REQUEST);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String getRealPathFromURI(Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if (cursor == null) return null;
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
-
-    public void uploadDocumentFromLibrary(Uri uri, int reqType) {
-        try {
-            String FilePath = "";
-            if (reqType == ACTIVITY_CHOOSE_FILE) {
-                FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
-            } else {
-                FilePath = getRealPathFromURI(uri);
-            }
-            File mediaFile = new File(FilePath);
-            dbaFile = mediaFile;
-            removeAndUploadAdditionalDoc(identificationType);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    //    private void chooseFilePopup(final Context context) {
+//        try {
+//            Dialog chooseFile = new Dialog(context);
+//            chooseFile.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//            chooseFile.setContentView(R.layout.activity_choose_file_botm_sheet);
+//            chooseFile.setCancelable(true);
+//            Window window = chooseFile.getWindow();
+//            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//            chooseFile.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//            WindowManager.LayoutParams wlp = window.getAttributes();
+//            wlp.gravity = Gravity.BOTTOM;
+//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            window.setAttributes(wlp);
+//            chooseFile.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//
+//            TextView libraryTV = chooseFile.findViewById(R.id.libraryTV);
+//            TextView takePhotoTV = chooseFile.findViewById(R.id.takePhotoTV);
+//            TextView browseFileTV = chooseFile.findViewById(R.id.browseFileTV);
+//
+//            libraryTV.setOnClickListener(view -> {
+//                chooseFile.dismiss();
+//
+//                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+//                photoPickerIntent.setType("image/*");
+//                startActivityForResult(photoPickerIntent, PICK_IMAGE_REQUEST);
+//            });
+//
+//            takePhotoTV.setOnClickListener(view -> {
+//                chooseFile.dismiss();
+//                startActivity(new Intent(DBAInfoAcivity.this, CameraActivity.class).putExtra("FROM", "DBA_INFO"));
+//
+//            });
+//
+//            browseFileTV.setOnClickListener(view -> {
+//                chooseFile.dismiss();
+//
+//                Intent pickIntent = new Intent();
+//                pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
+//                pickIntent.setType("*/*");
+//                String[] extraMimeTypes = {"application/pdf", "image/*"};
+////                String[] extraMimeTypes = {"application/pdf", "image/*", "text/csv", "application/msword",
+////                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
+//                pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
+//                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+//
+//                Intent chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
+//                startActivityForResult(chooserIntent, ACTIVITY_CHOOSE_FILE);
+//
+//            });
+//
+//            chooseFile.show();
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        try {
+//            super.onActivityResult(requestCode, resultCode, data);
+//            if (resultCode != RESULT_OK) return;
+//            String path = "";
+//            if (requestCode == ACTIVITY_CHOOSE_FILE) {
+//                uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
+//            } else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
+//                uploadDocumentFromLibrary(data.getData(), PICK_IMAGE_REQUEST);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public String getRealPathFromURI(Uri contentUri) {
+//        String[] proj = {MediaStore.Images.Media.DATA};
+//        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+//        if (cursor == null) return null;
+//        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//        cursor.moveToFirst();
+//        return cursor.getString(column_index);
+//    }
+//
+//    public void uploadDocumentFromLibrary(Uri uri, int reqType) {
+//        try {
+//            String FilePath = "";
+//            if (reqType == ACTIVITY_CHOOSE_FILE) {
+//                FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
+//            } else {
+//                FilePath = getRealPathFromURI(uri);
+//            }
+//            File mediaFile = new File(FilePath);
+//            dbaFile = mediaFile;
+//            removeAndUploadAdditionalDoc(identificationType);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
     private boolean isValidUrl(String url) {
         Pattern p = Patterns.WEB_URL;
         Matcher m = p.matcher(url.toLowerCase());
