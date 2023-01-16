@@ -174,7 +174,7 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
     private void setItemViewData(TransactionListPosted objData, ItemViewHolder holder) {
 
         if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.SaleOrder)) {
-            holder.txnTypeDn.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
+            holder.txnTypeDn.setText(objData.getTxnTypeDn() + " - " + objData.getTxnSubTypeDn());
             holder.amount.setText(Utils.convertTwoDecimal(objData.getAmount()).replace("CYN", ""));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
         } else if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.Refund)) {
