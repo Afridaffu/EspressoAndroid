@@ -348,6 +348,8 @@
     <string name="merchant_s_settings">Merchant’s Settings</string>
     <string name="user_settings">User Settings</string>
     <string name="sale_order_token">Sale Order: Token</string>
+    <string name="sale_order_eCommerce">Sale Order: eCommerce</string>
+    <string name="sale_order_Retail_Mobile">Sale Order: Retail/Mobile</string>
     <string name="refund">Refund</string>
     <string name="token_account">Token Account</string>
     <string name="instan_pay">Instant Pay</string>
