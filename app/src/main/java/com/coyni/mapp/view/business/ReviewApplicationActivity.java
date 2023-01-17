@@ -104,9 +104,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private BenificialOwnersRecyclerAdapter benificialOwnersRecyclerAdapter;
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
-    private TextView noBanksTv, noBoTV, ssnEinTV, bankEditTV, tvName, tvRoutingNum, tvAccountNum,tv_filling_date;
+    private TextView noBanksTv, noBoTV, ssnEinTV, bankEditTV, tvName, tvRoutingNum, tvAccountNum, tv_filling_date;
     private LinearLayout banksLL, boLL, CloseLL, companyEditLL, websiteLL;
-    private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL,dbaFillingLL, llDBADocuments,lisenceDocumentsLL;
+    private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL, llDBADocuments, lisenceDocumentsLL;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
     private BusinessApplicationSummaryViewModel summaryViewModel;
     private int monthlyProcVolume = 0;
@@ -207,7 +207,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         companyEditLL = findViewById(R.id.companyEditLL);
         websiteLL = findViewById(R.id.websiteLL);
 
-        setSpannableText();
+//        setSpannableText();
 
         edit1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,31 +282,31 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 }
             }
         });
-
-        agreeCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    isAgree = true;
-                    submitCv.setEnabled(true);
-                    submitCv.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                } else {
-                    isAgree = false;
-                    submitCv.setEnabled(false);
-                    submitCv.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                }
-            }
-        });
+//        agreeCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    isAgree = true;
+//                    submitCv.setEnabled(true);
+//                    submitCv.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+//                } else {
+//                    isAgree = true;
+//                    submitCv.setEnabled(false);
+//                    submitCv.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                }
+//            }
+//        });
+        submitCv.setEnabled(true);
+        submitCv.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
         submitCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isAgree) {
+//                if (isAgree) {
                     showProgressDialog();
-
                     applicationSubmissionViewModel.postApplicationData();
 
-                }
+//                }
             }
         });
 
@@ -639,20 +639,20 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             }
                             if (dbaInfo.getIdentificationType() == 8) {
                                 mWebsiteHeadTX.setText("Website (Optional)");
-                                if (dbaInfo.getWebsite() == null || dbaInfo.getWebsite().equals("")) {
-                                    websiteLL.setVisibility(GONE);
-                                } else {
-                                    websiteLL.setVisibility(VISIBLE);
-                                }
+//                                if (dbaInfo.getWebsite() == null || dbaInfo.getWebsite().equals("")) {
+//                                    websiteLL.setVisibility(GONE);
+//                                } else {
+//                                    websiteLL.setVisibility(VISIBLE);
+//                                }
                             } else if (dbaInfo.getIdentificationType() == 9) {
                                 mWebsiteHeadTX.setText("Website");
                                 httpHeader.setVisibility(View.VISIBLE);
-                                websiteLL.setVisibility(VISIBLE);
+//                                websiteLL.setVisibility(VISIBLE);
                             }
-                            if (dbaInfo.getWebsite() != null) {
+                            if (dbaInfo.getWebsite() != null && !dbaInfo.getWebsite().equals("")) {
                                 mWebsiteTx.setText(dbaInfo.getWebsite());
                             } else {
-                                websiteLL.setVisibility(GONE);
+                                mWebsiteTx.setText("No Website Submitted");
                             }
 
                             if (dbaInfo.getMonthlyProcessingVolume() != null) {
@@ -730,7 +730,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                                 showFile((String) v.getTag());
                                             }
                                         });
-                                    }else if (dbaInfo.getRequiredDocuments().get(i).getIdentityId() == 12){
+                                    } else if (dbaInfo.getRequiredDocuments().get(i).getIdentityId() == 12) {
                                         lisenceDocumentsLL.setVisibility(View.VISIBLE);
                                         tv_filling_date.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
                                         lisenceDocumentsLL.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
@@ -1145,60 +1145,60 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         }
     }
 
-    public void setSpannableText() {
-
-        SpannableString ss = new SpannableString("By clicking this box, I acknowledge I have read and agree to the Terms of Service & Privacy Policy ");
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                Log.e("Click", "click");
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                showProgressDialog();
-                selectedAgreement = getString(R.string.gbx_tos);
-                dashboardViewModel.getDocumentUrl(Utils.mTOS);
-            }
-
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(true);
-            }
-        };
-
-        ClickableSpan clickableSpan2 = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                Log.e("Click", "click");
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                showProgressDialog();
-                selectedAgreement = getString(R.string.gbx_pp);
-                dashboardViewModel.getDocumentUrl(Utils.mPP);
-
-            }
-
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(true);
-            }
-        };
-
-        ss.setSpan(clickableSpan, 65, 81, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(clickableSpan2, 84, 98, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 65, 81, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 84, 98, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-
-        spannableTV.setText(ss);
-        spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
-        spannableTV.setHighlightColor(Color.TRANSPARENT);
-    }
+//    public void setSpannableText() {
+//
+//        SpannableString ss = new SpannableString("By clicking this box, I acknowledge I have read and agree to the Terms of Service & Privacy Policy ");
+//        ClickableSpan clickableSpan = new ClickableSpan() {
+//            @Override
+//            public void onClick(View textView) {
+//                Log.e("Click", "click");
+//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                    return;
+//                }
+//                mLastClickTime = SystemClock.elapsedRealtime();
+//                showProgressDialog();
+//                selectedAgreement = getString(R.string.gbx_tos);
+//                dashboardViewModel.getDocumentUrl(Utils.mTOS);
+//            }
+//
+//            @Override
+//            public void updateDrawState(TextPaint ds) {
+//                super.updateDrawState(ds);
+//                ds.setUnderlineText(true);
+//            }
+//        };
+//
+//        ClickableSpan clickableSpan2 = new ClickableSpan() {
+//            @Override
+//            public void onClick(View textView) {
+//                Log.e("Click", "click");
+//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                    return;
+//                }
+//                mLastClickTime = SystemClock.elapsedRealtime();
+//                showProgressDialog();
+//                selectedAgreement = getString(R.string.gbx_pp);
+//                dashboardViewModel.getDocumentUrl(Utils.mPP);
+//
+//            }
+//
+//            @Override
+//            public void updateDrawState(TextPaint ds) {
+//                super.updateDrawState(ds);
+//                ds.setUnderlineText(true);
+//            }
+//        };
+//
+//        ss.setSpan(clickableSpan, 65, 81, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(clickableSpan2, 84, 98, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 65, 81, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 84, 98, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//
+//        spannableTV.setText(ss);
+//        spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
+//        spannableTV.setHighlightColor(Color.TRANSPARENT);
+//    }
 
     private void launchDocumentUrl(String url) {
 //        Intent intent = new Intent(Intent.ACTION_VIEW);

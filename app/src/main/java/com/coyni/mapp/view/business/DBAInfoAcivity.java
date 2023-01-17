@@ -1476,7 +1476,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         try {
             if (isCopyCompanyInfo) {
                 if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
-                        && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected) {
+                        && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected && isDBAFiling) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);
@@ -1487,8 +1487,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
             } else {
                 if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
-                        && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected) {
-//                    && isDBAFiling (DBA file is Optional)
+                        && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected
+                        && isDBAFiling) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);
@@ -1601,6 +1601,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             if (type.equalsIgnoreCase("SAME")) {
                 isCopyCompanyInfo = true;
                 dbaFillingLL.setVisibility(GONE);
+                isDBAFiling = true;
                 if (objMyApplication.getCompanyInfoResp() != null) {
                     CompanyInfoResp.Data cir = objMyApplication.getCompanyInfoResp().getData();
                     if (cir.getName() != null && !cir.getName().equals("")) {
@@ -1659,6 +1660,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             } else if (type.equalsIgnoreCase("DIFF")) {
                 isCopyCompanyInfo = false;
                 dbaFillingLL.setVisibility(VISIBLE);
+                isDBAFiling = false;
                 prevDBAName = "";
             } else if (getIntent().getStringExtra("TYPE").equalsIgnoreCase("EXIST")) {
                 if (objMyApplication.getDbaInfoResp() != null && objMyApplication.getDbaInfoResp().getStatus().equalsIgnoreCase("SUCCESS")) {
@@ -1746,8 +1748,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                     if (isCopyCompanyInfo) {
                         dbaFillingLL.setVisibility(GONE);
+                        isDBAFiling = true;
                     } else {
                         dbaFillingLL.setVisibility(VISIBLE);
+                        isDBAFiling = true;
                     }
 
                     if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Utils.doubleParsing(cir.getMonthlyProcessingVolume()) > 0) {
