@@ -144,6 +144,7 @@
                         android:textAlignment="center"
                         android:textColor="@color/chip_text_color"
                         android:textSize="@dimen/_11ssp"
+                        android:visibility="invisible"
                         app:chipBackgroundColor="@color/chipbackgroundcolor"
                         app:chipMinHeight="@dimen/_32sdp" />
 
@@ -162,7 +163,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_8sdp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/transSubTypeEcomerce"
