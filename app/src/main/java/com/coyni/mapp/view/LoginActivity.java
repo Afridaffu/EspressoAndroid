@@ -265,7 +265,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
 
             etEmail.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
 
-            etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
+            etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(32)});
             etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
 
