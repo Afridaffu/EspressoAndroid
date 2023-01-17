@@ -246,8 +246,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
             emailET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
 
-            passwordET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
-            confirmPasswordET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
+            passwordET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(32)});
+            confirmPasswordET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(32)});
             passwordET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             confirmPasswordET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance());

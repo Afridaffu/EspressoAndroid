@@ -104,9 +104,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private BenificialOwnersRecyclerAdapter benificialOwnersRecyclerAdapter;
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
-    private TextView noBanksTv, noBoTV, ssnEinTV, bankEditTV, tvName, tvRoutingNum, tvAccountNum;
+    private TextView noBanksTv, noBoTV, ssnEinTV, bankEditTV, tvName, tvRoutingNum, tvAccountNum, tv_filling_date;
     private LinearLayout banksLL, boLL, CloseLL, companyEditLL, websiteLL;
-    private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL, llDBADocuments;
+    private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL, llDBADocuments, lisenceDocumentsLL;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
     private BusinessApplicationSummaryViewModel summaryViewModel;
     private int monthlyProcVolume = 0;
@@ -181,22 +181,24 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         edit1 = findViewById(R.id.edit1);
         edit2 = findViewById(R.id.edit2TV);
         edit3 = findViewById(R.id.edit3TV);
-        bankEditTV = findViewById(R.id.bankEditTV);
-        tvAccountNum = findViewById(R.id.tvAccountNum);
+//        bankEditTV = findViewById(R.id.bankEditTV);
+//        tvAccountNum = findViewById(R.id.tvAccountNum);
         tvName = findViewById(R.id.tvName);
-        tvRoutingNum = findViewById(R.id.tvRoutingNum);
+//        tvRoutingNum = findViewById(R.id.tvRoutingNum);
         agreeCB = findViewById(R.id.agreeCB);
         submitCv = findViewById(R.id.submitCV);
-        noBanksTv = findViewById(R.id.noBanksTV);
+//        noBanksTv = findViewById(R.id.noBanksTV);
         noBoTV = findViewById(R.id.noBOTV);
-        banksLL = findViewById(R.id.banksLL);
+//        banksLL = findViewById(R.id.banksLL);
         boLL = findViewById(R.id.boLL);
         boRecyclerView = findViewById(R.id.boRecycler);
         uploadArticlesLL = findViewById(R.id.ll_upload_articles);
         uploadEINLL = findViewById(R.id.ll_upload_ein);
         uploadW9LL = findViewById(R.id.ll_upload_w9);
         dbaFillingLL = findViewById(R.id.ll_dba_filling);
+        tv_filling_date = findViewById(R.id.tv_filling_date);
         llDBADocuments = findViewById(R.id.llDBADocuments);
+        lisenceDocumentsLL = findViewById(R.id.lisenceDocuments);
         llEin = findViewById(R.id.llEIN);
         CloseLL = findViewById(R.id.CloseLL);
         ssnEinTV = findViewById(R.id.ssnEinTV);
@@ -205,7 +207,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         companyEditLL = findViewById(R.id.companyEditLL);
         websiteLL = findViewById(R.id.websiteLL);
 
-        setSpannableText();
+//        setSpannableText();
 
         edit1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,15 +234,15 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 startActivity(intent);
             }
         });
-        bankEditTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ReviewApplicationActivity.this, AddManualBankAccount.class);
-                intent.putExtra("From", "REVIEW");
-                intent.putExtra("bankObject", objBank);
-                startActivity(intent);
-            }
-        });
+//        bankEditTV.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(ReviewApplicationActivity.this, AddManualBankAccount.class);
+//                intent.putExtra("From", "REVIEW");
+//                intent.putExtra("bankObject", objBank);
+//                startActivity(intent);
+//            }
+//        });
 
         llEin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -280,31 +282,31 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 }
             }
         });
-
-        agreeCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    isAgree = true;
-                    submitCv.setEnabled(true);
-                    submitCv.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                } else {
-                    isAgree = false;
-                    submitCv.setEnabled(false);
-                    submitCv.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                }
-            }
-        });
+//        agreeCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    isAgree = true;
+//                    submitCv.setEnabled(true);
+//                    submitCv.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+//                } else {
+//                    isAgree = true;
+//                    submitCv.setEnabled(false);
+//                    submitCv.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                }
+//            }
+//        });
+        submitCv.setEnabled(true);
+        submitCv.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
         submitCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isAgree) {
+//                if (isAgree) {
                     showProgressDialog();
-
                     applicationSubmissionViewModel.postApplicationData();
 
-                }
+//                }
             }
         });
 
@@ -400,58 +402,58 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
     }
 
-    public void deleteBankAPICall(int id) {
-        paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-        showProgressDialog();
-        paymentMethodsViewModel.deleteBanks(id);
-    }
+//    public void deleteBankAPICall(int id) {
+//        paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
+//        showProgressDialog();
+//        paymentMethodsViewModel.deleteBanks(id);
+//    }
 
-    public void showBankDeleteCOnfirmationDialog() {
-        DialogAttributes dialogAttributes = new DialogAttributes(getString(R.string.bank_delete_title),
-                getString(R.string.bankdeletemsg),
-                getString(R.string.bank_delete_keep), getString(R.string.bank_delete_relink));
-        CustomConfirmationDialog customConfirmationDialog = new CustomConfirmationDialog
-                (ReviewApplicationActivity.this, dialogAttributes);
-
-        customConfirmationDialog.setOnDialogClickListener(new OnDialogClickListener() {
-            @Override
-            public void onDialogClicked(String action, Object value) {
-                LogUtils.d(TAG, "onclickkk" + action + value);
-                if (action.equalsIgnoreCase(getString(R.string.bank_delete_relink))) {
-                    try {
-                        dismissDialog();
-                        if (objMyApplication.getStrSignOnError().equals("") && objMyApplication.getSignOnData() != null && objMyApplication.getSignOnData().getUrl() != null) {
-                            isBank = true;
-                            Intent i = new Intent(ReviewApplicationActivity.this, WebViewActivity.class);
-                            i.putExtra("signon", objMyApplication.getSignOnData());
-                            startActivityForResult(i, 1);
-                        } else {
-                            Utils.displayAlert(objMyApplication.getStrSignOnError(), ReviewApplicationActivity.this, "", "");
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                } else {
-                    dismissDialog();
-                }
-            }
-        });
-
-        customConfirmationDialog.show();
-    }
+//    public void showBankDeleteCOnfirmationDialog() {
+//        DialogAttributes dialogAttributes = new DialogAttributes(getString(R.string.bank_delete_title),
+//                getString(R.string.bankdeletemsg),
+//                getString(R.string.bank_delete_keep), getString(R.string.bank_delete_relink));
+//        CustomConfirmationDialog customConfirmationDialog = new CustomConfirmationDialog
+//                (ReviewApplicationActivity.this, dialogAttributes);
+//
+//        customConfirmationDialog.setOnDialogClickListener(new OnDialogClickListener() {
+//            @Override
+//            public void onDialogClicked(String action, Object value) {
+//                LogUtils.d(TAG, "onclickkk" + action + value);
+//                if (action.equalsIgnoreCase(getString(R.string.bank_delete_relink))) {
+//                    try {
+//                        dismissDialog();
+//                        if (objMyApplication.getStrSignOnError().equals("") && objMyApplication.getSignOnData() != null && objMyApplication.getSignOnData().getUrl() != null) {
+//                            isBank = true;
+//                            Intent i = new Intent(ReviewApplicationActivity.this, WebViewActivity.class);
+//                            i.putExtra("signon", objMyApplication.getSignOnData());
+//                            startActivityForResult(i, 1);
+//                        } else {
+//                            Utils.displayAlert(objMyApplication.getStrSignOnError(), ReviewApplicationActivity.this, "", "");
+//                        }
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                } else {
+//                    dismissDialog();
+//                }
+//            }
+//        });
+//
+//        customConfirmationDialog.show();
+//    }
 
     public void initObservers() {
 
-        paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
-            @Override
-            public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
-                if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
-                    //showProgressDialog();
-                    summaryViewModel.getApplicationSummaryData();
-                    Utils.showCustomToast(ReviewApplicationActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
-                }
-            }
-        });
+//        paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
+//            @Override
+//            public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
+//                if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
+//                    //showProgressDialog();
+//                    summaryViewModel.getApplicationSummaryData();
+//                    Utils.showCustomToast(ReviewApplicationActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+//                }
+//            }
+//        });
 
 //        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
 //            @Override
@@ -637,20 +639,20 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             }
                             if (dbaInfo.getIdentificationType() == 8) {
                                 mWebsiteHeadTX.setText("Website (Optional)");
-                                if (dbaInfo.getWebsite() == null || dbaInfo.getWebsite().equals("")) {
-                                    websiteLL.setVisibility(GONE);
-                                } else {
-                                    websiteLL.setVisibility(VISIBLE);
-                                }
+//                                if (dbaInfo.getWebsite() == null || dbaInfo.getWebsite().equals("")) {
+//                                    websiteLL.setVisibility(GONE);
+//                                } else {
+//                                    websiteLL.setVisibility(VISIBLE);
+//                                }
                             } else if (dbaInfo.getIdentificationType() == 9) {
                                 mWebsiteHeadTX.setText("Website");
                                 httpHeader.setVisibility(View.VISIBLE);
-                                websiteLL.setVisibility(VISIBLE);
+//                                websiteLL.setVisibility(VISIBLE);
                             }
-                            if (dbaInfo.getWebsite() != null) {
+                            if (dbaInfo.getWebsite() != null && !dbaInfo.getWebsite().equals("")) {
                                 mWebsiteTx.setText(dbaInfo.getWebsite());
                             } else {
-                                websiteLL.setVisibility(GONE);
+                                mWebsiteTx.setText("No Website Submitted");
                             }
 
                             if (dbaInfo.getMonthlyProcessingVolume() != null) {
@@ -718,15 +720,27 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
                             if (dbaInfo.getRequiredDocuments().size() > 0) {
                                 for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
-                                    llDBADocuments.setVisibility(View.VISIBLE);
-                                    mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
-                                    llDBADocuments.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
-                                    llDBADocuments.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            showFile((String) v.getTag());
-                                        }
-                                    });
+                                    if (dbaInfo.getRequiredDocuments().get(i).getIdentityId() == 8) {
+                                        llDBADocuments.setVisibility(View.VISIBLE);
+                                        mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
+                                        llDBADocuments.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
+                                        llDBADocuments.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                showFile((String) v.getTag());
+                                            }
+                                        });
+                                    } else if (dbaInfo.getRequiredDocuments().get(i).getIdentityId() == 12) {
+                                        lisenceDocumentsLL.setVisibility(View.VISIBLE);
+                                        tv_filling_date.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
+                                        lisenceDocumentsLL.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
+                                        lisenceDocumentsLL.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                showFile((String) v.getTag());
+                                            }
+                                        });
+                                    }
                                 }
                             }
 
@@ -745,30 +759,30 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 noBoTV.setVisibility(View.VISIBLE);
                                 boLL.setVisibility(View.GONE);
                             }
-                            if (summaryModelResponse.getData().getBankaccount().size() > 0) {
-                                banksLL.setVisibility(View.VISIBLE);
-                                noBanksTv.setVisibility(View.GONE);
-                                bankBankAccounts = summaryModelResponse.getData().getBankaccount();
-                                Log.d("BankItems", bankBankAccounts.toString());
-                                objBank = bankBankAccounts.get(0);
-                                if (bankBankAccounts.get(0).getAccountName() != null) {
-                                    tvName.setText(bankBankAccounts.get(0).getAccountName());
-                                }
-                                if (bankBankAccounts.get(0).getRoutingNumber() != null) {
-                                    tvRoutingNum.setText(bankBankAccounts.get(0).getRoutingNumber());
-                                }
-                                if (bankBankAccounts.get(0).getAccountNumber() != null) {
-                                    accountNumber = bankBankAccounts.get(0).getAccountNumber().replaceAll("", "");
-                                    String converted = accountNumber.replaceAll("\\w(?=\\w{4})", "•");
-                                    tvAccountNum.setText(converted);
-
-                                }
-
-
-                            } else {
-                                banksLL.setVisibility(View.GONE);
-                                noBanksTv.setVisibility(View.VISIBLE);
-                            }
+//                            if (summaryModelResponse.getData().getBankaccount().size() > 0) {
+//                                banksLL.setVisibility(View.VISIBLE);
+//                                noBanksTv.setVisibility(View.GONE);
+//                                bankBankAccounts = summaryModelResponse.getData().getBankaccount();
+//                                Log.d("BankItems", bankBankAccounts.toString());
+//                                objBank = bankBankAccounts.get(0);
+//                                if (bankBankAccounts.get(0).getAccountName() != null) {
+//                                    tvName.setText(bankBankAccounts.get(0).getAccountName());
+//                                }
+//                                if (bankBankAccounts.get(0).getRoutingNumber() != null) {
+//                                    tvRoutingNum.setText(bankBankAccounts.get(0).getRoutingNumber());
+//                                }
+//                                if (bankBankAccounts.get(0).getAccountNumber() != null) {
+//                                    accountNumber = bankBankAccounts.get(0).getAccountNumber().replaceAll("", "");
+//                                    String converted = accountNumber.replaceAll("\\w(?=\\w{4})", "•");
+//                                    tvAccountNum.setText(converted);
+//
+//                                }
+//
+//
+//                            } else {
+//                                banksLL.setVisibility(View.GONE);
+//                                noBanksTv.setVisibility(View.VISIBLE);
+//                            }
                             agreements = summaryModelResponse.getData().getAgreements().getItems();
                             Agreements agreements1 = summaryModelResponse.getData().getAgreements();
                             llPrivacy.setOnClickListener(new View.OnClickListener() {
@@ -1068,9 +1082,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     public void selectedBankItem(int id) {
         LogUtils.d(TAG, "selectedBankItem" + id);
         if (id == 0) {
-            showBankDeleteCOnfirmationDialog();
+//            showBankDeleteCOnfirmationDialog();
         } else {
-            deleteBankAPICall(id);
+//            deleteBankAPICall(id);
         }
     }
 
@@ -1131,60 +1145,60 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         }
     }
 
-    public void setSpannableText() {
-
-        SpannableString ss = new SpannableString("By clicking this box, I acknowledge I have read and agree to the Terms of Service & Privacy Policy ");
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                Log.e("Click", "click");
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                showProgressDialog();
-                selectedAgreement = getString(R.string.gbx_tos);
-                dashboardViewModel.getDocumentUrl(Utils.mTOS);
-            }
-
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(true);
-            }
-        };
-
-        ClickableSpan clickableSpan2 = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                Log.e("Click", "click");
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                showProgressDialog();
-                selectedAgreement = getString(R.string.gbx_pp);
-                dashboardViewModel.getDocumentUrl(Utils.mPP);
-
-            }
-
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(true);
-            }
-        };
-
-        ss.setSpan(clickableSpan, 65, 81, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(clickableSpan2, 84, 98, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 65, 81, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 84, 98, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-
-        spannableTV.setText(ss);
-        spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
-        spannableTV.setHighlightColor(Color.TRANSPARENT);
-    }
+//    public void setSpannableText() {
+//
+//        SpannableString ss = new SpannableString("By clicking this box, I acknowledge I have read and agree to the Terms of Service & Privacy Policy ");
+//        ClickableSpan clickableSpan = new ClickableSpan() {
+//            @Override
+//            public void onClick(View textView) {
+//                Log.e("Click", "click");
+//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                    return;
+//                }
+//                mLastClickTime = SystemClock.elapsedRealtime();
+//                showProgressDialog();
+//                selectedAgreement = getString(R.string.gbx_tos);
+//                dashboardViewModel.getDocumentUrl(Utils.mTOS);
+//            }
+//
+//            @Override
+//            public void updateDrawState(TextPaint ds) {
+//                super.updateDrawState(ds);
+//                ds.setUnderlineText(true);
+//            }
+//        };
+//
+//        ClickableSpan clickableSpan2 = new ClickableSpan() {
+//            @Override
+//            public void onClick(View textView) {
+//                Log.e("Click", "click");
+//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                    return;
+//                }
+//                mLastClickTime = SystemClock.elapsedRealtime();
+//                showProgressDialog();
+//                selectedAgreement = getString(R.string.gbx_pp);
+//                dashboardViewModel.getDocumentUrl(Utils.mPP);
+//
+//            }
+//
+//            @Override
+//            public void updateDrawState(TextPaint ds) {
+//                super.updateDrawState(ds);
+//                ds.setUnderlineText(true);
+//            }
+//        };
+//
+//        ss.setSpan(clickableSpan, 65, 81, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(clickableSpan2, 84, 98, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 65, 81, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 84, 98, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//
+//        spannableTV.setText(ss);
+//        spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
+//        spannableTV.setHighlightColor(Color.TRANSPARENT);
+//    }
 
     private void launchDocumentUrl(String url) {
 //        Intent intent = new Intent(Intent.ACTION_VIEW);

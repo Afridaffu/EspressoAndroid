@@ -170,7 +170,7 @@
                         android:imeOptions="actionDone"
                         android:importantForAutofill="no"
                         android:longClickable="false"
-                        android:maxLength="12"
+                        android:maxLength="32"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"

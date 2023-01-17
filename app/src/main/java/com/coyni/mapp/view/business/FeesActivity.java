@@ -20,7 +20,7 @@ import com.coyni.mapp.viewmodel.BusinessDashboardViewModel;
 public class
 FeesActivity extends BaseActivity {
     private LinearLayout bpbackBtn, wdSignetLL, wdCogentLL;
-    private TextView salesOrderDollTV, salesOrderPerTV, refundDollTV, refundPerTV, tvEBADoll, tvEBAPer, instantPayDollTV, instantPayPerTV, CogentAccDollTV, CogentAccPerTV, SignetAccDollTV, SignetAccPerTV,
+    private TextView salesOrderEcomDollTV, salesOrdeEcomrPerTV, refundDollTV, refundPerTV, tvEBADoll, tvEBAPer, instantPayDollTV, instantPayPerTV, CogentAccDollTV, CogentAccPerTV, SignetAccDollTV, SignetAccPerTV, salesOrderRetailDollTV, salesOrderRetailPerTV,
             giftCardDollTV, giftCardPerTV, fdwDollTV, fdwPerTV, buyTokenEBADollTV, buyTokenEBAPerTV, buytokenCogentDollTV, buytokenCogentPerTV, buytokenSignetDollTV, buytokenSignetPerTV, monthlyFeeDollTV, monthlyFeePerTV;
     private BusinessDashboardViewModel viewModel;
     private MyApplication objMyApplication;
@@ -37,8 +37,10 @@ FeesActivity extends BaseActivity {
             bpbackBtn = findViewById(R.id.bpbackBtn);
             wdSignetLL = findViewById(R.id.wdSignetLL);
             wdCogentLL = findViewById(R.id.wdCogentLL);
-            salesOrderDollTV = findViewById(R.id.salesOrderDollTV);
-            salesOrderPerTV = findViewById(R.id.salesOrderPerTV);
+            salesOrderEcomDollTV = findViewById(R.id.salesOrderEcomDollTV);
+            salesOrdeEcomrPerTV = findViewById(R.id.salesOrderEcomPerTV);
+            salesOrderRetailDollTV = findViewById(R.id.salesOrderRetailDollTV);
+            salesOrderRetailPerTV = findViewById(R.id.salesOrderRetailPerTV);
             refundDollTV = findViewById(R.id.refundDollTV);
             refundPerTV = findViewById(R.id.refundPerTV);
             tvEBADoll = findViewById(R.id.tvEBADoll);
@@ -221,16 +223,33 @@ FeesActivity extends BaseActivity {
                             }
 
                             //transactions
-                            if (fees.getData().getTransactionSaleOrderTokenFeeInDollar() != null) {
-                                salesOrderDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInDollar()))));
-                            } else {
-                                salesOrderDollTV.setText("$ 0.00");
-                            }
+                            //  v2.0
+//                            if (fees.getData().getTransactionSaleOrderTokenFeeInDollar() != null) {
+//                                salesOrderDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInDollar()))));
+//                            } else {
+//                                salesOrderDollTV.setText("$ 0.00");
+//                            }
 
-                            if (fees.getData().getTransactionSaleOrderTokenFeeInPercent() != null) {
-                                salesOrderPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInPercent()) + "%");
+                            //  v2.3 changes
+                            if (fees.getData().getTransactionSaleOrderTokenFeeInDollar() != null) {
+                                salesOrderEcomDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInDollar()))));
                             } else {
-                                salesOrderPerTV.setText("0.00%");
+                                salesOrderEcomDollTV.setText("$ 0.00");
+                            }
+                            if (fees.getData().getTransactionSaleOrderTokenFeeInPercent() != null) {
+                                salesOrdeEcomrPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInPercent()) + "%");
+                            } else {
+                                salesOrdeEcomrPerTV.setText("0.00%");
+                            }
+                            if (fees.getData().getTransactionSaleOrderTokenFeeInDollar() != null) {
+                                salesOrderRetailDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInDollar()))));
+                            } else {
+                                salesOrderRetailDollTV.setText("$ 0.00");
+                            }
+                            if (fees.getData().getTransactionSaleOrderTokenFeeInPercent() != null) {
+                                salesOrderRetailPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInPercent()) + "%");
+                            } else {
+                                salesOrderRetailPerTV.setText("0.00%");
                             }
 
                             if (fees.getData().getTransactionRefundFeeInDollar() != null) {
