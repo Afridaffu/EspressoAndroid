@@ -98,7 +98,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public CardView dbaNextCV, addressNextCV;
     public static DBAInfoAcivity dbaInfoAcivity;
     public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isECommerce = false, isRetail = false,
-            isWebsite = true, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false;
+            isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false;
     ConstraintLayout businessTypeCL, timeZoneCL, stateCL;
     public View viewBarLeft, viewBarRight, pageOneView, pageTwoView;
     Long mLastClickTime = 0L, mLastClickTimeAddr = 0L;
@@ -454,36 +454,36 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
             });
 
-//            eCommerceLL.setOnClickListener(view -> {
-//                if (!isECommerce) {
-//                    eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
-//                    retailIV.setImageResource(R.drawable.ic_rb_unselected);
-//                    websiteOET.setHint("Website");
-//                    isECommerce = true;
-//                    isRetail = false;
-//                    identificationType = 9;
-//                    isIDVESelected = true;
-//
-////                    dbaFillingLL.setVisibility(GONE);
-//                }
-//                isWebsite = isValidUrl(websiteOET.getText().trim());
-//                enableOrDisableNext();
-//            });
+            eCommerceLL.setOnClickListener(view -> {
+                if (!isECommerce) {
+                    eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
+                    retailIV.setImageResource(R.drawable.ic_rb_unselected);
+                    websiteOET.setHint("Website");
+                    isECommerce = true;
+                    isRetail = false;
+                    identificationType = 9;
+                    isIDVESelected = true;
 
-//            retailLL.setOnClickListener(view -> {
-//                if (!isRetail) {
-//                    websiteOET.setHint("Website (Optional)");
-//                    isECommerce = false;
-//                    isRetail = true;
-//                    identificationType = 8;
-//                    isIDVESelected = true;
-//                    retailIV.setImageResource(R.drawable.ic_rb_selected);
-//                    eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
-//                }
-////                isWebsite = true;
+//                    dbaFillingLL.setVisibility(GONE);
+                }
+                isWebsite = isValidUrl(websiteOET.getText().trim());
+                enableOrDisableNext();
+            });
+
+            retailLL.setOnClickListener(view -> {
+                if (!isRetail) {
+                    websiteOET.setHint("Website (Optional)");
+                    isECommerce = false;
+                    isRetail = true;
+                    identificationType = 8;
+                    isIDVESelected = true;
+                    retailIV.setImageResource(R.drawable.ic_rb_selected);
+                    eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
+                }
+                isWebsite = true;
 //                isWebsite = isValidUrl(websiteOET.getText().trim());
-//                enableOrDisableNext();
-//            });
+                enableOrDisableNext();
+            });
 
             dbaNextCV.setOnClickListener(v -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -546,18 +546,18 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 Utils.populateStates(this, stateET, objMyApplication);
             });
 
-            //Default values enabled
-//            eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
-//            retailIV.setImageResource(R.drawable.ic_rb_unselected);
-//            websiteOET.setHint("Website");
+          //  Default values enabled
+            eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
+            retailIV.setImageResource(R.drawable.ic_rb_unselected);
+            websiteOET.setHint("Website");
             //Modified
-            retailIV.setImageResource(R.drawable.ic_rb_selected);
-            websiteOET.setHint("Website (Optional)");
+//            retailIV.setImageResource(R.drawable.ic_rb_selected);
+//            websiteOET.setHint("Website (Optional)");
             //isWebsite = isValidUrl(websiteOET.getText().trim());
             //end
-            isECommerce = false;
-            isRetail = true;
-            identificationType = 8;
+            isECommerce = true;
+            isRetail = false;
+            identificationType = 9;
             isIDVESelected = true;
 
 
@@ -1584,7 +1584,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         websiteOET.setSelection();
                     }
 
-//                    if (cir.getIdentificationType().equals("8")) {
+                    if (cir.getIdentificationType().equals("8")) {
                     websiteOET.setHint("Website (Optional)");
                     isECommerce = false;
                     isRetail = true;
@@ -1593,16 +1593,16 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
                     isWebsite = true;
                     isIDVESelected = true;
-//                    } else if (cir.getIdentificationType().equals("9")) {
-//                        eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
-//                        retailIV.setImageResource(R.drawable.ic_rb_unselected);
-//                        websiteOET.setHint("Website");
-//                        isECommerce = true;
-//                        isRetail = false;
-//                        identificationType = 9;
-//                        isWebsite = isValidUrl(cir.getWebsite());
-//                        isIDVESelected = true;
-//                    }
+                    } else if (cir.getIdentificationType().equals("9")) {
+                        eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
+                        retailIV.setImageResource(R.drawable.ic_rb_unselected);
+                        websiteOET.setHint("Website");
+                        isECommerce = true;
+                        isRetail = false;
+                        identificationType = 9;
+                        isWebsite = isValidUrl(cir.getWebsite());
+                        isIDVESelected = true;
+                    }
 
                     if (cir.getRequiredDocuments().size() > 0) {
                         dbaFillingLL.setVisibility(VISIBLE);
