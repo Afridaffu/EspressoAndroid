@@ -348,6 +348,8 @@
     <string name="merchant_s_settings">Merchant’s Settings</string>
     <string name="user_settings">User Settings</string>
     <string name="sale_order_token">Sale Order: Token</string>
+    <string name="sale_order_eCommerce">Sale Order: eCommerce</string>
+    <string name="sale_order_Retail_Mobile">Sale Order: Retail/Mobile</string>
     <string name="refund">Refund</string>
     <string name="token_account">Token Account</string>
     <string name="instan_pay">Instant Pay</string>
@@ -578,6 +580,8 @@
     <string name="original_transaction_information">Original Transaction Information</string>
     <string name="please_note_new_team_members">*Please Note: New team members get full administrator permission</string>
     <string name="identity_verification_under_review">Identity Verification\nUnder Review</string>
+    <string name="merchant_under_review_head">Merchant Application Under Review</string>
+    <string name="merchant_under_review_text">Your Merchant Application has been successfully submitted and is currently under review by the coyni Underwriting Team. This process can take up to 3 business days. Please stay tuned for any communication from coyni regarding your application.</string>
     <string name="thank_you_interest_in_coyni">Thank you for your interest in coyni. Please allow us up to 3 business days for further review of your account. Within that time you may receive a notification and/or email if further information is needed.</string>
     <string name="reference_id_name">Reference ID.</string>
     <string name="you_have_no_transactions">You have no transactions</string>
@@ -849,6 +853,7 @@
     <string name="choose_library">Choose From Library</string>
     <string name="take_photo">Take a Photo</string>
     <string name="browse_files">Browse Files</string>
+    <string name="sale_order_ecommerce">Sale Order- eCommerce</string>
 
     <string name="skip">Skip</string>
     <string name="add_debit_or_credit_card">Add Debit or Credit Card</string>

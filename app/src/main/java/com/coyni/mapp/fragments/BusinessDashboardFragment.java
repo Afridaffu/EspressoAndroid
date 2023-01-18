@@ -211,7 +211,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlProcessingVolume = mCurrentView.findViewById(R.id.ll_processing_volume);
         mTvProcessingVolume = mCurrentView.findViewById(R.id.tv_processing_volume);
         mTvMerchantTransactions = mCurrentView.findViewById(R.id.tv_merchant_transactions);
-        mCvBatchNow = mCurrentView.findViewById(R.id.cv_batch_now);
+//        mCvBatchNow = mCurrentView.findViewById(R.id.cv_batch_now);
         mTvReserveList = mCurrentView.findViewById(R.id.tv_reserve_list);
         mIvUserIcon = mCurrentView.findViewById(R.id.iv_user_icon);
         mTvUserName = mCurrentView.findViewById(R.id.tv_user_name);
@@ -315,14 +315,14 @@ public class BusinessDashboardFragment extends BaseFragment {
             startActivity(new Intent(getActivity(), MerchantTransactionListActivity.class));
         });
 
-        mCvBatchNow.setOnClickListener(v -> {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                return;
-            }
-            mLastClickTimeQA = SystemClock.elapsedRealtime();
-            //showBatchNowDialog(batchNowRequest);
-            initiateBatchNow();
-        });
+//        mCvBatchNow.setOnClickListener(v -> {
+//            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+//                return;
+//            }
+//            mLastClickTimeQA = SystemClock.elapsedRealtime();
+//            //showBatchNowDialog(batchNowRequest);
+//            initiateBatchNow();
+//        });
 
     }
 
@@ -1108,14 +1108,14 @@ public class BusinessDashboardFragment extends BaseFragment {
                         String amount = listItems.get(i).getTotalAmount();
                         String amt = Utils.convertBigDecimalUSDC((amount));
                         Utils.setTextSize(nextPayoutAmountTV, amt, 48);
-                        if (Utils.doubleParsing(amt.replaceAll(",", "")) <= 0) {
-                            mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                            mCvBatchNow.setClickable(false);
-                        } else {
-                            mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                            mCvBatchNow.setClickable(true);
-//                        Utils.setTextSize(nextPayoutAmountTV,"1,000.00");
-                        }
+//                        if (Utils.doubleParsing(amt.replaceAll(",", "")) <= 0) {
+//                            mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                            mCvBatchNow.setClickable(false);
+//                        } else {
+//                            mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+//                            mCvBatchNow.setClickable(true);
+////                        Utils.setTextSize(nextPayoutAmountTV,"1,000.00");
+//                        }
                         String date = listItems.get(i).getCreatedAt();
                         if (date.contains(".")) {
                             String res = date.substring(0, date.lastIndexOf("."));
@@ -1164,7 +1164,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                             listItems.get(j).getStatus().equalsIgnoreCase(Utils.INPROGRESS) ||
                             listItems.get(j).getStatus().equalsIgnoreCase(Utils.MERCHANT_TRANSACTION_FAILED)) {
                         TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
-                        TextView payoutManualTV = xmlView.findViewById(R.id.payoutManualTV);
+//                        TextView payoutManualTV = xmlView.findViewById(R.id.payoutManualTV);
                         String listDate = listItems.get(j).getUpdatedAt();
                         if (listDate == null) {
                             listDate = listItems.get(j).getCreatedAt();
@@ -1175,16 +1175,16 @@ public class BusinessDashboardFragment extends BaseFragment {
                         } else {
 //                        payoutDate.setText("N/A");
                         }
-                        try {
-                            String type = listItems.get(j).getProcessType();
-                            if (type != null && type.equalsIgnoreCase(Utils.processType)) {
-                                payoutManualTV.setVisibility(View.VISIBLE);
-                            } else {
-                                payoutManualTV.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+//                        try {
+//                            String type = listItems.get(j).getProcessType();
+//                            if (type != null && type.equalsIgnoreCase(Utils.processType)) {
+//                                payoutManualTV.setVisibility(View.VISIBLE);
+//                            } else {
+//                                payoutManualTV.setVisibility(View.GONE);
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
                         TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
                         totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(j).getTotalAmount()));
                         payoutsList.addView(xmlView);

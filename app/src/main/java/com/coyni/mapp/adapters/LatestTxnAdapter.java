@@ -74,9 +74,11 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                         holder.gapView.setVisibility(View.GONE);
                 } else {
                     if (objData.getTxnDescription().length() > 23)
-                        holder.txnDescrip.setText(objData.getTxnDescription().substring(0, 22) + "...");
+//                        holder.txnDescrip.setText(objData.getTxnDescription().substring(0, 22) + "...");
+                        holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
                     else {
-                        holder.txnDescrip.setText(objData.getTxnDescription());
+//                        holder.txnDescrip.setText(objData.getTxnDescription());
+                        holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
                     }
                     holder.txnDescripExtention.setVisibility(View.GONE);
                     holder.descriptionView.setVisibility(View.VISIBLE);

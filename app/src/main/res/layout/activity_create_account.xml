@@ -299,7 +299,7 @@
                             android:importantForAutofill="no"
                             android:inputType="text|textNoSuggestions"
                             android:longClickable="false"
-                            android:maxLength="12"
+                            android:maxLength="32"
                             android:padding="@dimen/_14sdp"
                             android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                             android:singleLine="true"
@@ -380,7 +380,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/opensans_regular"
-                    android:text="Must be 8-12 characters, 1 uppercase, 1 number, 1 lower case, 1 special character."
+                    android:text="Must be 8-32 characters, 1 uppercase, 1 number, 1 lower case, 1 special character."
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/_10ssp" />
 
@@ -410,7 +410,7 @@
                         android:importantForAutofill="no"
                         android:inputType="text|textNoSuggestions"
                         android:longClickable="false"
-                        android:maxLength="12"
+                        android:maxLength="32"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                         android:singleLine="true"
