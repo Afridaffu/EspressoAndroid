@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".view.AddBankMXActivity">
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:contentDescription="@string/back_button"
+        android:padding="@dimen/_5sdp"
+        android:src="@drawable/ic_close" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivBack"
+        android:layout_marginHorizontal="@dimen/_21sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:fontFamily="@font/opensans_bold"
+        android:text="@string/add_bank_checking_account"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginHorizontal="@dimen/_21sdp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/start"
+            android:src="@drawable/mx_bank_graphic" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_21sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:lineSpacingExtra="@dimen/_4ssp"
+            android:text="@string/coyni_uses_a_trusted_partner_mx_to_verify_bank_account_information_mx_may_also_check_your_balance_to_ensure_that_you_have_enough_funds_to_cover_requested_transactions_please_note_that_you_can_only_add_checking_accounts_into_coyni_using_mx"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="@dimen/_21sdp"
+        android:layout_marginBottom="@dimen/_27sdp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="-5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/opensans_regular"
+                android:lineSpacingExtra="@dimen/_2ssp"
+                android:text="@string/i_understand_that_i_will_be_redirected_to_a_3rd_party_process_to_add_a_checking_account_to_coyni"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_11ssp" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvStart"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginTop="@dimen/_21sdp"
+            app:cardBackgroundColor="@color/inactive_color"
+            app:cardCornerRadius="@dimen/_22sdp"
+            app:cardElevation="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/opensans_bold"
+                android:text="@string/start"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_13sp" />
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</RelativeLayout>
