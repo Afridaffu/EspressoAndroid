@@ -54,6 +54,10 @@ public class LatestTxnResponse {
         private String transactionId;
         private String gbxTransactionId;
         private String updatedAt;
+        private String senderName;
+        private String receiveName;
+        private String reserveAmount;
+        private String userType;
 
         public String getCreatedAt() {
             return createdAt;
@@ -133,6 +137,38 @@ public class LatestTxnResponse {
 
         public void setUpdatedAt(String updatedAt) {
             this.updatedAt = updatedAt;
+        }
+
+        public String getSenderName() {
+            return senderName;
+        }
+
+        public void setSenderName(String senderName) {
+            this.senderName = senderName;
+        }
+
+        public String getReceiveName() {
+            return receiveName;
+        }
+
+        public void setReceiveName(String receiveName) {
+            this.receiveName = receiveName;
+        }
+
+        public String getReserveAmount() {
+            return reserveAmount;
+        }
+
+        public void setReserveAmount(String reserveAmount) {
+            this.reserveAmount = reserveAmount;
+        }
+
+        public String getUserType() {
+            return userType;
+        }
+
+        public void setUserType(String userType) {
+            this.userType = userType;
         }
     }
 

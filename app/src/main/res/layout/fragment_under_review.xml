@@ -165,7 +165,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/_20sdp"
                         android:fontFamily="@font/opensans_bold"
-                        android:text="@string/identity_verification_under_review"
+                        android:text="@string/merchant_under_review_head"
                         android:textAlignment="center"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_16ssp" />
@@ -176,7 +176,7 @@
                         android:layout_marginTop="@dimen/_20sdp"
                         android:fontFamily="@font/opensans_regular"
                         android:paddingHorizontal="@dimen/_10sdp"
-                        android:text="@string/thank_you_interest_in_coyni"
+                        android:text="@string/merchant_under_review_text"
                         android:textAlignment="center"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp" />

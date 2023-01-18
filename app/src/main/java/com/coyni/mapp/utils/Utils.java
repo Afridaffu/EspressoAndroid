@@ -357,6 +357,8 @@ public class Utils {
     public static final int failedWithdraw = 11; // need to confirm
     public static final int cancelledWithdraw = 18;
     public static final int transfer = 10;
+    public static final int eComerce = 12; // need confirmation
+    public static final int retailMobile = 13; //need confirmation
 
     public static final int pending = 1;
     public static final int completed = 2;
