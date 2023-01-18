@@ -81,6 +81,7 @@ public class MerchantTrackerAgreementsActivity extends BaseActivity {
         Intent intent = new Intent(MerchantTrackerAgreementsActivity.this, AcceptAgreementsActivity.class);
         intent.putExtra(Utils.AGREEMENT_TYPE, agreementType);
         intent.putExtra(Utils.ACT_TYPE, Utils.single);
+        intent.putExtra(Utils.SCREEN,"Tracker");
         agreementVerifiedLauncher.launch(intent);
     }
 
