@@ -854,5 +854,7 @@
     <string name="take_photo">Take a Photo</string>
     <string name="browse_files">Browse Files</string>
     <string name="sale_order_ecommerce">Sale Order- eCommerce</string>
+    <string name="application_desclosure_description">Before we can process your application, please take time to read then sign the coyni’s Application Disclosure.</string>
+    <string name="acknowledge_text">I understand this eSignature counts as a legally binding signature.</string>
 
 </resources>
