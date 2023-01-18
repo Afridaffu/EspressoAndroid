@@ -49,7 +49,7 @@ public class AgreementsActivity extends BaseActivity {
     String status;
     String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
     String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
-    String merchantagreeURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
+//    String merchantagreeURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
     Agreements agreements;
     MyApplication objMyApplication;
     TextView pastTV, activeTV;
@@ -176,7 +176,7 @@ public class AgreementsActivity extends BaseActivity {
         } else {
             sortTODisplay.add(Utils.mPP);
             sortTODisplay.add(Utils.mTOS);
-            sortTODisplay.add(Utils.mAgmt);
+//            sortTODisplay.add(Utils.mAgmt);
         }
 
         Collections.sort(items, new Comparator<Item>() {
@@ -281,13 +281,13 @@ public class AgreementsActivity extends BaseActivity {
                 selectedAgreement = getString(R.string.gbx_tos);
             } else if (item.getSignatureType() == Utils.cPP) {
                 selectedAgreement = getString(R.string.gbx_pp);
-            } else if (item.getSignatureType() == Utils.mAgmt) {
-                selectedAgreement = getString(R.string.gbx_merchant);
             }
+//            else if (item.getSignatureType() == Utils.mAgmt) {
+//                selectedAgreement = getString(R.string.gbx_merchant);
+//            }
             dashboardViewModel.getAgreementUrlByDocumentNumber(item.getRefId());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-
 }
