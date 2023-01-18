@@ -111,15 +111,15 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
                 if (FROM.equals("DBA_INFO")) {
                     DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
 //                    if (isValidUrl(charSequence.toString())) {
-                    if (isValidUrl(charSequence.toString()) || charSequence.toString().equals("")) {
+                    if (isValidUrl(charSequence.toString())) {
                         dia.isWebsite = true;
                         websiteErrorLL.setVisibility(GONE);
                     } else {
-//                        if (hintString.equals("Website"))
-//                            dia.isWebsite = false;
-//                        else
-//                            dia.isWebsite = true;
-                        dia.isWebsite = false;
+                        if (hintString.equals("Website"))
+                            dia.isWebsite = false;
+                        else
+                            dia.isWebsite = true;
+//                        dia.isWebsite = false;
                     }
 
                     dia.enableOrDisableNext();
@@ -169,22 +169,20 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
     public void setHint(String text) {
         hintName.setText(text);
         hintString = text;
-//        if (!text.equals("Website") && !websiteET.hasFocus()) {
-        if (!text.equals("Website (Optional)") && !websiteET.hasFocus()) {
-            websiteET.setHint(text);
-            websiteErrorLL.setVisibility(GONE);
-            hintName.setTextColor(getResources().getColor(R.color.primary_black));
-            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
-//        } else if (text.equals("Website") && !websiteET.hasFocus()) {
-        } else if (text.equals("Website (Optional)") && !websiteET.hasFocus()) {
-            websiteET.setHint(text);
-            if (websiteET.getText().toString().trim().length() > 0 && !isValidUrl(websiteET.getText().toString().trim())) {
-                hintName.setTextColor(getResources().getColor(R.color.error_red));
-                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                websiteErrorLL.setVisibility(VISIBLE);
-                websiteErrorTV.setText("Please enter a valid Website");
+            if (!text.equals("Website") && !websiteET.hasFocus()) {
+                websiteET.setHint(text);
+                websiteErrorLL.setVisibility(GONE);
+                hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+            } else if (text.equals("Website") && !websiteET.hasFocus()) {
+                websiteET.setHint(text);
+                if (websiteET.getText().toString().trim().length() > 0 && !isValidUrl(websiteET.getText().toString().trim())) {
+                    hintName.setTextColor(getResources().getColor(R.color.error_red));
+                    hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                    websiteErrorLL.setVisibility(VISIBLE);
+                    websiteErrorTV.setText("Please enter a valid Website");
+                }
             }
-        }
     }
 
     public void setText(String text) {

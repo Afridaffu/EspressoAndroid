@@ -640,7 +640,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             if (dbaInfo.getIdentificationType() == 8) {
                                 mWebsiteHeadTX.setText("Website (Optional)");
 //                                if (dbaInfo.getWebsite() == null || dbaInfo.getWebsite().equals("")) {
-//                                    websiteLL.setVisibility(GONE);
+                                httpHeader.setVisibility(GONE);
 //                                } else {
 //                                    websiteLL.setVisibility(VISIBLE);
 //                                }

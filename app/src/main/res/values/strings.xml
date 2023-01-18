@@ -853,5 +853,6 @@
     <string name="choose_library">Choose From Library</string>
     <string name="take_photo">Take a Photo</string>
     <string name="browse_files">Browse Files</string>
+    <string name="sale_order_ecommerce">Sale Order- eCommerce</string>
 
 </resources>
