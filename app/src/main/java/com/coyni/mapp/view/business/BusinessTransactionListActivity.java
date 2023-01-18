@@ -1530,7 +1530,6 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         transactionType.add(Utils.buyTokens);
         transactionType.add(Utils.refund);
         transactionType.add(Utils.paidInvoice);
-        transactionType.add(Utils.saleOrder);
         transactionType.add(Utils.businessPayout);
         transactionType.add(Utils.reserveRelease);
         transactionType.add(Utils.monthlyservicefee);
