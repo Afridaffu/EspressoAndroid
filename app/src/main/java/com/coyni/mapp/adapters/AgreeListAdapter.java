@@ -41,9 +41,10 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
             holder.agreementTV.setText(context.getResources().getString(R.string.privacy_policy) + " ");
         } else if (items.get(pos).getSignatureType() == Utils.cTOS) {
             holder.agreementTV.setText(context.getResources().getString(R.string.tos) + " ");
-        } else if (items.get(pos).getSignatureType() == Utils.mAgmt) {
-            holder.agreementTV.setText(context.getResources().getString(R.string.merchant_s_agreement) + " ");
         }
+//        else if (items.get(pos).getSignatureType() == Utils.mAgmt) {
+//            holder.agreementTV.setText(context.getResources().getString(R.string.merchant_s_agreement) + " ");
+//        }
         if (items.get(pos).getDocumentVersion() != null && !items.get(pos).getDocumentVersion().equals("")) {
             holder.listDocsTV.setText(items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
         }

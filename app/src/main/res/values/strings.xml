@@ -849,8 +849,16 @@
     <string name="choose_library">Choose From Library</string>
     <string name="take_photo">Take a Photo</string>
     <string name="browse_files">Browse Files</string>
+    <string name="sale_order_ecommerce">Sale Order- eCommerce</string>
+    <string name="sale_order_Retail_Mobile">Sale Order: Retail/Mobile</string>
+    <string name="application_desclosure_description">Before we can process your application, please take time to read then sign the coyni’s Application Disclosure.</string>
+    <string name="acknowledge_text">I understand this eSignature counts as a legally binding signature.</string>
     <string name="add_bank_checking_account">Add Bank Checking Account</string>
     <string name="i_understand_that_i_will_be_redirected_to_a_3rd_party_process_to_add_a_checking_account_to_coyni">I understand that I will be redirected to a 3rd party process to add a checking account to coyni.</string>
     <string name="coyni_uses_a_trusted_partner_mx_to_verify_bank_account_information_mx_may_also_check_your_balance_to_ensure_that_you_have_enough_funds_to_cover_requested_transactions_please_note_that_you_can_only_add_checking_accounts_into_coyni_using_mx">coyni uses a trusted partner MX to verify bank account information. MX may also check your balance to ensure that you have enough funds to cover requested transactions. Please note that you can only add checking accounts into coyni using MX.</string>
+    <string name="sale_order_eCommerce">Sale Order: eCommerce</string>
+    <string name="merchant_under_review_head">Merchant Application Under Review</string>
+    <string name="merchant_under_review_text">Your Merchant Application has been successfully submitted and is currently under review by the coyni Underwriting Team. This process can take up to 3 business days. Please stay tuned for any communication from coyni regarding your application.</string>
+
 
 </resources>

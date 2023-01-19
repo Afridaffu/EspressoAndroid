@@ -2,26 +2,17 @@ package com.coyni.mapp.view.business;
 
 
 import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 import static com.coyni.mapp.utils.Utils.convertTwoDecimal;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -31,7 +22,6 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,18 +36,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.BankAccountsRecyclerAdapter;
 import com.coyni.mapp.adapters.BenificialOwnersRecyclerAdapter;
-import com.coyni.mapp.dialogs.CustomConfirmationDialog;
-import com.coyni.mapp.dialogs.OnDialogClickListener;
 import com.coyni.mapp.interfaces.OnKeyboardVisibilityListener;
 import com.coyni.mapp.model.APIError;
 import com.coyni.mapp.model.DBAInfo.BusinessTypeResp;
-import com.coyni.mapp.model.DialogAttributes;
-import com.coyni.mapp.model.bank.BankDeleteResponseData;
-import com.coyni.mapp.model.bank.SignOn;
 import com.coyni.mapp.model.bank.SignOnData;
-import com.coyni.mapp.model.bank.SyncAccount;
 import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
-import com.coyni.mapp.model.profile.AddBusinessUserResponse;
 import com.coyni.mapp.model.profile.DownloadDocumentData;
 import com.coyni.mapp.model.profile.DownloadDocumentResponse;
 import com.coyni.mapp.model.profile.DownloadImageData;
@@ -79,7 +62,6 @@ import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.DashboardActivity;
-import com.coyni.mapp.view.WebViewActivity;
 import com.coyni.mapp.viewmodel.ApplicationSubmissionViewModel;
 import com.coyni.mapp.viewmodel.BankAccountsViewModel;
 import com.coyni.mapp.viewmodel.BusinessApplicationSummaryViewModel;
@@ -303,8 +285,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             @Override
             public void onClick(View v) {
 //                if (isAgree) {
-                    showProgressDialog();
-                    applicationSubmissionViewModel.postApplicationData();
+//                    showProgressDialog();
+//                    applicationSubmissionViewModel.postApplicationData();
+                startActivity(new Intent(ReviewApplicationActivity.this, ReviewMerchantAgreementActivity.class));
 
 //                }
             }
