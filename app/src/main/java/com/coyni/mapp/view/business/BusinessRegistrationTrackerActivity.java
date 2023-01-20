@@ -367,8 +367,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (businessTrackerResponse.getData().isIsbankAccount()) {
-                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantsAgrementActivity.class);
+//                    if (businessTrackerResponse.getData().isIsbankAccount()) {
+                    if (businessTrackerResponse.getData().isBeneficialOwners()) {
+//                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantsAgrementActivity.class);
+                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, MerchantTrackerAgreementsActivity.class);
                         startActivity(intent);
                     }
                 }
@@ -748,18 +750,18 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             boIncompleteLL.setVisibility(View.VISIBLE);
         }
 
-        if (businessTrackerResponse.getData().isIsbankAccount()) {
-            aggrementsInProgressIV.setVisibility(GONE);
-            aggrementsStartTV.setVisibility(View.VISIBLE);
-            aggrementsIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
-            addBankCompleteLL.setVisibility(View.VISIBLE);
-            addBankIncompleteLL.setVisibility(View.GONE);
-        } else {
-            aggrementsStartTV.setVisibility(View.GONE);
-            aggrementsIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
-            addBankCompleteLL.setVisibility(View.GONE);
-            addBankIncompleteLL.setVisibility(View.VISIBLE);
-        }
+//        if (businessTrackerResponse.getData().isIsbankAccount()) {
+//            aggrementsInProgressIV.setVisibility(GONE);
+//            aggrementsStartTV.setVisibility(View.VISIBLE);
+//            aggrementsIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
+//            addBankCompleteLL.setVisibility(View.VISIBLE);
+//            addBankIncompleteLL.setVisibility(View.GONE);
+//        } else {
+//            aggrementsStartTV.setVisibility(View.GONE);
+//            aggrementsIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
+//            addBankCompleteLL.setVisibility(View.GONE);
+//            addBankIncompleteLL.setVisibility(View.VISIBLE);
+//        }
 
         if (businessTrackerResponse.getData().isAgreementSigned()) {
             aggrementsCompleteLL.setVisibility(View.VISIBLE);
@@ -771,8 +773,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
         }
         LogUtils.d(TAG, "reviewbutton" + addDBA + businessTrackerResponse);
 
+//        if (businessTrackerResponse != null && businessTrackerResponse.getData().isCompanyInfo() && businessTrackerResponse.getData().isDbaInfo() && businessTrackerResponse.getData().isBeneficialOwners()
+//                && businessTrackerResponse.getData().isIsbankAccount() && businessTrackerResponse.getData().isAgreementSigned()) {
         if (businessTrackerResponse != null && businessTrackerResponse.getData().isCompanyInfo() && businessTrackerResponse.getData().isDbaInfo() && businessTrackerResponse.getData().isBeneficialOwners()
-                && businessTrackerResponse.getData().isIsbankAccount() && businessTrackerResponse.getData().isAgreementSigned()) {
+                && businessTrackerResponse.getData().isAgreementSigned()) {
             review = true;
             mReviewCv.setVisibility(VISIBLE);
             appFinishedTV.setVisibility(VISIBLE);
@@ -780,8 +784,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             bagIV.setImageDrawable(getResources().getDrawable(R.drawable.idve_completed));
         } else {
             if (addDBA) {
+//                if (businessTrackerResponse != null && businessTrackerResponse.getData().isDbaInfo() && businessTrackerResponse.getData().isBeneficialOwners()
+//                        && businessTrackerResponse.getData().isIsbankAccount() && businessTrackerResponse.getData().isAgreementSigned()) {
                 if (businessTrackerResponse != null && businessTrackerResponse.getData().isDbaInfo() && businessTrackerResponse.getData().isBeneficialOwners()
-                        && businessTrackerResponse.getData().isIsbankAccount() && businessTrackerResponse.getData().isAgreementSigned()) {
+                        && businessTrackerResponse.getData().isAgreementSigned()) {
                     LogUtils.d(TAG, "iffff" + addDBA + businessTrackerResponse);
                     review = true;
                     mReviewCv.setVisibility(VISIBLE);

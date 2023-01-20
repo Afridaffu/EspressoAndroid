@@ -522,6 +522,7 @@ public class Utils {
     public static final String paySignetEnable = "token account.payment methods.signet account";
     public static final String allControlsEnable = "token account.all controls";
 
+    public static final String SCREEN = "screen";
     public static final String AGREEMENT_TYPE = "AGREE_TYPE";
     public static final String ACT_TYPE = "ACT_TYPE";
     public static final String DOC_URL = "DOC_URL";

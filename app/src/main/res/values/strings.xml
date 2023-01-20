@@ -861,4 +861,11 @@
     <string name="merchant_under_review_text">Your Merchant Application has been successfully submitted and is currently under review by the coyni Underwriting Team. This process can take up to 3 business days. Please stay tuned for any communication from coyni regarding your application.</string>
 
 
+    <string name="skip">Skip</string>
+    <string name="add_debit_or_credit_card">Add Debit or Credit Card</string>
+    <string name="account_created">Account Created!</string>
+    <string name="your_coyni_account_is_now_ready_get_started_by_adding_a_debit_or_credit_card">Your coyni account is now ready. Get started by adding a debit or credit card.</string>
+    <string name="save_this_address_as_my_account_address">Save this address as my account address.</string>
+
+    <string name="agreement_desc">Please read and accept each agreement.</string>
 </resources>
