@@ -62,7 +62,7 @@ public class AcceptAgreementsActivity extends BaseActivity {
     private ActivityAcceptAgreementsBinding binding;
     private DashboardViewModel dashboardViewModel;
     private LoginViewModel loginViewModel;
-    private String myUrl = "", ACT_TYPE, DOC_NAME = "", DOC_URL = "";
+    private String myUrl = "", ACT_TYPE, DOC_NAME = "", DOC_URL = "", SCREEN = "";
     private boolean isActionEnabled = false;
     private MyApplication objMyApplication;
     private int AGREE_TYPE;
@@ -108,6 +108,7 @@ public class AcceptAgreementsActivity extends BaseActivity {
             ACT_TYPE = getIntent().getStringExtra(Utils.ACT_TYPE);
             DOC_NAME = getIntent().getStringExtra(Utils.DOC_NAME);
             DOC_URL = getIntent().getStringExtra(Utils.DOC_URL);
+            SCREEN = getIntent().getStringExtra(Utils.SCREEN);
 
             setupLablesAndUI();
 
@@ -181,7 +182,8 @@ public class AcceptAgreementsActivity extends BaseActivity {
                         if (isActionEnabled) {
 //                            canEnableCheckBox = false;
                             SignAgreementRequest request = new SignAgreementRequest();
-                            if (binding.actionTV.getText().toString().equalsIgnoreCase("Done")) {
+                            if (binding.actionTV.getText().toString().equalsIgnoreCase("Done") ||
+                                    binding.actionTV.getText().toString().equalsIgnoreCase("I Agree")) {
                                 setResult(RESULT_OK);
                                 finish();
                             } else if (binding.actionTV.getText().toString().equalsIgnoreCase("Next")) {
@@ -250,7 +252,10 @@ public class AcceptAgreementsActivity extends BaseActivity {
                 binding.optionsIV.setVisibility(View.GONE);
                 binding.closeIV.setImageDrawable(getDrawable(R.drawable.ic_close));
             }
-            binding.actionTV.setText("Done");
+            if (!SCREEN.equals(""))
+                binding.actionTV.setText("I Agree");
+            else
+                binding.actionTV.setText("Done");
         } else if (ACT_TYPE.equals(Utils.multiple)) {
             binding.optionsIV.setVisibility(View.VISIBLE);
             binding.closeIV.setImageDrawable(getDrawable(R.drawable.ic_close));

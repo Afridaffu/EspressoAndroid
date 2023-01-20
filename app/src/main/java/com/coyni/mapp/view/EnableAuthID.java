@@ -2,6 +2,7 @@ package com.coyni.mapp.view;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
+import android.accounts.Account;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -512,8 +513,9 @@ public class EnableAuthID extends BaseActivity {
     private void showSuccessLayout() {
         try {
             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                successRL.setVisibility(View.VISIBLE);
-                businessSuccessRL.setVisibility(View.GONE);
+//                successRL.setVisibility(View.VISIBLE);
+//                businessSuccessRL.setVisibility(View.GONE);
+                startActivity(new Intent(this, AccountCreatedActivity.class).putExtra("screen","signup"));
             } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                 successRL.setVisibility(View.GONE);
                 businessSuccessRL.setVisibility(View.VISIBLE);
