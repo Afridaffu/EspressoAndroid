@@ -441,7 +441,7 @@ public class PaymentMethodsActivity extends BaseActivity {
                                 && objMyApplication.getFeatureControlGlobal().getPayBank() && objMyApplication.getFeatureControlByUser().getPayBank()) {
                             if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
                                 //showExternalBank("");
-                                Intent i = new Intent(PaymentMethodsActivity.this, AddManualBankAccount.class);
+                                Intent i = new Intent(PaymentMethodsActivity.this, AddBankMXActivity.class);
                                 i.putExtra("From", "pay");
                                 startActivityForResult(i, 4);
                             }

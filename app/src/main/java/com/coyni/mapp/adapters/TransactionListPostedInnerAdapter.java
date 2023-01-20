@@ -67,7 +67,7 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
         }
 
         if(objData.getTxnTypeDn().equalsIgnoreCase("Paid Order")){
-            holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
+            holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getReceiveName());
         }
 
         holder.walletBal.setText("Balance " + Utils.convertTwoDecimal(objData.getWalletBalance()));
