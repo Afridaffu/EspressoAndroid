@@ -71,11 +71,13 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     private void initFields() {
 
         objMyApplication = (MyApplication) context.getApplicationContext();
-        Chip transTypeSalesOrderEcomerce = findViewById(R.id.transTypeSalesOrderEcomerce);
-        Chip transTypeSalesOrderRetail = findViewById(R.id.transTypeSalesOrderRetail);
+        Chip transTypeSalesOrder = findViewById(R.id.transTypeSalesOrder);
         Chip transTypeRefund = findViewById(R.id.transTypeRefund);
         Chip transTypeMerchantPayout = findViewById(R.id.transTypeMerchantPayout);
         Chip transTypeMonthlyServiceFee = findViewById(R.id.transTypeMonthlyServiceFee);
+
+        Chip transSubTypeEcommerce = findViewById(R.id.transSubTypeEcommerce);
+        Chip transSubTyperetail = findViewById(R.id.transSubTypeRetail);
 
         Chip transStatusCompleted = findViewById(R.id.transStatusCompleted);
         Chip transStatusRefund = findViewById(R.id.transStatusRefund);
@@ -101,11 +103,8 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             if (transactionType.size() > 0) {
                 for (int i = 0; i < transactionType.size(); i++) {
                     switch (transactionType.get(i)) {
-                        case Utils.eComerce:
-                            transTypeSalesOrderEcomerce.setChecked(true);
-                            break;
-                        case Utils.retailMobile:
-                            transTypeSalesOrderRetail.setChecked(true);
+                        case Utils.saleOrder:
+                            transTypeSalesOrder.setChecked(true);
                             break;
                         case Utils.refund:
                             transTypeRefund.setChecked(true);
@@ -124,6 +123,18 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             }
             if (transactionSubType == null) {
                 transactionSubType = new ArrayList<>();
+            }
+            if (transactionSubType.size() > 0) {
+                for (int i = 0; i < transactionSubType.size(); i++) {
+                    switch (transactionSubType.get(i)) {
+                        case Utils.eComerce:
+                            transSubTypeEcommerce.setChecked(true);
+                            break;
+                        case Utils.retailMobile:
+                            transSubTyperetail.setChecked(true);
+                            break;
+                    }
+                }
             }
 
             if (filterTransactionListRequest.getTxnStatus() != null) {
@@ -276,12 +287,14 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             rangeDates.setUpdatedFromDate("");
             rangeDates.setUpdatedToDate("");
 
-            transTypeSalesOrderEcomerce.setChecked(false);
-            transTypeSalesOrderRetail.setChecked(false);
+            transTypeSalesOrder.setChecked(false);
             transTypeRefund.setChecked(false);
             transTypeMerchantPayout.setChecked(false);
             transTypeMonthlyServiceFee.setChecked(false);
 //            transTypeRefund.setChecked(false);
+
+            transSubTypeEcommerce.setChecked(false);
+            transSubTyperetail.setChecked(false);
 
             transStatusCompleted.setChecked(false);
             transStatusRefund.setChecked(false);
@@ -295,34 +308,15 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
         });
 //
 
-        transTypeSalesOrderEcomerce.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        transTypeSalesOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    transactionType.add(Utils.eComerce);
+                    transactionType.add(Utils.saleOrder);
                 } else {
                     for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.eComerce) {
-                            transactionType.remove(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
-
-
-        transTypeSalesOrderRetail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    transactionType.add(Utils.retailMobile);
-                } else {
-                    for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.retailMobile) {
+                        if (transactionType.get(i) == Utils.saleOrder) {
                             transactionType.remove(i);
                             break;
                         }
@@ -374,6 +368,40 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 } else {
                     for (int i = 0; i < transactionType.size(); i++) {
                         if (transactionType.get(i) == Utils.monthlyServiceFee) {
+                            transactionType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transSubTypeEcommerce.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    transactionSubType.add(Utils.eComerce);
+                } else {
+                    for (int i = 0; i < transactionType.size(); i++) {
+                        if (transactionType.get(i) == Utils.eComerce) {
+                            transactionType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transSubTyperetail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    transactionSubType.add(Utils.retailMobile);
+                } else {
+                    for (int i = 0; i < transactionType.size(); i++) {
+                        if (transactionType.get(i) == Utils.retailMobile) {
                             transactionType.remove(i);
                             break;
                         }

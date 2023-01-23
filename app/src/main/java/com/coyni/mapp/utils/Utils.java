@@ -359,8 +359,8 @@ public class Utils {
     public static final int failedWithdraw = 11; // need to confirm
     public static final int cancelledWithdraw = 18;
     public static final int transfer = 10;
-    public static final int eComerce = 12; // need confirmation
-    public static final int retailMobile = 13; //need confirmation
+    public static final int eComerce = 12;
+    public static final int retailMobile = 13;
 
     public static final int pending = 1;
     public static final int completed = 2;
@@ -473,6 +473,8 @@ public class Utils {
     public static final String wallet = "wallet";
     public static final String amount = "amount";
     public static final String sentt = "sent";
+    public static final String ecomerce = "eCommerce";
+    public static final String retail = "retail/mobile";
 
     public static final String applyFilter = "apply";
     public static final String resetFilter = "resetFilter";
