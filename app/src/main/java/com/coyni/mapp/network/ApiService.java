@@ -288,9 +288,6 @@ public interface ApiService {
     @GET("api/v2/profile/me/signedagreements")
     Call<Agreements> meAgreementsByType();
 
-//    @PATCH("api/v2/user/change-password")
-//    Call<ChangePassword> mChangePassword(@Body ChangePasswordRequest request);
-
     @PATCH("api/v2/user/change-password/{requestToken}")
     Call<ChangePassword> mChangePassword(@Body ChangePasswordRequest request, @Path("requestToken") String requestToken);
 

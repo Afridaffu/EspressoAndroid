@@ -1833,7 +1833,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             startActivity(i);
                         } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("buytoken") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add") && !isBuyFCEnabled) {
                             startActivity(new Intent(AddCardActivity.this, BuyTokenPaymentMethodsActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                        } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("signup")) {
+                        } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("signup")) {
                             launchDashboard(getIntent().getStringExtra("screen"));
                         } else {
                             Intent i = new Intent();

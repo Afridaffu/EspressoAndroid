@@ -69,7 +69,6 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
     private Pattern strong, medium;
     private MyApplication myApplication;
     Boolean isPassword = false, isConfirm = false, isPwdEye = false, isCPwdEye = false, isOldPwd = true;
-    //    !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
     private static final String STRONG_PATTERN =
             "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&'()*+,-./:;<=>?@^_`{|}~]).{8,})";
 
@@ -145,7 +144,6 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
             cvSave.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-//            Utils.statusBar(CreatePasswordActivity.this, "#FFFFFF");
 
             passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
             confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
@@ -191,14 +189,12 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
                             }, 100);
                         } else {
                             onBackPressed();
-                            //                        finish();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
-//            Utils.setCustomSelectionActionModeCallback(passwordET);
             passwordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -207,12 +203,6 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CreatePasswordActivity.this);
                         if (passwordET.getText().toString().trim().length() == 0 || !strong.matcher(passwordET.getText().toString().trim()).matches()) {
-//                            passwordET.setHint("Password");
-//                            stregnthViewLL.setVisibility(VISIBLE);
-//                            passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
-//                            passwordTIL.setHint("Password");
-//                            focusedID = passwordET.getId();
                             tvPasswordInfo.setVisibility(VISIBLE);
                             tvPasswordInfo.setTextColor(getResources().getColor(R.color.error_red));
                             passwordErrorLL.setVisibility(GONE);
@@ -221,16 +211,12 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
                         passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
                         passwordTIL.setHint("New Password");
-//                        focusedID = passwordET.getId();
                     } else {
                         layoutIndicator.setVisibility(GONE);
                         if (passwordET.getText().toString().trim().length() == 0) {
                             passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(CreatePasswordActivity.this));
-//                            passwordTIL.setHint("New Password");
                             passwordET.setHint("");
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.light_gray));
-//                            passwordInfoTV.setVisibility(VISIBLE);
-//                            passwordInfoTV.setTextColor(getResources().getColor(R.color.error_red));
                             tvPasswordInfo.setVisibility(GONE);
                             passwordErrorLL.setVisibility(VISIBLE);
                             passwordErrorTV.setText("Field Required");
@@ -261,13 +247,9 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
-//                        if (!Utils.isKeyboardVisible)
-//                            Utils.shwForcedKeypad(CreatePasswordActivity.this);
-//                        confirmPasswordET.setHint("Confirm Password");
                         confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
                         confPasswordTIL.setHint("Confirm Password");
-//                        focusedID = confirmPasswordET.getId();
                         confPassErrorLL.setVisibility(GONE);
                     } else {
                         confirmPasswordET.setHint("");
@@ -291,83 +273,6 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
 
                 }
             });
-
-//            passwordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View view, boolean b) {
-//                    if (b) {
-//                        try {
-//                            passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
-//                            passwordTIL.setHint("New Password");
-//                            passwordET.setHint("Password");
-//                            layoutIndicator.setVisibility(VISIBLE);
-//                            passwordErrorLL.setVisibility(GONE);
-//                            if (passwordET.getText().toString().trim().length() == 0 || !strong.matcher(passwordET.getText().toString().trim()).matches()) {
-//                                tvPasswordInfo.setVisibility(VISIBLE);
-//                            }
-//                        } catch (Resources.NotFoundException e) {
-//                            e.printStackTrace();
-//                        }
-//                    } else {
-//                        passwordET.setHint("");
-//                        layoutIndicator.setVisibility(GONE);
-//
-//                        if (passwordET.getText().toString().trim().length() == 0) {
-//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.light_gray));
-//                            tvPasswordInfo.setVisibility(GONE);
-//                            passwordErrorLL.setVisibility(VISIBLE);
-//                            passwordErrorTV.setText("Field Required");
-//                        } else if (!strong.matcher(passwordET.getText().toString().trim()).matches()) {
-//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-//                        } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-//                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-//                        } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-//                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
-//                            confPasswordTIL.setHint("Password doesn’t match");
-//                        } else {
-//                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-//                        }
-//                    }
-//                }
-//            });
-//
-//            confirmPasswordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View view, boolean b) {
-//                    if (b) {
-//                        confirmPasswordET.setHint("Confirm Password");
-//                        confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                        Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
-//                        confPasswordTIL.setHint("Confirm Password");
-//                        confPassErrorLL.setVisibility(GONE);
-//                    } else {
-//                        confirmPasswordET.setHint("");
-//                        if (confirmPasswordET.getText().toString().trim().length() == 0) {
-//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
-//                            confPassErrorLL.setVisibility(VISIBLE);
-//                            confPassErrorTV.setText("Field Required");
-//                        } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
-//                        } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
-//                            confPasswordTIL.setHint("Password doesn’t match");
-//                        } else {
-//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                            Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
-//                        }
-//                    }
-//
-//                }
-//            });
 
             passwordET.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -417,9 +322,6 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
                             }
                             if (passwordET.getText().toString().length() == 0) {
                                 passwordTIL.setHint("New Password");
-//                                confPasswordTIL.setHint("Confirm Password");
-
-//                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 if (confirmPasswordET.getText().toString().trim().length() == 0) {
                                     Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
                                 } else {
@@ -436,7 +338,6 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
                                 Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
 
                                 if (confirmPasswordET.getText().toString().trim().length() == 0) {
-//                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(CreatePasswordActivity.this));
                                 } else {
                                     confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
                                 }
@@ -448,14 +349,10 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
 
                                 if (confirmPasswordET.getText().toString().trim().length() > 0 && passwordET.getText().toString().trim().length() > 0) {
                                     passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-//                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-
-//                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                     confPasswordTIL.setHint("Password doesn’t match");
                                     confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(CreatePasswordActivity.this));
                                     Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
                                 } else if (confirmPasswordET.getText().toString().trim().length() == 0) {
-//                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                     confPasswordTIL.setHint("Confirm Password");
                                     Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
 
@@ -505,25 +402,16 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
                                 if (strong.matcher(passwordET.getText().toString().trim()).matches()) {
                                     passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
                                     Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-                                } else {
-//                                    passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
-//                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
                                 }
                             } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                                 isConfirm = true;
-
-//                                passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 passwordTIL.setHint("New Password");
-//                                Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-
                                 confPasswordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
                                 confPasswordTIL.setHint("Confirm Password");
                                 Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
 
                             } else {
                                 isConfirm = false;
-//                                confPasswordTIL.setHint("Password doesn’t match");
-
                             }
                             enableOrDisableNext();
                         }
@@ -642,10 +530,6 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
                         dialog = Utils.showProgressDialog(CreatePasswordActivity.this);
                         strNewPwd = passwordET.getText().toString().trim();
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
-//                            ManagePasswordRequest request = new ManagePasswordRequest();
-//                            request.setPassword(passwordET.getText().toString().trim());
-//                            loginViewModel.setExpiryPassword(request);
-
                             // new update - using same API for forgot pass and expiry password.
                             SetPassword setPassword = new SetPassword();
                             setPassword.setCode(strCode);
@@ -722,7 +606,6 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
                 dialog.dismiss();
                 if (changePassword != null) {
                     if (changePassword.getStatus().equals("SUCCESS")) {
-//                        Utils.setStrToken("");
                         myApplication.clearStrToken();
                         startActivity(new Intent(CreatePasswordActivity.this, BindingLayoutActivity.class)
                                 .putExtra("screen", "ChangePassword")
@@ -768,13 +651,11 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
     public void onBackPressed() {
         try {
             if (!isSuccessLayout) {
-                //            super.onBackPressed();
                 if (getIntent().getStringExtra("screen").equals("loginExpiry")) {
                     Intent loginIntent = new Intent(CreatePasswordActivity.this, LoginActivity.class);
                     loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(loginIntent);
                 } else {
-//                    onBackPressed();
                     finish();
                 }
             }
