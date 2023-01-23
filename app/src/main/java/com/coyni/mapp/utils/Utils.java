@@ -3026,4 +3026,5 @@ public class Utils {
         activity.startActivity(new Intent(activity, SignAgreementsActivity.class)
                 .putExtra("REMOVE_MERCHANT", isMerchantRemove));
     }
+
 }

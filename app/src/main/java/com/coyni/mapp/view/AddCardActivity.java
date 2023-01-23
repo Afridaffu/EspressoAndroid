@@ -1635,10 +1635,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-//            WindowManager.LayoutParams lp = window.getAttributes();
-//            lp.dimAmount = 0.7f;
-//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            preAuthDialog.getWindow().setAttributes(lp);
             preAuthDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             preAuthDialog.show();
             layoutPClose = preAuthDialog.findViewById(R.id.layoutPClose);
@@ -1654,7 +1650,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
-            //tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
+//          tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
+            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your bank/card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
             etPreAmount.setShowSoftInputOnFocus(false);
             etPreAmount.setEnabled(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {
@@ -1836,6 +1833,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             startActivity(i);
                         } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("buytoken") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add") && !isBuyFCEnabled) {
                             startActivity(new Intent(AddCardActivity.this, BuyTokenPaymentMethodsActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("signup")) {
+                            launchDashboard(getIntent().getStringExtra("screen"));
                         } else {
                             Intent i = new Intent();
                             setResult(RESULT_OK, i);
@@ -2313,6 +2312,51 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             });
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void launchDashboard(String strScreen) {
+        try {
+            if (objMyApplication.getInitializeResponse() != null && objMyApplication.getInitializeResponse().getData() != null
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+
+                if (objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.SHARED_ACCOUNT) {
+                    if (objMyApplication.getInitializeResponse().getData().getOwnerDetails() != null && !objMyApplication.getInitializeResponse().getData().getOwnerDetails().getTracker().isIsAgreementSigned()) {
+                        showProgressDialog();
+                        callHasToSignAPI(true);
+                    } else {
+                        dashboard(strScreen);
+                    }
+                } else {
+                    if (!objMyApplication.getInitializeResponse().getData().getTracker().isIsAgreementSigned()) {
+                        showProgressDialog();
+                        if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || !objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+                            callHasToSignAPI(true);
+                        else if (objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+                            callHasToSignAPI(false);
+                        }
+                    } else {
+                        dashboard(strScreen);
+                    }
+                }
+
+            } else {
+                dashboard(strScreen);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void dashboard(String strScreen) {
+        if (objMyApplication.checkForDeclinedStatus()) {
+            objMyApplication.setIsLoggedIn(true);
+            objMyApplication.launchDeclinedActivity(this);
+        } else {
+            objMyApplication.setIsLoggedIn(true);
+            objMyApplication.launchDashboard(this, strScreen);
         }
     }
 
