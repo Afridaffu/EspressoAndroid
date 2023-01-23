@@ -231,23 +231,23 @@ FeesActivity extends BaseActivity {
 //                            }
 
                             //  v2.3 changes
-                            if (fees.getData().getTransactionSaleOrderTokenFeeInDollar() != null) {
-                                salesOrderEcomDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInDollar()))));
+                            if (fees.getData().getSaleOrderEcommerceFeeInDollar() != null) {
+                                salesOrderEcomDollTV.setText("$ " + Utils.convertTwoDecimalPoints(fees.getData().getSaleOrderEcommerceFeeInDollar()));
                             } else {
                                 salesOrderEcomDollTV.setText("$ 0.00");
                             }
-                            if (fees.getData().getTransactionSaleOrderTokenFeeInPercent() != null) {
-                                salesOrdeEcomrPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInPercent()) + "%");
+                            if (fees.getData().getSaleOrderEcommerceFeeInPercent() != null) {
+                                salesOrdeEcomrPerTV.setText(Utils.convertTwoDecimalPoints(fees.getData().getSaleOrderEcommerceFeeInPercent()) + "%");
                             } else {
                                 salesOrdeEcomrPerTV.setText("0.00%");
                             }
-                            if (fees.getData().getTransactionSaleOrderTokenFeeInDollar() != null) {
-                                salesOrderRetailDollTV.setText("$ " + Utils.USNumberFormat(Utils.doubleParsing(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInDollar()))));
+                            if (fees.getData().getSaleOrderRetailFeeInDollar() != null) {
+                                salesOrderRetailDollTV.setText("$ " + Utils.convertTwoDecimalPoints(fees.getData().getSaleOrderRetailFeeInDollar()));
                             } else {
                                 salesOrderRetailDollTV.setText("$ 0.00");
                             }
-                            if (fees.getData().getTransactionSaleOrderTokenFeeInPercent() != null) {
-                                salesOrderRetailPerTV.setText(Utils.convertBigDecimalUSDC(fees.getData().getTransactionSaleOrderTokenFeeInPercent()) + "%");
+                            if (fees.getData().getSaleOrderRetailFeeInPercent() != null) {
+                                salesOrderRetailPerTV.setText(Utils.convertTwoDecimalPoints(fees.getData().getSaleOrderRetailFeeInPercent()) + "%");
                             } else {
                                 salesOrderRetailPerTV.setText("0.00%");
                             }

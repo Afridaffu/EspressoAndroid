@@ -153,16 +153,6 @@ public class ConfirmPasswordActivity extends BaseActivity implements OnKeyboardV
                 }
             });
 
-//            currentPassET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//                @Override
-//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                        Utils.hideKeypad(ConfirmPasswordActivity.this);
-//                    }
-//                    return false;
-//                }
-//            });
-
             currentPassET.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
 
                 public boolean onPrepareActionMode(ActionMode mode, Menu menu) {

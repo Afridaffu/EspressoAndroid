@@ -39,6 +39,10 @@ public class FeeData {
     private String transactionRefundFeeInPercent;
     private String disputeChargebackFeeInDollar;
     private String disputeChargebackFeeInPercent;
+    private Double saleOrderEcommerceFeeInDollar;
+    private Double saleOrderEcommerceFeeInPercent;
+    private Double saleOrderRetailFeeInDollar;
+    private Double saleOrderRetailFeeInPercent;
 
     public String getBuyTokenCreditCardFeeInPercent() {
         return buyTokenCreditCardFeeInPercent;
@@ -321,4 +325,37 @@ public class FeeData {
     public void setBuyTokenSignetFeeInPercent(String buyTokenSignetFeeInPercent) {
         this.buyTokenSignetFeeInPercent = buyTokenSignetFeeInPercent;
     }
+
+    public Double getSaleOrderEcommerceFeeInDollar() {
+        return saleOrderEcommerceFeeInDollar;
+    }
+
+    public void setSaleOrderEcommerceFeeInDollar(Double saleOrderEcommerceFeeInDollar) {
+        this.saleOrderEcommerceFeeInDollar = saleOrderEcommerceFeeInDollar;
+    }
+
+    public Double getSaleOrderEcommerceFeeInPercent() {
+        return saleOrderEcommerceFeeInPercent;
+    }
+
+    public void setSaleOrderEcommerceFeeInPercent(Double saleOrderEcommerceFeeInPercent) {
+        this.saleOrderEcommerceFeeInPercent = saleOrderEcommerceFeeInPercent;
+    }
+
+    public Double getSaleOrderRetailFeeInDollar() {
+        return saleOrderRetailFeeInDollar;
+    }
+
+    public void setSaleOrderRetailFeeInDollar(Double saleOrderRetailFeeInDollar) {
+        this.saleOrderRetailFeeInDollar = saleOrderRetailFeeInDollar;
+    }
+
+    public Double getSaleOrderRetailFeeInPercent() {
+        return saleOrderRetailFeeInPercent;
+    }
+
+    public void setSaleOrderRetailFeeInPercent(Double saleOrderRetailFeeInPercent) {
+        this.saleOrderRetailFeeInPercent = saleOrderRetailFeeInPercent;
+    }
+
 }
