@@ -262,6 +262,8 @@ public class Utils {
     public static final String giftcardType = "6";
     public static final String signetType = "7";
     public static final String CogentType = "14";
+    public static final String eComerceStr = "12";
+    public static final String retailMobileStr = "13";
     public static final String payType = "12";
     public static final String businessType = "19";
     public static final String tokenType = "11";

@@ -66,8 +66,8 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             e.printStackTrace();
         }
 
-        if(objData.getTxnTypeDn().equalsIgnoreCase("Paid Order")){
-            holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getReceiveName());
+        if(objData.getTxnTypeDn().equalsIgnoreCase("Sale Order")){
+            holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getTxnSubTypeDn());
         }
 
         holder.walletBal.setText("Balance " + Utils.convertTwoDecimal(objData.getWalletBalance()));
@@ -99,13 +99,13 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             strType = "buy";
         } else if (objData.getTxnTypeDn().toLowerCase().contains("refund")) {
             strType = "refund";
-        } else if (objData.getTxnTypeDn().toLowerCase().contains("paid")) {
-            strType = "paid";
+        } else if (objData.getTxnTypeDn().toLowerCase().contains("sale order")) {
+            strType = "sale order";
         } else {
             strType = objData.getTxnTypeDn().toLowerCase();
         }
 
-        if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid") || strType.equals("monthly service fee")) {
+        if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("sale order") || strType.equals("monthly service fee")) {
             holder.amount.setText("-" + Utils.convertTwoDecimal(objData.getAmount()).replace("CYN", "").trim());
             holder.amount.setTextColor(mContext.getResources().getColor(R.color.black));
         } else {

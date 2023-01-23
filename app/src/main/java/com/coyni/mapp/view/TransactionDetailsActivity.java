@@ -67,6 +67,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     private static final String CANCELLED_WITH = "cancelledWithdrawBank";
     private static final String FAILED_WITH = "failedWithdrawBank";
     private static final String PAID_ORDER_TOKEN = "PaidOrderToken";
+    private static final String SALE_ORDER = "SaleOrder";
     private static final String REFUND_RECEIVED = "RefundReceived";
     private static final String REFUND_SENT = "RefundSent";
     private static final String RESERVE_RELEASE = "ReserveRelease";
@@ -81,6 +82,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     private static final String canceled_bank_withdraw = "canceled bank withdraw";
     private static final String failed_bank_withdraw = "failed bank withdraw";
     private static final String paid_order = "paid order";
+    private static final String sale_order = "sale order";
     private static final String refund = "refund";
     private static final String reserve_release = "reserve release";
     private static final String monthly_service_fee = "monthly service fee";
@@ -96,6 +98,8 @@ public class TransactionDetailsActivity extends BaseActivity {
     private static final String gift_card = "gift card";
     private static final String instant_pay = "instant pay";
     private static final String token = "token";
+    private static final String retail = "retail/mobile";
+    private static final String eCommerce = "eCommerce";
 
     private String message, createdAt;
 
@@ -147,7 +151,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     case failed_bank_withdraw:
                         txnType = Utils.failedWithdraw;
                         break;
-                    case paid_order:
+                    case sale_order:
                         txnType = Utils.paidInvoice;
                         break;
                     case refund:
@@ -193,6 +197,12 @@ public class TransactionDetailsActivity extends BaseActivity {
                         break;
                     case token:
                         txnSubType = Integer.parseInt(Utils.tokenType);
+                        break;
+                    case retail:
+                        txnSubType = Integer.parseInt(Utils.retailMobileStr);
+                        break;
+                    case eCommerce:
+                        txnSubType = Integer.parseInt(Utils.eComerceStr);
                         break;
                     case Utils.transfersub:
                         txnSubType = Utils.transfer;
@@ -287,10 +297,17 @@ public class TransactionDetailsActivity extends BaseActivity {
                         failedWithdraw(transactionDetails.getData());
                     }
                     break;
-                    case paid_order:
-                        if (token.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase()))
-                            ControlMethod(PAID_ORDER_TOKEN);
-                        paidOrderToken(transactionDetails.getData());
+                    case sale_order:
+                        switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
+                            case retail:
+                                ControlMethod(SALE_ORDER);
+                                paidOrderToken(transactionDetails.getData());
+                                break;
+                            case eCommerce:
+                                ControlMethod(SALE_ORDER);
+                                refundtoken(transactionDetails.getData());
+                                break;
+                        }
                         break;
                     case refund:
                         switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
@@ -676,7 +693,7 @@ public class TransactionDetailsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(TransactionDetailsActivity.this, TransactionDetailsActivity.class)
-                        .putExtra(Utils.txnType, paid_order)
+                        .putExtra(Utils.txnType, sale_order)
                         .putExtra(Utils.txnSubType, token)
                         .putExtra(Utils.gbxTxnIdType, paidOrderId));
             }
@@ -2475,7 +2492,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.MTDservicefee).setVisibility(View.GONE);
                 }
                 break;
-                case PAID_ORDER_TOKEN:
+                case SALE_ORDER:
                 case REFUND_RECEIVED: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
