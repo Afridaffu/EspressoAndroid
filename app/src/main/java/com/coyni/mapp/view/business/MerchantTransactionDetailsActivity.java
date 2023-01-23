@@ -92,6 +92,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             }
             if (txnSubTypeStr != null) {
                 switch (txnSubTypeStr.toLowerCase()) {
+                    case Utils.tokensub:
+                        txnSubType = Utils.token;
+                        break;
                     case Utils.transfersub:
                         txnSubType = Utils.transfer;
                         break;
