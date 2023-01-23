@@ -545,7 +545,8 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void fetchTransactions() {
-        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
+        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified() ||
+                objMyApplication.getTrackerResponse().getData().isProfileVerified()) {
             LatestTransactionsRequest request = new LatestTransactionsRequest();
             request.setTransactionType(getDefaultTransactionTypes());
             dashboardViewModel.getLatestTxns(request);
@@ -602,7 +603,7 @@ public class DashboardActivity extends BaseActivity {
                 if (trackerResponse != null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
                     objMyApplication.setTrackerResponse(trackerResponse);
 
-                    if (trackerResponse.getData().isPersonIdentified()) {
+                    if (trackerResponse.getData().isPersonIdentified() || trackerResponse.getData().isProfileVerified()) {
                         cvHeaderRL.setVisibility(View.VISIBLE);
                         cvSmallHeaderRL.setVisibility(View.GONE);
                         getStartedCV.setVisibility(View.GONE);
