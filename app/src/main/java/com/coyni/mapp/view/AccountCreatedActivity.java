@@ -98,5 +98,4 @@ public class AccountCreatedActivity extends BaseActivity {
         }
     }
 
-
 }
