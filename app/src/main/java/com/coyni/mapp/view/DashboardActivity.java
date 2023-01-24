@@ -112,7 +112,6 @@ public class DashboardActivity extends BaseActivity {
             initObserver();
 
             if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
-//                showProgressDialog("connecting...");
                 showProgressDialog();
             }
             firebaseToken();
@@ -352,8 +351,7 @@ public class DashboardActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, AddCardActivity.class)
-                            .putExtra("card", "None")
+                    startActivity(new Intent(DashboardActivity.this, EditAddressActivity.class)
                             .putExtra("screen", "add_address"));
                 }
             });
