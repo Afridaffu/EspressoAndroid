@@ -66,9 +66,12 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             e.printStackTrace();
         }
 
-        if(objData.getTxnTypeDn().equalsIgnoreCase("Sale Order")){
+        if(objData.getUserType().equalsIgnoreCase(Utils.BUSINESS) && objData.getTxnTypeDn().equalsIgnoreCase("Sale Order")){
+            holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getReceiveName());
+        }else if(objData.getTxnTypeDn().equalsIgnoreCase("Sale Order")){
             holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getTxnSubTypeDn());
         }
+
 
         holder.walletBal.setText("Balance " + Utils.convertTwoDecimal(objData.getWalletBalance()));
 

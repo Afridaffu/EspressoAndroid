@@ -383,9 +383,9 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 if (b) {
                     transactionSubType.add(Utils.eComerce);
                 } else {
-                    for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.eComerce) {
-                            transactionType.remove(i);
+                    for (int i = 0; i < transactionSubType.size(); i++) {
+                        if (transactionSubType.get(i) == Utils.eComerce) {
+                            transactionSubType.remove(i);
                             break;
                         }
                     }
@@ -400,9 +400,9 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 if (b) {
                     transactionSubType.add(Utils.retailMobile);
                 } else {
-                    for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.retailMobile) {
-                            transactionType.remove(i);
+                    for (int i = 0; i < transactionSubType.size(); i++) {
+                        if (transactionSubType.get(i) == Utils.retailMobile) {
+                            transactionSubType.remove(i);
                             break;
                         }
                     }
