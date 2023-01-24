@@ -12,6 +12,7 @@ public class PreAuthRequest {
     private String addressLine2;
     private String cardNumber;
     private String fromTxnScreen;
+    private Boolean isSaveAsAccountAddress;
 
     public String getAmount() {
         return amount;
@@ -99,6 +100,14 @@ public class PreAuthRequest {
 
     public void setFromTxnScreen(String fromTxnScreen) {
         this.fromTxnScreen = fromTxnScreen;
+    }
+
+    public Boolean getSaveAsAccountAddress() {
+        return isSaveAsAccountAddress;
+    }
+
+    public void setSaveAsAccountAddress(Boolean saveAsAccountAddress) {
+        isSaveAsAccountAddress = saveAsAccountAddress;
     }
 }
 

@@ -18,7 +18,7 @@
         android:layout_marginTop="@dimen/_45sdp"
         android:layout_marginEnd="@dimen/_21sdp"
         android:fitsSystemWindows="true"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/topLL"
@@ -51,6 +51,17 @@
                 android:text="Edit Address"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_16ssp" />
+
+            <TextView
+                android:id="@+id/tvAddMsg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Please enter your residential address."
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp"
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -149,10 +160,10 @@
                         android:id="@+id/addressLineTwoET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="100"
                         android:maxLines="1"
@@ -214,10 +225,10 @@
                         android:id="@+id/cityET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="50"
                         android:maxLines="1"
@@ -448,6 +459,7 @@
                     app:cardCornerRadius="@dimen/_21sdp">
 
                     <TextView
+                        android:id="@+id/tvButtonText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -470,7 +482,7 @@
         android:background="#F2F4F5"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
 
         <LinearLayout
@@ -614,9 +626,9 @@
                         android:id="@+id/b_cityET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
-                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLength="50"
@@ -736,12 +748,12 @@
                         android:id="@+id/b_zipcodeET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="0123456789"
                         android:autofillHints="AUTOFILL_HINT_SMS_OTP"
+                        android:digits="0123456789"
                         android:fontFamily="@font/opensans_semibold"
+                        android:hint="@string/zip"
                         android:imeOptions="actionDone"
                         android:importantForAutofill="no"
-                        android:hint="@string/zip"
                         android:inputType="number|textNoSuggestions"
                         android:maxLength="5"
                         android:maxLines="1"

@@ -215,7 +215,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     public void onBackPressed() {
         try {
             if (pagerPosition == 1) {
-                if (getIntent().getStringExtra("screen").equalsIgnoreCase("add_address")) {
+                if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("add_address")) {
                     super.onBackPressed();
                 } else {
                     viewPager.setCurrentItem(0);
@@ -285,20 +285,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             addCardTV = findViewById(R.id.addCardTV);
             etName.requestFocus();
             etCardNumber.setFrom("ADD_CARD");
-//            etName.setHint("Name on Card");
-//            try {
-//                MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
-//                mRecognizer = new BlinkCardRecognizer();
-//                mRecognizer.setExtractCvv(false);
-//                mRecognizer.setExtractIban(false);
-//                // bundle recognizers into RecognizerBundle
-//                mRecognizerBundle = new RecognizerBundle(mRecognizer);
-//            } catch (Exception ex) {
-//                if (ex.toString().toLowerCase().contains("invalidlicencekeyexception")) {
-//                    isLicense = true;
-//                }
-//                ex.printStackTrace();
-//            }
             etAddress1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etAddress2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
@@ -307,8 +293,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-            //paymentMethodsViewModel.getPublicKey(objMyApplication.getLoginUserId());
-            //objMyApplication.getStates();
             if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
                 tvCardHead.setText("Add New Debit Card");
             } else if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("credit")) {
@@ -1773,6 +1757,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             } else {
                 request.setFromTxnScreen("");
             }
+            request.setSaveAsAccountAddress(isSaveAddress);
             paymentMethodsViewModel.preAuthVerify(request);
         } catch (Exception ex) {
             preDialog.dismiss();
@@ -2273,47 +2258,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
         }
     }
 
-    private void displayAddAddressSuccess() {
-        try {
-            CardView cvDone;
-            TextView header, subHeader;
-            preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
-            preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            preDialog.setContentView(R.layout.activity_all_done_card);
-            Window window = preDialog.getWindow();
-            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            window.setGravity(Gravity.CENTER);
-            window.setBackgroundDrawableResource(android.R.color.transparent);
-
-            preDialog.setCancelable(false);
-            preDialog.show();
-            cvDone = preDialog.findViewById(R.id.cvDone);
-            header = preDialog.findViewById(R.id.tvHead);
-            subHeader = preDialog.findViewById(R.id.subHeaderTV);
-            header.setText("Address Added");
-            subHeader.setText("Your address has been added and your account is now fully verified!");
-            preDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            cvDone.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
-
-            preDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                @Override
-                public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
-                    if (i == KeyEvent.KEYCODE_BACK) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
     private void launchDashboard(String strScreen) {
         try {
