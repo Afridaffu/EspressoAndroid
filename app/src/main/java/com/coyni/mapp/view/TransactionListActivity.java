@@ -510,7 +510,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                             transTypeBT.setChecked(true);
                             break;
 
-                        case Utils.saleOrder:
+                        case Utils.paidInvoice:
                             transTypeSO.setChecked(true);
                             break;
 
@@ -792,10 +792,10 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    tempTransactionType.add(Utils.saleOrder);
+                    tempTransactionType.add(Utils.paidInvoice);
                 } else {
                     for (int i = 0; i < tempTransactionType.size(); i++) {
-                        if (tempTransactionType.get(i) == Utils.saleOrder) {
+                        if (tempTransactionType.get(i) == Utils.paidInvoice) {
                             tempTransactionType.remove(i);
                             break;
                         }
@@ -1662,7 +1662,6 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
         transactionType.add(Utils.refund);
         transactionType.add(Utils.paidInvoice);
         transactionType.add(Utils.businessPayout);
-        transactionType.add(Utils.saleOrder);
         return transactionType;
     }
 
