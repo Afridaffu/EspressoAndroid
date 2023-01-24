@@ -235,10 +235,6 @@ public class CustomerProfileActivity extends BaseActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-//                Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
-//                        .putExtra("TYPE", "ENTER")
-//                        .putExtra("screen", "ChangePassword");
-//                startActivity(i);
 
                 if ((isFaceLock || isTouchId) && Utils.checkAuthentication(CustomerProfileActivity.this)) {
                     if (isBiometric && ((isTouchId && Utils.isFingerPrint(CustomerProfileActivity.this)) || (isFaceLock))) {
