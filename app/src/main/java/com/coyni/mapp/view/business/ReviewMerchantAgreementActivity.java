@@ -74,7 +74,7 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
         initfields();
         initObservers();
         showProgressDialog();
-        dashboardViewModel.getDocumentUrl(Utils.mAgmt);
+        dashboardViewModel.getDocumentUrl(Utils.mAD);
     }
 
     private void initfields() {
@@ -228,7 +228,7 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
             File file = new File(filePath);
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("identityFile", file.getName(), requestFile);
-            businessDashboardViewModel.signedAgreement(body, Utils.mAgmt);
+            businessDashboardViewModel.signedAgreement(body, Utils.mAD);
         } else {
             dismissDialog();
             LogUtils.v(TAG, "File path is null");

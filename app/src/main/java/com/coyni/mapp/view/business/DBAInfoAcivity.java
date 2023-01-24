@@ -1751,7 +1751,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         isDBAFiling = true;
                     } else {
                         dbaFillingLL.setVisibility(VISIBLE);
-                        isDBAFiling = true;
+                        isDBAFiling = false;
                     }
 
                     if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Utils.doubleParsing(cir.getMonthlyProcessingVolume()) > 0) {

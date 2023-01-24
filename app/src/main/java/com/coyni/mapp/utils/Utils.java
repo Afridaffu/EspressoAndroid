@@ -485,6 +485,7 @@ public class Utils {
     public static final int mPP = 1;
     public static final int mTOS = 0;
     public static final int mAgmt = 2;
+    public static final int mAD = 4; //Application Disclosure
     public static final int ACTIVE_AGREEMENT = 0;
     public static final int SCHEDULED_AGREEMENT = 3;
 
@@ -523,6 +524,7 @@ public class Utils {
     public static final String allControlsEnable = "token account.all controls";
 
     public static final String SCREEN = "screen";
+    public static final String REF_ID = "REF_ID";
     public static final String AGREEMENT_TYPE = "AGREE_TYPE";
     public static final String ACT_TYPE = "ACT_TYPE";
     public static final String DOC_URL = "DOC_URL";

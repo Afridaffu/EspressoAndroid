@@ -829,6 +829,9 @@ public interface ApiService {
     @POST("api/v2/profile/update-sign-agreement")
     Call<UpdateSignAgreementsResp> signUpdatedAgreement(@Body UpdateSignRequest updateSignRequest);
 
+    @POST("api/v2/user/signedagreements/update")
+    Call<UpdateSignAgreementsResp> trackerSignAgreement(@Body UpdateSignRequest updateSignRequest);
+
     @Multipart
     @POST("api/v2/profile/update-agreement/{agreementId}")
     Call<UpdateSignAgreementsResp> signUpdatedAgreementDoc(@Path("agreementId") Integer agreementId, @Part MultipartBody.Part filee);

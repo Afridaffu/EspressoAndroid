@@ -38,7 +38,7 @@ public class MerchantTrackerAgreementsActivity extends BaseActivity {
     private int agreementType = -1;
     private DashboardViewModel dashboardViewModel;
     private BusinessDashboardViewModel businessDashboardViewModel;
-    private String ppDate = "", tosDate = "";
+    private String ppDate = "", tosDate = "", tosID = "", ppID = "";
     private MyApplication myApplication;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -95,6 +95,8 @@ public class MerchantTrackerAgreementsActivity extends BaseActivity {
         intent.putExtra(Utils.AGREEMENT_TYPE, agreementType);
         intent.putExtra(Utils.ACT_TYPE, Utils.single);
         intent.putExtra(Utils.SCREEN, "Tracker");
+        if (agreementType == Utils.mPP) intent.putExtra(Utils.REF_ID, ppID);
+        else intent.putExtra(Utils.REF_ID, tosID);
         agreementVerifiedLauncher.launch(intent);
     }
 
@@ -120,14 +122,16 @@ public class MerchantTrackerAgreementsActivity extends BaseActivity {
                                 Item item = agreements.getData().getItems().get(i);
                                 if (item.getSignatureType() == Utils.mTOS) {
                                     tosDate = item.getSignedOn();
-                                    if (!Objects.equals(item.getSignature(), "")) {
+                                    tosID = item.getRefId();
+                                    if (item.getSignature() != null && !item.getSignature().equals("")) {
                                         isTOS = true;
                                         binding.ivCheckTOS.setVisibility(View.VISIBLE);
                                         binding.tvStatusTOS.setText("Agreed On: " + myApplication.convertZoneDateTime(tosDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy") + ".");
                                     }
                                 } else if (item.getSignatureType() == Utils.mPP) {
                                     ppDate = item.getSignedOn();
-                                    if (!Objects.equals(item.getSignature(), "")) {
+                                    ppID = item.getRefId();
+                                    if (item.getSignature() != null && !item.getSignature().equals("")) {
                                         isPP = true;
                                         binding.ivCheckPP.setVisibility(View.VISIBLE);
                                         binding.tvStatusPP.setText("Agreed On: " + myApplication.convertZoneDateTime(ppDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy") + ".");

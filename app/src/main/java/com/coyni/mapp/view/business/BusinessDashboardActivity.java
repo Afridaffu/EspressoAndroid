@@ -668,7 +668,8 @@ public class BusinessDashboardActivity extends BaseActivity {
         if (isTabsEnabled && selectedTab == Tabs.ACCOUNT) {
             pushFragment(new BusinessAccountFragment());
         } else {
-            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                    || accountStatus.equalsIgnoreCase("Application")) {
                 pushFragment(new GetStartedFragment());
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                 pushFragment(new UnderReviewFragment());
