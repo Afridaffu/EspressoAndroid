@@ -669,7 +669,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             pushFragment(new BusinessAccountFragment());
         } else {
             if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
-                    || accountStatus.equalsIgnoreCase("Application")) {
+                    || accountStatus.equalsIgnoreCase("Application")) { //Remove after status changed
                 pushFragment(new GetStartedFragment());
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                 pushFragment(new UnderReviewFragment());

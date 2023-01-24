@@ -535,6 +535,11 @@ public class Utils {
 
     public static final long centuryTimeInMillis = 3155760000000L;
 
+    public static final int eCommerce_DBA_Filling = 9;
+    public static final int retail_DBA_Filling = 8;
+    public static final int BUSINESS_LICENSE = 12;
+
+
     public static String getStrLang() {
         return strLang;
     }

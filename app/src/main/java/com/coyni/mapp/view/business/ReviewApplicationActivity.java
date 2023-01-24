@@ -124,7 +124,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     Long mLastClickTime = 0L;
     private String selectedAgreement = "";
     private String Cstate = "";
-    private String Dstate = "";
+    private String Dstate = "", applicationDisclosureRefID = "";
     private int bankMaxAllowedCount = 0;
     public static ReviewApplicationActivity reviewApplicationActivity;
 
@@ -287,7 +287,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //                if (isAgree) {
 //                    showProgressDialog();
 //                    applicationSubmissionViewModel.postApplicationData();
-                startActivity(new Intent(ReviewApplicationActivity.this, ReviewMerchantAgreementActivity.class));
+                startActivity(new Intent(ReviewApplicationActivity.this, ReviewMerchantAgreementActivity.class)
+                        .putExtra(Utils.REF_ID, applicationDisclosureRefID));
 
 //                }
             }
@@ -620,14 +621,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     mTimeZoneTx.setText(R.string.SST);
                                 }
                             }
-                            if (dbaInfo.getIdentificationType() == 8) {
+                            if (dbaInfo.getIdentificationType() == Utils.retail_DBA_Filling) {
                                 mWebsiteHeadTX.setText("Website (Optional)");
 //                                if (dbaInfo.getWebsite() == null || dbaInfo.getWebsite().equals("")) {
                                 httpHeader.setVisibility(GONE);
 //                                } else {
 //                                    websiteLL.setVisibility(VISIBLE);
 //                                }
-                            } else if (dbaInfo.getIdentificationType() == 9) {
+                            } else if (dbaInfo.getIdentificationType() == Utils.eCommerce_DBA_Filling) {
                                 mWebsiteHeadTX.setText("Website");
                                 httpHeader.setVisibility(View.VISIBLE);
 //                                websiteLL.setVisibility(VISIBLE);
@@ -703,7 +704,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
                             if (dbaInfo.getRequiredDocuments().size() > 0) {
                                 for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
-                                    if (dbaInfo.getRequiredDocuments().get(i).getIdentityId() == 8) {
+                                    if (dbaInfo.getRequiredDocuments().get(i).getIdentityId() == Utils.retail_DBA_Filling
+                                            || dbaInfo.getRequiredDocuments().get(i).getIdentityId() == Utils.eCommerce_DBA_Filling) {
                                         llDBADocuments.setVisibility(View.VISIBLE);
                                         mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
                                         llDBADocuments.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
@@ -713,7 +715,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                                 showFile((String) v.getTag());
                                             }
                                         });
-                                    } else if (dbaInfo.getRequiredDocuments().get(i).getIdentityId() == 12) {
+                                    } else if (dbaInfo.getRequiredDocuments().get(i).getIdentityId() == Utils.BUSINESS_LICENSE) {
                                         lisenceDocumentsLL.setVisibility(View.VISIBLE);
                                         tv_filling_date.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
                                         lisenceDocumentsLL.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
@@ -818,6 +820,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                             break;
                                         case Utils.mAgmt:
                                             mMerchantsVno.setText(doc.substring(0, 1).toLowerCase() + doc.substring(1).trim());
+                                            break;
+                                        case Utils.mAD:
+                                            applicationDisclosureRefID = String.valueOf(agreements1.getItems().get(i).getRefId());
                                             break;
                                     }
 //                                    if (agreements1.getItems().get(i).getSignatureType() == Utils.mPP) {

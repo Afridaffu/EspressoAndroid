@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -34,9 +35,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.coyni.mapp.R;
 import com.coyni.mapp.model.Agreements;
+import com.coyni.mapp.model.AgreementsPdf;
 import com.coyni.mapp.model.UpdateSignAgree.UpdateSignAgreementsResponse;
+import com.coyni.mapp.model.featurecontrols.FeatureControlGlobalResp;
 import com.coyni.mapp.model.profile.DownloadDocumentData;
 import com.coyni.mapp.model.profile.DownloadDocumentResponse;
+import com.coyni.mapp.model.signedagreements.SignedAgreementResponse;
 import com.coyni.mapp.utils.DisplayImageUtility;
 import com.coyni.mapp.utils.JavaScriptInterface;
 import com.coyni.mapp.utils.LogUtils;
@@ -46,6 +50,7 @@ import com.coyni.mapp.viewmodel.BusinessDashboardViewModel;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 
 import java.io.File;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -56,12 +61,12 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
     DashboardViewModel dashboardViewModel;
     private String filePath = null;
     private boolean isSignatureCaptured = false;
-    private JavaScriptInterface jsInterface;
-    private String myUrl = "", signatureKey = "";
+    //    private JavaScriptInterface jsInterface;
+//    private String myUrl = "", signatureKey = "";
     boolean isBottom = false, isChecked = false, isDone = false;
-    private WebView webView;
+    //    private WebView webView;
     private CardView AgreeDoneCv;
-    private TextView signatureTv, savedtextTV;
+    private TextView signatureTv, savedtextTV, disclosureContentTV;
     private ImageView signatureEditIV;
     private CheckBox agreeCB;
     private LinearLayout signatureEditLL, closeLL, llCheckBox;
@@ -73,15 +78,16 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
         setContentView(R.layout.activity_review_merchant_agreement);
         initfields();
         initObservers();
-        showProgressDialog();
-        dashboardViewModel.getDocumentUrl(Utils.mAD);
+//        showProgressDialog();
+//        dashboardViewModel.getDocumentUrl(Utils.mAD);
     }
 
     private void initfields() {
-        webView = findViewById(R.id.webView);
+//        webView = findViewById(R.id.webView);
         AgreeDoneCv = findViewById(R.id.AgreeDoneCv);
         signatureTv = findViewById(R.id.signatureTv);
         savedtextTV = findViewById(R.id.savedtextTV);
+        disclosureContentTV = findViewById(R.id.disclosureContentTV);
         signatureEditIV = findViewById(R.id.signatureEditIV);
         agreeCB = findViewById(R.id.agreeCB);
         signatureEditLL = findViewById(R.id.signatureEditLL);
@@ -89,49 +95,50 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
         llCheckBox = findViewById(R.id.llCheckBox);
         viewColorV = findViewById(R.id.viewColorV);
 
-        jsInterface = new JavaScriptInterface(this);
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webView.addJavascriptInterface(jsInterface, "JSInterface");
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setLoadWithOverviewMode(true);
-        webSettings.setUseWideViewPort(true);
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);
-        webSettings.setSupportZoom(true);
-        webSettings.setDefaultTextEncodingName("utf-8");
+//        jsInterface = new JavaScriptInterface(this);
+//        WebSettings webSettings = webView.getSettings();
+//        webSettings.setJavaScriptEnabled(true);
+//        webView.addJavascriptInterface(jsInterface, "JSInterface");
+//        webSettings.setDomStorageEnabled(true);
+//        webSettings.setLoadWithOverviewMode(true);
+//        webSettings.setUseWideViewPort(true);
+//        webSettings.setBuiltInZoomControls(true);
+//        webSettings.setDisplayZoomControls(false);
+//        webSettings.setSupportZoom(true);
+//        webSettings.setDefaultTextEncodingName("utf-8");
 
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public boolean onJsAlert(WebView view, final String url, String message, JsResult result) {
-                Log.e("Bottom page", result.toString());
-                result.cancel();
-                try {
-                    if(!isBottom) {
-                        isBottom = true;
-                        signatureTv.setTextColor(getColor(R.color.black));
-                        viewColorV.setBackgroundColor(getColor(R.color.light_gray));
-                        signatureEditIV.setImageResource(R.drawable.ic_sign);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return true;
-            }
-        });
+//        webView.setWebChromeClient(new WebChromeClient() {
+//            @Override
+//            public boolean onJsAlert(WebView view, final String url, String message, JsResult result) {
+//                Log.e("Bottom page", result.toString());
+//                result.cancel();
+//                try {
+//                    if (!isBottom) {
+//                        isBottom = true;
+//                        signatureTv.setTextColor(getColor(R.color.black));
+//                        viewColorV.setBackgroundColor(getColor(R.color.light_gray));
+//                        signatureEditIV.setImageResource(R.drawable.ic_sign);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                return true;
+//            }
+//        });
 
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                dismissDialog();
-                webView.loadUrl("javascript:showPDF('" + Uri.encode(myUrl) + "')");
-
-            }
-        });
+//        webView.setWebViewClient(new WebViewClient() {
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                dismissDialog();
+//                webView.loadUrl("javascript:showPDF('" + Uri.encode(myUrl) + "')");
+//
+//            }
+//        });
 
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
+        businessDashboardViewModel.getApplicationDisclosure(getIntent().getStringExtra(Utils.REF_ID));
 
         closeLL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,13 +150,16 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
         AgreeDoneCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog();
+                if (isDone) {
+                    showProgressDialog();
+                    sendSignatureRequest();
+                }
 //                SignSubmitRequest request = new SignSubmitRequest();
 //                request.setDocumentType(Utils.mAgmt);
 //                request.setSignature(signatureKey);
 //                businessDashboardViewModel.signSubmitApplication(request);
-                Intent i = new Intent(ReviewMerchantAgreementActivity.this, BusinessDashboardActivity.class);
-                startActivity(i);
+//                Intent i = new Intent(ReviewMerchantAgreementActivity.this, BusinessDashboardActivity.class);
+//                startActivity(i);
 //                sendSignatureRequest();
 
             }
@@ -159,7 +169,7 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
         signatureEditLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isSignatureCaptured && isBottom) {
+                if (!isSignatureCaptured) {
                     launchSignature();
                 }
             }
@@ -196,13 +206,11 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
         activityResultLauncher.launch(inSignature);
     }
 
-    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    getSignature(result.getData());
-                }
-            });
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            getSignature(result.getData());
+        }
+    });
 
     private void getSignature(Intent data) {
         if (data != null) {
@@ -220,6 +228,7 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
 //                showProgressDialog();
 //                sendSignatureRequest();
             }
+            enableOrDisableNext();
         }
     }
 
@@ -248,23 +257,48 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
 
     private void initObservers() {
 
+        businessDashboardViewModel.getSignedAgreementResponseMutableLiveData().observe(this, new Observer<SignedAgreementResponse>() {
+            @Override
+            public void onChanged(SignedAgreementResponse signedAgreementResponse) {
+                try {
+                    deleteTemporarySignatureFile();
+                    dismissDialog();
+                    if (signedAgreementResponse != null) {
+                        if (signedAgreementResponse.getStatus() != null && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
+                            Intent i = new Intent(ReviewMerchantAgreementActivity.this, BusinessDashboardActivity.class);
+                            startActivity(i);
+                        } else {
+                            String errorMessage = getString(R.string.something_went_wrong);
+                            if (signedAgreementResponse.getError() != null && signedAgreementResponse.getError().getErrorDescription() != null) {
+                                errorMessage = signedAgreementResponse.getError().getErrorDescription();
+                            }
+                            Utils.displayAlert(errorMessage, ReviewMerchantAgreementActivity.this, "", signedAgreementResponse.getError().getFieldErrors().get(0));
+                        }
+                    } else {
+                        LogUtils.v(TAG, "signedAgreementResponse is null");
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         businessDashboardViewModel.getUpdateSignAgreementsResponseMutableLiveData().observe(this, new Observer<UpdateSignAgreementsResponse>() {
             @Override
             public void onChanged(UpdateSignAgreementsResponse updateSignAgreementsResponse) {
                 try {
                     dismissDialog();
                     if (updateSignAgreementsResponse != null) {
-                        if (updateSignAgreementsResponse.getStatus() != null
-                                && updateSignAgreementsResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                            finish();
+                        if (updateSignAgreementsResponse.getStatus() != null && updateSignAgreementsResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                            Intent i = new Intent(ReviewMerchantAgreementActivity.this, BusinessDashboardActivity.class);
+                            startActivity(i);
                         } else {
                             String errorMessage = getString(R.string.something_went_wrong);
-                            if (updateSignAgreementsResponse.getError() != null
-                                    && updateSignAgreementsResponse.getError().getErrorDescription() != null) {
+                            if (updateSignAgreementsResponse.getError() != null && updateSignAgreementsResponse.getError().getErrorDescription() != null) {
                                 errorMessage = updateSignAgreementsResponse.getError().getErrorDescription();
                             }
-                            Utils.displayAlert(errorMessage,
-                                    ReviewMerchantAgreementActivity.this, "", updateSignAgreementsResponse.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(errorMessage, ReviewMerchantAgreementActivity.this, "", updateSignAgreementsResponse.getError().getFieldErrors().get(0));
 
                         }
                     } else {
@@ -277,15 +311,24 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
             }
         });
 
+        businessDashboardViewModel.getApplicationDisclosureRespMutableLiveData().observe(this, new Observer<AgreementsPdf>() {
+            @Override
+            public void onChanged(AgreementsPdf agreementsPdf) {
+                try {
+                    disclosureContentTV.setText(Html.fromHtml(agreementsPdf.getData().getAgreementFileRefPath()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         dashboardViewModel.getAgreementsMutableLiveData().observe(this, new Observer<Agreements>() {
             @Override
             public void onChanged(Agreements agreements) {
                 LogUtils.v(TAG, agreements + "");
                 if (agreements.getStatus() != null && agreements.getStatus().equalsIgnoreCase("Success")) {
                     for (int i = 0; i < agreements.getData().getItems().size(); i++) {
-                        if (agreements.getData().getItems().get(i).getSignatureType() == 5
-                                && agreements.getData().getItems().get(i).getSignature() != null
-                                && android.util.Patterns.WEB_URL.matcher(agreements.getData().getItems().get(i).getSignature()).matches()) {
+                        if (agreements.getData().getItems().get(i).getSignatureType() == 5 && agreements.getData().getItems().get(i).getSignature() != null && android.util.Patterns.WEB_URL.matcher(agreements.getData().getItems().get(i).getSignature()).matches()) {
                             DisplayImageUtility utility = DisplayImageUtility.getInstance(ReviewMerchantAgreementActivity.this);
                             utility.addImage(agreements.getData().getItems().get(i).getSignature(), signatureEditIV, R.drawable.ic_sign);
                             AgreeDoneCv.setVisibility(View.VISIBLE);
@@ -308,7 +351,7 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
                         DownloadDocumentData data = downloadDocumentResponse.getData();
                         if (data != null) {
                             if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
-                                launchDocumentUrl(data.getDownloadUrl());
+//                                launchDocumentUrl(data.getDownloadUrl());
                             } else {
                                 Utils.displayAlert(getString(R.string.unable_to_get_document), ReviewMerchantAgreementActivity.this, "", "");
                             }
@@ -322,16 +365,16 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
 
     }
 
-    private void launchDocumentUrl(String url) {
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        Uri uri = Uri.parse(url);
-//        intent.setDataAndType(uri, "application/pdf");
-//        startActivity(intent);
-        myUrl = url;
-//        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + urlNew);
-        webView.loadUrl("file:///android_asset/pdfViewerScript.html");
-
-    }
+//    private void launchDocumentUrl(String url) {
+////        Intent intent = new Intent(Intent.ACTION_VIEW);
+////        Uri uri = Uri.parse(url);
+////        intent.setDataAndType(uri, "application/pdf");
+////        startActivity(intent);
+//        myUrl = url;
+////        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + urlNew);
+//        webView.loadUrl("file:///android_asset/pdfViewerScript.html");
+//
+//    }
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
@@ -342,7 +385,7 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        webView.loadUrl("file:///android_asset/pdfViewerScript.html");
+//        webView.loadUrl("file:///android_asset/pdfViewerScript.html");
     }
 
     public void toastTimer(Dialog dialog) {
@@ -417,6 +460,5 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
         toastTimer(dialog);
 
     }
-
 }
 

@@ -421,7 +421,7 @@ public interface ApiService {
                                                     @Part("identityNumber") RequestBody number);
 
     @Multipart
-    @POST("api/v2/business/sign-agreement")
+    @POST("api/v2/business/image-submit")
     Call<SignedAgreementResponse> signedAgreement(@Part MultipartBody.Part file,
                                                   @Part("agreementType") int agreementType);
 
@@ -841,5 +841,15 @@ public interface ApiService {
 
     @GET("api/v2/profile/fetch-address")
     Call<FetchAddressResp> fetchAddress();
+
+    @GET("api/v2/agreements/{agreementId}")
+    Call<AgreementsPdf> getApplicationDisclosure(@Path("agreementId") String agreementId);
+
+    @Multipart
+    @POST("api/v2/business/image-submit")
+    Call<IdentityImageResponse> submitApplication(@Part MultipartBody.Part filee,
+                                                  @Part("agreementType") RequestBody type);
+
+
 }
 

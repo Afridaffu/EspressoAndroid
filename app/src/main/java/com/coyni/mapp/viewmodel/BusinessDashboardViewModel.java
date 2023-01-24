@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.coyni.mapp.model.AgreementsPdf;
 import com.coyni.mapp.model.BatchNow.BatchNowPaymentRequest;
 import com.coyni.mapp.model.BatchNow.BatchNowRequest;
 import com.coyni.mapp.model.BatchNow.BatchNowResponse;
@@ -26,6 +27,7 @@ import com.coyni.mapp.model.businesswallet.BusinessWalletResponse;
 import com.coyni.mapp.model.businesswallet.WalletRequest;
 import com.coyni.mapp.model.cogent.CogentRequest;
 import com.coyni.mapp.model.cogent.CogentResponse;
+import com.coyni.mapp.model.featurecontrols.FeatureControlGlobalResp;
 import com.coyni.mapp.model.fee.Fees;
 import com.coyni.mapp.model.merchant_activity.MerchantActivityRequest;
 import com.coyni.mapp.model.merchant_activity.MerchantActivityResp;
@@ -71,9 +73,14 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<BatchNowResponse> batchNowSlideResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BusinessActivityResp> businessActivityRespMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<MerchantActivityResp> merchantActivityRespMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<AgreementsPdf> applicationDisclosureRespMutableLiveData = new MutableLiveData<>();
 
     public BusinessDashboardViewModel(@NonNull Application application) {
         super(application);
+    }
+
+    public MutableLiveData<AgreementsPdf> getApplicationDisclosureRespMutableLiveData() {
+        return applicationDisclosureRespMutableLiveData;
     }
 
     public MutableLiveData<MerchantActivityResp> getMerchantActivityRespMutableLiveData() {
@@ -921,6 +928,45 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                 @Override
                 public void onFailure(Call<MerchantActivityResp> call, Throwable t) {
                     merchantActivityRespMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getApplicationDisclosure(String agreementId) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<AgreementsPdf> call = apiService.getApplicationDisclosure(agreementId);
+            call.enqueue(new Callback<AgreementsPdf>() {
+                @Override
+                public void onResponse(Call<AgreementsPdf> call, Response<AgreementsPdf> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            AgreementsPdf list = response.body();
+                            applicationDisclosureRespMutableLiveData.setValue(list);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<AgreementsPdf>() {
+                            }.getType();
+                            AgreementsPdf errorResponse = null;
+                            try {
+                                errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            applicationDisclosureRespMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AgreementsPdf> call, Throwable t) {
+                    applicationDisclosureRespMutableLiveData.setValue(null);
                 }
             });
 

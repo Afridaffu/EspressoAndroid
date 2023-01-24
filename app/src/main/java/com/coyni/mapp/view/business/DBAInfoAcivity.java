@@ -109,8 +109,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public TextView dbanameTV, dbaemailTV, customernumTV, dbaFillinguploadTV, licenseUpdatedOnTV, dbaFillingUpdatedOnTV, licesnseUploadTV;
     public CardView dbaNextCV, addressNextCV;
     public static DBAInfoAcivity dbaInfoAcivity;
-    public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isECommerce = false, isRetail = false,
-            isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false,isBLUploaded = false;
+    public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isECommerce = false, isRetail = false, isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false, isBLUploaded = false;
     ConstraintLayout businessTypeCL, timeZoneCL, stateCL;
     public View viewBarLeft, viewBarRight, pageOneView, pageTwoView;
     Long mLastClickTime = 0L, mLastClickTimeAddr = 0L;
@@ -127,8 +126,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     TextInputEditText companyaddressET, companyaddress2ET, cityET, stateET, zipcodeET;
     LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, stateErrorLL, zipcodeErrorLL;
     TextView address1ErrorTV, address2ErrorTV, cityErrorTV, stateErrorTV, zipcodeErrorTV;
-    public boolean isCompanyAdress1 = false, isCity = false, isState = false,
-            isZipcode = false, isAddressNextEnabled = false, isCopyCompanyInfo = false, isPostSuccess = false;
+    public boolean isCompanyAdress1 = false, isCity = false, isState = false, isZipcode = false, isAddressNextEnabled = false, isCopyCompanyInfo = false, isPostSuccess = false;
     ImageView statedropdownIV;
 
     DBAPager dbaPager;
@@ -150,8 +148,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_dba_information);
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
             initFields();
@@ -181,8 +178,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         try {
             super.onDestroy();
 //            if (!isPostSuccess && !isAddDBA && !addBusiness)
-            if (!isPostSuccess && !isAddDBA)
-                dbaInfoAPICall(prepareRequest());
+            if (!isPostSuccess && !isAddDBA) dbaInfoAPICall(prepareRequest());
 
 //            if (!isPostSuccess && !isAddDBA) {
 //                if (isAddDBAAPICalled) {
@@ -201,8 +197,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public void onBackPressed() {
         if (selectedPage == 0) {
 //            if (isAddDBA || addBusiness)
-            if (isAddDBA)
-                confirmationAlert();
+            if (isAddDBA) confirmationAlert();
             else {
                 if (getIntent().getStringExtra("FROM").equals("EDIT")) {
                     try {
@@ -432,8 +427,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
                 Utils.populateTimeZones(DBAInfoAcivity.this, timeZoneET, objMyApplication, "DBA_INFO");
             });
 
@@ -442,8 +436,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
                 Utils.populateTimeZones(DBAInfoAcivity.this, timeZoneET, objMyApplication, "DBA_INFO");
 
             });
@@ -453,8 +446,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
                 Utils.populateBusinessTypes(this, businessTypeET, objMyApplication, "DBA_INFO");
             });
 
@@ -463,21 +455,14 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
                 Utils.populateBusinessTypes(this, businessTypeET, objMyApplication, "DBA_INFO");
 
             });
 
             eCommerceLL.setOnClickListener(view -> {
                 if (!isECommerce) {
-                    eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
-                    retailIV.setImageResource(R.drawable.ic_rb_unselected);
-                    websiteOET.setHint("Website");
-                    isECommerce = true;
-                    isRetail = false;
-                    identificationType = 9;
-                    isIDVESelected = true;
+                    selectEcommerceRB();
 
 //                    dbaFillingLL.setVisibility(GONE);
                 }
@@ -487,13 +472,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
             retailLL.setOnClickListener(view -> {
                 if (!isRetail) {
-                    websiteOET.setHint("Website (Optional)");
-                    isECommerce = false;
-                    isRetail = true;
-                    identificationType = 8;
-                    isIDVESelected = true;
-                    retailIV.setImageResource(R.drawable.ic_rb_selected);
-                    eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
+                    selectRetailRB();
                 }
                 isWebsite = true;
 //                isWebsite = isValidUrl(websiteOET.getText().trim());
@@ -558,8 +537,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
                 Utils.populateStates(this, stateET, objMyApplication);
             });
 
@@ -568,12 +546,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
                 Utils.populateStates(this, stateET, objMyApplication);
             });
 
-          //  Default values enabled
+            //  Default values enabled
             eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
             retailIV.setImageResource(R.drawable.ic_rb_unselected);
             websiteOET.setHint("Website");
@@ -584,7 +561,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             //end
             isECommerce = true;
             isRetail = false;
-            identificationType = 9;
+            identificationType = Utils.eCommerce_DBA_Filling;
             isIDVESelected = true;
 
 
@@ -620,8 +597,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 return;
             }
             mLastClickTime = SystemClock.elapsedRealtime();
-            if (Utils.isKeyboardVisible)
-                Utils.hideKeypad(DBAInfoAcivity.this);
+            if (Utils.isKeyboardVisible) Utils.hideKeypad(DBAInfoAcivity.this);
             chooseFile(this, selectedDocType);
         }
     }
@@ -633,8 +609,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 return;
             }
             mLastClickTime = SystemClock.elapsedRealtime();
-            if (Utils.isKeyboardVisible)
-                Utils.hideKeypad(DBAInfoAcivity.this);
+            if (Utils.isKeyboardVisible) Utils.hideKeypad(DBAInfoAcivity.this);
             chooseFile(this, selectedDocType);
         }
     }
@@ -660,37 +635,34 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         pickerDialog.show();
     }
 
-    private void launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR action, String
-            type) {
+    private void launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR action, String type) {
         Intent camIntent = new Intent(DBAInfoAcivity.this, CameraHandlerActivity.class);
         camIntent.putExtra(CameraUtility.CAMERA_ACTION, action);
         camIntent.putExtra(CameraUtility.SELECTING_ID, type);
         imageChooserActivityLauncher.launch(camIntent);
     }
 
-    ActivityResultLauncher<Intent> imageChooserActivityLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        uploadFile(result.getData().getStringExtra(CameraUtility.TARGET_FILE));
-                        //setImageFromFilePath(result.getData().getStringExtra(CameraUtility.TARGET_FILE));
-                        LogUtils.e(TAG, result.getData().getStringExtra(CameraUtility.TARGET_FILE));
-                    } else {
-                        LogUtils.e(TAG, "Error while selecting photo");
-                    }
-                }
-            });
+    ActivityResultLauncher<Intent> imageChooserActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                uploadFile(result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+                //setImageFromFilePath(result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+                LogUtils.e(TAG, result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+            } else {
+                LogUtils.e(TAG, "Error while selecting photo");
+            }
+        }
+    });
 
     private void uploadFile(String filePath) {
         File mediaFile = new File(filePath);
         if (selectedDocType.equals("B-LICENCE")) {
             businessLicenseFile = mediaFile;
-            removeAndUploadAdditionalDoc(12);
+            removeAndUploadAdditionalDoc(Utils.BUSINESS_LICENSE);
         } else if (selectedDocType.equals("DBA")) {
             dbaFile = mediaFile;
-            removeAndUploadAdditionalDoc(8);
+            removeAndUploadAdditionalDoc(identificationType);
         }
     }
 
@@ -735,8 +707,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                                 viewBarRight.setBackgroundResource(R.drawable.button_background);
                             }
                         } else {
-                            Utils.displayAlert(dbaInfoUpdateResp.getError().getErrorDescription(),
-                                    DBAInfoAcivity.this, "", dbaInfoUpdateResp.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(dbaInfoUpdateResp.getError().getErrorDescription(), DBAInfoAcivity.this, "", dbaInfoUpdateResp.getError().getFieldErrors().get(0));
                         }
                     }
                 }
@@ -751,14 +722,14 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onChanged(IdentityImageResponse identityImageResponse) {
                     dismissDialog();
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
-                        if (DocID == 12) {
+                        if (DocID == Utils.BUSINESS_LICENSE) {
                             licesnseUploadTV.setVisibility(GONE);
                             licenseUploadedLL.setVisibility(VISIBLE);
                             String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
                             licenseUpdatedOnTV.setText("Uploaded on " + dateString);
                             licenseUpdatedOnTV.setVisibility(VISIBLE);
                             isBLUploaded = true;
-                        } else if (DocID == 8) {
+                        } else if (DocID == Utils.retail_DBA_Filling) {
                             dbaFillinguploadTV.setVisibility(GONE);
                             dbaFillingUploadedLL.setVisibility(VISIBLE);
                             String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
@@ -791,10 +762,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                         RequestBody requestBody = null;
                         MultipartBody.Part idFile = null;
-                        if (DocID == 12) {
+                        if (DocID == Utils.BUSINESS_LICENSE) {
                             requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), businessLicenseFile);
                             idFile = MultipartBody.Part.createFormData("identityFile", businessLicenseFile.getName(), requestBody);
-                        } else if (DocID == 8) {
+                        } else if (DocID == Utils.retail_DBA_Filling) {
                             requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), dbaFile);
                             idFile = MultipartBody.Part.createFormData("identityFile", dbaFile.getName(), requestBody);
                         }
@@ -825,8 +796,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             finish();
                         } else {
                             isPostSuccess = false;
-                            Utils.displayAlert(dbaInfoUpdateResp.getError().getErrorDescription(),
-                                    DBAInfoAcivity.this, "", dbaInfoUpdateResp.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(dbaInfoUpdateResp.getError().getErrorDescription(), DBAInfoAcivity.this, "", dbaInfoUpdateResp.getError().getFieldErrors().get(0));
                         }
                     }
                 }
@@ -843,8 +813,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         objMyApplication.setDbaInfoResp(dbaInfoResp);
                         loadCompanyInfo();
                     } else {
-                        Utils.displayAlert(dbaInfoResp.getError().getErrorDescription(),
-                                DBAInfoAcivity.this, "", dbaInfoResp.getError().getFieldErrors().get(0));
+                        Utils.displayAlert(dbaInfoResp.getError().getErrorDescription(), DBAInfoAcivity.this, "", dbaInfoResp.getError().getFieldErrors().get(0));
                     }
                 }
             });
@@ -1475,8 +1444,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
         try {
             if (isCopyCompanyInfo) {
-                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
-                        && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected && isDBAFiling) {
+                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected && isDBAFiling) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);
@@ -1486,9 +1454,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     viewPager.setPagingEnabled(false);
                 }
             } else {
-                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
-                        && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected
-                        && isDBAFiling) {
+                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected && isDBAFiling) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);
@@ -1509,8 +1475,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             if (isCompanyAdress1 && isCity && isState && isZipcode) {
                 isAddressNextEnabled = true;
                 addressNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                if (isNextEnabled)
-                    viewPager.setPagingEnabled(true);
+                if (isNextEnabled) viewPager.setPagingEnabled(true);
             } else {
                 isAddressNextEnabled = false;
                 addressNextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
@@ -1704,35 +1669,35 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         websiteOET.setSelection();
                     }
 
-                    if (cir.getIdentificationType().equals("8")) {
-                    websiteOET.setHint("Website (Optional)");
-                    isECommerce = false;
-                    isRetail = true;
-                    identificationType = 8;
-                    retailIV.setImageResource(R.drawable.ic_rb_selected);
-                    eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
-                    isWebsite = true;
-                    isIDVESelected = true;
-                    } else if (cir.getIdentificationType().equals("9")) {
+                    if (cir.getIdentificationType().equals(String.valueOf(Utils.retail_DBA_Filling))) {
+                        websiteOET.setHint("Website (Optional)");
+                        isECommerce = false;
+                        isRetail = true;
+                        identificationType = Utils.retail_DBA_Filling;
+                        retailIV.setImageResource(R.drawable.ic_rb_selected);
+                        eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
+                        isWebsite = true;
+                        isIDVESelected = true;
+                    } else if (cir.getIdentificationType().equals(String.valueOf(Utils.eCommerce_DBA_Filling))) {
                         eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
                         retailIV.setImageResource(R.drawable.ic_rb_unselected);
                         websiteOET.setHint("Website");
                         isECommerce = true;
                         isRetail = false;
-                        identificationType = 9;
+                        identificationType = Utils.eCommerce_DBA_Filling;
                         isWebsite = isValidUrl(cir.getWebsite());
                         isIDVESelected = true;
                     }
 
                     if (cir.getRequiredDocuments().size() > 0) {
                         for (int i = 0; i < cir.getRequiredDocuments().size(); i++) {
-                            if (cir.getRequiredDocuments().get(i).getIdentityId() == 8) {
+                            if (cir.getRequiredDocuments().get(i).getIdentityId() == Utils.retail_DBA_Filling || cir.getRequiredDocuments().get(i).getIdentityId() == Utils.eCommerce_DBA_Filling) {
                                 dbaFillingLL.setVisibility(VISIBLE);
                                 dbaFillinguploadTV.setVisibility(GONE);
                                 dbaFillingUploadedLL.setVisibility(VISIBLE);
                                 dbaFillingUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(0).getUpdatedAt()));
                                 isDBAFiling = true;
-                            } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 12) {
+                            } else if (cir.getRequiredDocuments().get(i).getIdentityId() == Utils.BUSINESS_LICENSE) {
                                 licesnseUploadTV.setVisibility(GONE);
                                 licenseUploadedLL.setVisibility(VISIBLE);
                                 licenseUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(0).getUpdatedAt()));
@@ -1873,18 +1838,15 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             //Name
             if (dbanameET.getText().toString().trim().length() > 0)
                 dbaInfoRequest.setName(dbanameET.getText().toString().trim());
-            else
-                dbaInfoRequest.setName(prevDBAName);
+            else dbaInfoRequest.setName(prevDBAName);
 
             //Email
             if (Utils.isValidEmail(dbaemailET.getText().toString().trim()))
                 dbaInfoRequest.setEmail(dbaemailET.getText().toString().trim());
             //Business Type
-            if (!selectedBTKey.equals(""))
-                dbaInfoRequest.setBusinessType(selectedBTKey.trim());
+            if (!selectedBTKey.equals("")) dbaInfoRequest.setBusinessType(selectedBTKey.trim());
             //IdentificationID
-            if (identificationType != 0)
-                dbaInfoRequest.setIdentificationType(identificationType);
+            if (identificationType != 0) dbaInfoRequest.setIdentificationType(identificationType);
             //Avg ticket
             if (avgTicketOET.getText().trim().length() > 0)
                 dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSD(avgTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
@@ -1926,28 +1888,21 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
     public static boolean checkAndRequestPermissions(final Activity context) {
         try {
-            int WExtstorePermission = ContextCompat.checkSelfPermission(context,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            int cameraPermission = ContextCompat.checkSelfPermission(context,
-                    android.Manifest.permission.CAMERA);
-            int internalStorage = ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.READ_EXTERNAL_STORAGE);
+            int WExtstorePermission = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int cameraPermission = ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA);
+            int internalStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
             List<String> listPermissionsNeeded = new ArrayList<>();
             if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
                 listPermissionsNeeded.add(android.Manifest.permission.CAMERA);
             }
             if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
-                listPermissionsNeeded
-                        .add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
             if (internalStorage != PackageManager.PERMISSION_GRANTED) {
-                listPermissionsNeeded
-                        .add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+                listPermissionsNeeded.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
             }
             if (!listPermissionsNeeded.isEmpty()) {
-                ActivityCompat.requestPermissions(context, listPermissionsNeeded
-                                .toArray(new String[listPermissionsNeeded.size()]),
-                        REQUEST_ID_MULTIPLE_PERMISSIONS);
+                ActivityCompat.requestPermissions(context, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
                 return false;
             }
         } catch (Exception ex) {
@@ -1962,17 +1917,14 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             switch (requestCode) {
                 case REQUEST_ID_MULTIPLE_PERMISSIONS:
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 //                        Utils.displayAlert("Requires Access to Camera.", DBAInfoAcivity.this, "", "");
                         Utils.showDialogPermission(DBAInfoAcivity.this, getString(R.string.allow_access_header), getString(R.string.camera_permission_desc));
 
-                    } else if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         Utils.displayAlert("Requires Access to Your Storage.", DBAInfoAcivity.this, "", "");
 
-                    } else if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         Utils.displayAlert("Requires Access to Your Storage.", DBAInfoAcivity.this, "", "");
 
                     } else {
@@ -2146,5 +2098,25 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    private void selectEcommerceRB() {
+        eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
+        retailIV.setImageResource(R.drawable.ic_rb_unselected);
+        websiteOET.setHint("Website");
+        isECommerce = true;
+        isRetail = false;
+        identificationType = Utils.eCommerce_DBA_Filling;
+        isIDVESelected = true;
+    }
+
+    private void selectRetailRB() {
+        websiteOET.setHint("Website (Optional)");
+        isECommerce = false;
+        isRetail = true;
+        identificationType = Utils.retail_DBA_Filling;
+        isIDVESelected = true;
+        retailIV.setImageResource(R.drawable.ic_rb_selected);
+        eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
     }
 }
