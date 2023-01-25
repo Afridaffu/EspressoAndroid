@@ -33,6 +33,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.coyni.mapp.R;
 import com.coyni.mapp.databinding.ActivityAcceptAgreementsBinding;
 import com.coyni.mapp.model.States;
+import com.coyni.mapp.model.UpdateSignAgreementsResp;
+import com.coyni.mapp.model.UpdateSignRequest;
 import com.coyni.mapp.model.profile.DownloadDocumentData;
 import com.coyni.mapp.model.profile.DownloadDocumentResponse;
 import com.coyni.mapp.model.register.OTPValidateResponse;
@@ -182,10 +184,21 @@ public class AcceptAgreementsActivity extends BaseActivity {
                         if (isActionEnabled) {
 //                            canEnableCheckBox = false;
                             SignAgreementRequest request = new SignAgreementRequest();
-                            if (binding.actionTV.getText().toString().equalsIgnoreCase("Done") ||
-                                    binding.actionTV.getText().toString().equalsIgnoreCase("I Agree")) {
+                            if (binding.actionTV.getText().toString().equalsIgnoreCase("Done")) {
                                 setResult(RESULT_OK);
                                 finish();
+                            } else if (binding.actionTV.getText().toString().equalsIgnoreCase("I Agree")) {
+                                showProgressDialog();
+                                UpdateSignRequest updateSignRequest = new UpdateSignRequest();
+
+                                if (objMyApplication.getStrDBAName() != null && !objMyApplication.getStrDBAName().equals(""))
+                                    updateSignRequest.setSignature(objMyApplication.getStrDBAName());
+                                else if (objMyApplication.getStrUserName() != null && !objMyApplication.getStrUserName().equals(""))
+                                    updateSignRequest.setSignature(objMyApplication.getStrUserName());
+
+                                updateSignRequest.setUserId(objMyApplication.getLoginUserId());
+                                updateSignRequest.setDocId(Integer.parseInt(getIntent().getStringExtra(Utils.REF_ID)));
+                                loginViewModel.signTrackerAgreement(updateSignRequest);
                             } else if (binding.actionTV.getText().toString().equalsIgnoreCase("Next")) {
                                 binding.webView.setVisibility(View.INVISIBLE);
                                 showProgressDialog();
@@ -339,6 +352,22 @@ public class AcceptAgreementsActivity extends BaseActivity {
                         startActivity(i);
                     } else {
                         Utils.displayAlert(signAgreementResponse.getError().getErrorDescription(), AcceptAgreementsActivity.this, "", signAgreementResponse.getError().getFieldErrors().get(0));
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        loginViewModel.getSignTrackerAgreementLiveData().observe(this, new Observer<UpdateSignAgreementsResp>() {
+            @Override
+            public void onChanged(UpdateSignAgreementsResp updateSignAgreementsResp) {
+                try {
+                    dismissDialog();
+                    if (updateSignAgreementsResp != null && updateSignAgreementsResp.getStatus().toLowerCase().equals("success")) {
+                        setResult(RESULT_OK);
+                        finish();
+                    } else {
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

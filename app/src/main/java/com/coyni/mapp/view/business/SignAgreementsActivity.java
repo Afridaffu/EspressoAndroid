@@ -219,9 +219,9 @@ public class SignAgreementsActivity extends BaseActivity {
                                 showProgressDialog();
                                 UpdateSignRequest updateSignRequest = new UpdateSignRequest();
 
-                                if (!objMyApplication.getStrDBAName().equals("") && objMyApplication.getStrDBAName() != null)
+                                if (objMyApplication.getStrDBAName() != null && !objMyApplication.getStrDBAName().equals(""))
                                     updateSignRequest.setSignature(objMyApplication.getStrDBAName());
-                                else if (!objMyApplication.getStrUserName().equals("") && objMyApplication.getStrUserName() != null)
+                                else if (objMyApplication.getStrUserName() != null && !objMyApplication.getStrUserName().equals(""))
                                     updateSignRequest.setSignature(objMyApplication.getStrUserName());
 
                                 updateSignRequest.setAgreementId(agrementsResponse.getData().get(currentIteration).getId());
