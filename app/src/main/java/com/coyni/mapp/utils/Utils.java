@@ -262,6 +262,8 @@ public class Utils {
     public static final String giftcardType = "6";
     public static final String signetType = "7";
     public static final String CogentType = "14";
+    public static final String eComerceStr = "12";
+    public static final String retailMobileStr = "13";
     public static final String payType = "12";
     public static final String businessType = "19";
     public static final String tokenType = "11";
@@ -357,6 +359,8 @@ public class Utils {
     public static final int failedWithdraw = 11; // need to confirm
     public static final int cancelledWithdraw = 18;
     public static final int transfer = 10;
+    public static final int eComerce = 12;
+    public static final int retailMobile = 13;
 
     public static final int pending = 1;
     public static final int completed = 2;
@@ -469,6 +473,8 @@ public class Utils {
     public static final String wallet = "wallet";
     public static final String amount = "amount";
     public static final String sentt = "sent";
+    public static final String ecomerce = "eCommerce";
+    public static final String retail = "retail/mobile";
 
     public static final String applyFilter = "apply";
     public static final String resetFilter = "resetFilter";
@@ -483,6 +489,7 @@ public class Utils {
     public static final int mPP = 1;
     public static final int mTOS = 0;
     public static final int mAgmt = 2;
+    public static final int mAD = 4; //Application Disclosure
     public static final int ACTIVE_AGREEMENT = 0;
     public static final int SCHEDULED_AGREEMENT = 3;
 
@@ -520,6 +527,8 @@ public class Utils {
     public static final String paySignetEnable = "token account.payment methods.signet account";
     public static final String allControlsEnable = "token account.all controls";
 
+    public static final String SCREEN = "screen";
+    public static final String REF_ID = "REF_ID";
     public static final String AGREEMENT_TYPE = "AGREE_TYPE";
     public static final String ACT_TYPE = "ACT_TYPE";
     public static final String DOC_URL = "DOC_URL";
@@ -529,6 +538,11 @@ public class Utils {
     public static final String verifyActionType = "Verify";
 
     public static final long centuryTimeInMillis = 3155760000000L;
+
+    public static final int eCommerce_DBA_Filling = 9;
+    public static final int retail_DBA_Filling = 8;
+    public static final int BUSINESS_LICENSE = 12;
+
 
     public static String getStrLang() {
         return strLang;
@@ -3023,4 +3037,5 @@ public class Utils {
         activity.startActivity(new Intent(activity, SignAgreementsActivity.class)
                 .putExtra("REMOVE_MERCHANT", isMerchantRemove));
     }
+
 }

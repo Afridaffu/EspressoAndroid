@@ -363,7 +363,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -375,394 +375,468 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/welcomeCoyniCV"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginStart="1dp"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:layout_marginEnd="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:visibility="gone"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="@dimen/_10sdp">
+                        android:orientation="vertical">
 
-                        <LinearLayout
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/welcomeCoyniCV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:paddingRight="@dimen/_10sdp">
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="1dp"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_marginEnd="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:visibility="visible"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_10sdp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_15sdp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
+                                android:orientation="horizontal"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:paddingRight="@dimen/_10sdp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <TextView
-                                        android:id="@+id/welcomeCoyniTV"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="Welcome to"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_12ssp" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_bold"
-                                        android:text=" coyni!"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_12ssp" />
-                                </LinearLayout>
-
-
-                                <TextView
-                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_7sdp"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Tokenize Your Money With coyni"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
 
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_7sdp"
-                                    android:layout_marginBottom="@dimen/_22sdp"
-                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:id="@+id/welcomeCoyniTV"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Welcome to"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_12ssp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_bold"
+                                            android:text=" coyni!"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_12ssp" />
+                                    </LinearLayout>
+
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="Add Payment"
-                                        android:textColor="@color/primary_color"
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:fontFamily="@font/opensans_regular"
+                                        android:text="Get started by adding coyni tokens to your account."
+                                        android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_11ssp" />
 
-                                    <ImageView
-                                        android:id="@+id/arrowIconIV"
+                                    <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="15dp"
-                                        android:layout_marginTop="3dp"
-                                        android:src="@drawable/ic_arrowicon" />
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:layout_marginBottom="@dimen/_22sdp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Add payment method"
+                                            android:textColor="@color/primary_color"
+                                            android:textSize="@dimen/_11ssp" />
+
+                                        <ImageView
+                                            android:id="@+id/arrowIconIV"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="15dp"
+                                            android:layout_marginTop="3dp"
+                                            android:src="@drawable/ic_arrowicon" />
+
+
+                                    </LinearLayout>
 
 
                                 </LinearLayout>
+
+                                <ImageView
+                                    android:id="@+id/spAccountImage"
+                                    android:layout_width="@dimen/_80sdp"
+                                    android:layout_height="@dimen/_90sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_11sdp"
+                                    android:src="@drawable/ic_add_payment" />
 
 
                             </LinearLayout>
+                        </androidx.cardview.widget.CardView>
 
-                            <ImageView
-                                android:id="@+id/spAccountImage"
-                                android:layout_width="@dimen/_80sdp"
-                                android:layout_height="@dimen/_90sdp"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/_11sdp"
-                                android:src="@drawable/ic_add_payment" />
-
-
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/underReviewCV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginStart="1dp"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:layout_marginEnd="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:visibility="gone"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="@dimen/_10sdp">
-
-                        <LinearLayout
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/addAddressCV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:paddingRight="@dimen/_10sdp">
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="1dp"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_marginEnd="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:visibility="visible"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_10sdp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_15sdp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
+                                android:orientation="horizontal"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:paddingRight="@dimen/_10sdp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Address Required"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_12ssp" />
+                                    </LinearLayout>
+
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_6sdp"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="Account Status:"
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:fontFamily="@font/opensans_regular"
+                                        android:text="We will need your address to verify your identity."
                                         android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_11ssp" />
 
-                                    <!--                                    <LinearLayout-->
-                                    <!--                                        android:layout_width="match_parent"-->
-                                    <!--                                        android:layout_height="wrap_content"-->
-                                    <!--                                        android:layout_weight="1"-->
-                                    <!--                                        android:layout_marginTop="@dimen/_6sdp"-->
-                                    <!--                                        android:orientation="horizontal">-->
-
-                                    <!--                                        <TextView-->
-                                    <!--                                            android:layout_width="wrap_content"-->
-                                    <!--                                            android:layout_height="wrap_content"-->
-                                    <!--                                            android:layout_marginStart="5dp"-->
-                                    <!--                                            android:fontFamily="@font/opensans_semibold"-->
-                                    <!--                                            android:text="Under Review"-->
-                                    <!--                                            android:textColor="@color/under_review_blue"-->
-                                    <!--                                            android:textSize="@dimen/_11ssp" />-->
-
-                                    <!--                                        <androidx.cardview.widget.CardView-->
-                                    <!--                                            android:layout_width="@dimen/_8sdp"-->
-                                    <!--                                            android:layout_height="@dimen/_8sdp"-->
-                                    <!--                                            app:cardBackgroundColor="@color/under_review_blue"-->
-                                    <!--                                            app:cardCornerRadius="@dimen/_4sdp" />-->
-                                    <!--                                    </LinearLayout>-->
-
-                                    <TextView
+                                    <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="5dp"
-                                        android:layout_marginTop="@dimen/_6sdp"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="Under Review"
-                                        android:textColor="@color/under_review_blue"
-                                        android:textSize="@dimen/_11ssp" />
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:layout_marginBottom="@dimen/_22sdp"
+                                        android:orientation="horizontal">
 
-                                    <androidx.cardview.widget.CardView
-                                        android:layout_width="@dimen/_8sdp"
-                                        android:layout_height="@dimen/_8sdp"
-                                        android:layout_marginTop="@dimen/_2sdp"
-                                        android:layout_marginEnd="@dimen/_5sdp"
-                                        app:cardBackgroundColor="@color/under_review_blue"
-                                        app:cardCornerRadius="@dimen/_4sdp" />
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Add an address"
+                                            android:textColor="@color/primary_color"
+                                            android:textSize="@dimen/_11ssp" />
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="15dp"
+                                            android:layout_marginTop="3dp"
+                                            android:src="@drawable/ic_arrowicon" />
+
+
+                                    </LinearLayout>
+
 
                                 </LinearLayout>
 
-                                <TextView
-                                    android:id="@+id/tv_user_status_update"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_7sdp"
-                                    android:layout_marginBottom="@dimen/_16sdp"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="@string/customer_under_review"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
+                                <ImageView
+                                    android:layout_width="@dimen/_80sdp"
+                                    android:layout_height="@dimen/_90sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_11sdp"
+                                    android:src="@drawable/ic_add_address" />
 
 
                             </LinearLayout>
+                        </androidx.cardview.widget.CardView>
 
-                            <ImageView
-                                android:layout_width="@dimen/_60sdp"
-                                android:layout_height="@dimen/_80sdp"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/_11sdp"
-                                android:src="@drawable/ic_in_progress_icon" />
-
-
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/additionalActionCV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginStart="1dp"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:layout_marginEnd="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:visibility="gone"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="@dimen/_10sdp">
-
-                        <LinearLayout
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/underReviewCV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:paddingRight="@dimen/_10sdp">
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="1dp"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_marginEnd="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:visibility="gone"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_10sdp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_15sdp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
+                                android:orientation="horizontal"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:paddingRight="@dimen/_10sdp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_6sdp"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Account Status:"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_11ssp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="5dp"
+                                            android:layout_marginTop="@dimen/_6sdp"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Under Review"
+                                            android:textColor="@color/under_review_blue"
+                                            android:textSize="@dimen/_11ssp" />
+
+                                        <androidx.cardview.widget.CardView
+                                            android:layout_width="@dimen/_8sdp"
+                                            android:layout_height="@dimen/_8sdp"
+                                            android:layout_marginTop="@dimen/_2sdp"
+                                            android:layout_marginEnd="@dimen/_5sdp"
+                                            app:cardBackgroundColor="@color/under_review_blue"
+                                            app:cardCornerRadius="@dimen/_4sdp" />
+
+                                    </LinearLayout>
 
                                     <TextView
+                                        android:id="@+id/tv_user_status_update"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="Additional Action Required"
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:layout_marginBottom="@dimen/_16sdp"
+                                        android:fontFamily="@font/opensans_regular"
+                                        android:text="@string/customer_under_review"
                                         android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_12ssp" />
-
-                                </LinearLayout>
-
-
-                                <TextView
-                                    android:id="@+id/actionRequiredMsgTV"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_7sdp"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="The coyni team requires you to upload your documents within 30 days to further verify you."
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_7sdp"
-                                    android:layout_marginBottom="@dimen/_22sdp"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/actionTV"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="Upload Document"
-                                        android:textColor="@color/primary_color"
                                         android:textSize="@dimen/_11ssp" />
 
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="15dp"
-                                        android:layout_marginTop="3dp"
-                                        android:src="@drawable/ic_arrowicon" />
-
 
                                 </LinearLayout>
 
+                                <ImageView
+                                    android:layout_width="@dimen/_60sdp"
+                                    android:layout_height="@dimen/_80sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_11sdp"
+                                    android:src="@drawable/ic_in_progress_icon" />
+
+
                             </LinearLayout>
+                        </androidx.cardview.widget.CardView>
 
-                            <ImageView
-                                android:layout_width="@dimen/_80sdp"
-                                android:layout_height="@dimen/_90sdp"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/_11sdp"
-                                android:src="@drawable/ic_ssn_fail" />
-
-
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/buyTokensCV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginStart="1dp"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:layout_marginEnd="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:visibility="gone"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="@dimen/_10sdp">
-
-                        <LinearLayout
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/additionalActionCV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:paddingRight="@dimen/_10sdp">
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="1dp"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_marginEnd="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:visibility="gone"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_10sdp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_15sdp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
+                                android:orientation="horizontal"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:paddingRight="@dimen/_10sdp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <TextView
-                                        android:id="@+id/buyTokenWelcomeCoyniTV"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="Welcome to"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_12ssp" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_bold"
-                                        android:text=" coyni!"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_12ssp" />
-                                </LinearLayout>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_7sdp"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Start managing your money by coyni tokens today!"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
 
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_7sdp"
-                                    android:layout_marginBottom="@dimen/_22sdp"
-                                    android:orientation="horizontal">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Additional Action Required"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_12ssp" />
+
+                                    </LinearLayout>
+
 
                                     <TextView
+                                        android:id="@+id/actionRequiredMsgTV"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="Buy Token"
-                                        android:textColor="@color/primary_color"
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:fontFamily="@font/opensans_regular"
+                                        android:text="The coyni team requires you to upload your documents within 30 days to further verify you."
+                                        android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_11ssp" />
 
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:layout_marginBottom="@dimen/_22sdp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/actionTV"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Upload Document"
+                                            android:textColor="@color/primary_color"
+                                            android:textSize="@dimen/_11ssp" />
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="15dp"
+                                            android:layout_marginTop="3dp"
+                                            android:src="@drawable/ic_arrowicon" />
+
+
+                                    </LinearLayout>
+
                                 </LinearLayout>
 
+                                <ImageView
+                                    android:layout_width="@dimen/_80sdp"
+                                    android:layout_height="@dimen/_90sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_11sdp"
+                                    android:src="@drawable/ic_ssn_fail" />
+
+
                             </LinearLayout>
+                        </androidx.cardview.widget.CardView>
 
-                            <ImageView
-                                android:layout_width="@dimen/_80sdp"
-                                android:layout_height="@dimen/_90sdp"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/_11sdp"
-                                android:src="@drawable/ic_buy_token" />
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/buyTokensCV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="1dp"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_marginEnd="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:visibility="gone"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_10sdp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:paddingRight="@dimen/_10sdp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:id="@+id/buyTokenWelcomeCoyniTV"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Welcome to"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_12ssp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_bold"
+                                            android:text=" coyni!"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_12ssp" />
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:fontFamily="@font/opensans_regular"
+                                        android:text="Start managing your money by coyni tokens today!"
+                                        android:textColor="@color/primary_black"
+                                        android:textSize="@dimen/_11ssp" />
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:layout_marginBottom="@dimen/_22sdp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Buy Token"
+                                            android:textColor="@color/primary_color"
+                                            android:textSize="@dimen/_11ssp" />
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:layout_width="@dimen/_80sdp"
+                                    android:layout_height="@dimen/_90sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_11sdp"
+                                    android:src="@drawable/ic_buy_token" />
 
 
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
 
                 </RelativeLayout>
 

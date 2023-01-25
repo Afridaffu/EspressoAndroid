@@ -288,9 +288,6 @@ public interface ApiService {
     @GET("api/v2/profile/me/signedagreements")
     Call<Agreements> meAgreementsByType();
 
-//    @PATCH("api/v2/user/change-password")
-//    Call<ChangePassword> mChangePassword(@Body ChangePasswordRequest request);
-
     @PATCH("api/v2/user/change-password/{requestToken}")
     Call<ChangePassword> mChangePassword(@Body ChangePasswordRequest request, @Path("requestToken") String requestToken);
 
@@ -424,7 +421,7 @@ public interface ApiService {
                                                     @Part("identityNumber") RequestBody number);
 
     @Multipart
-    @POST("api/v2/business/sign-agreement")
+    @POST("api/v2/business/image-submit")
     Call<SignedAgreementResponse> signedAgreement(@Part MultipartBody.Part file,
                                                   @Part("agreementType") int agreementType);
 
@@ -829,6 +826,9 @@ public interface ApiService {
     @POST("api/v2/profile/update-sign-agreement")
     Call<UpdateSignAgreementsResp> signUpdatedAgreement(@Body UpdateSignRequest updateSignRequest);
 
+    @POST("api/v2/user/signedagreements/update")
+    Call<UpdateSignAgreementsResp> trackerSignAgreement(@Body UpdateSignRequest updateSignRequest);
+
     @Multipart
     @POST("api/v2/profile/update-agreement/{agreementId}")
     Call<UpdateSignAgreementsResp> signUpdatedAgreementDoc(@Path("agreementId") Integer agreementId, @Part MultipartBody.Part filee);
@@ -841,5 +841,15 @@ public interface ApiService {
 
     @GET("api/v2/profile/fetch-address")
     Call<FetchAddressResp> fetchAddress();
+
+    @GET("api/v2/agreements/{agreementId}")
+    Call<AgreementsPdf> getApplicationDisclosure(@Path("agreementId") String agreementId);
+
+    @Multipart
+    @POST("api/v2/business/image-submit")
+    Call<IdentityImageResponse> submitApplication(@Part MultipartBody.Part filee,
+                                                  @Part("agreementType") RequestBody type);
+
+
 }
 

@@ -71,10 +71,13 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     private void initFields() {
 
         objMyApplication = (MyApplication) context.getApplicationContext();
-        Chip transTypeSalesOrderToken = findViewById(R.id.transTypeSalesOrderToken);
+        Chip transTypeSalesOrder = findViewById(R.id.transTypeSalesOrder);
         Chip transTypeRefund = findViewById(R.id.transTypeRefund);
         Chip transTypeMerchantPayout = findViewById(R.id.transTypeMerchantPayout);
         Chip transTypeMonthlyServiceFee = findViewById(R.id.transTypeMonthlyServiceFee);
+
+        Chip transSubTypeEcommerce = findViewById(R.id.transSubTypeEcommerce);
+        Chip transSubTyperetail = findViewById(R.id.transSubTypeRetail);
 
         Chip transStatusCompleted = findViewById(R.id.transStatusCompleted);
         Chip transStatusRefund = findViewById(R.id.transStatusRefund);
@@ -90,7 +93,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
 
         if (filterTransactionListRequest != null) {
             isFilters = true;
-            if(filterTransactionListRequest.getTransactionType() != null) {
+            if (filterTransactionListRequest.getTransactionType() != null) {
                 transactionType.addAll(filterTransactionListRequest.getTransactionType());
             }
 
@@ -101,7 +104,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 for (int i = 0; i < transactionType.size(); i++) {
                     switch (transactionType.get(i)) {
                         case Utils.saleOrder:
-                            transTypeSalesOrderToken.setChecked(true);
+                            transTypeSalesOrder.setChecked(true);
                             break;
                         case Utils.refund:
                             transTypeRefund.setChecked(true);
@@ -115,14 +118,26 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                     }
                 }
             }
-            if(filterTransactionListRequest.getTransactionSubType() != null) {
+            if (filterTransactionListRequest.getTransactionSubType() != null) {
                 transactionSubType.addAll(filterTransactionListRequest.getTransactionSubType());
             }
             if (transactionSubType == null) {
                 transactionSubType = new ArrayList<>();
             }
+            if (transactionSubType.size() > 0) {
+                for (int i = 0; i < transactionSubType.size(); i++) {
+                    switch (transactionSubType.get(i)) {
+                        case Utils.eComerce:
+                            transSubTypeEcommerce.setChecked(true);
+                            break;
+                        case Utils.retailMobile:
+                            transSubTyperetail.setChecked(true);
+                            break;
+                    }
+                }
+            }
 
-            if(filterTransactionListRequest.getTxnStatus() != null) {
+            if (filterTransactionListRequest.getTxnStatus() != null) {
                 txnStatus.addAll(filterTransactionListRequest.getTxnStatus());
             }
             if (txnStatus == null) {
@@ -272,11 +287,14 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             rangeDates.setUpdatedFromDate("");
             rangeDates.setUpdatedToDate("");
 
-            transTypeSalesOrderToken.setChecked(false);
+            transTypeSalesOrder.setChecked(false);
             transTypeRefund.setChecked(false);
             transTypeMerchantPayout.setChecked(false);
             transTypeMonthlyServiceFee.setChecked(false);
 //            transTypeRefund.setChecked(false);
+
+            transSubTypeEcommerce.setChecked(false);
+            transSubTyperetail.setChecked(false);
 
             transStatusCompleted.setChecked(false);
             transStatusRefund.setChecked(false);
@@ -288,8 +306,9 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             getOnDialogClickListener().onDialogClicked(Utils.resetFilter, null);
 //            dismiss();
         });
+//
 
-        transTypeSalesOrderToken.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        transTypeSalesOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
@@ -350,6 +369,40 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                     for (int i = 0; i < transactionType.size(); i++) {
                         if (transactionType.get(i) == Utils.monthlyServiceFee) {
                             transactionType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transSubTypeEcommerce.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    transactionSubType.add(Utils.eComerce);
+                } else {
+                    for (int i = 0; i < transactionSubType.size(); i++) {
+                        if (transactionSubType.get(i) == Utils.eComerce) {
+                            transactionSubType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transSubTyperetail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    transactionSubType.add(Utils.retailMobile);
+                } else {
+                    for (int i = 0; i < transactionSubType.size(); i++) {
+                        if (transactionSubType.get(i) == Utils.retailMobile) {
+                            transactionSubType.remove(i);
                             break;
                         }
                     }

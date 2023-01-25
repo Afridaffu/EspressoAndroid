@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,10 +15,13 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,26 +61,23 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
     MyApplication myApplicationObj;
     CardView editAddressSaveCV, b_editAddressSaveCV;
     boolean isAddress1, isAddress2, isCity, isState, isZipcode, isSaveEnabled;
-    Dialog popupStates;
+    Dialog popupStates, preDialog;
     StatesListAdapter statesListAdapter;
     List<States> listStates = new ArrayList<>();
     LinearLayout backIV, address1ErrorLL, address2ErrorLL, cityErrorLL, zipcodeErrorLL;
     LinearLayout b_backIV, b_address1ErrorLL, b_cityErrorLL, b_zipcodeErrorLL;
     TextView address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV;
-    TextView b_address1ErrorTV, b_cityErrorTV, b_zipcodeErrorTV;
+    TextView b_address1ErrorTV, b_cityErrorTV, b_zipcodeErrorTV, headerTV, tvButtonText;
     Long mLastClickTime = 0L;
     Dialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
+    ImageView imgBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_edit_address);
-//            Window window = getWindow();
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            window.setStatusBarColor(Color.TRANSPARENT);
             initfields();
             if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 try {
@@ -85,6 +86,14 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                     initObservers();
                     findViewById(R.id.customerEditAddressRL).setVisibility(VISIBLE);
                     findViewById(R.id.businessEditAddressLL).setVisibility(GONE);
+                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("add_address")) {
+                        findViewById(R.id.tvAddMsg).setVisibility(VISIBLE);
+                        headerTV.setText("Add Address");
+                        tvButtonText.setText("Add Address");
+                        imgBack.setImageResource(R.drawable.ic_close);
+                        address1TIL.setHint("Biling Address Line 1");
+                        address2TIL.setHint("Biling Address Line 2(Optional)");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -111,9 +120,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
     }
 
     public void initfields() {
-
         try {
-
             myApplicationObj = (MyApplication) getApplicationContext();
             address1TIL = findViewById(R.id.addressLineOneTIL);
             address2TIL = findViewById(R.id.addressLineTwoTIL);
@@ -170,6 +177,9 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
             b_countryTIL = findViewById(R.id.b_countryTIL);
 
             b_editAddressSaveCV = findViewById(R.id.b_editAddressSaveCV);
+            headerTV = findViewById(R.id.headerTV);
+            imgBack = findViewById(R.id.imgBack);
+            tvButtonText = findViewById(R.id.tvButtonText);
 
 
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
@@ -313,7 +323,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 if (myApplicationObj.getMyProfile().getData().getState() != null
                         && !myApplicationObj.getMyProfile().getData().getState().equals("")) {
 //                    stateET.setText(myApplicationObj.getMyProfile().getData().getState());
-                    Utils.setStateFromList(myApplicationObj.getMyProfile().getData().getState(),stateET,myApplicationObj);
+                    Utils.setStateFromList(myApplicationObj.getMyProfile().getData().getState(), stateET, myApplicationObj);
                     Utils.tempStateName = myApplicationObj.getMyProfile().getData().getState();
                     isState = true;
                 } else {
@@ -362,7 +372,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 if (myApplicationObj.getMyProfile().getData().getState() != null
                         && !myApplicationObj.getMyProfile().getData().getState().equals("")) {
 //                    b_stateET.setText(myApplicationObj.getMyProfile().getData().getState());
-                    Utils.setStateFromList(myApplicationObj.getMyProfile().getData().getState(),b_stateET,myApplicationObj);
+                    Utils.setStateFromList(myApplicationObj.getMyProfile().getData().getState(), b_stateET, myApplicationObj);
                     Utils.setUpperHintColor(b_stateTIL, getResources().getColor(R.color.primary_black));
                     Utils.tempStateName = myApplicationObj.getMyProfile().getData().getState();
                     isState = true;
@@ -831,15 +841,16 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
     }
 
     public void initObservers() {
-
-        try {
-            customerProfileViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
-                @Override
-                public void onChanged(User user) {
-                    try {
-                        dialog.dismiss();
-                        if (user != null) {
-                            if (user.getStatus().toString().toLowerCase().equals("success")) {
+        customerProfileViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                try {
+                    dialog.dismiss();
+                    if (user != null) {
+                        if (user.getStatus().toString().toLowerCase().equals("success")) {
+                            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("add_address")) {
+                                displayAddAddressSuccess();
+                            } else {
                                 Utils.showCustomToast(EditAddressActivity.this, "Address has been updated", R.drawable.ic_location, "EditAddress");
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
@@ -851,18 +862,16 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                                         }
                                     }
                                 }, 2000);
-                            } else {
-                                Utils.displayAlert(user.getError().getErrorDescription(), EditAddressActivity.this, "", user.getError().getFieldErrors().get(0));
                             }
+                        } else {
+                            Utils.displayAlert(user.getError().getErrorDescription(), EditAddressActivity.this, "", user.getError().getFieldErrors().get(0));
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
 
     //Business Changes........
@@ -1322,15 +1331,53 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
         });
     }
 
+    private void displayAddAddressSuccess() {
+        try {
+            CardView cvDone;
+            TextView header, subHeader;
+            preDialog = new Dialog(EditAddressActivity.this, R.style.DialogTheme);
+            preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            preDialog.setContentView(R.layout.activity_all_done_card);
+            Window window = preDialog.getWindow();
+            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            window.setGravity(Gravity.CENTER);
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+
+            preDialog.setCancelable(false);
+            preDialog.show();
+            cvDone = preDialog.findViewById(R.id.cvDone);
+            header = preDialog.findViewById(R.id.tvHead);
+            subHeader = preDialog.findViewById(R.id.subHeaderTV);
+            header.setText("Address Added");
+            subHeader.setText("Your address has been added and your account is now fully verified!");
+            preDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            cvDone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+
+            preDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                    if (i == KeyEvent.KEYCODE_BACK) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     @Override
     public void onVisibilityChanged(boolean visible) {
         if (visible) {
             Utils.isKeyboardVisible = true;
-//            pageOneView.setVisibility(VISIBLE);
-//            pageTwoView.setVisibility(VISIBLE);
         } else {
-//            pageOneView.setVisibility(GONE);
-//            pageTwoView.setVisibility(GONE);
             Utils.isKeyboardVisible = false;
         }
     }

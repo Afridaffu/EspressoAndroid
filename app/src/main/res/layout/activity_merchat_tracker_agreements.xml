@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/_16sdp">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_9sdp"
+                android:contentDescription="@string/back_button"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_close" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_21sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="@string/cp_agreements"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_16ssp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_21sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="@string/agreement_desc"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_10ssp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_agreements"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/termsOfServiceLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/dark_color_bg_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_11sdp">
+
+                        <ImageView
+                            android:id="@+id/ivCheckTOS"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_check_box_complete"
+                            android:visibility="gone"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingStart="@dimen/_5sdp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:lineSpacingExtra="14.7sp"
+                                android:text="@string/gbx_tos"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_12ssp"
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:id="@+id/tvStatusTOS"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:lineSpacingExtra="14.7sp"
+                                android:text="@string/incomplete"
+                                android:textColor="@color/dark_grey"
+                                android:textSize="@dimen/_9ssp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_rightarrow" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/privacyPolicyLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:background="@drawable/dark_color_bg_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_11sdp">
+
+                        <ImageView
+                            android:id="@+id/ivCheckPP"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_check_box_complete"
+                            android:visibility="gone"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingStart="@dimen/_5sdp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:lineSpacingExtra="14.7sp"
+                                android:text="@string/gbx_pp"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_12ssp"
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:id="@+id/tvStatusPP"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:lineSpacingExtra="14.7sp"
+                                android:text="@string/incomplete"
+                                android:textColor="@color/dark_grey"
+                                android:textSize="@dimen/_9ssp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_rightarrow" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvDone"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:cardBackgroundColor="@color/inactive_color"
+            app:cardCornerRadius="@dimen/_22sdp">
+
+            <TextView
+                android:id="@+id/nextBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/opensans_bold"
+                android:text="@string/done"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13ssp" />
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</layout>

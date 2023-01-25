@@ -457,11 +457,10 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
 
         Chip transTypePR = dialog.findViewById(R.id.transTypePR);
         Chip transTypeBT = dialog.findViewById(R.id.transTypeBT);
-        Chip transTypeSO = dialog.findViewById(R.id.transTypeSO);
+        Chip transTypeSO = dialog.findViewById(R.id.transTypeSaleOrder);
         Chip transTypeWithdraw = dialog.findViewById(R.id.transTypeWithdraw);
         Chip transTypeRefund = dialog.findViewById(R.id.transTypeRefund);
         Chip transTypeAT = dialog.findViewById(R.id.transTypeAT);
-        Chip transTypePI = dialog.findViewById(R.id.transTypePI);
 
         Chip transSubTypeSent = dialog.findViewById(R.id.transSubTypeSent);
         Chip transSubTypeReceived = dialog.findViewById(R.id.transSubTypeReceived);
@@ -474,6 +473,8 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
         Chip transSubTypeSOToken = dialog.findViewById(R.id.transSubTypeSOToken);
         Chip transSubTypeFW = dialog.findViewById(R.id.transSubTypeFW);
         Chip transSubTypeCW = dialog.findViewById(R.id.transSubTypeCW);
+        Chip transSubTypeEcomerce = dialog.findViewById(R.id.transSubTypeEcomerce);
+        Chip transSubTypeRetail = dialog.findViewById(R.id.transSubTypeRetail);
 
         Chip transStatusPending = dialog.findViewById(R.id.transStatusPending);
         Chip transStatusCompleted = dialog.findViewById(R.id.transStatusCompleted);
@@ -509,7 +510,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                             transTypeBT.setChecked(true);
                             break;
 
-                        case Utils.saleOrder:
+                        case Utils.paidInvoice:
                             transTypeSO.setChecked(true);
                             break;
 
@@ -523,10 +524,6 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
 
                         case Utils.accountTransfer:
                             transTypeAT.setChecked(true);
-                            break;
-
-                        case Utils.paidInvoice:
-                            transTypePI.setChecked(true);
                             break;
 
                         case Utils.failedWithdraw:
@@ -579,9 +576,13 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
                             transSubTypeGiftCard.setChecked(true);
                             break;
 
-//                    case Utils.saleOrderToken:
-//                        transSubTypeSOToken.setChecked(true);
-//                        break;
+                        case Utils.eComerce:
+                            transSubTypeEcomerce.setChecked(true);
+                            break;
+
+                        case Utils.retailMobile:
+                            transSubTypeRetail.setChecked(true);
+                            break;
 
                         case Utils.failedWithdraw:
                             transSubTypeFW.setChecked(true);
@@ -713,7 +714,6 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
             transTypeWithdraw.setChecked(false);
             transTypeRefund.setChecked(false);
             transTypeAT.setChecked(false);
-            transTypePI.setChecked(false);
 
             transSubTypeSent.setChecked(false);
             transSubTypeReceived.setChecked(false);
@@ -726,6 +726,8 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
             transSubTypeSOToken.setChecked(false);
             transSubTypeFW.setChecked(false);
             transSubTypeCW.setChecked(false);
+            transSubTypeEcomerce.setChecked(false);
+            transSubTypeRetail.setChecked(false);
 
             transStatusPending.setChecked(false);
             transStatusCompleted.setChecked(false);
@@ -790,10 +792,10 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    tempTransactionType.add(Utils.saleOrder);
+                    tempTransactionType.add(Utils.paidInvoice);
                 } else {
                     for (int i = 0; i < tempTransactionType.size(); i++) {
-                        if (tempTransactionType.get(i) == Utils.saleOrder) {
+                        if (tempTransactionType.get(i) == Utils.paidInvoice) {
                             tempTransactionType.remove(i);
                             break;
                         }
@@ -855,22 +857,40 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
             }
         });
 
-        transTypePI.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        transSubTypeEcomerce.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    tempTransactionType.add(Utils.paidInvoice);
+                    tempTransactionSubType.add(Utils.eComerce);
                 } else {
-                    for (int i = 0; i < tempTransactionType.size(); i++) {
-                        if (tempTransactionType.get(i) == Utils.paidInvoice) {
-                            tempTransactionType.remove(i);
+                    for (int i = 0; i < tempTransactionSubType.size(); i++) {
+                        if (tempTransactionSubType.get(i) == Utils.eComerce) {
+                            tempTransactionSubType.remove(i);
                             break;
                         }
                     }
                 }
             }
         });
+
+        transSubTypeRetail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    tempTransactionSubType.add(Utils.retailMobile);
+                } else {
+                    for (int i = 0; i < tempTransactionSubType.size(); i++) {
+                        if (tempTransactionSubType.get(i) == Utils.retailMobile) {
+                            tempTransactionSubType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
 
         transSubTypeSent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -1646,16 +1666,17 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
     }
 
     private ArrayList<Integer> getDefaultTransactionSubTypes() {
-        ArrayList<Integer> transactionType = new ArrayList<>();
-        transactionType.add(Utils.sent);
-        transactionType.add(Utils.received);
-        transactionType.add(Utils.debitCard);
-        transactionType.add(Utils.creditCard);
-        transactionType.add(Utils.bankAccount);
-        transactionType.add(Utils.instantPay);
-        transactionType.add(Utils.giftCard);
-
-        return transactionType;
+        ArrayList<Integer> transactionsubType = new ArrayList<>();
+        transactionsubType.add(Utils.sent);
+        transactionsubType.add(Utils.received);
+        transactionsubType.add(Utils.debitCard);
+        transactionsubType.add(Utils.creditCard);
+        transactionsubType.add(Utils.bankAccount);
+        transactionsubType.add(Utils.instantPay);
+        transactionsubType.add(Utils.giftCard);
+        transactionsubType.add(Utils.eComerce);
+        transactionsubType.add(Utils.retailMobile);
+        return transactionsubType;
     }
 
     private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {

@@ -531,45 +531,9 @@ public class DashboardViewModel extends AndroidViewModel {
         }
     }
 
-//    public void meWallet() {
-//        try {
-//            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-//            Call<WalletResponse> mCall = apiService.meWallet();
-//            mCall.enqueue(new Callback<WalletResponse>() {
-//                @Override
-//                public void onResponse(Call<WalletResponse> call, Response<WalletResponse> response) {
-//                    try {
-//                        if (response.isSuccessful()) {
-//                            WalletResponse obj = response.body();
-//                            walletResponseMutableLiveData.setValue(obj);
-//                        } else {
-//                            Gson gson = new Gson();
-//                            Type type = new TypeToken<APIError>() {
-//                            }.getType();
-//                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-//                            apiErrorMutableLiveData.setValue(errorResponse);
-//                        }
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                        apiErrorMutableLiveData.setValue(null);
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<WalletResponse> call, Throwable t) {
-//                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-//                    apiErrorMutableLiveData.setValue(null);
-//                }
-//            });
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     public void meChangePassword(ChangePasswordRequest changePasswordRequest, String token) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-//            Call<ChangePassword> mcall = apiService.mChangePassword(changePasswordRequest);
             Call<ChangePassword> mcall = apiService.mChangePassword(changePasswordRequest, token);
             mcall.enqueue(new Callback<ChangePassword>() {
                 @Override

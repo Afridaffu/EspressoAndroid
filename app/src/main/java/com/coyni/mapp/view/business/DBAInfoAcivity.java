@@ -3,6 +3,10 @@ package com.coyni.mapp.view.business;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import static com.coyni.mapp.custom_camera.CameraUtility.BROWSE;
+import static com.coyni.mapp.custom_camera.CameraUtility.CHOOSE_LIBRARY;
+import static com.coyni.mapp.custom_camera.CameraUtility.TAKE_PHOTO;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -36,6 +40,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -45,6 +53,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.coyni.mapp.custom_camera.CameraHandlerActivity;
+import com.coyni.mapp.custom_camera.CameraUtility;
+import com.coyni.mapp.dialogs.FilePickerDialog;
+import com.coyni.mapp.dialogs.OnDialogClickListener;
 import com.coyni.mapp.utils.EmojiFilter;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -92,13 +104,12 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     CompanyOutLineBoxPhoneNumberEditText dbaPhoneOET;
     ImageView backIV, eCommerceIV, retailIV;
     public WebsiteOutlineEditText websiteOET;
-    public LinearLayout dbanameLL, dbaemailLL, customerphonenumLL, eCommerceLL, retailLL, dbaFillingUploadedLL, dbaFillingLL, closeIV;
+    public LinearLayout dbanameLL, dbaemailLL, customerphonenumLL, eCommerceLL, retailLL, dbaFillingUploadedLL, dbaFillingLL, licesnseUploadLL, licenseUploadedLL, closeIV;
     public VolumeEditText mpvOET, highTicketOET, avgTicketOET;
-    public TextView dbanameTV, dbaemailTV, customernumTV, dbaFillinguploadTV, dbaFillingUpdatedOnTV;
+    public TextView dbanameTV, dbaemailTV, customernumTV, dbaFillinguploadTV, licenseUpdatedOnTV, dbaFillingUpdatedOnTV, licesnseUploadTV;
     public CardView dbaNextCV, addressNextCV;
     public static DBAInfoAcivity dbaInfoAcivity;
-    public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isECommerce = false, isRetail = false,
-            isWebsite = true, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false;
+    public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isECommerce = false, isRetail = false, isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false, isBLUploaded = false;
     ConstraintLayout businessTypeCL, timeZoneCL, stateCL;
     public View viewBarLeft, viewBarRight, pageOneView, pageTwoView;
     Long mLastClickTime = 0L, mLastClickTimeAddr = 0L;
@@ -108,14 +119,14 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     private boolean isAddDBA = false, addBusiness = false;
     private boolean isAddDBAAPICalled = false;
     private int companyID = 0;
+//    public int docTypeID = 0;
 
     //Address
     TextInputLayout companyaddresstil, companyaddress2til, citytil, statetil, zipcodetil, countryTIL;
     TextInputEditText companyaddressET, companyaddress2ET, cityET, stateET, zipcodeET;
     LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, stateErrorLL, zipcodeErrorLL;
     TextView address1ErrorTV, address2ErrorTV, cityErrorTV, stateErrorTV, zipcodeErrorTV;
-    public boolean isCompanyAdress1 = false, isCity = false, isState = false,
-            isZipcode = false, isAddressNextEnabled = false, isCopyCompanyInfo = false, isPostSuccess = false;
+    public boolean isCompanyAdress1 = false, isCity = false, isState = false, isZipcode = false, isAddressNextEnabled = false, isCopyCompanyInfo = false, isPostSuccess = false;
     ImageView statedropdownIV;
 
     DBAPager dbaPager;
@@ -125,19 +136,19 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     BusinessTypeResp btResponse;
     public String type = "", selectedBTKey = "";
     IdentityVerificationViewModel identityVerificationViewModel;
-    public static File dbaFile = null;
+    public static File dbaFile = null, businessLicenseFile = null;
     private static final int ACTIVITY_CHOOSE_FILE = 3;
     private static final int PICK_IMAGE_REQUEST = 4;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
     DBAInfoAcivity myActivity;
-    String prevDBAName = "";
+    String prevDBAName = "", selectedDocType;
+    private int DocID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_dba_information);
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
             initFields();
@@ -167,8 +178,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         try {
             super.onDestroy();
 //            if (!isPostSuccess && !isAddDBA && !addBusiness)
-            if (!isPostSuccess && !isAddDBA)
-                dbaInfoAPICall(prepareRequest());
+            if (!isPostSuccess && !isAddDBA) dbaInfoAPICall(prepareRequest());
 
 //            if (!isPostSuccess && !isAddDBA) {
 //                if (isAddDBAAPICalled) {
@@ -187,8 +197,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public void onBackPressed() {
         if (selectedPage == 0) {
 //            if (isAddDBA || addBusiness)
-            if (isAddDBA)
-                confirmationAlert();
+            if (isAddDBA) confirmationAlert();
             else {
                 if (getIntent().getStringExtra("FROM").equals("EDIT")) {
                     try {
@@ -280,6 +289,9 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             timeZoneCL = findViewById(R.id.timeZoneCL);
 
             dbaFillingLL = findViewById(R.id.dbaFillingLL);
+            licesnseUploadTV = findViewById(R.id.licesnseUploadTV);
+            licenseUploadedLL = findViewById(R.id.licenseUploadedLL);
+            licenseUpdatedOnTV = findViewById(R.id.licenseUpdatedOnTV);
             dbaFillingUploadedLL = findViewById(R.id.dbaFillingUploadedLL);
             dbaFillinguploadTV = findViewById(R.id.dbaFillinguploadTV);
             dbaFillingUpdatedOnTV = findViewById(R.id.dbaFillingUpdatedOnTV);
@@ -415,8 +427,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
                 Utils.populateTimeZones(DBAInfoAcivity.this, timeZoneET, objMyApplication, "DBA_INFO");
             });
 
@@ -425,8 +436,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
                 Utils.populateTimeZones(DBAInfoAcivity.this, timeZoneET, objMyApplication, "DBA_INFO");
 
             });
@@ -436,11 +446,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
                 Utils.populateBusinessTypes(this, businessTypeET, objMyApplication, "DBA_INFO");
-
-
             });
 
             businessTypeET.setOnClickListener(view -> {
@@ -448,42 +455,29 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
                 Utils.populateBusinessTypes(this, businessTypeET, objMyApplication, "DBA_INFO");
 
             });
 
-//            eCommerceLL.setOnClickListener(view -> {
-//                if (!isECommerce) {
-//                    eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
-//                    retailIV.setImageResource(R.drawable.ic_rb_unselected);
-//                    websiteOET.setHint("Website");
-//                    isECommerce = true;
-//                    isRetail = false;
-//                    identificationType = 9;
-//                    isIDVESelected = true;
-//
-////                    dbaFillingLL.setVisibility(GONE);
-//                }
-//                isWebsite = isValidUrl(websiteOET.getText().trim());
-//                enableOrDisableNext();
-//            });
+            eCommerceLL.setOnClickListener(view -> {
+                if (!isECommerce) {
+                    selectEcommerceRB();
 
-//            retailLL.setOnClickListener(view -> {
-//                if (!isRetail) {
-//                    websiteOET.setHint("Website (Optional)");
-//                    isECommerce = false;
-//                    isRetail = true;
-//                    identificationType = 8;
-//                    isIDVESelected = true;
-//                    retailIV.setImageResource(R.drawable.ic_rb_selected);
-//                    eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
-//                }
-////                isWebsite = true;
+//                    dbaFillingLL.setVisibility(GONE);
+                }
+                isWebsite = isValidUrl(websiteOET.getText().trim());
+                enableOrDisableNext();
+            });
+
+            retailLL.setOnClickListener(view -> {
+                if (!isRetail) {
+                    selectRetailRB();
+                }
+                isWebsite = true;
 //                isWebsite = isValidUrl(websiteOET.getText().trim());
-//                enableOrDisableNext();
-//            });
+                enableOrDisableNext();
+            });
 
             dbaNextCV.setOnClickListener(v -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -513,26 +507,37 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
             });
 
-            dbaFillingLL.setOnClickListener(v -> {
-                if (checkAndRequestPermissions(DBAInfoAcivity.this)) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(this);
-                    chooseFilePopup(DBAInfoAcivity.this);
-                }
-
-            });
+//            dbaFillingLL.setOnClickListener(v -> {
+//                if (checkAndRequestPermissions(DBAInfoAcivity.this)) {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(this);
+//                    chooseFilePopup(DBAInfoAcivity.this);
+//                }
+//
+//            });
+//            dbaFillingLL.setOnClickListener(v -> {
+//                if (checkAndRequestPermissions(DBAInfoAcivity.this)) {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(this);
+//                    chooseFilePopup(DBAInfoAcivity.this);
+//                }
+//
+//            });
 
             stateET.setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
                 Utils.populateStates(this, stateET, objMyApplication);
             });
 
@@ -541,23 +546,22 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
                 Utils.populateStates(this, stateET, objMyApplication);
             });
 
-            //Default values enabled
-//            eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
-//            retailIV.setImageResource(R.drawable.ic_rb_unselected);
-//            websiteOET.setHint("Website");
+            //  Default values enabled
+            eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
+            retailIV.setImageResource(R.drawable.ic_rb_unselected);
+            websiteOET.setHint("Website");
             //Modified
-            retailIV.setImageResource(R.drawable.ic_rb_selected);
-            websiteOET.setHint("Website (Optional)");
+//            retailIV.setImageResource(R.drawable.ic_rb_selected);
+//            websiteOET.setHint("Website (Optional)");
             //isWebsite = isValidUrl(websiteOET.getText().trim());
             //end
-            isECommerce = false;
-            isRetail = true;
-            identificationType = 8;
+            isECommerce = true;
+            isRetail = false;
+            identificationType = Utils.eCommerce_DBA_Filling;
             isIDVESelected = true;
 
 
@@ -584,6 +588,82 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             e.printStackTrace();
         }
 
+    }
+
+    public void blicenseClick(View view) {
+        selectedDocType = "B-LICENCE";
+        if (checkAndRequestPermissions(DBAInfoAcivity.this)) {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (Utils.isKeyboardVisible) Utils.hideKeypad(DBAInfoAcivity.this);
+            chooseFile(this, selectedDocType);
+        }
+    }
+
+    public void dbaFillClick(View view) {
+        selectedDocType = "DBA";
+        if (checkAndRequestPermissions(DBAInfoAcivity.this)) {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            if (Utils.isKeyboardVisible) Utils.hideKeypad(DBAInfoAcivity.this);
+            chooseFile(this, selectedDocType);
+        }
+    }
+
+    private void chooseFile(final Context context, String type) {
+        FilePickerDialog pickerDialog = new FilePickerDialog(context, true);
+        pickerDialog.setOnDialogClickListener(new OnDialogClickListener() {
+            @Override
+            public void onDialogClicked(String action, Object value) {
+                switch (action) {
+                    case CHOOSE_LIBRARY:
+                        launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR.GALLERY, type);
+                        break;
+                    case TAKE_PHOTO:
+                        launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR.CAMERA_RETAKE, type);
+                        break;
+                    case BROWSE:
+                        launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR.BROWSE, type);
+                        break;
+                }
+            }
+        });
+        pickerDialog.show();
+    }
+
+    private void launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR action, String type) {
+        Intent camIntent = new Intent(DBAInfoAcivity.this, CameraHandlerActivity.class);
+        camIntent.putExtra(CameraUtility.CAMERA_ACTION, action);
+        camIntent.putExtra(CameraUtility.SELECTING_ID, type);
+        imageChooserActivityLauncher.launch(camIntent);
+    }
+
+    ActivityResultLauncher<Intent> imageChooserActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                uploadFile(result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+                //setImageFromFilePath(result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+                LogUtils.e(TAG, result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+            } else {
+                LogUtils.e(TAG, "Error while selecting photo");
+            }
+        }
+    });
+
+    private void uploadFile(String filePath) {
+        File mediaFile = new File(filePath);
+        if (selectedDocType.equals("B-LICENCE")) {
+            businessLicenseFile = mediaFile;
+            removeAndUploadAdditionalDoc(Utils.BUSINESS_LICENSE);
+        } else if (selectedDocType.equals("DBA")) {
+            dbaFile = mediaFile;
+            removeAndUploadAdditionalDoc(identificationType);
+        }
     }
 
     private void initObservers() {
@@ -627,8 +707,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                                 viewBarRight.setBackgroundResource(R.drawable.button_background);
                             }
                         } else {
-                            Utils.displayAlert(dbaInfoUpdateResp.getError().getErrorDescription(),
-                                    DBAInfoAcivity.this, "", dbaInfoUpdateResp.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(dbaInfoUpdateResp.getError().getErrorDescription(), DBAInfoAcivity.this, "", dbaInfoUpdateResp.getError().getFieldErrors().get(0));
                         }
                     }
                 }
@@ -643,13 +722,20 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onChanged(IdentityImageResponse identityImageResponse) {
                     dismissDialog();
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
-
-                        dbaFillinguploadTV.setVisibility(GONE);
-                        dbaFillingUploadedLL.setVisibility(VISIBLE);
-                        String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
-                        dbaFillingUpdatedOnTV.setText("Uploaded on " + dateString);
-                        isDBAFiling = true;
-
+                        if (DocID == Utils.BUSINESS_LICENSE) {
+                            licesnseUploadTV.setVisibility(GONE);
+                            licenseUploadedLL.setVisibility(VISIBLE);
+                            String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
+                            licenseUpdatedOnTV.setText("Uploaded on " + dateString);
+                            licenseUpdatedOnTV.setVisibility(VISIBLE);
+                            isBLUploaded = true;
+                        } else if (DocID == Utils.retail_DBA_Filling) {
+                            dbaFillinguploadTV.setVisibility(GONE);
+                            dbaFillingUploadedLL.setVisibility(VISIBLE);
+                            String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
+                            dbaFillingUpdatedOnTV.setText("Uploaded on " + dateString);
+                            isDBAFiling = true;
+                        }
                         enableOrDisableNext();
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), DBAInfoAcivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
@@ -666,21 +752,24 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onChanged(RemoveIdentityResponse imageResponse) {
                     if (imageResponse != null) {
 
-                        dbaFillinguploadTV.setVisibility(VISIBLE);
-                        dbaFillingUploadedLL.setVisibility(GONE);
-                        dbaFillingUpdatedOnTV.setText("");
-                        isDBAFiling = false;
-                        enableOrDisableNext();
+//                        dbaFillinguploadTV.setVisibility(VISIBLE);
+//                        dbaFillingUploadedLL.setVisibility(GONE);
+//                        dbaFillingUpdatedOnTV.setText("");
+//                        isDBAFiling = false;
+//                        enableOrDisableNext();
 
                         showProgressDialog();
 
                         RequestBody requestBody = null;
                         MultipartBody.Part idFile = null;
-
-                        requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), dbaFile);
-                        idFile = MultipartBody.Part.createFormData("identityFile", dbaFile.getName(), requestBody);
-
-                        RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), identificationType + "");
+                        if (DocID == Utils.BUSINESS_LICENSE) {
+                            requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), businessLicenseFile);
+                            idFile = MultipartBody.Part.createFormData("identityFile", businessLicenseFile.getName(), requestBody);
+                        } else if (DocID == Utils.retail_DBA_Filling) {
+                            requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), dbaFile);
+                            idFile = MultipartBody.Part.createFormData("identityFile", dbaFile.getName(), requestBody);
+                        }
+                        RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), DocID + "");
 
                         RequestBody idNumber;
                         if (objMyApplication.getCompanyInfoResp().getData().getSsnOrEin() != null) {
@@ -707,8 +796,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             finish();
                         } else {
                             isPostSuccess = false;
-                            Utils.displayAlert(dbaInfoUpdateResp.getError().getErrorDescription(),
-                                    DBAInfoAcivity.this, "", dbaInfoUpdateResp.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(dbaInfoUpdateResp.getError().getErrorDescription(), DBAInfoAcivity.this, "", dbaInfoUpdateResp.getError().getFieldErrors().get(0));
                         }
                     }
                 }
@@ -725,8 +813,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         objMyApplication.setDbaInfoResp(dbaInfoResp);
                         loadCompanyInfo();
                     } else {
-                        Utils.displayAlert(dbaInfoResp.getError().getErrorDescription(),
-                                DBAInfoAcivity.this, "", dbaInfoResp.getError().getFieldErrors().get(0));
+                        Utils.displayAlert(dbaInfoResp.getError().getErrorDescription(), DBAInfoAcivity.this, "", dbaInfoResp.getError().getFieldErrors().get(0));
                     }
                 }
             });
@@ -1357,8 +1444,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
         try {
             if (isCopyCompanyInfo) {
-                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
-                        && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected) {
+                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected && isDBAFiling) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);
@@ -1368,9 +1454,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     viewPager.setPagingEnabled(false);
                 }
             } else {
-                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
-                        && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected) {
-//                    && isDBAFiling (DBA file is Optional)
+                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected && isDBAFiling) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);
@@ -1391,8 +1475,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             if (isCompanyAdress1 && isCity && isState && isZipcode) {
                 isAddressNextEnabled = true;
                 addressNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                if (isNextEnabled)
-                    viewPager.setPagingEnabled(true);
+                if (isNextEnabled) viewPager.setPagingEnabled(true);
             } else {
                 isAddressNextEnabled = false;
                 addressNextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
@@ -1483,6 +1566,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             if (type.equalsIgnoreCase("SAME")) {
                 isCopyCompanyInfo = true;
                 dbaFillingLL.setVisibility(GONE);
+                isDBAFiling = true;
                 if (objMyApplication.getCompanyInfoResp() != null) {
                     CompanyInfoResp.Data cir = objMyApplication.getCompanyInfoResp().getData();
                     if (cir.getName() != null && !cir.getName().equals("")) {
@@ -1541,6 +1625,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             } else if (type.equalsIgnoreCase("DIFF")) {
                 isCopyCompanyInfo = false;
                 dbaFillingLL.setVisibility(VISIBLE);
+                isDBAFiling = false;
                 prevDBAName = "";
             } else if (getIntent().getStringExtra("TYPE").equalsIgnoreCase("EXIST")) {
                 if (objMyApplication.getDbaInfoResp() != null && objMyApplication.getDbaInfoResp().getStatus().equalsIgnoreCase("SUCCESS")) {
@@ -1584,42 +1669,54 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         websiteOET.setSelection();
                     }
 
-//                    if (cir.getIdentificationType().equals("8")) {
-                    websiteOET.setHint("Website (Optional)");
-                    isECommerce = false;
-                    isRetail = true;
-                    identificationType = 8;
-                    retailIV.setImageResource(R.drawable.ic_rb_selected);
-                    eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
-                    isWebsite = true;
-                    isIDVESelected = true;
-//                    } else if (cir.getIdentificationType().equals("9")) {
-//                        eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
-//                        retailIV.setImageResource(R.drawable.ic_rb_unselected);
-//                        websiteOET.setHint("Website");
-//                        isECommerce = true;
-//                        isRetail = false;
-//                        identificationType = 9;
-//                        isWebsite = isValidUrl(cir.getWebsite());
-//                        isIDVESelected = true;
-//                    }
+                    if (cir.getIdentificationType().equals(String.valueOf(Utils.retail_DBA_Filling))) {
+                        websiteOET.setHint("Website (Optional)");
+                        isECommerce = false;
+                        isRetail = true;
+                        identificationType = Utils.retail_DBA_Filling;
+                        retailIV.setImageResource(R.drawable.ic_rb_selected);
+                        eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
+                        isWebsite = true;
+                        isIDVESelected = true;
+                    } else if (cir.getIdentificationType().equals(String.valueOf(Utils.eCommerce_DBA_Filling))) {
+                        eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
+                        retailIV.setImageResource(R.drawable.ic_rb_unselected);
+                        websiteOET.setHint("Website");
+                        isECommerce = true;
+                        isRetail = false;
+                        identificationType = Utils.eCommerce_DBA_Filling;
+                        isWebsite = isValidUrl(cir.getWebsite());
+                        isIDVESelected = true;
+                    }
 
                     if (cir.getRequiredDocuments().size() > 0) {
-                        dbaFillingLL.setVisibility(VISIBLE);
-                        dbaFillinguploadTV.setVisibility(GONE);
-                        dbaFillingUploadedLL.setVisibility(VISIBLE);
-                        dbaFillingUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(0).getUpdatedAt()));
-                        isDBAFiling = true;
-
+                        for (int i = 0; i < cir.getRequiredDocuments().size(); i++) {
+                            if (cir.getRequiredDocuments().get(i).getIdentityId() == Utils.retail_DBA_Filling || cir.getRequiredDocuments().get(i).getIdentityId() == Utils.eCommerce_DBA_Filling) {
+                                dbaFillingLL.setVisibility(VISIBLE);
+                                dbaFillinguploadTV.setVisibility(GONE);
+                                dbaFillingUploadedLL.setVisibility(VISIBLE);
+                                dbaFillingUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(0).getUpdatedAt()));
+                                isDBAFiling = true;
+                            } else if (cir.getRequiredDocuments().get(i).getIdentityId() == Utils.BUSINESS_LICENSE) {
+                                licesnseUploadTV.setVisibility(GONE);
+                                licenseUploadedLL.setVisibility(VISIBLE);
+                                licenseUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(0).getUpdatedAt()));
+                                licenseUpdatedOnTV.setVisibility(VISIBLE);
+                                isBLUploaded = true;
+                            }
+                        }
                     } else {
                         dbaFillingLL.setVisibility(GONE);
                         isDBAFiling = false;
+                        isBLUploaded = false;
                     }
 
                     if (isCopyCompanyInfo) {
                         dbaFillingLL.setVisibility(GONE);
+                        isDBAFiling = true;
                     } else {
                         dbaFillingLL.setVisibility(VISIBLE);
+                        isDBAFiling = false;
                     }
 
                     if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Utils.doubleParsing(cir.getMonthlyProcessingVolume()) > 0) {
@@ -1741,18 +1838,15 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             //Name
             if (dbanameET.getText().toString().trim().length() > 0)
                 dbaInfoRequest.setName(dbanameET.getText().toString().trim());
-            else
-                dbaInfoRequest.setName(prevDBAName);
+            else dbaInfoRequest.setName(prevDBAName);
 
             //Email
             if (Utils.isValidEmail(dbaemailET.getText().toString().trim()))
                 dbaInfoRequest.setEmail(dbaemailET.getText().toString().trim());
             //Business Type
-            if (!selectedBTKey.equals(""))
-                dbaInfoRequest.setBusinessType(selectedBTKey.trim());
+            if (!selectedBTKey.equals("")) dbaInfoRequest.setBusinessType(selectedBTKey.trim());
             //IdentificationID
-            if (identificationType != 0)
-                dbaInfoRequest.setIdentificationType(identificationType);
+            if (identificationType != 0) dbaInfoRequest.setIdentificationType(identificationType);
             //Avg ticket
             if (avgTicketOET.getText().trim().length() > 0)
                 dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSD(avgTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
@@ -1794,28 +1888,21 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
     public static boolean checkAndRequestPermissions(final Activity context) {
         try {
-            int WExtstorePermission = ContextCompat.checkSelfPermission(context,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            int cameraPermission = ContextCompat.checkSelfPermission(context,
-                    android.Manifest.permission.CAMERA);
-            int internalStorage = ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.READ_EXTERNAL_STORAGE);
+            int WExtstorePermission = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int cameraPermission = ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA);
+            int internalStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
             List<String> listPermissionsNeeded = new ArrayList<>();
             if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
                 listPermissionsNeeded.add(android.Manifest.permission.CAMERA);
             }
             if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
-                listPermissionsNeeded
-                        .add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
             if (internalStorage != PackageManager.PERMISSION_GRANTED) {
-                listPermissionsNeeded
-                        .add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+                listPermissionsNeeded.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
             }
             if (!listPermissionsNeeded.isEmpty()) {
-                ActivityCompat.requestPermissions(context, listPermissionsNeeded
-                                .toArray(new String[listPermissionsNeeded.size()]),
-                        REQUEST_ID_MULTIPLE_PERMISSIONS);
+                ActivityCompat.requestPermissions(context, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
                 return false;
             }
         } catch (Exception ex) {
@@ -1830,22 +1917,19 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             switch (requestCode) {
                 case REQUEST_ID_MULTIPLE_PERMISSIONS:
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 //                        Utils.displayAlert("Requires Access to Camera.", DBAInfoAcivity.this, "", "");
                         Utils.showDialogPermission(DBAInfoAcivity.this, getString(R.string.allow_access_header), getString(R.string.camera_permission_desc));
 
-                    } else if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         Utils.displayAlert("Requires Access to Your Storage.", DBAInfoAcivity.this, "", "");
 
-                    } else if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         Utils.displayAlert("Requires Access to Your Storage.", DBAInfoAcivity.this, "", "");
 
                     } else {
 //                        startActivity(new Intent(this, CameraActivity.class));
-                        chooseFilePopup(this);
+                        chooseFile(this, selectedDocType);
                     }
                     break;
             }
@@ -1855,111 +1939,119 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     }
 
     public void removeAndUploadAdditionalDoc(int docID) {
-        if (Utils.isValidFileSize(dbaFile)) {
-            identityVerificationViewModel.removeIdentityImage(docID + "");
+        DocID = docID;
+        boolean isValid = false;
+        if (selectedDocType.equals("B-LICENCE")) {
+            isValid = Utils.isValidFileSize(businessLicenseFile);
+        } else if (selectedDocType.equals("DBA")) {
+            isValid = Utils.isValidFileSize(dbaFile);
+        }
+//        if (Utils.isValidFileSize(dbaFile)) {
+        if (isValid) {
+            identityVerificationViewModel.removeIdentityImage(DocID + "");
         } else {
             Utils.displayAlert(getString(R.string.allowed_file_size_error), this, "coyni", "");
         }
     }
 
-    private void chooseFilePopup(final Context context) {
-        try {
-            Dialog chooseFile = new Dialog(context);
-            chooseFile.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            chooseFile.setContentView(R.layout.activity_choose_file_botm_sheet);
-            chooseFile.setCancelable(true);
-            Window window = chooseFile.getWindow();
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-            chooseFile.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            WindowManager.LayoutParams wlp = window.getAttributes();
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
-            chooseFile.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-            TextView libraryTV = chooseFile.findViewById(R.id.libraryTV);
-            TextView takePhotoTV = chooseFile.findViewById(R.id.takePhotoTV);
-            TextView browseFileTV = chooseFile.findViewById(R.id.browseFileTV);
-
-            libraryTV.setOnClickListener(view -> {
-                chooseFile.dismiss();
-
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, PICK_IMAGE_REQUEST);
-            });
-
-            takePhotoTV.setOnClickListener(view -> {
-                chooseFile.dismiss();
-                startActivity(new Intent(DBAInfoAcivity.this, CameraActivity.class).putExtra("FROM", "DBA_INFO"));
-
-            });
-
-            browseFileTV.setOnClickListener(view -> {
-                chooseFile.dismiss();
-
-                Intent pickIntent = new Intent();
-                pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                pickIntent.setType("*/*");
-                String[] extraMimeTypes = {"application/pdf", "image/*"};
-//                String[] extraMimeTypes = {"application/pdf", "image/*", "text/csv", "application/msword",
-//                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
-                pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
-                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-                Intent chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
-                startActivityForResult(chooserIntent, ACTIVITY_CHOOSE_FILE);
-
-            });
-
-            chooseFile.show();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            super.onActivityResult(requestCode, resultCode, data);
-            if (resultCode != RESULT_OK) return;
-            String path = "";
-            if (requestCode == ACTIVITY_CHOOSE_FILE) {
-                uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
-            } else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
-                uploadDocumentFromLibrary(data.getData(), PICK_IMAGE_REQUEST);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String getRealPathFromURI(Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if (cursor == null) return null;
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
-
-    public void uploadDocumentFromLibrary(Uri uri, int reqType) {
-        try {
-            String FilePath = "";
-            if (reqType == ACTIVITY_CHOOSE_FILE) {
-                FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
-            } else {
-                FilePath = getRealPathFromURI(uri);
-            }
-            File mediaFile = new File(FilePath);
-            dbaFile = mediaFile;
-            removeAndUploadAdditionalDoc(identificationType);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    //    private void chooseFilePopup(final Context context) {
+//        try {
+//            Dialog chooseFile = new Dialog(context);
+//            chooseFile.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//            chooseFile.setContentView(R.layout.activity_choose_file_botm_sheet);
+//            chooseFile.setCancelable(true);
+//            Window window = chooseFile.getWindow();
+//            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//            chooseFile.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//            WindowManager.LayoutParams wlp = window.getAttributes();
+//            wlp.gravity = Gravity.BOTTOM;
+//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            window.setAttributes(wlp);
+//            chooseFile.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//
+//            TextView libraryTV = chooseFile.findViewById(R.id.libraryTV);
+//            TextView takePhotoTV = chooseFile.findViewById(R.id.takePhotoTV);
+//            TextView browseFileTV = chooseFile.findViewById(R.id.browseFileTV);
+//
+//            libraryTV.setOnClickListener(view -> {
+//                chooseFile.dismiss();
+//
+//                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+//                photoPickerIntent.setType("image/*");
+//                startActivityForResult(photoPickerIntent, PICK_IMAGE_REQUEST);
+//            });
+//
+//            takePhotoTV.setOnClickListener(view -> {
+//                chooseFile.dismiss();
+//                startActivity(new Intent(DBAInfoAcivity.this, CameraActivity.class).putExtra("FROM", "DBA_INFO"));
+//
+//            });
+//
+//            browseFileTV.setOnClickListener(view -> {
+//                chooseFile.dismiss();
+//
+//                Intent pickIntent = new Intent();
+//                pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
+//                pickIntent.setType("*/*");
+//                String[] extraMimeTypes = {"application/pdf", "image/*"};
+////                String[] extraMimeTypes = {"application/pdf", "image/*", "text/csv", "application/msword",
+////                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
+//                pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
+//                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+//
+//                Intent chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
+//                startActivityForResult(chooserIntent, ACTIVITY_CHOOSE_FILE);
+//
+//            });
+//
+//            chooseFile.show();
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        try {
+//            super.onActivityResult(requestCode, resultCode, data);
+//            if (resultCode != RESULT_OK) return;
+//            String path = "";
+//            if (requestCode == ACTIVITY_CHOOSE_FILE) {
+//                uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
+//            } else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
+//                uploadDocumentFromLibrary(data.getData(), PICK_IMAGE_REQUEST);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public String getRealPathFromURI(Uri contentUri) {
+//        String[] proj = {MediaStore.Images.Media.DATA};
+//        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+//        if (cursor == null) return null;
+//        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//        cursor.moveToFirst();
+//        return cursor.getString(column_index);
+//    }
+//
+//    public void uploadDocumentFromLibrary(Uri uri, int reqType) {
+//        try {
+//            String FilePath = "";
+//            if (reqType == ACTIVITY_CHOOSE_FILE) {
+//                FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
+//            } else {
+//                FilePath = getRealPathFromURI(uri);
+//            }
+//            File mediaFile = new File(FilePath);
+//            dbaFile = mediaFile;
+//            removeAndUploadAdditionalDoc(identificationType);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
     private boolean isValidUrl(String url) {
         Pattern p = Patterns.WEB_URL;
         Matcher m = p.matcher(url.toLowerCase());
@@ -2006,5 +2098,25 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    private void selectEcommerceRB() {
+        eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
+        retailIV.setImageResource(R.drawable.ic_rb_unselected);
+        websiteOET.setHint("Website");
+        isECommerce = true;
+        isRetail = false;
+        identificationType = Utils.eCommerce_DBA_Filling;
+        isIDVESelected = true;
+    }
+
+    private void selectRetailRB() {
+        websiteOET.setHint("Website (Optional)");
+        isECommerce = false;
+        isRetail = true;
+        identificationType = Utils.retail_DBA_Filling;
+        isIDVESelected = true;
+        retailIV.setImageResource(R.drawable.ic_rb_selected);
+        eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
     }
 }

@@ -82,19 +82,20 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/transTypeSalesOrderToken"
+                        android:id="@+id/transTypeSalesOrder"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="@string/sale_order_tokens"
+                        android:text="Sale Order"
+                        android:layout_marginRight="@dimen/_10sdp"
                         android:textAlignment="center"
                         android:textColor="@color/chip_text_color"
                         android:textSize="@dimen/_11ssp"
                         app:chipBackgroundColor="@color/chipbackgroundcolor"
                         app:chipMinHeight="@dimen/_32sdp" />
+
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/transTypeRefund"
@@ -120,18 +121,17 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/transTypeSO"
+                        android:id="@+id/transTypeMonthlyServiceFee"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/_10sdp"
                         android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/_10sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="@string/merchant_payout"
+                        android:text="@string/monthly_service_fee"
                         android:textAlignment="center"
                         android:textColor="@color/chip_text_color"
                         android:textSize="@dimen/_11ssp"
-                        android:visibility="gone"
                         app:chipBackgroundColor="@color/chipbackgroundcolor"
                         app:chipMinHeight="@dimen/_32sdp" />
 
@@ -140,7 +140,6 @@
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="@string/merchant_payout"
@@ -150,21 +149,53 @@
                         app:chipBackgroundColor="@color/chipbackgroundcolor"
                         app:chipMinHeight="@dimen/_32sdp" />
 
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Transaction Sub Type"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/transTypeMonthlyServiceFee"
+                        android:id="@+id/transSubTypeEcommerce"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="@string/monthly_service_fee"
+                        android:text="eCommerce"
                         android:textAlignment="center"
                         android:textColor="@color/chip_text_color"
                         android:textSize="@dimen/_11ssp"
                         app:chipBackgroundColor="@color/chipbackgroundcolor"
                         app:chipMinHeight="@dimen/_32sdp" />
-                </LinearLayout>
 
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transSubTypeRetail"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Retail / Mobile"
+                        android:textAlignment="center"
+                        android:textColor="@color/chip_text_color"
+                        android:textSize="@dimen/_11ssp"
+                        app:chipBackgroundColor="@color/chipbackgroundcolor"
+                        app:chipMinHeight="@dimen/_32sdp" />
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"

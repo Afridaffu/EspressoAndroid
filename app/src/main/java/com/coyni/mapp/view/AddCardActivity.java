@@ -31,6 +31,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -112,7 +115,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL;
     public LinearLayout cardErrorLL;
     View divider1, divider2;
-    TextView tvCardHead, nameErrorTV, expiryErrorTV, cvvErrorTV, address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV;
+    TextView tvCardHead, nameErrorTV, expiryErrorTV, cvvErrorTV, address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV, addressSubHeaderTV, addCardTV;
     public TextView cardErrorTV;
     CardView cvNext, cvAddCard;
     String strName = "", strCardNo = "", strExpiry = "", strCvv = "", strAdd1 = "", strAdd2 = "", strCity = "", strState = "", strZip = "", strCountry = "";
@@ -128,7 +131,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     public static AddCardActivity addCardActivity;
     CardTypeResponse objCard;
     Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false;
-    Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false, isInvalid = false;
+    Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false, isInvalid = false, isSaveAddress = false;
     public Boolean isCard = false, isScan = false, isCardClear = false, isBuyFCEnabled = false, isWithFCEnabled = false;
     TextView tvError;
     //    private BlinkCardRecognizer mRecognizer;
@@ -141,6 +144,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     int pagerPosition = 0, diffMonths = -1;
     private static final String API_KEY = "qOJ_fF-WLDMbG05iBq5wvwiTNTmM2qIn";
     CardScanSheet sheet;
+    private CheckBox saveAddressCB;
+    private ImageView closeIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,8 +154,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             sheet = CardScanSheet.create(this, API_KEY, this::handleScanResult);
 
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_addcard);
 //            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             addCardActivity = this;
@@ -165,8 +169,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
 //                    Utils.shwForcedKeypad(AddCardActivity.this);
 
                     if (position == 1) {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(AddCardActivity.this);
+                        if (!Utils.isKeyboardVisible) Utils.shwForcedKeypad(AddCardActivity.this);
                     }
                 }
 
@@ -212,9 +215,13 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     public void onBackPressed() {
         try {
             if (pagerPosition == 1) {
-                viewPager.setCurrentItem(0);
-                divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
-                divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("add_address")) {
+                    super.onBackPressed();
+                } else {
+                    viewPager.setCurrentItem(0);
+                    divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
+                    divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
+                }
             } else {
                 super.onBackPressed();
             }
@@ -272,22 +279,12 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             etlAddress2 = findViewById(R.id.etlAddress2);
             etlCity = findViewById(R.id.etlCity);
             etlZipCode = findViewById(R.id.etlZipCode);
+            saveAddressCB = findViewById(R.id.saveAddressCB);
+            addressSubHeaderTV = findViewById(R.id.tvAddMsg);
+            closeIV = findViewById(R.id.closeIV);
+            addCardTV = findViewById(R.id.addCardTV);
             etName.requestFocus();
             etCardNumber.setFrom("ADD_CARD");
-//            etName.setHint("Name on Card");
-//            try {
-//                MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
-//                mRecognizer = new BlinkCardRecognizer();
-//                mRecognizer.setExtractCvv(false);
-//                mRecognizer.setExtractIban(false);
-//                // bundle recognizers into RecognizerBundle
-//                mRecognizerBundle = new RecognizerBundle(mRecognizer);
-//            } catch (Exception ex) {
-//                if (ex.toString().toLowerCase().contains("invalidlicencekeyexception")) {
-//                    isLicense = true;
-//                }
-//                ex.printStackTrace();
-//            }
             etAddress1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etAddress2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
@@ -296,12 +293,25 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-            //paymentMethodsViewModel.getPublicKey(objMyApplication.getLoginUserId());
-            //objMyApplication.getStates();
             if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
                 tvCardHead.setText("Add New Debit Card");
-            } else {
+            } else if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("credit")) {
                 tvCardHead.setText("Add New Credit Card");
+            } else {
+                if (getIntent().getStringExtra("screen").equalsIgnoreCase("signup")) {
+                    saveAddressCB.setVisibility(VISIBLE);
+                    tvCardHead.setText("Add Debit or Credit Card");
+                } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("add_address")) {
+                    saveAddressCB.setVisibility(GONE);
+                    tvCardHead.setText("Add Billing Address");
+                    viewPager.setPagingEnabled(false);
+                    viewPager.setCurrentItem(1);
+                    addressSubHeaderTV.setText("Please enter your billing address.");
+                    divider1.setVisibility(GONE);
+                    divider2.setVisibility(GONE);
+                    closeIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_close));
+                    addCardTV.setText("Add Address");
+                }
             }
 
             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
@@ -335,8 +345,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(AddCardActivity.this);
+                    if (Utils.isKeyboardVisible) Utils.hideKeypad(AddCardActivity.this);
                     Utils.populateStates(AddCardActivity.this, etState, objMyApplication);
                 }
             });
@@ -348,8 +357,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(AddCardActivity.this);
+                    if (Utils.isKeyboardVisible) Utils.hideKeypad(AddCardActivity.this);
                     Utils.populateStates(AddCardActivity.this, etState, objMyApplication);
                 }
             });
@@ -361,8 +369,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(AddCardActivity.this);
+                    if (Utils.isKeyboardVisible) Utils.hideKeypad(AddCardActivity.this);
                     Utils.populateStates(AddCardActivity.this, etState, objMyApplication);
                 }
             });
@@ -370,8 +377,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(AddCardActivity.this);
+                    if (Utils.isKeyboardVisible) Utils.hideKeypad(AddCardActivity.this);
                     onBackPressed();
                 }
             });
@@ -407,8 +413,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
                             }
-                            if (Utils.isKeyboardVisible)
-                                Utils.hideKeypad(AddCardActivity.this);
+                            if (Utils.isKeyboardVisible) Utils.hideKeypad(AddCardActivity.this);
                             mLastClickTime = SystemClock.elapsedRealtime();
                             progressDialog = Utils.showProgressDialog(AddCardActivity.this);
                             strAdd1 = etAddress1.getText().toString().trim();
@@ -479,19 +484,28 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             etCardNumber.getCardReaderIVRef().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(AddCardActivity.this);
+                    if (Utils.isKeyboardVisible) Utils.hideKeypad(AddCardActivity.this);
                     sheet.present(
                             /* enableEnterCardManually */ true,
                             /* enableExpiryExtraction */ false,
-                            /* enableNameExtraction */ false
-                    );
+                            /* enableNameExtraction */ false);
 //                    if (!isLicense) {
 //                        startScanning();
 //                    } else {
 //                        Utils.hideKeypad(AddCardActivity.this, view);
 //                        Utils.displayAlert("License has expired", AddCardActivity.this, "", "");
 //                    }
+                }
+            });
+
+            saveAddressCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        isSaveAddress = true;
+                    } else {
+                        isSaveAddress = false;
+                    }
                 }
             });
 
@@ -519,8 +533,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         cardResponseData = cardResponse.getData();
                         Error errData = cardResponse.getError();
                         if (errData == null || cardResponse.getStatus().toString().toLowerCase().equals("success")) {
-                            if (cardResponseData.getProcessor_response_text() != null && (cardResponseData.getProcessor_response_text().toLowerCase().contains("cvv mismatch") || cardResponseData.getProcessor_response_text().toLowerCase().contains("wrong card details")
-                                    || cardResponseData.getProcessor_response_text().toLowerCase().contains("fraud card"))) {
+                            if (cardResponseData.getProcessor_response_text() != null && (cardResponseData.getProcessor_response_text().toLowerCase().contains("cvv mismatch") || cardResponseData.getProcessor_response_text().toLowerCase().contains("wrong card details") || cardResponseData.getProcessor_response_text().toLowerCase().contains("fraud card"))) {
                                 displayAlert("Card details are invalid, please try with a valid card", "", "");
                             } else if (cardResponseData.getStatus().toLowerCase().contains("authorize") || cardResponseData.getStatus().toLowerCase().contains("approve") || cardResponseData.getStatus().toLowerCase().equals("pending_settlement")) {
                                 displayPreAuth();
@@ -688,8 +701,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                     if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw")) {
                         isWithFCEnabled = objMyApplication.withFeatureCtrlEnabled(objData);
                     }
-                    if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("dashboard")
-                            || getIntent().getStringExtra("screen").equals("payRequest") || getIntent().getStringExtra("screen").equals("ScreenCheckOut") || getIntent().getStringExtra("screen").equals("buytoken"))) {
+                    if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("dashboard") || getIntent().getStringExtra("screen").equals("payRequest") || getIntent().getStringExtra("screen").equals("ScreenCheckOut") || getIntent().getStringExtra("screen").equals("buytoken"))) {
                         isBuyFCEnabled = objMyApplication.buyFeatureCtrlEnabled(objData);
                     }
                     if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && objMyApplication.getGBTBalance() == 0) {
@@ -1607,10 +1619,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-//            WindowManager.LayoutParams lp = window.getAttributes();
-//            lp.dimAmount = 0.7f;
-//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            preAuthDialog.getWindow().setAttributes(lp);
             preAuthDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             preAuthDialog.show();
             layoutPClose = preAuthDialog.findViewById(R.id.layoutPClose);
@@ -1626,7 +1634,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
-            //tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
+//          tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
+            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your bank/card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
             etPreAmount.setShowSoftInputOnFocus(false);
             etPreAmount.setEnabled(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {
@@ -1748,6 +1757,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             } else {
                 request.setFromTxnScreen("");
             }
+            request.setSaveAsAccountAddress(isSaveAddress);
             paymentMethodsViewModel.preAuthVerify(request);
         } catch (Exception ex) {
             preDialog.dismiss();
@@ -1761,9 +1771,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             if (preAuthDialog != null) {
                 preAuthDialog.dismiss();
             }
-            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("withdraw")
-                    || getIntent().getStringExtra("screen").equals("dashboard") || getIntent().getStringExtra("screen").equals("payRequest")
-                    || getIntent().getStringExtra("screen").equals("ScreenCheckOut") || getIntent().getStringExtra("screen").equals("buytoken"))) {
+            if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("withdraw") || getIntent().getStringExtra("screen").equals("dashboard") || getIntent().getStringExtra("screen").equals("payRequest") || getIntent().getStringExtra("screen").equals("ScreenCheckOut") || getIntent().getStringExtra("screen").equals("buytoken"))) {
                 dashboardViewModel.mePaymentMethods();
             }
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
@@ -1784,24 +1792,21 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                     try {
                         //preDialog.dismiss();
                         objMyApplication.setCardSave(true);
-                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("dashboard")
-                                || getIntent().getStringExtra("screen").equals("buytoken") || getIntent().getStringExtra("screen").equals("payRequest") || getIntent().getStringExtra("screen").equals("ScreenCheckOut")) && isBuyFCEnabled) {
+                        if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("addpay") || getIntent().getStringExtra("screen").equals("dashboard") || getIntent().getStringExtra("screen").equals("buytoken") || getIntent().getStringExtra("screen").equals("payRequest") || getIntent().getStringExtra("screen").equals("ScreenCheckOut")) && isBuyFCEnabled) {
                             Intent i = new Intent(AddCardActivity.this, BuyTokenActivity.class);
                             i.putExtra("cvv", strCvv);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
                         } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && isWithFCEnabled && objMyApplication.getGBTBalance() != 0) {
                             if (getIntent().getStringExtra("card") != null && !getIntent().getStringExtra("card").equals("credit")) {
-                                startActivity(new Intent(AddCardActivity.this, WithdrawTokenActivity.class)
-                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                startActivity(new Intent(AddCardActivity.this, WithdrawTokenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             } else {
                                 Intent i = new Intent();
                                 setResult(RESULT_OK, i);
                             }
                         } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("withdraw") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add") && !isWithFCEnabled) {
                             if (getIntent().getStringExtra("card") != null && !getIntent().getStringExtra("card").equals("credit")) {
-                                startActivity(new Intent(AddCardActivity.this, WithdrawPaymentMethodsActivity.class)
-                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                startActivity(new Intent(AddCardActivity.this, WithdrawPaymentMethodsActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             } else {
                                 Intent i = new Intent();
                                 setResult(RESULT_OK, i);
@@ -1812,8 +1817,9 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
                         } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("buytoken") && getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("add") && !isBuyFCEnabled) {
-                            startActivity(new Intent(AddCardActivity.this, BuyTokenPaymentMethodsActivity.class)
-                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            startActivity(new Intent(AddCardActivity.this, BuyTokenPaymentMethodsActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("signup")) {
+                            launchDashboard(getIntent().getStringExtra("screen"));
                         } else {
                             Intent i = new Intent();
                             setResult(RESULT_OK, i);
@@ -2192,11 +2198,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             message.append(scanResult.getCardholderName());
         }
         if (scanResult.getExpiryMonth() != null && scanResult.getExpiryYear() != null) {
-            message.append(
-                    String.format("\nExpiry: %s/%s",
-                            scanResult.getExpiryMonth(),
-                            scanResult.getExpiryYear())
-            );
+            message.append(String.format("\nExpiry: %s/%s", scanResult.getExpiryMonth(), scanResult.getExpiryYear()));
         }
         if (scanResult.getErrorString() != null) {
             message.append("\nError: ");
@@ -2255,4 +2257,51 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             ex.printStackTrace();
         }
     }
+
+
+    private void launchDashboard(String strScreen) {
+        try {
+            if (objMyApplication.getInitializeResponse() != null && objMyApplication.getInitializeResponse().getData() != null
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+
+                if (objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.SHARED_ACCOUNT) {
+                    if (objMyApplication.getInitializeResponse().getData().getOwnerDetails() != null && !objMyApplication.getInitializeResponse().getData().getOwnerDetails().getTracker().isIsAgreementSigned()) {
+                        showProgressDialog();
+                        callHasToSignAPI(true);
+                    } else {
+                        dashboard(strScreen);
+                    }
+                } else {
+                    if (!objMyApplication.getInitializeResponse().getData().getTracker().isIsAgreementSigned()) {
+                        showProgressDialog();
+                        if (objMyApplication.getInitializeResponse().getData().getBusinessTracker() == null || !objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned())
+                            callHasToSignAPI(true);
+                        else if (objMyApplication.getInitializeResponse().getData().getBusinessTracker().isIsAgreementSigned()) {
+                            callHasToSignAPI(false);
+                        }
+                    } else {
+                        dashboard(strScreen);
+                    }
+                }
+
+            } else {
+                dashboard(strScreen);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void dashboard(String strScreen) {
+        if (objMyApplication.checkForDeclinedStatus()) {
+            objMyApplication.setIsLoggedIn(true);
+            objMyApplication.launchDeclinedActivity(this);
+        } else {
+            objMyApplication.setIsLoggedIn(true);
+            objMyApplication.launchDashboard(this, strScreen);
+        }
+    }
+
 }

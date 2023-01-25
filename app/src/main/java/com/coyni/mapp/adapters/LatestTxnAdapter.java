@@ -59,6 +59,7 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
         try {
             LatestTxnResponse.Daata objData = latestTxns.getData().get(position);
 
+
             String[] data = objData.getTxnDescription().replace("****", "-").split("-");
             try {
                 if (data.length > 1) {
@@ -75,8 +76,10 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                 } else {
                     if (objData.getTxnDescription().length() > 23)
                         holder.txnDescrip.setText(objData.getTxnDescription().substring(0, 22) + "...");
+//                        holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
                     else {
                         holder.txnDescrip.setText(objData.getTxnDescription());
+//                        holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
                     }
                     holder.txnDescripExtention.setVisibility(View.GONE);
                     holder.descriptionView.setVisibility(View.VISIBLE);
@@ -87,8 +90,11 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                 e.printStackTrace();
             }
 
-
-//            holder.txnDescTV.setText(latestTxns.getData().get(position).getTxnDescription());
+            if(objData.getTxnTypeDn().equalsIgnoreCase("Sale Order") && objData.getUserType().equalsIgnoreCase(Utils.BUSINESS)) {
+                holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getReceiveName());
+            }else if(objData.getTxnTypeDn().equalsIgnoreCase("Sale Order")){
+                holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getTxnSubTypeDn());
+            }
 //
             holder.amountTV.setText(Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()));
 //            holder.dateTV.setText(latestTxns.getData().get(position).getUpdatedAt());

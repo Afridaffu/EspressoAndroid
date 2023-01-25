@@ -101,6 +101,12 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     case Utils.sentt:
                         txnSubType = Utils.sent;
                         break;
+                    case Utils.ecomerce:
+                        txnSubType = Utils.eComerce;
+                        break;
+                    case Utils.retail:
+                        txnSubType = Utils.retailMobile;
+                        break;
                     default:
                         txnSubType = null;
 

@@ -88,7 +88,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
         webSettings.setBuiltInZoomControls(true);
 
         showProgressDialog();
-        dashboardViewModel.getDocumentUrl(Utils.mAgmt);
+        dashboardViewModel.getDocumentUrl(Utils.mAD);
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -169,7 +169,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
             File file = new File(filePath);
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("identityFile", file.getName(), requestFile);
-            businessDashboardViewModel.signedAgreement(body, Utils.mAgmt);
+            businessDashboardViewModel.signedAgreement(body, Utils.mAD);
         } else {
             dismissDialog();
             LogUtils.v(TAG, "File path is null");

@@ -101,8 +101,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_transaction_list);
         MatomoUtility.getInstance().trackScreen(MatomoConstants.TOKEN_TRANSACTIONS_SCREEN);
         setKeyboardVisibilityListener(this);
@@ -452,37 +451,28 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 
         Chip transTypeBP = dialog.findViewById(R.id.transTypeBP);
         Chip transTypeBT = dialog.findViewById(R.id.transTypeBT);
-//        Chip transTypeSO = dialog.findViewById(R.id.transTypeSO);
+        Chip transTypeSaleOrder = dialog.findViewById(R.id.transTypeSaleorder);
         Chip transTypeWithdraw = dialog.findViewById(R.id.transTypeWithdraw);
-//        Chip transTypeRefund = dialog.findViewById(R.id.transTypeRefund);
-//        Chip transTypeAT = dialog.findViewById(R.id.transTypeAT);
-//        Chip transTypePI = dialog.findViewById(R.id.transTypePI);
-//
-//        Chip transSubTypeSent = dialog.findViewById(R.id.transSubTypeSent);
-//        Chip transSubTypeReceived = dialog.findViewById(R.id.transSubTypeReceived);
+
         Chip transSubTypeBA = dialog.findViewById(R.id.transSubTypeBA);
-//        Chip transSubTypeCC = dialog.findViewById(R.id.transSubTypeCC);
-//        Chip transSubTypeDC = dialog.findViewById(R.id.transSubTypeDC);
         Chip transSubTypeCogent = dialog.findViewById(R.id.transSubTypeCogent);
         Chip transSubTypeSignet = dialog.findViewById(R.id.transSubTypeSignet);
         Chip transSubTypeIP = dialog.findViewById(R.id.transSubTypeIP);
         Chip transSubTypeGiftCard = dialog.findViewById(R.id.transSubTypeGiftCard);
         Chip transSubTypeGiftCardNew = dialog.findViewById(R.id.transSubTypeGiftCardNew);
-//        Chip transSubTypeSOToken = dialog.findViewById(R.id.transSubTypeSOToken);
-//        Chip transSubTypeFW = dialog.findViewById(R.id.transSubTypeFW);
-//        Chip transSubTypeCW = dialog.findViewById(R.id.transSubTypeCW);
-//
+        Chip transSubTypeEcomerce = dialog.findViewById(R.id.transSubTypeEcomerce);
+        Chip transSubTypeRetail = dialog.findViewById(R.id.transSubTypeRetail);
+
         Chip transStatusPending = dialog.findViewById(R.id.transStatusPending);
         Chip transStatusCompleted = dialog.findViewById(R.id.transStatusCompleted);
         Chip transStatusCanceled = dialog.findViewById(R.id.transStatusCanceled);
         Chip transStatusInProgress = dialog.findViewById(R.id.transStatusInProgress);
         Chip transStatusFailed = dialog.findViewById(R.id.transStatusFailed);
-
         Chip emptyChip = dialog.findViewById(R.id.emptyChip);
 
         EditText transAmountStartET = dialog.findViewById(R.id.transAmountStartET);
         EditText transAmountEndET = dialog.findViewById(R.id.transAmountEndET);
-//
+
         CardView applyFilterBtnCV = dialog.findViewById(R.id.applyFilterBtnCV);
         LinearLayout dateRangePickerLL = dialog.findViewById(R.id.dateRangePickerLL);
         LinearLayout cogentGCLL = dialog.findViewById(R.id.cogentGCLL);
@@ -542,38 +532,21 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
             if (tempTransactionType.size() > 0) {
                 for (int i = 0; i < tempTransactionType.size(); i++) {
                     switch (tempTransactionType.get(i)) {
-//                        case Utils.payRequest:
-//                            transTypePR.setChecked(true);
-//                            break;
-
                         case Utils.buyTokens:
                             transTypeBT.setChecked(true);
                             break;
 
-//                        case Utils.saleOrder:
-//                            transTypeSO.setChecked(true);
-//                            break;
+                        case Utils.saleOrder:
+                            transTypeSaleOrder.setChecked(true);
+                            break;
 
                         case Utils.withdraw:
                             transTypeWithdraw.setChecked(true);
                             break;
-//
-//                        case Utils.refund:
-//                            transTypeRefund.setChecked(true);
-//                            break;
 
-//                        case Utils.accountTransfer:
-//                            transTypeAT.setChecked(true);
-//                            break;
-
-//                        case Utils.paidInvoice:
-//                            transTypePI.setChecked(true);
-//                            break;
                         case Utils.businessPayout:
                             transTypeBP.setChecked(true);
                             break;
-
-
                     }
                 }
             }
@@ -583,25 +556,9 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
             if (tempTransactionSubType.size() > 0) {
                 for (int i = 0; i < tempTransactionSubType.size(); i++) {
                     switch (tempTransactionSubType.get(i)) {
-//                        case Utils.sent:
-//                            transSubTypeSent.setChecked(true);
-//                            break;
-//
-//                        case Utils.received:
-//                            transSubTypeReceived.setChecked(true);
-//                            break;
-
                         case Utils.bankAccount:
                             transSubTypeBA.setChecked(true);
                             break;
-
-//                        case Utils.creditCard:
-//                            transSubTypeCC.setChecked(true);
-//                            break;
-//
-//                        case Utils.debitCard:
-//                            transSubTypeDC.setChecked(true);
-//                            break;
 
                         case Utils.Cogent:
                             transSubTypeCogent.setChecked(true);
@@ -613,24 +570,18 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                         case Utils.instantPay:
                             transSubTypeIP.setChecked(true);
                             break;
-//
+
                         case Utils.giftCard:
                             transSubTypeGiftCard.setChecked(true);
                             transSubTypeGiftCardNew.setChecked(true);
                             break;
 
-//                    case Utils.saleOrderToken:
-//                        transSubTypeSOToken.setChecked(true);
-//                        break;
-
-//                        case Utils.failedWithdraw:
-//                            transSubTypeFW.setChecked(true);
-//                            break;
-//
-//                        case Utils.cancelledWithdraw:
-//                            transSubTypeCW.setChecked(true);
-//                            break;
-
+                        case Utils.eComerce:
+                            transSubTypeEcomerce.setChecked(true);
+                            break;
+                        case Utils.retailMobile:
+                            transSubTypeRetail.setChecked(true);
+                            break;
                     }
                 }
             }
@@ -721,7 +672,6 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
             isFilters = false;
             strSelectedDate = "";
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
-//            searchET.setText("");
         }
 
         resetFiltersTV.setOnClickListener(view -> {
@@ -729,8 +679,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 return;
             }
             mLastClickTimeFilters = SystemClock.elapsedRealtime();
-            if (Utils.isKeyboardVisible)
-                Utils.hideKeypad(this);
+            if (Utils.isKeyboardVisible) Utils.hideKeypad(this);
             transactionType.clear();
             transactionSubType.clear();
             txnStatus.clear();
@@ -759,28 +708,19 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
             transAmountEndET.clearFocus();
             getDateFromPickerET.clearFocus();
 
-//            transTypePR.setChecked(false);
             transTypeBT.setChecked(false);
-//            transTypeSO.setChecked(false);
+            transTypeSaleOrder.setChecked(false);
             transTypeWithdraw.setChecked(false);
-//            transTypeRefund.setChecked(false);
-//            transTypeAT.setChecked(false);
-//            transTypePI.setChecked(false);
             transTypeBP.setChecked(false);
 
-//            transSubTypeSent.setChecked(false);
-//            transSubTypeReceived.setChecked(false);
             transSubTypeBA.setChecked(false);
-//            transSubTypeCC.setChecked(false);
-//            transSubTypeDC.setChecked(false);
             transSubTypeCogent.setChecked(false);
             transSubTypeSignet.setChecked(false);
             transSubTypeIP.setChecked(false);
             transSubTypeGiftCard.setChecked(false);
             transSubTypeGiftCardNew.setChecked(false);
-//            transSubTypeSOToken.setChecked(false);
-//            transSubTypeFW.setChecked(false);
-//            transSubTypeCW.setChecked(false);
+            transSubTypeEcomerce.setChecked(false);
+            transSubTypeRetail.setChecked(false);
 
             transStatusPending.setChecked(false);
             transStatusCompleted.setChecked(false);
@@ -806,24 +746,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
             objMyApplication.initializeTransactionSearch();
             objMyApplication.setTransactionListSearch(transactionListRequest);
         });
-//
-//        transTypePR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-//                    transactionType.add(Utils.payRequest);
-//                } else {
-//                    for (int i = 0; i < transactionType.size(); i++) {
-//                        if (transactionType.get(i) == Utils.payRequest) {
-//                            transactionType.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//
+
         transTypeBT.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -840,24 +763,24 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 }
             }
         });
-//
-//        transTypeSO.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-//                    transactionType.add(Utils.saleOrder);
-//                } else {
-//                    for (int i = 0; i < transactionType.size(); i++) {
-//                        if (transactionType.get(i) == Utils.saleOrder) {
-//                            transactionType.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//
+
+        transTypeSaleOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    tempTransactionType.add(Utils.saleOrder);
+                } else {
+                    for (int i = 0; i < tempTransactionType.size(); i++) {
+                        if (tempTransactionType.get(i) == Utils.saleOrder) {
+                            tempTransactionType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
         transTypeWithdraw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -874,59 +797,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 }
             }
         });
-//
-//        transTypeRefund.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-//                    transactionType.add(Utils.refund);
-//                } else {
-//                    for (int i = 0; i < transactionType.size(); i++) {
-//                        if (transactionType.get(i) == Utils.refund) {
-//                            transactionType.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//
-//        transTypeAT.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-////                    transactionType.add(Utils.accountTransfer);
-//                    transTypeAT.setChecked(false);
-//                } else {
-////                    for (int i=0; i < transactionType.size();i++){
-////                        if(transactionType.get(i) == Utils.refund){
-////                            transactionType.remove(i);
-////                            break;
-////                        }
-////                    }
-//                    transTypeAT.setChecked(false);
-//                }
-//            }
-//        });
-//
-//        transTypePI.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-//                    transactionType.add(Utils.paidInvoice);
-//                } else {
-//                    for (int i = 0; i < transactionType.size(); i++) {
-//                        if (transactionType.get(i) == Utils.paidInvoice) {
-//                            transactionType.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
+
         transTypeBP.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -943,41 +814,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 }
             }
         });
-//
-//        transSubTypeSent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-//                    transactionSubType.add(Utils.sent);
-//                } else {
-//                    for (int i = 0; i < transactionSubType.size(); i++) {
-//                        if (transactionSubType.get(i) == Utils.sent) {
-//                            transactionSubType.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//
-//        transSubTypeReceived.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-//                    transactionSubType.add(Utils.received);
-//                } else {
-//                    for (int i = 0; i < transactionSubType.size(); i++) {
-//                        if (transactionSubType.get(i) == Utils.received) {
-//                            transactionSubType.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//
+
         transSubTypeBA.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -994,41 +831,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 }
             }
         });
-//
-//        transSubTypeCC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-//                    transactionSubType.add(Utils.creditCard);
-//                } else {
-//                    for (int i = 0; i < transactionSubType.size(); i++) {
-//                        if (transactionSubType.get(i) == Utils.creditCard) {
-//                            transactionSubType.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//
-//        transSubTypeDC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-//                    transactionSubType.add(Utils.debitCard);
-//                } else {
-//                    for (int i = 0; i < transactionSubType.size(); i++) {
-//                        if (transactionSubType.get(i) == Utils.debitCard) {
-//                            transactionSubType.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//
+
         transSubTypeCogent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1113,58 +916,41 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 }
             }
         });
-//
-//        transSubTypeSOToken.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-//                    transactionSubType.add(Utils.saleOrderToken);
-//                } else {
-//                    for (int i = 0; i < transactionSubType.size(); i++) {
-//                        if (transactionSubType.get(i) == Utils.saleOrderToken) {
-//                            transactionSubType.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//
-//        transSubTypeFW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-//                    transactionSubType.add(Utils.failedWithdraw);
-//                } else {
-//                    for (int i = 0; i < transactionSubType.size(); i++) {
-//                        if (transactionSubType.get(i) == Utils.failedWithdraw) {
-//                            transactionSubType.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//
-//        transSubTypeCW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-//                    transactionSubType.add(Utils.cancelledWithdraw);
-//                } else {
-//                    for (int i = 0; i < transactionSubType.size(); i++) {
-//                        if (transactionSubType.get(i) == Utils.cancelledWithdraw) {
-//                            transactionSubType.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//
+
+        transSubTypeEcomerce.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    tempTransactionSubType.add(Utils.eComerce);
+                } else {
+                    for (int i = 0; i < tempTransactionSubType.size(); i++) {
+                        if (tempTransactionSubType.get(i) == Utils.eComerce) {
+                            tempTransactionSubType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transSubTypeRetail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    tempTransactionSubType.add(Utils.retailMobile);
+                } else {
+                    for (int i = 0; i < tempTransactionSubType.size(); i++) {
+                        if (tempTransactionSubType.get(i) == Utils.retailMobile) {
+                            tempTransactionSubType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
         transStatusPending.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1469,15 +1255,11 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                     filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
                 }
 
-                if (!strStartAmount.equals(""))
-                    strStartAmountTemp = strStartAmount;
-                else
-                    strStartAmountTemp = "";
+                if (!strStartAmount.equals("")) strStartAmountTemp = strStartAmount;
+                else strStartAmountTemp = "";
 
-                if (!strEndAmount.equals(""))
-                    strEndAmountTemp = strEndAmount;
-                else
-                    strEndAmountTemp = "";
+                if (!strEndAmount.equals("")) strEndAmountTemp = strEndAmount;
+                else strEndAmountTemp = "";
 
 
                 if (!transAmountStartET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
@@ -1502,7 +1284,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                     objMyApplication.setTransactionListSearch(transactionListRequest);
                     noMoreTransactionTV.setVisibility(View.GONE);
                     dialog.dismiss();
-//
+
                 }
                 isApplyClicked = true;
             }
@@ -1600,9 +1382,7 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
 
                         Log.e("myear", mYear + " " + mMonth + " " + mDay + " " + strFromDate);
 
-                        if (Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[0]))) == mDay
-                                && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == (mMonth + 1)
-                                && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[2]))) == mYear) {
+                        if (Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[0]))) == mDay && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == (mMonth + 1) && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[2]))) == mYear) {
                             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SS");
                             String str = sdf.format(new Date());
                             strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " " + str;

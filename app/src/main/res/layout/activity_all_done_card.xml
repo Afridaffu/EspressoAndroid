@@ -26,6 +26,7 @@
         android:textSize="@dimen/_16ssp" />
 
     <TextView
+        android:id="@+id/subHeaderTV"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_59sdp"
         android:layout_below="@+id/tvHead"

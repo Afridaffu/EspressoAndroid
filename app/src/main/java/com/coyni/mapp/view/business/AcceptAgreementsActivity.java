@@ -33,6 +33,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.coyni.mapp.R;
 import com.coyni.mapp.databinding.ActivityAcceptAgreementsBinding;
 import com.coyni.mapp.model.States;
+import com.coyni.mapp.model.UpdateSignAgreementsResp;
+import com.coyni.mapp.model.UpdateSignRequest;
 import com.coyni.mapp.model.profile.DownloadDocumentData;
 import com.coyni.mapp.model.profile.DownloadDocumentResponse;
 import com.coyni.mapp.model.register.OTPValidateResponse;
@@ -62,7 +64,7 @@ public class AcceptAgreementsActivity extends BaseActivity {
     private ActivityAcceptAgreementsBinding binding;
     private DashboardViewModel dashboardViewModel;
     private LoginViewModel loginViewModel;
-    private String myUrl = "", ACT_TYPE, DOC_NAME = "", DOC_URL = "";
+    private String myUrl = "", ACT_TYPE, DOC_NAME = "", DOC_URL = "", SCREEN = "";
     private boolean isActionEnabled = false;
     private MyApplication objMyApplication;
     private int AGREE_TYPE;
@@ -108,6 +110,7 @@ public class AcceptAgreementsActivity extends BaseActivity {
             ACT_TYPE = getIntent().getStringExtra(Utils.ACT_TYPE);
             DOC_NAME = getIntent().getStringExtra(Utils.DOC_NAME);
             DOC_URL = getIntent().getStringExtra(Utils.DOC_URL);
+            SCREEN = getIntent().getStringExtra(Utils.SCREEN);
 
             setupLablesAndUI();
 
@@ -184,6 +187,18 @@ public class AcceptAgreementsActivity extends BaseActivity {
                             if (binding.actionTV.getText().toString().equalsIgnoreCase("Done")) {
                                 setResult(RESULT_OK);
                                 finish();
+                            } else if (binding.actionTV.getText().toString().equalsIgnoreCase("I Agree")) {
+                                showProgressDialog();
+                                UpdateSignRequest updateSignRequest = new UpdateSignRequest();
+
+                                if (objMyApplication.getStrDBAName() != null && !objMyApplication.getStrDBAName().equals(""))
+                                    updateSignRequest.setSignature(objMyApplication.getStrDBAName());
+                                else if (objMyApplication.getStrUserName() != null && !objMyApplication.getStrUserName().equals(""))
+                                    updateSignRequest.setSignature(objMyApplication.getStrUserName());
+
+                                updateSignRequest.setUserId(objMyApplication.getLoginUserId());
+                                updateSignRequest.setDocId(Integer.parseInt(getIntent().getStringExtra(Utils.REF_ID)));
+                                loginViewModel.signTrackerAgreement(updateSignRequest);
                             } else if (binding.actionTV.getText().toString().equalsIgnoreCase("Next")) {
                                 binding.webView.setVisibility(View.INVISIBLE);
                                 showProgressDialog();
@@ -250,7 +265,10 @@ public class AcceptAgreementsActivity extends BaseActivity {
                 binding.optionsIV.setVisibility(View.GONE);
                 binding.closeIV.setImageDrawable(getDrawable(R.drawable.ic_close));
             }
-            binding.actionTV.setText("Done");
+            if (!SCREEN.equals(""))
+                binding.actionTV.setText("I Agree");
+            else
+                binding.actionTV.setText("Done");
         } else if (ACT_TYPE.equals(Utils.multiple)) {
             binding.optionsIV.setVisibility(View.VISIBLE);
             binding.closeIV.setImageDrawable(getDrawable(R.drawable.ic_close));
@@ -334,6 +352,22 @@ public class AcceptAgreementsActivity extends BaseActivity {
                         startActivity(i);
                     } else {
                         Utils.displayAlert(signAgreementResponse.getError().getErrorDescription(), AcceptAgreementsActivity.this, "", signAgreementResponse.getError().getFieldErrors().get(0));
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        loginViewModel.getSignTrackerAgreementLiveData().observe(this, new Observer<UpdateSignAgreementsResp>() {
+            @Override
+            public void onChanged(UpdateSignAgreementsResp updateSignAgreementsResp) {
+                try {
+                    dismissDialog();
+                    if (updateSignAgreementsResp != null && updateSignAgreementsResp.getStatus().toLowerCase().equals("success")) {
+                        setResult(RESULT_OK);
+                        finish();
+                    } else {
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

@@ -40,6 +40,7 @@ public class TransactionListPosted extends ListItem implements Serializable, Com
     private String updatedAt;
     private String senderName;
     private String receiveName;
+    private String userType;
 
     public String getReceiveName() {
         return receiveName;
@@ -145,6 +146,14 @@ public class TransactionListPosted extends ListItem implements Serializable, Com
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     @Override

@@ -643,7 +643,8 @@
     <string name="confirmation_msg">Do you want to discard the changes?</string>
     <string name="pre_authorization">Pre-Authorization</string>
     <!--    <string name="preauth_description">A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from [Descriptor Name] and enter the amount below.</string>-->
-    <string name="preauth_description">For security reasons, we have charged your card a small amount which will be removed after the verification process is complete.  Please check your recent card transactions and enter the amount of this charge below.</string>
+    <!--    <string name="preauth_description">For security reasons, we have charged your card a small amount which will be removed after the verification process is complete.  Please check your recent card transactions and enter the amount of this charge below.</string>-->
+    <string name="preauth_description">A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your bank/card statement for a charge from [Descriptor Name] and enter the amount below.</string>
     <string name="incorrect_amount_1_attempt_left">Incorrect amount, 1 attempt left</string>
     <string name="please_check_the_box_if_you_completed_a_task">Please check the box if you completed a task</string>
     <string name="footer_full_legal_name_as_it"><b>%1$s</b> - %2$s </string>
@@ -849,5 +850,23 @@
     <string name="choose_library">Choose From Library</string>
     <string name="take_photo">Take a Photo</string>
     <string name="browse_files">Browse Files</string>
+    <string name="sale_order_ecommerce">Sale Order- eCommerce</string>
+    <string name="sale_order_Retail_Mobile">Sale Order: Retail/Mobile</string>
+    <string name="application_desclosure_description">Before we can process your application, please take time to read then sign the coyni’s Application Disclosure.</string>
+    <string name="acknowledge_text">I understand this eSignature counts as a legally binding signature.</string>
+    <string name="add_bank_checking_account">Add Bank Checking Account</string>
+    <string name="i_understand_that_i_will_be_redirected_to_a_3rd_party_process_to_add_a_checking_account_to_coyni">I understand that I will be redirected to a 3rd party process to add a checking account to coyni.</string>
+    <string name="coyni_uses_a_trusted_partner_mx_to_verify_bank_account_information_mx_may_also_check_your_balance_to_ensure_that_you_have_enough_funds_to_cover_requested_transactions_please_note_that_you_can_only_add_checking_accounts_into_coyni_using_mx">coyni uses a trusted partner MX to verify bank account information. MX may also check your balance to ensure that you have enough funds to cover requested transactions. Please note that you can only add checking accounts into coyni using MX.</string>
+    <string name="sale_order_eCommerce">Sale Order: eCommerce</string>
+    <string name="merchant_under_review_head">Merchant Application Under Review</string>
+    <string name="merchant_under_review_text">Your Merchant Application has been successfully submitted and is currently under review by the coyni Underwriting Team. This process can take up to 3 business days. Please stay tuned for any communication from coyni regarding your application.</string>
 
+
+    <string name="skip">Skip</string>
+    <string name="add_debit_or_credit_card">Add Debit or Credit Card</string>
+    <string name="account_created">Account Created!</string>
+    <string name="your_coyni_account_is_now_ready_get_started_by_adding_a_debit_or_credit_card">Your coyni account is now ready. Get started by adding a debit or credit card.</string>
+    <string name="save_this_address_as_my_account_address">Save this address as my account address.</string>
+
+    <string name="agreement_desc">Please read and accept each agreement.</string>
 </resources>
