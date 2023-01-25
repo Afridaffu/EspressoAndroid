@@ -72,7 +72,7 @@ import java.util.List;
 
 public class DashboardActivity extends BaseActivity {
     public static final int REQUEST_READ_CONTACTS = 79;
-    LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu;
+    LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu, recentTxnLL;
     LinearLayout scanQr, viewMoreLL, notificationsSmallLL, ll_identity_verification_failed;
     RelativeLayout notificationsLL;
     DashboardViewModel dashboardViewModel;
@@ -215,6 +215,7 @@ public class DashboardActivity extends BaseActivity {
             notificationsLL = findViewById(R.id.notificationsLL);
             countTV = findViewById(R.id.countTV);
             countCV = findViewById(R.id.countCV);
+            recentTxnLL = findViewById(R.id.recentTxnLL);
 
             idVeriStatus.setText(getString(R.string.declined_text));
             objMyApplication = (MyApplication) getApplicationContext();
@@ -696,6 +697,7 @@ public class DashboardActivity extends BaseActivity {
             public void onChanged(LatestTxnResponse latestTxnResponse) {
                 try {
                     latestTxnRefresh.setRefreshing(false);
+                    recentTxnLL.setVisibility(View.VISIBLE);
                     if (latestTxnResponse != null && latestTxnResponse.getStatus().equalsIgnoreCase("success")) {
                         cvHeaderRL.setVisibility(View.VISIBLE);
                         cvSmallHeaderRL.setVisibility(View.GONE);

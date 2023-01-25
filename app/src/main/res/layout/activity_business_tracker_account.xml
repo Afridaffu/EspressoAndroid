@@ -770,7 +770,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_5sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="@string/merchant_s_agreement"
+                                android:text="@string/cp_agreements"
                                 android:textColor="@color/primary_green"
                                 android:textSize="@dimen/_12ssp" />
 

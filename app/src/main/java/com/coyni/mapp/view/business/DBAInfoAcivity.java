@@ -725,11 +725,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         if (DocID == Utils.BUSINESS_LICENSE) {
                             licesnseUploadTV.setVisibility(GONE);
                             licenseUploadedLL.setVisibility(VISIBLE);
-                            String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
+                            String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
                             licenseUpdatedOnTV.setText("Uploaded on " + dateString);
                             licenseUpdatedOnTV.setVisibility(VISIBLE);
                             isBLUploaded = true;
-                        } else if (DocID == Utils.retail_DBA_Filling) {
+                        } else if (DocID == Utils.retail_DBA_Filling || DocID == Utils.eCommerce_DBA_Filling) {
                             dbaFillinguploadTV.setVisibility(GONE);
                             dbaFillingUploadedLL.setVisibility(VISIBLE);
                             String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
@@ -762,14 +762,16 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                         RequestBody requestBody = null;
                         MultipartBody.Part idFile = null;
+                        RequestBody idType = null;
                         if (DocID == Utils.BUSINESS_LICENSE) {
                             requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), businessLicenseFile);
                             idFile = MultipartBody.Part.createFormData("identityFile", businessLicenseFile.getName(), requestBody);
-                        } else if (DocID == Utils.retail_DBA_Filling) {
+                            idType = RequestBody.create(MediaType.parse("text/plain"), DocID + "");
+                        } else if (DocID == Utils.retail_DBA_Filling || DocID == Utils.eCommerce_DBA_Filling) {
                             requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), dbaFile);
                             idFile = MultipartBody.Part.createFormData("identityFile", dbaFile.getName(), requestBody);
+                            idType = RequestBody.create(MediaType.parse("text/plain"), Utils.retail_DBA_Filling + "");
                         }
-                        RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), DocID + "");
 
                         RequestBody idNumber;
                         if (objMyApplication.getCompanyInfoResp().getData().getSsnOrEin() != null) {
@@ -1706,7 +1708,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             }
                         }
                     } else {
-                        dbaFillingLL.setVisibility(GONE);
+//                        dbaFillingLL.setVisibility(GONE);
                         isDBAFiling = false;
                         isBLUploaded = false;
                     }

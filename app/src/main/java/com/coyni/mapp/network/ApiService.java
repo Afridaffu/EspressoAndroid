@@ -844,12 +844,5 @@ public interface ApiService {
 
     @GET("api/v2/agreements/{agreementId}")
     Call<AgreementsPdf> getApplicationDisclosure(@Path("agreementId") String agreementId);
-
-    @Multipart
-    @POST("api/v2/business/image-submit")
-    Call<IdentityImageResponse> submitApplication(@Part MultipartBody.Part filee,
-                                                  @Part("agreementType") RequestBody type);
-
-
 }
 
