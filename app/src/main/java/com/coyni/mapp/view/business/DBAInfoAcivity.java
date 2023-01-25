@@ -662,7 +662,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             removeAndUploadAdditionalDoc(Utils.BUSINESS_LICENSE);
         } else if (selectedDocType.equals("DBA")) {
             dbaFile = mediaFile;
-            removeAndUploadAdditionalDoc(identificationType);
+            removeAndUploadAdditionalDoc(Utils.retail_DBA_Filling);
         }
     }
 
@@ -1718,7 +1718,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         isDBAFiling = true;
                     } else {
                         dbaFillingLL.setVisibility(VISIBLE);
-                        isDBAFiling = false;
+//                        isDBAFiling = false;
                     }
 
                     if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Utils.doubleParsing(cir.getMonthlyProcessingVolume()) > 0) {

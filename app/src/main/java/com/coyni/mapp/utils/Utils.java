@@ -536,6 +536,8 @@ public class Utils {
     public static final String single = "Single";
     public static final String multiple = "Multiple";
     public static final String verifyActionType = "Verify";
+    public static final String ECOMMERCE = "eCommerce";
+    public static final String RETAIL = "Retail";
 
     public static final long centuryTimeInMillis = 3155760000000L;
 

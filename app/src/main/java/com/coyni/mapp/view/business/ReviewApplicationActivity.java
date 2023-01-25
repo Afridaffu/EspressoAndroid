@@ -599,7 +599,11 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             }
 
                             if (dbaInfo.getBusinessType() != null) {
-                                mBusinessTypeTx.setText(Utils.getBusinessName(objMyApplication, dbaInfo.getBusinessType()));
+                                if (dbaInfo.getIdentificationType() == Utils.eCommerce_DBA_Filling) {
+                                    mBusinessTypeTx.setText(Utils.getBusinessName(objMyApplication, dbaInfo.getBusinessType()) + " - " + Utils.ECOMMERCE);
+                                } else if (dbaInfo.getIdentificationType() == Utils.retail_DBA_Filling) {
+                                    mBusinessTypeTx.setText(Utils.getBusinessName(objMyApplication, dbaInfo.getBusinessType()) + " - " + Utils.RETAIL);
+                                }
                                 // Utils.getBusinessName(objMyApplication,dbaInfo.getBusinessType());
                             }
                             if (dbaInfo.getTimeZone() != null) {
