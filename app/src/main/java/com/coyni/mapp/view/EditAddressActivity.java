@@ -91,8 +91,8 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                         headerTV.setText("Add Address");
                         tvButtonText.setText("Add Address");
                         imgBack.setImageResource(R.drawable.ic_close);
-                        address1TIL.setHint("Biling Address Line 1");
-                        address2TIL.setHint("Biling Address Line 2(Optional)");
+                        address1TIL.setHint("Billing Address Line 1");
+                        address2TIL.setHint("Billing Address Line 2(Optional)");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -322,9 +322,9 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 }
                 if (myApplicationObj.getMyProfile().getData().getState() != null
                         && !myApplicationObj.getMyProfile().getData().getState().equals("")) {
-//                    stateET.setText(myApplicationObj.getMyProfile().getData().getState());
                     Utils.setStateFromList(myApplicationObj.getMyProfile().getData().getState(), stateET, myApplicationObj);
                     Utils.tempStateName = myApplicationObj.getMyProfile().getData().getState();
+                    Utils.setUpperHintColor(stateTIL, getResources().getColor(R.color.primary_black));
                     isState = true;
                 } else {
                     isState = false;
@@ -351,15 +351,6 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 } else {
                     isAddress1 = false;
                 }
-//                if (myApplicationObj.getMyProfile().getData().getAddressLine2() != null
-//                        && !myApplicationObj.getMyProfile().getData().getAddressLine2().equals("")) {
-//                    address2ET.setText(myApplicationObj.getMyProfile().getData().getAddressLine2());
-//                    Utils.setUpperHintColor(address2TIL,getResources().getColor(R.color.primary_black));
-//
-//                    isAddress2 = true;
-//                } else {
-//                    isAddress2 = false;
-//                }
 
                 if (myApplicationObj.getMyProfile().getData().getCity() != null
                         && !myApplicationObj.getMyProfile().getData().getCity().equals("")) {
@@ -371,7 +362,6 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 }
                 if (myApplicationObj.getMyProfile().getData().getState() != null
                         && !myApplicationObj.getMyProfile().getData().getState().equals("")) {
-//                    b_stateET.setText(myApplicationObj.getMyProfile().getData().getState());
                     Utils.setStateFromList(myApplicationObj.getMyProfile().getData().getState(), b_stateET, myApplicationObj);
                     Utils.setUpperHintColor(b_stateTIL, getResources().getColor(R.color.primary_black));
                     Utils.tempStateName = myApplicationObj.getMyProfile().getData().getState();
@@ -408,11 +398,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 if (charSequence.length() > 0) {
                     isAddress1 = true;
                     address1ErrorLL.setVisibility(GONE);
-//                    address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_green));
                 } else {
-//                    address1ErrorLL.setVisibility(VISIBLE);
-//                    address1ErrorTV.setText("Field Required");
                     isAddress1 = false;
                 }
                 enableOrDisableSave();
@@ -430,7 +416,6 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                     String str = address1ET.getText().toString();
                     if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
                         address1ET.setText(str.substring(1));
-//                        address1ET.setSelection(address1ET.getText().length());
                         address1ErrorLL.setVisibility(GONE);
                     } else if (str.substring(0).equals(" ")) {
                         address1ET.setText("");
@@ -453,16 +438,6 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                if(charSequence.length() > 0){
-//                    isAddress2 = true;
-//                    address2ErrorLL.setVisibility(GONE);
-//                    address2TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(address2TIL,getResources().getColor(R.color.primary_green));
-//                }else{
-//                    address2ErrorLL.setVisibility(VISIBLE);
-//                    address2ErrorTV.setText("Field Required");
-//                    isAddress2 = false;
-//                }
                 enableOrDisableSave();
 
                 if (address2ET.getText().toString().contains("  ")) {
@@ -501,11 +476,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 if (charSequence.length() > 0) {
                     isCity = true;
                     cityErrorLL.setVisibility(GONE);
-//                    cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_green));
                 } else {
-//                    cityErrorLL.setVisibility(VISIBLE);
-//                    cityErrorTV.setText("Field Required");
                     isCity = false;
                 }
                 enableOrDisableSave();
@@ -550,7 +521,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
                     isState = true;
-
+                    Utils.setUpperHintColor(stateTIL, getResources().getColor(R.color.primary_black));
                 } else {
                     isState = false;
                 }
@@ -574,18 +545,12 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 if (charSequence.length() == 5) {
                     isZipcode = true;
                     zipcodeErrorLL.setVisibility(GONE);
-//                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
                 } else if (charSequence.length() > 0 && charSequence.length() < 5) {
                     isZipcode = false;
                     zipcodeErrorLL.setVisibility(GONE);
-//                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
                     zipcodeErrorTV.setText("Minimum 5 Digits Required");
                 } else if (charSequence.length() == 0) {
                     isZipcode = false;
-//                    zipcodeErrorLL.setVisibility(VISIBLE);
-//                    zipcodeErrorTV.setText("Field Required");
                 }
                 enableOrDisableSave();
             }
@@ -621,7 +586,6 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                         address1ET.setSelection(address1ET.getText().toString().trim().length());
                     }
                 } else {
-//                    address1ET.setHint("Address Line 1");
                     address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(address1TIL, getColor(R.color.primary_green));
                     address1ErrorLL.setVisibility(GONE);
@@ -647,13 +611,11 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                         address2ET.setSelection(address2ET.getText().toString().trim().length());
                     }
                 } else {
-//                    address2ET.setHint("Address Line 2");
                     address2TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(address2TIL, getColor(R.color.primary_green));
                 }
             }
         });
-
 
         cityET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -676,7 +638,6 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                         cityET.setSelection(cityET.getText().toString().trim().length());
                     }
                 } else {
-//                    cityET.setHint("City");
                     cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_green));
                     cityErrorLL.setVisibility(GONE);
@@ -707,7 +668,6 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                         zipcodeErrorTV.setText("Field Required");
                     }
                 } else {
-//                    zipcodeET.setHint("Zip Code");
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_green));
                     zipcodeErrorLL.setVisibility(GONE);
@@ -732,100 +692,8 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
 
     }
 
-    private void statesPopup() {
-        try {
-            popupStates = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-            popupStates.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            popupStates.setContentView(R.layout.countrieslist);
-            popupStates.setCanceledOnTouchOutside(false);
-            popupStates.setCancelable(false);
-            popupStates.show();
-            bindStates();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void bindStates() {
-        RecyclerView rvCountries;
-        ImageView imgBack;
-        EditText etSearch;
-        TextView tvNoResults;
-        statesListAdapter = new StatesListAdapter(null, this, "EditAddress");
-        try {
-            imgBack = popupStates.findViewById(R.id.imgBack);
-            etSearch = popupStates.findViewById(R.id.etSearch);
-            tvNoResults = popupStates.findViewById(R.id.tvNoResults);
-            rvCountries = popupStates.findViewById(R.id.rvCountries);
-            listStates = myApplicationObj.getListStates();
-            if (listStates != null && listStates.size() > 0) {
-                statesListAdapter = new StatesListAdapter(listStates, this, "EditAddress");
-                LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-                rvCountries.setLayoutManager(mLayoutManager);
-                rvCountries.setItemAnimator(new DefaultItemAnimator());
-                rvCountries.setAdapter(statesListAdapter);
-            }
-            imgBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    popupStates.dismiss();
-                }
-            });
-            etSearch.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    try {
-                        String search_key = s.toString();
-                        List<States> filterList = new ArrayList<>();
-                        int sIndex = 0;
-                        if (listStates != null && listStates.size() > 0) {
-                            for (int i = 0; i < listStates.size(); i++) {
-                                sIndex = listStates.get(i).getName().toLowerCase().indexOf(search_key.toLowerCase());
-                                if (sIndex == 0) {
-                                    filterList.add(listStates.get(i));
-                                }
-                            }
-                            if (filterList != null && filterList.size() > 0) {
-                                statesListAdapter.updateList(filterList);
-                                rvCountries.setVisibility(View.VISIBLE);
-                                tvNoResults.setVisibility(View.GONE);
-                            } else {
-                                rvCountries.setVisibility(View.GONE);
-                                tvNoResults.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void populateState(String strState) {
-        try {
-            popupStates.dismiss();
-            stateET.setText(strState);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     private void updateAddress() {
         try {
-
             UserData userData = new UserData();
             userData.setAddressLine1(address1ET.getText().toString().trim());
             userData.setAddressLine2(address2ET.getText().toString().trim());
@@ -833,7 +701,6 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
             userData.setState(stateET.getText().toString().trim());
             userData.setZipCode(zipcodeET.getText().toString().trim());
             userData.setCountry("United States");
-
             customerProfileViewModel.meUpdateAddress(userData);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -889,12 +756,6 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 if (charSequence.length() > 0) {
                     isAddress1 = true;
                     b_address1ErrorLL.setVisibility(GONE);
-//                    address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_green));
-                } else {
-//                    b_address1ErrorLL.setVisibility(VISIBLE);
-//                    b_address1ErrorTV.setText("Field Required");
-//                    isAddress1 = false;
                 }
                 if (b_address1ET.getText().toString().contains("  ")) {
                     b_address1ET.setText(b_address1ET.getText().toString().replace("  ", " "));
@@ -910,18 +771,15 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                     String str = b_address1ET.getText().toString();
                     if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
                         b_address1ET.setText(str.substring(1));
-//                        address1ET.setSelection(address1ET.getText().length());
                         b_address1ErrorLL.setVisibility(GONE);
                     } else if (str.substring(0).equals(" ")) {
                         b_address1ET.setText("");
                         b_address1ET.setSelection(address1ET.getText().length());
                         b_address1ErrorLL.setVisibility(GONE);
                     }
-
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-
             }
         });
 
@@ -937,11 +795,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 if (charSequence.length() > 0) {
                     isCity = true;
                     b_cityErrorLL.setVisibility(GONE);
-//                    cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_green));
                 } else {
-//                    b_cityErrorLL.setVisibility(VISIBLE);
-//                    b_cityErrorTV.setText("Field Required");
                     isCity = false;
                 }
                 if (b_cityET.getText().toString().contains("  ")) {
@@ -967,8 +821,6 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                         b_cityET.setSelection(b_cityET.getText().length());
                         b_cityErrorLL.setVisibility(GONE);
                     }
-
-
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1009,18 +861,12 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 if (charSequence.length() == 5) {
                     isZipcode = true;
                     b_zipcodeErrorLL.setVisibility(GONE);
-//                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
                 } else if (charSequence.length() > 0 && charSequence.length() < 5) {
                     isZipcode = false;
                     b_zipcodeErrorLL.setVisibility(GONE);
-//                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
                     b_zipcodeErrorTV.setText("Minimum 5 Digits Required");
                 } else if (charSequence.length() == 0) {
                     isZipcode = false;
-//                    b_zipcodeErrorLL.setVisibility(VISIBLE);
-//                    b_zipcodeErrorTV.setText("Field Required");
                 }
                 b_enableOrDisableSave();
             }
@@ -1056,35 +902,12 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                         b_address1ET.setSelection(b_address1ET.getText().toString().trim().length());
                     }
                 } else {
-//                    b_address1ET.setHint("Address");
                     b_address1ErrorLL.setVisibility(GONE);
                     b_address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(b_address1TIL, getColor(R.color.primary_green));
                 }
             }
         });
-
-//        b_address2ET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View view, boolean b) {
-//                if (!b) {
-//                    address2ET.setHint("");
-//                    if (address2ET.getText().toString().length()>0){
-//                        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                        Utils.setUpperHintColor(address2TIL, getColor(R.color.primary_black));
-//                    }
-//                    else {
-//                        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-//                        Utils.setUpperHintColor(address2TIL, getColor(R.color.light_gray));
-//                    }
-//                } else {
-//                    address2ET.setHint("Address Line 2");
-//                    address2TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(address2TIL, getColor(R.color.primary_green));
-//                }
-//            }
-//        });
-
 
         b_cityET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -1102,13 +925,11 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                         b_cityErrorTV.setText("Field Required");
                     }
 
-
                     if (b_cityET.getText().toString().length() > 0 && !b_cityET.getText().toString().substring(0, 1).equals(" ")) {
                         b_cityET.setText(b_cityET.getText().toString().substring(0, 1).toUpperCase() + b_cityET.getText().toString().substring(1).toLowerCase());
                         b_cityET.setSelection(b_cityET.getText().toString().trim().length());
                     }
                 } else {
-//                    b_cityET.setHint("City");
                     b_cityErrorLL.setVisibility(GONE);
                     b_cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(b_cityTIL, getColor(R.color.primary_green));
@@ -1142,7 +963,6 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                     b_zipcodeET.requestFocus();
                     if (!Utils.isKeyboardVisible)
                         Utils.shwForcedKeypad(EditAddressActivity.this);
-//                    b_zipcodeET.setHint("Zip Code");
                     b_zipcodeErrorLL.setVisibility(GONE);
                     b_zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(b_zipcodeTIL, getColor(R.color.primary_green));
@@ -1167,100 +987,8 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
 
     }
 
-    private void b_statesPopup() {
-        try {
-            popupStates = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-            popupStates.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            popupStates.setContentView(R.layout.countrieslist);
-            popupStates.setCanceledOnTouchOutside(false);
-            popupStates.setCancelable(false);
-            popupStates.show();
-            b_bindStates();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void b_bindStates() {
-        RecyclerView rvCountries;
-        ImageView imgBack;
-        EditText etSearch;
-        TextView tvNoResults;
-        statesListAdapter = new StatesListAdapter(null, this, "EditAddress");
-        try {
-            imgBack = popupStates.findViewById(R.id.imgBack);
-            etSearch = popupStates.findViewById(R.id.etSearch);
-            tvNoResults = popupStates.findViewById(R.id.tvNoResults);
-            rvCountries = popupStates.findViewById(R.id.rvCountries);
-            listStates = myApplicationObj.getListStates();
-            if (listStates != null && listStates.size() > 0) {
-                statesListAdapter = new StatesListAdapter(listStates, this, "EditAddress");
-                LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-                rvCountries.setLayoutManager(mLayoutManager);
-                rvCountries.setItemAnimator(new DefaultItemAnimator());
-                rvCountries.setAdapter(statesListAdapter);
-            }
-            imgBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    popupStates.dismiss();
-                }
-            });
-            etSearch.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    try {
-                        String search_key = s.toString();
-                        List<States> filterList = new ArrayList<>();
-                        int sIndex = 0;
-                        if (listStates != null && listStates.size() > 0) {
-                            for (int i = 0; i < listStates.size(); i++) {
-                                sIndex = listStates.get(i).getName().toLowerCase().indexOf(search_key.toLowerCase());
-                                if (sIndex == 0) {
-                                    filterList.add(listStates.get(i));
-                                }
-                            }
-                            if (filterList != null && filterList.size() > 0) {
-                                statesListAdapter.updateList(filterList);
-                                rvCountries.setVisibility(View.VISIBLE);
-                                tvNoResults.setVisibility(View.GONE);
-                            } else {
-                                rvCountries.setVisibility(View.GONE);
-                                tvNoResults.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void b_populateState(String strState) {
-        try {
-            popupStates.dismiss();
-            stateET.setText(strState);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     private void b_updateAddress() {
         try {
-
             UserData userData = new UserData();
             userData.setAddressLine1(b_address1ET.getText().toString().trim());
             userData.setAddressLine2(address2ET.getText().toString().trim());
@@ -1268,7 +996,6 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
             userData.setState(b_stateET.getText().toString().trim());
             userData.setZipCode(b_zipcodeET.getText().toString().trim());
             userData.setCountry("United States");
-
             customerProfileViewModel.meUpdateAddress(userData);
         } catch (Exception ex) {
             ex.printStackTrace();

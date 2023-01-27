@@ -207,7 +207,7 @@ public class SignAgreementsActivity extends BaseActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (isActionEnabled) {
-                            if (AGREE_TYPE == Utils.mAgmt && agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(MATERIAL)) {
+                            if (AGREE_TYPE == Utils.mAgmt && (agrementsResponse.getData().get(currentIteration).getMaterialType() != null && agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(MATERIAL))) {
                                 showProgressDialog();
                                 File doc = new File(filePath);
                                 RequestBody requestBody = null;
@@ -304,7 +304,7 @@ public class SignAgreementsActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     private void setupLablesAndUI(String materialType, String effectiveDate) {
         try {
-            if (materialType.equalsIgnoreCase(MATERIAL)) {
+            if (materialType != null && materialType.equalsIgnoreCase(MATERIAL)) {
                 binding.webView.setVisibility(View.VISIBLE);
                 binding.changeSummaryLL.setVisibility(View.GONE);
                 binding.infoTV.setVisibility(View.GONE);
@@ -358,7 +358,7 @@ public class SignAgreementsActivity extends BaseActivity {
 //                    binding.agreNameTV.setText(getString(R.string.gbx_merchant) + " Update");
                     binding.agreNameTV.setText(getString(R.string.gbx_merchant1) + " Update");
             }
-        } catch (Resources.NotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -585,60 +585,65 @@ public class SignAgreementsActivity extends BaseActivity {
     }
 
     public void setSpannableText(String date) {
+        try {
+            String agreeName = "", agreeName1 = "";
+            if (AGREE_TYPE == Utils.cTOS)
+                agreeName = getString(R.string.gbx_tos);
+            else if (AGREE_TYPE == Utils.cPP)
+                agreeName = getString(R.string.gbx_pp);
+            else if (AGREE_TYPE == Utils.mAgmt) {
+                agreeName = getString(R.string.gbx_merchant);
+                agreeName1 = getString(R.string.gbx_merchant1);
 
-        String agreeName = "", agreeName1 = "";
-        if (AGREE_TYPE == Utils.cTOS)
-            agreeName = getString(R.string.gbx_tos);
-        else if (AGREE_TYPE == Utils.cPP)
-            agreeName = getString(R.string.gbx_pp);
-        else if (AGREE_TYPE == Utils.mAgmt) {
-            agreeName = getString(R.string.gbx_merchant);
-            agreeName1 = getString(R.string.gbx_merchant1);
+            }
+            if (AGREE_TYPE == Utils.mAgmt) {
+                binding.changeSummaryHeaderTV.setText(agreeName1 + " Update Summary");
+            } else {
+                binding.changeSummaryHeaderTV.setText(agreeName + " Update Summary");
+            }
+            binding.changeSummarySubHeaderTV.setText("Here is a brief summary of the " + agreeName + " changes that go into effect on " + date + ":");
+            if (agrementsResponse.getData().get(currentIteration) != null && agrementsResponse.getData().get(currentIteration).getChangeSummary() != null)
+                binding.changeSummaryTV.setText(Html.fromHtml(agrementsResponse.getData().get(currentIteration).getChangeSummary()));
+            else
+                binding.changeSummaryTV.setText("");
+            String formString = "On " + date + ", we’re making some changes to our " + agreeName +
+                    " These changes won’t affect the way you use our services, but they’ll make it easier for you to understand what to expect — and what we expect from you — as you use our services. You can review the new terms here. At a glance, here’s what this update means for you:";
+            SpannableString ss = new SpannableString(formString);
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    Log.e("Click", "click");
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
 
-        }
-        if (AGREE_TYPE == Utils.mAgmt) {
-            binding.changeSummaryHeaderTV.setText(agreeName1 + " Update Summary");
-        } else {
-            binding.changeSummaryHeaderTV.setText(agreeName + " Update Summary");
-        }
-        binding.changeSummarySubHeaderTV.setText("Here is a brief summary of the " + agreeName + " changes that go into effect on " + date + ":");
-        binding.changeSummaryTV.setText(Html.fromHtml(agrementsResponse.getData().get(currentIteration).getChangeSummary()));
-        String formString = "On " + date + ", we’re making some changes to our " + agreeName +
-                " These changes won’t affect the way you use our services, but they’ll make it easier for you to understand what to expect — and what we expect from you — as you use our services. You can review the new terms here. At a glance, here’s what this update means for you:";
-        SpannableString ss = new SpannableString(formString);
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                Log.e("Click", "click");
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
+                    showProgressDialog();
+                    List<DownloadUrlRequest> requests = new ArrayList<>();
+                    DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
+                    downloadUrlRequest.setKey(agrementsResponse.getData().get(currentIteration).getAgreementFileRefPath());
+                    requests.add(downloadUrlRequest);
+                    loginViewModel.getDownloadUrl(requests);
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
 
-                showProgressDialog();
-                List<DownloadUrlRequest> requests = new ArrayList<>();
-                DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
-                downloadUrlRequest.setKey(agrementsResponse.getData().get(currentIteration).getAgreementFileRefPath());
-                requests.add(downloadUrlRequest);
-                loginViewModel.getDownloadUrl(requests);
-            }
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(true);
+                }
+            };
 
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(true);
-            }
-        };
-
-        int start = ss.toString().indexOf("new terms here"), end = ss.toString().indexOf("new terms here") + 14;
-        ss.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            int start = ss.toString().indexOf("new terms here"), end = ss.toString().indexOf("new terms here") + 14;
+            ss.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), ss.toString().indexOf("new terms here"), ss.toString().indexOf("new terms here") + 13, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), ss.toString().indexOf("new terms here"), ss.toString().indexOf("new terms here") + 13, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), ss.toString().indexOf("new terms here"), ss.toString().indexOf("new terms here") + 13, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        binding.infoTV.setText(ss);
-        binding.infoTV.setMovementMethod(LinkMovementMethod.getInstance());
-        binding.infoTV.setHighlightColor(Color.TRANSPARENT);
-
+            binding.infoTV.setText(ss);
+            binding.infoTV.setMovementMethod(LinkMovementMethod.getInstance());
+            binding.infoTV.setHighlightColor(Color.TRANSPARENT);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
     }
 
@@ -744,7 +749,7 @@ public class SignAgreementsActivity extends BaseActivity {
             setupLablesAndUI(agrementsResponse.getData().get(currentIteration).getMaterialType(),
                     Utils.convertEffectiveDate(agrementsResponse.getData().get(currentIteration).getEffectiveDate()));
 
-            if (agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(MATERIAL)) {
+            if (agrementsResponse.getData().get(currentIteration).getMaterialType() != null && agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(MATERIAL)) {
                 binding.webView.addJavascriptInterface(jsInterface, "JSInterface");
                 binding.webView.loadUrl("file:///android_asset/pdfViewerScript.html");
 //                dashboardViewModel.getDocumentUrl(AGREE_TYPE);

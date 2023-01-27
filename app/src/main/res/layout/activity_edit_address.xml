@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"
                 android:fontFamily="@font/opensans_regular"
-                android:text="Please enter your residential address."
+                android:text="Please enter your billing address."
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp"
                 android:visibility="gone" />
@@ -176,7 +176,6 @@
                         android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
 
                 <LinearLayout
                     android:id="@+id/address2ErrorLL"
@@ -296,17 +295,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/state"
-                        android:textColorHint="@color/black"
+                        android:importantForAutofill="no"
+                        android:textColorHint="@color/light_gray"
                         app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                         app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                         app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                         app:boxCornerRadiusTopStart="@dimen/_10sdp"
                         app:boxStrokeColor="@color/primary_color"
-                        app:expandedHintEnabled="false"
+                        app:errorIconDrawable="@null"
                         app:hintTextColor="@color/primary_color"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:ignore="MissingConstraints">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/stateET"
@@ -703,6 +704,7 @@
                         app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                         app:boxCornerRadiusTopStart="@dimen/_10sdp"
                         app:boxStrokeColor="@color/primary_color"
+                        app:errorIconDrawable="@null"
                         app:hintTextColor="@color/primary_color"
                         tools:ignore="MissingConstraints">
 
@@ -715,8 +717,8 @@
                             android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
-                            android:importantForAutofill="no"
                             android:inputType="textEmailAddress|textNoSuggestions"
+                            android:longClickable="false"
                             android:maxLines="1"
                             android:padding="@dimen/_14sdp"
                             android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
