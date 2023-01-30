@@ -242,12 +242,12 @@ public class AcceptAgreementsActivity extends BaseActivity {
     private void setupLablesAndUI() {
         if (AGREE_TYPE == Utils.cTOS) {
             binding.agreNameTV.setText(getString(R.string.gbx_tos));
-            binding.infoTV.setText(getString(R.string.read_agree_text) + " " + getString(R.string.tos));
-            binding.accknowledgeTV.setText(getString(R.string.read_accept_text) + " " + getString(R.string.tos));
+            binding.infoTV.setText(getString(R.string.read_agree_text) + " " + getString(R.string.tos) + ".");
+            binding.accknowledgeTV.setText(getString(R.string.read_accept_text) + " " + getString(R.string.tos) + " Agreement");
         } else if (AGREE_TYPE == Utils.cPP) {
             binding.agreNameTV.setText(getString(R.string.gbx_pp));
-            binding.infoTV.setText(getString(R.string.read_agree_text) + " " + getString(R.string.pp));
-            binding.accknowledgeTV.setText(getString(R.string.read_accept_text) + " " + getString(R.string.pp));
+            binding.infoTV.setText(getString(R.string.read_agree_text) + " " + getString(R.string.pp) + ".");
+            binding.accknowledgeTV.setText(getString(R.string.read_accept_text) + " " + getString(R.string.pp) + " Agreement");
         } else if (AGREE_TYPE == Utils.mAgmt) {
             binding.agreNameTV.setText(getString(R.string.gbx_merchant));
             binding.infoTV.setText(getString(R.string.read_agree_text) + " " + getString(R.string.m_agree));
@@ -262,7 +262,7 @@ public class AcceptAgreementsActivity extends BaseActivity {
                 binding.infoLL.setVisibility(View.GONE);
                 binding.closeIV.setImageDrawable(getDrawable(R.drawable.ic_back));
             } else {
-                binding.optionsIV.setVisibility(View.GONE);
+                binding.optionsIV.setVisibility(View.INVISIBLE);
                 binding.closeIV.setImageDrawable(getDrawable(R.drawable.ic_close));
             }
             if (!SCREEN.equals(""))
@@ -274,7 +274,6 @@ public class AcceptAgreementsActivity extends BaseActivity {
             binding.closeIV.setImageDrawable(getDrawable(R.drawable.ic_close));
             binding.actionTV.setText("Next");
         }
-
     }
 
     private void initObservers() {

@@ -34,11 +34,12 @@
             android:id="@+id/agreNameTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_40sdp"
-            android:fontFamily="@font/opensans_semibold"
             android:layout_gravity="center"
-            android:text="Agreement"
+            android:layout_marginHorizontal="@dimen/_40sdp"
             android:layout_weight="1"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="center"
+            android:text="Agreement"
             android:textColor="@color/black"
             android:textSize="@dimen/_11ssp" />
 

@@ -691,7 +691,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
                     if (getCurrentFocus().getId() == passwordET.getId()) {
 
-                        if (strong.matcher(charSequence).matches()) {
+                        if (passwordET.getText().toString().length() > 7 && strong.matcher(charSequence).matches()) {
                             stregnthOne.setVisibility(VISIBLE);
                             stregnthTwo.setVisibility(VISIBLE);
                             stregnthThree.setVisibility(VISIBLE);
@@ -699,7 +699,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             stregnthTwo.setBackgroundColor(getResources().getColor(R.color.primary_color));
                             stregnthThree.setBackgroundColor(getResources().getColor(R.color.primary_color));
                             passwordInfoTV.setVisibility(GONE);
-                        } else if (medium.matcher(charSequence).matches()) {
+                        } else if (passwordET.getText().toString().length() > 5 && medium.matcher(charSequence).matches()) {
                             stregnthOne.setVisibility(VISIBLE);
                             stregnthTwo.setVisibility(VISIBLE);
                             stregnthThree.setVisibility(INVISIBLE);
