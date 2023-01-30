@@ -297,7 +297,7 @@
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
                             android:importantForAutofill="no"
-                            android:inputType="text|textNoSuggestions"
+                            android:inputType="text|textNoSuggestions|textFilter"
                             android:longClickable="false"
                             android:maxLength="32"
                             android:padding="@dimen/_14sdp"
