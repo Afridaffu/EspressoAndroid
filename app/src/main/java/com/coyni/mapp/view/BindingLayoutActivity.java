@@ -152,9 +152,9 @@ public class BindingLayoutActivity extends BaseActivity {
                             || objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT) {
                         identityVerificationViewModel.getPostAddCustomer();
                     } else {
-                        Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
-                        startActivity(i);
-                        finish();
+//                        Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
+//                        startActivity(i);
+//                        finish();
                     }
                 }
             });
@@ -269,14 +269,16 @@ public class BindingLayoutActivity extends BaseActivity {
                             }
                             objMyApplication.setDbaOwnerId(identityImageResponse.getData().getDbaOwnerId());
                             objMyApplication.setIsReserveEnabled(identityImageResponse.getData().isReserveEnabled());
-                            Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
-                            i.putExtra("ADDPERSONAL", "true");
+//                            Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
+//                            i.putExtra("ADDPERSONAL", "true");
+//                            startActivity(i);
+                            Intent i = new Intent(BindingLayoutActivity.this, AccountCreatedActivity.class);
                             startActivity(i);
                             finish();
                         } else {
-                            Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
-                            startActivity(i);
-                            finish();
+//                            Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
+//                            startActivity(i);
+//                            finish();
                         }
 
                     } else {

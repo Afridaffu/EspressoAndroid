@@ -7,7 +7,7 @@ import retrofit2.http.Body;
 public class InformationRequest {
     private List<Integer> websiteUpdates;
     private List<ProposalRequest> proposals;
-    private BankRequest bankRequest;
+//    private BankRequest bankRequest;
     private Boolean reserveRuleAccepted;
 
     public List<Integer> getWebsiteUpdates() {
@@ -18,13 +18,13 @@ public class InformationRequest {
         this.websiteUpdates = websiteUpdates;
     }
 
-    public BankRequest getBankRequest() {
-        return bankRequest;
-    }
-
-    public void setBankRequest(BankRequest bankRequest) {
-        this.bankRequest = bankRequest;
-    }
+//    public BankRequest getBankRequest() {
+//        return bankRequest;
+//    }
+//
+//    public void setBankRequest(BankRequest bankRequest) {
+//        this.bankRequest = bankRequest;
+//    }
 
     public boolean isReserveRuleAccepted() {
         return reserveRuleAccepted;

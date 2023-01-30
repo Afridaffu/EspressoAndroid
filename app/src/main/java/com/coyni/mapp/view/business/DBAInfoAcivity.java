@@ -474,8 +474,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 if (!isRetail) {
                     selectRetailRB();
                 }
-                isWebsite = true;
-//                isWebsite = isValidUrl(websiteOET.getText().trim());
+//                isWebsite = true;
+                isWebsite = isValidUrl(websiteOET.getText().trim());
                 enableOrDisableNext();
             });
 
