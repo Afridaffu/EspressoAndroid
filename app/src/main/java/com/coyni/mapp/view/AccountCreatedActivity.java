@@ -7,6 +7,9 @@ import android.os.SystemClock;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.coyni.mapp.databinding.ActivityAccountCreatedBinding;
+import com.coyni.mapp.dialogs.OnAgreementsAPIListener;
+import com.coyni.mapp.model.FilteredAgreements;
+import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
 
@@ -41,6 +44,28 @@ public class AccountCreatedActivity extends BaseActivity {
             launchDashboard();
         });
 
+        setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
+            @Override
+            public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp, boolean isMerchantHide) {
+                dismissDialog();
+                if (isMerchantHide) {
+                    FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                    if (filteredAgreements.getAgreements().size() > 0) {
+                        objMyApplication.setHasToSignAgreements(filteredAgreements.getAgreements());
+                        Utils.launchAgreements(AccountCreatedActivity.this, isMerchantHide);
+                    } else {
+                        launchDasboardFromBase();
+                    }
+                } else {
+                    if (signAgreementsResp.getData().size() > 0) {
+                        objMyApplication.setHasToSignAgreements(signAgreementsResp.getData());
+                        Utils.launchAgreements(AccountCreatedActivity.this, isMerchantHide);
+                    } else {
+                        launchDasboardFromBase();
+                    }
+                }
+            }
+        });
     }
 
     @Override

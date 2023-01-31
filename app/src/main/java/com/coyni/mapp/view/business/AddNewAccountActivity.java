@@ -15,10 +15,14 @@ import com.coyni.mapp.R;
 import com.coyni.mapp.adapters.AddNewAccountsAdapter;
 import com.coyni.mapp.databinding.ActivityAddNewAccountBinding;
 import com.coyni.mapp.model.preferences.ProfilesResponse;
+import com.coyni.mapp.model.profile.AddBusinessUserResponse;
+import com.coyni.mapp.utils.MyApplication;
 import com.coyni.mapp.utils.Utils;
+import com.coyni.mapp.view.AccountCreatedActivity;
 import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.BindingLayoutActivity;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
+import com.coyni.mapp.viewmodel.IdentityVerificationViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +33,8 @@ public class AddNewAccountActivity extends BaseActivity {
     private List<ProfilesResponse.Profiles> profilesList = new ArrayList<>();
     private ActivityAddNewAccountBinding binding;
     private static final int AUTO_SCROLL_THRESHOLD_IN_MILLI = 5000;
+    private IdentityVerificationViewModel identityVerificationViewModel;
+    private MyApplication objMyApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +43,9 @@ public class AddNewAccountActivity extends BaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             binding = DataBindingUtil.setContentView(this, R.layout.activity_add_new_account);
-
+            objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
 
             initObservers();
             binding.llBusinessAccount.setOnClickListener(new View.OnClickListener() {
@@ -70,8 +77,10 @@ public class AddNewAccountActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTimeQA = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(AddNewAccountActivity.this, BindingLayoutActivity.class)
-                            .putExtra("screen", "profileGetStarted"));
+//                    startActivity(new Intent(AddNewAccountActivity.this, BindingLayoutActivity.class)
+//                            .putExtra("screen", "profileGetStarted"));
+                    showProgressDialog();
+                    identityVerificationViewModel.getPostAddCustomer();
                 }
             });
 
@@ -117,6 +126,35 @@ public class AddNewAccountActivity extends BaseActivity {
                         }
                     } else {
 
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            identityVerificationViewModel.getBusinessAddCustomer().observe(this, new Observer<AddBusinessUserResponse>() {
+                @Override
+                public void onChanged(AddBusinessUserResponse identityImageResponse) {
+                    dismissDialog();
+                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+                        objMyApplication.setOldLoginUserId(objMyApplication.getLoginUserId());
+                        objMyApplication.setLoginUserId(identityImageResponse.getData().getUserId());
+                        objMyApplication.setStrEmail(identityImageResponse.getData().getEmail());
+                        if (identityImageResponse.getData().getAccountType() != 0) {
+                            objMyApplication.setAccountType(identityImageResponse.getData().getAccountType());
+                        } else {
+                            objMyApplication.setAccountType(Utils.PERSONAL_ACCOUNT);
+                        }
+                        objMyApplication.setDbaOwnerId(identityImageResponse.getData().getDbaOwnerId());
+                        objMyApplication.setIsReserveEnabled(identityImageResponse.getData().isReserveEnabled());
+                        Intent i = new Intent(AddNewAccountActivity.this, AccountCreatedActivity.class);
+                        startActivity(i);
+                        finish();
+                    } else {
+                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), AddNewAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
                 }
             });

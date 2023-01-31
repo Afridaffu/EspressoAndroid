@@ -275,7 +275,7 @@ public class EnableAuthID extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(EnableAuthID.this, IdentityVerificationActivity.class));
+//                    startActivity(new Intent(EnableAuthID.this, IdentityVerificationActivity.class));
                 }
             });
 
