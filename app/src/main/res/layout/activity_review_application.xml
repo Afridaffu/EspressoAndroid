@@ -825,7 +825,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_1sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="DBA Filling"
+                                android:text="DBA Filing"
                                 android:textColor="@color/primary_color"
                                 android:textSize="@dimen/_10ssp" />
 

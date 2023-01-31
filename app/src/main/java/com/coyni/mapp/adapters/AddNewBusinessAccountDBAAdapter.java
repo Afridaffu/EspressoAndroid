@@ -104,6 +104,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
 
             if (listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
                     listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                    listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus()) ||
                     listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                 holder.itemView.setEnabled(false);
                 holder.txvCompanyName.setEnabled(false);

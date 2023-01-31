@@ -82,9 +82,7 @@ public class DashboardActivity extends BaseActivity {
     IdentityVerificationViewModel identityVerificationViewModel;
     public NotificationsViewModel notificationsViewModel;
     private LoginViewModel loginViewModel;
-    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV,
-            welcomeCoyniTV, buyTokenWelcomeCoyniTV, contactUSTV, idVeriStatus, actionRequiredMsgTV,
-            actionTV, tvUserStatusUpdate;
+    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV, welcomeCoyniTV, buyTokenWelcomeCoyniTV, contactUSTV, idVeriStatus, actionRequiredMsgTV, actionTV, tvUserStatusUpdate;
     MyApplication objMyApplication;
     Dialog dialog;
     RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL;
@@ -105,8 +103,7 @@ public class DashboardActivity extends BaseActivity {
         try {
             super.onCreate(savedInstanceState);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_dashboard);
             initialization();
             initObserver();
@@ -249,8 +246,9 @@ public class DashboardActivity extends BaseActivity {
 //                        }
                         if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                             showQuickAction(DashboardActivity.this);
-                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())
+                                || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                                || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                             Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
                         } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                             Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve1), 0, "");
@@ -307,12 +305,11 @@ public class DashboardActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())
-                            || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
-                            && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
+                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
                         Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve1), 0, "");
-                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                            objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())
+                            || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                            || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                         Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
                     } else {
                         startActivity(new Intent(DashboardActivity.this, ScanActivity.class));
@@ -340,8 +337,7 @@ public class DashboardActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, PaymentMethodsActivity.class)
-                            .putExtra("screen", "dashboard"));
+                    startActivity(new Intent(DashboardActivity.this, PaymentMethodsActivity.class).putExtra("screen", "dashboard"));
                 }
             });
 
@@ -352,8 +348,7 @@ public class DashboardActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, EditAddressActivity.class)
-                            .putExtra("screen", "add_address"));
+                    startActivity(new Intent(DashboardActivity.this, EditAddressActivity.class).putExtra("screen", "add_address"));
                 }
             });
 
@@ -378,8 +373,7 @@ public class DashboardActivity extends BaseActivity {
                     if (objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equals("ACTION_REQUIRED_ADDITIONAL_INFO"))
                         startActivity(new Intent(DashboardActivity.this, AdditionalActionUploadActivity.class));
                     else if (objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equals("ACTION_REQUIRED_FULL_SSN"))
-                        startActivity(new Intent(DashboardActivity.this, IdVeAdditionalActionActivity.class)
-                                .putExtra("from", "DASHBOARD"));
+                        startActivity(new Intent(DashboardActivity.this, IdVeAdditionalActionActivity.class).putExtra("from", "DASHBOARD"));
 
 
                 }
@@ -406,12 +400,11 @@ public class DashboardActivity extends BaseActivity {
                             return;
                         }
                         mLastClickTimeQA = SystemClock.elapsedRealtime();
-                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())
-                                || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
-                                && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
+                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
                             Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve1), 0, "");
-                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())
+                                || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                                || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                             Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
                         } else {
                             requestPermission();
@@ -544,8 +537,7 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void fetchTransactions() {
-        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified() ||
-                objMyApplication.getTrackerResponse().getData().isProfileVerified()) {
+        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified() || objMyApplication.getTrackerResponse().getData().isProfileVerified()) {
             LatestTransactionsRequest request = new LatestTransactionsRequest();
             request.setTransactionType(getDefaultTransactionTypes());
             dashboardViewModel.getLatestTxns(request);
@@ -637,7 +629,8 @@ public class DashboardActivity extends BaseActivity {
                         request.setTransactionType(getDefaultTransactionTypes());
                         dashboardViewModel.getLatestTxns(request);
                     } else {
-                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                                || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) {
                             ll_identity_verification_failed.setVisibility(View.GONE);
 
                             // new code
@@ -652,10 +645,8 @@ public class DashboardActivity extends BaseActivity {
                             additionalActionCV.setVisibility(View.GONE);
                             buyTokensCV.setVisibility(View.GONE);
                             //new code
-                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus()) ||
-                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
-                            startActivity(new Intent(DashboardActivity.this, IdentityVerificationBindingLayoutActivity.class)
-                                    .putExtra("screen", "FAILED"));
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                            startActivity(new Intent(DashboardActivity.this, IdentityVerificationBindingLayoutActivity.class).putExtra("screen", "FAILED"));
                         } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                             cvHeaderRL.setVisibility(View.VISIBLE);
                             cvSmallHeaderRL.setVisibility(View.GONE);
@@ -830,8 +821,7 @@ public class DashboardActivity extends BaseActivity {
                         if (notifications.getStatus().equalsIgnoreCase("success")) {
                             List<NotificationsDataItems> localData = notifications.getData().getItems();
                             for (int i = 0; i < localData.size(); i++) {
-                                if (localData.get(i).getStatus().equalsIgnoreCase("Requested") ||
-                                        localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
+                                if (localData.get(i).getStatus().equalsIgnoreCase("Requested") || localData.get(i).getStatus().equalsIgnoreCase("Remind")) {
                                     globalCount++;
                                 }
                             }
@@ -933,8 +923,7 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void showUnderReviewData() {
-        if (objMyApplication.getMyProfile() != null &&
-                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
+        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
             cvHeaderRL.setVisibility(View.VISIBLE);
             cvSmallHeaderRL.setVisibility(View.GONE);
             getStartedCV.setVisibility(View.GONE);
@@ -945,8 +934,7 @@ public class DashboardActivity extends BaseActivity {
             additionalActionCV.setVisibility(View.GONE);
             buyTokensCV.setVisibility(View.GONE);
             tvUserStatusUpdate.setText(R.string.customer_under_review);
-            if (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
-                    && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE")) {
+            if (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE")) {
                 tvUserStatusUpdate.setText(R.string.under_review_dispute);
             } else {
                 underReviewCV.setVisibility(View.GONE);
@@ -1086,8 +1074,7 @@ public class DashboardActivity extends BaseActivity {
 
             String imageString = objMyApplication.getMyProfile().getData().getImage();
             String imageTextNew = "";
-            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                    objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
             tvUserInfo.setText(imageTextNew);
             tvUserInfoSmall.setText(imageTextNew);
 
@@ -1109,8 +1096,7 @@ public class DashboardActivity extends BaseActivity {
                 tvUserInfoSmall.setVisibility(View.VISIBLE);
 
                 String imageText = "";
-                imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                 tvUserInfo.setText(imageText);
                 tvUserInfoSmall.setText(imageText);
             }
@@ -1191,12 +1177,11 @@ public class DashboardActivity extends BaseActivity {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
-                if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())
-                        || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null
-                        && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
+                if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) || (objMyApplication.getMyProfile().getData().getStatusChangeReasonType() != null && objMyApplication.getMyProfile().getData().getStatusChangeReasonType().equalsIgnoreCase("UNDER_REVIEW_DISPUTE"))) {
                     Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve1), 0, "");
-                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                        objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())
+                        || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                        || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                     Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
                 } else {
                     requestPermission();
@@ -1251,11 +1236,9 @@ public class DashboardActivity extends BaseActivity {
         try {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS)) {
                 // show UI part if you want here to show some rationale !!!
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS},
-                        REQUEST_READ_CONTACTS);
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, REQUEST_READ_CONTACTS);
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS},
-                        REQUEST_READ_CONTACTS);
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, REQUEST_READ_CONTACTS);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1352,20 +1335,19 @@ public class DashboardActivity extends BaseActivity {
 
     private void firebaseToken() {
         try {
-            FirebaseMessaging.getInstance().getToken()
-                    .addOnCompleteListener(new OnCompleteListener<String>() {
-                        @Override
-                        public void onComplete(@NonNull Task<String> task) {
-                            if (!task.isSuccessful()) {
-                                Log.w("", "Fetching FCM registration token failed", task.getException());
-                                return;
-                            }
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w("", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
 
-                            // Get new FCM registration token
-                            strFCMToken = task.getResult();
-                            Log.d("Token", "Token - " + strFCMToken);
-                        }
-                    });
+                    // Get new FCM registration token
+                    strFCMToken = task.getResult();
+                    Log.d("Token", "Token - " + strFCMToken);
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
