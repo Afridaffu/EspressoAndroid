@@ -184,7 +184,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
     private void showUserData() {
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null &&
-                myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                (myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                        myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus()))) {
             if (myApplication.getMyProfile().getData().getFirstName() != null) {
                 firstName = myApplication.getMyProfile().getData().getFirstName();
 //            iconText = firstName.substring(0, 1).toUpperCase();

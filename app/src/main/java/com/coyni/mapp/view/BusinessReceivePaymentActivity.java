@@ -83,8 +83,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_receive_payment);
 
         initialization();
@@ -120,10 +119,8 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                     }
 //                    ctKey.enableButton();
 
-                    if (Utils.doubleParsing(editable.toString()) > 0.005)
-                        ctKey.enableButton();
-                    else
-                        ctKey.disableButton();
+                    if (Utils.doubleParsing(editable.toString()) > 0.005) ctKey.enableButton();
+                    else ctKey.disableButton();
                 } else if (editable.toString().equals(".")) {
                     setAmount.setText("");
                     ctKey.disableButton();
@@ -187,9 +184,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                     e.printStackTrace();
                 }
             });
-            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                    && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
-                    && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
+            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null && (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
                 strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
             } else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
                 strName = objMyApplication.getMyProfile().getData().getDbaName();
@@ -344,8 +339,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                 //divider.setVisibility(View.VISIBLE);
             }
             imageSaveAlbumLL.setDrawingCacheEnabled(true);
-            imageSaveAlbumLL.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            imageSaveAlbumLL.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
             imageSaveAlbumLL.layout(0, 0, imageSaveAlbumLL.getMeasuredWidth(), imageSaveAlbumLL.getMeasuredHeight());
 
             imageSaveAlbumLL.buildDrawingCache(true);
@@ -418,11 +412,8 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                 imageString = objMyApplication.getMyProfile().getData().getImage();
             }
             String imageTextNew = "";
-            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                    && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
-                    && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
-                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null && (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
+                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
             }
 //            else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
 //                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
@@ -441,15 +432,14 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                         utility.addImage(imageUrl, imgProfile, R.drawable.acct_profile);
                     }
                 } else {
-                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                            && objMyApplication.getMyProfile().getData().getImage() != null) {
+                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getImage() != null) {
                         String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
                         DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                         utility.addImage(imageUrl, imgProfile, R.drawable.acct_profile);
                     }
                 }
 
-            } else if (!objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+            } else if (!objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || !objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) {
                 imgProfile.setVisibility(View.VISIBLE);
                 userNameTV.setVisibility(View.GONE);
                 imgProfile.setImageResource(R.drawable.acct_profile);
@@ -457,11 +447,8 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                 imgProfile.setVisibility(View.GONE);
                 userNameTV.setVisibility(View.VISIBLE);
                 String imageText = "";
-                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                        && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
-                        && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
-                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                            objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null && (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
+                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                 }
 //                else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
 //                    imageText = imageText + objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
@@ -481,14 +468,10 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             String imageString = "";
             if (objMyApplication.getAccountType() == Utils.SHARED_ACCOUNT)
                 imageString = objMyApplication.getOwnerImage().trim();
-            else
-                imageString = objMyApplication.getMyProfile().getData().getImage();
+            else imageString = objMyApplication.getMyProfile().getData().getImage();
             String imageTextNew = "";
-            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                    && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
-                    && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
-                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null && (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
+                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
             }
 //            else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
 //                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
@@ -508,14 +491,13 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                         utility.addImage(imageUrl, saveProfileIV, R.drawable.acct_profile);
                     }
                 } else {
-                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                            && objMyApplication.getMyProfile().getData().getImage() != null) {
+                    if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getImage() != null) {
                         String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
                         DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                         utility.addImage(imageUrl, saveProfileIV, R.drawable.acct_profile);
                     }
                 }
-            } else if (!objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+            } else if (!objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || !objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) {
                 saveProfileIV.setVisibility(View.VISIBLE);
                 saveProfileTitle.setVisibility(View.GONE);
                 saveProfileIV.setImageResource(R.drawable.acct_profile);
@@ -523,11 +505,9 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                 saveProfileIV.setVisibility(View.GONE);
                 saveProfileTitle.setVisibility(View.VISIBLE);
                 String imageText = "";
-                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                        && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
-                        && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
-                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                            objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null && (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                        || objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
+                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                 }
 //                else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
 //                    imageText = imageText + objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
@@ -645,11 +625,9 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == 123) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 Utils.displayAlert("Requires Access to Your Storage.", BusinessReceivePaymentActivity.this, "", "");
-            } else if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 saveToGallery();
                 Utils.showCustomToast(BusinessReceivePaymentActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
             }

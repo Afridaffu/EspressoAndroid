@@ -45,6 +45,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.coyni.mapp.dialogs.OnAgreementsAPIListener;
+import com.coyni.mapp.model.FilteredAgreements;
+import com.coyni.mapp.model.SignAgreementsResp;
 import com.coyni.mapp.model.paymentmethods.PaymentMethodsResponse;
 import com.coyni.mapp.model.paymentmethods.PaymentsList;
 import com.coyni.mapp.utils.CheckOutConstants;
@@ -207,6 +210,29 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             initObserver();
 
             CardScanSheet.prepareScan(this, API_KEY, true, () -> null);
+
+            setOnAgreementsAPIListener(new OnAgreementsAPIListener() {
+                @Override
+                public void onAgreementsAPIResponse(SignAgreementsResp signAgreementsResp, boolean isMerchantHide) {
+                    dismissDialog();
+                    if (isMerchantHide) {
+                        FilteredAgreements filteredAgreements = Utils.getFilteredAgreements(signAgreementsResp.getData());
+                        if (filteredAgreements.getAgreements().size() > 0) {
+                            objMyApplication.setHasToSignAgreements(filteredAgreements.getAgreements());
+                            Utils.launchAgreements(AddCardActivity.this, isMerchantHide);
+                        } else {
+                            launchDasboardFromBase();
+                        }
+                    } else {
+                        if (signAgreementsResp.getData().size() > 0) {
+                            objMyApplication.setHasToSignAgreements(signAgreementsResp.getData());
+                            Utils.launchAgreements(AddCardActivity.this, isMerchantHide);
+                        } else {
+                            launchDasboardFromBase();
+                        }
+                    }
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -2271,10 +2297,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
 
     private void launchDashboard(String strScreen) {
         try {
-            if (objMyApplication.getInitializeResponse() != null && objMyApplication.getInitializeResponse().getData() != null
-                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())
-                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
-                    && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+            if (objMyApplication.getInitializeResponse() != null && objMyApplication.getInitializeResponse().getData() != null && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus()) && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) && !objMyApplication.getInitializeResponse().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
 
                 if (objMyApplication.getInitializeResponse().getData().getAccountType() == Utils.SHARED_ACCOUNT) {
                     if (objMyApplication.getInitializeResponse().getData().getOwnerDetails() != null && !objMyApplication.getInitializeResponse().getData().getOwnerDetails().getTracker().isIsAgreementSigned()) {

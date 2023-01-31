@@ -102,7 +102,7 @@
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_weight="1"
                             android:background="@drawable/shape_green_round_rect"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -131,7 +131,7 @@
                             android:layout_marginStart="@dimen/_5sdp"
                             android:layout_weight="1"
                             android:background="@drawable/shape_green_round_rect"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <ImageView
                                 android:layout_width="wrap_content"

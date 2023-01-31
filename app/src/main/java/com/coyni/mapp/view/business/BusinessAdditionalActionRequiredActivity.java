@@ -375,7 +375,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         informationJSON = new JSONObject();
         try {
             JSONArray website = new JSONArray();
-            JSONObject bankRequest = new JSONObject();
+//            JSONObject bankRequest = new JSONObject();
             if (actionRequired.getData().getWebsiteChange() != null) {
                 for (int i = 0; i <= actionRequired.getData().getWebsiteChange().size() - 1; i++) {
                     website.put(actionRequired.getData().getWebsiteChange().get(i).getId());
@@ -385,23 +385,23 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 informationJSON.put("reserveRuleAccepted", reservedRuleAccepted);
             }
 
-            if (objMyApplication.getBankAccount() != null) {
-                bankRequest.put("accountName", objMyApplication.getBankAccount().getAccountName());
-                bankRequest.put("accountNumber", objMyApplication.getBankAccount().getAccountNumber());
-                if (bankID != 0) {
-                    bankRequest.put("bankId", bankID);
-                } else {
-                    bankRequest.put("bankId", bankProposal.getDbId());
-                }
-                bankRequest.put("giactReq", true);
-                bankRequest.put("routingNumber", objMyApplication.getBankAccount().getRoutingNumber());
-            }
+//            if (objMyApplication.getBankAccount() != null) {
+//                bankRequest.put("accountName", objMyApplication.getBankAccount().getAccountName());
+//                bankRequest.put("accountNumber", objMyApplication.getBankAccount().getAccountNumber());
+//                if (bankID != 0) {
+//                    bankRequest.put("bankId", bankID);
+//                } else {
+//                    bankRequest.put("bankId", bankProposal.getDbId());
+//                }
+//                bankRequest.put("giactReq", true);
+//                bankRequest.put("routingNumber", objMyApplication.getBankAccount().getRoutingNumber());
+//            }
             informationJSON.put("websiteUpdates", website);
-            if (bankRequest.length() > 0) {
-                informationJSON.put("bankRequest", bankRequest);
-            } else {
-                informationJSON.put("bankRequest", JSONObject.NULL);
-            }
+//            if (bankRequest.length() > 0) {
+//                informationJSON.put("bankRequest", bankRequest);
+//            } else {
+//                informationJSON.put("bankRequest", JSONObject.NULL);
+//            }
 
             JSONArray proposals = new JSONArray();
 

@@ -669,7 +669,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             pushFragment(new BusinessAccountFragment());
         } else {
             if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
-                    || accountStatus.equalsIgnoreCase("Application")) { //Remove after status changed
+                    || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) {
                 pushFragment(new GetStartedFragment());
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                 pushFragment(new UnderReviewFragment());
@@ -691,7 +691,8 @@ public class BusinessDashboardActivity extends BaseActivity {
     public void showUserData() {
         String iconText = "";
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                && (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus()))) {
             if (objMyApplication.getMyProfile().getData().getFirstName() != null) {
                 firstName = objMyApplication.getMyProfile().getData().getFirstName();
 //            iconText = firstName.substring(0, 1).toUpperCase();

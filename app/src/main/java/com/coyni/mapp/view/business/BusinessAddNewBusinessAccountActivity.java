@@ -232,7 +232,8 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 isInActiveDBAFound = true;
             } else {
                 for (ProfilesResponse.Profiles dbaProfile : dBAList) {
-                    if (dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                    if (dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus()) ||
+                            dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
                             dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
                             dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                         isInActiveDBAFound = true;

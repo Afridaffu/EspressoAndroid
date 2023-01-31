@@ -518,10 +518,9 @@ public class BusinessProfileActivity extends BaseActivity {
                     } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.xdark_gray));
                         statusDot.setCardBackgroundColor(getResources().getColor(R.color.light_gray));
-                    } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-                        account_status.setTextColor(getResources().getColor(R.color.orange));
-                        statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
-                    } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                    } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                            || accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())
+                            || accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.orange));
                         statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
                     } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
@@ -544,7 +543,8 @@ public class BusinessProfileActivity extends BaseActivity {
                     account_id.setText("Account ID M-" + myApplication.getMyProfile().getData().getId());
 //                    fullname = Utils.capitalize(myApplication.getMyProfile().getData().getFirstName() + " " + myApplication.getMyProfile().getData().getLastName());
                     if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-                            && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                            && (myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                            myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus()))
                             && myApplication.getMyProfile().getData().getFirstName() != null) {
                         firstName = myApplication.getMyProfile().getData().getFirstName();
                         // iconText = firstName.substring(0, 1).toUpperCase();
@@ -614,7 +614,7 @@ public class BusinessProfileActivity extends BaseActivity {
         disableLayout(feesLL, isEnable);
         disableLayout(accountlimitsLL, isEnable);
         disableLayout(cpagreeementsLL, isEnable);
-        disableLayout(cpHelpLL,true);
+        disableLayout(cpHelpLL, true);
     }
 
     public void setToken() {
@@ -749,7 +749,9 @@ public class BusinessProfileActivity extends BaseActivity {
                                 } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.xdark_gray));
                                     statusDot.setCardBackgroundColor(getResources().getColor(R.color.light_gray));
-                                } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                                } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                                        profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus()) ||
+                                        profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.orange));
                                     statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
                                 } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
@@ -758,9 +760,6 @@ public class BusinessProfileActivity extends BaseActivity {
                                 } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.error_red));
                                     statusDot.setCardBackgroundColor(getResources().getColor(R.color.error_red));
-                                } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                                    account_status.setTextColor(getResources().getColor(R.color.orange));
-                                    statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
                                 } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                                         || profile.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.error_red));
@@ -776,7 +775,8 @@ public class BusinessProfileActivity extends BaseActivity {
                                 account_id.setText("Account ID M-" + profile.getData().getId());
 //                                String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
                                 if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-                                        && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                                        && (myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                                        myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus()))
                                         && myApplication.getMyProfile().getData().getFirstName() != null) {
                                     String firstName = myApplication.getMyProfile().getData().getFirstName();
                                     // iconText = firstName.substring(0, 1).toUpperCase();
@@ -901,7 +901,8 @@ public class BusinessProfileActivity extends BaseActivity {
     private void bindImage(String imageString) {
         try {
             if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null &&
-                    myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                    (myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                            myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus()))) {
                 if (myApplication.getMyProfile().getData().getLastName() != null) {
                     firstName = myApplication.getMyProfile().getData().getFirstName();
 //            iconText = firstName.substring(0, 1).toUpperCase();

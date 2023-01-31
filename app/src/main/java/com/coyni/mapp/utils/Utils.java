@@ -159,6 +159,7 @@ public class Utils {
         ADDITIONAL_INFO_REQUIRED("Additional Info Required"),
         REGISTRATION_CANCELED("Canceled"),
         UNVERIFIED("Unverified"),
+        APPLICATION("Application"),
         INFO_SHARED("Info Shared"),
         EXPIRED("Expired"),
         PENDING("Pending"),
