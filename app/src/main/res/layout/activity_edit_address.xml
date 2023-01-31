@@ -407,6 +407,7 @@
 
 
                     <View
+                        android:id="@+id/viewBackGround"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_39sdp"
                         android:layout_marginTop="@dimen/_6sdp"

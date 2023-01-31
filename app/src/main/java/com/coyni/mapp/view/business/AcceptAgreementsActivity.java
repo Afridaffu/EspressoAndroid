@@ -64,7 +64,7 @@ public class AcceptAgreementsActivity extends BaseActivity {
     private ActivityAcceptAgreementsBinding binding;
     private DashboardViewModel dashboardViewModel;
     private LoginViewModel loginViewModel;
-    private String myUrl = "", ACT_TYPE, DOC_NAME = "", DOC_URL = "", SCREEN = "";
+    private String myUrl = "", ACT_TYPE, DOC_NAME = "", DOC_URL = "", SCREEN = "", FLOW = "";
     private boolean isActionEnabled = false;
     private MyApplication objMyApplication;
     private int AGREE_TYPE;
@@ -111,6 +111,7 @@ public class AcceptAgreementsActivity extends BaseActivity {
             DOC_NAME = getIntent().getStringExtra(Utils.DOC_NAME);
             DOC_URL = getIntent().getStringExtra(Utils.DOC_URL);
             SCREEN = getIntent().getStringExtra(Utils.SCREEN);
+            FLOW = getIntent().getStringExtra("flow");
 
             setupLablesAndUI();
 
@@ -243,11 +244,19 @@ public class AcceptAgreementsActivity extends BaseActivity {
         if (AGREE_TYPE == Utils.cTOS) {
             binding.agreNameTV.setText(getString(R.string.gbx_tos));
             binding.infoTV.setText(getString(R.string.read_agree_text) + " " + getString(R.string.tos) + ".");
-            binding.accknowledgeTV.setText(getString(R.string.read_accept_text) + " " + getString(R.string.tos) + " Agreement");
+            if (DOC_URL == null && FLOW == null) {
+                binding.accknowledgeTV.setText(getString(R.string.read_accept_text) + " " + getString(R.string.tos) + " Agreement.");
+            } else {
+                binding.accknowledgeTV.setText(getString(R.string.read_accept_text) + " " + getString(R.string.tos));
+            }
         } else if (AGREE_TYPE == Utils.cPP) {
             binding.agreNameTV.setText(getString(R.string.gbx_pp));
             binding.infoTV.setText(getString(R.string.read_agree_text) + " " + getString(R.string.pp) + ".");
-            binding.accknowledgeTV.setText(getString(R.string.read_accept_text) + " " + getString(R.string.pp) + " Agreement");
+            if (DOC_URL == null && FLOW == null) {
+                binding.accknowledgeTV.setText(getString(R.string.read_accept_text) + " " + getString(R.string.pp) + " Agreement.");
+            } else {
+                binding.accknowledgeTV.setText(getString(R.string.read_accept_text) + " " + getString(R.string.pp));
+            }
         } else if (AGREE_TYPE == Utils.mAgmt) {
             binding.agreNameTV.setText(getString(R.string.gbx_merchant));
             binding.infoTV.setText(getString(R.string.read_agree_text) + " " + getString(R.string.m_agree));

@@ -53,7 +53,7 @@ import java.util.Objects;
 
 public class EditAddressActivity extends BaseActivity implements OnKeyboardVisibilityListener {
 
-    TextInputEditText address1ET, address2ET, cityET, stateET, zipcodeET;
+    TextInputEditText address1ET, address2ET, cityET, stateET, zipcodeET, countryET;
     TextInputEditText b_address1ET, b_cityET, b_stateET, b_zipcodeET;
     TextInputLayout address1TIL, address2TIL, cityTIL, stateTIL, zipcodeTIL, countryTIL;
     TextInputLayout b_address1TIL, b_cityTIL, b_stateTIL, b_zipcodeTIL, b_countryTIL;
@@ -72,6 +72,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
     Dialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
     ImageView imgBack;
+    View viewBackGround;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,14 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                         imgBack.setImageResource(R.drawable.ic_close);
                         address1TIL.setHint("Billing Address Line 1");
                         address2TIL.setHint("Billing Address Line 2(Optional)");
+                        viewBackGround.setVisibility(GONE);
+                        Utils.setUpperHintColor(countryTIL, getColor(R.color.primary_black));
+                        countryET.setFocusable(true);
+                        countryET.setFocusableInTouchMode(false);
+                        countryET.setClickable(false);
+                        countryET.setTextColor(getResources().getColor(R.color.text_color));
+                    } else {
+                        viewBackGround.setVisibility(VISIBLE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -180,6 +189,8 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
             headerTV = findViewById(R.id.headerTV);
             imgBack = findViewById(R.id.imgBack);
             tvButtonText = findViewById(R.id.tvButtonText);
+            viewBackGround = findViewById(R.id.viewBackGround);
+            countryET = findViewById(R.id.countryET);
 
 
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);

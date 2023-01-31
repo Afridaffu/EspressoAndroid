@@ -619,6 +619,7 @@ public class OTPValidation extends BaseActivity implements OnKeyboardVisibilityL
                                                         objMyApplication.setStrRegisToken(emailResponse.getData().getToken());
                                                         startActivity(new Intent(OTPValidation.this, AcceptAgreementsActivity.class)
                                                                 .putExtra(Utils.AGREEMENT_TYPE, Utils.cTOS)
+                                                                .putExtra("flow", "signup")
                                                                 .putExtra(Utils.ACT_TYPE, Utils.multiple));
                                                         finish();
                                                     }
