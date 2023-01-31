@@ -106,8 +106,7 @@ public class CustomerProfileActivity extends BaseActivity {
         try {
             super.onCreate(savedInstanceState);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_customer_profile);
             MatomoUtility.getInstance().trackScreen(MatomoConstants.CUSTOMER_PROFILE_SCREEN);
 
@@ -194,9 +193,7 @@ public class CustomerProfileActivity extends BaseActivity {
                     try {
                         if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                             displayQRCode();
-                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
-                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
 //                            Utils.showCustomToast(CustomerProfileActivity.this, getString(R.string.complete_idve), 0, "");
                             UnderReviewErrorMsgDialog reviewErrorMsgDialog = new UnderReviewErrorMsgDialog(CustomerProfileActivity.this);
                             reviewErrorMsgDialog.show();
@@ -240,15 +237,11 @@ public class CustomerProfileActivity extends BaseActivity {
                     if (isBiometric && ((isTouchId && Utils.isFingerPrint(CustomerProfileActivity.this)) || (isFaceLock))) {
                         Utils.checkAuthentication(CustomerProfileActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                     } else {
-                        Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
-                                .putExtra("TYPE", "ENTER")
-                                .putExtra("screen", "ChangePassword");
+                        Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class).putExtra("TYPE", "ENTER").putExtra("screen", "ChangePassword");
                         startActivity(i);
                     }
                 } else {
-                    Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
-                            .putExtra("TYPE", "ENTER")
-                            .putExtra("screen", "ChangePassword");
+                    Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class).putExtra("TYPE", "ENTER").putExtra("screen", "ChangePassword");
                     startActivity(i);
                 }
             });
@@ -373,8 +366,7 @@ public class CustomerProfileActivity extends BaseActivity {
 //                        }
                         if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                             startActivity(new Intent(CustomerProfileActivity.this, PaymentMethodsActivity.class));
-                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                             Utils.showCustomToast(CustomerProfileActivity.this, getString(R.string.complete_idve), 0, "");
                         } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                             Utils.showCustomToast(CustomerProfileActivity.this, getString(R.string.complete_idve1), 0, "");
@@ -396,14 +388,10 @@ public class CustomerProfileActivity extends BaseActivity {
                         if (isBiometric && ((isTouchId && Utils.isFingerPrint(CustomerProfileActivity.this)) || (isFaceLock))) {
                             Utils.checkAuthentication(CustomerProfileActivity.this, CODE_AUTHENTICATION_VERIFICATION_RESET_PIN);
                         } else {
-                            startActivity(new Intent(CustomerProfileActivity.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("screen", "ResetPIN"));
+                            startActivity(new Intent(CustomerProfileActivity.this, PINActivity.class).putExtra("TYPE", "ENTER").putExtra("screen", "ResetPIN"));
                         }
                     } else {
-                        startActivity(new Intent(CustomerProfileActivity.this, PINActivity.class)
-                                .putExtra("TYPE", "ENTER")
-                                .putExtra("screen", "ResetPIN"));
+                        startActivity(new Intent(CustomerProfileActivity.this, PINActivity.class).putExtra("TYPE", "ENTER").putExtra("screen", "ResetPIN"));
                     }
 
                 }
@@ -567,8 +555,7 @@ public class CustomerProfileActivity extends BaseActivity {
                 saveProfileTitle.setVisibility(View.VISIBLE);
                 String imageString = objMyApplication.getMyProfile().getData().getImage();
                 String imageTextNew = "";
-                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                 saveProfileTitle.setText(imageTextNew);
 
                 if (imageString != null && !imageString.trim().equals("")) {
@@ -580,8 +567,7 @@ public class CustomerProfileActivity extends BaseActivity {
                     saveProfileIV.setVisibility(View.GONE);
                     saveProfileTitle.setVisibility(View.VISIBLE);
                     String imageText = "";
-                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                            objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                     saveProfileTitle.setText(imageText);
                 }
 
@@ -597,8 +583,7 @@ public class CustomerProfileActivity extends BaseActivity {
                 userInfo.setVisibility(View.VISIBLE);
                 String imageString = objMyApplication.getMyProfile().getData().getImage();
                 String imageTextNew = "";
-                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                 userInfo.setText(imageTextNew);
 
                 if (imageString != null && !imageString.trim().equals("")) {
@@ -609,8 +594,7 @@ public class CustomerProfileActivity extends BaseActivity {
                     imgProfile.setVisibility(View.GONE);
                     userInfo.setVisibility(View.VISIBLE);
                     String imageText = "";
-                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                            objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                     userInfo.setText(imageText);
                 }
 
@@ -693,8 +677,7 @@ public class CustomerProfileActivity extends BaseActivity {
 
                     try {
                         saveToAlbumLL.setDrawingCacheEnabled(true);
-                        saveToAlbumLL.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                        saveToAlbumLL.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
                         saveToAlbumLL.layout(0, 0, saveToAlbumLL.getMeasuredWidth(), saveToAlbumLL.getMeasuredHeight());
 
@@ -807,23 +790,15 @@ public class CustomerProfileActivity extends BaseActivity {
 //                    Intent cp = new Intent(CustomerProfileActivity.this, ConfirmPasswordActivity.class);
 //                    startActivity(cp);
                 } else {
-                    Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
-                            .putExtra("TYPE", "ENTER")
-                            .putExtra("screen", "ChangePassword");
+                    Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class).putExtra("TYPE", "ENTER").putExtra("screen", "ChangePassword");
                     startActivity(i);
                 }
             } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION_RESET_PIN) {
                 if (resultCode == RESULT_OK) {
-                    Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
-                            .putExtra("TYPE", "CHOOSE")
-                            .putExtra("screen", "ResetPIN")
-                            .putExtra("AUTH_TYPE", "TOUCH");
+                    Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class).putExtra("TYPE", "CHOOSE").putExtra("screen", "ResetPIN").putExtra("AUTH_TYPE", "TOUCH");
                     startActivity(i);
                 } else {
-                    Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
-                            .putExtra("TYPE", "ENTER")
-                            .putExtra("screen", "ResetPIN")
-                            .putExtra("AUTH_TYPE", "PIN");
+                    Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class).putExtra("TYPE", "ENTER").putExtra("screen", "ResetPIN").putExtra("AUTH_TYPE", "PIN");
                     startActivity(i);
                 }
             } else if (requestCode == CODE_AUTHENTICATION) {
@@ -967,8 +942,7 @@ public class CustomerProfileActivity extends BaseActivity {
                         }
 
                     }
-                } catch (
-                        Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -996,7 +970,7 @@ public class CustomerProfileActivity extends BaseActivity {
             }
         });
 
-        dashboardViewModel.getFetchAddressMutableLiveData().observe(this,  addressResp -> {
+        dashboardViewModel.getFetchAddressMutableLiveData().observe(this, addressResp -> {
             if (addressResp != null) {
                 objMyApplication.setMyAddress(addressResp);
             }
@@ -1172,8 +1146,7 @@ public class CustomerProfileActivity extends BaseActivity {
             profileIV.setVisibility(View.GONE);
             imageTextTV.setVisibility(View.VISIBLE);
             String imageTextNew = "";
-            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                    objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
             imageTextTV.setText(imageTextNew);
 
             if (imageString != null && !imageString.trim().equals("")) {
@@ -1185,8 +1158,7 @@ public class CustomerProfileActivity extends BaseActivity {
                 profileIV.setVisibility(View.GONE);
                 imageTextTV.setVisibility(View.VISIBLE);
                 String imageText = "";
-                imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                 imageTextTV.setText(imageText);
             }
 
@@ -1235,8 +1207,7 @@ public class CustomerProfileActivity extends BaseActivity {
                     FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
                     if (!fingerprintManager.hasEnrolledFingerprints()) {
                         final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
-                        enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                                BIOMETRIC_STRONG);
+                        enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED, BIOMETRIC_STRONG);
                         startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
                     } else {
 //                        dialog = Utils.showProgressDialog(context);
@@ -1383,8 +1354,7 @@ public class CustomerProfileActivity extends BaseActivity {
 
     private void enableDisableSettings() {
         boolean isEnable = false;
-        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                && objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
+        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
             String accountStatus = objMyApplication.getMyProfile().getData().getAccountStatus();
             if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 isEnable = true;
@@ -1400,20 +1370,19 @@ public class CustomerProfileActivity extends BaseActivity {
                 if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                     tvACStatus.setTextColor(getResources().getColor(R.color.active_green));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.active_green));
-                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
-                        || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                     tvACStatus.setTextColor(getResources().getColor(R.color.orange));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.orange));
                 } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                     tvACStatus.setTextColor(getResources().getColor(R.color.under_review_blue));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
-                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
-                        objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+                } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) || objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
                     tvACStatus.setTextColor(getResources().getColor(R.color.error_red));
                     statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.error_red));
                     tvACStatus.setText(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus());
                 }
-                if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                        objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) {
                     cardviewYourAccount.setVisibility(View.VISIBLE);
                 } else {
                     cardviewYourAccount.setVisibility(View.GONE);

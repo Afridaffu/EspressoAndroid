@@ -500,7 +500,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             RequestBody underwritingActionRequired = RequestBody.create(MediaType.parse("application/json"),
                     String.valueOf(informationJSON));
             Log.e("JSN", informationJSON.toString());
-//            underwritingUserActionRequiredViewModel.submitMerchantActionRequired(underwritingActionRequired);
+            underwritingUserActionRequiredViewModel.submitMerchantActionRequired(underwritingActionRequired);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -96,6 +96,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             for (int position = 0; position < profilesList.size(); position++) {
                 if (profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
                         profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                        profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus()) ||
                         profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                     addDBA.setEnabled(false);
                     addDbaText.setEnabled(false);
@@ -189,7 +190,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_inprogress_bg));
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setTextColor(context.getColor(R.color.under_review_blue));
-                } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                        || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())
+                        || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_pending_bg));
@@ -224,7 +227,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_inprogress_bg));
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setTextColor(context.getColor(R.color.under_review_blue));
-                } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                        || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())
+                        || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_pending_bg));
@@ -383,7 +388,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 status.setBackground(context.getDrawable(R.drawable.txn_inprogress_bg));
                 status.setText(headerInfo.getAccountStatus());
                 status.setTextColor(context.getColor(R.color.under_review_blue));
-            } else if (headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+            } else if (headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                    || headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())
+                    || headerInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.APPLICATION.getStatus())) {
                 status.setVisibility(View.VISIBLE);
                 status.setText(headerInfo.getAccountStatus());
                 status.setBackground(context.getDrawable(R.drawable.txn_pending_bg));
