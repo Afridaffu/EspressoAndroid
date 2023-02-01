@@ -111,16 +111,27 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
                 if (FROM.equals("DBA_INFO")) {
                     DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
 //                    if (isValidUrl(charSequence.toString())) {
-                    if (isValidUrl(charSequence.toString())) {
-                        dia.isWebsite = true;
-                        websiteErrorLL.setVisibility(GONE);
-                    } else {
-                        if (hintString.equals("Website"))
-                            dia.isWebsite = false;
-                        else
+                    if (hintString.equals("Website")) {
+                        if (isValidUrl(charSequence.toString())) {
                             dia.isWebsite = true;
-//                        dia.isWebsite = false;
+                            websiteErrorLL.setVisibility(GONE);
+                        } else {
+                            dia.isWebsite = false;
+                        }
+                    } else {
+                        if (websiteET.getText().toString().trim().length() > 0) {
+                            if (isValidUrl(charSequence.toString())) {
+                                dia.isWebsite = true;
+                                websiteErrorLL.setVisibility(GONE);
+                            } else {
+                                dia.isWebsite = false;
+                            }
+                        } else {
+                            dia.isWebsite = true;
+                            websiteErrorLL.setVisibility(GONE);
+                        }
                     }
+
 
                     dia.enableOrDisableNext();
                 }
