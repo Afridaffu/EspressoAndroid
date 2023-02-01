@@ -256,7 +256,7 @@ public class SignAgreementsActivity extends BaseActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if (agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(MATERIAL) &&
+                        if (agrementsResponse.getData().get(currentIteration).getMaterialType() != null && agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(MATERIAL) &&
                                 (agrementsResponse.getData().get(currentIteration).getStatus() == Utils.SCHEDULED_AGREEMENT)) {
                             loadNextOrDashboard(false);
                         }
@@ -405,7 +405,7 @@ public class SignAgreementsActivity extends BaseActivity {
                             if (data != null) {
                                 if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
                                     myUrl = data.getDownloadUrl();
-                                    if (agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(NON_MATERIAL)) {
+                                    if (agrementsResponse.getData().get(currentIteration).getMaterialType() != null && agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(NON_MATERIAL)) {
                                         launchDocumentUrl(data.getDownloadUrl());
                                     } else {
                                         binding.webView.setVisibility(View.VISIBLE);
@@ -455,61 +455,6 @@ public class SignAgreementsActivity extends BaseActivity {
                 }
             }
         });
-
-//        loginViewModel.getHasToSignResponseMutableLiveData().observe(this, new Observer<SignAgreementsResp>() {
-//            @Override
-//            public void onChanged(SignAgreementsResp signAgreementsResp) {
-//                if (signAgreementsResp != null) {
-//                    agrementsResponse = signAgreementsResp;
-//                    dismissDialog();
-//                    if (signAgreementsResp.getStatus().equalsIgnoreCase("success")) {
-//                        if (removeMerchant)
-//                            agrementsResponse.setData(Utils.getFilteredAgreements(signAgreementsResp.getData()).getAgreements());
-////                        //block section
-////                        String resp = "{\"status\":\"SUCCESS\",\"timestamp\":\"2022-10-26T06:19:40.161+00:00\",\"" +
-////                                "data\":[" +
-////
-////                                "{\"id\":147,\"version\":\"v1.76\",\"startDate\":\"2022-10-25 07:00:00\",\"status\":0," +
-////                                "\"effectiveDate\":\"2022-10-26 05:00:00\",\"materialType\":\"M\",\"agreementType\":1," +
-////                                "\"agreementFileRefPath\":\"YWdyZWVtZW50cy8xNjY2NzU3NDc1NjE1X0dyZWVuYm94K1BPUytHRFBSK1ByaXZhY3krUG9saWN5LnBkZg==\"}," +
-////
-////                                "{\"id\":146,\"version\":\"v1.76\",\"startDate\":\"2022-10-25 07:00:00\",\"status\":3,\"" +
-////                                "effectiveDate\":\"2022-10-26 05:00:00\",\"materialType\":\"M\",\"agreementType\":0,\"" +
-////                                "agreementFileRefPath\":\"YWdyZWVtZW50cy8xNjY2NzU3NDIzNDc4XzEwN19HZW4rMytWMStUT1MrdjYucGRm\"}," +
-////                                "" +
-////                                "{\"id\":145,\"version\":\"v1.74\",\"startDate\":\"2022-10-22 07:00:00\",\"status\":0,\"" +
-////                                "effectiveDate\":\"2022-10-23 07:00:00\",\"materialType\":\"M\",\"agreementType\":0,\"" +
-////                                "agreementFileRefPath\":\"YWdyZWVtZW50cy8xNjY2MzM3NjYxMzE5X0dyZWVuQm94LVRlcm1zIG9mIFNlcnZpY2UgQWdyZWVtZW50LnBkZg==\"}" +
-////
-////                                "],\"error\":null}";
-////                        Gson gson = new Gson();
-////                        Type type = new TypeToken<SignAgreementsResp>() {
-////                        }.getType();
-////                        signAgreementsResp = gson.fromJson(resp, type);
-////                        agrementsResponse = signAgreementsResp;
-////                        Log.e("response", signAgreementsResp.getData().get(0).getAgreementFileRefPath() + "");
-////                        //block section
-//
-//
-//                        iterationCount = agrementsResponse.getData().size();
-//                        loadNextOrDashboard(true);
-////                        if (iterationCount > 0) {
-////                            iterationCount--;
-////                            AGREE_TYPE = agrementsResponse.getData().get(0).getAgreementType();
-////                            setupLablesAndUI(agrementsResponse.getData().get(0).getMaterialType(),
-////                                    Utils.convertEffectiveDate(agrementsResponse.getData().get(0).getEffectiveDate()));
-////                            currentIteration = 0;
-////                            dashboardViewModel.getDocumentUrl(AGREE_TYPE);
-////                        }
-//
-//                    } else {
-//                        Utils.displayAlert(signAgreementsResp.getError().getErrorDescription(), SignAgreementsActivity.this, "", "");
-//                    }
-//                } else {
-//                    Utils.displayAlert(signAgreementsResp.getError().getErrorDescription(), SignAgreementsActivity.this, "", "");
-//                }
-//            }
-//        });
     }
 
     private void downloadPDFPopup(final Context context) {
@@ -578,9 +523,13 @@ public class SignAgreementsActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(MATERIAL) &&
-                (agrementsResponse.getData().get(currentIteration).getStatus() == Utils.SCHEDULED_AGREEMENT)) {
-            launchDashboard();
+        try {
+            if (agrementsResponse.getData().get(currentIteration).getMaterialType() != null && agrementsResponse.getData().get(currentIteration).getMaterialType().equalsIgnoreCase(MATERIAL) &&
+                    (agrementsResponse.getData().get(currentIteration).getStatus() == Utils.SCHEDULED_AGREEMENT)) {
+                launchDashboard();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
