@@ -288,21 +288,20 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 
             avaBal = objMyApplication.getGBTBalance();
             businessIdentityVerificationViewModel.getBusinessType();
-            calculateFee("10");
-
-            if (Utils.checkInternet(ScanActivity.this)) {
-                TransactionLimitRequest obj = new TransactionLimitRequest();
-                obj.setTransactionType(Utils.saleOrder);
-                obj.setTransactionSubType(Utils.saleOrderToken);
-                dialog = Utils.showProgressDialog(ScanActivity.this);
-                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
-                } else {
-                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
-                }
-            }
-//            setFaceLock();
-//            setTouchId();
+            //Commented on 1 Feb 2023 as SaleorderToken is replaced into Ecommerce-Retail/Mobile
+            //calculateFee("10");
+//            if (Utils.checkInternet(ScanActivity.this)) {
+//                TransactionLimitRequest obj = new TransactionLimitRequest();
+//                obj.setTransactionType(Utils.saleOrder);
+//                obj.setTransactionSubType(Utils.saleOrderToken);
+//                dialog = Utils.showProgressDialog(ScanActivity.this);
+//                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+//                } else {
+//                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
+//                }
+//            }
+            //
 
             objMyApplication.initializeDBHandler(ScanActivity.this);
             isFaceLock = objMyApplication.setFaceLock();
@@ -716,13 +715,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                         dialog = Utils.showProgressDialog(ScanActivity.this);
                                         cynValue = Utils.doubleParsing(strQRAmount.toString().trim().replace(",", ""));
                                         calculateCustomerFee(Utils.USNumberFormat(cynValue));
-//                                        showPayToMerchantWithAmountDialog(strQRAmount, userDetails, avaBal, businessTypeValue);
                                         dashboardViewModel.getFeatureControlByUser(userDetails.getData().getUserId());
-//                                        Intent i = new Intent(ScanActivity.this, PayToPersonalActivity.class);
-//                                        i.putExtra("walletId", strScanWallet);
-//                                        i.putExtra("amount", strQRAmount);
-//                                        i.putExtra("screen", "scan");
-//                                        startActivity(i);
                                     } else {
                                         if (mcodeScanner != null) {
                                             mcodeScanner.startPreview();
@@ -752,7 +745,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                 String amount = strQRAmount;
                                 dialog = Utils.showProgressDialog(ScanActivity.this);
                                 cynValue = Utils.doubleParsing(strQRAmount.toString().trim().replace(",", ""));
-                                calculateFee(Utils.USNumberFormat(cynValue));
+                                //calculateFee(Utils.USNumberFormat(cynValue));
                                 businessIdentityVerificationViewModel.getBusinessType();
                                 showPayToMerchantWithAmountDialog(amount, userDetails, avaBal, businessTypeValue);
                                 dashboardViewModel.getFeatureControlByUser(userDetails.getData().getUserId());
@@ -819,9 +812,6 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 
         buyTokenViewModel.getTransferFeeResponseMutableLiveData().observe(this, transferFeeResponse -> {
             try {
-//                if (dialog != null) {
-//                    dialog.dismiss();
-//                }
                 if (transferFeeResponse != null) {
                     objMyApplication.setTransferFeeResponse(transferFeeResponse);
                     feeInAmount = transferFeeResponse.getData().getFeeInAmount();
@@ -1805,47 +1795,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 }
             }
         });
-
         payToMerchantWithAmountDialog.show();
-
     }
-
-
-//    private void setFaceLock() {
-//        try {
-//            isFaceLock = false;
-//            String value = dbHandler.getFacePinLock();
-//            if (value != null && value.equals("true")) {
-//                isFaceLock = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isFaceLock = false;
-//                objMyApplication.setLocalBiometric(false);
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    private void setTouchId() {
-//        try {
-//            isTouchId = false;
-//            String value = dbHandler.getThumbPinLock();
-//            if (value != null && value.equals("true")) {
-//                isTouchId = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isTouchId = false;
-////                objMyApplication.setLocalBiometric(false);
-//                if (!isFaceLock) {
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
 
     private void calculateFee(String strAmount) {
         try {
@@ -1885,15 +1836,6 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 
     private void saleTransaction() {
         try {
-//            TransferPayRequest request = new TransferPayRequest();
-//            request.setTokens(strQRAmount.trim().replace(",", ""));
-//            request.setRemarks("");
-//            request.setRecipientWalletId(strScanWallet);
-//            objMyApplication.setTransferPayRequest(request);
-//            objMyApplication.setWithdrawAmount(cynValue);
-//            if (Utils.checkInternet(ScanActivity.this)) {
-//                payViewModel.sendTokens(request);
-//            }
             PaidOrderRequest request = new PaidOrderRequest();
             request.setTokensAmount(Utils.doubleParsing(strQRAmount.trim().replace(",", "").trim()));
             request.setRecipientWalletId(strScanWallet);
@@ -1935,12 +1877,12 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 slideActionEnabled = true;
                 displayAlertNew("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
-            } else if (cynValue < Utils.doubleParsing(objResponse.getData().getMinimumLimit())) {
+            } else if (objResponse != null && cynValue < Utils.doubleParsing(objResponse.getData().getMinimumLimit())) {
                 slideActionEnabled = true;
                 displayAlert("Minimum Amount is " + Utils.USNumberFormat(Utils.doubleParsing(objResponse.getData().getMinimumLimit())) + " CYN", "Oops!");
                 value = false;
 
-            } else if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit()) && !objResponse.getData().getLimitType().equalsIgnoreCase("NO LIMIT")) {
+            } else if (objResponse != null && cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit()) && !objResponse.getData().getLimitType().equalsIgnoreCase("NO LIMIT")) {
                 slideActionEnabled = true;
                 displayAlert("Amount entered exceeds transaction limit.", "Oops!");
                 value = false;

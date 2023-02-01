@@ -78,7 +78,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
     CoyniViewModel coyniViewModel;
-    LinearLayout lyPayClose, lyBalance,layoutETAmount;
+    LinearLayout lyPayClose, lyBalance, layoutETAmount;
     ImageView imgConvert;
     TextView tvCurrency, coyniTV, availBal, addNoteTV, tvError;
     TransactionLimitResponse objResponse;
@@ -318,8 +318,9 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 }
             }
 
-            calculateFee("10");
-            transactionLimitCall();
+            //Commented on 1 Feb 2023 as SaleorderToken is replaced into Ecommerce-Retail/Mobile
+//            calculateFee("10");
+//            transactionLimitCall();
             walletAPICall();
             onClickListeners();
             objMyApplication.initializeDBHandler(PayToMerchantActivity.this);
@@ -370,7 +371,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
                 isPayClick = true;
                 cynValue = Utils.doubleParsing(payET.getText().toString().trim().replace(",", ""));
-                calculateFee(Utils.USNumberFormat(cynValue));
+//                calculateFee(Utils.USNumberFormat(cynValue));
             }
         }
     }
@@ -654,14 +655,12 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
                 value = false;
-            } else if ((Utils.doubleParsing(strPay.replace(",", "")) < Utils.doubleParsing(objResponse.getData().getMinimumLimit()))) {
-//                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(Utils.doubleParsing(objResponse.getData().getMinimumLimit())) + " CYN");
+            } else if (objResponse != null && (Utils.doubleParsing(strPay.replace(",", "")) < Utils.doubleParsing(objResponse.getData().getMinimumLimit()))) {
                 Utils.setErrorSpannableText("Minimum Amount is " + Utils.USNumberFormat(Utils.doubleParsing(objResponse.getData().getMinimumLimit())) + " CYN", PayToMerchantActivity.this, tvError, 17);
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
                 value = false;
-//            } else if (cynValue > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
-            } else if (!strLimit.equals("") && !strLimit.equals("unlimited") && !strLimit.equals("no limit") && Utils.doubleParsing(strPay.replace(",", "")) > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
+            } else if (objResponse != null && !strLimit.equals("") && !strLimit.equals("unlimited") && !strLimit.equals("no limit") && Utils.doubleParsing(strPay.replace(",", "")) > Utils.doubleParsing(objResponse.getData().getTransactionLimit())) {
                 tvError.setText("Amount entered exceeds transaction limit.");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
@@ -1045,7 +1044,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                     isPayClick = true;
                     pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
                     cynValue = Utils.doubleParsing(payET.getText().toString().trim().replace(",", ""));
-                    calculateFee(Utils.USNumberFormat(cynValue));
+//                    calculateFee(Utils.USNumberFormat(cynValue));
                 }
             } else {
                 Utils.displayAlert(getString(R.string.errormsg), PayToMerchantActivity.this, "", "");
