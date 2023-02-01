@@ -182,6 +182,10 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                 websiteErrorLL.setVisibility(VISIBLE);
                 websiteErrorTV.setText("Please enter a valid Website");
+            } else if (websiteET.getText().toString().trim().length() == 0) {
+                hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                websiteErrorLL.setVisibility(GONE);
             }
         }
     }

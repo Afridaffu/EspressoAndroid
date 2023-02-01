@@ -2,6 +2,7 @@ package com.coyni.mapp.view.business;
 
 
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.coyni.mapp.utils.Utils.convertTwoDecimal;
 
 import android.app.Dialog;
@@ -154,7 +155,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
         initFields();
         initObservers();
-        companyEditLL.setVisibility(addDBA ? companyEditLL.GONE : companyEditLL.VISIBLE);
+        companyEditLL.setVisibility(addDBA ? companyEditLL.GONE : VISIBLE);
     }
 
     private void initFields() {
@@ -549,7 +550,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             if (cir.getRequiredDocuments().size() > 0) {
                                 for (int i = 0; i < cir.getRequiredDocuments().size(); i++) {
                                     if (cir.getRequiredDocuments().get(i).getIdentityId() == 5) {
-                                        uploadArticlesLL.setVisibility(View.VISIBLE);
+                                        uploadArticlesLL.setVisibility(VISIBLE);
                                         uploadArticlesLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
                                         uploadArticlesLL.setOnClickListener(new View.OnClickListener() {
                                             @Override
@@ -559,7 +560,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                         });
                                         mArticleDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                     } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 6) {
-                                        uploadEINLL.setVisibility(View.VISIBLE);
+                                        uploadEINLL.setVisibility(VISIBLE);
                                         uploadEINLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
                                         uploadEINLL.setOnClickListener(new View.OnClickListener() {
                                             @Override
@@ -569,7 +570,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                         });
                                         mEINDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                     } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 7 || cir.getRequiredDocuments().get(i).getIdentityId() == 11) {
-                                        uploadW9LL.setVisibility(View.VISIBLE);
+                                        uploadW9LL.setVisibility(VISIBLE);
                                         uploadW9LL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
                                         uploadW9LL.setOnClickListener(new View.OnClickListener() {
                                             @Override
@@ -583,13 +584,13 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             }
 
                             if (cir.getIdentificationType() == 10) {
-                                uploadArticlesLL.setVisibility(View.VISIBLE);
-                                uploadEINLL.setVisibility(View.VISIBLE);
-                                uploadW9LL.setVisibility(View.VISIBLE);
+                                uploadArticlesLL.setVisibility(VISIBLE);
+                                uploadEINLL.setVisibility(VISIBLE);
+                                uploadW9LL.setVisibility(VISIBLE);
                             } else if (cir.getIdentificationType() == 11) {
                                 uploadArticlesLL.setVisibility(GONE);
                                 uploadEINLL.setVisibility(GONE);
-                                uploadW9LL.setVisibility(View.VISIBLE);
+                                uploadW9LL.setVisibility(VISIBLE);
                             }
 
                             DbaInfo dbaInfo = summaryModelResponse.getData().getDbaInfo();
@@ -627,14 +628,15 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             }
                             if (dbaInfo.getIdentificationType() == Utils.retail_DBA_Filling) {
                                 mWebsiteHeadTX.setText("Website (Optional)");
-//                                if (dbaInfo.getWebsite() == null || dbaInfo.getWebsite().equals("")) {
-                                httpHeader.setVisibility(GONE);
-//                                } else {
-//                                    websiteLL.setVisibility(VISIBLE);
-//                                }
+                                if (dbaInfo.getWebsite() == null || dbaInfo.getWebsite().equals("")) {
+                                    httpHeader.setVisibility(GONE);
+                                } else {
+                                    httpHeader.setVisibility(VISIBLE);
+                                    websiteLL.setVisibility(VISIBLE);
+                                }
                             } else if (dbaInfo.getIdentificationType() == Utils.eCommerce_DBA_Filling) {
                                 mWebsiteHeadTX.setText("Website");
-                                httpHeader.setVisibility(View.VISIBLE);
+                                httpHeader.setVisibility(VISIBLE);
 //                                websiteLL.setVisibility(VISIBLE);
                             }
                             if (dbaInfo.getWebsite() != null && !dbaInfo.getWebsite().equals("")) {
@@ -710,7 +712,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
                                     if (dbaInfo.getRequiredDocuments().get(i).getIdentityId() == Utils.retail_DBA_Filling
                                             || dbaInfo.getRequiredDocuments().get(i).getIdentityId() == Utils.eCommerce_DBA_Filling) {
-                                        llDBADocuments.setVisibility(View.VISIBLE);
+                                        llDBADocuments.setVisibility(VISIBLE);
                                         mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
                                         llDBADocuments.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
                                         llDBADocuments.setOnClickListener(new View.OnClickListener() {
@@ -720,7 +722,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                             }
                                         });
                                     } else if (dbaInfo.getRequiredDocuments().get(i).getIdentityId() == Utils.BUSINESS_LICENSE) {
-                                        lisenceDocumentsLL.setVisibility(View.VISIBLE);
+                                        lisenceDocumentsLL.setVisibility(VISIBLE);
                                         tv_filling_date.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
                                         lisenceDocumentsLL.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
                                         lisenceDocumentsLL.setOnClickListener(new View.OnClickListener() {
@@ -736,7 +738,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             List<BeneficialOwnerInfo> boList = summaryModelResponse.getData().getBeneficialOwnerInfo();
                             Log.d("BOWData", boList.toString());
                             if (boList.size() > 0) {
-                                boLL.setVisibility(View.VISIBLE);
+                                boLL.setVisibility(VISIBLE);
                                 noBoTV.setVisibility(View.GONE);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
                                 benificialOwnersRecyclerAdapter = new BenificialOwnersRecyclerAdapter(ReviewApplicationActivity.this, boList, ReviewApplicationActivity.this);
@@ -745,7 +747,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 boRecyclerView.setLayoutManager(layoutManager);
                                 boRecyclerView.setAdapter(benificialOwnersRecyclerAdapter);
                             } else {
-                                noBoTV.setVisibility(View.VISIBLE);
+                                noBoTV.setVisibility(VISIBLE);
                                 boLL.setVisibility(View.GONE);
                             }
 //                            if (summaryModelResponse.getData().getBankaccount().size() > 0) {
