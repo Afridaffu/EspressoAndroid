@@ -2984,18 +2984,14 @@ public class Utils {
     }
 
     public static boolean isValidFileSize(File file) {
-        try {
-            int maxFileSize = 10 * 1000 * 1000;
-            Long l = file.length();
-            String fileSize = l.toString();
-            int finalFileSize = Integer.parseInt(fileSize);
-            if (finalFileSize > maxFileSize)
-                return false;
-            else
-                return true;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        int maxFileSize = 10 * 1000 * 1000;
+        Long l = file.length();
+        String fileSize = l.toString();
+        int finalFileSize = Integer.parseInt(fileSize);
+        if (finalFileSize > maxFileSize)
+            return false;
+        else
+            return true;
     }
 
     public static Bitmap getRoundedCroppedBitmap(Bitmap bitmap) {

@@ -716,13 +716,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                         dialog = Utils.showProgressDialog(ScanActivity.this);
                                         cynValue = Utils.doubleParsing(strQRAmount.toString().trim().replace(",", ""));
                                         calculateCustomerFee(Utils.USNumberFormat(cynValue));
-//                                        showPayToMerchantWithAmountDialog(strQRAmount, userDetails, avaBal, businessTypeValue);
                                         dashboardViewModel.getFeatureControlByUser(userDetails.getData().getUserId());
-//                                        Intent i = new Intent(ScanActivity.this, PayToPersonalActivity.class);
-//                                        i.putExtra("walletId", strScanWallet);
-//                                        i.putExtra("amount", strQRAmount);
-//                                        i.putExtra("screen", "scan");
-//                                        startActivity(i);
                                     } else {
                                         if (mcodeScanner != null) {
                                             mcodeScanner.startPreview();
@@ -1805,47 +1799,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 }
             }
         });
-
         payToMerchantWithAmountDialog.show();
-
     }
-
-
-//    private void setFaceLock() {
-//        try {
-//            isFaceLock = false;
-//            String value = dbHandler.getFacePinLock();
-//            if (value != null && value.equals("true")) {
-//                isFaceLock = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isFaceLock = false;
-//                objMyApplication.setLocalBiometric(false);
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    private void setTouchId() {
-//        try {
-//            isTouchId = false;
-//            String value = dbHandler.getThumbPinLock();
-//            if (value != null && value.equals("true")) {
-//                isTouchId = true;
-//                objMyApplication.setLocalBiometric(true);
-//            } else {
-//                isTouchId = false;
-////                objMyApplication.setLocalBiometric(false);
-//                if (!isFaceLock) {
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
 
     private void calculateFee(String strAmount) {
         try {
@@ -1885,15 +1840,6 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 
     private void saleTransaction() {
         try {
-//            TransferPayRequest request = new TransferPayRequest();
-//            request.setTokens(strQRAmount.trim().replace(",", ""));
-//            request.setRemarks("");
-//            request.setRecipientWalletId(strScanWallet);
-//            objMyApplication.setTransferPayRequest(request);
-//            objMyApplication.setWithdrawAmount(cynValue);
-//            if (Utils.checkInternet(ScanActivity.this)) {
-//                payViewModel.sendTokens(request);
-//            }
             PaidOrderRequest request = new PaidOrderRequest();
             request.setTokensAmount(Utils.doubleParsing(strQRAmount.trim().replace(",", "").trim()));
             request.setRecipientWalletId(strScanWallet);
