@@ -382,195 +382,6 @@
                         android:orientation="vertical">
 
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/welcomeCoyniCV"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginStart="1dp"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_marginBottom="1dp"
-                            android:visibility="gone"
-                            app:cardBackgroundColor="@color/white"
-                            app:cardCornerRadius="@dimen/_10sdp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_10sdp"
-                                android:paddingRight="@dimen/_10sdp">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_15sdp"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <TextView
-                                            android:id="@+id/welcomeCoyniTV"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:fontFamily="@font/opensans_semibold"
-                                            android:text="Welcome to"
-                                            android:textColor="@color/primary_black"
-                                            android:textSize="@dimen/_12ssp" />
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:fontFamily="@font/opensans_bold"
-                                            android:text=" coyni!"
-                                            android:textColor="@color/primary_black"
-                                            android:textSize="@dimen/_12ssp" />
-                                    </LinearLayout>
-
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_7sdp"
-                                        android:fontFamily="@font/opensans_regular"
-                                        android:text="Get started by adding coyni tokens to your account."
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_11ssp" />
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_7sdp"
-                                        android:layout_marginBottom="@dimen/_22sdp"
-                                        android:orientation="horizontal">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:fontFamily="@font/opensans_semibold"
-                                            android:text="Add payment method"
-                                            android:textColor="@color/primary_color"
-                                            android:textSize="@dimen/_11ssp" />
-
-                                        <ImageView
-                                            android:id="@+id/arrowIconIV"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginStart="15dp"
-                                            android:layout_marginTop="3dp"
-                                            android:src="@drawable/ic_arrowicon" />
-
-
-                                    </LinearLayout>
-
-
-                                </LinearLayout>
-
-                                <ImageView
-                                    android:id="@+id/spAccountImage"
-                                    android:layout_width="@dimen/_80sdp"
-                                    android:layout_height="@dimen/_90sdp"
-                                    android:layout_gravity="center"
-                                    android:layout_marginStart="@dimen/_11sdp"
-                                    android:src="@drawable/ic_add_payment" />
-
-
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/addAddressCV"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginStart="1dp"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_marginBottom="1dp"
-                            android:visibility="gone"
-                            app:cardBackgroundColor="@color/white"
-                            app:cardCornerRadius="@dimen/_10sdp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_10sdp"
-                                android:paddingRight="@dimen/_10sdp">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_15sdp"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:fontFamily="@font/opensans_semibold"
-                                            android:text="Address Required"
-                                            android:textColor="@color/primary_black"
-                                            android:textSize="@dimen/_12ssp" />
-                                    </LinearLayout>
-
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_7sdp"
-                                        android:fontFamily="@font/opensans_regular"
-                                        android:text="We will need your address to verify your identity."
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_11ssp" />
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_7sdp"
-                                        android:layout_marginBottom="@dimen/_22sdp"
-                                        android:orientation="horizontal">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:fontFamily="@font/opensans_semibold"
-                                            android:text="Add an address"
-                                            android:textColor="@color/primary_color"
-                                            android:textSize="@dimen/_11ssp" />
-
-                                        <ImageView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginStart="15dp"
-                                            android:layout_marginTop="3dp"
-                                            android:src="@drawable/ic_arrowicon" />
-
-
-                                    </LinearLayout>
-
-
-                                </LinearLayout>
-
-                                <ImageView
-                                    android:layout_width="@dimen/_80sdp"
-                                    android:layout_height="@dimen/_90sdp"
-                                    android:layout_gravity="center"
-                                    android:layout_marginStart="@dimen/_11sdp"
-                                    android:src="@drawable/ic_add_address" />
-
-
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
                             android:id="@+id/underReviewCV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -831,6 +642,195 @@
                                     android:layout_gravity="center"
                                     android:layout_marginStart="@dimen/_11sdp"
                                     android:src="@drawable/ic_buy_token" />
+
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/welcomeCoyniCV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="1dp"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_marginEnd="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:visibility="gone"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_10sdp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:paddingRight="@dimen/_10sdp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:id="@+id/welcomeCoyniTV"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Welcome to"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_12ssp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_bold"
+                                            android:text=" coyni!"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_12ssp" />
+                                    </LinearLayout>
+
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:fontFamily="@font/opensans_regular"
+                                        android:text="Get started by adding coyni tokens to your account."
+                                        android:textColor="@color/primary_black"
+                                        android:textSize="@dimen/_11ssp" />
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:layout_marginBottom="@dimen/_22sdp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Add payment method"
+                                            android:textColor="@color/primary_color"
+                                            android:textSize="@dimen/_11ssp" />
+
+                                        <ImageView
+                                            android:id="@+id/arrowIconIV"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="15dp"
+                                            android:layout_marginTop="3dp"
+                                            android:src="@drawable/ic_arrowicon" />
+
+
+                                    </LinearLayout>
+
+
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:id="@+id/spAccountImage"
+                                    android:layout_width="@dimen/_80sdp"
+                                    android:layout_height="@dimen/_90sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_11sdp"
+                                    android:src="@drawable/ic_add_payment" />
+
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/addAddressCV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="1dp"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_marginEnd="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:visibility="gone"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_10sdp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingLeft="@dimen/_10sdp"
+                                android:paddingRight="@dimen/_10sdp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Address Required"
+                                            android:textColor="@color/primary_black"
+                                            android:textSize="@dimen/_12ssp" />
+                                    </LinearLayout>
+
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:fontFamily="@font/opensans_regular"
+                                        android:text="We will need your address to verify your identity."
+                                        android:textColor="@color/primary_black"
+                                        android:textSize="@dimen/_11ssp" />
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_7sdp"
+                                        android:layout_marginBottom="@dimen/_22sdp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/opensans_semibold"
+                                            android:text="Add an address"
+                                            android:textColor="@color/primary_color"
+                                            android:textSize="@dimen/_11ssp" />
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="15dp"
+                                            android:layout_marginTop="3dp"
+                                            android:src="@drawable/ic_arrowicon" />
+
+
+                                    </LinearLayout>
+
+
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:layout_width="@dimen/_80sdp"
+                                    android:layout_height="@dimen/_90sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/_11sdp"
+                                    android:src="@drawable/ic_add_address" />
 
 
                             </LinearLayout>

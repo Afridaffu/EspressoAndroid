@@ -315,6 +315,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             etAddress2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
 
+
             setKeyboardVisibilityListener(this);
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
@@ -1654,6 +1655,10 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             etPreAmount = preAuthDialog.findViewById(R.id.etAmount);
             etlAmount = preAuthDialog.findViewById(R.id.etlAmuont);
 
+            etlAmount.setBoxStrokeColorStateList(Utils.getFocusedColorState(getApplicationContext()));
+            etPreAmount.requestFocus();
+            etPreAmount.setShowSoftInputOnFocus(false);
+
             ctKey = preAuthDialog.findViewById(R.id.ckb);
             ctKey.setKeyAction("Verify", this);
             ctKey.setScreenName("addcard");
@@ -1662,8 +1667,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             ctKey.setInputConnection(ic);
 //          tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
             tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your bank/card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
-            etPreAmount.setShowSoftInputOnFocus(false);
-            etPreAmount.setEnabled(false);
+//            etPreAmount.setShowSoftInputOnFocus(false);
+//            etPreAmount.setEnabled(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1760,9 +1765,10 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     public void enableOrDisableFocus(String enteredText) {
         if (enteredText.length() > 0) {
             etlAmount.setBoxStrokeColorStateList(Utils.getFocusedColorState(getApplicationContext()));
-        } else if (enteredText.length() == 0) {
-            etlAmount.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
         }
+//        else if (enteredText.length() == 0) {
+//            etlAmount.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+//        }
     }
 
     private void preparePreAuth() {
