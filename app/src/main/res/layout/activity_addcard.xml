@@ -729,12 +729,14 @@
                             android:layout_marginTop="@dimen/_14sdp">
 
                             <View
+                                android:id="@+id/viewBackGround"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_43sdp"
                                 android:layout_marginTop="@dimen/_6sdp"
                                 android:background="@drawable/disable_bg" />
 
                             <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/etlCountry"
                                 style="@style/TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

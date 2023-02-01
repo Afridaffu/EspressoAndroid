@@ -124,7 +124,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     String strName = "", strCardNo = "", strExpiry = "", strCvv = "", strAdd1 = "", strAdd2 = "", strCity = "", strState = "", strZip = "", strCountry = "";
     TextInputEditText etName, etCVV, etAddress1, etAddress2, etCity, etState, etZipCode, etCountry, etPreAmount;
     CardNumberEditText etCardNumber;
-    TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1, etlAddress2, etlCity, etlZipCode, etlAmount;
+    TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1, etlAddress2, etlCity, etlZipCode, etlAmount, etlCountry;
     MaskEditText etExpiry;
     ConstraintLayout clStates;
     Long mLastClickTime = 0L;
@@ -149,6 +149,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     CardScanSheet sheet;
     private CheckBox saveAddressCB;
     private ImageView closeIV;
+    View viewBackGround;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -309,6 +310,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             addressSubHeaderTV = findViewById(R.id.tvAddMsg);
             closeIV = findViewById(R.id.closeIV);
             addCardTV = findViewById(R.id.addCardTV);
+            viewBackGround = findViewById(R.id.viewBackGround);
+            etlCountry = findViewById(R.id.etlCountry);
             etName.requestFocus();
             etCardNumber.setFrom("ADD_CARD");
             etAddress1.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
@@ -328,6 +331,12 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 if (getIntent().getStringExtra("screen").equalsIgnoreCase("signup")) {
                     saveAddressCB.setVisibility(VISIBLE);
                     tvCardHead.setText("Add Debit or Credit Card");
+                    viewBackGround.setVisibility(GONE);
+                    Utils.setUpperHintColor(etlCountry, getColor(R.color.primary_black));
+                    etCountry.setFocusable(true);
+                    etCountry.setFocusableInTouchMode(false);
+                    etCountry.setClickable(false);
+                    etCountry.setTextColor(getResources().getColor(R.color.text_color));
                 } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("add_address")) {
                     saveAddressCB.setVisibility(GONE);
                     tvCardHead.setText("Add Billing Address");
@@ -338,6 +347,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                     divider2.setVisibility(GONE);
                     closeIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_close));
                     addCardTV.setText("Add Address");
+                    viewBackGround.setVisibility(VISIBLE);
                 }
             }
 

@@ -1015,12 +1015,16 @@ public class PaymentMethodsActivity extends BaseActivity {
     }
 
     public void hideorShowNoTokenText() {
-        if (paymentMethodsResponse.getData().getBankCount() > 0
-                || paymentMethodsResponse.getData().getDebitCardCount() > 0
-                || paymentMethodsResponse.getData().getCreditCardCount() > 0) {
-            tvMessage.setVisibility(View.GONE);
-        } else {
-            tvMessage.setVisibility(View.VISIBLE);
+        try {
+            if (paymentMethodsResponse.getData().getBankCount() > 0
+                    || paymentMethodsResponse.getData().getDebitCardCount() > 0
+                    || paymentMethodsResponse.getData().getCreditCardCount() > 0) {
+                tvMessage.setVisibility(View.GONE);
+            } else {
+                tvMessage.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }
