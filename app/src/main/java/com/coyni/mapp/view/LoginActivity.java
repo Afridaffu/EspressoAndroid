@@ -163,12 +163,13 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                 Utils.setIsTouchEnabled(false);
                 Utils.setIsFaceEnabled(false);
             }
-            enableIcon();
+//            enableIcon();
             setDB();
             setToken();
             setFaceLock();
             setTouchId();
             setRemember();
+            enableIcon();
             if (!isExpiry) {
                 String value = dbHandler.getTableRemember();
 
