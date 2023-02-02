@@ -25,7 +25,7 @@
             <TextView
                 android:id="@+id/messageTV"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight=".65"
                 android:ellipsize="end"
                 android:fontFamily="@font/opensans_semibold"
@@ -38,7 +38,7 @@
             <TextView
                 android:id="@+id/messagTV"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight=".3"
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="start"
@@ -67,7 +67,7 @@
             android:layout_width="@dimen/_68sdp"
             android:layout_height="@dimen/_14sdp"
             android:layout_below="@id/topLL"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="center"
             android:textSize="@dimen/_7ssp" />
