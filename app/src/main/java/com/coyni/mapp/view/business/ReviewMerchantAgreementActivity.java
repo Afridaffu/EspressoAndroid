@@ -266,6 +266,7 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
                     if (signedAgreementResponse != null) {
                         if (signedAgreementResponse.getStatus() != null && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
                             Intent i = new Intent(ReviewMerchantAgreementActivity.this, BusinessDashboardActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(i);
                         } else {
                             String errorMessage = getString(R.string.something_went_wrong);
@@ -292,6 +293,7 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
                     if (updateSignAgreementsResponse != null) {
                         if (updateSignAgreementsResponse.getStatus() != null && updateSignAgreementsResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                             Intent i = new Intent(ReviewMerchantAgreementActivity.this, BusinessDashboardActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(i);
                         } else {
                             String errorMessage = getString(R.string.something_went_wrong);
