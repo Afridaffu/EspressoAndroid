@@ -1042,9 +1042,10 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 convertDecimal();
                 if (payValidation()) {
                     isPayClick = true;
-                    pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
+                    //pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
                     cynValue = Utils.doubleParsing(payET.getText().toString().trim().replace(",", ""));
 //                    calculateFee(Utils.USNumberFormat(cynValue));
+                    payPreview();
                 }
             } else {
                 Utils.displayAlert(getString(R.string.errormsg), PayToMerchantActivity.this, "", "");
