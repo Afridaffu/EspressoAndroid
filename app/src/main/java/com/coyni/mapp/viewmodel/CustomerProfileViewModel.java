@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.coyni.mapp.model.users.AddAddressRequest;
+import com.coyni.mapp.model.users.AddAddressResponse;
 import com.coyni.mapp.model.websocket.WebSocketUrlResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -39,6 +41,7 @@ public class CustomerProfileViewModel extends AndroidViewModel {
     private MutableLiveData<UpdatePhoneResponse> updatePhoneSendOTPResponse = new MutableLiveData<>();
     private MutableLiveData<UserPreference> userPreferenceMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<AddAddressResponse> addAddressResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BankResponse> bankResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<WebSocketUrlResponse> webSocketUrlResponseMutableLiveData = new MutableLiveData<>();
 
@@ -69,13 +72,9 @@ public class CustomerProfileViewModel extends AndroidViewModel {
         return userPreferenceMutableLiveData;
     }
 
-//    public MutableLiveData<SignOn> getSignOnMutableLiveData() {
-//        return signOnMutableLiveData;
-//    }
-//
-//    public MutableLiveData<SyncAccount> getSyncAccountMutableLiveData() {
-//        return syncAccountMutableLiveData;
-//    }
+    public MutableLiveData<AddAddressResponse> getAddAddressResponseMutableLiveData() {
+        return addAddressResponseMutableLiveData;
+    }
 
     public MutableLiveData<BankResponse> getBankResponseMutableLiveData() {
         return bankResponseMutableLiveData;
@@ -232,7 +231,6 @@ public class CustomerProfileViewModel extends AndroidViewModel {
         }
     }
 
-
     public void updateDefaultAccount(UserPreferenceModel request) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -309,87 +307,40 @@ public class CustomerProfileViewModel extends AndroidViewModel {
         }
     }
 
-//    public void meSignOn() {
-//        try {
-//            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-//            Call<SignOn> mCall = apiService.meSignOn();
-//            mCall.enqueue(new Callback<SignOn>() {
-//                @Override
-//                public void onResponse(Call<SignOn> call, Response<SignOn> response) {
-//                    try {
-//                        if (response.isSuccessful()) {
-//                            SignOn obj = response.body();
-//                            signOnMutableLiveData.setValue(obj);
-//                        } else {
-//                            String strResponse = response.errorBody().string();
-////                            Gson gson = new Gson();
-////                            Type type = new TypeToken<APIError>() {
-////                            }.getType();
-////                            APIError errorResponse = gson.fromJson(strResponse, type);
-////                            apiErrorMutableLiveData.setValue(errorResponse);
-//                            Gson gson = new Gson();
-//                            Type type = new TypeToken<SignOn>() {
-//                            }.getType();
-//                            SignOn errorResponse1 = gson.fromJson(strResponse, type);
-//                            signOnMutableLiveData.setValue(errorResponse1);
-//                        }
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                        apiErrorMutableLiveData.setValue(null);
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<SignOn> call, Throwable t) {
-//                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-//                    apiErrorMutableLiveData.setValue(null);
-//                }
-//            });
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
+    public void meAddAddress(AddAddressRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<AddAddressResponse> mCall = apiService.meAddAddress(request);
+            mCall.enqueue(new Callback<AddAddressResponse>() {
+                @Override
+                public void onResponse(Call<AddAddressResponse> call, Response<AddAddressResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            AddAddressResponse obj = response.body();
+                            addAddressResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<User>() {
+                            }.getType();
+                            AddAddressResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            addAddressResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        addAddressResponseMutableLiveData.setValue(null);
+                    }
+                }
 
-//    public void meSyncAccount() {
-//        try {
-//            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-//            Call<SyncAccount> mCall = apiService.meSyncAccount();
-//            mCall.enqueue(new Callback<SyncAccount>() {
-//                @Override
-//                public void onResponse(Call<SyncAccount> call, Response<SyncAccount> response) {
-//                    try {
-//                        if (response.isSuccessful()) {
-//                            SyncAccount obj = response.body();
-//                            syncAccountMutableLiveData.setValue(obj);
-//                        } else if (response.code() == 500) {
-//                            Gson gson = new Gson();
-//                            Type type = new TypeToken<SyncAccount>() {
-//                            }.getType();
-//                            SyncAccount errorResponse = gson.fromJson(response.errorBody().charStream(), type);
-//                            syncAccountMutableLiveData.setValue(errorResponse);
-//                        } else {
-//                            Gson gson = new Gson();
-//                            Type type = new TypeToken<APIError>() {
-//                            }.getType();
-//                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-//                            apiErrorMutableLiveData.setValue(errorResponse);
-//                        }
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                        apiErrorMutableLiveData.setValue(null);
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<SyncAccount> call, Throwable t) {
-//                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-//                    apiErrorMutableLiveData.setValue(null);
-//                }
-//            });
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
+                @Override
+                public void onFailure(Call<AddAddressResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    addAddressResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     public void meBanks() {
         try {

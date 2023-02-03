@@ -35,6 +35,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.coyni.mapp.model.users.AddAddressRequest;
+import com.coyni.mapp.model.users.AddAddressResponse;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.coyni.mapp.R;
@@ -224,9 +226,14 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                     mLastClickTime = SystemClock.elapsedRealtime();
                     dialog = Utils.showProgressDialog(EditAddressActivity.this);
                     Utils.tempStateName = "";
-                    updateAddress();
+                    if ((myApplicationObj.getTrackerResponse() != null && !myApplicationObj.getTrackerResponse().getData().isAddressAvailable()) || getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("add_address")) {
+                        addAddress();
+                    } else {
+                        updateAddress();
+                    }
                 }
             });
+
             b_editAddressSaveCV.setOnClickListener(view -> {
                 if (isSaveEnabled) {
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -718,6 +725,23 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
         }
     }
 
+    private void addAddress() {
+        try {
+            AddAddressRequest request = new AddAddressRequest();
+            request.setAddressLine1(address1ET.getText().toString().trim());
+            request.setAddressLine2(address2ET.getText().toString().trim());
+            request.setAddressType(Utils.ADDRESS_TYPE);
+            request.setCity(cityET.getText().toString().trim());
+            request.setState(stateET.getText().toString().trim());
+            request.setStateCode("");
+            request.setZipCode(zipcodeET.getText().toString().trim());
+            request.setCountry("United States");
+            customerProfileViewModel.meAddAddress(request);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public void initObservers() {
         customerProfileViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
             @Override
@@ -726,27 +750,41 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                     dialog.dismiss();
                     if (user != null) {
                         if (user.getStatus().toString().toLowerCase().equals("success")) {
-                            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("add_address")) {
-                                displayAddAddressSuccess();
-                            } else {
-                                Utils.showCustomToast(EditAddressActivity.this, "Address has been updated", R.drawable.ic_location, "EditAddress");
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            finish();
-                                        } catch (Exception ex) {
-                                            ex.printStackTrace();
-                                        }
+//                            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("add_address")) {
+//                                displayAddAddressSuccess();
+//                            } else {
+                            Utils.showCustomToast(EditAddressActivity.this, "Address has been updated", R.drawable.ic_location, "EditAddress");
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        finish();
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
                                     }
-                                }, 2000);
-                            }
+                                }
+                            }, 2000);
+//                            }
                         } else {
                             Utils.displayAlert(user.getError().getErrorDescription(), EditAddressActivity.this, "", user.getError().getFieldErrors().get(0));
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            }
+        });
+
+        customerProfileViewModel.getAddAddressResponseMutableLiveData().observe(this, new Observer<AddAddressResponse>() {
+            @Override
+            public void onChanged(AddAddressResponse addAddressResponse) {
+                dialog.dismiss();
+                if (addAddressResponse != null) {
+                    if (addAddressResponse.getStatus().toString().toLowerCase().equals("success")) {
+                        displayAddAddressSuccess();
+                    }
+                } else {
+                    Utils.displayAlert(addAddressResponse.getError().getErrorDescription(), EditAddressActivity.this, "", addAddressResponse.getError().getFieldErrors().get(0));
                 }
             }
         });

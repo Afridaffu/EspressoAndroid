@@ -90,10 +90,11 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                 e.printStackTrace();
             }
 
-            if(objData.getTxnTypeDn().equalsIgnoreCase("Sale Order") && objData.getUserType().equalsIgnoreCase(Utils.BUSINESS)) {
+            if (objData.getTxnTypeDn().equalsIgnoreCase("Sale Order") && objData.getUserType().equalsIgnoreCase(Utils.BUSINESS)) {
                 holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getReceiveName());
-            }else if(objData.getTxnTypeDn().equalsIgnoreCase("Sale Order")){
-                holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getTxnSubTypeDn());
+            } else if (objData.getTxnTypeDn().equalsIgnoreCase("Sale Order")) {
+//                holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getTxnSubTypeDn());
+                holder.txnDescrip.setText(objData.getReceiveName());
             }
 //
             holder.amountTV.setText(Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()));

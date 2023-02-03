@@ -188,6 +188,8 @@ import com.coyni.mapp.model.update_resend_otp.UpdateResendRequest;
 import com.coyni.mapp.model.userrequest.UserRequest;
 import com.coyni.mapp.model.userrequest.UserRequestResponse;
 import com.coyni.mapp.model.users.AccountLimits;
+import com.coyni.mapp.model.users.AddAddressRequest;
+import com.coyni.mapp.model.users.AddAddressResponse;
 import com.coyni.mapp.model.users.User;
 import com.coyni.mapp.model.users.UserData;
 import com.coyni.mapp.model.users.UserPreferenceModel;
@@ -844,5 +846,8 @@ public interface ApiService {
 
     @GET("api/v2/agreements/{agreementId}")
     Call<AgreementsPdf> getApplicationDisclosure(@Path("agreementId") String agreementId);
+
+    @POST("api/v2/profile/me/add-address")
+    Call<AddAddressResponse> meAddAddress(@Body AddAddressRequest request);
 }
 

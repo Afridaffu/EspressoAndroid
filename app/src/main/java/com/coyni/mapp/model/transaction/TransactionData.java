@@ -42,6 +42,9 @@ public class TransactionData implements Serializable {
     @SerializedName("accountBalance")
     @Expose
     private String accountBalance;
+    @SerializedName("merchantBalance")
+    @Expose
+    private String merchantBalance;
     @SerializedName("cardBrand")
     @Expose
     private String cardBrand;
@@ -51,6 +54,12 @@ public class TransactionData implements Serializable {
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("saleOrderType")
+    @Expose
+    private String saleOrderType;
+    @SerializedName("saleOrderSubType")
+    @Expose
+    private String saleOrderSubType;
 
     private String amount;
     private String senderMessage;
@@ -96,6 +105,7 @@ public class TransactionData implements Serializable {
 
 
     private String achReferenceId;
+    private String merchantName;
 
 
     //    MerchantTransaction newly added fields
@@ -444,6 +454,14 @@ public class TransactionData implements Serializable {
         this.accountBalance = accountBalance;
     }
 
+    public String getMerchantBalance() {
+        return merchantBalance;
+    }
+
+    public void setMerchantBalance(String merchantBalance) {
+        this.merchantBalance = merchantBalance;
+    }
+
     public String getCardBrand() {
         return cardBrand;
     }
@@ -711,4 +729,27 @@ public class TransactionData implements Serializable {
         this.saleOrderFees = saleOrderFees;
     }
 
+    public String getSaleOrderType() {
+        return saleOrderType;
+    }
+
+    public void setSaleOrderType(String saleOrderType) {
+        this.saleOrderType = saleOrderType;
+    }
+
+    public String getSaleOrderSubType() {
+        return saleOrderSubType;
+    }
+
+    public void setSaleOrderSubType(String saleOrderSubType) {
+        this.saleOrderSubType = saleOrderSubType;
+    }
+
+    public String getMerchantName() {
+        return merchantName;
+    }
+
+    public void setMerchantName(String merchantName) {
+        this.merchantName = merchantName;
+    }
 }

@@ -53,23 +53,24 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
 
         String[] data = objData.getTxnDescription().replace("****", "-").split("-");
         try {
-                if (data.length > 1) {
-                    holder.txnDescripExtention.setVisibility(View.VISIBLE);
-                    holder.txnDescrip.setText(data[0]);
-                    holder.txnDescripExtention.setText("**" + data[1]);
-                    holder.txnDescrip.setVisibility(View.VISIBLE);
-                } else {
-                    holder.txnDescrip.setText(objData.getTxnDescription());
-                    holder.txnDescripExtention.setVisibility(View.GONE);
-                }
+            if (data.length > 1) {
+                holder.txnDescripExtention.setVisibility(View.VISIBLE);
+                holder.txnDescrip.setText(data[0]);
+                holder.txnDescripExtention.setText("**" + data[1]);
+                holder.txnDescrip.setVisibility(View.VISIBLE);
+            } else {
+                holder.txnDescrip.setText(objData.getTxnDescription());
+                holder.txnDescripExtention.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(objData.getUserType().equalsIgnoreCase(Utils.BUSINESS) && objData.getTxnTypeDn().equalsIgnoreCase("Sale Order")){
+        if (objData.getUserType().equalsIgnoreCase(Utils.BUSINESS) && objData.getTxnTypeDn().equalsIgnoreCase("Sale Order")) {
             holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getReceiveName());
-        }else if(objData.getTxnTypeDn().equalsIgnoreCase("Sale Order")){
-            holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getTxnSubTypeDn());
+        } else if (objData.getTxnTypeDn().equalsIgnoreCase("Sale Order")) {
+//            holder.txnDescrip.setText(objData.getTxnTypeDn() + " - " + objData.getTxnSubTypeDn());
+            holder.txnDescrip.setText(objData.getReceiveName());
         }
 
 

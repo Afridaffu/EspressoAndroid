@@ -139,9 +139,6 @@ public class TransactionDetailsActivity extends BaseActivity {
                     case withdraw:
                         txnType = Integer.parseInt(Utils.withdrawType);
                         break;
-//                    case Utils.businessPayouttxntype:
-//                        txnType = Utils.businessPayout;
-//                        break;
                     case Utils.merchantPayouttxntype:
                         txnType = Utils.merchantPayout;
                         break;
@@ -162,6 +159,9 @@ public class TransactionDetailsActivity extends BaseActivity {
                         break;
                     case reserve_release:
                         txnType = Utils.reserveRelease;
+                        break;
+                    default:
+                        txnType = Integer.parseInt(getIntent().getStringExtra(Utils.txnType));
                         break;
                 }
             }
@@ -208,7 +208,8 @@ public class TransactionDetailsActivity extends BaseActivity {
                         txnSubType = Utils.transfer;
                         break;
                     default:
-                        txnSubType = null;
+//                        txnSubType = null;
+                        txnSubType = Integer.parseInt(getIntent().getStringExtra(Utils.txnSubType));
                         break;
                 }
             }
@@ -601,8 +602,14 @@ public class TransactionDetailsActivity extends BaseActivity {
             mPaidDateAndTime.setText(objMyApplication.convertZoneLatestTxn(paidOrderData.getCreatedDate()));
         }
 
+        //Modified on 3 Feb 2023 As AccountBalance param was modified as MerchantBalance in the API response
+//        if (paidOrderData.getAccountBalance() != null) {
+//            mAccountBalance.setText(Utils.convertTwoDecimal(paidOrderData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+//        }
         if (paidOrderData.getAccountBalance() != null) {
             mAccountBalance.setText(Utils.convertTwoDecimal(paidOrderData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+        } else if (paidOrderData.getMerchantBalance() != null) {
+            mAccountBalance.setText(Utils.convertTwoDecimal(paidOrderData.getMerchantBalance().replace("CYN", "").trim()) + " CYN");
         }
 
         if (paidOrderData.getReferenceId() != null) {
@@ -629,8 +636,12 @@ public class TransactionDetailsActivity extends BaseActivity {
 //            else
 //                mDbaName.setText(paidOrderData.getDbaName());
 //        }
-        if (paidOrderData.getDbaName() != null) {
-            mDbaName.setText(paidOrderData.getDbaName());
+        //Modified on 3 Feb 2023 As DbaName param was modified as MerchantName in the API response
+//        if (paidOrderData.getDbaName() != null) {
+//            mDbaName.setText(paidOrderData.getDbaName());
+//        }
+        if (paidOrderData.getMerchantName() != null) {
+            mDbaName.setText(paidOrderData.getMerchantName());
         }
 
 //        if (paidOrderData.getCustomerServiceMail() != null) {
@@ -693,8 +704,10 @@ public class TransactionDetailsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(TransactionDetailsActivity.this, TransactionDetailsActivity.class)
-                        .putExtra(Utils.txnType, sale_order)
-                        .putExtra(Utils.txnSubType, token)
+//                        .putExtra(Utils.txnType, sale_order)
+//                        .putExtra(Utils.txnSubType, token)
+                        .putExtra(Utils.txnType, paidOrderData.getSaleOrderType())
+                        .putExtra(Utils.txnSubType, paidOrderData.getSaleOrderSubType())
                         .putExtra(Utils.gbxTxnIdType, paidOrderId));
             }
         });
@@ -778,8 +791,10 @@ public class TransactionDetailsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(TransactionDetailsActivity.this, MerchantTransactionDetailsActivity.class)
-                        .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE, Utils.saleOrdertxntype)
-                        .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE, Utils.tokensub)
+//                        .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE, Utils.saleOrdertxntype)
+//                        .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE, Utils.tokensub)
+                        .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE, refundsentdata.getSaleOrderType())
+                        .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE, refundsentdata.getSaleOrderSubType())
                         .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, saleOrderId));
             }
         });

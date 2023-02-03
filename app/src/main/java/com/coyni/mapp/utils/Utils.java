@@ -150,6 +150,7 @@ public class Utils {
     public static final String TOKEN_STR = "TOKEN", MERCHANT_STR = "MERCHANT", RESERVE_STR = "RESERVE";
 
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
+    public static final int ADDRESS_TYPE = 0;
 
     public static enum BUSINESS_ACCOUNT_STATUS {
         UNDER_REVIEW("Under Review"),

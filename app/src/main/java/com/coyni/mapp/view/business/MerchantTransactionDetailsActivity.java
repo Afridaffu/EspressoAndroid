@@ -88,6 +88,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     case Utils.reserveReleasetxntype:
                         txnType = Utils.reserveRelease;
                         break;
+                    default:
+                        txnType = Integer.parseInt(txnTypeStr);
+                        break;
                 }
             }
             if (txnSubTypeStr != null) {
@@ -108,7 +111,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                         txnSubType = Utils.retailMobile;
                         break;
                     default:
-                        txnSubType = null;
+//                        txnSubType = null;
+                        txnSubType = Integer.parseInt(txnSubTypeStr);
+                        break;
 
                 }
             }
@@ -249,8 +254,10 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(MerchantTransactionDetailsActivity.this, MerchantTransactionDetailsActivity.class)
-                            .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE, Utils.saleOrdertxntype)
-                            .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE, Utils.tokensub)
+//                            .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE, Utils.saleOrdertxntype)
+//                            .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE, Utils.tokensub)
+                            .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE, objData.getData().getSaleOrderType())
+                            .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE, objData.getData().getSaleOrderSubType())
                             .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, saleOrderId));
                 }
             });
@@ -404,9 +411,18 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             if (objData.getData().getNetAmount() != null) {
                 salesnetamountTV.setText(Utils.convertTwoDecimal(objData.getData().getNetAmount().replace("CYN", "").trim()));
             }
+            //Modified on 2 Feb 2023 - As AccountBalance param was changed to MerchantBalance
+//            if (objData.getData().getAccountBalance() != null) {
+//                salesMerchantBalanceTV.setText(Utils.convertTwoDecimal(objData.getData().getAccountBalance().replace("CYN", "").trim()));
+//            }
+
             if (objData.getData().getAccountBalance() != null) {
                 salesMerchantBalanceTV.setText(Utils.convertTwoDecimal(objData.getData().getAccountBalance().replace("CYN", "").trim()));
+            } else if (objData.getData().getMerchantBalance() != null) {
+                salesMerchantBalanceTV.setText(Utils.convertTwoDecimal(objData.getData().getMerchantBalance().replace("CYN", "").trim()));
             }
+
+
             if (objMyApplication.isReserveEnabled() && objData.getData().getReserve() != null && !objData.getData().getReserve().equals("")) {
                 salesreserveLL.setVisibility(View.VISIBLE);
                 salesreserveTV.setText(Utils.convertTwoDecimal(objData.getData().getReserve().replace("CYN", "").trim()));
