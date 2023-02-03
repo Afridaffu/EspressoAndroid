@@ -117,8 +117,9 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public ScrollView dbaBasicSL, addressSL;
     private boolean addDBAClick = false;
     private boolean isAddDBA = false, addBusiness = false;
-    private boolean isAddDBAAPICalled = false;
+    private boolean isAddDBAAPICalled = false, docUploadFlow = false;
     private int companyID = 0;
+    private String target_file = "";
 //    public int docTypeID = 0;
 
     //Address
@@ -621,6 +622,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         pickerDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
+                docUploadFlow = true;
                 switch (action) {
                     case CHOOSE_LIBRARY:
                         launchCameraActionActivity(CameraUtility.CAMERA_ACTION_SELECTOR.GALLERY, type);
@@ -648,10 +650,18 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
-                uploadFile(result.getData().getStringExtra(CameraUtility.TARGET_FILE));
-                //setImageFromFilePath(result.getData().getStringExtra(CameraUtility.TARGET_FILE));
-                LogUtils.e(TAG, result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+//                if (docUploadFlow) {
+                target_file = result.getData().getStringExtra(CameraUtility.TARGET_FILE);
+                if (isAddDBA && !isAddDBAAPICalled) {
+                    identityVerificationViewModel.getPostAddDBABusiness(companyID);
+                } else {
+                    uploadFile(result.getData().getStringExtra(CameraUtility.TARGET_FILE));
+                }
+//                }
+
             } else {
+                target_file = "";
+                docUploadFlow = false;
                 LogUtils.e(TAG, "Error while selecting photo");
             }
         }
@@ -857,10 +867,14 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     isAddDBAAPICalled = true;
                     isAddDBA = false;
                     addBusiness = false;
-                    if (selectedPage == 1) {
-                        businessIdentityVerificationViewModel.postDBAInfo(prepareRequest());
+                    if (docUploadFlow) {
+                        uploadFile(target_file);
                     } else {
-                        dbaInfoAPICall(prepareRequest());
+                        if (selectedPage == 1) {
+                            businessIdentityVerificationViewModel.postDBAInfo(prepareRequest());
+                        } else {
+                            dbaInfoAPICall(prepareRequest());
+                        }
                     }
 
                 } else {
