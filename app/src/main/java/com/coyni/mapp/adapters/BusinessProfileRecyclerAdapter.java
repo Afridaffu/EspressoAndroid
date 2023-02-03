@@ -21,6 +21,7 @@ import com.coyni.mapp.utils.LogUtils;
 import com.coyni.mapp.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
@@ -121,7 +122,10 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     childItem.setText(detailInfo.getDbaName());
                 }
             } else {
-                childItem.setText("[Dba Name]");
+                if (detailInfo.getCompanyName() == null || detailInfo.getCompanyName().equals(""))
+                    childItem.setText("[Dba Name]");
+                else
+                    childItem.setText(detailInfo.getCompanyName());
             }
             if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
@@ -144,7 +148,10 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     childItem.setText(detailInfo.getDbaName());
                 }
             } else {
-                childItem.setText("[Dba Name]");
+                if (detailInfo.getCompanyName() == null || detailInfo.getCompanyName().equals(""))
+                    childItem.setText("[Dba Name]");
+                else
+                    childItem.setText(detailInfo.getCompanyName());
             }
             if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);

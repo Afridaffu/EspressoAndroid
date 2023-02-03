@@ -78,6 +78,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -798,8 +799,17 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         Utils.displayAlert(userPreference.getError().getErrorDescription(), UserDetailsActivity.this, "", userPreference.getError().getFieldErrors().get(0));
                     } else {
                         LogUtils.d(TAG, "userPreference" + userPreference);
-                        if (selectedName == null || selectedName.equals(""))
-                            business_defaultaccountET.setText("[DBA Name]");
+                        if (selectedName == null || selectedName.equals("")) {
+//                            business_defaultaccountET.setText("[DBA Name]");
+                            if (myApplicationObj.getCompanyName() == null || myApplicationObj.getCompanyName().equals(""))
+                                business_defaultaccountET.setText("[Dba Name]");
+                            else
+                                business_defaultaccountET.setText(myApplicationObj.getCompanyName());
+//                            if (Utils.DBA_NAME.equals(""))
+//                                business_defaultaccountET.setText("[Dba Name]");
+//                            else
+//                                business_defaultaccountET.setText(Utils.DBA_NAME);
+                        }
                         else if (selectedName.length() > 20)
                             business_defaultaccountET.setText((selectedName).substring(0, 20));
                         else
