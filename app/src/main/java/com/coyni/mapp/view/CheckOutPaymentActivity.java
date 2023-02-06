@@ -124,13 +124,11 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             if (myApplication.getCheckOutModel().getEncryptedToken() != null && !myApplication.getCheckOutModel().getEncryptedToken().equals("")) {
                 requestToken = myApplication.getCheckOutModel().getEncryptedToken();
 //                checkOutViewModel.scanQRCode(requestToken);
-                TransactionLimitAPICall();
+                //Commented on 1 Feb 2023 as SaleorderToken is replaced into Ecommerce-Retail/Mobile
+                //TransactionLimitAPICall();
                 orderInfoAPICall(requestToken);
             }
         }
-//        slideToConfirm.setInteractionEnabled(false);
-//        setFaceLock();
-//        setTouchId();
         myApplication.initializeDBHandler(CheckOutPaymentActivity.this);
         isFaceLock = myApplication.setFaceLock();
         isTouchId = myApplication.setTouchId();
@@ -551,11 +549,13 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             }
         } else if (Utils.doubleParsing(strPay.replace(",", "")) == 0.0) {
             displayAlertNew(getString(R.string.amount_greater_zero), CheckOutPaymentActivity.this, getString(R.string.oops));
-        } else if ((Utils.doubleParsing(strPay.replace(",", "")) < minimumLimit)) {
-            displayAlertNew(getString(R.string.minimum_amount) + Utils.USNumberFormat(minimumLimit) + " CYN", CheckOutPaymentActivity.this, getString(R.string.oops));
-        } else if (Utils.doubleParsing(strPay.replace(",", "")) > transactionLimit && !limitType.equalsIgnoreCase("NO LIMIT")) {
-            displayAlertNew(getString(R.string.amount_exceed_message), CheckOutPaymentActivity.this, getString(R.string.oops));
-        } else {
+        }
+//        else if ((Utils.doubleParsing(strPay.replace(",", "")) < minimumLimit)) {
+//            displayAlertNew(getString(R.string.minimum_amount) + Utils.USNumberFormat(minimumLimit) + " CYN", CheckOutPaymentActivity.this, getString(R.string.oops));
+//        } else if (Utils.doubleParsing(strPay.replace(",", "")) > transactionLimit && !limitType.equalsIgnoreCase("NO LIMIT")) {
+//            displayAlertNew(getString(R.string.amount_exceed_message), CheckOutPaymentActivity.this, getString(R.string.oops));
+//        }
+        else {
             value = true;
         }
         return value;
@@ -760,8 +760,8 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private void tokenWalletData(BusinessWalletResponse businessWalletResponse) {
         if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null) {
             List<WalletInfo> walletInfoList = businessWalletResponse.getData().getWalletNames();
-            for (WalletInfo walletInfo : walletInfoList){
-                if (walletInfo.getWalletType().equalsIgnoreCase(Utils.TOKEN_STR)){
+            for (WalletInfo walletInfo : walletInfoList) {
+                if (walletInfo.getWalletType().equalsIgnoreCase(Utils.TOKEN_STR)) {
                     availableBalance = walletInfo.getAvailabilityToUse();
                     mTokenBalance.setText("Available: " + Utils.convertTwoDecimal(String.valueOf(availableBalance)) + "CYN");
                 }

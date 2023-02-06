@@ -99,7 +99,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     private static final String instant_pay = "instant pay";
     private static final String token = "token";
     private static final String retail = "retail/mobile";
-    private static final String eCommerce = "eCommerce";
+    private static final String eCommerce = "ecommerce";
 
     private String message, createdAt;
 
@@ -299,16 +299,18 @@ public class TransactionDetailsActivity extends BaseActivity {
                     }
                     break;
                     case sale_order:
-                        switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
-                            case retail:
-                                ControlMethod(SALE_ORDER);
-                                paidOrderToken(transactionDetails.getData());
-                                break;
-                            case eCommerce:
-                                ControlMethod(SALE_ORDER);
-                                refundtoken(transactionDetails.getData());
-                                break;
-                        }
+//                        switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
+//                            case retail:
+//                                ControlMethod(SALE_ORDER);
+//                                paidOrderToken(transactionDetails.getData());
+//                                break;
+//                            case eCommerce:
+//                                ControlMethod(SALE_ORDER);
+//                                refundtoken(transactionDetails.getData());
+//                                break;
+//                        }
+                        ControlMethod(SALE_ORDER);
+                        paidOrderToken(transactionDetails.getData());
                         break;
                     case refund:
                         switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
@@ -640,7 +642,9 @@ public class TransactionDetailsActivity extends BaseActivity {
 //        if (paidOrderData.getDbaName() != null) {
 //            mDbaName.setText(paidOrderData.getDbaName());
 //        }
-        if (paidOrderData.getMerchantName() != null) {
+        if (paidOrderData.getDbaName() != null) {
+            mDbaName.setText(paidOrderData.getDbaName());
+        } else if (paidOrderData.getMerchantName() != null) {
             mDbaName.setText(paidOrderData.getMerchantName());
         }
 
@@ -775,12 +779,12 @@ public class TransactionDetailsActivity extends BaseActivity {
             refundamounttv.setText(Utils.convertTwoDecimal(refundsentdata.getRefundAmount().replace("CYN", "").trim()));
         }
 
-        if (refundsentdata.getReferenceId().length() > 10) {
+        if (refundsentdata.getReferenceId() != null && refundsentdata.getReferenceId().length() > 10) {
             refundreferencetv.setText(refundsentdata.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
         } else {
             refundreferencetv.setText(refundsentdata.getReferenceId());
         }
-        if (refundsentdata.getSaleOrderReferenceId().length() > 10) {
+        if (refundsentdata.getSaleOrderReferenceId() != null && refundsentdata.getSaleOrderReferenceId().length() > 10) {
             refundOTIrefrencetv.setText(refundsentdata.getSaleOrderReferenceId().substring(0, 10) + "...");
             refundOTIrefrencetv.setPaintFlags(refundOTIrefrencetv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         } else {
