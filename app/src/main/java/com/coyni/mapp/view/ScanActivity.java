@@ -712,7 +712,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                     if (objMyApplication.getFeatureControlGlobal().getPay() != null && objMyApplication.getFeatureControlGlobal().getPay()
                                             && objMyApplication.getFeatureControlByUser().getPay() != null && objMyApplication.getFeatureControlByUser().getPay()) {
                                         details = userDetails;
-                                        dialog = Utils.showProgressDialog(ScanActivity.this);
+//                                        dialog = Utils.showProgressDialog(ScanActivity.this);
                                         cynValue = Utils.doubleParsing(strQRAmount.toString().trim().replace(",", ""));
                                         calculateCustomerFee(Utils.USNumberFormat(cynValue));
                                         dashboardViewModel.getFeatureControlByUser(userDetails.getData().getUserId());
@@ -743,7 +743,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                             } else {
                                 details = userDetails;
                                 String amount = strQRAmount;
-                                dialog = Utils.showProgressDialog(ScanActivity.this);
+//                                dialog = Utils.showProgressDialog(ScanActivity.this);
                                 cynValue = Utils.doubleParsing(strQRAmount.toString().trim().replace(",", ""));
                                 //calculateFee(Utils.USNumberFormat(cynValue));
                                 businessIdentityVerificationViewModel.getBusinessType();

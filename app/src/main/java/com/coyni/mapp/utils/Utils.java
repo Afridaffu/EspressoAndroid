@@ -475,7 +475,7 @@ public class Utils {
     public static final String wallet = "wallet";
     public static final String amount = "amount";
     public static final String sentt = "sent";
-    public static final String ecomerce = "eCommerce";
+    public static final String ecomerce = "ecommerce";
     public static final String retail = "retail/mobile";
 
     public static final String applyFilter = "apply";
