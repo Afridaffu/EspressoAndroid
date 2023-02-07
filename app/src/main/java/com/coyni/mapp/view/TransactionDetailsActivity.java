@@ -211,11 +211,16 @@ public class TransactionDetailsActivity extends BaseActivity {
                         break;
                     default:
 //                        txnSubType = null;
-                        String subType = getIntent().getStringExtra(Utils.txnSubType).replaceAll(" ", "").toLowerCase(Locale.ROOT);
-                        if (subType.equalsIgnoreCase(Utils.retail))
-                            txnSubType = Utils.retailMobile;
-                        else if (subType.equalsIgnoreCase(Utils.ecomerce))
-                            txnSubType = Utils.eComerce;
+                        boolean isDigitsOnly = getIntent().getStringExtra(Utils.txnSubType).matches("\\d+");
+                        if (isDigitsOnly) {
+                            txnSubType = Integer.parseInt(getIntent().getStringExtra(Utils.txnSubType));
+                        } else {
+                            String subType = getIntent().getStringExtra(Utils.txnSubType).replaceAll(" ", "").toLowerCase(Locale.ROOT);
+                            if (subType.equalsIgnoreCase(Utils.retail))
+                                txnSubType = Utils.retailMobile;
+                            else if (subType.equalsIgnoreCase(Utils.ecomerce))
+                                txnSubType = Utils.eComerce;
+                        }
                         break;
                 }
             }

@@ -317,7 +317,7 @@ public class ReviewMerchantAgreementActivity extends BaseActivity {
             @Override
             public void onChanged(AgreementsPdf agreementsPdf) {
                 try {
-                    disclosureContentTV.setText(Html.fromHtml(agreementsPdf.getData().getAgreementFileRefPath()));
+                    disclosureContentTV.setText(Html.fromHtml(agreementsPdf.getData().getChangeSummary()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -1462,7 +1462,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
         try {
             if (isCopyCompanyInfo) {
-                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected && isDBAFiling) {
+                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);
@@ -1472,7 +1472,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     viewPager.setPagingEnabled(false);
                 }
             } else {
-                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected && isDBAFiling) {
+                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);

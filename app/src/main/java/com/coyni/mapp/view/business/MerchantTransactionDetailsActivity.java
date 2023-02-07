@@ -96,38 +96,40 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                 }
             }
             if (txnSubTypeStr != null) {
-                switch (txnSubTypeStr.toLowerCase()) {
-                    case Utils.tokensub:
-                        txnSubType = Utils.token;
-                        break;
-                    case Utils.transfersub:
-                        txnSubType = Utils.transfer;
-                        break;
-                    case Utils.sentt:
-                        txnSubType = Utils.sent;
-                        break;
-                    case Utils.ecomerce:
-                        txnSubType = Utils.eComerce;
-                        break;
-                    case Utils.retail:
-                        txnSubType = Utils.retailMobile;
-                        break;
-                    default:
+
+                boolean isDigitsOnly = txnSubTypeStr.matches("\\d+");
+                if (isDigitsOnly) {
+                    txnSubType = Integer.parseInt(txnSubTypeStr);
+                } else {
+                    String subType = txnSubTypeStr.replaceAll(" ", "").toLowerCase(Locale.ROOT);
+//                    if (subType.equalsIgnoreCase(Utils.retail))
+//                        txnSubType = Utils.retailMobile;
+//                    else if (subType.equalsIgnoreCase(Utils.ecomerce))
+//                        txnSubType = Utils.eComerce;
+
+                    switch (subType.toLowerCase()) {
+                        case Utils.tokensub:
+                            txnSubType = Utils.token;
+                            break;
+                        case Utils.transfersub:
+                            txnSubType = Utils.transfer;
+                            break;
+                        case Utils.sentt:
+                            txnSubType = Utils.sent;
+                            break;
+                        case Utils.ecomerce:
+                            txnSubType = Utils.eComerce;
+                            break;
+                        case Utils.retail:
+                            txnSubType = Utils.retailMobile;
+                            break;
+                        default:
 //                        txnSubType = null;
-                        boolean isDigitsOnly = txnSubTypeStr.matches("\\d+");
-                        if (isDigitsOnly) {
-                            txnSubType = Integer.parseInt(txnSubTypeStr);
-                        } else {
-                            String subType = txnSubTypeStr.replaceAll(" ", "").toLowerCase(Locale.ROOT);
-                            if (subType.equalsIgnoreCase(Utils.retail))
-                                txnSubType = Utils.retailMobile;
-                            else if (subType.equalsIgnoreCase(Utils.ecomerce))
-                                txnSubType = Utils.eComerce;
-                        }
+                            break;
 
-                        break;
-
+                    }
                 }
+
             }
 
             if (Utils.checkInternet(MerchantTransactionDetailsActivity.this)) {

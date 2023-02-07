@@ -828,7 +828,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                             mMerchantsVno.setText(doc.substring(0, 1).toLowerCase() + doc.substring(1).trim());
                                             break;
                                         case Utils.mAD:
-                                            applicationDisclosureRefID = String.valueOf(agreements1.getItems().get(i).getRefId());
+                                            if (agreements1.getItems().get(i).getSignature() == null)
+                                                applicationDisclosureRefID = String.valueOf(agreements1.getItems().get(i).getRefId());
                                             break;
                                     }
 //                                    if (agreements1.getItems().get(i).getSignatureType() == Utils.mPP) {
