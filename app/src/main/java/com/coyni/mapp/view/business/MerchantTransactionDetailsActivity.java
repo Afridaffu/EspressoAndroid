@@ -24,6 +24,8 @@ import com.coyni.mapp.view.BaseActivity;
 import com.coyni.mapp.view.TransactionDetailsActivity;
 import com.coyni.mapp.viewmodel.DashboardViewModel;
 
+import java.util.Locale;
+
 public class MerchantTransactionDetailsActivity extends BaseActivity {
 
 
@@ -112,7 +114,17 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                         break;
                     default:
 //                        txnSubType = null;
-                        txnSubType = Integer.parseInt(txnSubTypeStr);
+                        boolean isDigitsOnly = txnSubTypeStr.matches("\\d+");
+                        if (isDigitsOnly) {
+                            txnSubType = Integer.parseInt(txnSubTypeStr);
+                        } else {
+                            String subType = txnSubTypeStr.replaceAll(" ", "").toLowerCase(Locale.ROOT);
+                            if (subType.equalsIgnoreCase(Utils.retail))
+                                txnSubType = Utils.retailMobile;
+                            else if (subType.equalsIgnoreCase(Utils.ecomerce))
+                                txnSubType = Utils.eComerce;
+                        }
+
                         break;
 
                 }
