@@ -113,14 +113,14 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                 }
             } else if (latestTxns.getData().get(position).getTxnTypeDn().toLowerCase().contains("buy")) {
                 strType = "buy";
-            } else if (latestTxns.getData().get(position).getTxnTypeDn().toLowerCase().contains("paid")) {
-                strType = "paid";
+            } else if (latestTxns.getData().get(position).getTxnTypeDn().toLowerCase().contains("sale order")) {
+                strType = "Sale Order";
             } else {
                 strType = latestTxns.getData().get(position).getTxnTypeDn().toLowerCase();
             }
 
 //            if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid")) {
-            if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid") || strType.equals("monthly service fee")) {
+            if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("Sale Order") || strType.equals("monthly service fee")) {
                 holder.amountTV.setText("-" + Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()).split(" ")[0]);
             } else {
                 holder.amountTV.setText("+" + Utils.convertTwoDecimal(latestTxns.getData().get(position).getAmount()).split(" ")[0]);
