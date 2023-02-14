@@ -19,14 +19,3 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
-#-keep public class com.greenbox.coyni.model.** {
-#    public protected private *;
-#}
-
--keep public class com.coyni.mapp.model.** {
-    *;
-}
-#Need to discuss , Customer Action Required Docs upload not working in release if we didn't add below line.
--keep class okhttp3.** { *; }
--keep class com.google.firebase.** { *; }

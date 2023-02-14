@@ -1,10 +1,20 @@
-rootProject.name = "Coyni"
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url='https://jitpack.io'}
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url='https://jitpack.io'}
+    }
+}
+rootProject.name = "MPOS"
 include ':app'
-include ':WheelPicker'
-include ':scan-ui'
-include ':cardscan-ui'
-include ':scan-framework'
-include ':scan-camera'
-include ':tensorflow-lite'
-include ':scan-camerax'
-include ':scan-payment'

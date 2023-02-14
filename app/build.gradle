@@ -1,32 +1,18 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-android-extensions'
+    id 'org.jetbrains.kotlin.android'
 }
-apply plugin: 'com.google.gms.google-services'
+
 android {
-    signingConfigs {
-        config {
-            keyAlias 'coyni_alias'
-            keyPassword 'coyni@1'
-            storeFile file('../coyni_v2_keystore.jks')
-            storePassword 'coyni@1'
-        }
-//        releaseSigningConfig {
-//            storeFile rootProject.file("app/keystore.jks")
-//            storePassword System.getProperty("Coyni@1")
-//            keyAlias System.getProperty("alias_name")
-//            keyPassword System.getProperty("Coyni@1")
-//        }
-    }
-    compileSdk 31
+    namespace 'com.coyni.pos.app'
+    compileSdk 33
 
     defaultConfig {
-        applicationId "com.coyni.mapp"
+        applicationId "com.coyni.pos.app"
         minSdk 26
-        targetSdk 31
-        versionCode 16
-        versionName "2.3.0"
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -42,8 +28,6 @@ android {
             buildConfigField 'boolean', 'ANALYTICS_ENABLED', 'true'
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.releaseSigningConfig
-            signingConfig signingConfigs.config
         }
         debug {
             buildConfigField 'boolean', 'LOGGING_ENABLED', 'true'
@@ -69,21 +53,14 @@ android {
             buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
         }
         sat {
-//            buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-stg.coyni.com/\"'
             buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-sat2.coyni.com/\"'
-//            buildConfigField 'String', 'Referer', '\"https://members.coyni.com\"'
             buildConfigField 'String', 'Referer', '\"https://members-sat2.coyni.com/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
             buildConfigField 'String', 'MATOMO_SERVER', '\"https://qa-analytics.coyni.com\"'
             buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
         }
         qa {
-//            buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-auto.coyni.com/\"'
             buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-qa.coyni.com/\"'
-//            buildConfigField 'String', 'URL_PRODUCTION', '\"http://api-perf.coyni.com/\"'
-//            buildConfigField 'String', 'URL_PRODUCTION', '\"http://sat-qa-api-1367964791.us-east-1.elb.amazonaws.com/\"'
-//            buildConfigField 'String', 'URL_PRODUCTION', '\"http://54.204.152.195:9001/\"'
-//            buildConfigField 'String', 'URL_PRODUCTION', '\"http://3.94.123.86:9001/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
             buildConfigField 'String', 'MATOMO_SERVER', '\"https://qa-analytics.coyni.com\"'
@@ -91,9 +68,6 @@ android {
         }
         dev {
             buildConfigField 'String', 'URL_PRODUCTION', '\"http://dev23-api-gateway-511281183.us-east-1.elb.amazonaws.com:80/\"'
-//            buildConfigField 'String', 'URL_PRODUCTION', '\"http://api-gateway-dev-1893379566.us-east-1.elb.amazonaws.com:80/\"'
-//            buildConfigField 'String', 'URL_PRODUCTION', '\"http://54.172.13.210:9001/\"'
-//            buildConfigField 'String', 'URL_PRODUCTION', '\"http://18.234.239.29:9001/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
             buildConfigField 'String', 'MATOMO_SERVER', '\"https://qa-analytics.coyni.com\"'
@@ -101,6 +75,7 @@ android {
 
         }
     }
+
     lintOptions {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
@@ -128,48 +103,38 @@ android {
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
-
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
 
-    implementation project(":scan-camerax")
-    implementation project(":cardscan-ui")
-
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.android.support:multidex:2.0.1'
+    implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.4.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata:2.4.0'
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.5.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     def appCenterSdkVersion = '4.3.1'
     implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
     implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 
-//    implementation 'com.github.santalu:maskara:1.0.0'
-    implementation 'androidx.biometric:biometric:1.1.0'
-
-    implementation 'com.google.android.gms:play-services-auth:19.2.0'
-    implementation 'com.google.android.gms:play-services-auth-api-phone:17.5.1'
-
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
-
-    implementation 'com.budiyev.android:code-scanner:2.1.0'
-
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
@@ -178,31 +143,11 @@ dependencies {
 
     implementation 'com.github.matomo-org:matomo-sdk-android:4.1.4'
 
-//    implementation('com.microblink:blinkcard:2.5.0@aar') {
-//        transitive = true
-//    }
-
-    implementation 'org.apache.httpcomponents:httpcore:4.4.10'
-    implementation 'org.apache.httpcomponents:httpclient:4.5.6'
-
-    implementation 'com.google.android.material:material:1.2.0-alpha03'
-
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'org.apache.httpcomponents:httpcore:4.4.13'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    //iOS Style DatePicker
-    implementation project(path: ':WheelPicker')
-//    implementation 'com.github.delight-im:Android-AdvancedWebView:v3.2.1'
-
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
-
-    //Firebase
-    implementation platform('com.google.firebase:firebase-bom:30.3.2')
-    implementation 'com.google.firebase:firebase-messaging'
-    implementation 'com.google.firebase:firebase-analytics'
-    //End
-
-    implementation "com.airbnb.android:lottie:3.4.0"
 
     //Websocket
     implementation 'com.squareup.okhttp3:okhttp:4.8.0'
