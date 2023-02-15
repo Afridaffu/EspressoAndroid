@@ -6,8 +6,6 @@ import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import androidx.appcompat.content.res.AppCompatResources
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
@@ -23,12 +21,6 @@ class LoginActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-        )
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
