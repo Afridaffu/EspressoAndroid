@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    android:id="@+id/root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/zxing_transparent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/_27sdp">
+
+
+    <LinearLayout
+        android:id="@+id/discardSaleLL"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_44sdp"
+        android:layout_marginHorizontal="@dimen/_21sdp"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_marginBottom="@dimen/_21sdp"
+        android:background="@drawable/discard_sale_bg"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_bold"
+            android:text="Discard Sale"
+            android:textAlignment="center"
+            android:textColor="@color/error_red"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/continueLL"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_44sdp"
+        android:layout_marginHorizontal="@dimen/_21sdp"
+        android:layout_marginBottom="@dimen/_21sdp"
+        android:background="@drawable/continue_bg"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_bold"
+            android:text="Continue"
+            android:textAlignment="center"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+
+
+</LinearLayout>

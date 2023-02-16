@@ -5,11 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.coyni.pos.app.R
+import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityTransactionListBinding
 import com.coyni.pos.app.fragments.TransactionList_filter_frag
-import com.coyni.pos.app.fragments.dashboard_frag
 
-class TransactionListActivity : AppCompatActivity() {
+class TransactionListActivity : BaseActivity() {
 
     private lateinit var binding : ActivityTransactionListBinding
 

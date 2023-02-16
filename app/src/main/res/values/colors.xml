@@ -15,6 +15,9 @@
     <color name="inactive_green">#B5E2E0</color>
     <color name="dark_gray">#767676</color>
     <color name="loader_color">#0F6764</color>
+    <color name="vblue_light">#f2f5f8</color>
+    <color name="vlight_grey">#E8E8E8</color>
+    <color name="bg_color">#fafafa</color>
     <color name="light_blue">#d8e2f0</color>
     <color name="true_green">#008a05</color>
 
@@ -24,6 +27,7 @@
     <color name="mpos_bg">#008682</color>
     <color name="blue_light">#d8e2f0</color>
     <color name="viewcolor">#e8e8e8</color>
+    <color name="hidden_view_color">#008581</color>
     <color name="slidebtn_bg">#DFF4F3</color>
     <color name="bg_view_color">#f2f4f5</color>
 

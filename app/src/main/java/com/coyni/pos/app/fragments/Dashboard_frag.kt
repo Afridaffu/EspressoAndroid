@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.coyni.pos.app.databinding.FragmentDashboardFragBinding
 import com.coyni.pos.app.view.TransactionListActivity
 
-class dashboard_frag : Fragment() {
+class Dashboard_frag : Fragment() {
 
     private lateinit var binding: FragmentDashboardFragBinding
 
@@ -39,7 +39,7 @@ class dashboard_frag : Fragment() {
 
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            dashboard_frag().apply {
+            Dashboard_frag().apply {
                 arguments = Bundle().apply {
 
                 }

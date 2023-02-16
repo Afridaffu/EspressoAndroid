@@ -22,7 +22,6 @@
                 style="@style/Base.CardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="@dimen/_10sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.473"
@@ -33,7 +32,7 @@
                     android:id="@+id/consLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/dash_bottom_radius"
+                    android:background="@drawable/generateqr_bg"
                     app:layout_constraintBottom_toBottomOf="@+id/base_cardview"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.511"
@@ -172,7 +171,7 @@
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_marginTop="@dimen/_30sdp">
 
                                 <LinearLayout
@@ -182,28 +181,10 @@
                                     android:layout_marginHorizontal="@dimen/_20sdp"
                                     android:orientation="vertical">
 
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_regular"
-                                        android:text="Terminal Name"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_11ssp"
-                                        android:textStyle="normal" />
-
-                                    <TextView
-                                        android:id="@+id/terminalNameTV"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="James Cameron"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_12ssp" />
-
                                     <View
                                         android:layout_width="match_parent"
                                         android:layout_height="@dimen/_1sdp"
-                                        android:layout_marginTop="@dimen/_8sdp"
+                                        android:layout_marginTop="@dimen/_11sdp"
                                         android:layout_marginBottom="@dimen/_15sdp"
                                         android:background="@color/primary_green" />
 
@@ -211,7 +192,33 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/opensans_regular"
-                                        android:text="Terminal ID"
+                                        android:gravity="center"
+                                        android:text="Current Employee"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_11ssp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/opensans_semibold"
+                                        android:gravity="center"
+                                        android:text="TID-13243435"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_16ssp" />
+
+                                    <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="@dimen/_1sdp"
+                                        android:layout_marginTop="@dimen/_15sdp"
+                                        android:layout_marginBottom="@dimen/_15sdp"
+                                        android:background="@color/primary_green" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/opensans_regular"
+                                        android:gravity="center"
+                                        android:text="Terminal Name"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/_11ssp" />
 
@@ -220,79 +227,29 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/opensans_semibold"
-                                        android:text="TID-13243435"
+                                        android:gravity="center"
+                                        android:text="Front Counter 1"
                                         android:textColor="@color/white"
-                                        android:textSize="@dimen/_12ssp" />
+                                        android:textSize="@dimen/_16ssp" />
 
                                     <View
                                         android:layout_width="match_parent"
                                         android:layout_height="@dimen/_1sdp"
-                                        android:layout_marginTop="@dimen/_8sdp"
-                                        android:layout_marginBottom="@dimen/_15sdp"
-                                        android:background="@color/primary_green" />
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_regular"
-                                        android:text="Location"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_11ssp" />
-
-                                    <TextView
-                                        android:id="@+id/locationTV"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="[DBA Name]"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_12ssp" />
-
-                                    <View
-                                        android:layout_width="match_parent"
-                                        android:layout_height="@dimen/_1sdp"
-                                        android:layout_marginTop="@dimen/_8sdp"
-                                        android:layout_marginBottom="@dimen/_15sdp"
-                                        android:background="@color/primary_green" />
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_regular"
-                                        android:text="Business"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_11ssp" />
-
-                                    <TextView
-                                        android:id="@+id/businessNameTV"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="[Business Name Here]"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_12ssp" />
-
-                                    <View
-                                        android:layout_width="match_parent"
-                                        android:layout_height="@dimen/_1sdp"
-                                        android:layout_marginTop="@dimen/_8sdp"
-                                        android:layout_marginBottom="@dimen/_15sdp"
+                                        android:layout_marginTop="@dimen/_15sdp"
                                         android:background="@color/primary_green" />
 
                                 </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@id/detailsLL"
-                                    android:layout_alignParentBottom="true"
+                                    android:layout_height="match_parent"
+                                    android:layout_below="@+id/detailsLL"
                                     android:layout_marginHorizontal="@dimen/_11sdp"
-                                    android:layout_marginTop="@dimen/_60sdp"
-                                    android:gravity="center"
+                                    android:layout_marginTop="@dimen/_32sdp"
                                     android:orientation="vertical">
 
                                     <LinearLayout
-                                        android:id="@+id/logoutLL"
+                                        android:id="@+id/exitLL"
                                         android:layout_width="match_parent"
                                         android:layout_height="@dimen/_44sdp"
                                         android:layout_marginTop="@dimen/_1sdp"
@@ -304,28 +261,21 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginEnd="@dimen/_5sdp"
-                                            android:src="@drawable/log_out_icon" />
+                                            android:src="@drawable/log_out_icon"
+                                            android:visibility="gone" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="Log Out"
+                                            android:text="Exit Sale Mode"
                                             android:textAlignment="center"
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/_12ssp" />
-
                                     </LinearLayout>
-
-
                                 </LinearLayout>
-
                             </RelativeLayout>
-
                         </LinearLayout>
-
-
-
                     </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -336,10 +286,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
-
-
         </LinearLayout>
-
-
     </LinearLayout>
 </layout>

@@ -19,5 +19,7 @@
     <string name="this_terminal_has_been_deactivated_and_is_no_longer_accessible">This terminal has been deactivated and is no longer accessible.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="maxlength">8</string>
+    <string name="maxlendecimal">13</string>
 
 </resources>

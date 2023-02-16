@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.ui.AppBarConfiguration
 import com.coyni.pos.app.R
 import com.coyni.pos.app.databinding.ActivityMposDashboardBinding
-import com.coyni.pos.app.fragments.dashboard_frag
+import com.coyni.pos.app.fragments.Dashboard_frag
 
 class MposDashboardActivity : AppCompatActivity() {
 
@@ -30,7 +30,7 @@ class MposDashboardActivity : AppCompatActivity() {
             if( screen == "qr"){
 //                showfrag(sale_fragment())
             }else{
-                showfrag(dashboard_frag())
+                showfrag(Dashboard_frag())
             }
 
             binding.arrowButton.setOnClickListener { view: View? ->
@@ -44,7 +44,7 @@ class MposDashboardActivity : AppCompatActivity() {
 
                 } else {
                     TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
-                    binding.consLL.setBackgroundResource(R.color.logout_bg)
+                    binding.consLL.setBackgroundResource(R.color.hidden_view_color)
                     binding.hiddenView.visibility = View.VISIBLE
                     binding.cvProfileSmall.visibility = View.GONE
                     binding.dbaNameTV.visibility = View.GONE
