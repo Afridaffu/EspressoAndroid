@@ -9,21 +9,8 @@ import android.view.WindowManager
 import com.coyni.pos.app.R
 import com.coyni.pos.app.dialog.OnDialogClickListener
 
-abstract class BaseDialog : Dialog {
-    var onDialogClickListener: OnDialogClickListener? = null
-    private var customHeight = 0.0
-    private var mContext: Context? = null
-
-    constructor(context: Context) : super(context, R.style.Theme_Dialog) {
-        this.mContext = context
-    }
-
-    constructor(context: Context, height: Double) : super(context, R.style.Theme_Dialog) {
-        this.mContext = context
-        customHeight = height
-    }
-
-    constructor(context: Context, themeResId: Int) : super(context, themeResId) {}
+abstract class BaseDialog(context: Context) : Dialog(context, R.style.Theme_Dialog) {
+    var listener: OnDialogClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +18,15 @@ abstract class BaseDialog : Dialog {
         setContentView(getLayoutId())
         initViews()
     }
+
+    open fun setOnDialogClickListener(listener: OnDialogClickListener?) {
+        this.listener = listener
+    }
+
+    open fun getOnDialogClickListener(): OnDialogClickListener? {
+        return listener
+    }
+
     private fun setDefaultProperties() {
         val window = this.window
         if (window != null) {
@@ -42,11 +38,6 @@ abstract class BaseDialog : Dialog {
             window.attributes = wlp
             window.attributes.windowAnimations = R.style.DialogAnimation
             setCanceledOnTouchOutside(true)
-            if (customHeight != 0.0) {
-                val height =
-                    (mContext!!.resources.displayMetrics.heightPixels * customHeight).toInt()
-                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, height)
-            }
         }
     }
 

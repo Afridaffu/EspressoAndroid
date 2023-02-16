@@ -3,9 +3,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/llDialog"
     android:orientation="vertical"
-    android:background="@drawable/dialog_corners"
-    android:paddingBottom="@dimen/_27sdp">
+    android:background="@drawable/dialog_corners">
 
     <View
         android:layout_width="@dimen/_43sdp"
@@ -18,7 +18,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Terminal ID or Password"
+        android:text="@string/terminal_id_or_password"
         android:textColor="@color/primary_black"
         android:layout_marginHorizontal="@dimen/_21sdp"
         android:fontFamily="@font/opensans_bold"
@@ -28,10 +28,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_11sdp"
-        android:text="Either your terminal ID or password is incorrect. Please try again or contact your supervisor for help."
+        android:text="@string/either_your_terminal_id_or_password_is_incorrect_please_try_again_or_contact_your_supervisor_for_help"
         android:textColor="@color/primary_black"
         android:layout_marginHorizontal="@dimen/_21sdp"
         android:fontFamily="@font/opensans_regular"
         android:textSize="@dimen/_12ssp"/>
+
+    <TextView
+        android:id="@+id/tvButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_43sdp"
+        android:layout_marginHorizontal="@dimen/_21sdp"
+        android:layout_marginVertical="@dimen/_27sdp"
+        android:background="@drawable/button_bg_green"
+        android:fontFamily="@font/opensans_bold"
+        android:gravity="center"
+        android:text="@string/okay"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp" />
 
 </LinearLayout>
