@@ -1,5 +1,6 @@
 package com.coyni.pos.app.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -34,31 +35,29 @@ class LoginActivity : BaseActivity() {
 
         binding.tvButton.isEnabled = false
         binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
-//        binding.tidET.requestFocus()
+
+        binding.ivBack.setOnClickListener { onBackPressed() }
 
         binding.passwordTIL.setEndIconOnClickListener {
             if (!isIconEnable) {
                 isIconEnable = true
-                binding.passwordET.setSelection(binding.passwordET.text.toString().length)
                 binding.passwordTIL.endIconDrawable =
                     AppCompatResources.getDrawable(this, R.drawable.ic_eyeopen)
                 binding.passwordET.transformationMethod =
                     HideReturnsTransformationMethod.getInstance()
             } else {
                 isIconEnable = false
-                binding.passwordET.setSelection(binding.passwordET.text.toString().length)
                 binding.passwordTIL.endIconDrawable =
                     AppCompatResources.getDrawable(this, R.drawable.ic_eyeclose)
                 binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
             }
+            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
+
         }
 
-        binding.ivBack.setOnClickListener {
-            onBackPressed()
-        }
         binding.tvButton.setOnClickListener {
-            showDialog()
-//            startActivity(Intent(applicationContext, DashboardActivity::class.java))
+//            showDialog()
+            startActivity(Intent(applicationContext, TransactionHistoryActivity::class.java))
         }
     }
 
