@@ -3,6 +3,20 @@
 
     <string name="android_text">Android</string>
     <string name="log_in">Log In</string>
+    <string name="tid">TID-</string>
+    <string name="terminal_id">Terminal ID</string>
+    <string name="error">error</string>
+    <string name="password">Password</string>
+    <string name="back">back</string>
+    <string name="mpos_logo">mpos logo</string>
+    <string name="terminal_id_or_password">Terminal ID or Password</string>
+    <string name="either_your_terminal_id_or_password_is_incorrect_please_try_again_or_contact_your_supervisor_for_help">Either your terminal ID or password is incorrect. Please try again or contact your supervisor for help.</string>
+    <string name="okay">Okay</string>
+    <string name="recent_transactions">Recent Transactions</string>
+    <string name="cyn">(CYN)</string>
+    <string name="transaction_details">Transaction Details</string>
+    <string name="terminal_deactivated">Terminal Deactivated</string>
+    <string name="this_terminal_has_been_deactivated_and_is_no_longer_accessible">This terminal has been deactivated and is no longer accessible.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="maxlength">8</string>

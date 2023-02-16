@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/et_bg_gray">
+        android:background="@color/et_bg_gray"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/SearchLL"
@@ -47,6 +48,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/batchMoneyTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_bold"
@@ -81,6 +83,7 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_38sdp"
+                        android:layout_marginHorizontal="@dimen/_1sdp"
                         android:layout_marginTop="@dimen/_21sdp"
                         android:layout_marginBottom="@dimen/_21sdp"
                         app:cardCornerRadius="@dimen/_19sdp">
@@ -169,5 +172,5 @@
         </LinearLayout>
 
 
-    </FrameLayout>
+    </LinearLayout>
 </layout>
