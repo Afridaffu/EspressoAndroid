@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.ui.AppBarConfiguration
 import com.coyni.pos.app.R
 import com.coyni.pos.app.databinding.ActivityMposDashboardBinding
+import com.coyni.pos.app.fragments.dashboard_frag
 
 class MposDashboardActivity : AppCompatActivity() {
 
@@ -29,7 +30,7 @@ class MposDashboardActivity : AppCompatActivity() {
             if( screen == "qr"){
 //                showfrag(sale_fragment())
             }else{
-//                showfrag(dashboard_frag())
+                showfrag(dashboard_frag())
             }
 
             binding.arrowButton.setOnClickListener { view: View? ->
