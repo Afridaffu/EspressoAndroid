@@ -15,7 +15,7 @@ class DiscardSaleDialog(context: Context) : BaseDialog(context) {
         dialogBinding = DiscardSaleBinding.bind(findViewById(R.id.root))
 
         dialogBinding.discardSaleLL.setOnClickListener{
-            onDialogClickListener?.onDialogClicked(Utils.DISCARD,"")
+            getOnDialogClickListener()?.onDialogClicked(Utils.DISCARD,"")
         }
         dialogBinding.continueLL.setOnClickListener{
             dismiss()

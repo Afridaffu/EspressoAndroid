@@ -12,9 +12,6 @@ import com.coyni.pos.app.dialog.OnDialogClickListener
 abstract class BaseDialog(context: Context) : Dialog(context, R.style.Theme_Dialog) {
     var listener: OnDialogClickListener? = null
 
-    fun setDialogClickListener(listener: OnDialogClickListener) {
-        onDialogClickListener = listener
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setDefaultProperties()

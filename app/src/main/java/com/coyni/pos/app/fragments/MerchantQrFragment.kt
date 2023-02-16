@@ -34,7 +34,7 @@ class MerchantQrFragment : BaseFragment() {
         binding.discardSaleLL.setOnClickListener {
             val discardSaleDialog = DiscardSaleDialog(requireContext())
             discardSaleDialog.show()
-            discardSaleDialog.setDialogClickListener(object : OnDialogClickListener {
+            discardSaleDialog.setOnDialogClickListener(object : OnDialogClickListener {
                 override fun onDialogClicked(action: String?, value: Any?) {
                     if (action == Utils.DISCARD) {
                         val intent = Intent(requireContext(), MposDashboardActivity::class.java)
