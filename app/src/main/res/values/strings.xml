@@ -2,5 +2,6 @@
     <string name="app_name">MPOS</string>
 
     <string name="android_text">Android</string>
+    <string name="log_in">Log In</string>
 
 </resources>

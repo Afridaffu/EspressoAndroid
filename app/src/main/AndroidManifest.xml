@@ -15,13 +15,16 @@
         tools:targetApi="31">
         <activity
             android:name=".view.TransactionListActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".view.MainActivity"
             android:exported="false"></activity>
         <activity
             android:name=".view.MposDashboardActivity"
+            android:usesCleartextTraffic="true"></activity>
+
+        <activity
+            android:name=".view.OnboardActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.LoginActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+
     </application>
 
 </manifest>
