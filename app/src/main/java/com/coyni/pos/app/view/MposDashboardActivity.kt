@@ -53,8 +53,7 @@ class MposDashboardActivity : AppCompatActivity() {
             }
 
             binding.logoutLL?.setOnClickListener {
-              val i = Intent(this, TransactionListActivity::class.java)
-                startActivity(i)
+                startActivity(Intent(applicationContext, OnboardActivity::class.java))
             }
 
         }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.coyni.pos.app.databinding.FragmentDashboardFragBinding
+import com.coyni.pos.app.view.TransactionListActivity
 
 class dashboard_frag : Fragment() {
 
@@ -25,22 +26,13 @@ class dashboard_frag : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.todayBatchCV?.setOnClickListener{
-//            startActivity(Intent(context, MposSuccesScreen::class.java))
-//            val intent = Intent(view.context, TransactionFailedFragment::class.java)
-//            view.context.startActivity(intent)
-//            activity?.finish()
-
-//            val transaction = fragmentManager?.beginTransaction()
-//            transaction?.replace(R.id.FirstFragment, sale_fragment())
-//            transaction?.addToBackStack(null)
-//            transaction?.commit()
-
-//        }
+        binding.todayBatchCV?.setOnClickListener{
+            startActivity(Intent(context, TransactionListActivity::class.java))
+        }
 
         binding.startSaleLL?.setOnClickListener {
-
-
+//            startActivity(Intent(context, PinActivity::class.java))
+            startActivity(Intent(context, TransactionListActivity::class.java))
         }
 
 
