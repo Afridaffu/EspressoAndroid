@@ -11,5 +11,8 @@
     <color name="error_red">#E72222</color>
     <color name="light_gray">#C5C5C5</color>
     <color name="primary_green">#00A6A2</color>
+    <color name="primary_black">#151515</color>
+    <color name="inactive_green">#B5E2E0</color>
+    <color name="dark_gray">#767676</color>
     <color name="loader_color">#0F6764</color>
 </resources>

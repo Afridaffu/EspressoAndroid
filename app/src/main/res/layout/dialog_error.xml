@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_corners"
+    android:paddingBottom="@dimen/_27sdp">
+
+    <View
+        android:layout_width="@dimen/_43sdp"
+        android:layout_height="@dimen/_2sdp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_13sdp"
+        android:layout_marginBottom="@dimen/_21sdp"
+        android:background="@drawable/dialog_view" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Terminal ID or Password"
+        android:textColor="@color/primary_black"
+        android:layout_marginHorizontal="@dimen/_21sdp"
+        android:fontFamily="@font/opensans_bold"
+        android:textSize="@dimen/_16ssp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:text="Either your terminal ID or password is incorrect. Please try again or contact your supervisor for help."
+        android:textColor="@color/primary_black"
+        android:layout_marginHorizontal="@dimen/_21sdp"
+        android:fontFamily="@font/opensans_regular"
+        android:textSize="@dimen/_12ssp"/>
+
+</LinearLayout>
