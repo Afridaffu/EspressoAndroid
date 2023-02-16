@@ -17,5 +17,7 @@
     <string name="transaction_details">Transaction Details</string>
     <string name="terminal_deactivated">Terminal Deactivated</string>
     <string name="this_terminal_has_been_deactivated_and_is_no_longer_accessible">This terminal has been deactivated and is no longer accessible.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

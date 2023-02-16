@@ -17,6 +17,14 @@
     <color name="loader_color">#0F6764</color>
     <color name="light_blue">#d8e2f0</color>
     <color name="true_green">#008a05</color>
-    <color name="layout_bg">#F2F4F5</color>
+
+    <color name="et_bg_gray">#f2f4f5</color>
+    <color name="button_bg">#e4eaf2</color>
+    <color name="logout_bg">#166567</color>
+    <color name="mpos_bg">#008682</color>
+    <color name="blue_light">#d8e2f0</color>
+    <color name="viewcolor">#e8e8e8</color>
+    <color name="slidebtn_bg">#DFF4F3</color>
+    <color name="bg_view_color">#f2f4f5</color>
 
 </resources>

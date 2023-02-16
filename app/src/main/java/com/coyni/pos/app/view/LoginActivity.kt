@@ -57,7 +57,7 @@ class LoginActivity : BaseActivity() {
 
         binding.tvButton.setOnClickListener {
 //            showDialog()
-            startActivity(Intent(applicationContext, TransactionHistoryActivity::class.java))
+            startActivity(Intent(applicationContext, MposDashboardActivity::class.java))
         }
     }
 
