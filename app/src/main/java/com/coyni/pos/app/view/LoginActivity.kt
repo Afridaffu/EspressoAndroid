@@ -1,5 +1,6 @@
 package com.coyni.pos.app.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -57,8 +58,8 @@ class LoginActivity : BaseActivity() {
             onBackPressed()
         }
         binding.tvButton.setOnClickListener {
-            showDialog()
-//            startActivity(Intent(applicationContext, DashboardActivity::class.java))
+//            showDialog()
+            startActivity(Intent(applicationContext, MposDashboardActivity::class.java))
         }
     }
 
