@@ -13,8 +13,6 @@ class dashboard_frag : Fragment() {
 
     private lateinit var binding: FragmentDashboardFragBinding
 
-    interface fragment
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,7 +30,6 @@ class dashboard_frag : Fragment() {
 
         binding.startSaleLL?.setOnClickListener {
 //            startActivity(Intent(context, PinActivity::class.java))
-            startActivity(Intent(context, TransactionListActivity::class.java))
         }
 
 

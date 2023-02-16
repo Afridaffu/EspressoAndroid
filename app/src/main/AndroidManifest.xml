@@ -14,15 +14,18 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".view.TransactionDetailsActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".view.TransactionListActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".view.MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".view.MposDashboardActivity"
-            android:usesCleartextTraffic="true"></activity>
-
+            android:usesCleartextTraffic="true" />
         <activity
             android:name=".view.OnboardActivity"
             android:exported="true">
@@ -36,7 +39,6 @@
             android:name=".view.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
-
     </application>
 
 </manifest>
