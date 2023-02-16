@@ -67,7 +67,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_56sdp"
-                            android:background="@color/logout_bg"
+                            android:background="@color/hidden_view_color"
                             android:foregroundGravity="center_horizontal"
                             android:padding="@dimen/_4sdp"
                             android:src="@drawable/ic_x"

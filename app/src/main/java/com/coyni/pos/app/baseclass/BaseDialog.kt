@@ -25,6 +25,9 @@ abstract class BaseDialog : Dialog {
 
     constructor(context: Context, themeResId: Int) : super(context, themeResId) {}
 
+    fun setDialogClickListener(listener: OnDialogClickListener) {
+        onDialogClickListener = listener
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setDefaultProperties()

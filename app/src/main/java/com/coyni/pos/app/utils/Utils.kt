@@ -207,7 +207,9 @@ class Utils {
         const val payCogentEnable = "token account.payment methods.cogent account"
         const val paySignetEnable = "token account.payment methods.signet account"
         const val allControlsEnable = "token account.all controls"
-
+        const val MERCHANT_QR = "merchant qr"
+        const val GENERATE_QR = "generate qr"
+        const val DISCARD = "discard"
 
         lateinit var errorState: Array<IntArray>
         lateinit var state: Array<IntArray>
