@@ -1,30 +1,57 @@
 package com.coyni.pos.app.view
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import com.coyni.pos.app.R
+import android.view.View
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.coyni.pos.app.adapter.RecentTransactionsListAdapter
 import com.coyni.pos.app.baseclass.BaseActivity
-import com.coyni.pos.app.databinding.ActivityTransactionListBinding
-import com.coyni.pos.app.fragments.TransactionList_filter_frag
+import com.coyni.pos.app.baseclass.OnItemClickListener
+import com.coyni.pos.app.databinding.ActivityTransactionHistoryBinding
 
 class TransactionListActivity : BaseActivity() {
 
-    private lateinit var binding : ActivityTransactionListBinding
+    private lateinit var binding: ActivityTransactionHistoryBinding
+    private var adapter: RecentTransactionsListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_transaction_list)
-        initFields()
+
+        binding = ActivityTransactionHistoryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        initView()
+
     }
 
-    private fun initFields(){
-        showfrag(TransactionList_filter_frag())
-    }
-    private fun showfrag(fragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.transactionlistFrameFL, fragment)
-        transaction.commit()
+    private fun initView() {
+
+        binding.ivBack.setOnClickListener { onBackPressed(); }
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.itemAnimator = DefaultItemAnimator()
+        adapter = RecentTransactionsListAdapter(applicationContext)
+        binding.recyclerView.adapter = adapter
+
+        adapter?.setOnItemClickListener(object : OnItemClickListener {
+
+            override fun onItemClick(position: Int?, value: Any?) {
+
+                startActivity(Intent(applicationContext, TerminalDeactivatedActivity::class.java))
+
+            }
+        })
+
+        binding.recentTV.setOnClickListener {
+            binding.llRecentTxn.visibility = View.GONE
+            binding.SearchLL.visibility = View.VISIBLE
+
+            binding.listRecyclerRV.layoutManager = LinearLayoutManager(this)
+            binding.listRecyclerRV.itemAnimator = DefaultItemAnimator()
+            adapter = RecentTransactionsListAdapter(applicationContext)
+            binding.listRecyclerRV.adapter = adapter
+
+        }
     }
 }
