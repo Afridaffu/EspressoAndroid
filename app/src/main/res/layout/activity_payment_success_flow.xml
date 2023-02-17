@@ -37,7 +37,6 @@
                 android:layout_marginStart="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_45sdp"
                 android:padding="@dimen/_5sdp"
-                android:src="@drawable/ic_x"
                 android:visibility="gone" />
 
             <com.airbnb.lottie.LottieAnimationView

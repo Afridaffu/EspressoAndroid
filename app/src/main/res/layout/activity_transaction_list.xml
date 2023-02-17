@@ -28,7 +28,7 @@
                     android:layout_marginStart="@dimen/_13sdp"
                     android:layout_marginTop="@dimen/_43sdp"
                     android:padding="@dimen/_8sdp"
-                    android:src="@drawable/ic_left_white_chevron" />
+                    android:src="@drawable/ic_back" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

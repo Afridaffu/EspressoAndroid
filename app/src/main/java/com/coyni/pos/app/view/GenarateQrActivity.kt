@@ -69,14 +69,14 @@ class GenarateQrActivity : BaseActivity() {
                 binding.hiddenView.visibility = View.GONE
                 binding.cvProfileSmall.visibility = View.VISIBLE
                 binding.dbaNameTV.visibility = View.VISIBLE
-                binding.arrowButton.setImageResource(R.drawable.ic_x)
+                binding.arrowButton.setImageResource(R.drawable.ic_cross)
             } else {
                 TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
                 binding.consLL.setBackgroundResource(R.color.hidden_view_color)
                 binding.hiddenView.visibility = View.VISIBLE
                 binding.cvProfileSmall.visibility = View.GONE
                 binding.dbaNameTV.visibility = View.GONE
-                binding.arrowButton.setImageResource(R.drawable.ic_x_white)
+                binding.arrowButton.setImageResource(R.drawable.ic_back)
             }
         }
     }
@@ -89,14 +89,14 @@ class GenarateQrActivity : BaseActivity() {
                 binding.hiddenView.visibility = View.GONE
                 binding.cvProfileSmall.visibility = View.VISIBLE
                 binding.dbaNameTV.visibility = View.VISIBLE
-                binding.arrowButton.setImageResource(R.drawable.ic_x)
+                binding.arrowButton.setImageResource(R.drawable.ic_cross)
             } else {
                 TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
                 binding.consLL.setBackgroundResource(R.color.hidden_view_color)
                 binding.hiddenView.visibility = View.VISIBLE
                 binding.cvProfileSmall.visibility = View.GONE
                 binding.dbaNameTV.visibility = View.GONE
-                binding.arrowButton.setImageResource(R.drawable.ic_x_white)
+                binding.arrowButton.setImageResource(R.drawable.ic_back)
             }
         }
     }
