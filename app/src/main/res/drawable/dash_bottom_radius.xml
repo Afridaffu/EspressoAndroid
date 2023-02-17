@@ -6,9 +6,9 @@
             <corners android:bottomLeftRadius="@dimen/_10sdp"
                 android:bottomRightRadius="@dimen/_10sdp"/>
             <gradient
-                android:centerColor="@color/logout_bg"
-                android:endColor="@color/logout_bg"
-                android:startColor="@color/logout_bg" />
+                android:centerColor="@color/primary_dark_green"
+                android:endColor="@color/primary_dark_green"
+                android:startColor="@color/primary_dark_green" />
         </shape>
     </item>
 

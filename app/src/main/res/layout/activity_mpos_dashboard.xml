@@ -68,7 +68,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_56sdp"
-                            android:background="@color/hidden_view_color"
+                            android:background="@color/primary_dark_green"
                             android:foregroundGravity="center_horizontal"
                             android:padding="@dimen/_4sdp"
                             android:src="@drawable/ic_cross"
@@ -160,6 +160,8 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="gone"
+                        android:layout_marginTop="@dimen/_110sdp"
+                        android:background="@color/primary_dark_green"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -172,8 +174,7 @@
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_30sdp">
+                                android:layout_height="wrap_content">
 
                                 <LinearLayout
                                     android:id="@+id/detailsLL"
