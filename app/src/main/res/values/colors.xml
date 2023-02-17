@@ -30,5 +30,6 @@
     <color name="hidden_view_color">#008581</color>
     <color name="slidebtn_bg">#DFF4F3</color>
     <color name="bg_view_color">#f2f4f5</color>
+    <color name="primary_dark_green">#008682</color>
 
 </resources>

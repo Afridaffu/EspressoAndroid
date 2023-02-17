@@ -1,5 +1,6 @@
 package com.coyni.pos.app.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -24,8 +25,12 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     private fun inItFields() {
         pinViewModel = PinViewModel.getInstance(this)!!
 
+        binding.qrNavigationTV.setOnClickListener {
+            startActivity(Intent(applicationContext, GenarateQrActivity::class.java))
+        }
+
         binding.imgBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
         binding.keyZeroTV.setOnClickListener(this)
         binding.keyOneTV.setOnClickListener(this)

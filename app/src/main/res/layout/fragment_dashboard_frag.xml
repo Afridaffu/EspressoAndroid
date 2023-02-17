@@ -77,9 +77,9 @@
                             android:layout_width="@dimen/_150sdp"
                             android:layout_height="@dimen/_150sdp"
                             android:layout_marginTop="@dimen/_27sdp"
-                            android:background="@drawable/image_background"
+                            android:background="@drawable/image_bg"
                             android:padding="@dimen/_25sdp"
-                            android:src="@drawable/register_icon" />
+                            android:src="@drawable/register_img" />
 
                         <TextView
                             android:layout_width="match_parent"

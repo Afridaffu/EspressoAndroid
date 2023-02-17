@@ -6,9 +6,9 @@
             <corners android:bottomLeftRadius="@dimen/_10sdp"
                 android:bottomRightRadius="@dimen/_10sdp"/>
             <gradient
-                android:centerColor="@color/hidden_view_color"
-                android:endColor="@color/hidden_view_color"
-                android:startColor="@color/hidden_view_color" />
+                android:centerColor="@color/primary_dark_green"
+                android:endColor="@color/primary_dark_green"
+                android:startColor="@color/primary_dark_green" />
         </shape>
     </item>
 

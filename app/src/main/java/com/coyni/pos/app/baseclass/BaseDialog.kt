@@ -9,15 +9,21 @@ import android.view.WindowManager
 import com.coyni.pos.app.R
 import com.coyni.pos.app.dialog.OnDialogClickListener
 
-abstract class BaseDialog(context: Context) : Dialog(context, R.style.Theme_Dialog) {
+abstract class BaseDialog : Dialog {
     var listener: OnDialogClickListener? = null
+    private var customHeight = 0.0
+    private var mContext: Context? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setDefaultProperties()
-        setContentView(getLayoutId())
-        initViews()
+    constructor(context: Context) : super(context, R.style.Theme_Dialog) {
+        this.mContext = context
     }
+
+    constructor(context: Context, height: Double) : super(context, R.style.Theme_Dialog) {
+        this.mContext = context
+        customHeight = height
+    }
+
+    constructor(context: Context, themeResId: Int) : super(context, themeResId) {}
 
     open fun setOnDialogClickListener(listener: OnDialogClickListener?) {
         this.listener = listener
@@ -25,6 +31,13 @@ abstract class BaseDialog(context: Context) : Dialog(context, R.style.Theme_Dial
 
     open fun getOnDialogClickListener(): OnDialogClickListener? {
         return listener
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setDefaultProperties()
+        setContentView(getLayoutId())
+        initViews()
     }
 
     private fun setDefaultProperties() {
@@ -38,6 +51,11 @@ abstract class BaseDialog(context: Context) : Dialog(context, R.style.Theme_Dial
             window.attributes = wlp
             window.attributes.windowAnimations = R.style.DialogAnimation
             setCanceledOnTouchOutside(true)
+            if (customHeight != 0.0) {
+                val height =
+                    (mContext!!.resources.displayMetrics.heightPixels * customHeight).toInt()
+                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, height)
+            }
         }
     }
 
