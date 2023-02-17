@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.coyni.pos.app.databinding.FragmentDashboardFragBinding
+import com.coyni.pos.app.view.PinActivity
 import com.coyni.pos.app.view.TransactionListActivity
 
 class Dashboard_frag : Fragment() {
@@ -25,11 +26,12 @@ class Dashboard_frag : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.todayBatchCV?.setOnClickListener{
+//            startActivity(Intent(context, PinActivity::class.java))
             startActivity(Intent(context, TransactionListActivity::class.java))
         }
 
         binding.startSaleLL?.setOnClickListener {
-//            startActivity(Intent(context, PinActivity::class.java))
+            startActivity(Intent(context, PinActivity::class.java))
         }
 
 

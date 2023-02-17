@@ -26,10 +26,33 @@
             android:exported="false" />
 
         <activity
+            android:name=".view.TransactionDetailsActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".view.MposDashboardActivity"
             android:usesCleartextTraffic="true" />
+
+        <activity
+            android:name=".view.LoginActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".view.TerminalDeactivatedActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.MainActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".view.PinActivity"
+            android:exported="true" />
         <activity
             android:name=".view.GenarateQrActivity"
+            android:exported="true"></activity>
+
+        <activity
+            android:name=".view.OnboardActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,33 +60,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.PinActivity"
-            android:exported="true"/>
-        <activity
-            android:name=".view.OnboardActivity"
-            android:exported="true">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-        <activity
-            android:name=".view.LoginActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".view.TransactionHistoryActivity"
-            android:exported="true" />
-        <activity
-            android:name=".view.TerminalDeactivatedActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.MainActivity"
-            android:exported="true" />
     </application>
 
 </manifest>
