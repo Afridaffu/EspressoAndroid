@@ -9,6 +9,8 @@ import com.coyni.pos.app.adapter.RecentTransactionsListAdapter
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.baseclass.OnItemClickListener
 import com.coyni.pos.app.databinding.ActivityTransactionHistoryBinding
+import com.coyni.pos.app.dialog.ErrorDialog
+import com.coyni.pos.app.dialog.TransactionFilterDialog
 
 class TransactionListActivity : BaseActivity() {
 
@@ -56,6 +58,13 @@ class TransactionListActivity : BaseActivity() {
 
                 }
             })
+
+        }
+
+        binding.ivFilterIcon.setOnClickListener {
+
+            val filterDialog = TransactionFilterDialog(this@TransactionListActivity)
+            filterDialog.show()
 
         }
     }
