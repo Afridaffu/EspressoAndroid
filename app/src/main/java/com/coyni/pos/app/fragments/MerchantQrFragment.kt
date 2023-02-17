@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.MerchantQrBinding
 import com.coyni.pos.app.dialog.DiscardSaleDialog
 import com.coyni.pos.app.dialog.OnDialogClickListener
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.view.MposDashboardActivity
+import com.coyni.pos.app.view.SucessFlowActivity
 
 class MerchantQrFragment : BaseFragment() {
     lateinit var binding: MerchantQrBinding
@@ -42,6 +42,10 @@ class MerchantQrFragment : BaseFragment() {
                     }
                 }
             })
+        }
+
+        binding.amountTV.setOnClickListener {
+            startActivity(Intent(context, SucessFlowActivity::class.java))
         }
     }
 }

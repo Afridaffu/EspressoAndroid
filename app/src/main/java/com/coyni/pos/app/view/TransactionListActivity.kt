@@ -34,14 +34,6 @@ class TransactionListActivity : BaseActivity() {
         adapter = RecentTransactionsListAdapter(applicationContext)
         binding.recyclerView.adapter = adapter
 
-        adapter?.setOnItemClickListener(object : OnItemClickListener {
-
-            override fun onItemClick(position: Int?, value: Any?) {
-
-                startActivity(Intent(applicationContext, TerminalDeactivatedActivity::class.java))
-
-            }
-        })
 
         binding.recentTV.setOnClickListener {
             binding.llRecentTxn.visibility = View.GONE
@@ -49,8 +41,21 @@ class TransactionListActivity : BaseActivity() {
 
             binding.listRecyclerRV.layoutManager = LinearLayoutManager(this)
             binding.listRecyclerRV.itemAnimator = DefaultItemAnimator()
-            adapter = RecentTransactionsListAdapter(applicationContext)
             binding.listRecyclerRV.adapter = adapter
+
+            adapter?.setOnItemClickListener(object : OnItemClickListener {
+
+                override fun onItemClick(position: Int?, value: Any?) {
+
+                    startActivity(
+                        Intent(
+                            applicationContext,
+                            TransactionDetailsActivity::class.java
+                        )
+                    )
+
+                }
+            })
 
         }
     }
