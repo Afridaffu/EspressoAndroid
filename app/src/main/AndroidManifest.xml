@@ -17,9 +17,6 @@
         <activity
             android:name=".baseclass.BaseActivity"
             android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
         </activity>
         <activity
             android:name=".view.TransactionListActivity"
