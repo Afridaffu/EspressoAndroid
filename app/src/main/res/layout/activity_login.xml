@@ -7,17 +7,6 @@
     android:background="@color/white"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
-    <ImageView
-        android:id="@+id/ivBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_40sdp"
-        android:contentDescription="@string/back"
-        android:padding="@dimen/_5sdp"
-        android:src="@drawable/ic_cross" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -227,5 +216,17 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:contentDescription="@string/back"
+        android:padding="@dimen/_5sdp"
+        android:src="@drawable/ic_cross" />
+
 
 </RelativeLayout>
