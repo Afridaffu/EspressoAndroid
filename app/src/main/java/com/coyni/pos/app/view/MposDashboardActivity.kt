@@ -53,7 +53,7 @@ class MposDashboardActivity : AppCompatActivity() {
                 }
             }
 
-            binding.logoutLL?.setOnClickListener {
+            binding.logoutLL.setOnClickListener {
                 startActivity(Intent(applicationContext, OnboardActivity::class.java))
             }
 

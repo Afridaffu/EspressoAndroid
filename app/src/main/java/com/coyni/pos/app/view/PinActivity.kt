@@ -8,19 +8,27 @@ import android.view.animation.AnimationUtils
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityPinBinding
+import com.coyni.pos.app.model.pin.ValidateRequest
+import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.PinViewModel
 
 class PinActivity : BaseActivity(), View.OnClickListener {
     lateinit var binding: ActivityPinBinding
     var passcode: String = ""
     lateinit var pinViewModel: PinViewModel
+    lateinit var action: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(R.anim.slide_up, 0)
         binding = ActivityPinBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
+        action = intent.getStringExtra(Utils.ACTION_TYPE).toString()
+
         inItFields()
+        inItObservers()
     }
+
 
     private fun inItFields() {
         pinViewModel = PinViewModel.getInstance(this)!!
@@ -47,9 +55,37 @@ class PinActivity : BaseActivity(), View.OnClickListener {
         binding.imgBack.setOnClickListener(this)
     }
 
+
     override fun onBackPressed() {
         super.onBackPressed()
         overridePendingTransition(0, R.anim.slide_bottom)
+    }
+
+    private fun inItObservers() {
+        pinViewModel.validatePinResponse.observe(this) { ValidateResponse ->
+            try {
+                if (ValidateResponse!!.data != null) {
+                    if (ValidateResponse.status == Utils.SUCCESS) {
+                        Handler().postDelayed({
+                            val `in` = Intent()
+                            `in`.putExtra(Utils.ACTION_TYPE, action)
+                            `in`.putExtra(
+                                Utils.TRANSACTION_TOKEN, ValidateResponse.data?.requestToken
+                            )
+                            sendSuccessResult(`in`)
+                        }, 200)
+                    } else {
+                        setErrorPIN()
+                    }
+                } else {
+//                    setErrorPIN()
+                    val intent = Intent(this, GenarateQrActivity::class.java)
+                    startActivity(intent)
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
     }
 
     override fun onClick(v: View?) {
@@ -132,9 +168,19 @@ class PinActivity : BaseActivity(), View.OnClickListener {
                 1 -> binding.chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_white)
                 2 -> binding.chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_white)
                 3 -> binding.chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_white)
-                4 -> binding.chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_white)
+                4 -> {
+                    binding.chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_white)
+                    checkAndProceed()
+                }
             }
         }
+    }
+
+    private fun checkAndProceed() {
+        val request = ValidateRequest()
+        request.pin = passcode
+        request.actionType = action
+        pinViewModel.validateCoyniPin(request)
     }
 
     private fun clearPasscodes() {
@@ -175,5 +221,13 @@ class PinActivity : BaseActivity(), View.OnClickListener {
         binding.circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle)
         binding.circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle)
         binding.circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle)
+        clearPasscodes()
+    }
+
+    fun sendSuccessResult(intent: Intent) {
+        setResult(RESULT_OK, intent)
+        finish()
     }
 }
+
+

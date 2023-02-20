@@ -5,11 +5,10 @@ import com.coyni.pos.app.model.login.BiometricSignIn
 import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.model.pin.PinRegisterResponse
 import com.coyni.pos.app.model.pin.RegisterPinRequest
+import com.coyni.pos.app.model.pin.ValidateRequest
+import com.coyni.pos.app.model.pin.ValidateResponse
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiService {
 
@@ -21,4 +20,7 @@ interface ApiService {
 
     @POST("api/v2/coyni-pin/register")
     fun coyniPinRegister(@Body request: RegisterPinRequest?): Call<PinRegisterResponse?>?
+
+    @PATCH("api/v2/coyni-pin/validate")
+    fun validateCoyniPin(@Body request: ValidateRequest?): Call<ValidateResponse?>?
 }
