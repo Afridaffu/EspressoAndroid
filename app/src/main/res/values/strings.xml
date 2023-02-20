@@ -12,6 +12,7 @@
     <string name="terminal_id_or_password">Terminal ID or Password</string>
     <string name="either_your_terminal_id_or_password_is_incorrect_please_try_again_or_contact_your_supervisor_for_help">Either your terminal ID or password is incorrect. Please try again or contact your supervisor for help.</string>
     <string name="okay">Okay</string>
+    <string name="try_again">Try Again</string>
     <string name="recent_transactions">Recent Transactions</string>
     <string name="cyn">(CYN)</string>
     <string name="transaction_details">Transaction Details</string>

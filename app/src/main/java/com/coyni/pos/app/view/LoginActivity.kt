@@ -7,9 +7,12 @@ import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import androidx.appcompat.content.res.AppCompatResources
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
+import com.coyni.pos.app.baseclass.OnClickListener
 import com.coyni.pos.app.databinding.ActivityLoginBinding
 import com.coyni.pos.app.dialog.ErrorDialog
 import com.coyni.pos.app.utils.Utils
@@ -23,6 +26,11 @@ class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+        )
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -31,12 +39,22 @@ class LoginActivity : BaseActivity() {
         textWatchers()
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.tidET.requestFocus()
+        Utils.shwForcedKeypad(this@LoginActivity)
+    }
+
     private fun initView() {
 
         binding.tvButton.isEnabled = false
         binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
 
-        binding.ivBack.setOnClickListener { onBackPressed() }
+        binding.ivBack.setOnClickListener {
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(this@LoginActivity)
+            onBackPressed()
+        }
 
         binding.passwordTIL.setEndIconOnClickListener {
             if (!isIconEnable) {
@@ -55,9 +73,24 @@ class LoginActivity : BaseActivity() {
 
         }
 
+        TerminalDeactivatedActivity.setOnClickListener(object :
+            OnClickListener {
+            override fun onButtonClick(click: Boolean) {
+//                if (click)
+                onBackPressed()
+            }
+        })
+
         binding.tvButton.setOnClickListener {
-//            showDialog()
-            startActivity(Intent(applicationContext, MposDashboardActivity::class.java))
+
+            if (Utils.isKeyboardVisible) Utils.hideKeypad(this@LoginActivity)
+            showTerminalScreen()
+//            startActivity(
+//                Intent(applicationContext, MposDashboardActivity::class.java)
+//                    .setFlags(
+//                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                    )
+//            )
         }
     }
 
@@ -166,6 +199,22 @@ class LoginActivity : BaseActivity() {
             binding.tvButton.background =
                 AppCompatResources.getDrawable(this@LoginActivity, R.drawable.button_bg_inactive)
         }
+    }
+
+    private fun showTerminalScreen() {
+
+        startActivity(
+            Intent(
+                this@LoginActivity,
+                TerminalDeactivatedActivity::class.java
+            )
+                .putExtra(Utils.SCREEN, Utils.LOGIN)
+                .putExtra(Utils.HEADER, getString(R.string.terminal_deactivated))
+                .putExtra(
+                    Utils.DESCRIPTION,
+                    getString(R.string.this_terminal_has_been_deactivated_and_is_no_longer_accessible)
+                )
+        )
     }
 
     private fun showDialog() {
