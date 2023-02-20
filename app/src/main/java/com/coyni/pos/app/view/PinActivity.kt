@@ -69,7 +69,8 @@ class PinActivity : BaseActivity(), View.OnClickListener {
                         Handler().postDelayed({
                             val `in` = Intent()
                             `in`.putExtra(Utils.ACTION_TYPE, action)
-                            `in`.putExtra(Utils.TRANSACTION_TOKEN, ValidateResponse.data?.requestToken
+                            `in`.putExtra(
+                                Utils.TRANSACTION_TOKEN, ValidateResponse.data?.requestToken
                             )
                             sendSuccessResult(`in`)
                         }, 200)
@@ -77,7 +78,9 @@ class PinActivity : BaseActivity(), View.OnClickListener {
                         setErrorPIN()
                     }
                 } else {
-                    setErrorPIN()
+//                    setErrorPIN()
+                    val intent = Intent(this, GenarateQrActivity::class.java)
+                    startActivity(intent)
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()

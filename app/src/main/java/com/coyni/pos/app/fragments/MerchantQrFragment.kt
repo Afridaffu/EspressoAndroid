@@ -89,9 +89,9 @@ class MerchantQrFragment : BaseFragment() {
             })
         }
 
-        binding.amountTV.setOnClickListener {
-            startActivity(Intent(context, SucessFlowActivity::class.java))
-        }
+//        binding.amountTV.setOnClickListener {
+//            startActivity(Intent(context, SucessFlowActivity::class.java))
+//        }
     }
 
     private fun generateQRCode(wallet: String?) {

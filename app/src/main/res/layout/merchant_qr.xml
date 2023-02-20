@@ -26,8 +26,10 @@
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
+                    android:id="@+id/qrLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="invisible"
                     android:orientation="vertical">
 
                     <TextView
@@ -87,7 +89,7 @@
                     android:id="@+id/animationRL"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center_horizontal"
+                    android:gravity="center"
                     android:padding="@dimen/_60sdp"
                     android:visibility="visible">
 
@@ -96,7 +98,6 @@
                         android:layout_width="@dimen/_90sdp"
                         android:layout_height="@dimen/_90sdp"
                         android:layout_marginStart="@dimen/_30sdp"
-                        android:layout_marginBottom="@dimen/_40sdp"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
                         app:lottie_rawRes="@raw/stepper_loader" />
