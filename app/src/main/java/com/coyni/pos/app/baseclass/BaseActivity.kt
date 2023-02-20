@@ -11,14 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.coyni.pos.app.R
 import com.coyni.pos.app.utils.LogUtils.Companion.d
-import com.coyni.pos.app.utils.MyApplication
 import com.vt.kotlinexamples.retrofit_network.viewmodel.CommonViewModel
 import com.vt.kotlinexamples.retrofit_network.viewmodel.CommonViewModel.Companion.getInstance
 
 abstract class BaseActivity : AppCompatActivity() {
     val TAG = javaClass.name
     private var dialog: Dialog? = null
-    private var myApplication: MyApplication? = null
     var commonViewModel: CommonViewModel? = null
     var isBaseBiometric = false
     var isAccess = false
@@ -27,7 +25,6 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         try {
             d(TAG, javaClass.name)
-            myApplication = applicationContext as MyApplication
             commonViewModel = getInstance(this)
 
 //            runOnUiThread(() -> {
