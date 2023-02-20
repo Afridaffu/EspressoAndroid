@@ -213,7 +213,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:layout_marginStart="@dimen/_9sdp"
-                                    android:src="@drawable/ic_search_icon" />
+                                    android:src="@drawable/search_icon" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -254,7 +254,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:paddingEnd="@dimen/_14sdp"
-                                        android:src="@drawable/ic_filtericon" />
+                                        android:src="@drawable/ic_filter_icon" />
                                 </LinearLayout>
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>

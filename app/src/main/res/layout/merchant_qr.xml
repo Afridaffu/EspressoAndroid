@@ -43,7 +43,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_11sdp"
                         android:layout_marginBottom="@dimen/_11sdp"
                         android:gravity="center"
                         android:orientation="horizontal">
@@ -83,6 +83,38 @@
                             android:padding="@dimen/_3sdp" />
                     </RelativeLayout>
                 </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/animationRL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:padding="@dimen/_60sdp"
+                    android:visibility="visible">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottieAnimV"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_90sdp"
+                        android:layout_marginStart="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_40sdp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/stepper_loader" />
+
+                    <TextView
+                        android:id="@+id/waitingText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lottieAnimV"
+                        android:layout_marginBottom="@dimen/_50sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:gravity="clip_horizontal"
+                        android:text="Waiting on customer..."
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp"
+                        android:visibility="invisible" />
+                </RelativeLayout>
+
             </androidx.cardview.widget.CardView>
         </RelativeLayout>
     </ScrollView>

@@ -4,13 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Point
+import android.opengl.Visibility
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.MerchantQrBinding
 import com.coyni.pos.app.dialog.DiscardSaleDialog
@@ -18,6 +23,7 @@ import com.coyni.pos.app.dialog.OnDialogClickListener
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.view.MposDashboardActivity
 import org.json.JSONObject
+import com.coyni.pos.app.view.SucessFlowActivity
 
 class MerchantQrFragment : BaseFragment() {
     lateinit var binding: MerchantQrBinding
@@ -27,6 +33,7 @@ class MerchantQrFragment : BaseFragment() {
     private lateinit var strWallet: String
     lateinit var bitmap: Bitmap
     lateinit var qrgEncoder: QRGEncoder
+    var rotate: Animation? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +55,27 @@ class MerchantQrFragment : BaseFragment() {
         jsonObject.put("referenceID", strWallet)
         generateQRCode(jsonObject.toString())
 
+
+//        binding.lottieAnimV.loop(false)
+
+        Handler().postDelayed({
+            rotate = AnimationUtils.loadAnimation(context, R.anim.rotate)
+            binding.lottieAnimV.startAnimation(rotate)
+
+            binding.qrLL.visibility = View.VISIBLE
+            binding.animationRL.visibility = View.GONE
+
+            Handler().postDelayed({
+                rotate = AnimationUtils.loadAnimation(context, R.anim.rotate)
+                binding.lottieAnimV.startAnimation(rotate)
+                binding.qrLL.visibility = View.GONE
+                binding.animationRL.visibility = View.VISIBLE
+                binding.waitingText.visibility = View.VISIBLE
+
+            }, 3000)
+        }, 3000)
+
+
         binding.discardSaleLL.setOnClickListener {
             val discardSaleDialog = DiscardSaleDialog(requireContext())
             discardSaleDialog.show()
@@ -59,6 +87,10 @@ class MerchantQrFragment : BaseFragment() {
                     }
                 }
             })
+        }
+
+        binding.amountTV.setOnClickListener {
+            startActivity(Intent(context, SucessFlowActivity::class.java))
         }
     }
 

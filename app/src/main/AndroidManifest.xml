@@ -22,6 +22,8 @@
 
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
+            android:name=".view.SucessFlowActivity"
+            android:exported="false">
         </activity>
         <activity
             android:name=".baseclass.BaseActivity"
@@ -29,11 +31,9 @@
         <activity
             android:name=".view.TransactionListActivity"
             android:exported="false" />
-
         <activity
             android:name=".view.TransactionDetailsActivity"
             android:exported="false" />
-
         <activity
             android:name=".view.MposDashboardActivity"
             android:usesCleartextTraffic="true" />
