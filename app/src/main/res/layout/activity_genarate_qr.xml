@@ -26,6 +26,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.473"
                 app:layout_constraintStart_toStartOf="parent"
+                app:cardElevation="0sp"
+                app:cardMaxElevation="0sp"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -54,7 +56,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="fitEnd"
-                            android:src="@drawable/top_dashboard_bgimg"
+                            android:src="@drawable/top_dashboard_bg_image"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintLeft_toLeftOf="parent"
@@ -70,7 +72,7 @@
                             android:background="@color/hidden_view_color"
                             android:foregroundGravity="center_horizontal"
                             android:padding="@dimen/_4sdp"
-                            android:src="@drawable/ic_x"
+                            android:src="@drawable/ic_cross"
                             app:layout_constraintBottom_toBottomOf="@+id/fixed_layout"
                             app:layout_constraintEnd_toEndOf="@+id/fixed_layout"
                             app:layout_constraintHorizontal_bias="0.062"
@@ -108,7 +110,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="fitXY"
-                                    android:src="@drawable/ic_dba"
+                                    android:src="@drawable/dba_img"
                                     android:visibility="visible" />
 
                                 <TextView
@@ -253,7 +255,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="@dimen/_44sdp"
                                         android:layout_marginTop="@dimen/_1sdp"
-                                        android:background="@drawable/white_border"
+                                        android:background="@drawable/white_stroke"
                                         android:gravity="center"
                                         android:orientation="horizontal">
 
@@ -261,7 +263,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginEnd="@dimen/_5sdp"
-                                            android:src="@drawable/log_out_icon"
+                                            android:src="@drawable/logout_icon"
                                             android:visibility="gone" />
 
                                         <TextView

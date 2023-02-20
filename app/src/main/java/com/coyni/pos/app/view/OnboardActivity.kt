@@ -36,9 +36,10 @@ class OnboardActivity : BaseActivity() {
         }
 
         binding.tvButton.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - lastClickTime < 2000) return@setOnClickListener
+            if (SystemClock.elapsedRealtime() - lastClickTime < 2000)
+                return@setOnClickListener
             lastClickTime = SystemClock.elapsedRealtime()
-            val intent = Intent(applicationContext, LoginActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
     }

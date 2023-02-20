@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/saleDiscardFL"
@@ -14,20 +14,22 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_11sdp"
-            android:layout_marginHorizontal="@dimen/_11sdp">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_21sdp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/saleCardV"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="@dimen/_10sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
+                    android:id="@+id/qrLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="invisible"
                     android:orientation="vertical">
 
                     <TextView
@@ -67,37 +69,74 @@
                             android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/qr_outlineIV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/qrViewRL"
+                        android:layout_width="@dimen/_146sdp"
+                        android:layout_height="@dimen/_144sdp"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="@dimen/_31sdp"
-                        android:src="@drawable/qr_image_outline" />
+                        android:layout_marginBottom="@dimen/_34sdp"
+                        android:background="@drawable/qr_image_outline">
+
+                        <ImageView
+                            android:id="@+id/idIVQrcode"
+                            android:layout_width="@dimen/_142sdp"
+                            android:layout_height="@dimen/_140sdp"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/_3sdp" />
+                    </RelativeLayout>
                 </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/animationRL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="@dimen/_60sdp"
+                    android:visibility="visible">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottieAnimV"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_90sdp"
+                        android:layout_marginStart="@dimen/_30sdp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/stepper_loader" />
+
+                    <TextView
+                        android:id="@+id/waitingText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lottieAnimV"
+                        android:layout_marginBottom="@dimen/_50sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:gravity="clip_horizontal"
+                        android:text="Waiting on customer..."
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp"
+                        android:visibility="invisible" />
+                </RelativeLayout>
+
             </androidx.cardview.widget.CardView>
-
-            <LinearLayout
-                android:id="@+id/discardSaleLL"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_44sdp"
-                android:layout_below="@+id/saleCardV"
-                android:layout_marginHorizontal="@dimen/_11sdp"
-                android:layout_marginBottom="@dimen/_21sdp"
-                android:layout_marginTop="@dimen/_50sdp"
-                android:background="@drawable/bg_greencolor_filled"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_bold"
-                    android:text="Discard Sale"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_12ssp" />
-            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
-</FrameLayout>
+    <LinearLayout
+        android:id="@+id/discardSaleLL"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_44sdp"
+       android:layout_marginBottom="@dimen/_43sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="@dimen/_11sdp"
+        android:background="@drawable/bg_greencolor_filled"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_bold"
+            android:text="Discard Sale"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+</RelativeLayout>

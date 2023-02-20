@@ -168,6 +168,7 @@ class Utils {
         const val LEGAL = "LEGAL"
         const val FORGOTPINOTP = "FORGOTPINOTP"
         const val SCREEN = "screen"
+        const val REFUND = "refund"
         const val VALUE = "value"
         const val HEADER = "Header"
         const val DESCRIPTION = "Description"
@@ -214,6 +215,7 @@ class Utils {
         const val MERCHANT_QR = "merchant qr"
         const val GENERATE_QR = "generate qr"
         const val DISCARD = "discard"
+        const val DONE = "done"
 
         lateinit var errorState: Array<IntArray>
         lateinit var state: Array<IntArray>

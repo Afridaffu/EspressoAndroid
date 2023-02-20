@@ -20,7 +20,7 @@
     <color name="bg_color">#fafafa</color>
     <color name="light_blue">#d8e2f0</color>
     <color name="true_green">#008a05</color>
-
+    <color name="text_grey_msg">#C4C5C7</color>
     <color name="et_bg_gray">#f2f4f5</color>
     <color name="button_bg">#e4eaf2</color>
     <color name="logout_bg">#166567</color>
@@ -29,5 +29,9 @@
     <color name="viewcolor">#e8e8e8</color>
     <color name="hidden_view_color">#008581</color>
     <color name="slidebtn_bg">#DFF4F3</color>
+    <color name="bg_view_color">#f2f4f5</color>
+    <color name="balance_text_color">#404040</color>
+    <color name="background_lt_blue">#40d8e2f0</color>
+    <color name="primary_dark_green">#008682</color>
 
 </resources>
