@@ -2,11 +2,13 @@
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/dialog_corners"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <View
         android:layout_width="@dimen/_40sdp"
@@ -208,106 +210,106 @@
             android:textSize="@dimen/_11ssp" />
     </LinearLayout>
 
-    <!--    <androidx.constraintlayout.motion.widget.MotionLayout-->
-    <!--        android:id="@+id/slideToConfirmm"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="@dimen/_48sdp"-->
-    <!--        android:layout_marginLeft="@dimen/_20sdp"-->
-    <!--        android:layout_marginTop="@dimen/_40sdp"-->
-    <!--        android:layout_marginRight="@dimen/_20sdp"-->
-    <!--        android:layout_marginBottom="@dimen/_30sdp"-->
-    <!--        android:background="@drawable/shape_round_rectable"-->
-    <!--        android:elevation="@dimen/_2sdp"-->
-    <!--        app:layoutDescription="@xml/activity_swipe_unloack_scene"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--        app:layout_constraintRight_toRightOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent">-->
-    <!--        -->
-    <!--        <TextView-->
-    <!--            android:id="@+id/tv_lable_verify"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginStart="8dp"-->
-    <!--            android:ellipsize="end"-->
-    <!--            android:gravity="center"-->
-    <!--            android:paddingEnd="16dp"-->
-    <!--            android:paddingRight="16dp"-->
-    <!--            android:text="Verifying"-->
-    <!--            android:textColor="@color/primary_green"-->
-    <!--            android:textSize="@dimen/_15sdp"-->
-    <!--            android:textStyle="bold"-->
-    <!--            app:layout_constraintBottom_toBottomOf="@id/im_lock"-->
-    <!--            app:layout_constraintStart_toEndOf="@+id/im_lock"-->
-    <!--            app:layout_constraintTop_toTopOf="@+id/im_lock"-->
-    <!--            android:visibility="gone"/>-->
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/slideToConfirmm"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_48sdp"
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_30sdp"
+        android:background="@drawable/shape_round_rectable"
+        android:elevation="@dimen/_2sdp"
+        app:layoutDescription="@xml/activity_swipe_unloack_scene"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!--        <com.coyni.mapp.utils.custometextview.AnimatedGradientTextView-->
-    <!--            android:id="@+id/tv_lable"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginStart="8dp"-->
-    <!--            android:gravity="center"-->
-    <!--            android:paddingEnd="16dp"-->
-    <!--            android:paddingRight="16dp"-->
-    <!--            android:text="Slide to Confirm"-->
-    <!--            android:textColor="@color/primary_green"-->
-    <!--            android:textSize="@dimen/_15sdp"-->
-    <!--            android:textStyle="bold"-->
-    <!--            android:visibility="visible"-->
-    <!--            app:angle="45"-->
-    <!--            app:chainUseRtl="true"-->
-    <!--            app:colors="@array/default_gradient_colors"-->
-    <!--            app:layout_constraintBottom_toBottomOf="@id/im_lock"-->
-    <!--            app:layout_constraintStart_toEndOf="@+id/im_lock"-->
-    <!--            app:layout_constraintTop_toTopOf="@+id/im_lock"-->
-    <!--            app:speed="500"-->
-    <!--            app:maxFPS="24"-->
-    <!--            app:simultaneousColors="8"/>-->
+        <TextView
+            android:id="@+id/tv_lable_verify"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:text="Verifying"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/im_lock"
+            app:layout_constraintStart_toEndOf="@+id/im_lock"
+            app:layout_constraintTop_toTopOf="@+id/im_lock"
+            android:visibility="gone" />
 
-    <!--        <androidx.cardview.widget.CardView-->
-    <!--            android:id="@+id/im_lock"-->
-    <!--            android:layout_width="@dimen/_44sdp"-->
-    <!--            android:layout_height="@dimen/_44sdp"-->
-    <!--            android:layout_marginStart="@dimen/_2sdp"-->
-    <!--            android:layout_marginTop="@dimen/_2sdp"-->
-    <!--            android:layout_marginBottom="@dimen/_2sdp"-->
-    <!--            app:cardBackgroundColor="@color/slidebtn_bg"-->
-    <!--            app:cardCornerRadius="@dimen/_21sdp"-->
-    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--            app:layout_constraintStart_toStartOf="parent"-->
-    <!--            app:layout_constraintTop_toTopOf="parent">-->
+        <com.coyni.pos.app.utils.CustomeTextView.AnimatedGradientTextView
+            android:id="@+id/tv_lable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:text="Slide to Confirm"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:angle="45"
+            app:chainUseRtl="true"
+            app:colors="@array/default_gradient_colors"
+            app:layout_constraintBottom_toBottomOf="@id/im_lock"
+            app:layout_constraintStart_toEndOf="@+id/im_lock"
+            app:layout_constraintTop_toTopOf="@+id/im_lock"
+            app:speed="500"
+            app:maxFPS="24"
+            app:simultaneousColors="8" />
 
-    <!--            <androidx.appcompat.widget.AppCompatImageView-->
-    <!--                android:layout_width="match_parent"-->
-    <!--                android:layout_height="match_parent"-->
-    <!--                android:layout_gravity="center"-->
-    <!--                android:src="@drawable/ic_double_left" />-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/im_lock"
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            app:cardBackgroundColor="@color/slidebtn_bg"
+            app:cardCornerRadius="@dimen/_21sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <!--        </androidx.cardview.widget.CardView>-->
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_double_left" />
+
+        </androidx.cardview.widget.CardView>
 
 
-    <!--        <androidx.cardview.widget.CardView-->
-    <!--            android:id="@+id/im_lock_"-->
-    <!--            android:layout_width="@dimen/_44sdp"-->
-    <!--            android:layout_height="@dimen/_44sdp"-->
-    <!--            android:layout_marginTop="@dimen/_2sdp"-->
-    <!--            android:layout_marginEnd="@dimen/_2sdp"-->
-    <!--            android:layout_marginBottom="@dimen/_2sdp"-->
-    <!--            android:visibility="invisible"-->
-    <!--            app:cardBackgroundColor="@color/white"-->
-    <!--            app:cardCornerRadius="@dimen/_20sdp"-->
-    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintTop_toTopOf="parent">-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/im_lock_"
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/_2sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:visibility="invisible"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/_20sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <!--            <ProgressBar-->
-    <!--                android:layout_width="@dimen/_20sdp"-->
-    <!--                android:layout_height="@dimen/_20sdp"-->
-    <!--                android:layout_gravity="center" />-->
+            <ProgressBar
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_gravity="center" />
 
-    <!--        </androidx.cardview.widget.CardView>-->
+        </androidx.cardview.widget.CardView>
 
-    <!--    </androidx.constraintlayout.motion.widget.MotionLayout>-->
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 
 </LinearLayout>
