@@ -4,17 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Point
-import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidmads.library.qrgenearator.QRGContents
-import androidmads.library.qrgenearator.QRGEncoder
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidmads.library.qrgenearator.QRGContents
+import androidmads.library.qrgenearator.QRGEncoder
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.MerchantQrBinding
@@ -23,13 +22,13 @@ import com.coyni.pos.app.dialog.OnDialogClickListener
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.view.MposDashboardActivity
 import org.json.JSONObject
-import com.coyni.pos.app.view.SucessFlowActivity
 
 class MerchantQrFragment : BaseFragment() {
     lateinit var binding: MerchantQrBinding
     var fontSize: Float = 0.0f;
     private var isPayClickable: Boolean = false
     private lateinit var screen: String
+    private lateinit var amount: String
     private lateinit var strWallet: String
     lateinit var bitmap: Bitmap
     lateinit var qrgEncoder: QRGEncoder
@@ -47,15 +46,14 @@ class MerchantQrFragment : BaseFragment() {
     }
 
     private fun inItFields() {
-
+        getValues()
         strWallet = "12345787654"
 //        generateQRCode(strWallet)
         val jsonObject = JSONObject()
-        jsonObject.put("cynAmount", "100")
+        jsonObject.put("cynAmount", amount.toString())
         jsonObject.put("referenceID", strWallet)
         generateQRCode(jsonObject.toString())
-
-
+        binding.amountTV.text = amount.toString()
 //        binding.lottieAnimV.loop(false)
 
         Handler().postDelayed({
@@ -66,11 +64,11 @@ class MerchantQrFragment : BaseFragment() {
             binding.animationRL.visibility = View.GONE
 
             Handler().postDelayed({
-                rotate = AnimationUtils.loadAnimation(context, R.anim.rotate)
-                binding.lottieAnimV.startAnimation(rotate)
-                binding.qrLL.visibility = View.GONE
-                binding.animationRL.visibility = View.VISIBLE
-                binding.waitingText.visibility = View.VISIBLE
+//                rotate = AnimationUtils.loadAnimation(context, R.anim.rotate)
+//                binding.lottieAnimV.startAnimation(rotate)
+//                binding.qrLL.visibility = View.GONE
+//                binding.animationRL.visibility = View.VISIBLE
+//                binding.waitingText.visibility = View.VISIBLE
 
             }, 3000)
         }, 3000)
@@ -132,6 +130,18 @@ class MerchantQrFragment : BaseFragment() {
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
+        }
+    }
+
+    private fun getValues() {
+        if (arguments == null) {
+            return
+        }
+        if (requireArguments()[Utils.SCREEN] != null) {
+            screen = java.lang.String.valueOf(requireArguments()[Utils.SCREEN])
+        }
+        if (requireArguments()[Utils.VALUE] != null) {
+            amount = java.lang.String.valueOf(requireArguments()[Utils.VALUE])
         }
     }
 }

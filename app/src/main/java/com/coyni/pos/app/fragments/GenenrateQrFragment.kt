@@ -118,7 +118,10 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
             override fun onKeyboardClick(action: String, value: String?) {
                 if (action == Utils.BUTTON_CLICK) {
                     if (isPayClickable) {
-                        mActivity.fragmentNavigation(Utils.MERCHANT_QR, binding.merchantAmountET.text.toString())
+                        mActivity.fragmentNavigation(
+                            Utils.MERCHANT_QR,
+                            Utils.convertTwoDecimal(binding.merchantAmountET.text.toString())
+                        )
                     }
                 }
             }

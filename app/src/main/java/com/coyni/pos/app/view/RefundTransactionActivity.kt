@@ -30,6 +30,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     private var halfAmount: Double = 0.00
     private lateinit var fullAmount: String
     private lateinit var action_type: String
+    private var reason: String = ""
     var isPayClickable: Boolean = false
     var isrefundClickable: Boolean = false
     var ishalfamount: Boolean = false
@@ -51,6 +52,9 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         binding.refundAmountET.showSoftInputOnFocus = false
         binding.refundAmountET.textDirection = View.TEXT_DIRECTION_RTL
         binding.refundAmountET.addTextChangedListener(this)
+        binding.RefundbackIV.setOnClickListener {
+            finish()
+        }
 //        if (!transactionData?.grossAmount?.isEmpty()!!) {
 //            grossAmount = Utils.doubleParsing(
 //                Utils.convertTwoDecimal(
@@ -115,12 +119,13 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
 
         inItKeyboard()
         binding.remarksLL.setOnClickListener {
-            val addNoteDialog = AddNoteDialog(this)
+            val addNoteDialog = AddNoteDialog(this,reason)
             addNoteDialog.show()
             addNoteDialog.setOnDialogClickListener(object : OnDialogClickListener {
                 override fun onDialogClicked(action: String?, value: Any?) {
+                    reason = value.toString()
                     if (action == Utils.DONE) {
-                        binding.eTremarks.setText(value.toString())
+                        binding.eTremarks.setText(reason)
                     }
                 }
             })

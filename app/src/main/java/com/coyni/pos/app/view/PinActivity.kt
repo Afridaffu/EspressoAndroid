@@ -3,7 +3,10 @@ package com.coyni.pos.app.view
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.animation.AnimationUtils
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
@@ -17,11 +20,11 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     var passcode: String = ""
     lateinit var pinViewModel: PinViewModel
     lateinit var action: String
+    var count: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(R.anim.slide_up, 0)
         binding = ActivityPinBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
         action = intent.getStringExtra(Utils.ACTION_TYPE).toString()
 
@@ -34,11 +37,11 @@ class PinActivity : BaseActivity(), View.OnClickListener {
         pinViewModel = PinViewModel.getInstance(this)!!
 
         binding.qrNavigationTV.setOnClickListener {
-            startActivity(Intent(applicationContext, GenarateQrActivity::class.java))
+            startActivity(Intent(this, GenarateQrActivity::class.java))
         }
 
-        binding.imgBack.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+        binding.imgBackk.setOnClickListener {
+            onBackPressed()
         }
         binding.keyZeroTV.setOnClickListener(this)
         binding.keyOneTV.setOnClickListener(this)
@@ -51,14 +54,16 @@ class PinActivity : BaseActivity(), View.OnClickListener {
         binding.keyEightTV.setOnClickListener(this)
         binding.keyNineTV.setOnClickListener(this)
         binding.backActionIV.setOnClickListener(this)
-        binding.tvForgot.setOnClickListener(this)
-        binding.imgBack.setOnClickListener(this)
+//        binding.tvForgot.setOnClickListener(this)
     }
+
 
 
     override fun onBackPressed() {
         super.onBackPressed()
+        finish()
         overridePendingTransition(0, R.anim.slide_bottom)
+        count = 0
     }
 
     private fun inItObservers() {
@@ -81,6 +86,7 @@ class PinActivity : BaseActivity(), View.OnClickListener {
 //                    setErrorPIN()
                     val intent = Intent(this, GenarateQrActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -191,6 +197,14 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun setErrorPIN() {
+        count = count + 1;
+
+        if (count != 0 && count < 4) {
+            binding.invalidTV.visibility = VISIBLE
+        } else {
+            binding.invalidTV.visibility = VISIBLE
+            binding.inValidErrorTV.visibility = VISIBLE
+        }
         binding.circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error))
         binding.circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error))
         binding.circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error))
@@ -201,7 +215,7 @@ class PinActivity : BaseActivity(), View.OnClickListener {
         binding.chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_error)
         binding.chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_error)
 
-        shakeAnimateLeftRight()
+//        shakeAnimateLeftRight()
         Handler().postDelayed({
             try {
                 clearControls()
@@ -217,6 +231,8 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun clearControls() {
+        binding.invalidTV.visibility = GONE
+        binding.inValidErrorTV.visibility = GONE
         binding.circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle)
         binding.circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle)
         binding.circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle)

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/hidden_view_color"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <LinearLayout
@@ -14,7 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/_221sdp"
+            android:layout_marginBottom="@dimen/_321sdp"
             android:background="#008581"
             android:gravity="center"
             android:orientation="horizontal">

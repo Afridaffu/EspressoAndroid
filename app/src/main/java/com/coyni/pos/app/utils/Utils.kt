@@ -167,6 +167,8 @@ class Utils {
         const val FORGOTPINOTP = "FORGOTPINOTP"
         const val SCREEN = "screen"
         const val REFUND = "refund"
+        const val START_NEW_SALE = "start new sale"
+        const val VIEW_BATCH = "view today batch"
         const val VALUE = "value"
         const val FORGOT_PIN = "forgot pin"
         const val FORGOT_PASSWORD = "Forgot Password"
