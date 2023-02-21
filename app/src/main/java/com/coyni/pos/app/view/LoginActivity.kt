@@ -12,7 +12,6 @@ import android.view.WindowManager
 import androidx.appcompat.content.res.AppCompatResources
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
-import com.coyni.pos.app.baseclass.OnClickListener
 import com.coyni.pos.app.databinding.ActivityLoginBinding
 import com.coyni.pos.app.dialog.ErrorDialog
 import com.coyni.pos.app.utils.Utils
@@ -73,30 +72,21 @@ class LoginActivity : BaseActivity() {
 
         }
 
-        TerminalDeactivatedActivity.setOnClickListener(object :
-            OnClickListener {
-            override fun onButtonClick(click: Boolean) {
-//                if (click)
-                onBackPressed()
-            }
-        })
-
         binding.tvButton.setOnClickListener {
 
             if (Utils.isKeyboardVisible) Utils.hideKeypad(this@LoginActivity)
-            showTerminalScreen()
-//            startActivity(
-//                Intent(applicationContext, MposDashboardActivity::class.java)
-//                    .setFlags(
-//                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                    )
-//            )
+            startActivity(
+                Intent(applicationContext, MposDashboardActivity::class.java)
+                    .setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    )
+            )
         }
     }
 
     private fun focusListeners() {
 
-        binding.tidET.setOnFocusChangeListener { view, b ->
+        binding.tidET.setOnFocusChangeListener { _, b ->
             if (b) {
                 if (binding.tidET.text.toString().isNotEmpty())
                     binding.tidET.setSelection(binding.tidET.text.toString().length)
@@ -128,11 +118,11 @@ class LoginActivity : BaseActivity() {
             }
         }
 
-        binding.passwordET.setOnFocusChangeListener { view, hasFocus ->
+        binding.passwordET.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 if (binding.passwordET.text.toString().isNotEmpty())
                     binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-//                Utils.upperHintColor(binding.passwordTIL, R.color.primary_green)
+                Utils.upperHintColor(binding.passwordTIL, this@LoginActivity,R.color.primary_green)
                 binding.passwordErrorLL.visibility = View.GONE
                 binding.passwordTIL.setBoxStrokeColorStateList(Utils.getFocusedColorState(this))
                 binding.passwordET.hint =
@@ -141,11 +131,14 @@ class LoginActivity : BaseActivity() {
             } else {
                 if (binding.passwordET.text.toString().length in 1..7) {
                     binding.passwordErrorTV.text = "Please enter a valid Password"
-//                    Utils.upperHintColor(binding.passwordTIL, R.color.error)
+                    Utils.upperHintColor(binding.passwordTIL, this@LoginActivity,R.color.error_red)
                     binding.passwordErrorLL.visibility = View.VISIBLE
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(this))
                 } else {
-//                    Utils.upperHintColor(binding.passwordTIL, R.color.light_gray)
+                    if (binding.passwordET.text.toString().length > 7)
+                        Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_black)
+                    else
+                        Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.light_gray)
                     binding.passwordET.hint = ""
                     binding.passwordErrorLL.visibility = View.GONE
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
@@ -206,7 +199,7 @@ class LoginActivity : BaseActivity() {
         startActivity(
             Intent(
                 this@LoginActivity,
-                TerminalDeactivatedActivity::class.java
+                StatusFailedActivity::class.java
             )
                 .putExtra(Utils.SCREEN, Utils.LOGIN)
                 .putExtra(Utils.HEADER, getString(R.string.terminal_deactivated))

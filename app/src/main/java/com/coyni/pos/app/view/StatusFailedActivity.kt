@@ -5,12 +5,12 @@ import android.view.View
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.baseclass.OnClickListener
-import com.coyni.pos.app.databinding.ActivityTerminalDeactivatedBinding
+import com.coyni.pos.app.databinding.ActivityStatusFailedBinding
 import com.coyni.pos.app.utils.Utils
 
-class TerminalDeactivatedActivity : BaseActivity() {
+class StatusFailedActivity : BaseActivity() {
 
-    private lateinit var binding: ActivityTerminalDeactivatedBinding
+    private lateinit var binding: ActivityStatusFailedBinding
 
     companion object {
         private var listener: OnClickListener? = null
@@ -22,7 +22,7 @@ class TerminalDeactivatedActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityTerminalDeactivatedBinding.inflate(layoutInflater)
+        binding = ActivityStatusFailedBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initView()
@@ -42,6 +42,9 @@ class TerminalDeactivatedActivity : BaseActivity() {
         binding.tvHeader.text = intent.getStringExtra(Utils.HEADER)
         binding.tvDescription.text = intent.getStringExtra(Utils.DESCRIPTION)
 
-        binding.tvButton.setOnClickListener { onBackPressed() }
+        binding.tvButton.setOnClickListener {
+            listener?.onButtonClick(true)
+            finish()
+        }
     }
 }

@@ -11,6 +11,7 @@ import android.util.Log
 import android.util.Patterns
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.coyni.pos.app.R
 import com.google.android.material.textfield.TextInputLayout
@@ -523,6 +524,10 @@ class Utils {
             )
             colorState = ColorStateList(state, color)
             return colorState
+        }
+
+        fun upperHintColor(textInputLayout: TextInputLayout, context: Context, @ColorRes colorIdRes: Int) {
+            textInputLayout.defaultHintTextColor = ColorStateList.valueOf(ContextCompat.getColor(context, colorIdRes))
         }
 
         fun setUpperHintColor(til: TextInputLayout, color: Int) {
