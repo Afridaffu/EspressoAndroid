@@ -1,6 +1,7 @@
 package com.coyni.pos.app.dialog
 
 import android.content.Context
+import android.view.View.VISIBLE
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseDialog
@@ -15,6 +16,12 @@ class RefundPreviewDialog(context: Context) : BaseDialog(context) {
 
     override fun initViews() {
         dialogBinding = RefundPreviewBinding.bind(findViewById(R.id.root))
+        dialogBinding.infoIV.setOnClickListener {
+            dialogBinding.viewFeesTextLL.visibility = VISIBLE
+        }
+        dialogBinding.viewFeesTV.setOnClickListener {
+            feeDialog()
+        }
         dialogBinding.slideToConfirmm.setTransitionListener(object :
             MotionLayout.TransitionListener {
             override fun onTransitionStarted(
@@ -56,5 +63,10 @@ class RefundPreviewDialog(context: Context) : BaseDialog(context) {
             }
         })
 
+    }
+
+    private fun feeDialog() {
+        val feeDialog = ViewFeeDialog(context)
+        feeDialog.show()
     }
 }

@@ -83,10 +83,10 @@ class PinActivity : BaseActivity(), View.OnClickListener {
                         setErrorPIN()
                     }
                 } else {
-//                    setErrorPIN()
-                    val intent = Intent(this, GenarateQrActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    setErrorPIN()
+//                    val intent = Intent(this, RefundTransactionActivity::class.java)
+//                    startActivity(intent)
+//                    finish()
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()

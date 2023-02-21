@@ -166,6 +166,7 @@ class Utils {
         const val LEGAL = "LEGAL"
         const val FORGOTPINOTP = "FORGOTPINOTP"
         const val SCREEN = "screen"
+        const val STATUS = "status"
         const val REFUND = "refund"
         const val START_NEW_SALE = "start new sale"
         const val VIEW_BATCH = "view today batch"
@@ -177,6 +178,8 @@ class Utils {
         const val PIN = "pin"
         const val ERROR = "error"
         const val SUCCESS = "success"
+        const val FAILED = "failed"
+        const val IN_PROGRESS = "in progress"
         const val CUSTOMER_PROFILE_ACTIVITY =
             "com.coyni.mapp.profile.profile_dashboard.CustomerProfileActivity"
         const val CURRENT_PASSWORD_ACTIVITY =

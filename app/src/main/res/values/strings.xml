@@ -27,5 +27,11 @@
     <string name="refund_transaction">Refund Transaction</string>
     <string name="transactionamount">Transaction Amount:</string>
     <string name="done">Done</string>
+    <string name="try_again">Try Again</string>
+    <string name="please_try__again">Please try again.</string>
+    <string name="transaction_failed">Transaction Failed</string>
+    <string name="we_were_unable_to_complete_your_transaction_due_to_the_reason">We were unable to complete your transaction due to the reason:</string>
+    <string name="e1234_verification_failed">[E1234 - Verification Failed]</string>
+
 
 </resources>
