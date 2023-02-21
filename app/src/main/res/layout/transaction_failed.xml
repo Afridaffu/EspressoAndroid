@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/ic_cross" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivBack"
+            android:layout_marginHorizontal="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_44sdp"
+            android:src="@drawable/ic_failed" />
+
+        <TextView
+            android:id="@+id/tvHead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image"
+            android:layout_marginHorizontal="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_21sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
+            android:text="@string/transaction_failed"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16ssp" />
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvHead"
+            android:layout_marginHorizontal="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_21sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:gravity="center"
+            android:lineHeight="@dimen/_21ssp"
+            android:text="@string/we_were_unable_to_complete_your_transaction_due_to_the_reason"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/tvErrMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvMessage"
+            android:layout_marginHorizontal="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
+            android:lineHeight="@dimen/_21ssp"
+            android:text="@string/e1234_verification_failed"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/tvTryAgain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvErrMessage"
+            android:layout_marginHorizontal="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_32sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:gravity="center"
+            android:text="@string/please_try__again"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvTryAgain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="@dimen/_23sdp"
+            android:layout_marginBottom="@dimen/_32sdp"
+            android:gravity="center"
+            app:cardBackgroundColor="@color/primary_green"
+            app:cardCornerRadius="@dimen/_21sdp">
+
+            <TextView
+                android:id="@+id/try_button_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="@dimen/_13sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:gravity="center"
+                android:text="@string/try_again"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+        </androidx.cardview.widget.CardView>
+
+
+    </RelativeLayout>
+</layout>

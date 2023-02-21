@@ -19,8 +19,16 @@
         tools:targetApi="31"
         android:name=".utils.MyApplication">
         <activity
+            android:name=".view.TransactionStatusActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".view.RefundTransactionActivity"
             android:exported="true" />
+
         <activity
             android:name=".view.SucessFlowActivity"
             android:exported="false" />
@@ -34,6 +42,12 @@
             android:name=".view.MposDashboardActivity"
             android:usesCleartextTraffic="true" />
         <activity
+            android:name=".view.GenarateQrActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".view.PinActivity"
+            android:exported="true" />
+        <activity
             android:name=".view.LoginActivity"
             android:configChanges="uiMode"
             android:exported="false"
@@ -45,12 +59,6 @@
             android:name=".view.MainActivity"
             android:exported="true" />
         <activity
-            android:name=".view.PinActivity"
-            android:exported="true" />
-        <activity
-            android:name=".view.GenarateQrActivity"
-            android:exported="true" />
-        <activity
             android:name=".view.OnboardActivity"
             android:exported="true">
             <intent-filter>
@@ -60,4 +68,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>
