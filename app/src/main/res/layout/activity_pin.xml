@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/primary_green"
     android:orientation="vertical"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -216,16 +216,16 @@
         </LinearLayout>
 
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/choosePINLL"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@id/bottomKeyPad"
-        android:layout_alignParentTop="true"
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imgBack"
+            android:id="@+id/imgBackk"
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
             android:layout_marginStart="32dp"
@@ -353,7 +353,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvForgot"
+            android:id="@+id/invalidTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -364,6 +364,7 @@
             android:textSize="@dimen/_9ssp"
             android:visibility="gone" />
         <TextView
+            android:id="@+id/inValidErrorTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

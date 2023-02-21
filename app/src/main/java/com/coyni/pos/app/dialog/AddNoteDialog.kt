@@ -8,13 +8,16 @@ import com.coyni.pos.app.baseclass.BaseDialog
 import com.coyni.pos.app.databinding.AddNoteBinding
 import com.coyni.pos.app.utils.Utils
 
-class AddNoteDialog(context: Context) : BaseDialog(context), TextWatcher {
+class AddNoteDialog(context: Context, private val reason: String) : BaseDialog(context),
+    TextWatcher {
     private lateinit var dialogBinding: AddNoteBinding
     override fun getLayoutId() = R.layout.add_note
 
     override fun initViews() {
         dialogBinding = AddNoteBinding.bind(findViewById(R.id.root))
-
+        if (reason != null) {
+            dialogBinding.addNoteET.setText(reason)
+        }
         dialogBinding.cancelBtn.setOnClickListener {
             dismiss()
         }
@@ -30,11 +33,7 @@ class AddNoteDialog(context: Context) : BaseDialog(context), TextWatcher {
 
     override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
     override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-        if (charSequence.length == 0) {
-            dialogBinding.addNoteTIL.setCounterEnabled(false)
-        } else {
-            dialogBinding.addNoteTIL.setCounterEnabled(true)
-        }
+        dialogBinding.addNoteTIL.isCounterEnabled = charSequence.length != 0
     }
 
     override fun afterTextChanged(editable: Editable) {

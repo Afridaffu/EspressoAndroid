@@ -16,7 +16,7 @@ class AnimatedGradientTextView : TextView {
     }
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        gradientManager = GradientManager(this, attrs)
+        gradientManager = GradientManager(this, attrs!!)
         CustomFontManager.applyFontFromAttrs(this, attrs)
     }
 
@@ -25,7 +25,7 @@ class AnimatedGradientTextView : TextView {
         attrs,
         defStyle
     ) {
-        gradientManager = GradientManager(this, attrs)
+        gradientManager = GradientManager(this, attrs!!)
         CustomFontManager.applyFontFromAttrs(this, attrs)
     }
 
