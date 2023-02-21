@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/variableclickLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:paddingHorizontal="@dimen/_7sdp"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/checkBoxCB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_3sdp"
+            android:theme="@style/AppTheme"
+            android:fontFamily="@font/opensans_semibold"
+            android:paddingVertical="@dimen/_10sdp"
+            android:text="abc"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
+
+        <EditText
+            android:id="@+id/etTypeSomething"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_corner"
+            android:hint=""
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/primary_black"
+            android:paddingHorizontal="@dimen/_7sdp"
+            android:textColorHint="@color/dark_gray"
+            android:paddingTop="@dimen/_11sdp"
+            android:paddingBottom="@dimen/_13sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+</layout>

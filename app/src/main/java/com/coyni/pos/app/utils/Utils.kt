@@ -2,13 +2,23 @@ package com.coyni.pos.app.utils
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
+import android.view.Gravity
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.ExpandableListView
+import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import com.coyni.pos.app.R
 import com.google.android.material.textfield.TextInputLayout
@@ -84,6 +94,12 @@ class Utils {
         const val txnType = "txnType"
         const val txnSubType = "txnSubType"
         const val PAID_ORDER = "paid order"
+        const val SALE_ORDER = "sale order"
+        const val REFUND = "refund"
+        const val eCommerce = "eCommerce"
+        const val FULL = "full"
+        const val Partial = "partial"
+        const val Retail = "Retail / Mobile"
         const val buyType = "2"
         const val withdrawType = "3"
         const val refundType = "9"
@@ -534,5 +550,105 @@ class Utils {
             return value
         }
 
+        fun setInitialListViewHeight(listView: ExpandableListView) {
+            val listAdapter = listView.expandableListAdapter
+            var totalHeight = 0
+            val desiredWidth = View.MeasureSpec.makeMeasureSpec(
+                listView.width,
+                View.MeasureSpec.EXACTLY
+            )
+            for (i in 0 until listAdapter.groupCount) {
+                val groupItem = listAdapter.getGroupView(i, false, null, listView)
+                groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED)
+                totalHeight += groupItem.measuredHeight
+            }
+            val params = listView.layoutParams
+            var height = (totalHeight
+                    + listView.dividerHeight * (listAdapter.groupCount - 1))
+            if (height < 10) height = 200
+            //        params.height = (int) (height * 0.35);
+            params.height = height
+            listView.layoutParams = params
+            listView.requestLayout()
+        }
+
+        fun setListViewHeight(listView: ExpandableListView, group: Int) {
+            val listAdapter = listView.expandableListAdapter
+            var totalHeight = 0
+            val desiredWidth = View.MeasureSpec.makeMeasureSpec(
+                listView.width,
+                View.MeasureSpec.EXACTLY
+            )
+            for (i in 0 until listAdapter.groupCount) {
+                val groupItem = listAdapter.getGroupView(i, false, null, listView)
+                groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED)
+                totalHeight += groupItem.measuredHeight
+                if (listView.isGroupExpanded(i) && i != group
+                    || !listView.isGroupExpanded(i) && i == group
+                ) {
+                    for (j in 0 until listAdapter.getChildrenCount(i)) {
+                        val listItem = listAdapter.getChildView(
+                            i, j, false, null,
+                            listView
+                        )
+                        listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED)
+                        totalHeight += listItem.measuredHeight
+                    }
+                }
+            }
+            val params = listView.layoutParams
+            var height = (totalHeight
+                    + listView.dividerHeight * (listAdapter.groupCount - 1))
+            if (height < 10) height = 200
+            params.height = height
+            listView.layoutParams = params
+            listView.requestLayout()
+        }
+
+        fun displayAlertNew(msg: String, context: Context, headerText: String) {
+            // custom dialog
+            displayAlertDialog = Dialog(context)
+            displayAlertDialog!!.getWindow()!!.requestFeature(Window.FEATURE_NO_TITLE)
+            displayAlertDialog!!.setContentView(R.layout.bottom_sheet_alert_dialog)
+            displayAlertDialog!!.getWindow()!!
+                .setBackgroundDrawableResource(android.R.color.transparent)
+            val mertics = context.resources.displayMetrics
+            val width = mertics.widthPixels
+            val header: TextView = displayAlertDialog!!.findViewById<TextView>(R.id.tvHead)
+            val message: TextView = displayAlertDialog!!.findViewById<TextView>(R.id.tvMessage)
+            val actionCV: CardView = displayAlertDialog!!.findViewById<CardView>(R.id.cvAction)
+            val actionText: TextView = displayAlertDialog!!.findViewById<TextView>(R.id.tvAction)
+            if (headerText != "") {
+                header.visibility = View.VISIBLE
+                header.text = headerText
+            }
+            actionCV.setOnClickListener {
+                if (msg.equals("Requires Access to Your Storage.", ignoreCase = true)) {
+                    displayAlertDialog!!.dismiss()
+                    context.startActivity(
+                        Intent(
+                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.fromParts("package", context.packageName, null)
+                        )
+                    )
+                } else displayAlertDialog!!.dismiss()
+            }
+            if (msg == "") {
+                message.text = context.getString(R.string.please_try_after)
+            } else message.text = msg
+            val window: Window = displayAlertDialog!!.getWindow()!!
+            window.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+            val wlp = window.attributes
+            wlp.gravity = Gravity.BOTTOM
+            wlp.flags = wlp.flags and WindowManager.LayoutParams.FLAG_DIM_BEHIND
+            window.attributes = wlp
+            displayAlertDialog!!.getWindow()!!.getAttributes().windowAnimations =
+                R.style.DialogAnimation
+            displayAlertDialog!!.setCanceledOnTouchOutside(true)
+            displayAlertDialog!!.show()
+        }
     }
 }
