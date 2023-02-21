@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:name=".utils.MyApplication">
         <activity
             android:name=".view.RefundTransactionActivity"
             android:exported="true" />

@@ -12,8 +12,10 @@ import android.view.WindowManager
 import androidx.appcompat.content.res.AppCompatResources
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
+import com.coyni.pos.app.baseclass.OnClickListener
 import com.coyni.pos.app.databinding.ActivityLoginBinding
 import com.coyni.pos.app.dialog.ErrorDialog
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 
 class LoginActivity : BaseActivity() {
@@ -32,7 +34,6 @@ class LoginActivity : BaseActivity() {
         )
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         initView()
         focusListeners()
         textWatchers()
@@ -45,6 +46,8 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun initView() {
+
+        val myApplication = applicationContext as MyApplication
 
         binding.tvButton.isEnabled = false
         binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
@@ -69,6 +72,13 @@ class LoginActivity : BaseActivity() {
                 binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
             }
             binding.passwordET.setSelection(binding.passwordET.text.toString().length)
+
+        }
+
+        myApplication.listener = object : OnClickListener {
+            override fun onButtonClick(click: Boolean) {
+                finish()
+            }
 
         }
 

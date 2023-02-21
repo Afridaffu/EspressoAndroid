@@ -6,19 +6,13 @@ import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.baseclass.OnClickListener
 import com.coyni.pos.app.databinding.ActivityStatusFailedBinding
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 
 class StatusFailedActivity : BaseActivity() {
 
     private lateinit var binding: ActivityStatusFailedBinding
 
-    companion object {
-        private var listener: OnClickListener? = null
-
-        fun setOnClickListener(listener: OnClickListener) {
-            this.listener = listener
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +24,8 @@ class StatusFailedActivity : BaseActivity() {
     }
 
     private fun initView() {
+
+        val myApplication = applicationContext as MyApplication
 
         if (intent.getStringExtra(Utils.SCREEN).equals(Utils.LOGIN)) {
             binding.ivBack.visibility = View.GONE
@@ -43,7 +39,7 @@ class StatusFailedActivity : BaseActivity() {
         binding.tvDescription.text = intent.getStringExtra(Utils.DESCRIPTION)
 
         binding.tvButton.setOnClickListener {
-            listener?.onButtonClick(true)
+            myApplication.listener!!.onButtonClick(true)
             finish()
         }
     }
