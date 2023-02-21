@@ -32,8 +32,9 @@ class Dashboard_frag : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.todayBatchCV?.setOnClickListener {
-            action_type = Utils.VIEW_BATCH
-            launchPinActivity()
+            startActivity(Intent(context, TransactionListActivity::class.java))
+//            action_type = Utils.VIEW_BATCH
+//            launchPinActivity()
         }
 
         binding.startSaleLL?.setOnClickListener {
