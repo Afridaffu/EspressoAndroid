@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/dialog_corners"
+        android:orientation="vertical"
+        android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+
+
+        <LinearLayout
+            android:id="@+id/feeBtmRadiusLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_2sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_13sdp"
+                android:layout_marginBottom="@dimen/_28sdp"
+                android:background="@drawable/dialog_view" />
+
+
+            <ImageView
+                android:id="@+id/backIV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_black_back" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_21sdp"
+                android:background="@drawable/bg_vblue_light"
+                android:fontFamily="@font/opensans_bold"
+                android:padding="@dimen/_9sdp"
+                android:text="Processing Fees"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_21sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="Sale Order"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginHorizontal="@dimen/_21sdp"
+                    android:layout_marginTop="@dimen/_11sdp"
+                    android:background="@color/viewcolor" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_21sdp"
+                    android:layout_marginTop="@dimen/_11sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:singleLine="true"
+                        android:text="eCommerce"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/tvEBADoll"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:text="+"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/tvEBAPer"
+                        android:layout_width="@dimen/_45sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_23sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_21sdp"
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:singleLine="true"
+                        android:text="Retail / Mobile"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/instantPayDollTV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:text="+"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/instantPayPerTV"
+                        android:layout_width="@dimen/_45sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_23sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_21sdp"
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:layout_marginBottom="@dimen/_31sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:singleLine="true"
+                        android:text="Refund"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/giftCardDollTV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:text="+"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/giftCardPerTV"
+                        android:layout_width="@dimen/_45sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_23sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>
