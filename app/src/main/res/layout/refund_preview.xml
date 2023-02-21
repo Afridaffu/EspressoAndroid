@@ -78,6 +78,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/_17sdp"
+        android:layout_marginRight="@dimen/_11sdp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_weight="1"
+            android:fontFamily="@font/opensans_regular"
+            android:text="Customer Name"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/_11ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="right"
+            android:text=""
+            android:textColor="@color/primary_black"
+            android:textFontWeight="1"
+            android:textSize="@dimen/_11ssp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_22sdp"
         android:layout_marginRight="@dimen/_11sdp"
         android:orientation="horizontal">
@@ -88,7 +118,7 @@
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_weight="0.8"
             android:fontFamily="@font/opensans_regular"
-            android:text="Recipient’s Address"
+            android:text="Customer Address"
             android:textColor="@color/dark_gray"
             android:textSize="@dimen/_11ssp" />
 
@@ -128,20 +158,34 @@
         android:layout_marginRight="@dimen/_11sdp"
         android:orientation="horizontal">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_10sdp"
             android:layout_weight="1"
-            android:fontFamily="@font/opensans_regular"
-            android:text="Processing Fee"
-            android:textColor="@color/dark_gray"
-            android:textSize="@dimen/_11ssp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Processing Fee"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/_11ssp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_info" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvProcessingFee"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="right"
@@ -181,12 +225,20 @@
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_21sdp"
+        android:background="@color/blue_light" />
+
     <LinearLayout
         android:id="@+id/lyMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_11sdp"
-        android:layout_marginTop="@dimen/_17sdp"
+        android:layout_marginTop="@dimen/_11sdp"
         android:layout_marginRight="@dimen/_11sdp"
         android:orientation="vertical">
 
@@ -195,7 +247,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_regular"
-            android:text="Reason for Refund"
+            android:text="Refund Note"
             android:textColor="@color/dark_gray"
             android:textSize="@dimen/_11ssp" />
 
@@ -239,10 +291,10 @@
             android:textColor="@color/primary_green"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/im_lock"
             app:layout_constraintStart_toEndOf="@+id/im_lock"
-            app:layout_constraintTop_toTopOf="@+id/im_lock"
-            android:visibility="gone" />
+            app:layout_constraintTop_toTopOf="@+id/im_lock" />
 
         <com.coyni.pos.app.utils.CustomeTextView.AnimatedGradientTextView
             android:id="@+id/tv_lable"
@@ -263,9 +315,9 @@
             app:layout_constraintBottom_toBottomOf="@id/im_lock"
             app:layout_constraintStart_toEndOf="@+id/im_lock"
             app:layout_constraintTop_toTopOf="@+id/im_lock"
-            app:speed="500"
             app:maxFPS="24"
-            app:simultaneousColors="8" />
+            app:simultaneousColors="8"
+            app:speed="500" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/im_lock"

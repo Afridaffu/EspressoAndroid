@@ -51,6 +51,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/amountTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_bold"
@@ -125,7 +126,7 @@
         android:layout_height="@dimen/_44sdp"
        android:layout_marginBottom="@dimen/_43sdp"
         android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="@dimen/_11sdp"
+        android:layout_marginHorizontal="@dimen/_21sdp"
         android:background="@drawable/bg_greencolor_filled"
         android:gravity="center"
         android:orientation="horizontal">
