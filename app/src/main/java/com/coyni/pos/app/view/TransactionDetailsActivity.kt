@@ -1,5 +1,6 @@
 package com.coyni.pos.app.view
 
+import android.content.Intent
 import android.os.Bundle
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityTransactionDetailsBinding
@@ -17,6 +18,9 @@ class TransactionDetailsActivity : BaseActivity() {
     }
 
     private fun initField() {
-
+        binding.RefundIV.setOnClickListener {
+            val intent = Intent(this, RefundTransactionActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

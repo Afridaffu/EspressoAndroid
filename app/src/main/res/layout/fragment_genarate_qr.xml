@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/hidden_view_color"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <LinearLayout
@@ -14,7 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/_221sdp"
+            android:layout_marginBottom="@dimen/_321sdp"
             android:background="#008581"
             android:gravity="center"
             android:orientation="horizontal">
@@ -31,7 +32,7 @@
                 android:maxLength="@string/maxlength"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textCursorDrawable="@drawable/cursor_color"
+                android:textCursorDrawable="@drawable/cursor_color_white"
                 android:textSize="@dimen/_53ssp" />
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/closeLL"
@@ -60,9 +61,10 @@
 
                     <ImageView
                         android:id="@+id/imgProfileSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_6sdp"
+                        android:layout_height="@dimen/_6sdp"
                         android:scaleType="fitXY"
+                        android:layout_gravity="center"
                         android:src="@drawable/ic_white_close"
                         android:visibility="visible" />
 

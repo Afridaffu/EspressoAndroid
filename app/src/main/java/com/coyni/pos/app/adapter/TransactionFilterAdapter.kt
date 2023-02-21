@@ -9,7 +9,6 @@ import com.coyni.pos.app.R
 import com.coyni.pos.app.model.TransactionFilter.TransactionsSubTypeData
 import com.coyni.pos.app.model.TransactionFilter.TransactionsTypeData
 
-
 class TransactionFilterAdapter() : BaseExpandableListAdapter() {
 
     private var listener: OnItemClickListener? = null

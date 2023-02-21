@@ -33,6 +33,7 @@ class GenarateQrActivity : BaseActivity() {
 //        merchantQr()
         binding.exitLL?.setOnClickListener {
             startActivity(Intent(applicationContext, MposDashboardActivity::class.java))
+            finish()
         }
 
     }

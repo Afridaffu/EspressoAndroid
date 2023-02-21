@@ -694,7 +694,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
         val refund = TransactionsTypeData()
         refund.itemId = (Utils.filter_Refund)
         refund.isSelected = (transactionType.contains(Utils.filter_Refund))
-        refund.groupItem = Utils.REFUND
+        refund.groupItem = Utils.Refund_String
         transactionTypeData!![Utils.filter_Refund] = refund
 
         //Sale Order Sub Types
