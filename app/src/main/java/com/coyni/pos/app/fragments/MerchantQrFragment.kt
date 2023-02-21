@@ -14,6 +14,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
+import androidx.navigation.fragment.findNavController
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.MerchantQrBinding
@@ -82,6 +83,7 @@ class MerchantQrFragment : BaseFragment() {
                     if (action == Utils.DISCARD) {
                         val intent = Intent(requireContext(), MposDashboardActivity::class.java)
                         startActivity(intent)
+                        requireActivity().finish()
                     }
                 }
             })
