@@ -23,8 +23,9 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     var count: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        overridePendingTransition(R.anim.slide_up, 0)
+
         binding = ActivityPinBinding.inflate(layoutInflater)
+        overridePendingTransition(R.anim.slide_up, 0)
         setContentView(binding.root)
         action = intent.getStringExtra(Utils.ACTION_TYPE).toString()
 
@@ -58,7 +59,6 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     }
 
 
-
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
@@ -66,33 +66,6 @@ class PinActivity : BaseActivity(), View.OnClickListener {
         count = 0
     }
 
-    private fun inItObservers() {
-        pinViewModel.validatePinResponse.observe(this) { ValidateResponse ->
-            try {
-                if (ValidateResponse!!.data != null) {
-                    if (ValidateResponse.status == Utils.SUCCESS) {
-                        Handler().postDelayed({
-                            val `in` = Intent()
-                            `in`.putExtra(Utils.ACTION_TYPE, action)
-                            `in`.putExtra(
-                                Utils.TRANSACTION_TOKEN, ValidateResponse.data?.requestToken
-                            )
-                            sendSuccessResult(`in`)
-                        }, 200)
-                    } else {
-                        setErrorPIN()
-                    }
-                } else {
-                    setErrorPIN()
-//                    val intent = Intent(this, RefundTransactionActivity::class.java)
-//                    startActivity(intent)
-//                    finish()
-                }
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-        }
-    }
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -243,6 +216,34 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     fun sendSuccessResult(intent: Intent) {
         setResult(RESULT_OK, intent)
         finish()
+    }
+
+    private fun inItObservers() {
+        pinViewModel.validatePinResponse.observe(this) { ValidateResponse ->
+            try {
+                if (ValidateResponse!!.data != null) {
+                    if (ValidateResponse.status == Utils.SUCCESS) {
+                        Handler().postDelayed({
+                            val `in` = Intent()
+                            `in`.putExtra(Utils.ACTION_TYPE, action)
+                            `in`.putExtra(
+                                Utils.TRANSACTION_TOKEN, ValidateResponse.data?.requestToken
+                            )
+                            sendSuccessResult(`in`)
+                        }, 200)
+                    } else {
+                        setErrorPIN()
+                    }
+                } else {
+                    setErrorPIN()
+//                    val intent = Intent(this, RefundTransactionActivity::class.java)
+//                    startActivity(intent)
+//                    finish()
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
     }
 }
 
