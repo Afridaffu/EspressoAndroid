@@ -20,7 +20,7 @@ class AnimatedGradientTextView : TextView {
         CustomFontManager.applyFontFromAttrs(this, attrs)
     }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(
+    constructor(context: Context?, attrs: AttributeSet, defStyle: Int) : super(
         context,
         attrs,
         defStyle

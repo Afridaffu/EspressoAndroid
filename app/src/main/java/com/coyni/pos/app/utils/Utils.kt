@@ -1,5 +1,6 @@
 package com.coyni.pos.app.utils
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -18,6 +19,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.ExpandableListView
 import android.widget.TextView
+import androidx.annotation.ColorRes
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import com.coyni.pos.app.R
@@ -119,7 +121,7 @@ class Utils {
         const val PAY = "pay"
         const val TIP = "tip"
         const val LOGIN_EXPIRY = "loginExpiry"
-        const val LOGIN = "login"
+        const val LOGIN = "Log In"
         const val PAY_TO_PERSONAL_WITH_AMOUNT = "pay to personal with amount"
         const val PAY_TO_MERCHANT = "pay to merchant"
         const val PAY_TO_PERSONAL = "pay to personal"
@@ -187,6 +189,8 @@ class Utils {
         const val START_NEW_SALE = "start new sale"
         const val VIEW_BATCH = "view today batch"
         const val VALUE = "value"
+        const val HEADER = "Header"
+        const val DESCRIPTION = "Description"
         const val FORGOT_PIN = "forgot pin"
         const val FORGOT_PASSWORD = "Forgot Password"
         const val RETRIEVE_EMAIL = "Retrieve Email"
@@ -251,6 +255,19 @@ class Utils {
                 context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
         }
+
+        fun hideKeypad(context: Context) {
+            try {
+                val activity = context as Activity
+                activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+                val imm =
+                    context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+            } catch (ex: java.lang.Exception) {
+                ex.printStackTrace()
+            }
+        }
+
 
         fun convertDate(date: String?): String {
             var strDate = ""
@@ -527,6 +544,15 @@ class Utils {
             )
             colorState = ColorStateList(state, color)
             return colorState
+        }
+
+        fun upperHintColor(
+            textInputLayout: TextInputLayout,
+            context: Context,
+            @ColorRes colorIdRes: Int
+        ) {
+            textInputLayout.defaultHintTextColor =
+                ColorStateList.valueOf(ContextCompat.getColor(context, colorIdRes))
         }
 
         fun setUpperHintColor(til: TextInputLayout, color: Int) {
