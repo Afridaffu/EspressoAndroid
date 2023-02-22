@@ -42,7 +42,6 @@ class LoginActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         binding.tidET.requestFocus()
-        Utils.shwForcedKeypad(this@LoginActivity)
     }
 
     private fun initView() {
@@ -85,6 +84,7 @@ class LoginActivity : BaseActivity() {
         binding.tvButton.setOnClickListener {
 
             if (Utils.isKeyboardVisible) Utils.hideKeypad(this@LoginActivity)
+            Utils.hideKeypad(this@LoginActivity)
             startActivity(
                 Intent(applicationContext, MposDashboardActivity::class.java)
                     .setFlags(
@@ -98,6 +98,7 @@ class LoginActivity : BaseActivity() {
 
         binding.tidET.setOnFocusChangeListener { _, b ->
             if (b) {
+                Utils.shwForcedKeypad(this@LoginActivity)
                 if (binding.tidET.text.toString().isNotEmpty())
                     binding.tidET.setSelection(binding.tidET.text.toString().length)
                 binding.tidET.hint = ""

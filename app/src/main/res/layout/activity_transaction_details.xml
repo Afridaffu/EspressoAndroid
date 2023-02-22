@@ -1,1253 +1,742 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/et_bg_gray"
+    android:orientation="vertical">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_radius"
+        android:paddingBottom="@dimen/_7sdp">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:contentDescription="@string/back"
+            android:padding="@dimen/_3sdp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/primary_black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_45sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="center"
+            android:text="@string/transaction_details"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_11ssp" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bottom_radius"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/_22sdp"
-            android:paddingTop="@dimen/_40sdp">
+            android:layout_marginHorizontal="@dimen/_11sdp"
+            android:paddingVertical="@dimen/_16sdp"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/backLL"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginBottom="@dimen/_7sdp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corners"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/_11sdp"
+                android:paddingTop="@dimen/_21sdp"
+                android:paddingBottom="@dimen/_7sdp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
+                    android:text="Sale Order - Retail/Mobile"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_12ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="100.00"
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_24ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="CYN"
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvReason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/refund"
+                    android:textAlignment="center"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_9ssp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@color/light_blue" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/_7sdp"
+                    android:paddingBottom="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/status"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="@string/copy"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/_7sdp"
+                    android:paddingBottom="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/date"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="07/27/2020 10:36:14"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llSaleOrderData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="Purchase Amount"
+                            android:textColor="@color/dark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/tvPurchaseAmt"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="100.00 CYN"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/tip_1_00"
+                            android:textColor="@color/dark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/tvTipAmt"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="1.00 CYN"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/total"
+                            android:textColor="@color/dark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/tvTotalAmt"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="100.00 CYN"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_marginTop="@dimen/_1sdp"
+                        android:background="@color/light_blue" />
+
+                    <ImageView
+                        android:id="@+id/ivRefund"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_4sdp"
+                        android:contentDescription="@string/refund"
+                        android:src="@drawable/refund" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="@string/refund"
+                        android:textAlignment="center"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_9ssp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:background="@drawable/rounded_corners"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_11sdp"
+                android:paddingVertical="@dimen/_14sdp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="@string/reference_id"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="srm1d3hsM734h98"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_back"
-                    app:tint="@color/primary_black" />
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:contentDescription="@string/copy"
+                    android:src="@drawable/ic_content_copy"
+                    app:tint="@color/primary_green" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvCustomerInfoHeading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:text="@string/customer_information"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corners"
+                android:orientation="vertical"
+                android:padding="@dimen/_11sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/_7sdp"
+                    android:paddingBottom="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/customer_name"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Jennifer Lopez"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/_7sdp"
+                    android:paddingBottom="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/customer_email"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/tvCustomerEmail"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="Jlopez@gmail.com"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llServicePhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/_7sdp"
+                    android:paddingBottom="@dimen/_4sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/customer_service_phone"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/tvCustomerServicePhone"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="100.00 CYN"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:layout_marginEnd="@dimen/_21sdp"
-                android:layout_marginBottom="@dimen/_11sdp"
-                android:fontFamily="@font/opensans_semibold"
-                android:gravity="center"
-                android:paddingEnd="@dimen/_10sdp"
-                android:text="Transaction Details"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_11ssp" />
-
-        </LinearLayout>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:overScrollMode="never"
-            android:scrollbars="none">
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:text="@string/ledger_information"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/et_bg_gray"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corners"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/_11sdp"
+                android:paddingTop="@dimen/_11sdp"
+                android:paddingBottom="@dimen/_5sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/_7sdp"
+                    android:paddingBottom="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/terminal_id"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="12345678"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/_7sdp"
+                    android:paddingBottom="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/employee_name"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/tvEmpName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="[Name Here]"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/_7sdp"
+                    android:paddingBottom="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/employee_id"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/tvEmpId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="[Name Here]"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llOriginalInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/refundLL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:layout_marginRight="@dimen/_11sdp"
-                        app:cardCornerRadius="@dimen/_10sdp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_16sdp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/RefundheaderTV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/_22sdp"
-                                android:layout_marginBottom="@dimen/_6sdp"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Refund - [Full/Partial]"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_12ssp" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/RefundamountTV"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_6sdp"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:text=""
-                                    android:textColor="@color/primary_green"
-                                    android:textSize="@dimen/_24ssp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:text=""
-                                    android:textColor="@color/primary_green"
-                                    android:textSize="@dimen/_11ssp" />
-                            </LinearLayout>
-
-
-                            <TextView
-                                android:id="@+id/refundReasonTV"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_11sdp"
-                                android:layout_marginTop="@dimen/_6sdp"
-                                android:layout_marginRight="@dimen/_11sdp"
-                                android:fontFamily="@font/opensans_regular"
-                                android:gravity="center"
-                                android:text=""
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_10ssp" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_gravity="center"
-                                android:layout_marginLeft="@dimen/_11sdp"
-                                android:layout_marginTop="@dimen/_11sdp"
-                                android:layout_marginRight="@dimen/_11sdp"
-                                android:layout_marginBottom="@dimen/_11sdp"
-                                android:background="@color/blue_light" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingRight="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_8sdp"
-                                    android:layout_marginBottom="@dimen/_11sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Status"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/refundStatusTV"
-                                    android:layout_width="@dimen/_68sdp"
-                                    android:layout_height="@dimen/_14sdp"
-                                    android:layout_marginTop="@dimen/_6sdp"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:gravity="center"
-                                    android:text=""
-                                    android:textSize="@dimen/_7sdp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Date &amp; Time"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/refundDatetimeTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:layout_marginRight="@dimen/_11sdp"
-                        app:cardCornerRadius="@dimen/_10sdp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_18sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Reference ID"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-
-                                <TextView
-                                    android:id="@+id/refundreciptantNameTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <ImageView
-                                    android:id="@+id/RefundcopyIV"
-                                    android:layout_width="@dimen/_11sdp"
-                                    android:layout_height="14dp"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="@dimen/_6sdp"
-                                    android:src="@drawable/ic_copy" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_21sdp"
-                        android:layout_marginTop="@dimen/_11sdp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="Merchant Information"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_11sdp"
-                        android:layout_marginBottom="@dimen/_14sdp"
-                        app:cardCornerRadius="@dimen/_10sdp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_18sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Merchant Name"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/merchantNameTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Customer Service Email"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/serviceEmailTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_4sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Customer Service Phone"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/refundOTIFeeTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_4sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_21sdp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="Ledger Information"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_11sdp"
-                        android:layout_marginBottom="@dimen/_14sdp"
-                        app:cardCornerRadius="@dimen/_10sdp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_18sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Terminal ID"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/terminalIDTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Employee Name"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/employeeNameTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_4sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Employee ID"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/employeID"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_4sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_21sdp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="Original Transaction Details"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_11sdp"
-                        android:layout_marginBottom="@dimen/_35sdp"
-                        app:cardCornerRadius="@dimen/_10sdp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_18sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Date"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/dateTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Reference ID"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/referenceID"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_4sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <ImageView
-                                    android:id="@+id/Refundcopy2IV"
-                                    android:layout_width="@dimen/_11sdp"
-                                    android:layout_height="14dp"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="@dimen/_6sdp"
-                                    android:src="@drawable/ic_copy" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Transaction Amount"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/transactionAmount"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_4sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Tip ([1.00%])"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/tipTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_4sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Total"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/TotalTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_4sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/saleorderLL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:layout_marginRight="@dimen/_11sdp"
-                        app:cardCornerRadius="@dimen/_10sdp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_16sdp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/saleorderHeaderTV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/_22sdp"
-                                android:layout_marginBottom="@dimen/_6sdp"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Sale Order - Retail/Mobile"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_12ssp" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/saleAmountTV"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_6sdp"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:text=""
-                                    android:textColor="@color/primary_green"
-                                    android:textSize="@dimen/_24ssp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:text=""
-                                    android:textColor="@color/primary_green"
-                                    android:textSize="@dimen/_11ssp" />
-                            </LinearLayout>
-
-
-                            <TextView
-                                android:id="@+id/saleReasonTV"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_11sdp"
-                                android:layout_marginTop="@dimen/_6sdp"
-                                android:layout_marginRight="@dimen/_11sdp"
-                                android:fontFamily="@font/opensans_regular"
-                                android:gravity="center"
-                                android:text=""
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_10ssp" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_gravity="center"
-                                android:layout_marginLeft="@dimen/_11sdp"
-                                android:layout_marginTop="@dimen/_11sdp"
-                                android:layout_marginRight="@dimen/_11sdp"
-                                android:layout_marginBottom="@dimen/_11sdp"
-                                android:background="@color/blue_light" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingRight="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_8sdp"
-                                    android:layout_marginBottom="@dimen/_11sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Status"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/saleStatusTV"
-                                    android:layout_width="@dimen/_68sdp"
-                                    android:layout_height="@dimen/_14sdp"
-                                    android:layout_marginTop="@dimen/_6sdp"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:gravity="center"
-                                    android:text=""
-                                    android:textSize="@dimen/_7sdp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Date"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/saleDatetimeTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Purchase Amount"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/purchaseTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Tip ([1.00%])"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/tipsTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Total"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/totallTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_gravity="center"
-                                android:layout_marginLeft="@dimen/_11sdp"
-                                android:layout_marginTop="@dimen/_11sdp"
-                                android:layout_marginRight="@dimen/_11sdp"
-                                android:layout_marginBottom="@dimen/_11sdp"
-                                android:background="@color/blue_light" />
-
-                            <ImageView
-                                android:id="@+id/RefundIV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:src="@drawable/refund" />
-
-                            <TextView
-                                android:id="@+id/RefundTV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/_4sdp"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="Refund"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:layout_marginRight="@dimen/_11sdp"
-                        app:cardCornerRadius="@dimen/_10sdp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_18sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Reference ID"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-
-                                <TextView
-                                    android:id="@+id/salereciptantNameTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <ImageView
-                                    android:id="@+id/salecopyIV"
-                                    android:layout_width="@dimen/_11sdp"
-                                    android:layout_height="14dp"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="@dimen/_6sdp"
-                                    android:src="@drawable/ic_copy"
-                                    app:tint="@color/primary_green" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_21sdp"
-                        android:layout_marginTop="@dimen/_11sdp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="Customer Information"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_11sdp"
-                        android:layout_marginBottom="@dimen/_14sdp"
-                        app:cardCornerRadius="@dimen/_10sdp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_18sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Customer Name"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/custNameTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Customer Email"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/custEmailTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_4sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_21sdp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="Ledger Information"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_11sdp"
-                        android:layout_marginBottom="@dimen/_14sdp"
-                        app:cardCornerRadius="@dimen/_10sdp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_18sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Terminal ID"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/saleTerminalIDTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Employee Name"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/saleEmployeeNameTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_4sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/_11sdp"
-                                android:paddingTop="@dimen/_8sdp"
-                                android:paddingRight="@dimen/_11sdp"
-                                android:paddingBottom="@dimen/_11sdp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Employee ID"
-                                    android:textColor="@color/dark_gray"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/saleEmployeID"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_4sdp"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-
                 <TextView
-                    android:id="@+id/activity_log_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_21sdp"
-                    android:layout_marginRight="@dimen/_21sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_bold"
-                    android:text="Activity Log"
+                    android:text="@string/original_transaction_details"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_12ssp"
-                    android:visibility="gone" />
+                    android:textSize="@dimen/_12ssp" />
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cv_activity_log"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_11sdp"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:layout_marginRight="@dimen/_11sdp"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:visibility="gone"
-                    app:cardCornerRadius="@dimen/_10sdp">
+                    android:background="@drawable/rounded_corners"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_11sdp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_8sdp"
-                        android:orientation="vertical">
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_10sdp">
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recycler_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/date"
+                            android:textColor="@color/dark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/tvOrgDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="07/27/2020 10:36:14"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/reference_id"
+                            android:textColor="@color/dark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="srm1d3hsM734h98"
+                            android:textColor="@color/primary_green"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_6sdp"
+                            android:contentDescription="@string/copy"
+                            android:src="@drawable/ic_content_copy"
+                            app:tint="@color/primary_green" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/transaction_amount"
+                            android:textColor="@color/dark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/tvOrgTxnAmt"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="100.00 CYN"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/tip_1_00"
+                            android:textColor="@color/dark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/tvOrgTip"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="1.00 CYN"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_10sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/total"
+                            android:textColor="@color/dark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/tvOrgTotal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="100.00 CYN"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
 
-        </ScrollView>
+            <LinearLayout
+                android:id="@+id/llActivityLog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-    </LinearLayout>
-</layout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="@string/activity_log"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_12ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_corners"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/_11sdp"
+                    android:paddingTop="@dimen/_9sdp"
+                    android:paddingBottom="@dimen/_13sdp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never"
+                        android:scrollbars="none" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

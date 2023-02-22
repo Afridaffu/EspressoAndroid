@@ -555,17 +555,6 @@ class Utils {
                 ColorStateList.valueOf(ContextCompat.getColor(context, colorIdRes))
         }
 
-        fun setUpperHintColor(til: TextInputLayout, color: Int) {
-            try {
-                val states = arrayOf(intArrayOf())
-                val colors = intArrayOf(color)
-                val myList = ColorStateList(states, colors)
-                til.defaultHintTextColor = myList
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-            }
-        }
-
         fun checkInternet(context: Context): Boolean {
             var value = false
             try {
