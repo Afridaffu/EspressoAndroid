@@ -90,7 +90,7 @@
                             <ExpandableListView
                                 android:id="@+id/custRecyclerView"
                                 android:layout_width="match_parent"
-                                android:layout_height="9dp"
+                                android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_5sdp"
                                 android:divider="@null"
                                 android:groupIndicator="@null"

@@ -68,6 +68,7 @@
 
                     <EditText
                         android:id="@+id/tidET"
+                        android:theme="@style/CursorColor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -140,6 +141,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordTIL"
                 style="@style/TextInputLayout.OutlinedBox"
+                android:theme="@style/CursorColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"
