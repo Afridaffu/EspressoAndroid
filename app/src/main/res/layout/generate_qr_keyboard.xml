@@ -253,7 +253,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/opensans_bold"
-            android:text="Generate Qr Code"
+            android:text="Generate QR Code"
             android:textColor="@color/white"
             android:textSize="@dimen/_13ssp" />
     </androidx.cardview.widget.CardView>

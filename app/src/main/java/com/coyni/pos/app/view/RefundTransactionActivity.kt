@@ -83,7 +83,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         })
         binding.fullAmountTV.setOnClickListener {
             if (grossAmount != null) {
-                binding.refundAmountET.setText(Utils.convertTwoDecimal(grossAmount.toString()))
+                binding.refundAmountET.setText(Utils.convertBigDecimal(grossAmount.toString()))
                 binding.refundAmountET.setSelection(binding.refundAmountET.text.length)
                 binding.fullAmountTV.setBackgroundResource(R.drawable.button_bg_light_green_core)
                 binding.fullAmountTV.setTextColor(getColor(R.color.primary_green))
@@ -119,7 +119,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
 
         inItKeyboard()
         binding.remarksLL.setOnClickListener {
-            val addNoteDialog = AddNoteDialog(this,reason)
+            val addNoteDialog = AddNoteDialog(this, reason)
             addNoteDialog.show()
             addNoteDialog.setOnDialogClickListener(object : OnDialogClickListener {
                 override fun onDialogClicked(action: String?, value: Any?) {
@@ -151,6 +151,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             override fun onKeyboardClick(action: String, value: String?) {
                 if (action == Utils.BUTTON_CLICK) {
                     if (isrefundClickable) {
+                        binding.refundAmountET.setText(Utils.convertTwoDecimal(enteredAmount.toString()))
                         refundPreviewDialog()
                     }
                 }
@@ -218,29 +219,17 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                         binding.refundAmountET.textSize =
                             Utils.pixelsToSp(applicationContext, fontSize)
                     }
-                    if (Utils.doubleParsing(editable.toString().replace(",", "")) > 0) {
-//                        disableButtons(false)
-                    } else {
-//                        disableButtons(true)
-                    }
-//                    if (validation()) {
-//                        disableButtons(false)
-//                    } else {
-//                        disableButtons(true)
-//                    }
                     binding.refundAmountET.setSelection(binding.refundAmountET.text.length)
                     binding.refundAmountET.textDirection = View.TEXT_DIRECTION_LTR
                 } else if (editable.toString() == ".") {
                     binding.refundAmountET.setText("")
-//                    disableButtons(true)
                 } else if (editable.length == 0) {
                     binding.refundAmountET.hint = "0.00"
                     binding.refundAmountET.textDirection = View.TEXT_DIRECTION_RTL
-//                    disableButtons(true)
+                    binding.refundCKB.disableButton()
                     binding.refundCKB.clearData()
                 } else {
                     binding.refundAmountET.setText("")
-//                    disableButtons(true)
                     binding.refundCKB.clearData()
                 }
                 enableRefund()
