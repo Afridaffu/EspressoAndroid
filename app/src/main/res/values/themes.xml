@@ -41,7 +41,12 @@
         <item name="boxCornerRadiusTopEnd">@dimen/_10sdp</item>
         <item name="boxCornerRadiusTopStart">@dimen/_10sdp</item>
         <item name="android:textStyle">bold</item>
+        <item name="colorPrimary">@color/primary_green</item>
     </style>
+
+    <style name="CursorColor">
+        <item name="colorPrimary">@color/primary_green</item>
+    </style>>
 
     <style name="Theme_Dialog" parent="android:Theme.Holo.Dialog">
         <item name="android:windowMinWidthMajor">100%</item>
