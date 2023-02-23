@@ -11,6 +11,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.coyni.pos.app.R
+import com.coyni.pos.app.adapter.ExpandableListAdapter
 import com.coyni.pos.app.adapter.TransactionFilterAdapter
 import com.coyni.pos.app.baseclass.BaseDialog
 import com.coyni.pos.app.databinding.TransactionFilterDialogBinding
@@ -53,10 +54,12 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
     var startDateLong = 0L
     var endDateLong: Long = 0L
     lateinit var rangeDates: RangeDates
-    private var adapter: TransactionFilterAdapter? = null
-    var transactionTypeData: HashMap<Int?, TransactionsTypeData>? = null
-    var transactionSubTypeData: HashMap<Int?, List<TransactionsSubTypeData>> =
-        HashMap<Int?, List<TransactionsSubTypeData>>()
+
+    //    private var adapter: TransactionFilterAdapter? = null
+    private var adapter: com.coyni.pos.app.adapter.ExpandableListAdapter? = null
+    var transactionTypeData: HashMap<Int, TransactionsTypeData> = HashMap<Int, TransactionsTypeData>()
+    var transactionSubTypeData: HashMap<Int, List<TransactionsSubTypeData>> =
+        HashMap<Int, List<TransactionsSubTypeData>>()
 
 //    private val myApplication: MyApplication? = context as MyApplication?
 
@@ -69,7 +72,14 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
     }
 
     private fun setAdapter() {
-        adapter = TransactionFilterAdapter(context, transactionTypeData, transactionSubTypeData)
+//        adapter = TransactionFilterAdapter(context, transactionTypeData, transactionSubTypeData)
+//        binding.custRecyclerView.setAdapter(adapter)
+//        Handler().postDelayed(
+//            { Utils.setInitialListViewHeight(binding.custRecyclerView) },
+//            100
+//        )
+
+        adapter = ExpandableListAdapter(context, transactionTypeData, transactionSubTypeData)
         binding.custRecyclerView.setAdapter(adapter)
         Handler().postDelayed(
             { Utils.setInitialListViewHeight(binding.custRecyclerView) },
@@ -206,7 +216,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
             tempStrSelectedDate = ""
         }
         prepareListData()
-        setAdapter()
+
     }
 
     private fun filterActions() {
@@ -727,14 +737,15 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
         refunSubType.add(data4)
         transactionSubTypeData[Utils.filter_saleorder] = refunSubType
 
+        setAdapter()
     }
 
     private fun processFilter(request: TransactionListRequest) {
         if (adapter != null) {
-            var parent: HashMap<Int?, TransactionsTypeData>? = adapter!!.groupData!!
-            var groups: List<Int?> = ArrayList<Int?>(parent!!.keys)
+            val parent: HashMap<Int, TransactionsTypeData> = adapter!!.groupData
+            val groups: List<Int> = ArrayList(parent.keys)
             for (group in groups) {
-                var data = parent[group]
+                val data = parent[group]
                 if (data!!.isSelected!! && !transactionType.contains(data.itemId)) {
                     transactionType.add(data.itemId)
                 }
@@ -742,8 +753,8 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                     transactionType.remove(data.itemId as Int?)
                 }
             }
-            val data: HashMap<Int?, List<TransactionsSubTypeData>> = adapter!!.childData!!
-            val childs: List<Int?> = ArrayList<Int?>(data.keys)
+            val data: HashMap<Int, List<TransactionsSubTypeData>> = adapter!!.childData
+            val childs: List<Int> = ArrayList(data.keys)
             for (child in childs) {
                 val groupChilds = data[child]!!
                 for (childData in groupChilds) {
