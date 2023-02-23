@@ -23,8 +23,9 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     var count: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        overridePendingTransition(R.anim.slide_up, 0)
+
         binding = ActivityPinBinding.inflate(layoutInflater)
+        overridePendingTransition(R.anim.slide_up, 0)
         setContentView(binding.root)
         action = intent.getStringExtra(Utils.ACTION_TYPE).toString()
 
@@ -58,7 +59,6 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     }
 
 
-
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
@@ -66,33 +66,6 @@ class PinActivity : BaseActivity(), View.OnClickListener {
         count = 0
     }
 
-    private fun inItObservers() {
-        pinViewModel.validatePinResponse.observe(this) { ValidateResponse ->
-            try {
-                if (ValidateResponse!!.data != null) {
-                    if (ValidateResponse.status == Utils.SUCCESS) {
-                        Handler().postDelayed({
-                            val `in` = Intent()
-                            `in`.putExtra(Utils.ACTION_TYPE, action)
-                            `in`.putExtra(
-                                Utils.TRANSACTION_TOKEN, ValidateResponse.data?.requestToken
-                            )
-                            sendSuccessResult(`in`)
-                        }, 200)
-                    } else {
-                        setErrorPIN()
-                    }
-                } else {
-                    setErrorPIN()
-//                    val intent = Intent(this, RefundTransactionActivity::class.java)
-//                    startActivity(intent)
-//                    finish()
-                }
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-        }
-    }
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -147,20 +120,16 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     private fun passNumberClear(passcode: String) {
         when (passcode.length) {
             3 -> {
-                binding.chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle)
-                binding.circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle)
+                binding.circleFourIV.setImageResource(R.drawable.clear_pin_ic)
             }
             2 -> {
-                binding.chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle)
-                binding.circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle)
+                binding.circleThreeIV.setImageResource(R.drawable.clear_pin_ic)
             }
             1 -> {
-                binding.chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle)
-                binding.circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle)
+                binding.circleTwoIV.setImageResource(R.drawable.clear_pin_ic)
             }
             0 -> {
-                binding.chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle)
-                binding.circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle)
+                binding.circleOneIV.setImageResource(R.drawable.clear_pin_ic)
             }
         }
     }
@@ -171,11 +140,11 @@ class PinActivity : BaseActivity(), View.OnClickListener {
             clearPasscodes()
         } else {
             when (passcode.length) {
-                1 -> binding.chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_white)
-                2 -> binding.chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_white)
-                3 -> binding.chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_white)
+                1 -> binding.circleOneIV.setImageResource(R.drawable.ic_enter_pin)
+                2 -> binding.circleTwoIV.setImageResource(R.drawable.ic_enter_pin)
+                3 -> binding.circleThreeIV.setImageResource(R.drawable.ic_enter_pin)
                 4 -> {
-                    binding.chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_white)
+                    binding.circleFourIV.setImageResource(R.drawable.ic_enter_pin)
                     checkAndProceed()
                 }
             }
@@ -190,10 +159,10 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun clearPasscodes() {
-        binding.chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle)
-        binding.chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle)
-        binding.chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle)
-        binding.chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle)
+        binding.circleOneIV.setImageResource(R.drawable.clear_pin_ic)
+        binding.circleTwoIV.setImageResource(R.drawable.clear_pin_ic)
+        binding.circleThreeIV.setImageResource(R.drawable.clear_pin_ic)
+        binding.circleFourIV.setImageResource(R.drawable.clear_pin_ic)
     }
 
     private fun setErrorPIN() {
@@ -205,15 +174,10 @@ class PinActivity : BaseActivity(), View.OnClickListener {
             binding.invalidTV.visibility = VISIBLE
             binding.inValidErrorTV.visibility = VISIBLE
         }
-        binding.circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error))
-        binding.circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error))
-        binding.circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error))
-        binding.circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error))
-
-        binding.chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_error)
-        binding.chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_error)
-        binding.chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_error)
-        binding.chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_error)
+        binding.circleOneIV.setImageResource(R.drawable.error_pin_ic)
+        binding.circleTwoIV.setImageResource(R.drawable.error_pin_ic)
+        binding.circleThreeIV.setImageResource(R.drawable.error_pin_ic)
+        binding.circleFourIV.setImageResource(R.drawable.error_pin_ic)
 
 //        shakeAnimateLeftRight()
         Handler().postDelayed({
@@ -233,16 +197,40 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     private fun clearControls() {
         binding.invalidTV.visibility = GONE
         binding.inValidErrorTV.visibility = GONE
-        binding.circleOneLL.setBackgroundResource(R.drawable.ic_outline_circle)
-        binding.circleTwoLL.setBackgroundResource(R.drawable.ic_outline_circle)
-        binding.circleThreeLL.setBackgroundResource(R.drawable.ic_outline_circle)
-        binding.circleFourLL.setBackgroundResource(R.drawable.ic_outline_circle)
         clearPasscodes()
     }
 
     fun sendSuccessResult(intent: Intent) {
         setResult(RESULT_OK, intent)
         finish()
+    }
+
+    private fun inItObservers() {
+        pinViewModel.validatePinResponse.observe(this) { ValidateResponse ->
+            try {
+                if (ValidateResponse!!.data != null) {
+                    if (ValidateResponse.status == Utils.SUCCESS) {
+                        Handler().postDelayed({
+                            val `in` = Intent()
+                            `in`.putExtra(Utils.ACTION_TYPE, action)
+                            `in`.putExtra(
+                                Utils.TRANSACTION_TOKEN, ValidateResponse.data?.requestToken
+                            )
+                            sendSuccessResult(`in`)
+                        }, 200)
+                    } else {
+                        setErrorPIN()
+                    }
+                } else {
+                    setErrorPIN()
+//                    val intent = Intent(this, RefundTransactionActivity::class.java)
+//                    startActivity(intent)
+//                    finish()
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
     }
 }
 
