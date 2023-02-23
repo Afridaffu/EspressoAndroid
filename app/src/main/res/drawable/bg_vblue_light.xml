@@ -5,9 +5,14 @@
         <shape>
             <stroke
                 android:width="1dp"
-                android:color="@color/vblue_light" />
-            <corners android:radius="15dp" />
+                android:color="#f2f5f8" />
+            <gradient
+                android:centerColor="#f2f5f8"
+                android:endColor="#f2f5f8"
+                android:startColor="#f2f5f8" />
 
+            <corners
+                android:radius="15dp"/>
         </shape>
     </item>
 

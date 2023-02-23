@@ -77,15 +77,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_11sdp"
+       android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginTop="@dimen/_17sdp"
-        android:layout_marginRight="@dimen/_11sdp"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_10sdp"
             android:layout_weight="1"
             android:fontFamily="@font/opensans_regular"
             android:text="Customer Name"
@@ -107,15 +105,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginTop="@dimen/_22sdp"
-        android:layout_marginRight="@dimen/_11sdp"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_10sdp"
             android:layout_weight="0.8"
             android:fontFamily="@font/opensans_regular"
             android:text="Customer Address"
@@ -153,9 +149,8 @@
         android:id="@+id/lyProcessing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginTop="@dimen/_17sdp"
-        android:layout_marginRight="@dimen/_11sdp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -239,9 +234,8 @@
         android:id="@+id/lyTotal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginTop="@dimen/_17sdp"
-        android:layout_marginRight="@dimen/_11sdp"
         android:orientation="horizontal">
 
         <TextView
@@ -269,7 +263,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
         android:layout_gravity="center"
-        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginTop="@dimen/_21sdp"
         android:background="@color/blue_light" />
 
@@ -277,9 +271,8 @@
         android:id="@+id/lyMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginTop="@dimen/_11sdp"
-        android:layout_marginRight="@dimen/_11sdp"
         android:orientation="vertical">
 
         <TextView
@@ -306,9 +299,8 @@
         android:id="@+id/slideToConfirmm"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_48sdp"
-        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginTop="@dimen/_40sdp"
-        android:layout_marginRight="@dimen/_20sdp"
         android:layout_marginBottom="@dimen/_30sdp"
         android:background="@drawable/shape_round_rectable"
         android:elevation="@dimen/_2sdp"

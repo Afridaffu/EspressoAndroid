@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/root"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/dialog_corners"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,15 +26,14 @@
         android:id="@+id/layoutMessage"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_100sdp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginTop="40dp"
-        android:layout_marginRight="15dp"
         android:background="@drawable/bg_message_radius">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/addNoteTIL"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:counterEnabled="false"
             app:counterMaxLength="120"
             app:counterTextColor="@color/primary_black"
@@ -44,8 +44,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_80sdp"
                 android:layout_gravity="center_vertical"
-                android:background="@null"
                 android:autofillHints="creditCardSecurityCode"
+                android:background="@null"
+                android:cursorVisible="true"
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="top"
@@ -57,7 +58,6 @@
                 android:padding="15dp"
                 android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                 android:text=""
-                android:cursorVisible="true"
                 android:textColor="@color/primary_black"
                 android:textColorHint="@color/text_grey_msg"
                 android:textCursorDrawable="@drawable/cursor_color"

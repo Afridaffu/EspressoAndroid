@@ -8,6 +8,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.AnimationUtils
+import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityPinBinding
@@ -35,7 +36,7 @@ class PinActivity : BaseActivity(), View.OnClickListener {
 
 
     private fun inItFields() {
-        pinViewModel = PinViewModel.getInstance(this)!!
+        pinViewModel = ViewModelProvider(this).get(PinViewModel::class.java)
 
         binding.qrNavigationTV.setOnClickListener {
             startActivity(Intent(this, GenarateQrActivity::class.java))
@@ -222,9 +223,9 @@ class PinActivity : BaseActivity(), View.OnClickListener {
                         setErrorPIN()
                     }
                 } else {
-                    setErrorPIN()
-//                    val intent = Intent(this, RefundTransactionActivity::class.java)
-//                    startActivity(intent)
+//                    setErrorPIN()
+                    val intent = Intent(this, RefundTransactionActivity::class.java)
+                    startActivity(intent)
 //                    finish()
                 }
             } catch (ex: Exception) {

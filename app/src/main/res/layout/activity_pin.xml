@@ -12,13 +12,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/_6sdp"
         android:background="@drawable/top_corners"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_6sdp"
+            android:layout_marginHorizontal="@dimen/_3sdp"
+            android:layout_marginTop="@dimen/_3sdp"
             android:orientation="horizontal">
 
             <TextView
@@ -68,7 +70,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_6sdp"
+            android:layout_marginHorizontal="@dimen/_3sdp"
             android:orientation="horizontal">
 
             <TextView
@@ -117,7 +119,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_6sdp"
+            android:layout_marginHorizontal="@dimen/_3sdp"
             android:orientation="horizontal">
 
             <TextView
@@ -166,7 +168,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_6sdp"
+            android:layout_marginHorizontal="@dimen/_3sdp"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
@@ -238,7 +240,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_90sdp"
             android:fontFamily="@font/opensans_bold"
-            android:text="Enter Your Pin"
+            android:text="Enter Your PIN"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="@dimen/_16ssp" />
@@ -248,7 +250,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_22sdp"
+            android:layout_marginTop="@dimen/_21sdp"
             android:orientation="horizontal">
 
             <ImageView

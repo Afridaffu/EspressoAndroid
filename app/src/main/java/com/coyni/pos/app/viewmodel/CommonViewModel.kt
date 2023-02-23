@@ -3,6 +3,7 @@ package com.vt.kotlinexamples.retrofit_network.viewmodel
 import android.app.Application
 import android.content.Context
 import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.coyni.pos.app.model.appupdate.AppUpdateResp
 import com.coyni.pos.app.model.login.BiometricSignIn
@@ -16,7 +17,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CommonViewModel private constructor(private val context: Context) {
+class CommonViewModel(application: Application) : AndroidViewModel(application) {
     // Follow below structure for creating API calls
     // App Update Section
     val appUpdateRespMutableLiveData = MutableLiveData<AppUpdateResp?>()
@@ -54,7 +55,7 @@ class CommonViewModel private constructor(private val context: Context) {
                 }
 
                 override fun onFailure(call: Call<AppUpdateResp?>, t: Throwable) {
-                    Toast.makeText(context, "something went wrong", Toast.LENGTH_LONG).show()
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show()
                     appUpdateRespMutableLiveData.value = null
                 }
             })
@@ -102,15 +103,15 @@ class CommonViewModel private constructor(private val context: Context) {
         }
     }
 
-    companion object {
-        private var sInstance: CommonViewModel? = null
-
-        @Synchronized
-        fun getInstance(context: Context): CommonViewModel? {
-            if (sInstance == null) {
-                sInstance = CommonViewModel(context)
-            }
-            return sInstance
-        }
-    }
+//    companion object {
+//        private var sInstance: CommonViewModel? = null
+//
+//        @Synchronized
+//        fun getInstance(context: Context): CommonViewModel? {
+//            if (sInstance == null) {
+//                sInstance = CommonViewModel(context)
+//            }
+//            return sInstance
+//        }
+//    }
 }

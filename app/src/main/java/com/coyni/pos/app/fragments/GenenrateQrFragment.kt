@@ -47,7 +47,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
                 }
             }
         })
-        binding.closeLL.setOnClickListener {
+        binding.closeIV.setOnClickListener {
             binding.merchantAmountET.hint = "0.00"
             binding.merchantAmountET.setText("")
             disableButtons(true)
@@ -98,7 +98,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
                     binding.merchantAmountET.textDirection = View.TEXT_DIRECTION_RTL
                     disableButtons(true)
                     binding.bottomKeyPad.clearData()
-                    binding.closeLL.visibility = View.GONE
+                    binding.closeIV.visibility = View.GONE
                 } else {
                     binding.merchantAmountET.setText("")
                     disableButtons(true)
@@ -133,11 +133,11 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
             if (value) {
                 binding.bottomKeyPad.disableButton()
                 isPayClickable = false
-                binding.closeLL.visibility = View.GONE
+                binding.closeIV.visibility = View.GONE
             } else {
                 binding.bottomKeyPad.enableButton()
                 isPayClickable = true
-                binding.closeLL.visibility = View.VISIBLE
+                binding.closeIV.visibility = View.VISIBLE
             }
         } catch (_: Exception) {
         }
