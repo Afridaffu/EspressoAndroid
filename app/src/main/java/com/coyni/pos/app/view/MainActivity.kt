@@ -2,6 +2,7 @@ package com.coyni.pos.app.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.utils.MyApplication
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         val myApplication: MyApplication = getApplicationContext() as MyApplication
 
         //View model initialization
-        commonViewModel = CommonViewModel.getInstance(this)
+        commonViewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
 
         //API call of Checking App Updates
         commonViewModel!!.getAppUpdate(getString(R.string.android_text))

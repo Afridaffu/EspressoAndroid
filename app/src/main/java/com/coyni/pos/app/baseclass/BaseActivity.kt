@@ -9,10 +9,10 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.utils.LogUtils.Companion.d
 import com.vt.kotlinexamples.retrofit_network.viewmodel.CommonViewModel
-import com.vt.kotlinexamples.retrofit_network.viewmodel.CommonViewModel.Companion.getInstance
 
 abstract class BaseActivity : AppCompatActivity() {
     val TAG = javaClass.name
@@ -25,7 +25,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         try {
             d(TAG, javaClass.name)
-            commonViewModel = getInstance(this)
+            commonViewModel = ViewModelProvider(this).get(CommonViewModel::class.java)
 
 //            runOnUiThread(() -> {
             commonViewModel!!.appUpdateRespMutableLiveData.observe(this,
