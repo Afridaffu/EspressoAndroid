@@ -1,15 +1,19 @@
 package com.coyni.pos.app.view
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.baseclass.OnClickListener
@@ -24,10 +28,13 @@ class LoginActivity : BaseActivity() {
     private var isPassword = false
     private var isIconEnable = false
 
+    override fun onResume() {
+        super.onResume()
+        binding.tidET.requestFocus()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
             WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
@@ -37,6 +44,21 @@ class LoginActivity : BaseActivity() {
         initView()
         focusListeners()
         textWatchers()
+
+
+        val drawable = ContextCompat.getDrawable(this, R.drawable.cursor_color)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            binding.passwordET.textCursorDrawable = drawable
+        } else {
+            try {
+                val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
+                f.isAccessible = true
+                f.set(binding.passwordET, R.drawable.cursor_color)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     private fun initView() {
@@ -84,6 +106,7 @@ class LoginActivity : BaseActivity() {
                     )
             )
         }
+
     }
 
     private fun focusListeners() {
@@ -122,9 +145,13 @@ class LoginActivity : BaseActivity() {
 
         binding.passwordET.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
+                Log.e("getKeyboardVisible", getKeyboardVisible().toString())
+                if (!getKeyboardVisible()!!) {
+                    Utils.shwForcedKeypad(this, binding.passwordET)
+                }
                 if (binding.passwordET.text.toString().isNotEmpty())
                     binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-                Utils.upperHintColor(binding.passwordTIL, this@LoginActivity,R.color.primary_green)
+                Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_green)
                 binding.passwordErrorLL.visibility = View.GONE
                 binding.passwordTIL.setBoxStrokeColorStateList(Utils.getFocusedColorState(this))
                 binding.passwordET.hint =
@@ -133,14 +160,22 @@ class LoginActivity : BaseActivity() {
             } else {
                 if (binding.passwordET.text.toString().length in 1..7) {
                     binding.passwordErrorTV.text = "Please enter a valid Password"
-                    Utils.upperHintColor(binding.passwordTIL, this@LoginActivity,R.color.error_red)
+                    Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.error_red)
                     binding.passwordErrorLL.visibility = View.VISIBLE
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(this))
                 } else {
                     if (binding.passwordET.text.toString().length > 7)
-                        Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_black)
+                        Utils.upperHintColor(
+                            binding.passwordTIL,
+                            this@LoginActivity,
+                            R.color.primary_black
+                        )
                     else
-                        Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.light_gray)
+                        Utils.upperHintColor(
+                            binding.passwordTIL,
+                            this@LoginActivity,
+                            R.color.light_gray
+                        )
                     binding.passwordET.hint = ""
                     binding.passwordErrorLL.visibility = View.GONE
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))

@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.PorterDuff
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
@@ -17,6 +18,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ExpandableListView
 import android.widget.TextView
 import androidx.annotation.ColorRes
@@ -250,10 +252,10 @@ class Utils {
             return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
         }
 
-        fun shwForcedKeypad(context: Context) {
+        fun shwForcedKeypad(context: Context, edittext: EditText) {
             val inputMethodManager =
                 context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+            inputMethodManager.showSoftInput(edittext, 0)
         }
 
         fun hideKeypad(context: Context) {
@@ -691,5 +693,33 @@ class Utils {
             dialog.show()
             return dialog
         }
+
+//        fun setCursorColor(edittext: EditText, context: Context) {
+//            try {
+//                // Get the cursor drawable resource ID
+//                val cursorDrawableRes = TextView::class.java.getDeclaredField("mCursorDrawableRes")
+//                cursorDrawableRes.isAccessible = true
+//                val drawableResId = cursorDrawableRes.getInt(edittext)
+//
+//                // Get the cursor drawable
+//                val cursorDrawable = ContextCompat.getDrawable(this, drawableResId)
+//
+//                // Set the cursor color
+//                cursorDrawable?.setColorFilter(
+//                    ContextCompat.getColor(
+//                        context,
+//                        R.color.primary_green
+//                    ), PorterDuff.Mode.SRC_IN
+//                )
+//
+//                // Set the cursor drawable with the new color
+//                val cursorDrawables = arrayOf(cursorDrawable, cursorDrawable)
+//                val cursorDrawableField = TextView::class.java.getDeclaredField("mCursorDrawable")
+//                cursorDrawableField.isAccessible = true
+//                cursorDrawableField.set(editText, cursorDrawables)
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
     }
 }

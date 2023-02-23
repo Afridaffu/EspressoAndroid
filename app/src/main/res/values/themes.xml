@@ -41,7 +41,6 @@
         <item name="boxCornerRadiusTopEnd">@dimen/_10sdp</item>
         <item name="boxCornerRadiusTopStart">@dimen/_10sdp</item>
         <item name="android:textStyle">bold</item>
-        <item name="colorPrimary">@color/primary_green</item>
     </style>
 
     <style name="CursorColor">
@@ -56,5 +55,9 @@
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_up</item>
         <item name="android:windowExitAnimation">@anim/slide_bottom</item>
+    </style>
+
+    <style name="Widget.AppTheme.TextInputLayout.FilledBox.Dense" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="colorControlActivated">@color/primary_green</item>
     </style>
 </resources>

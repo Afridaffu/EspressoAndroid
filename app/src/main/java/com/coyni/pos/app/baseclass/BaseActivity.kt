@@ -2,15 +2,20 @@ package com.coyni.pos.app.baseclass
 
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
-import android.view.Gravity
-import android.view.Window
-import android.view.WindowManager
+import android.util.Log
+import android.util.TypedValue
+import android.view.*
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.coyni.pos.app.R
+import com.coyni.pos.app.interfaces.OnKeyboardVisibilityListener
 import com.coyni.pos.app.utils.LogUtils.Companion.d
+import com.coyni.pos.app.utils.Utils
 import com.vt.kotlinexamples.retrofit_network.viewmodel.CommonViewModel
 import com.vt.kotlinexamples.retrofit_network.viewmodel.CommonViewModel.Companion.getInstance
 
@@ -21,6 +26,9 @@ abstract class BaseActivity : AppCompatActivity() {
     var isBaseBiometric = false
     var isAccess = false
     var isMerchantHide = false
+    private val mLastClickTime = 0L
+    var isKeyboardVisible: Boolean = false
+    lateinit var decorView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
@@ -28,32 +36,31 @@ abstract class BaseActivity : AppCompatActivity() {
             commonViewModel = getInstance(this)
 
 //            runOnUiThread(() -> {
-            commonViewModel!!.appUpdateRespMutableLiveData.observe(this,
-                Observer { appUpdateResp ->
-                    try {
-                        if (appUpdateResp == null) {
-                            return@Observer
-                        }
-                        if (appUpdateResp.data != null) {
-                            val version = packageManager.getPackageInfo(
-                                this@BaseActivity.packageName,
-                                0
-                            ).versionName
-                            val versionCode =
-                                packageManager.getPackageInfo(packageName, 0).versionCode
-                            val versionName = version.replace(".", "").toInt()
-                        }
-                        //                        else if (appUpdateResp.getError() != null && appUpdateResp.getError().getErrorCode().equals(getString(R.string.accessrestrictederrorcode))) {
-                        //                            showAccessRestricted();
-                        //                        }
-                    } catch (ex: Exception) {
-                        ex.printStackTrace()
+            commonViewModel!!.appUpdateRespMutableLiveData.observe(this, Observer { appUpdateResp ->
+                try {
+                    if (appUpdateResp == null) {
+                        return@Observer
                     }
-                })
+                    if (appUpdateResp.data != null) {
+                        val version = packageManager.getPackageInfo(
+                            this@BaseActivity.packageName, 0
+                        ).versionName
+                        val versionCode = packageManager.getPackageInfo(packageName, 0).versionCode
+                        val versionName = version.replace(".", "").toInt()
+                    }
+                    //                        else if (appUpdateResp.getError() != null && appUpdateResp.getError().getErrorCode().equals(getString(R.string.accessrestrictederrorcode))) {
+                    //                            showAccessRestricted();
+                    //                        }
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                }
+            })
             //            });
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
+        initKeyboardListener()
     }
 
     open fun fragmentNavigation(action: String?, value: String?) {}
@@ -61,18 +68,6 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-    }
-
-    override fun onStart() {
-        super.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
     }
 
     @JvmOverloads
@@ -92,8 +87,7 @@ abstract class BaseActivity : AppCompatActivity() {
         loaderMsg.text = message
         val window = dialog!!.window
         window!!.setLayout(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
+            WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT
         )
         val wlp = window.attributes
         wlp.gravity = Gravity.CENTER
@@ -108,4 +102,29 @@ abstract class BaseActivity : AppCompatActivity() {
             dialog!!.dismiss()
         }
     }
+
+    fun initKeyboardListener() {
+        // Get the current window view
+        decorView = window.decorView
+        // Set a ViewTreeObserver on the window view
+        decorView.getViewTreeObserver().addOnGlobalLayoutListener(OnGlobalLayoutListener {
+
+            // Get the current visible display frame of the window
+            val rect = Rect()
+            decorView.getWindowVisibleDisplayFrame(rect)
+
+            // Calculate the screen height and keyboard height
+            val screenHeight: Int = decorView.getRootView().getHeight()
+            val keyboardHeight = screenHeight - rect.bottom
+
+            // Check if the keyboard is visible
+            isKeyboardVisible = keyboardHeight > screenHeight * 0.15
+            Utils.isKeyboardVisible = isKeyboardVisible
+        })
+    }
+
+    open fun getKeyboardVisible(): Boolean? {
+        return isKeyboardVisible
+    }
+
 }
