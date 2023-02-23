@@ -1,14 +1,20 @@
 package com.coyni.pos.app.view
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.View
+import android.widget.PopupMenu
+import android.widget.PopupMenu.OnDismissListener
 import androidx.fragment.app.Fragment
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityGenarateQrBinding
+import com.coyni.pos.app.dialog.ExitSaleModeDialog
+import com.coyni.pos.app.dialog.OnDialogClickListener
 import com.coyni.pos.app.fragments.GenenrateQrFragment
 import com.coyni.pos.app.fragments.Dashboard_frag
 import com.coyni.pos.app.fragments.MerchantQrFragment
@@ -32,8 +38,24 @@ class GenarateQrActivity : BaseActivity() {
         generateQr()
 //        merchantQr()
         binding.exitLL?.setOnClickListener {
-            startActivity(Intent(applicationContext, MposDashboardActivity::class.java))
-            finish()
+            val dialog = Utils.showProgressDialog(this)
+            Handler().postDelayed({
+                if (dialog != null) {
+                    val intent = Intent(applicationContext, MposDashboardActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            }, 3000)
+//            val exitSaleModeDialog = ExitSaleModeDialog(this)
+//            exitSaleModeDialog.show()
+//            exitSaleModeDialog.setOnDialogClickListener(object : OnDialogClickListener {
+//                override fun onDialogClicked(action: String?, value: Any?) {
+//                    if (action == Utils.DONE) {
+//                        startActivity(Intent(applicationContext, MposDashboardActivity::class.java))
+//                        finish()
+//                    }
+//                }
+//            })
         }
 
     }

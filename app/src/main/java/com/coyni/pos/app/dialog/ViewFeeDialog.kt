@@ -12,5 +12,9 @@ class ViewFeeDialog(context: Context) : BaseDialog(context) {
 
     override fun initViews() {
         dialogBinding = ViewFeesDialogBinding.bind(findViewById(R.id.root))
+
+        dialogBinding.backIV.setOnClickListener {
+            dismiss()
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.coyni.pos.app.model.pin
 
+import com.coyni.pos.app.model.Error
+
 
 data class PinRegisterResponse(
     var status: String?,

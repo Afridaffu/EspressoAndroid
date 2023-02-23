@@ -555,17 +555,6 @@ class Utils {
                 ColorStateList.valueOf(ContextCompat.getColor(context, colorIdRes))
         }
 
-        fun setUpperHintColor(til: TextInputLayout, color: Int) {
-            try {
-                val states = arrayOf(intArrayOf())
-                val colors = intArrayOf(color)
-                val myList = ColorStateList(states, colors)
-                til.defaultHintTextColor = myList
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-            }
-        }
-
         fun checkInternet(context: Context): Boolean {
             var value = false
             try {
@@ -682,6 +671,25 @@ class Utils {
                 R.style.DialogAnimation
             displayAlertDialog!!.setCanceledOnTouchOutside(true)
             displayAlertDialog!!.show()
+        }
+
+        fun showProgressDialog(context: Context?): Dialog? {
+            val dialog = Dialog(context!!)
+            dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.exit_sale_mode_layout)
+            dialog.window!!.setBackgroundDrawableResource(android.R.color.white)
+            val window = dialog.window
+            window!!.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT
+            )
+            val wlp = window.attributes
+            wlp.gravity = Gravity.CENTER
+//            wlp.flags = wlp.flags and WindowManager.LayoutParams.FLAG_DIM_BEHIND
+            window.attributes = wlp
+            dialog.setCanceledOnTouchOutside(true)
+            dialog.show()
+            return dialog
         }
     }
 }

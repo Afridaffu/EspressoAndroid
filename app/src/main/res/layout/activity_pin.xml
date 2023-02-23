@@ -251,72 +251,83 @@
             android:layout_marginTop="@dimen/_22sdp"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/circleOneLL"
-                android:layout_width="@dimen/_27sdp"
-                android:layout_height="@dimen/_27sdp"
-                android:layout_gravity="center"
-                android:layout_marginRight="@dimen/_3sdp"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
-
-                <View
-                    android:id="@+id/chooseCircleOne"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_margin="@dimen/_6sdp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/circleTwoLL"
+            <ImageView
+                android:id="@+id/circleOneIV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_3sdp"
-                android:layout_marginRight="@dimen/_3sdp"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:src="@drawable/clear_pin_ic" />
 
-                <View
-                    android:id="@+id/chooseCircleTwo"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_margin="@dimen/_6sdp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/circleThreeLL"
+            <ImageView
+                android:id="@+id/circleTwoIV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_3sdp"
-                android:layout_marginRight="@dimen/_3sdp"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:src="@drawable/clear_pin_ic" />
 
-                <View
-                    android:id="@+id/chooseCircleThree"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_margin="@dimen/_6sdp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/circleFourLL"
+            <ImageView
+                android:id="@+id/circleThreeIV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_3sdp"
-                android:layout_marginRight="@dimen/_3sdp"
-                android:background="@drawable/ic_outline_circle"
-                android:gravity="center">
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:src="@drawable/clear_pin_ic" />
 
-                <View
-                    android:id="@+id/chooseCircleFour"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_margin="@dimen/_6sdp" />
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/circleFourIV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:src="@drawable/clear_pin_ic" />
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/circleTwoLL"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_marginLeft="@dimen/_3sdp"-->
+            <!--                android:layout_marginRight="@dimen/_3sdp"-->
+            <!--                android:background="@drawable/ic_outline_circle"-->
+            <!--                android:gravity="center">-->
+
+            <!--                <View-->
+            <!--                    android:id="@+id/chooseCircleTwo"-->
+            <!--                    android:layout_width="@dimen/_15sdp"-->
+            <!--                    android:layout_height="@dimen/_15sdp"-->
+            <!--                    android:layout_margin="@dimen/_6sdp" />-->
+            <!--            </LinearLayout>-->
+
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/circleThreeLL"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_marginLeft="@dimen/_3sdp"-->
+            <!--                android:layout_marginRight="@dimen/_3sdp"-->
+            <!--                android:background="@drawable/ic_outline_circle"-->
+            <!--                android:gravity="center">-->
+
+            <!--                <View-->
+            <!--                    android:id="@+id/chooseCircleThree"-->
+            <!--                    android:layout_width="@dimen/_15sdp"-->
+            <!--                    android:layout_height="@dimen/_15sdp"-->
+            <!--                    android:layout_margin="@dimen/_6sdp" />-->
+            <!--            </LinearLayout>-->
+
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/circleFourLL"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_marginLeft="@dimen/_3sdp"-->
+            <!--                android:layout_marginRight="@dimen/_3sdp"-->
+            <!--                android:background="@drawable/ic_outline_circle"-->
+            <!--                android:gravity="center">-->
+
+            <!--                <View-->
+            <!--                    android:id="@+id/chooseCircleFour"-->
+            <!--                    android:layout_width="@dimen/_15sdp"-->
+            <!--                    android:layout_height="@dimen/_15sdp"-->
+            <!--                    android:layout_margin="@dimen/_6sdp" />-->
+            <!--            </LinearLayout>-->
 
             <!--            <LinearLayout-->
             <!--                android:id="@+id/circleFiveLL"-->
@@ -363,14 +374,15 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_9ssp"
             android:visibility="gone" />
+
         <TextView
             android:id="@+id/inValidErrorTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
             android:layout_marginTop="@dimen/_5sdp"
             android:fontFamily="@font/opensans_semibold"
+            android:gravity="center"
             android:text="Invalid PIN Please contact your supervisor for assistance"
             android:textColor="@color/white"
             android:textSize="@dimen/_9ssp"
