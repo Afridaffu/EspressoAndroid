@@ -40,7 +40,7 @@ class MposDashboardActivity : AppCompatActivity() {
                     binding.hiddenView.visibility = View.GONE
                     binding.cvProfileSmall.visibility = View.VISIBLE
                     binding.dbaNameTV.visibility = View.VISIBLE
-                    binding.arrowButton.setImageResource(R.drawable.ic_cross)
+                    binding.arrowButton.setImageResource(R.drawable.menu_bar_ic)
 
                 } else {
                     TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
@@ -49,7 +49,7 @@ class MposDashboardActivity : AppCompatActivity() {
                     binding.cvProfileSmall.visibility = View.GONE
                     binding.dbaNameTV.visibility = View.GONE
                     binding.baseCardview.radius = 15f
-                    binding.arrowButton.setImageResource(R.drawable.ic_back)
+                    binding.arrowButton.setImageResource(R.drawable.ic_white_close)
                 }
             }
 

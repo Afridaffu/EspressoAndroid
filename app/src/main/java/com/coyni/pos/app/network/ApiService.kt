@@ -23,4 +23,6 @@ interface ApiService {
 
     @PATCH("api/v2/coyni-pin/validate")
     fun validateCoyniPin(@Body request: ValidateRequest?): Call<ValidateResponse?>?
+
+
 }

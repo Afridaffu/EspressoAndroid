@@ -1,7 +1,9 @@
 package com.coyni.pos.app.viewmodel
 
+import android.app.Application
 import android.content.Context
 import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.coyni.pos.app.model.pin.PinRegisterResponse
 import com.coyni.pos.app.model.pin.RegisterPinRequest
@@ -15,23 +17,23 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PinViewModel private constructor(private var context: Context) {
+class PinViewModel (application: Application) : AndroidViewModel(application) {
 
     val pinRegisterResponse = MutableLiveData<PinRegisterResponse?>()
 
     val validatePinResponse = MutableLiveData<ValidateResponse?>()
 
-    companion object {
-        private var sInstance: PinViewModel? = null
-
-        @Synchronized
-        fun getInstance(context: Context): PinViewModel? {
-            if (sInstance == null) {
-                sInstance = PinViewModel(context)
-            }
-            return sInstance
-        }
-    }
+//    companion object {
+//        private var sInstance: PinViewModel? = null
+//
+//        @Synchronized
+//        fun getInstance(context: Context): PinViewModel? {
+//            if (sInstance == null) {
+//                sInstance = PinViewModel(context)
+//            }
+//            return sInstance
+//        }
+//    }
 
     fun pinRegisterRequest(request: RegisterPinRequest) {
         try {
@@ -63,7 +65,7 @@ class PinViewModel private constructor(private var context: Context) {
                 }
 
                 override fun onFailure(call: Call<PinRegisterResponse?>, t: Throwable) {
-                    Toast.makeText(context, "something went wrong", Toast.LENGTH_LONG).show()
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show()
                     pinRegisterResponse.value = null
                 }
             })
@@ -102,7 +104,7 @@ class PinViewModel private constructor(private var context: Context) {
                 }
 
                 override fun onFailure(call: Call<ValidateResponse?>, t: Throwable) {
-                    Toast.makeText(context, "something went wrong", Toast.LENGTH_LONG).show()
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show()
                     validatePinResponse.value = null
                 }
             })

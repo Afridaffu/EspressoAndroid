@@ -71,7 +71,7 @@
                             android:background="@color/primary_dark_green"
                             android:foregroundGravity="center_horizontal"
                             android:padding="@dimen/_4sdp"
-                            android:src="@drawable/ic_cross"
+                            android:src="@drawable/menu_bar_ic"
                             app:layout_constraintBottom_toBottomOf="@+id/fixed_layout"
                             app:layout_constraintEnd_toEndOf="@+id/fixed_layout"
                             app:layout_constraintHorizontal_bias="0.062"
