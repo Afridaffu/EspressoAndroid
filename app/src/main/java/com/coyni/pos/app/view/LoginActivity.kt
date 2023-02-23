@@ -39,11 +39,6 @@ class LoginActivity : BaseActivity() {
         textWatchers()
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.tidET.requestFocus()
-    }
-
     private fun initView() {
 
         val myApplication = applicationContext as MyApplication
@@ -71,19 +66,16 @@ class LoginActivity : BaseActivity() {
                 binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
             }
             binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-
         }
 
         myApplication.listener = object : OnClickListener {
             override fun onButtonClick(click: Boolean) {
                 finish()
             }
-
         }
 
         binding.tvButton.setOnClickListener {
 
-            if (Utils.isKeyboardVisible) Utils.hideKeypad(this@LoginActivity)
             Utils.hideKeypad(this@LoginActivity)
             startActivity(
                 Intent(applicationContext, MposDashboardActivity::class.java)
@@ -98,7 +90,6 @@ class LoginActivity : BaseActivity() {
 
         binding.tidET.setOnFocusChangeListener { _, b ->
             if (b) {
-                Utils.shwForcedKeypad(this@LoginActivity)
                 if (binding.tidET.text.toString().isNotEmpty())
                     binding.tidET.setSelection(binding.tidET.text.toString().length)
                 binding.tidET.hint = ""
