@@ -48,7 +48,7 @@ class MerchantQrFragment : BaseFragment() {
 
     private fun inItFields() {
         getValues()
-        strWallet = "12345787654"
+        strWallet = "c7657907-ab53-4fdc-8d1e-d23b1a721cdc"
 //        generateQRCode(strWallet)
         val jsonObject = JSONObject()
         jsonObject.put("cynAmount", amount.toString())
