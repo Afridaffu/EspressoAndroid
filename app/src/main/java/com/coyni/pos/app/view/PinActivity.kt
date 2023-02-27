@@ -224,7 +224,7 @@ class PinActivity : BaseActivity(), View.OnClickListener {
                     }
                 } else {
 //                    setErrorPIN()
-                    val intent = Intent(this, RefundTransactionActivity::class.java)
+                    val intent = Intent(this, GenarateQrActivity::class.java)
                     startActivity(intent)
 //                    finish()
                 }

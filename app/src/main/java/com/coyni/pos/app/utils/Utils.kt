@@ -128,6 +128,11 @@ class Utils {
         const val LOAD_TOKEN = "loadtoken"
         const val CHECK_OUT = "checkout"
         const val SWIPE = "swipe"
+        const val transPending = "pending"
+        const val transCompleted = "completed"
+        const val transSuccessful = "Successful"
+        const val transOpen = "open"
+        const val transFailed = "failed"
         const val CVV_SUCCESS = "cvv"
         var displayAlertDialog: Dialog? = null
         const val slidePercentage = 0.3f
@@ -197,7 +202,7 @@ class Utils {
         const val BUSSINESS = "business"
         const val PIN = "pin"
         const val ERROR = "error"
-        const val SUCCESS = "success"
+        const val SUCCESS = "SUCCESS"
         const val FAILED = "failed"
         const val IN_PROGRESS = "in progress"
         const val CUSTOMER_PROFILE_ACTIVITY =
