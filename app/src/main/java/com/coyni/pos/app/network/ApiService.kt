@@ -1,7 +1,7 @@
 package com.coyni.pos.app.network
 
 import com.coyni.pos.app.model.appupdate.AppUpdateResp
-import com.coyni.pos.app.model.login.BiometricSignIn
+import com.coyni.pos.app.model.login.LoginResponse
 import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.model.pin.PinRegisterResponse
 import com.coyni.pos.app.model.pin.RegisterPinRequest
@@ -12,11 +12,11 @@ import retrofit2.http.*
 
 interface ApiService {
 
+    @POST("api/v2/m-pos/login")
+    fun login(@Body loginRequest: LoginRequest?): Call<LoginResponse>
+
     @GET("api/v2/app-version/retrieve")
     fun getAppUpdate(@Query("osType") osType: String?): Call<AppUpdateResp?>?
-
-    @POST("api/v2/user/signin")
-    fun loginNew(@Body loginRequest: LoginRequest?): Call<BiometricSignIn>
 
     @POST("api/v2/coyni-pin/register")
     fun coyniPinRegister(@Body request: RegisterPinRequest?): Call<PinRegisterResponse?>?

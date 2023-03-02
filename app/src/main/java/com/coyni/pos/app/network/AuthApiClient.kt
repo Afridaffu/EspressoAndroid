@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.coyni.pos.app.BuildConfig
 import com.coyni.pos.app.network.ApiClient.*
+import com.coyni.pos.app.utils.Utils
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -42,8 +43,7 @@ class AuthApiClient {
             var initialRequest: Request = chain.request()
             val requestBuild: Request.Builder =
                 initialRequest.newBuilder()
-                    //                    .addHeader(KEY_AUTHORIZATION, "Bearer " + Utils.getStrAuth());
-                    .addHeader(KEY_AUTHORIZATION, "Bearer ")
+                                        .addHeader(KEY_AUTHORIZATION, "Bearer " + Utils.strAuth);
             initialRequest = requestBuild.build()
             lateinit var response: Response
             response = try {

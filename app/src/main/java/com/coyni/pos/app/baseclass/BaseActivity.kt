@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.utils.LogUtils.Companion.d
-import com.vt.kotlinexamples.retrofit_network.viewmodel.CommonViewModel
+import com.coyni.pos.app.viewmodel.CommonViewModel
 
 abstract class BaseActivity : AppCompatActivity() {
     val TAG = javaClass.name
