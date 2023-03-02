@@ -5,7 +5,6 @@ import com.coyni.pos.app.model.discard.DiscardSaleRequest
 import com.coyni.pos.app.model.discard.DiscardSaleResponse
 import com.coyni.pos.app.model.generate_qr.GenerateQrRequest
 import com.coyni.pos.app.model.generate_qr.GenerateQrResponse
-import com.coyni.pos.app.model.login.BiometricSignIn
 import com.coyni.pos.app.model.login.LoginResponse
 import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.model.pin.PinRegisterResponse
@@ -26,8 +25,8 @@ interface ApiService {
     @GET("api/v2/app-version/retrieve")
     fun getAppUpdate(@Query("osType") osType: String?): Call<AppUpdateResp?>?
 
-    @POST("api/v2/user/signin")
-    fun loginNew(@Body loginRequest: LoginRequest?): Call<BiometricSignIn>?
+//    @POST("api/v2/user/signin")
+//    fun loginNew(@Body loginRequest: LoginRequest?): Call<BiometricSignIn>?
 
     @POST("api/v2/m-pos/generate-qrcode")
     fun generateQR(@Body generateQrRequest: GenerateQrRequest?): Call<GenerateQrResponse>?
