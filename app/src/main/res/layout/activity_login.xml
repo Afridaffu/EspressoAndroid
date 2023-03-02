@@ -78,7 +78,7 @@
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="@string/terminal_id"
                         android:inputType="number|textNoSuggestions"
-                        android:maxLength="8"
+                        android:maxLength="12"
                         android:maxLines="1"
                         android:paddingVertical="@dimen/_14sdp"
                         android:paddingStart="@dimen/_10sdp"
