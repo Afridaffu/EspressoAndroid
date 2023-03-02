@@ -13,6 +13,8 @@ import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityPinBinding
 import com.coyni.pos.app.model.pin.ValidateRequest
+import com.coyni.pos.app.model.pin.ValidateResponse
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.PinViewModel
 
@@ -20,6 +22,7 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     lateinit var binding: ActivityPinBinding
     var passcode: String = ""
     lateinit var pinViewModel: PinViewModel
+    var myApplication: MyApplication? = null
     lateinit var action: String
     var count: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +40,7 @@ class PinActivity : BaseActivity(), View.OnClickListener {
 
     private fun inItFields() {
         pinViewModel = ViewModelProvider(this).get(PinViewModel::class.java)
+        myApplication = applicationContext as MyApplication
 
         binding.qrNavigationTV.setOnClickListener {
             startActivity(Intent(this, GenarateQrActivity::class.java))
@@ -207,15 +211,17 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun inItObservers() {
-        pinViewModel.validatePinResponse.observe(this) { ValidateResponse ->
+        pinViewModel.validatePinResponse.observe(this) { validateResponse ->
             try {
-                if (ValidateResponse!!.data != null) {
-                    if (ValidateResponse.status == Utils.SUCCESS) {
+                if (validateResponse!!.data != null) {
+                    if (validateResponse.status == Utils.SUCCESS) {
+                        myApplication?.mCurrentUserData?.validateResponseData =
+                            validateResponse.data
                         Handler().postDelayed({
                             val `in` = Intent()
                             `in`.putExtra(Utils.ACTION_TYPE, action)
                             `in`.putExtra(
-                                Utils.TRANSACTION_TOKEN, ValidateResponse.data?.requestToken
+                                Utils.TRANSACTION_TOKEN, validateResponse.data?.token
                             )
                             sendSuccessResult(`in`)
                         }, 200)
@@ -223,9 +229,9 @@ class PinActivity : BaseActivity(), View.OnClickListener {
                         setErrorPIN()
                     }
                 } else {
-//                    setErrorPIN()
-                    val intent = Intent(this, GenarateQrActivity::class.java)
-                    startActivity(intent)
+                    setErrorPIN()
+//                    val intent = Intent(this, GenarateQrActivity::class.java)
+//                    startActivity(intent)
 //                    finish()
                 }
             } catch (ex: Exception) {

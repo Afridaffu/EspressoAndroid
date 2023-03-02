@@ -14,14 +14,17 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.MerchantQrBinding
 import com.coyni.pos.app.dialog.DiscardSaleDialog
 import com.coyni.pos.app.dialog.OnDialogClickListener
+import com.coyni.pos.app.model.discard.DiscardSaleRequest
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.view.MposDashboardActivity
+import com.coyni.pos.app.viewmodel.GenerateQrViewModel
 import org.json.JSONObject
 
 class MerchantQrFragment : BaseFragment() {
@@ -34,6 +37,8 @@ class MerchantQrFragment : BaseFragment() {
     lateinit var bitmap: Bitmap
     lateinit var qrgEncoder: QRGEncoder
     var rotate: Animation? = null
+    var myApplication: MyApplication? = null
+    lateinit var generateQrViewModel: GenerateQrViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,17 +48,22 @@ class MerchantQrFragment : BaseFragment() {
         binding = MerchantQrBinding.inflate(layoutInflater, container, false)
 
         inItFields()
+        inItObservers()
         return binding.root
     }
 
+
     private fun inItFields() {
+        myApplication = requireActivity().application as MyApplication
+        generateQrViewModel =
+            ViewModelProvider(requireActivity()).get(GenerateQrViewModel::class.java)
         getValues()
-        strWallet = "c7657907-ab53-4fdc-8d1e-d23b1a721cdc"
+        strWallet = myApplication!!.mCurrentUserData?.generateQrResponseData?.walletId.toString()
 //        generateQRCode(strWallet)
         val jsonObject = JSONObject()
         jsonObject.put("cynAmount", amount.toString())
         jsonObject.put("referenceID", strWallet)
-        generateQRCode(jsonObject.toString())
+        generateQRCode(myApplication!!.mCurrentUserData?.generateQrResponseData?.image)
         binding.amountTV.text = amount.toString()
 //        binding.lottieAnimV.loop(false)
 
@@ -81,17 +91,41 @@ class MerchantQrFragment : BaseFragment() {
             discardSaleDialog.setOnDialogClickListener(object : OnDialogClickListener {
                 override fun onDialogClicked(action: String?, value: Any?) {
                     if (action == Utils.DISCARD) {
-                        val intent = Intent(requireContext(), MposDashboardActivity::class.java)
-                        startActivity(intent)
-                        requireActivity().finish()
+                        disCardSale()
                     }
                 }
             })
         }
+    }
 
-//        binding.amountTV.setOnClickListener {
-//            startActivity(Intent(context, SucessFlowActivity::class.java))
-//        }
+    private fun disCardSale() {
+        val discardSaleRequest = DiscardSaleRequest()
+        discardSaleRequest.requestToken =
+            myApplication?.mCurrentUserData?.validateResponseData?.token
+        discardSaleRequest.uniqueId =
+            myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId
+        generateQrViewModel.discardSaleRequest(discardSaleRequest)
+    }
+
+    private fun inItObservers() {
+        generateQrViewModel.discardSaleResponse.observe(requireActivity()) { discardSaleResponse ->
+            try {
+                if (discardSaleResponse!!.data != null) {
+                    if (discardSaleResponse.status == Utils.SUCCESS) {
+                        val intent = Intent(requireContext(), MposDashboardActivity::class.java)
+                        startActivity(intent)
+                        requireActivity().finish()
+                    } else {
+
+                    }
+                } else {
+
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+
     }
 
     private fun generateQRCode(wallet: String?) {

@@ -179,6 +179,8 @@ class Utils {
         const val instantPay = 1
         const val giftCard = 6
         const val pageSize = 25
+
+        const val CUSTOMER = 1
         const val walletCategory = "1"
         const val PHONE = "PHONE"
         const val EMAIL = "EMAIL"
