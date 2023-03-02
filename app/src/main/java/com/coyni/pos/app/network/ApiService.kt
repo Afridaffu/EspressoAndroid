@@ -1,12 +1,19 @@
 package com.coyni.pos.app.network
 
 import com.coyni.pos.app.model.appupdate.AppUpdateResp
+import com.coyni.pos.app.model.discard.DiscardSaleRequest
+import com.coyni.pos.app.model.discard.DiscardSaleResponse
+import com.coyni.pos.app.model.generate_qr.GenerateQrRequest
+import com.coyni.pos.app.model.generate_qr.GenerateQrResponse
 import com.coyni.pos.app.model.login.BiometricSignIn
 import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.model.pin.PinRegisterResponse
 import com.coyni.pos.app.model.pin.RegisterPinRequest
 import com.coyni.pos.app.model.pin.ValidateRequest
 import com.coyni.pos.app.model.pin.ValidateResponse
+import com.coyni.pos.app.model.refund.RefundProcessRequest
+import com.coyni.pos.app.model.refund.RefundResponse
+import com.coyni.pos.app.model.refund.RefundVerifyRequest
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -16,12 +23,21 @@ interface ApiService {
     fun getAppUpdate(@Query("osType") osType: String?): Call<AppUpdateResp?>?
 
     @POST("api/v2/user/signin")
-    fun loginNew(@Body loginRequest: LoginRequest?): Call<BiometricSignIn>
+    fun loginNew(@Body loginRequest: LoginRequest?): Call<BiometricSignIn>?
 
-    @POST("api/v2/coyni-pin/register")
-    fun coyniPinRegister(@Body request: RegisterPinRequest?): Call<PinRegisterResponse?>?
+    @POST("api/v2/m-pos/generate-qrcode")
+    fun generateQR(@Body generateQrRequest: GenerateQrRequest?): Call<GenerateQrResponse>?
 
-    @PATCH("api/v2/coyni-pin/validate")
+    @POST("api/v2/node/mpos/refund/verify")
+    fun refundVerify(@Body refundVerifyRequest: RefundVerifyRequest?): Call<RefundResponse>?
+
+    @POST("api/v2/m-pos/discard-sale")
+    fun discardSale(@Body discardSaleRequest: DiscardSaleRequest?): Call<DiscardSaleResponse>?
+
+    @POST("api/v2/node/mpos/refund/process")
+    fun refundProcess(@Body refundProcessRequest: RefundProcessRequest?): Call<RefundResponse>?
+
+    @PATCH("api/v2/m-pos/validate-pin")
     fun validateCoyniPin(@Body request: ValidateRequest?): Call<ValidateResponse?>?
 
 

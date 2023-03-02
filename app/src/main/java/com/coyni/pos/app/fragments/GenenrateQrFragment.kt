@@ -10,15 +10,21 @@ import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.FragmentGenarateQrBinding
+import com.coyni.pos.app.model.generate_qr.GenerateQrRequest
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.utils.keyboards.GenerateQrCustomKeyboard
+import com.coyni.pos.app.viewmodel.GenerateQrViewModel
 
 class GenenrateQrFragment : BaseFragment(), TextWatcher {
     lateinit var binding: FragmentGenarateQrBinding
     var fontSize: Float = 0.0f;
     private var isPayClickable: Boolean = false
+    lateinit var generateQrViewModel: GenerateQrViewModel
+    var myApplication: MyApplication? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,10 +34,13 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         binding = FragmentGenarateQrBinding.inflate(layoutInflater, container, false)
 
         inItFields()
+        inItObservers()
         return binding.root
     }
 
     private fun inItFields() {
+        generateQrViewModel = ViewModelProvider(this).get(GenerateQrViewModel::class.java)
+        myApplication = requireActivity().application as MyApplication
         fontSize = binding.merchantAmountET.textSize
         initKeyboard()
         binding.merchantAmountET.showSoftInputOnFocus = false
@@ -52,6 +61,32 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
             binding.merchantAmountET.setText("")
             disableButtons(true)
         }
+    }
+
+    private fun inItObservers() {
+        generateQrViewModel.generateQrResponse.observe(requireActivity()) { generateQrResponse ->
+            try {
+                println("something went wrong")
+                if (generateQrResponse!!.data != null) {
+                    println("something")
+                    if (generateQrResponse.status == Utils.SUCCESS) {
+                        myApplication?.mCurrentUserData?.generateQrResponseData =
+                            generateQrResponse.data
+                        mActivity.fragmentNavigation(
+                            Utils.MERCHANT_QR,
+                            Utils.convertTwoDecimal(binding.merchantAmountET.text.toString())
+                        )
+                    } else {
+
+                    }
+                } else {
+
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -118,14 +153,20 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
             override fun onKeyboardClick(action: String, value: String?) {
                 if (action == Utils.BUTTON_CLICK) {
                     if (isPayClickable) {
-                        mActivity.fragmentNavigation(
-                            Utils.MERCHANT_QR,
-                            Utils.convertTwoDecimal(binding.merchantAmountET.text.toString())
-                        )
+                        generateQR()
                     }
                 }
             }
         })
+    }
+
+    private fun generateQR() {
+        val generateQrRequest = GenerateQrRequest()
+        generateQrRequest.amount = Utils.doubleParsing(binding.merchantAmountET.text.toString())
+        generateQrRequest.isQrCodeEnable = true
+        generateQrRequest.requestToken =
+            myApplication?.mCurrentUserData?.validateResponseData?.token
+        generateQrViewModel.generateQrRequest(generateQrRequest)
     }
 
     private fun disableButtons(value: Boolean) {

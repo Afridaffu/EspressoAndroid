@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityRefundTransactionBinding
@@ -19,8 +20,13 @@ import com.coyni.pos.app.dialog.AddNoteDialog
 import com.coyni.pos.app.dialog.OnDialogClickListener
 import com.coyni.pos.app.dialog.RefundPreviewDialog
 import com.coyni.pos.app.model.TransactionData
+import com.coyni.pos.app.model.refund.RefundProcessRequest
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.utils.keyboards.CustomKeyboard
+import com.coyni.pos.app.viewmodel.RefundViewModel
+import com.coyni.pos.app.model.refund.RefundResponse
+import com.coyni.pos.app.model.refund.RefundVerifyRequest
+import com.coyni.pos.app.utils.MyApplication
 
 class RefundTransactionActivity : BaseActivity(), TextWatcher {
     private lateinit var binding: ActivityRefundTransactionBinding
@@ -36,6 +42,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     var ishalfamount: Boolean = false
     var isfullamount: Boolean = false
     var fontSize: Float = 0.0f;
+    lateinit var refundViewModel: RefundViewModel
+    var myApplication: MyApplication? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +52,12 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         setContentView(binding.root)
 
         inItFields()
+        inItObservers()
     }
 
     private fun inItFields() {
+        myApplication = applicationContext as MyApplication
+        refundViewModel = ViewModelProvider(this).get(RefundViewModel::class.java)
         grossAmount = 500.00
         fontSize = binding.refundAmountET.textSize
         binding.refundAmountET.showSoftInputOnFocus = false
@@ -132,6 +143,43 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         }
     }
 
+    private fun inItObservers() {
+        refundViewModel.refundVerifyResponse.observe(this) { refundResponse ->
+            try {
+                if (refundResponse!!.data != null) {
+                    if (refundResponse.status == Utils.SUCCESS) {
+                        refundPreviewDialog()
+
+                    } else {
+
+                    }
+                } else {
+
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+        refundViewModel.refundProcessResponse.observe(this) { refundResponse ->
+            try {
+                if (refundResponse!!.data != null) {
+                    if (refundResponse.status == Utils.SUCCESS) {
+                        myApplication?.mCurrentUserData?.refundResponseData = refundResponse.data
+                        val intent = Intent(this, TransactionStatusActivity::class.java)
+                        startActivity(intent)
+                    } else {
+
+                    }
+                } else {
+
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+
+    }
+
     private fun inItKeyboard() {
         val ic: InputConnection = binding.refundAmountET.onCreateInputConnection(EditorInfo())
         binding.refundCKB.setInputConnection(ic)
@@ -151,12 +199,21 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             override fun onKeyboardClick(action: String, value: String?) {
                 if (action == Utils.BUTTON_CLICK) {
                     if (isrefundClickable) {
-                        binding.refundAmountET.setText(Utils.convertTwoDecimal(enteredAmount.toString()))
-                        refundPreviewDialog()
+                        refundVerify()
                     }
                 }
             }
         })
+    }
+
+    private fun refundVerify() {
+
+        val refundVerifyRequest = RefundVerifyRequest()
+        refundVerifyRequest.refundAmount =
+            Utils.doubleParsing(binding.refundAmountET.text.toString())
+        refundVerifyRequest.gbxTransactionId = "djgfdggdqwjgdvqwgdvwqgdvqwg"
+        refundVerifyRequest.refundReason = reason
+        refundViewModel.refundVerifyRequest(refundVerifyRequest)
     }
 
     private fun refundPreviewDialog() {
@@ -192,7 +249,14 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     }
 
     private fun refundApiCall(token: String?) {
-
+        val refundProcessRequest = RefundProcessRequest()
+        refundProcessRequest.refundAmount =
+            Utils.doubleParsing(binding.refundAmountET.text.toString())
+        refundProcessRequest.refundReason = reason
+        refundProcessRequest.requestToken =
+            myApplication?.mCurrentUserData?.validateResponseData?.token
+        refundProcessRequest.gbxTransactionId = "gwdfghfegfqhgdfvqgdfvqgh"
+        refundProcessRequest.walletType = Utils.CUSTOMER
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

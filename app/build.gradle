@@ -67,7 +67,8 @@ android {
             buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
         }
         dev {
-            buildConfigField 'String', 'URL_PRODUCTION', '\"http://dev23-api-gateway-511281183.us-east-1.elb.amazonaws.com:80/\"'
+//            buildConfigField 'String', 'URL_PRODUCTION', '\"http://dev23-api-gateway-511281183.us-east-1.elb.amazonaws.com:80/\"'
+            buildConfigField 'String', 'URL_PRODUCTION', '\"http://dev23-api-gateway-511281183.us-east-1.elb.amazonaws.com/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
             buildConfigField 'String', 'MATOMO_SERVER', '\"https://qa-analytics.coyni.com\"'

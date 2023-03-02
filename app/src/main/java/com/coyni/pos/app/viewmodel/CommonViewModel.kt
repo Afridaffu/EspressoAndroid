@@ -64,44 +64,44 @@ class CommonViewModel(application: Application) : AndroidViewModel(application) 
         }
     } // App Update Section
 
-    fun loginNew(loginRequest: LoginRequest?) {
-        try {
-            val apiService: ApiService = ApiClient.getInstance().create(ApiService::class.java)
-            val mCall: Call<BiometricSignIn> = apiService.loginNew(loginRequest)
-            mCall.enqueue(object : Callback<BiometricSignIn?> {
-                override fun onResponse(
-                    call: Call<BiometricSignIn?>,
-                    response: Response<BiometricSignIn?>
-                ) {
-                    try {
-                        var strResponse = ""
-                        if (response.isSuccessful()) {
-                            val obj: BiometricSignIn? = response.body()
-                            loginNewLiveData.setValue(obj)
-                        } else if (response.code() == 500) {
-                            strResponse = response.errorBody()!!.string()
-                            val gson = Gson()
-                            val type = object : TypeToken<BiometricSignIn?>() {}.type
-                            val errorResponse: BiometricSignIn = gson.fromJson(
-                                response.errorBody()!!.charStream(), type
-                            )
-
-                        } else {
-
-                        }
-                    } catch (ex: java.lang.Exception) {
-                        ex.printStackTrace()
-                    }
-                }
-
-                override fun onFailure(call: Call<BiometricSignIn?>, t: Throwable) {
-                    loginNewLiveData.setValue(null)
-                }
-            })
-        } catch (ex: java.lang.Exception) {
-            ex.printStackTrace()
-        }
-    }
+//    fun loginNew(loginRequest: LoginRequest?) {
+//        try {
+//            val apiService: ApiService = ApiClient.getInstance().create(ApiService::class.java)
+//            val mCall: Call<BiometricSignIn> = apiService.loginNew(loginRequest)
+//            mCall.enqueue(object : Callback<BiometricSignIn?> {
+//                override fun onResponse(
+//                    call: Call<BiometricSignIn?>,
+//                    response: Response<BiometricSignIn?>
+//                ) {
+//                    try {
+//                        var strResponse = ""
+//                        if (response.isSuccessful()) {
+//                            val obj: BiometricSignIn? = response.body()
+//                            loginNewLiveData.setValue(obj)
+//                        } else if (response.code() == 500) {
+//                            strResponse = response.errorBody()!!.string()
+//                            val gson = Gson()
+//                            val type = object : TypeToken<BiometricSignIn?>() {}.type
+//                            val errorResponse: BiometricSignIn = gson.fromJson(
+//                                response.errorBody()!!.charStream(), type
+//                            )
+//
+//                        } else {
+//
+//                        }
+//                    } catch (ex: java.lang.Exception) {
+//                        ex.printStackTrace()
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<BiometricSignIn?>, t: Throwable) {
+//                    loginNewLiveData.setValue(null)
+//                }
+//            })
+//        } catch (ex: java.lang.Exception) {
+//            ex.printStackTrace()
+//        }
+//    }
 
 //    companion object {
 //        private var sInstance: CommonViewModel? = null

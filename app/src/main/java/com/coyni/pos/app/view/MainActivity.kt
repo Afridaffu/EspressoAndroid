@@ -35,10 +35,10 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-        val loginRequest = LoginRequest()
-        loginRequest.setEmail("ttt@gmail.com")
-        loginRequest.setPassword("Admin@123")
-        commonViewModel!!.loginNew(loginRequest)
+//        val loginRequest = LoginRequest()
+//        loginRequest.setEmail("ttt@gmail.com")
+//        loginRequest.setPassword("Admin@123")
+//        commonViewModel!!.loginNew(loginRequest)
 
         commonViewModel!!.loginNewLiveData.observe(this, { it ->
             try {
