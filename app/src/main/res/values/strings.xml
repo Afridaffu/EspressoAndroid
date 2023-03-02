@@ -51,6 +51,9 @@
     <string name="customer_service_phone">Customer Service Phone</string>
     <string name="original_transaction_details">Original Transaction Details</string>
     <string name="transaction_amount">Transaction Amount</string>
+    <string name="transaction_processing">Transaction Processing</string>
+    <string name="please_do_not_close_this_window">Please do not close this window</string>
+    <string name="purchase_complete">Purchase Complete</string>
 
 
 </resources>

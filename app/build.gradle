@@ -67,7 +67,7 @@ android {
             buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
         }
         dev {
-            buildConfigField 'String', 'URL_PRODUCTION', '\"http://dev23-api-gateway-511281183.us-east-1.elb.amazonaws.com:80/\"'
+            buildConfigField 'String', 'URL_PRODUCTION', '\"http://dev23-api-gateway-511281183.us-east-1.elb.amazonaws.com/\"'
             buildConfigField 'String', 'Referer', '\"http://mobile/\"'
             buildConfigField 'String', 'Country_Code', '\"US\"'
             buildConfigField 'String', 'MATOMO_SERVER', '\"https://qa-analytics.coyni.com\"'
@@ -167,5 +167,7 @@ dependencies {
 
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
     implementation 'com.google.zxing:core:3.4.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.8.0'
+    implementation 'com.squareup.okhttp3:mockwebserver:3.12.1'
 
 }

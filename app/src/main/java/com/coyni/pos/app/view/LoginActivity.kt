@@ -15,19 +15,26 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.baseclass.OnClickListener
 import com.coyni.pos.app.databinding.ActivityLoginBinding
 import com.coyni.pos.app.dialog.ErrorDialog
+import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
+import com.coyni.pos.app.viewmodel.LoginViewModel
 
 class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivityLoginBinding
     private var isId = false
     private var isPassword = false
     private var isIconEnable = false
+    private var terminalId: String = ""
+    private var password: String = ""
+    private var loinViewModel: LoginViewModel? = null
 
     override fun onResume() {
         super.onResume()
@@ -46,24 +53,12 @@ class LoginActivity : BaseActivity() {
         initView()
         focusListeners()
         textWatchers()
-
-
-        val drawable = ContextCompat.getDrawable(this, R.drawable.cursor_color)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            binding.passwordET.textCursorDrawable = drawable
-        } else {
-            try {
-                val f = TextView::class.java.getDeclaredField("mCursorDrawableRes")
-                f.isAccessible = true
-                f.set(binding.passwordET, R.drawable.cursor_color)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+        initObserver()
     }
 
     private fun initView() {
+
+        loinViewModel = ViewModelProvider(this@LoginActivity).get(LoginViewModel::class.java)
 
         val myApplication = applicationContext as MyApplication
 
@@ -98,13 +93,8 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.tvButton.setOnClickListener {
-
-            Utils.hideKeypad(this@LoginActivity)
-            startActivity(
-                Intent(applicationContext, MposDashboardActivity::class.java).setFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    )
-            )
+            val loginRequest: LoginRequest = LoginRequest(terminalId, password)
+            loinViewModel?.getLoginData(loginRequest)
         }
 
     }
@@ -113,9 +103,8 @@ class LoginActivity : BaseActivity() {
 
         binding.tidET.setOnFocusChangeListener { _, b ->
             if (b) {
-                if (binding.tidET.text.toString()
-                        .isNotEmpty()
-                ) binding.tidET.setSelection(binding.tidET.text.toString().length)
+                if (binding.tidET.text.toString().isNotEmpty())
+                    binding.tidET.setSelection(binding.tidET.text.toString().length)
                 binding.tidET.hint = ""
                 binding.tvUpperHint.visibility = View.VISIBLE
                 binding.tvUpperHint.setTextColor(getColor(R.color.primary_green))
@@ -146,6 +135,9 @@ class LoginActivity : BaseActivity() {
 
         binding.passwordET.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
+                if (binding.passwordET.text.toString().isNotEmpty())
+                    binding.passwordET.setSelection(binding.passwordET.text.toString().length)
+                Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_green)
                 Log.e("getKeyboardVisible", getKeyboardVisible().toString())
                 if (!getKeyboardVisible()!!) {
                     Utils.shwForcedKeypad(this, binding.passwordET)
@@ -171,12 +163,18 @@ class LoginActivity : BaseActivity() {
                     binding.passwordErrorLL.visibility = View.VISIBLE
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(this))
                 } else {
-                    if (binding.passwordET.text.toString().length > 7) Utils.upperHintColor(
-                        binding.passwordTIL, this@LoginActivity, R.color.primary_black
-                    )
-                    else Utils.upperHintColor(
-                        binding.passwordTIL, this@LoginActivity, R.color.light_gray
-                    )
+                    if (binding.passwordET.text.toString().length > 7)
+                        Utils.upperHintColor(
+                            binding.passwordTIL,
+                            this@LoginActivity,
+                            R.color.primary_black
+                        )
+                    else
+                        Utils.upperHintColor(
+                            binding.passwordTIL,
+                            this@LoginActivity,
+                            R.color.light_gray
+                        )
                     binding.passwordET.hint = ""
                     binding.passwordErrorLL.visibility = View.GONE
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
@@ -195,6 +193,7 @@ class LoginActivity : BaseActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 isId = binding.tidET.text.toString().length >= 5
+                terminalId = binding.tidET.text.toString()
                 enableButton()
             }
 
@@ -210,6 +209,7 @@ class LoginActivity : BaseActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 isPassword = binding.passwordET.text?.length!! >= 8
+                password = binding.passwordET.text.toString()
                 enableButton()
 
                 if (p0!!.length == 0) {
@@ -239,6 +239,29 @@ class LoginActivity : BaseActivity() {
             binding.tvButton.background =
                 AppCompatResources.getDrawable(this@LoginActivity, R.drawable.button_bg_inactive)
         }
+    }
+
+    private fun initObserver() {
+        loinViewModel?.loginResponseMutableLiveData?.observe(this@LoginActivity,
+            Observer { response ->
+                if (response != null && response.status.equals(Utils.SUCCESS)) {
+                    Utils.strAuth = response.data?.jwtToken
+                    Utils.hideKeypad(this@LoginActivity)
+                    if (response.data?.status.equals("Deactivated")) {
+                        showTerminalScreen()
+                    } else {
+                        startActivity(
+                            Intent(applicationContext, MposDashboardActivity::class.java)
+                                .setFlags(
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                )
+                        )
+                    }
+
+                } else {
+                    showDialog()
+                }
+            })
     }
 
     private fun showTerminalScreen() {

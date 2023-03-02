@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/_11sdp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_90sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
+            android:text="@string/transaction_processing"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:gravity="center"
+            android:text="@string/please_do_not_close_this_window"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/_11ssp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_200sdp"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/carpet" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/stepperRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_20sdp" />
+    </LinearLayout>
+</layout>
