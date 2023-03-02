@@ -10,19 +10,26 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.baseclass.OnClickListener
 import com.coyni.pos.app.databinding.ActivityLoginBinding
 import com.coyni.pos.app.dialog.ErrorDialog
+import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
+import com.coyni.pos.app.viewmodel.LoginViewModel
 
 class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivityLoginBinding
     private var isId = false
     private var isPassword = false
     private var isIconEnable = false
+    private var terminalId: String = ""
+    private var password: String = ""
+    private var loinViewModel: LoginViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +44,12 @@ class LoginActivity : BaseActivity() {
         initView()
         focusListeners()
         textWatchers()
+        initObserver()
     }
 
     private fun initView() {
+
+        loinViewModel = ViewModelProvider(this@LoginActivity).get(LoginViewModel::class.java)
 
         val myApplication = applicationContext as MyApplication
 
@@ -75,14 +85,8 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.tvButton.setOnClickListener {
-
-            Utils.hideKeypad(this@LoginActivity)
-            startActivity(
-                Intent(applicationContext, MposDashboardActivity::class.java)
-                    .setFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    )
-            )
+            val loginRequest: LoginRequest = LoginRequest(terminalId, password)
+            loinViewModel?.getLoginData(loginRequest)
         }
     }
 
@@ -124,7 +128,7 @@ class LoginActivity : BaseActivity() {
             if (hasFocus) {
                 if (binding.passwordET.text.toString().isNotEmpty())
                     binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-                Utils.upperHintColor(binding.passwordTIL, this@LoginActivity,R.color.primary_green)
+                Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_green)
                 binding.passwordErrorLL.visibility = View.GONE
                 binding.passwordTIL.setBoxStrokeColorStateList(Utils.getFocusedColorState(this))
                 binding.passwordET.hint =
@@ -133,14 +137,22 @@ class LoginActivity : BaseActivity() {
             } else {
                 if (binding.passwordET.text.toString().length in 1..7) {
                     binding.passwordErrorTV.text = "Please enter a valid Password"
-                    Utils.upperHintColor(binding.passwordTIL, this@LoginActivity,R.color.error_red)
+                    Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.error_red)
                     binding.passwordErrorLL.visibility = View.VISIBLE
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(this))
                 } else {
                     if (binding.passwordET.text.toString().length > 7)
-                        Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_black)
+                        Utils.upperHintColor(
+                            binding.passwordTIL,
+                            this@LoginActivity,
+                            R.color.primary_black
+                        )
                     else
-                        Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.light_gray)
+                        Utils.upperHintColor(
+                            binding.passwordTIL,
+                            this@LoginActivity,
+                            R.color.light_gray
+                        )
                     binding.passwordET.hint = ""
                     binding.passwordErrorLL.visibility = View.GONE
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
@@ -159,6 +171,7 @@ class LoginActivity : BaseActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 isId = binding.tidET.text.toString().length >= 5
+                terminalId = binding.tidET.text.toString()
                 enableButton()
             }
 
@@ -174,6 +187,7 @@ class LoginActivity : BaseActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 isPassword = binding.passwordET.text?.length!! >= 8
+                password = binding.passwordET.text.toString()
                 enableButton()
             }
 
@@ -194,6 +208,29 @@ class LoginActivity : BaseActivity() {
             binding.tvButton.background =
                 AppCompatResources.getDrawable(this@LoginActivity, R.drawable.button_bg_inactive)
         }
+    }
+
+    private fun initObserver() {
+        loinViewModel?.loginResponseMutableLiveData?.observe(this@LoginActivity,
+            Observer { response ->
+                if (response != null && response.status.equals(Utils.SUCCESS)) {
+                    Utils.strAuth = response.data?.jwtToken
+                    Utils.hideKeypad(this@LoginActivity)
+                    if (response.data?.status.equals("Deactivated")) {
+                        showTerminalScreen()
+                    } else {
+                        startActivity(
+                            Intent(applicationContext, MposDashboardActivity::class.java)
+                                .setFlags(
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                )
+                        )
+                    }
+
+                } else {
+                    showDialog()
+                }
+            })
     }
 
     private fun showTerminalScreen() {

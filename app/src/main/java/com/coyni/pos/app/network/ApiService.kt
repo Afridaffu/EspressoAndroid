@@ -6,6 +6,7 @@ import com.coyni.pos.app.model.discard.DiscardSaleResponse
 import com.coyni.pos.app.model.generate_qr.GenerateQrRequest
 import com.coyni.pos.app.model.generate_qr.GenerateQrResponse
 import com.coyni.pos.app.model.login.BiometricSignIn
+import com.coyni.pos.app.model.login.LoginResponse
 import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.model.pin.PinRegisterResponse
 import com.coyni.pos.app.model.pin.RegisterPinRequest
@@ -18,6 +19,9 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
+
+    @POST("api/v2/m-pos/login")
+    fun login(@Body loginRequest: LoginRequest?): Call<LoginResponse>
 
     @GET("api/v2/app-version/retrieve")
     fun getAppUpdate(@Query("osType") osType: String?): Call<AppUpdateResp?>?

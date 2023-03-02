@@ -1,13 +1,10 @@
-package com.vt.kotlinexamples.retrofit_network.viewmodel
+package com.coyni.pos.app.viewmodel
 
 import android.app.Application
-import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.coyni.pos.app.model.appupdate.AppUpdateResp
-import com.coyni.pos.app.model.login.BiometricSignIn
-import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.network.ApiClient
 import com.coyni.pos.app.network.ApiClient.Companion.getInstance
 import com.coyni.pos.app.network.ApiService
@@ -21,7 +18,7 @@ class CommonViewModel(application: Application) : AndroidViewModel(application) 
     // Follow below structure for creating API calls
     // App Update Section
     val appUpdateRespMutableLiveData = MutableLiveData<AppUpdateResp?>()
-    val loginNewLiveData = MutableLiveData<BiometricSignIn?>()
+//    val loginNewLiveData = MutableLiveData<BiometricSignIn?>()
 
     fun getAppUpdate(osType: String?) {
         try {

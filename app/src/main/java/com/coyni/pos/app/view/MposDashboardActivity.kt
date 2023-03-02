@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.ui.AppBarConfiguration
 import com.coyni.pos.app.R
 import com.coyni.pos.app.databinding.ActivityMposDashboardBinding
 import com.coyni.pos.app.fragments.Dashboard_frag
+import com.coyni.pos.app.utils.Utils
 
 class MposDashboardActivity : AppCompatActivity() {
 
