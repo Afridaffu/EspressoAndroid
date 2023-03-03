@@ -10,6 +10,7 @@ import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
@@ -148,13 +149,16 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             try {
                 if (refundResponse != null) {
                     if (refundResponse.status == Utils.SUCCESS) {
-                        refundPreviewDialog()
-
+                        if (refundResponse.data?.insufficientMerchantBalance != true && refundResponse.data?.insufficientTokenBalance != true) {
+                            refundPreviewDialog()
+                        }
                     } else {
-
+                        Utils.displayAlertNew(
+                            refundResponse.error?.errorDescription.toString(),
+                            this,
+                            ""
+                        )
                     }
-                } else {
-
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -166,12 +170,16 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                     if (refundResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.refundResponseData = refundResponse.data
                         val intent = Intent(this, TransactionStatusActivity::class.java)
+                        intent.putExtra(Utils.SCREEN, Utils.REFUND)
+                        intent.putExtra(Utils.STATUS, Utils.SUCCESS)
                         startActivity(intent)
                     } else {
-
+                        Utils.displayAlertNew(
+                            refundResponse.error?.errorDescription.toString(),
+                            this,
+                            ""
+                        )
                     }
-                } else {
-
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -207,7 +215,6 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     }
 
     private fun refundVerify() {
-
         val refundVerifyRequest = RefundVerifyRequest()
         refundVerifyRequest.refundAmount =
             Utils.doubleParsing(binding.refundAmountET.text.toString())
@@ -225,8 +232,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                 if (action == Utils.SWIPE) {
                     action_type = Utils.REFUND
                     launchPinActivity()
-//                                    val intent = Intent(applicationContext, PinActivity::class.java)
-//                                    startActivity(intent)
+
                 }
             }
         })
@@ -330,31 +336,4 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             e.printStackTrace()
         }
     }
-    //    private fun disableButtons(value: Boolean) {
-//        try {
-//            if (value) {
-//                binding.refundCKB.disableButton()
-//                isPayClickable = false
-//            } else {
-//                binding.refundCKB.enableButton()
-//                isPayClickable = true
-//            }
-//        } catch (_: Exception) {
-//        }
-//    }
-//        binding.refundAmountET.setOnFocusChangeListener(OnFocusChangeListener { v, hasFocus ->
-//            if (!hasFocus) {
-//                if (binding.refundAmountET.text.toString().isNotEmpty()) {
-//                    val FilterArray = arrayOfNulls<InputFilter>(1)
-//                    FilterArray[0] = LengthFilter(getString(R.string.maxlendecimal).toInt())
-//                    binding.refundAmountET.setFilters(FilterArray)
-//                    USFormat(binding.refundAmountET)
-//                }
-//            } else {
-//                val FilterArray = arrayOfNulls<InputFilter>(1)
-//                FilterArray[0] = LengthFilter(getString(R.string.maxlength).toInt())
-//                binding.refundAmountET.setFilters(FilterArray)
-//            }
-//        })
-
 }

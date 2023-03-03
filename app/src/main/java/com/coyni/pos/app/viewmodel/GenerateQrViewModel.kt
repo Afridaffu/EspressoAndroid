@@ -8,10 +8,6 @@ import com.coyni.pos.app.model.discard.DiscardSaleRequest
 import com.coyni.pos.app.model.discard.DiscardSaleResponse
 import com.coyni.pos.app.model.generate_qr.GenerateQrRequest
 import com.coyni.pos.app.model.generate_qr.GenerateQrResponse
-import com.coyni.pos.app.model.pin.PinRegisterResponse
-import com.coyni.pos.app.model.pin.RegisterPinRequest
-import com.coyni.pos.app.model.pin.ValidateResponse
-import com.coyni.pos.app.network.ApiClient
 import com.coyni.pos.app.network.ApiService
 import com.coyni.pos.app.network.AuthApiClient
 import com.google.gson.Gson

@@ -25,7 +25,7 @@
             android:id="@+id/etTypeSomething"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_corner"
+            android:background="@drawable/rounded_corners"
             android:hint=""
             android:textSize="@dimen/_12ssp"
             android:layout_marginHorizontal="@dimen/_5sdp"
