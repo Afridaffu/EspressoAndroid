@@ -40,8 +40,8 @@ interface ApiService {
     @POST("api/v2/node/mpos/refund/process")
     fun refundProcess(@Body refundProcessRequest: RefundProcessRequest?): Call<RefundResponse>?
 
-    @PATCH("api/v2/m-pos/validate-pin")
-    fun validateCoyniPin(@Body request: ValidateRequest?): Call<ValidateResponse?>?
+    @POST("api/v2/m-pos/validate-pin")
+    fun validateCoyniPin(@Body request: ValidateRequest?): Call<ValidateResponse>?
 
 
 }

@@ -40,6 +40,9 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.temporal.ChronoField
 import java.util.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 
 class Utils {
     companion object {
@@ -701,7 +704,7 @@ class Utils {
             return dialog
         }
 
-//        fun setCursorColor(edittext: EditText, context: Context) {
+        //        fun setCursorColor(edittext: EditText, context: Context) {
 //            try {
 //                // Get the cursor drawable resource ID
 //                val cursorDrawableRes = TextView::class.java.getDeclaredField("mCursorDrawableRes")
@@ -728,5 +731,10 @@ class Utils {
 //                e.printStackTrace()
 //            }
 //        }
+        fun convertBase64ToBitmap(base64String: String): Bitmap {
+            val decodedString: ByteArray = Base64.decode(base64String, Base64.DEFAULT)
+            return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+        }
     }
+
 }

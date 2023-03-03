@@ -17,7 +17,7 @@ import com.coyni.pos.app.R
 import com.coyni.pos.app.interfaces.OnKeyboardVisibilityListener
 import com.coyni.pos.app.utils.LogUtils.Companion.d
 import com.coyni.pos.app.utils.Utils
-import com.vt.kotlinexamples.retrofit_network.viewmodel.CommonViewModel
+import com.coyni.pos.app.viewmodel.CommonViewModel
 
 abstract class BaseActivity : AppCompatActivity() {
     val TAG = javaClass.name
