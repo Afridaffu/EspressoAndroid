@@ -50,21 +50,27 @@ class MerchantQrFragment : BaseFragment() {
 
 
     private fun inItFields() {
+        binding.discardSaleLL.isEnabled = false
         myApplication = requireActivity().application as MyApplication
         generateQrViewModel =
             ViewModelProvider(requireActivity()).get(GenerateQrViewModel::class.java)
         getValues()
         strWallet = myApplication!!.mCurrentUserData.generateQrResponseData?.walletId.toString()
         binding.idIVQrcode.setImageBitmap(Utils.convertBase64ToBitmap(myApplication!!.mCurrentUserData.generateQrResponseData?.image.toString()))
-        webSocketUrl = myApplication!!.mCurrentUserData.generateQrResponseData?.mposWebsocket.toString()
+        webSocketUrl =
+            myApplication!!.mCurrentUserData.generateQrResponseData?.mposWebsocket.toString()
 //        binding.lottieAnimV.loop(false)
+
 
         Handler().postDelayed({
             rotate = AnimationUtils.loadAnimation(context, R.anim.rotate)
             binding.lottieAnimV.startAnimation(rotate)
 
+            binding.amountTV.text = amount
             binding.qrLL.visibility = View.VISIBLE
             binding.animationRL.visibility = View.GONE
+            binding.discardSaleLL.setBackgroundResource(R.drawable.bg_greencolor_filled)
+            binding.discardSaleLL.isEnabled = true
 
             Handler().postDelayed({
 //                rotate = AnimationUtils.loadAnimation(context, R.anim.rotate)
@@ -108,16 +114,19 @@ class MerchantQrFragment : BaseFragment() {
                         startActivity(intent)
                         requireActivity().finish()
                     } else {
-
+                        Utils.displayAlertNew(
+                            discardSaleResponse.error?.errorDescription.toString(),
+                            requireContext(),
+                            ""
+                        )
                     }
-                } else {
-
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
         }
     }
+
     private fun getValues() {
         if (arguments == null) {
             return

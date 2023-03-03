@@ -34,7 +34,7 @@ class GenarateQrActivity : BaseActivity() {
         getLoginResponce()
         generateQr()
 //        merchantQr()
-        binding.exitLL?.setOnClickListener {
+        binding.exitLL.setOnClickListener {
             val dialog = Utils.showProgressDialog(this)
             Handler().postDelayed({
                 if (dialog != null) {
@@ -48,13 +48,13 @@ class GenarateQrActivity : BaseActivity() {
     }
 
     private fun getLoginResponce() {
-//        terminalName = myApplication.mCurrentUserData?.loginData?.terminalName.toString()
-//        currentEmployee =
-//            myApplication.mCurrentUserData?.validateResponseData?.employeeName.toString()
-//        dbaName = myApplication.mCurrentUserData?.validateResponseData?.dbaName.toString()
-//        binding.dbaNameTV.setText(dbaName)
-//        binding.currentEmployeeTV.setText(currentEmployee)
-//        binding.terminalNameTV.setText(terminalName)
+        terminalName = myApplication.mCurrentUserData.loginData?.terminalName.toString()
+        currentEmployee =
+            myApplication.mCurrentUserData.validateResponseData?.employeeName.toString()
+        dbaName = myApplication.mCurrentUserData.validateResponseData?.dbaName.toString()
+        binding.dbaNameTV.setText(dbaName)
+        binding.currentEmployeeTV.setText(currentEmployee)
+        binding.terminalNameTV.setText(terminalName)
     }
 
     fun pushFragment(fragment: Fragment, navigation: String, value: String) {

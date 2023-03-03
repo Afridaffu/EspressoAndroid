@@ -23,7 +23,7 @@ class Dashboard_frag : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentDashboardFragBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -31,13 +31,12 @@ class Dashboard_frag : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.todayBatchCV?.setOnClickListener {
-            startActivity(Intent(context, TransactionListActivity::class.java))
-//            action_type = Utils.VIEW_BATCH
-//            launchPinActivity()
+        binding.todayBatchCV.setOnClickListener {
+            action_type = Utils.VIEW_BATCH
+            launchPinActivity()
         }
 
-        binding.startSaleLL?.setOnClickListener {
+        binding.startSaleLL.setOnClickListener {
             action_type = Utils.START_NEW_SALE
             launchPinActivity()
         }

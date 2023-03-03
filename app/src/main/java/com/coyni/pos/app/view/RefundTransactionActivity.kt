@@ -10,6 +10,7 @@ import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
@@ -148,14 +149,16 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             try {
                 if (refundResponse != null) {
                     if (refundResponse.status == Utils.SUCCESS) {
-                        if (refundResponse.data?.insufficientMerchantBalance != true && refundResponse.data?.insufficientTokenBalance != true){
+                        if (refundResponse.data?.insufficientMerchantBalance != true && refundResponse.data?.insufficientTokenBalance != true) {
                             refundPreviewDialog()
                         }
                     } else {
-
+                        Utils.displayAlertNew(
+                            refundResponse.error?.errorDescription.toString(),
+                            this,
+                            ""
+                        )
                     }
-                } else {
-
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -171,10 +174,12 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                         intent.putExtra(Utils.STATUS, Utils.SUCCESS)
                         startActivity(intent)
                     } else {
-
+                        Utils.displayAlertNew(
+                            refundResponse.error?.errorDescription.toString(),
+                            this,
+                            ""
+                        )
                     }
-                } else {
-
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -210,7 +215,6 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     }
 
     private fun refundVerify() {
-
         val refundVerifyRequest = RefundVerifyRequest()
         refundVerifyRequest.refundAmount =
             Utils.doubleParsing(binding.refundAmountET.text.toString())

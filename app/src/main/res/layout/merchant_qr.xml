@@ -127,7 +127,7 @@
        android:layout_marginBottom="@dimen/_43sdp"
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="@dimen/_21sdp"
-        android:background="@drawable/bg_greencolor_filled"
+        android:background="@drawable/bg_inactive_color_filled_cv"
         android:gravity="center"
         android:orientation="horizontal">
 

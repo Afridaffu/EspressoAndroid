@@ -66,9 +66,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
     private fun inItObservers() {
         generateQrViewModel.generateQrResponse.observe(requireActivity()) { generateQrResponse ->
             try {
-                println("something went wrong")
                 if (generateQrResponse != null) {
-                    println("something")
                     if (generateQrResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.generateQrResponseData =
                             generateQrResponse.data
@@ -77,10 +75,12 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
                             Utils.convertTwoDecimal(binding.merchantAmountET.text.toString())
                         )
                     } else {
-
+                        Utils.displayAlertNew(
+                            generateQrResponse.error?.errorDescription.toString(),
+                            requireContext(),
+                            ""
+                        )
                     }
-                } else {
-
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
