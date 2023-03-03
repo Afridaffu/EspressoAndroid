@@ -13,6 +13,7 @@ import com.coyni.pos.app.model.pin.RegisterPinRequest
 import com.coyni.pos.app.model.pin.ValidateResponse
 import com.coyni.pos.app.network.ApiClient
 import com.coyni.pos.app.network.ApiService
+import com.coyni.pos.app.network.AuthApiClient
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.Call
@@ -26,7 +27,7 @@ class GenerateQrViewModel(application: Application) : AndroidViewModel(applicati
 
     fun generateQrRequest(request: GenerateQrRequest) {
         try {
-            val apiService = ApiClient.getInstance().create(ApiService::class.java)
+            val apiService = AuthApiClient.instance.create(ApiService::class.java)
             val mCall = apiService.generateQR(request)
             mCall!!.enqueue(object : Callback<GenerateQrResponse?> {
                 override fun onResponse(
@@ -66,7 +67,7 @@ class GenerateQrViewModel(application: Application) : AndroidViewModel(applicati
 
     fun discardSaleRequest(request: DiscardSaleRequest) {
         try {
-            val apiService = ApiClient.getInstance().create(ApiService::class.java)
+            val apiService = AuthApiClient.instance.create(ApiService::class.java)
             val mCall = apiService.discardSale(request)
             mCall!!.enqueue(object : Callback<DiscardSaleResponse?> {
                 override fun onResponse(

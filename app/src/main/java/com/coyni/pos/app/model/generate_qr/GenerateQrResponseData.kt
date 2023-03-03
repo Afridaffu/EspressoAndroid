@@ -1,10 +1,11 @@
 package com.coyni.pos.app.model.generate_qr
 
 data class GenerateQrResponseData(
-    val walletId: String? = null,
-    val image: String? = null,
-    val employeeName: String? = null,
-    val companyName: String? = null,
-    val businessName: String? = null,
-    val uniqueId: String? = null
+    var walletId: String? = null,
+    var image: String? = null,
+    var employeeName: String? = null,
+    var companyName: String? = null,
+    var businessName: String? = null,
+    var uniqueId: String? = null,
+    val mposWebsocket: String? = null
 )

@@ -12,10 +12,15 @@ import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityGenarateQrBinding
 import com.coyni.pos.app.fragments.GenenrateQrFragment
 import com.coyni.pos.app.fragments.MerchantQrFragment
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 
 class GenarateQrActivity : BaseActivity() {
     private lateinit var binding: ActivityGenarateQrBinding
+    lateinit var myApplication: MyApplication
+    lateinit var terminalName: String
+    lateinit var currentEmployee: String
+    lateinit var dbaName: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGenarateQrBinding.inflate(layoutInflater)
@@ -27,6 +32,8 @@ class GenarateQrActivity : BaseActivity() {
     }
 
     private fun inItFields() {
+        myApplication = applicationContext as MyApplication
+        getLoginResponce()
         generateQr()
 //        merchantQr()
         binding.exitLL?.setOnClickListener {
@@ -38,18 +45,18 @@ class GenarateQrActivity : BaseActivity() {
                     finish()
                 }
             }, 3000)
-//            val exitSaleModeDialog = ExitSaleModeDialog(this)
-//            exitSaleModeDialog.show()
-//            exitSaleModeDialog.setOnDialogClickListener(object : OnDialogClickListener {
-//                override fun onDialogClicked(action: String?, value: Any?) {
-//                    if (action == Utils.DONE) {
-//                        startActivity(Intent(applicationContext, MposDashboardActivity::class.java))
-//                        finish()
-//                    }
-//                }
-//            })
         }
 
+    }
+
+    private fun getLoginResponce() {
+//        terminalName = myApplication.mCurrentUserData?.loginData?.terminalName.toString()
+//        currentEmployee =
+//            myApplication.mCurrentUserData?.validateResponseData?.employeeName.toString()
+//        dbaName = myApplication.mCurrentUserData?.validateResponseData?.dbaName.toString()
+//        binding.dbaNameTV.setText(dbaName)
+//        binding.currentEmployeeTV.setText(currentEmployee)
+//        binding.terminalNameTV.setText(terminalName)
     }
 
     fun pushFragment(fragment: Fragment, navigation: String, value: String) {
