@@ -213,7 +213,7 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     private fun inItObservers() {
         pinViewModel.validatePinResponse.observe(this) { validateResponse ->
             try {
-                if (validateResponse!!.data != null) {
+                if (validateResponse != null) {
                     if (validateResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.validateResponseData =
                             validateResponse.data

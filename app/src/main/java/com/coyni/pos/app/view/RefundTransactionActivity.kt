@@ -146,7 +146,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     private fun inItObservers() {
         refundViewModel.refundVerifyResponse.observe(this) { refundResponse ->
             try {
-                if (refundResponse!!.data != null) {
+                if (refundResponse != null) {
                     if (refundResponse.status == Utils.SUCCESS) {
                         refundPreviewDialog()
 
@@ -162,7 +162,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         }
         refundViewModel.refundProcessResponse.observe(this) { refundResponse ->
             try {
-                if (refundResponse!!.data != null) {
+                if (refundResponse != null) {
                     if (refundResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.refundResponseData = refundResponse.data
                         val intent = Intent(this, TransactionStatusActivity::class.java)
