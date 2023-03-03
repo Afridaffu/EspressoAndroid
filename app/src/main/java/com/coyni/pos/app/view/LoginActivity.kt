@@ -1,15 +1,20 @@
 package com.coyni.pos.app.view
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
@@ -31,10 +36,14 @@ class LoginActivity : BaseActivity() {
     private var password: String = ""
     private var loinViewModel: LoginViewModel? = null
 
+    override fun onResume() {
+        super.onResume()
+        binding.tidET.requestFocus()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
             WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
@@ -57,8 +66,7 @@ class LoginActivity : BaseActivity() {
         binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
 
         binding.ivBack.setOnClickListener {
-            if (Utils.isKeyboardVisible)
-                Utils.hideKeypad(this@LoginActivity)
+            if (Utils.isKeyboardVisible) Utils.hideKeypad(this@LoginActivity)
             onBackPressed()
         }
 
@@ -88,6 +96,7 @@ class LoginActivity : BaseActivity() {
             val loginRequest: LoginRequest = LoginRequest(terminalId, password)
             loinViewModel?.getLoginData(loginRequest)
         }
+
     }
 
     private fun focusListeners() {
@@ -129,11 +138,24 @@ class LoginActivity : BaseActivity() {
                 if (binding.passwordET.text.toString().isNotEmpty())
                     binding.passwordET.setSelection(binding.passwordET.text.toString().length)
                 Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_green)
+                Log.e("getKeyboardVisible", getKeyboardVisible().toString())
+                if (!getKeyboardVisible()!!) {
+                    Utils.shwForcedKeypad(this, binding.passwordET)
+                }
+                if (binding.passwordET.text.toString()
+                        .isNotEmpty()
+                ) binding.passwordET.setSelection(binding.passwordET.text.toString().length)
+                Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_green)
                 binding.passwordErrorLL.visibility = View.GONE
                 binding.passwordTIL.setBoxStrokeColorStateList(Utils.getFocusedColorState(this))
                 binding.passwordET.hint =
                     "\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605"
 
+                if (binding.passwordET.getText()
+                        .toString().length > 0
+                ) binding.passwordET.setTextSize(
+                    TypedValue.COMPLEX_UNIT_SP, 16f
+                ) else binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             } else {
                 if (binding.passwordET.text.toString().length in 1..7) {
                     binding.passwordErrorTV.text = "Please enter a valid Password"
@@ -189,6 +211,15 @@ class LoginActivity : BaseActivity() {
                 isPassword = binding.passwordET.text?.length!! >= 8
                 password = binding.passwordET.text.toString()
                 enableButton()
+
+                if (p0!!.length == 0) {
+                    // No entered text so will show hint
+                    if (binding.passwordET.hasFocus()) binding.passwordET.setTextSize(
+                        TypedValue.COMPLEX_UNIT_SP, 12f
+                    ) else binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+                } else {
+                    binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+                }
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -237,12 +268,9 @@ class LoginActivity : BaseActivity() {
 
         startActivity(
             Intent(
-                this@LoginActivity,
-                StatusFailedActivity::class.java
-            )
-                .putExtra(Utils.SCREEN, Utils.LOGIN)
-                .putExtra(Utils.HEADER, getString(R.string.terminal_deactivated))
-                .putExtra(
+                this@LoginActivity, StatusFailedActivity::class.java
+            ).putExtra(Utils.SCREEN, Utils.LOGIN)
+                .putExtra(Utils.HEADER, getString(R.string.terminal_deactivated)).putExtra(
                     Utils.DESCRIPTION,
                     getString(R.string.this_terminal_has_been_deactivated_and_is_no_longer_accessible)
                 )

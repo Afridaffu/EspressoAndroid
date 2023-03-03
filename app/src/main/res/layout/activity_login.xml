@@ -7,19 +7,20 @@
     android:background="@color/white"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="none">
+<!--    <ScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:overScrollMode="never"-->
+<!--        android:scrollbars="none">-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fitsSystemWindows="true"
             android:layout_marginHorizontal="@dimen/_21sdp"
-            android:orientation="vertical">
+            android:fitsSystemWindows="true"
+            android:orientation="vertical"
+            android:layout_centerInParent="true">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -68,17 +69,15 @@
 
                     <EditText
                         android:id="@+id/tidET"
-                        android:theme="@style/CursorColor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:background="@android:color/transparent"
                         android:digits="0123456789"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="@string/terminal_id"
-                        android:inputType="number|textNoSuggestions"
-                        android:maxLength="12"
+                        android:inputType="number"
+                        android:maxLength="8"
                         android:maxLines="1"
                         android:paddingVertical="@dimen/_14sdp"
                         android:paddingStart="@dimen/_10sdp"
@@ -103,7 +102,7 @@
                     android:paddingEnd="4dp"
                     android:text="@string/terminal_id"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp"
+                    android:textSize="@dimen/_9ssp"
                     android:visibility="gone"
                     app:layout_constraintBottom_toTopOf="@+id/llBoxStroke"
                     app:layout_constraintStart_toStartOf="@+id/llBoxStroke"
@@ -138,44 +137,54 @@
                     android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordTIL"
-                style="@style/TextInputLayout.OutlinedBox"
-                android:theme="@style/CursorColor"
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_14sdp"
-                android:hint="@string/password"
-                android:textColorHint="@color/light_gray"
-                app:boxStrokeColor="@color/primary_green"
-                app:endIconDrawable="@drawable/ic_eyeclose"
-                app:endIconMode="custom"
-                app:endIconTint="@color/dark_gray"
-                app:errorIconDrawable="@null"
-                app:hintTextColor="@color/primary_green">
+                android:layout_marginTop="@dimen/_14sdp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passwordET"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/passwordTIL"
+                    style="@style/TextInputLayout.OutlinedBox"
+                    android:theme="@style/Widget.AppTheme.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="AUTOFILL_HINT_SMS_OTP"
-                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?&amp;"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:imeOptions="actionDone"
-                    android:importantForAutofill="no"
-                    android:inputType="textPassword|textNoSuggestions"
-                    android:longClickable="false"
-                    android:maxLength="12"
-                    android:padding="@dimen/_14sdp"
-                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
-                    android:singleLine="true"
-                    android:textColor="@color/primary_black"
+                    android:hint="@string/password"
                     android:textColorHint="@color/light_gray"
-                    android:textCursorDrawable="@drawable/cursor_color"
-                    android:textIsSelectable="false"
-                    android:textSize="@dimen/_12ssp" />
+                    app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+                    app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                    app:boxCornerRadiusTopStart="@dimen/_10sdp"
+                    app:boxStrokeColor="@color/primary_green"
+                    app:endIconDrawable="@drawable/ic_eyeclose"
+                    app:errorIconDrawable="@null"
+                    app:hintTextColor="@color/primary_green"
+                    app:passwordToggleTint="@color/dark_gray">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/passwordET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
+                        android:digits="@string/password_characters"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:imeOptions="actionDone"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:longClickable="false"
+                        android:maxLength="12"
+                        android:maxLines="1"
+                        android:padding="@dimen/_14sdp"
+                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                        android:singleLine="true"
+                        android:textColor="@color/primary_black"
+                        android:textColorHint="@color/light_gray"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/_12ssp"
+                        android:textCursorDrawable="@drawable/cursor_color"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/passwordErrorLL"
@@ -218,7 +227,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+<!--    </ScrollView>-->
 
     <ImageView
         android:id="@+id/ivBack"

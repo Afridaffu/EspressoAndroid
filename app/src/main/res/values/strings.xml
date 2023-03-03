@@ -7,6 +7,7 @@
     <string name="terminal_id">Terminal ID</string>
     <string name="error">error</string>
     <string name="password">Password</string>
+    <string name="password_characters">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?&amp;</string>
     <string name="back">back</string>
     <string name="mpos_logo">mpos logo</string>
     <string name="terminal_id_or_password">Terminal ID or Password</string>
