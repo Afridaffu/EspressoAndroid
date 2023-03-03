@@ -3,18 +3,17 @@ package com.coyni.pos.app.baseclass
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Rect
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.util.TypedValue
-import android.view.*
+import android.view.Gravity
+import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.Window
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
-import com.coyni.pos.app.interfaces.OnKeyboardVisibilityListener
 import com.coyni.pos.app.utils.LogUtils.Companion.d
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.CommonViewModel
@@ -103,7 +102,7 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun initKeyboardListener() {
+    private fun initKeyboardListener() {
         // Get the current window view
         decorView = window.decorView
         // Set a ViewTreeObserver on the window view

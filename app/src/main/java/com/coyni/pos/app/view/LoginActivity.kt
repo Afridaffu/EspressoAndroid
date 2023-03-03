@@ -1,7 +1,6 @@
 package com.coyni.pos.app.view
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,9 +11,7 @@ import android.util.TypedValue
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
@@ -35,6 +32,7 @@ class LoginActivity : BaseActivity() {
     private var terminalId: String = ""
     private var password: String = ""
     private var loinViewModel: LoginViewModel? = null
+    private lateinit var myApplication: MyApplication
 
     override fun onResume() {
         super.onResume()
@@ -50,6 +48,7 @@ class LoginActivity : BaseActivity() {
         )
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        myApplication = applicationContext as MyApplication
         initView()
         focusListeners()
         textWatchers()
@@ -93,8 +92,7 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.tvButton.setOnClickListener {
-            val loginRequest: LoginRequest = LoginRequest(terminalId, password)
-            loinViewModel?.getLoginData(loginRequest)
+            loinViewModel?.getLoginData(LoginRequest(terminalId, password))
         }
 
     }
@@ -151,11 +149,10 @@ class LoginActivity : BaseActivity() {
                 binding.passwordET.hint =
                     "\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605"
 
-                if (binding.passwordET.getText()
-                        .toString().length > 0
-                ) binding.passwordET.setTextSize(
-                    TypedValue.COMPLEX_UNIT_SP, 16f
-                ) else binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+                if (binding.passwordET.getText().toString().length > 0)
+                    binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+                else
+                    binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             } else {
                 if (binding.passwordET.text.toString().length in 1..7) {
                     binding.passwordErrorTV.text = "Please enter a valid Password"
@@ -246,6 +243,7 @@ class LoginActivity : BaseActivity() {
             Observer { response ->
                 if (response != null && response.status.equals(Utils.SUCCESS)) {
                     Utils.strAuth = response.data?.jwtToken
+                    myApplication.mCurrentUserData?.loginData = response.data!!
                     Utils.hideKeypad(this@LoginActivity)
                     if (response.data?.status.equals("Deactivated")) {
                         showTerminalScreen()
