@@ -12,6 +12,7 @@ import com.coyni.pos.app.model.refund.RefundResponse
 import com.coyni.pos.app.model.refund.RefundVerifyRequest
 import com.coyni.pos.app.network.ApiClient
 import com.coyni.pos.app.network.ApiService
+import com.coyni.pos.app.network.AuthApiClient
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.Call
@@ -28,7 +29,7 @@ class RefundViewModel(application: Application) : AndroidViewModel(application) 
 
     fun refundVerifyRequest(request: RefundVerifyRequest) {
         try {
-            val apiService = ApiClient.getInstance().create(ApiService::class.java)
+            val apiService = AuthApiClient.instance.create(ApiService::class.java)
             val mCall = apiService.refundVerify(request)
             mCall!!.enqueue(object : Callback<RefundResponse?> {
                 override fun onResponse(
@@ -68,7 +69,7 @@ class RefundViewModel(application: Application) : AndroidViewModel(application) 
 
     fun refundProcessRequest(request: RefundProcessRequest) {
         try {
-            val apiService = ApiClient.getInstance().create(ApiService::class.java)
+            val apiService = AuthApiClient.instance.create(ApiService::class.java)
             val mCall = apiService.refundProcess(request)
             mCall!!.enqueue(object : Callback<RefundResponse?> {
                 override fun onResponse(

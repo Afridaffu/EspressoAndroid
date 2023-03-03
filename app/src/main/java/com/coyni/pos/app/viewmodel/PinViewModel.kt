@@ -11,6 +11,7 @@ import com.coyni.pos.app.model.pin.ValidateRequest
 import com.coyni.pos.app.model.pin.ValidateResponse
 import com.coyni.pos.app.network.ApiClient
 import com.coyni.pos.app.network.ApiService
+import com.coyni.pos.app.network.AuthApiClient
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.Call
@@ -24,7 +25,7 @@ class PinViewModel (application: Application) : AndroidViewModel(application) {
 
     fun validateCoyniPin(request: ValidateRequest) {
         try {
-            val apiService = ApiClient.getInstance().create(ApiService::class.java)
+            val apiService = AuthApiClient.instance.create(ApiService::class.java)
             val mCall = apiService.validateCoyniPin(request)
             mCall!!.enqueue(object : Callback<ValidateResponse?> {
                 override fun onResponse(
