@@ -1,10 +1,9 @@
 package com.coyni.pos.app.model.login
 
-
-class LoginData(
+data class LoginData(
     var terminalKey: Int? = null,
     val terminalName: String? = null,
-    val terminalId: String? = null,
+    var terminalId: String? = null,
     val merchantId: Int? = null,
     val jwtToken: String? = null,
     val status: String? = null,
