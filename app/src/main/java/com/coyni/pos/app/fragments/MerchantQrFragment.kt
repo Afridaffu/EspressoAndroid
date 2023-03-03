@@ -3,16 +3,13 @@ package com.coyni.pos.app.fragments
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Point
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
 import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
@@ -25,7 +22,6 @@ import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.view.MposDashboardActivity
 import com.coyni.pos.app.viewmodel.GenerateQrViewModel
-import org.json.JSONObject
 
 class MerchantQrFragment : BaseFragment() {
     lateinit var binding: MerchantQrBinding
@@ -47,7 +43,6 @@ class MerchantQrFragment : BaseFragment() {
     ): View {
         // inflate the layout and bind to the _binding
         binding = MerchantQrBinding.inflate(layoutInflater, container, false)
-
         inItFields()
         inItObservers()
         return binding.root
@@ -62,12 +57,6 @@ class MerchantQrFragment : BaseFragment() {
         strWallet = myApplication!!.mCurrentUserData.generateQrResponseData?.walletId.toString()
         binding.idIVQrcode.setImageBitmap(Utils.convertBase64ToBitmap(myApplication!!.mCurrentUserData.generateQrResponseData?.image.toString()))
         webSocketUrl = myApplication!!.mCurrentUserData.generateQrResponseData?.mposWebsocket.toString()
-//        generateQRCode(strWallet)
-//        val jsonObject = JSONObject()
-//        jsonObject.put("cynAmount", amount.toString())
-//        jsonObject.put("referenceID", strWallet)
-//        generateQRCode(myApplication!!.mCurrentUserData?.generateQrResponseData?.image)
-//        binding.amountTV.text = amount.toString()
 //        binding.lottieAnimV.loop(false)
 
         Handler().postDelayed({
@@ -128,50 +117,7 @@ class MerchantQrFragment : BaseFragment() {
                 ex.printStackTrace()
             }
         }
-
     }
-
-    private fun generateQRCode(wallet: String?) {
-        try {
-            val windowManager =
-                requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            // initializing a variable for default display.
-            val display = windowManager!!.defaultDisplay
-
-            // creating a variable for point which
-            // is to be displayed in QR Code.
-            val point = Point()
-            display!!.getSize(point)
-
-            // getting width and
-            // height of a point
-            val width = point.x
-            val height = point.y
-
-            // generating dimension from width and height.
-            var dimen = if (width < height) width else height
-            dimen = dimen * 3 / 4
-
-            // setting this dimensions inside our qr code
-            // encoder to generate our qr code.
-            qrgEncoder = QRGEncoder(wallet, null, QRGContents.Type.TEXT, 600)
-            bitmap = Bitmap.createBitmap(qrgEncoder.encodeAsBitmap(), 50, 50, 500, 500)
-            //            bitmap  = Utils.trimLeave5Percent(bitmap, R.color.white);
-
-            // getting our qrcode in the form of bitmap.
-//            bitmap = qrgEncoder.encodeAsBitmap();
-            // the bitmap is set inside our image
-            // view using .setimagebitmap method.
-            try {
-                binding.idIVQrcode.setImageBitmap(bitmap)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
-    }
-
     private fun getValues() {
         if (arguments == null) {
             return

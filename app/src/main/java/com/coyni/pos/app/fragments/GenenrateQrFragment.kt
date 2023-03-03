@@ -118,11 +118,6 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
                     } else {
                         disableButtons(true)
                     }
-//                    if (validation()) {
-//                        disableButtons(false)
-//                    } else {
-//                        disableButtons(true)
-//                    }
                     binding.merchantAmountET.setSelection(binding.merchantAmountET.text.length)
                     binding.merchantAmountET.textDirection = View.TEXT_DIRECTION_LTR
                 } else if (editable.toString() == ".") {
@@ -183,62 +178,4 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         } catch (_: Exception) {
         }
     }
-
-//    private fun USFormat(etAmount: EditText): String? {
-//        var strAmount = ""
-//        var strReturn = ""
-//        try {
-//            strAmount = Utils.convertBigDecimalUSDC(etAmount.text.toString().trim { it <= ' ' }
-//                .replace(",", ""))
-//            etAmount.removeTextChangedListener(this)
-//            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)))
-//            binding.bottomKeyPad.setEnteredText(etAmount.text.toString())
-//            etAmount.addTextChangedListener(this)
-//            etAmount.setSelection(etAmount.text.toString().length)
-//            strReturn = Utils.USNumberFormat(Utils.doubleParsing(strAmount))
-//            changeTextSize(strReturn)
-//            setDefaultLength()
-//        } catch (ex: java.lang.Exception) {
-//            ex.printStackTrace()
-//        }
-//        return strReturn
-//    }
-//
-//    private fun changeTextSize(editable: String) {
-//        try {
-//            val FilterArray = arrayOfNulls<InputFilter>(1)
-//            if (editable.length > 12) {
-//                FilterArray[0] =
-//                    LengthFilter(getString(R.string.maxlendecimal).toInt())
-//                binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28F)
-//            } else if (editable.length > 8) {
-//                FilterArray[0] =
-//                    LengthFilter(getString(R.string.maxlendecimal).toInt())
-//                binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33F)
-//            } else if (editable.length > 5) {
-//                FilterArray[0] =
-//                    LengthFilter(getString(R.string.maxlendecimal).toInt())
-//                binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43F)
-//            } else {
-//                FilterArray[0] =
-//                    LengthFilter(getString(R.string.maxlength).toInt())
-//                binding.merchantAmountET.textSize =
-//                    Utils.pixelsToSp(requireContext(), fontSize)
-//            }
-//            binding.merchantAmountET.filters = FilterArray
-//            binding.merchantAmountET.setSelection(binding.merchantAmountET.text.length)
-//        } catch (ex: java.lang.Exception) {
-//            ex.printStackTrace()
-//        }
-//    }
-//
-//    private fun setDefaultLength() {
-//        try {
-//            val FilterArray = arrayOfNulls<InputFilter>(1)
-//            FilterArray[0] = LengthFilter(getString(R.string.maxlength).toInt())
-//            binding.merchantAmountET.filters = FilterArray
-//        } catch (ex: java.lang.Exception) {
-//            ex.printStackTrace()
-//        }
-//    }
 }

@@ -4,13 +4,9 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.coyni.pos.app.model.pin.PinRegisterResponse
-import com.coyni.pos.app.model.pin.RegisterPinRequest
-import com.coyni.pos.app.model.pin.ValidateResponse
 import com.coyni.pos.app.model.refund.RefundProcessRequest
 import com.coyni.pos.app.model.refund.RefundResponse
 import com.coyni.pos.app.model.refund.RefundVerifyRequest
-import com.coyni.pos.app.network.ApiClient
 import com.coyni.pos.app.network.ApiService
 import com.coyni.pos.app.network.AuthApiClient
 import com.google.gson.Gson

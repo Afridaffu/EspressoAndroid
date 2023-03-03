@@ -25,9 +25,7 @@ class GenarateQrActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGenarateQrBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         pushFragment(GenenrateQrFragment(), "", "")
-
         inItFields();
     }
 
