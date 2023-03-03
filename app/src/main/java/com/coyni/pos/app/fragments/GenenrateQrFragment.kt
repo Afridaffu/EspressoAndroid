@@ -67,7 +67,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         generateQrViewModel.generateQrResponse.observe(requireActivity()) { generateQrResponse ->
             try {
                 println("something went wrong")
-                if (generateQrResponse!!.data != null) {
+                if (generateQrResponse != null) {
                     println("something")
                     if (generateQrResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.generateQrResponseData =

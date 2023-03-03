@@ -110,7 +110,7 @@ class MerchantQrFragment : BaseFragment() {
     private fun inItObservers() {
         generateQrViewModel.discardSaleResponse.observe(requireActivity()) { discardSaleResponse ->
             try {
-                if (discardSaleResponse!!.data != null) {
+                if (discardSaleResponse != null) {
                     if (discardSaleResponse.status == Utils.SUCCESS) {
                         val intent = Intent(requireContext(), MposDashboardActivity::class.java)
                         startActivity(intent)
