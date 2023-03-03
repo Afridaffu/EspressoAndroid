@@ -12,12 +12,14 @@ import androidx.navigation.ui.AppBarConfiguration
 import com.coyni.pos.app.R
 import com.coyni.pos.app.databinding.ActivityMposDashboardBinding
 import com.coyni.pos.app.fragments.Dashboard_frag
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 
 class MposDashboardActivity : AppCompatActivity() {
 
         private lateinit var appBarConfiguration: AppBarConfiguration
         private lateinit var binding: ActivityMposDashboardBinding
+        private var myApplication: MyApplication? = null;
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -28,10 +30,22 @@ class MposDashboardActivity : AppCompatActivity() {
         }
 
         private fun initFields() {
+            myApplication = applicationContext as MyApplication?
+            binding.terminalNameTV.text =
+                myApplication?.mCurrentUserData?.loginData?.terminalName
+            binding.terminalIDTV.text =
+                myApplication?.mCurrentUserData?.loginData?.terminalId
+            binding.terminalNameTV.text =
+                myApplication?.mCurrentUserData?.loginData?.terminalName
+            binding.locationTV.text =
+                myApplication?.mCurrentUserData?.loginData?.companyName
+            binding.businessNameTV.text =
+                myApplication?.mCurrentUserData?.loginData?.companyName
+
             val screen = intent.getStringExtra("screen")
             if( screen == "qr"){
 //                showfrag(sale_fragment())
-            }else{
+            } else{
                 showfrag(Dashboard_frag())
             }
 

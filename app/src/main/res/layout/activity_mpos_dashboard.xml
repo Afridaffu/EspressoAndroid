@@ -187,7 +187,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/opensans_regular"
-                                        android:text="Terminal Name"
+                                        android:text="@string/terminal_name"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/_11ssp"
                                         android:textStyle="normal" />
@@ -197,7 +197,6 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/opensans_semibold"
-                                        android:text="James Cameron"
                                         android:textColor="@color/white"
                                         android:textSize="@dimen/_12ssp" />
 
