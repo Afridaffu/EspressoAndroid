@@ -14,9 +14,11 @@ import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityPinBinding
 import com.coyni.pos.app.model.pin.ValidateRequest
 import com.coyni.pos.app.model.pin.ValidateResponse
+import com.coyni.pos.app.model.pin.ValidateResponseData
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.PinViewModel
+import com.google.gson.Gson
 
 class PinActivity : BaseActivity(), View.OnClickListener {
     lateinit var binding: ActivityPinBinding
@@ -215,8 +217,10 @@ class PinActivity : BaseActivity(), View.OnClickListener {
             try {
                 if (validateResponse != null) {
                     if (validateResponse.status == Utils.SUCCESS) {
-                        myApplication?.mCurrentUserData?.validateResponseData =
-                            validateResponse.data
+                        var gson = Gson()
+                        gson.fromJson(validateResponse.data!!, "type")
+//                        myApplication?.mCurrentUserData?.validateResponseData =
+//                            validateResponse.data?.copy()
                         Handler().postDelayed({
                             val `in` = Intent()
                             `in`.putExtra(Utils.ACTION_TYPE, action)
@@ -239,6 +243,15 @@ class PinActivity : BaseActivity(), View.OnClickListener {
             }
         }
     }
+
+    fun Gson.fromJson(data: ValidateResponseData, s: String) {
+        myApplication?.mCurrentUserData?.validateResponseData = data
+    }
 }
+
+
+//private fun Gson.fromJson(copy: ValidateResponseData?, nothing: Nothing?) {
+//    myApplication?.mCurrentUserData?.validateResponseData = ValidateResponseData
+//}
 
 

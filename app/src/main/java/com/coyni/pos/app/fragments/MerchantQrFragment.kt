@@ -34,6 +34,7 @@ class MerchantQrFragment : BaseFragment() {
     private lateinit var screen: String
     private lateinit var amount: String
     private lateinit var strWallet: String
+    private lateinit var webSocketUrl: String
     lateinit var bitmap: Bitmap
     lateinit var qrgEncoder: QRGEncoder
     var rotate: Animation? = null
@@ -58,13 +59,15 @@ class MerchantQrFragment : BaseFragment() {
         generateQrViewModel =
             ViewModelProvider(requireActivity()).get(GenerateQrViewModel::class.java)
         getValues()
-        strWallet = myApplication!!.mCurrentUserData?.generateQrResponseData?.walletId.toString()
+        strWallet = myApplication!!.mCurrentUserData.generateQrResponseData?.walletId.toString()
+        binding.idIVQrcode.setImageBitmap(Utils.convertBase64ToBitmap(myApplication!!.mCurrentUserData.generateQrResponseData?.image.toString()))
+        webSocketUrl = myApplication!!.mCurrentUserData.generateQrResponseData?.mposWebsocket.toString()
 //        generateQRCode(strWallet)
-        val jsonObject = JSONObject()
-        jsonObject.put("cynAmount", amount.toString())
-        jsonObject.put("referenceID", strWallet)
-        generateQRCode(myApplication!!.mCurrentUserData?.generateQrResponseData?.image)
-        binding.amountTV.text = amount.toString()
+//        val jsonObject = JSONObject()
+//        jsonObject.put("cynAmount", amount.toString())
+//        jsonObject.put("referenceID", strWallet)
+//        generateQRCode(myApplication!!.mCurrentUserData?.generateQrResponseData?.image)
+//        binding.amountTV.text = amount.toString()
 //        binding.lottieAnimV.loop(false)
 
         Handler().postDelayed({
