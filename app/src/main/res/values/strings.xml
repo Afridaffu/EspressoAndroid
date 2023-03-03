@@ -54,6 +54,7 @@
     <string name="transaction_processing">Transaction Processing</string>
     <string name="please_do_not_close_this_window">Please do not close this window</string>
     <string name="purchase_complete">Purchase Complete</string>
+    <string name="terminal_name">Terminal Name</string>
 
 
 </resources>
