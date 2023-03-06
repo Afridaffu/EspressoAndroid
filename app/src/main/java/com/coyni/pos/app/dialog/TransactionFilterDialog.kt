@@ -12,14 +12,12 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.coyni.pos.app.R
 import com.coyni.pos.app.adapter.ExpandableListAdapter
-import com.coyni.pos.app.adapter.TransactionFilterAdapter
 import com.coyni.pos.app.baseclass.BaseDialog
 import com.coyni.pos.app.databinding.TransactionFilterDialogBinding
 import com.coyni.pos.app.model.RangeDates
-import com.coyni.pos.app.model.TransactionFilter.TransactionListRequest
+import com.coyni.pos.app.model.TransactionFilter.TransactionFilterRequest
 import com.coyni.pos.app.model.TransactionFilter.TransactionsSubTypeData
 import com.coyni.pos.app.model.TransactionFilter.TransactionsTypeData
-import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,7 +29,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
     private var mContext: Context? = null
 
-    private var request: TransactionListRequest? = null
+    private var request: TransactionFilterRequest? = null
     private var isFilters = false
     private var txnStatus = java.util.ArrayList<Int>()
     private var transactionType = java.util.ArrayList<Int>()
@@ -557,7 +555,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                 return@OnClickListener
             }
             mLastClickTimeFilters = SystemClock.elapsedRealtime()
-            request = TransactionListRequest()
+            request = TransactionFilterRequest()
             isFilters = false
             binding.transAmountStartET.clearFocus()
             binding.transAmountEndET.clearFocus()
@@ -740,7 +738,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
         setAdapter()
     }
 
-    private fun processFilter(request: TransactionListRequest) {
+    private fun processFilter(request: TransactionFilterRequest) {
         if (adapter != null) {
             val parent: HashMap<Int, TransactionsTypeData> = adapter!!.groupData
             val groups: List<Int> = ArrayList(parent.keys)

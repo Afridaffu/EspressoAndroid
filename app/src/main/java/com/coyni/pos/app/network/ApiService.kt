@@ -1,5 +1,7 @@
 package com.coyni.pos.app.network
 
+import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
+import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
 import com.coyni.pos.app.model.appupdate.AppUpdateResp
 import com.coyni.pos.app.model.discard.DiscardSaleRequest
 import com.coyni.pos.app.model.discard.DiscardSaleResponse
@@ -37,4 +39,7 @@ interface ApiService {
 
     @POST("api/v2/m-pos/validate-pin")
     fun validateCoyniPin(@Body request: ValidateRequest?): Call<ValidateResponse>?
+
+    @POST("api/v2/m-pos/transaction/summary")
+    fun transactionList(@Body request: TransactionListReq?): Call<TransactionResponse>?
 }

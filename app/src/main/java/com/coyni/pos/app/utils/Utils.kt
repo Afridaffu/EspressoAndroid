@@ -196,6 +196,7 @@ class Utils {
         const val LEGAL = "LEGAL"
         const val FORGOTPINOTP = "FORGOTPINOTP"
         const val SCREEN = "screen"
+        const val EMPROLE = "Employee"
         const val STATUS = "status"
         const val REFUND = "refund"
         const val START_NEW_SALE = "start new sale"
