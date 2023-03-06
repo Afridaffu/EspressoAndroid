@@ -38,7 +38,7 @@ class GenarateQrActivity : BaseActivity() {
             val dialog = Utils.showProgressDialog(this)
             Handler().postDelayed({
                 if (dialog != null) {
-                    val intent = Intent(applicationContext, MposDashboardActivity::class.java)
+                    val intent = Intent(applicationContext, DashboardActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
@@ -89,14 +89,14 @@ class GenarateQrActivity : BaseActivity() {
                 binding.hiddenView.visibility = View.GONE
                 binding.cvProfileSmall.visibility = View.VISIBLE
                 binding.dbaNameTV.visibility = View.VISIBLE
-                binding.arrowButton.setImageResource(R.drawable.menu_bar_ic)
+                binding.arrowButton.setImageResource(R.drawable.ic_feather_menu)
             } else {
                 TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
                 binding.consLL.setBackgroundResource(R.color.hidden_view_color)
                 binding.hiddenView.visibility = View.VISIBLE
                 binding.cvProfileSmall.visibility = View.GONE
                 binding.dbaNameTV.visibility = View.GONE
-                binding.arrowButton.setImageResource(R.drawable.ic_white_close)
+                binding.arrowButton.setImageResource(R.drawable.ic_feather_x)
             }
         }
     }
@@ -109,14 +109,14 @@ class GenarateQrActivity : BaseActivity() {
                 binding.hiddenView.visibility = View.GONE
                 binding.cvProfileSmall.visibility = View.VISIBLE
                 binding.dbaNameTV.visibility = View.VISIBLE
-                binding.arrowButton.setImageResource(R.drawable.menu_bar_ic)
+                binding.arrowButton.setImageResource(R.drawable.ic_feather_menu)
             } else {
                 TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
                 binding.consLL.setBackgroundResource(R.color.hidden_view_color)
                 binding.hiddenView.visibility = View.VISIBLE
                 binding.cvProfileSmall.visibility = View.GONE
                 binding.dbaNameTV.visibility = View.GONE
-                binding.arrowButton.setImageResource(R.drawable.ic_white_close)
+                binding.arrowButton.setImageResource(R.drawable.ic_feather_x)
             }
         }
     }

@@ -34,7 +34,7 @@
             android:name=".view.TransactionDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.MposDashboardActivity"
+            android:name=".view.DashboardActivity"
             android:usesCleartextTraffic="true" />
         <activity
             android:name=".view.GenarateQrActivity"

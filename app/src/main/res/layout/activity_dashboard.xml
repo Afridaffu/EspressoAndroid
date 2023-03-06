@@ -71,7 +71,7 @@
                             android:background="@color/primary_dark_green"
                             android:foregroundGravity="center_horizontal"
                             android:padding="@dimen/_4sdp"
-                            android:src="@drawable/menu_bar_ic"
+                            android:src="@drawable/ic_feather_menu"
                             app:layout_constraintBottom_toBottomOf="@+id/fixed_layout"
                             app:layout_constraintEnd_toEndOf="@+id/fixed_layout"
                             app:layout_constraintHorizontal_bias="0.062"
@@ -81,7 +81,7 @@
                             android:id="@+id/cvProfileSmall"
                             android:layout_width="@dimen/_42sdp"
                             android:layout_height="@dimen/_42sdp"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:layout_marginBottom="@dimen/_10sdp"
                             android:background="@drawable/corecircle"
@@ -94,9 +94,9 @@
                                 android:id="@+id/userProfileCV"
                                 android:layout_width="@dimen/_36sdp"
                                 android:layout_height="@dimen/_36sdp"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_gravity="center"
-                                app:cardBackgroundColor="@color/white"
+                                app:cardBackgroundColor="@color/zxing_transparent"
                                 app:cardCornerRadius="@dimen/_18sdp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +105,7 @@
 
 
                                 <ImageView
-                                    android:id="@+id/imgProfileSmall"
+                                    android:id="@+id/ivUserProfile"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="fitXY"
@@ -113,10 +113,9 @@
                                     android:visibility="visible" />
 
                                 <TextView
-                                    android:id="@+id/tvUserInfoSmall"
+                                    android:id="@+id/tvUserName"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:background="@color/primary_green"
                                     android:fontFamily="@font/opensans_bold"
                                     android:gravity="center"
                                     android:text="TT"
@@ -317,14 +316,11 @@
 
                                     </LinearLayout>
 
-
                                 </LinearLayout>
 
                             </RelativeLayout>
 
                         </LinearLayout>
-
-
 
                     </LinearLayout>
 
