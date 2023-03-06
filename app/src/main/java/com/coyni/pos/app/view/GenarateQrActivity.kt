@@ -141,4 +141,26 @@ class GenarateQrActivity : BaseActivity() {
         }
     }
 
+    private fun inItObservers() {
+        generateQrViewModel.discardSaleResponse.observe(this) { discardSaleResponse ->
+            try {
+                if (discardSaleResponse != null) {
+                    if (discardSaleResponse.status == Utils.SUCCESS) {
+                        myApplication.mCurrentUserData.generateQrResponseData?.uniqueId = null
+                        val intent = Intent(this, DashboardActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        Utils.displayAlertNew(
+                            discardSaleResponse.error?.errorDescription.toString(),
+                            this,
+                            ""
+                        )
+                    }
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+    }
 }
