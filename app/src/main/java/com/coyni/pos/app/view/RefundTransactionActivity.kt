@@ -10,7 +10,6 @@ import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
@@ -25,7 +24,6 @@ import com.coyni.pos.app.model.refund.RefundProcessRequest
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.utils.keyboards.CustomKeyboard
 import com.coyni.pos.app.viewmodel.RefundViewModel
-import com.coyni.pos.app.model.refund.RefundResponse
 import com.coyni.pos.app.model.refund.RefundVerifyRequest
 import com.coyni.pos.app.utils.MyApplication
 
@@ -35,7 +33,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     private var grossAmount: Double = 0.00
     private var enteredAmount: Double = 0.00
     private var halfAmount: Double = 0.00
-    private lateinit var fullAmount: String
+    private lateinit var saleOrderAMount: String
+    private lateinit var gbxId: String
     private lateinit var action_type: String
     private var reason: String = ""
     var isPayClickable: Boolean = false
@@ -51,7 +50,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
 //        setContentView(R.layout.activity_refund_transaction)
         binding = ActivityRefundTransactionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        saleOrderAMount = intent.getStringExtra(Utils.SALE_ORDER_AMOUNT).toString()
+        gbxId = intent.getStringExtra(Utils.GBX_ID).toString()
         inItFields()
         inItObservers()
     }
@@ -59,7 +59,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     private fun inItFields() {
         myApplication = applicationContext as MyApplication
         refundViewModel = ViewModelProvider(this).get(RefundViewModel::class.java)
-        grossAmount = 500.00
+        grossAmount = Utils.doubleParsing(saleOrderAMount)
+//        grossAmount = 500.00
         fontSize = binding.refundAmountET.textSize
         binding.refundAmountET.showSoftInputOnFocus = false
         binding.refundAmountET.textDirection = View.TEXT_DIRECTION_RTL
@@ -67,7 +68,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         binding.RefundbackIV.setOnClickListener {
             finish()
         }
-//        if (!transactionData?.grossAmount?.isEmpty()!!) {
+        if (!transactionData?.grossAmount?.isEmpty()!!) {
 //            grossAmount = Utils.doubleParsing(
 //                Utils.convertTwoDecimal(
 //                    transactionData.grossAmount.replace(
@@ -76,15 +77,15 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
 //                    ).trim()
 //                )
 //            )
-//            binding.refundCurrencyTV.setText(
-//                "" + Utils.convertTwoDecimal(
-//                    transactionData.grossAmount.replace(
-//                        "CYN",
-//                        ""
-//                    ).trim()
-//                )
-//            )
-//        }
+            binding.refundCurrencyTV.setText(
+                "" + Utils.convertTwoDecimal(
+                    grossAmount.toString().replace(
+                        "CYN",
+                        ""
+                    ).trim()
+                )
+            )
+        }
         binding.refundAmountET.setAccessibilityDelegate(object : View.AccessibilityDelegate() {
             override fun sendAccessibilityEvent(host: View, eventType: Int) {
                 super.sendAccessibilityEvent(host, eventType)
@@ -149,6 +150,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             try {
                 if (refundResponse != null) {
                     if (refundResponse.status == Utils.SUCCESS) {
+                        myApplication?.mCurrentUserData?.refundResponseData = refundResponse.data
                         if (refundResponse.data?.insufficientMerchantBalance != true && refundResponse.data?.insufficientTokenBalance != true) {
                             refundPreviewDialog()
                         }
@@ -218,13 +220,13 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         val refundVerifyRequest = RefundVerifyRequest()
         refundVerifyRequest.refundAmount =
             Utils.doubleParsing(binding.refundAmountET.text.toString())
-        refundVerifyRequest.gbxTransactionId = "djgfdggdqwjgdvqwgdvwqgdvqwg"
+        refundVerifyRequest.gbxTransactionId = gbxId
         refundVerifyRequest.refundReason = reason
         refundViewModel.refundVerifyRequest(refundVerifyRequest)
     }
 
     private fun refundPreviewDialog() {
-        val refundPreviewDialog = RefundPreviewDialog(this)
+        val refundPreviewDialog = RefundPreviewDialog(this, binding.refundAmountET.text.toString(),reason)
         refundPreviewDialog.show()
         refundPreviewDialog.setOnDialogClickListener(object :
             OnDialogClickListener {
@@ -232,7 +234,6 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                 if (action == Utils.SWIPE) {
                     action_type = Utils.REFUND
                     launchPinActivity()
-
                 }
             }
         })
@@ -259,9 +260,10 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         refundProcessRequest.refundAmount =
             Utils.doubleParsing(binding.refundAmountET.text.toString())
         refundProcessRequest.refundReason = reason
-        refundProcessRequest.requestToken =
-            myApplication?.mCurrentUserData?.validateResponseData?.token
-        refundProcessRequest.gbxTransactionId = "gwdfghfegfqhgdfvqgdfvqgh"
+        refundProcessRequest.requestToken = token
+//        refundProcessRequest.requestToken =
+//            myApplication?.mCurrentUserData?.validateResponseData?.token
+        refundProcessRequest.gbxTransactionId = gbxId
         refundProcessRequest.walletType = Utils.CUSTOMER
     }
 

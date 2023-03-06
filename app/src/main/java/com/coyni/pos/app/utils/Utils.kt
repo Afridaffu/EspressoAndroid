@@ -133,6 +133,8 @@ class Utils {
         const val LOAD_TOKEN = "loadtoken"
         const val CHECK_OUT = "checkout"
         const val SWIPE = "swipe"
+        const val GBX_ID = "gbx id"
+        const val SALE_ORDER_AMOUNT = "sale order amount"
         const val transPending = "pending"
         const val transCompleted = "completed"
         const val transSuccessful = "Successful"
