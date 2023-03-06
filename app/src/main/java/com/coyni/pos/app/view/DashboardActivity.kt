@@ -44,7 +44,7 @@ class DashboardActivity : BaseActivity() {
         binding.businessNameTV.text =
             myApplication?.mCurrentUserData?.loginData?.companyName
 
-        if (myApplication?.mCurrentUserData?.loginData?.image != null ) {
+        if (myApplication?.mCurrentUserData?.loginData?.image != null) {
             binding.ivUserProfile.visibility = View.VISIBLE
             binding.tvUserName.visibility = View.GONE
         } else {
@@ -82,7 +82,12 @@ class DashboardActivity : BaseActivity() {
         }
 
         binding.logoutLL.setOnClickListener {
-            startActivity(Intent(applicationContext, OnboardActivity::class.java))
+            startActivity(
+                Intent(applicationContext, OnboardActivity::class.java)
+                    .setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    )
+            )
         }
 
     }
