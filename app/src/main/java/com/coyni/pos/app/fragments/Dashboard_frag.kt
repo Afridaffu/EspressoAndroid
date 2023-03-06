@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.coyni.pos.app.databinding.FragmentDashboardFragBinding
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.view.GenarateQrActivity
 import com.coyni.pos.app.view.PinActivity
@@ -19,11 +20,12 @@ class Dashboard_frag : Fragment() {
 
     private lateinit var binding: FragmentDashboardFragBinding
     lateinit var action_type: String
+    private var myApplication: MyApplication? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentDashboardFragBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -31,13 +33,16 @@ class Dashboard_frag : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.todayBatchCV?.setOnClickListener {
-            startActivity(Intent(context, TransactionListActivity::class.java))
-//            action_type = Utils.VIEW_BATCH
-//            launchPinActivity()
+        myApplication = context?.applicationContext as MyApplication?
+        binding.tvTerminalName.text = myApplication?.mCurrentUserData?.loginData?.terminalName
+        binding.terminalID.text = "TID - " + myApplication?.mCurrentUserData?.loginData?.terminalId
+
+        binding.todayBatchCV.setOnClickListener {
+            action_type = Utils.VIEW_BATCH
+            launchPinActivity()
         }
 
-        binding.startSaleLL?.setOnClickListener {
+        binding.startSaleLL.setOnClickListener {
             action_type = Utils.START_NEW_SALE
             launchPinActivity()
         }

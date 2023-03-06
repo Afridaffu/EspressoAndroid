@@ -20,7 +20,7 @@ import com.coyni.pos.app.viewmodel.CommonViewModel
 
 abstract class BaseActivity : AppCompatActivity() {
     val TAG = javaClass.name
-    private var dialog: Dialog? = null
+    var dialog: Dialog? = null
     var commonViewModel: CommonViewModel? = null
     var isBaseBiometric = false
     var isAccess = false

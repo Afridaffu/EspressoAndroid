@@ -1,15 +1,11 @@
 package com.coyni.pos.app.viewmodel
 
 import android.app.Application
-import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.coyni.pos.app.model.pin.PinRegisterResponse
-import com.coyni.pos.app.model.pin.RegisterPinRequest
 import com.coyni.pos.app.model.pin.ValidateRequest
 import com.coyni.pos.app.model.pin.ValidateResponse
-import com.coyni.pos.app.network.ApiClient
 import com.coyni.pos.app.network.ApiService
 import com.coyni.pos.app.network.AuthApiClient
 import com.google.gson.Gson

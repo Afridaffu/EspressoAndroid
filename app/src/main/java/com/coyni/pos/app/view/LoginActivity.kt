@@ -277,7 +277,7 @@ class LoginActivity : BaseActivity() {
                         showTerminalScreen()
                     } else {
                         startActivity(
-                            Intent(applicationContext, MposDashboardActivity::class.java)
+                            Intent(applicationContext, DashboardActivity::class.java)
                                 .setFlags(
                                     Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 )

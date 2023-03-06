@@ -62,7 +62,6 @@ class PinActivity : BaseActivity(), View.OnClickListener {
         binding.keyEightTV.setOnClickListener(this)
         binding.keyNineTV.setOnClickListener(this)
         binding.backActionIV.setOnClickListener(this)
-//        binding.tvForgot.setOnClickListener(this)
     }
 
 
@@ -232,15 +231,14 @@ class PinActivity : BaseActivity(), View.OnClickListener {
                     }
                 } else {
                     setErrorPIN()
-//                    val intent = Intent(this, GenarateQrActivity::class.java)
-//                    startActivity(intent)
-//                    finish()
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
         }
     }
+
 }
+
 
 

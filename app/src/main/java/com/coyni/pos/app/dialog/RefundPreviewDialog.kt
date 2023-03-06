@@ -6,16 +6,40 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseDialog
 import com.coyni.pos.app.databinding.RefundPreviewBinding
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 
 
-class RefundPreviewDialog(context: Context) : BaseDialog(context) {
+class RefundPreviewDialog(
+    context: Context,
+    private var refundAmount: String?,
+    private var reason: String?
+) : BaseDialog(context) {
     private var isCheckoutCalled = false
     private lateinit var dialogBinding: RefundPreviewBinding
+    lateinit var myApplication: MyApplication
+    var processingFee: Double = 0.0
+    var refundAmpount: Double = 0.0
+    var total: Double = 0.0
     override fun getLayoutId() = R.layout.refund_preview
 
     override fun initViews() {
+        myApplication = context as MyApplication
         dialogBinding = RefundPreviewBinding.bind(findViewById(R.id.root))
+
+        dialogBinding.tvProcessingFee.text =
+            Utils.convertTwoDecimal(myApplication.mCurrentUserData.refundResponseData?.processingFee.toString())
+        dialogBinding.customerAddressTV.text =
+            myApplication.mCurrentUserData.refundResponseData!!.referenceId
+        dialogBinding.amountPayTV.text = Utils.convertTwoDecimal(
+            refundAmount.toString()
+        )
+        processingFee =
+            Utils.doubleParsing(myApplication.mCurrentUserData.refundResponseData?.processingFee.toString())
+        refundAmount = Utils.doubleParsing(refundAmpount.toString()).toString()
+        total = processingFee + refundAmpount
+        dialogBinding.tvTotal.text = Utils.convertTwoDecimal(total.toString())
+        dialogBinding.messageNoteTV.text = reason
         dialogBinding.infoIV.setOnClickListener {
             dialogBinding.viewFeesTextLL.visibility = VISIBLE
         }
@@ -62,8 +86,8 @@ class RefundPreviewDialog(context: Context) : BaseDialog(context) {
             ) {
             }
         })
-
     }
+
 
     private fun feeDialog() {
         val feeDialog = ViewFeeDialog(context)

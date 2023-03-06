@@ -7,8 +7,6 @@ import com.coyni.pos.app.model.generate_qr.GenerateQrRequest
 import com.coyni.pos.app.model.generate_qr.GenerateQrResponse
 import com.coyni.pos.app.model.login.LoginResponse
 import com.coyni.pos.app.model.login.LoginRequest
-import com.coyni.pos.app.model.pin.PinRegisterResponse
-import com.coyni.pos.app.model.pin.RegisterPinRequest
 import com.coyni.pos.app.model.pin.ValidateRequest
 import com.coyni.pos.app.model.pin.ValidateResponse
 import com.coyni.pos.app.model.refund.RefundProcessRequest
@@ -25,9 +23,6 @@ interface ApiService {
     @GET("api/v2/app-version/retrieve")
     fun getAppUpdate(@Query("osType") osType: String?): Call<AppUpdateResp?>?
 
-//    @POST("api/v2/user/signin")
-//    fun loginNew(@Body loginRequest: LoginRequest?): Call<BiometricSignIn>?
-
     @POST("api/v2/m-pos/generate-qrcode")
     fun generateQR(@Body generateQrRequest: GenerateQrRequest?): Call<GenerateQrResponse>?
 
@@ -42,6 +37,4 @@ interface ApiService {
 
     @POST("api/v2/m-pos/validate-pin")
     fun validateCoyniPin(@Body request: ValidateRequest?): Call<ValidateResponse>?
-
-
 }
