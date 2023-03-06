@@ -110,6 +110,7 @@ class MerchantQrFragment : BaseFragment() {
             try {
                 if (discardSaleResponse != null) {
                     if (discardSaleResponse.status == Utils.SUCCESS) {
+                        myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId = null
                         val intent = Intent(requireContext(), DashboardActivity::class.java)
                         startActivity(intent)
                         requireActivity().finish()
