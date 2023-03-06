@@ -217,10 +217,8 @@ class PinActivity : BaseActivity(), View.OnClickListener {
             try {
                 if (validateResponse != null) {
                     if (validateResponse.status == Utils.SUCCESS) {
-                        var gson = Gson()
-                        gson.fromJson(validateResponse.data!!, "type")
-//                        myApplication?.mCurrentUserData?.validateResponseData =
-//                            validateResponse.data?.copy()
+                        myApplication?.mCurrentUserData?.validateResponseData =
+                            validateResponse.data
                         Handler().postDelayed({
                             val `in` = Intent()
                             `in`.putExtra(Utils.ACTION_TYPE, action)
@@ -243,15 +241,6 @@ class PinActivity : BaseActivity(), View.OnClickListener {
             }
         }
     }
-
-    fun Gson.fromJson(data: ValidateResponseData, s: String) {
-        myApplication?.mCurrentUserData?.validateResponseData = data
-    }
 }
-
-
-//private fun Gson.fromJson(copy: ValidateResponseData?, nothing: Nothing?) {
-//    myApplication?.mCurrentUserData?.validateResponseData = ValidateResponseData
-//}
 
 

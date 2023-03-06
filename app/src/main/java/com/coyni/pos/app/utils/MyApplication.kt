@@ -7,9 +7,4 @@ class MyApplication : Application() {
     val mCurrentUserData: UserData = UserData()
     var listener: OnClickListener? = null
 
-
-    override fun onCreate() {
-        super.onCreate()
-    }
-
 }
