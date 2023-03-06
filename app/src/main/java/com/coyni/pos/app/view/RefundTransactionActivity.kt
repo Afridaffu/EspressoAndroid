@@ -4,12 +4,15 @@ import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
+import android.text.InputFilter.LengthFilter
 import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.View
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import android.widget.EditText
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
@@ -21,11 +24,12 @@ import com.coyni.pos.app.dialog.OnDialogClickListener
 import com.coyni.pos.app.dialog.RefundPreviewDialog
 import com.coyni.pos.app.model.TransactionData
 import com.coyni.pos.app.model.refund.RefundProcessRequest
+import com.coyni.pos.app.model.refund.RefundVerifyRequest
+import com.coyni.pos.app.utils.LogUtils
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.utils.keyboards.CustomKeyboard
 import com.coyni.pos.app.viewmodel.RefundViewModel
-import com.coyni.pos.app.model.refund.RefundVerifyRequest
-import com.coyni.pos.app.utils.MyApplication
 
 class RefundTransactionActivity : BaseActivity(), TextWatcher {
     private lateinit var binding: ActivityRefundTransactionBinding
@@ -59,8 +63,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     private fun inItFields() {
         myApplication = applicationContext as MyApplication
         refundViewModel = ViewModelProvider(this).get(RefundViewModel::class.java)
-        grossAmount = Utils.doubleParsing(saleOrderAMount)
-//        grossAmount = 500.00
+//        grossAmount = Utils.doubleParsing(saleOrderAMount)
+        grossAmount = 500.0
         fontSize = binding.refundAmountET.textSize
         binding.refundAmountET.showSoftInputOnFocus = false
         binding.refundAmountET.textDirection = View.TEXT_DIRECTION_RTL
@@ -68,7 +72,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         binding.RefundbackIV.setOnClickListener {
             finish()
         }
-        if (!transactionData?.grossAmount?.isEmpty()!!) {
+//        if (!transactionData?.grossAmount?.isEmpty()!!) {
 //            grossAmount = Utils.doubleParsing(
 //                Utils.convertTwoDecimal(
 //                    transactionData.grossAmount.replace(
@@ -77,15 +81,15 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
 //                    ).trim()
 //                )
 //            )
-            binding.refundCurrencyTV.setText(
-                "" + Utils.convertTwoDecimal(
-                    grossAmount.toString().replace(
-                        "CYN",
-                        ""
-                    ).trim()
-                )
-            )
-        }
+//            binding.refundCurrencyTV.setText(
+//                "" + Utils.convertTwoDecimal(
+//                    grossAmount.toString().replace(
+//                        "CYN",
+//                        ""
+//                    ).trim()
+//                )
+//            )
+//        }
         binding.refundAmountET.setAccessibilityDelegate(object : View.AccessibilityDelegate() {
             override fun sendAccessibilityEvent(host: View, eventType: Int) {
                 super.sendAccessibilityEvent(host, eventType)
@@ -96,7 +100,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         })
         binding.fullAmountTV.setOnClickListener {
             if (grossAmount != null) {
-                binding.refundAmountET.setText(Utils.convertBigDecimal(grossAmount.toString()))
+                binding.refundAmountET.setText(Utils.convertTwoDecimal(grossAmount.toString()))
                 binding.refundAmountET.setSelection(binding.refundAmountET.text.length)
                 binding.fullAmountTV.setBackgroundResource(R.drawable.button_bg_light_green_core)
                 binding.fullAmountTV.setTextColor(getColor(R.color.primary_green))
@@ -208,12 +212,79 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             CustomKeyboard.OnSuccessListener {
             override fun onKeyboardClick(action: String, value: String?) {
                 if (action == Utils.BUTTON_CLICK) {
+                    convertDecimal()
                     if (isrefundClickable) {
                         refundVerify()
                     }
                 }
             }
         })
+    }
+
+    fun convertDecimal() {
+        try {
+            val FilterArray = arrayOfNulls<InputFilter>(1)
+            FilterArray[0] = LengthFilter(getString(R.string.maxlendecimal).toInt())
+            binding.refundAmountET.setFilters(FilterArray)
+            USFormat(binding.refundAmountET)
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    private fun USFormat(etAmount: EditText): String? {
+        var strAmount = ""
+        var strReturn = ""
+        try {
+            strAmount = Utils.convertTwoDecimal(etAmount.text.toString().trim { it <= ' ' }
+                .replace(",", ""))
+            etAmount.removeTextChangedListener(this@RefundTransactionActivity)
+            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)))
+            etAmount.addTextChangedListener(this@RefundTransactionActivity)
+            etAmount.setSelection(etAmount.text.toString().length)
+            strReturn = Utils.USNumberFormat(Utils.doubleParsing(strAmount))
+            changeTextSize(strReturn)
+            setDefaultLength()
+            binding.refundCKB.setEnteredText(
+                binding.refundAmountET.text.toString().trim { it <= ' ' })
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+        return strReturn
+    }
+
+    private fun changeTextSize(editable: String) {
+        try {
+            val FilterArray = arrayOfNulls<InputFilter>(1)
+            if (editable.length > 12) {
+                FilterArray[0] = LengthFilter(getString(R.string.maxlendecimal).toInt())
+                binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28f)
+                binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+            } else if (editable.length > 8) {
+                FilterArray[0] = LengthFilter(getString(R.string.maxlendecimal).toInt())
+                binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33f)
+                binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+            } else if (editable.length > 5) {
+                FilterArray[0] = LengthFilter(getString(R.string.maxlendecimal).toInt())
+                binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43f)
+                binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+
+            } else {
+            }
+            binding.refundAmountET.setFilters(FilterArray)
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    private fun setDefaultLength() {
+        try {
+            val FilterArray = arrayOfNulls<InputFilter>(1)
+            FilterArray[0] = LengthFilter(getString(R.string.maxlength).toInt())
+            binding.refundAmountET.setFilters(FilterArray)
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
     }
 
     private fun refundVerify() {
@@ -226,7 +297,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     }
 
     private fun refundPreviewDialog() {
-        val refundPreviewDialog = RefundPreviewDialog(this, binding.refundAmountET.text.toString(),reason)
+        val refundPreviewDialog =
+            RefundPreviewDialog(this, binding.refundAmountET.text.toString(), reason)
         refundPreviewDialog.show()
         refundPreviewDialog.setOnDialogClickListener(object :
             OnDialogClickListener {
@@ -281,39 +353,89 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     override fun afterTextChanged(editable: Editable) {
         if (editable === binding.refundAmountET.editableText) {
             try {
-                if (editable.length > 0 && editable.toString() != "." && editable.toString() != ".00") {
-                    binding.refundAmountET.hint = ""
-                    if (editable.length > 8) {
-                        binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33F)
-                    } else if (editable.length > 5) {
-                        binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43F)
-                    } else {
-                        binding.refundAmountET.textSize =
-                            Utils.pixelsToSp(applicationContext, fontSize)
+                if (editable.length > 0 && editable.toString() != "."
+                    && editable.toString() != ".00"
+                ) {
+                    binding.refundAmountET.setHint("")
+//                    convertUSDValue()
+                    if (editable.length == 5 || editable.length == 6) {
+                        binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42f)
+                        binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+//                        cKey.disableButton()
+                    } else if (editable.length == 7 || editable.length == 8) {
+                        binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32f)
+                        binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+//                        cKey.disableButton()
+                    } else if (editable.length >= 9) {
+                        binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
+                        binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+//                        cKey.disableButton()
+                    } else if (editable.length <= 4) {
+                        binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53f)
+                        binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+//                        cKey.disableButton()
                     }
-                    binding.refundAmountET.setSelection(binding.refundAmountET.text.length)
-                    binding.refundAmountET.textDirection = View.TEXT_DIRECTION_LTR
+                    binding.refundAmountET.setSelection(binding.refundAmountET.getText().length)
+                    binding.refundAmountET.setTextDirection(View.TEXT_DIRECTION_LTR)
                 } else if (editable.toString() == ".") {
                     binding.refundAmountET.setText("")
                 } else if (editable.length == 0) {
-                    binding.refundAmountET.hint = "0.00"
-                    binding.refundAmountET.textDirection = View.TEXT_DIRECTION_RTL
+                    binding.refundAmountET.setTextDirection(View.TEXT_DIRECTION_RTL)
+                    binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65f)
+                    binding.refundAmountET.setHint("0.00")
+                    binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                     binding.refundCKB.disableButton()
                     binding.refundCKB.clearData()
                 } else {
                     binding.refundAmountET.setText("")
+                    LogUtils.d(TAG, "lengthhh zeroo")
+                    binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65f)
+                    binding.refundCKB.disableButton()
                     binding.refundCKB.clearData()
                 }
                 enableRefund()
-            } catch (_: Exception) {
+            } catch (ex: java.lang.Exception) {
+                ex.printStackTrace()
             }
+//            try {
+//                if (editable.length > 0 && editable.toString() != "." && editable.toString() != ".00") {
+//                    binding.refundAmountET.hint = ""
+//                    if (editable.length > 8) {
+//                        binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33F)
+//                        binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+//                    } else if (editable.length > 5) {
+//                        binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43F)
+//                    } else {
+//                        binding.refundAmountET.textSize =
+//                            Utils.pixelsToSp(applicationContext, fontSize)
+//                    }
+//                    binding.refundAmountET.setSelection(binding.refundAmountET.text.length)
+//                    binding.refundAmountET.textDirection = View.TEXT_DIRECTION_LTR
+//                } else if (editable.toString() == ".") {
+//                    binding.refundAmountET.setText("")
+//                } else if (editable.length == 0) {
+//                    binding.refundAmountET.hint = "0.00"
+//                    binding.refundAmountET.textDirection = View.TEXT_DIRECTION_RTL
+//                    binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65f)
+//                    binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+//                    binding.refundCKB.disableButton()
+//                    binding.refundCKB.clearData()
+//                } else {
+//                    binding.refundAmountET.setText("")
+//                    binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65f)
+//                    binding.refundCKB.disableButton()
+//                    binding.refundCKB.clearData()
+//                }
+//                enableRefund()
+//            } catch (_: Exception) {
+//            }
         }
     }
 
     private fun enableRefund() {
         try {
             enteredAmount =
-                Utils.doubleParsing(Utils.convertBigDecimal(binding.refundAmountET.text.toString()))
+                Utils.doubleParsing(Utils.convertTwoDecimal(binding.refundAmountET.text.toString()))
             if (enteredAmount >= 0.006 && enteredAmount <= grossAmount) {
                 binding.refundCKB.enableButton()
                 isrefundClickable = true

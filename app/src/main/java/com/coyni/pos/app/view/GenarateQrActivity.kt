@@ -7,13 +7,16 @@ import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityGenarateQrBinding
 import com.coyni.pos.app.fragments.GenenrateQrFragment
 import com.coyni.pos.app.fragments.MerchantQrFragment
+import com.coyni.pos.app.model.discard.DiscardSaleRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
+import com.coyni.pos.app.viewmodel.GenerateQrViewModel
 
 class GenarateQrActivity : BaseActivity() {
     private lateinit var binding: ActivityGenarateQrBinding
@@ -21,30 +24,47 @@ class GenarateQrActivity : BaseActivity() {
     lateinit var terminalName: String
     lateinit var currentEmployee: String
     lateinit var dbaName: String
+    lateinit var generateQrViewModel: GenerateQrViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGenarateQrBinding.inflate(layoutInflater)
         setContentView(binding.root)
         pushFragment(GenenrateQrFragment(), "", "")
-        inItFields();
+        inItFields()
+        inItObservers()
     }
 
     private fun inItFields() {
         myApplication = applicationContext as MyApplication
+        generateQrViewModel = ViewModelProvider(this).get(GenerateQrViewModel::class.java)
         getLoginResponce()
         generateQr()
 //        merchantQr()
         binding.exitLL.setOnClickListener {
-            val dialog = Utils.showProgressDialog(this)
-            Handler().postDelayed({
-                if (dialog != null) {
-                    val intent = Intent(applicationContext, MposDashboardActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-            }, 3000)
+            val dialog = Utils.exitSaleModeDialog(this)
+            if (myApplication.mCurrentUserData.generateQrResponseData?.uniqueId == null || myApplication.mCurrentUserData.generateQrResponseData?.uniqueId == "") {
+                Handler().postDelayed({
+                    if (dialog != null) {
+                        val intent = Intent(applicationContext, MposDashboardActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                }, 3000)
+            } else {
+                disCardSale()
+            }
         }
 
+    }
+
+    private fun disCardSale() {
+        val discardSaleRequest = DiscardSaleRequest()
+        discardSaleRequest.requestToken =
+            myApplication.mCurrentUserData.validateResponseData?.token
+        discardSaleRequest.uniqueId =
+            myApplication.mCurrentUserData.generateQrResponseData?.uniqueId
+        generateQrViewModel.discardSaleRequest(discardSaleRequest)
     }
 
     private fun getLoginResponce() {
@@ -117,6 +137,34 @@ class GenarateQrActivity : BaseActivity() {
                 binding.cvProfileSmall.visibility = View.GONE
                 binding.dbaNameTV.visibility = View.GONE
                 binding.arrowButton.setImageResource(R.drawable.ic_white_close)
+            }
+        }
+    }
+
+    private fun inItObservers() {
+        generateQrViewModel.discardSaleResponse.observe(this) { discardSaleResponse ->
+            try {
+                if (discardSaleResponse != null) {
+                    if (discardSaleResponse.status == Utils.SUCCESS) {
+                        myApplication.mCurrentUserData.generateQrResponseData?.uniqueId = null
+                        Handler().postDelayed({
+                            if (dialog != null) {
+                                val intent =
+                                    Intent(applicationContext, MposDashboardActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                        }, 3000)
+                    } else {
+                        Utils.displayAlertNew(
+                            discardSaleResponse.error?.errorDescription.toString(),
+                            this,
+                            ""
+                        )
+                    }
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
             }
         }
     }

@@ -687,7 +687,7 @@ class Utils {
             displayAlertDialog!!.show()
         }
 
-        fun showProgressDialog(context: Context?): Dialog? {
+        fun exitSaleModeDialog(context: Context?): Dialog? {
             val dialog = Dialog(context!!)
             dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
             dialog.setContentView(R.layout.exit_sale_mode_layout)
