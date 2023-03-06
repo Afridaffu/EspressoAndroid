@@ -20,7 +20,7 @@ import com.coyni.pos.app.dialog.OnDialogClickListener
 import com.coyni.pos.app.model.discard.DiscardSaleRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
-import com.coyni.pos.app.view.MposDashboardActivity
+import com.coyni.pos.app.view.DashboardActivity
 import com.coyni.pos.app.viewmodel.GenerateQrViewModel
 
 class MerchantQrFragment : BaseFragment() {
@@ -111,7 +111,7 @@ class MerchantQrFragment : BaseFragment() {
                 if (discardSaleResponse != null) {
                     if (discardSaleResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId = null
-                        val intent = Intent(requireContext(), MposDashboardActivity::class.java)
+                        val intent = Intent(requireContext(), DashboardActivity::class.java)
                         startActivity(intent)
                         requireActivity().finish()
                     } else {

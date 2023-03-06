@@ -12,26 +12,19 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_100sdp"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/ICONClick"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_onboard_mpos" />
-
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/ICONClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/log_in"
+            android:src="@drawable/ic_onboard_mpos" />
 
         <TextView
             android:id="@+id/tvButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_43sdp"
             android:layout_marginHorizontal="@dimen/_21sdp"
-            android:layout_marginTop="@dimen/_17sdp"
+            android:layout_marginTop="@dimen/_27sdp"
             android:background="@drawable/button_bg_white"
             android:fontFamily="@font/opensans_bold"
             android:gravity="center"

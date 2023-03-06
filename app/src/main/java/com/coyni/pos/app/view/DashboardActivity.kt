@@ -1,5 +1,6 @@
 package com.coyni.pos.app.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.transition.AutoTransition
@@ -9,34 +10,49 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.ui.AppBarConfiguration
 import com.coyni.pos.app.R
-import com.coyni.pos.app.databinding.ActivityMposDashboardBinding
+import com.coyni.pos.app.baseclass.BaseActivity
+import com.coyni.pos.app.databinding.ActivityDashboardBinding
 import com.coyni.pos.app.fragments.Dashboard_frag
 import com.coyni.pos.app.utils.MyApplication
+import java.util.*
 
-class MposDashboardActivity : AppCompatActivity() {
+class DashboardActivity : BaseActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMposDashboardBinding
+    private lateinit var binding: ActivityDashboardBinding
     private var myApplication: MyApplication? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMposDashboardBinding.inflate(layoutInflater)
+        binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initFields();
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initFields() {
         myApplication = applicationContext as MyApplication?
+        binding.dbaNameTV.text =
+            myApplication?.mCurrentUserData?.loginData?.dbaName
         binding.terminalNameTV.text =
-            "TID - " + myApplication?.mCurrentUserData?.loginData?.terminalName
+            myApplication?.mCurrentUserData?.loginData?.terminalName
         binding.terminalIDTV.text =
-            myApplication?.mCurrentUserData?.loginData?.terminalId
+            "TID - " + myApplication?.mCurrentUserData?.loginData?.terminalId
         binding.locationTV.text =
             myApplication?.mCurrentUserData?.loginData?.dbaName
         binding.businessNameTV.text =
             myApplication?.mCurrentUserData?.loginData?.companyName
+
+        if (myApplication?.mCurrentUserData?.loginData?.image != null) {
+            binding.ivUserProfile.visibility = View.VISIBLE
+            binding.tvUserName.visibility = View.GONE
+        } else {
+            binding.ivUserProfile.visibility = View.GONE
+            binding.tvUserName.visibility = View.VISIBLE
+            val dbaName = myApplication!!.mCurrentUserData.loginData?.dbaName?.get(0)
+            binding.tvUserName.text = dbaName.toString().capitalize(Locale.ROOT)
+        }
 
         val screen = intent.getStringExtra("screen")
         if (screen == "qr") {
@@ -52,7 +68,7 @@ class MposDashboardActivity : AppCompatActivity() {
                 binding.hiddenView.visibility = View.GONE
                 binding.cvProfileSmall.visibility = View.VISIBLE
                 binding.dbaNameTV.visibility = View.VISIBLE
-                binding.arrowButton.setImageResource(R.drawable.menu_bar_ic)
+                binding.arrowButton.setImageResource(R.drawable.ic_feather_menu)
 
             } else {
                 TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
@@ -61,12 +77,17 @@ class MposDashboardActivity : AppCompatActivity() {
                 binding.cvProfileSmall.visibility = View.GONE
                 binding.dbaNameTV.visibility = View.GONE
                 binding.baseCardview.radius = 15f
-                binding.arrowButton.setImageResource(R.drawable.ic_white_close)
+                binding.arrowButton.setImageResource(R.drawable.ic_feather_x)
             }
         }
 
         binding.logoutLL.setOnClickListener {
-            startActivity(Intent(applicationContext, OnboardActivity::class.java))
+            startActivity(
+                Intent(applicationContext, OnboardActivity::class.java)
+                    .setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    )
+            )
         }
 
     }

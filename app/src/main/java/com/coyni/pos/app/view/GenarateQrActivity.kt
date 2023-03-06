@@ -46,7 +46,7 @@ class GenarateQrActivity : BaseActivity() {
             if (myApplication.mCurrentUserData.generateQrResponseData?.uniqueId == null || myApplication.mCurrentUserData.generateQrResponseData?.uniqueId == "") {
                 Handler().postDelayed({
                     if (dialog != null) {
-                        val intent = Intent(applicationContext, MposDashboardActivity::class.java)
+                        val intent = Intent(applicationContext, DashboardActivity::class.java)
                         startActivity(intent)
                         finish()
                     }
@@ -109,14 +109,14 @@ class GenarateQrActivity : BaseActivity() {
                 binding.hiddenView.visibility = View.GONE
                 binding.cvProfileSmall.visibility = View.VISIBLE
                 binding.dbaNameTV.visibility = View.VISIBLE
-                binding.arrowButton.setImageResource(R.drawable.menu_bar_ic)
+                binding.arrowButton.setImageResource(R.drawable.ic_feather_menu)
             } else {
                 TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
                 binding.consLL.setBackgroundResource(R.color.hidden_view_color)
                 binding.hiddenView.visibility = View.VISIBLE
                 binding.cvProfileSmall.visibility = View.GONE
                 binding.dbaNameTV.visibility = View.GONE
-                binding.arrowButton.setImageResource(R.drawable.ic_white_close)
+                binding.arrowButton.setImageResource(R.drawable.ic_feather_x)
             }
         }
     }
@@ -129,42 +129,14 @@ class GenarateQrActivity : BaseActivity() {
                 binding.hiddenView.visibility = View.GONE
                 binding.cvProfileSmall.visibility = View.VISIBLE
                 binding.dbaNameTV.visibility = View.VISIBLE
-                binding.arrowButton.setImageResource(R.drawable.menu_bar_ic)
+                binding.arrowButton.setImageResource(R.drawable.ic_feather_menu)
             } else {
                 TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
                 binding.consLL.setBackgroundResource(R.color.hidden_view_color)
                 binding.hiddenView.visibility = View.VISIBLE
                 binding.cvProfileSmall.visibility = View.GONE
                 binding.dbaNameTV.visibility = View.GONE
-                binding.arrowButton.setImageResource(R.drawable.ic_white_close)
-            }
-        }
-    }
-
-    private fun inItObservers() {
-        generateQrViewModel.discardSaleResponse.observe(this) { discardSaleResponse ->
-            try {
-                if (discardSaleResponse != null) {
-                    if (discardSaleResponse.status == Utils.SUCCESS) {
-                        myApplication.mCurrentUserData.generateQrResponseData?.uniqueId = null
-                        Handler().postDelayed({
-                            if (dialog != null) {
-                                val intent =
-                                    Intent(applicationContext, MposDashboardActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            }
-                        }, 3000)
-                    } else {
-                        Utils.displayAlertNew(
-                            discardSaleResponse.error?.errorDescription.toString(),
-                            this,
-                            ""
-                        )
-                    }
-                }
-            } catch (ex: Exception) {
-                ex.printStackTrace()
+                binding.arrowButton.setImageResource(R.drawable.ic_feather_x)
             }
         }
     }
