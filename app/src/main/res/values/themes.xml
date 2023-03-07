@@ -32,21 +32,6 @@
         <item name="android:windowTranslucentStatus">@color/white</item>
     </style>
 
-    <style name="TextInputLayout.OutlinedBox" parent="Base.Widget.MaterialComponents.TextInputLayout">
-        <item name="materialThemeOverlay">
-            @style/ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox
-        </item>
-        <item name="boxCornerRadiusBottomEnd">@dimen/_10sdp</item>
-        <item name="boxCornerRadiusBottomStart">@dimen/_10sdp</item>
-        <item name="boxCornerRadiusTopEnd">@dimen/_10sdp</item>
-        <item name="boxCornerRadiusTopStart">@dimen/_10sdp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="CursorColor">
-        <item name="colorPrimary">@color/primary_green</item>
-    </style>>
-
     <style name="Theme_Dialog" parent="android:Theme.Holo.Dialog">
         <item name="android:windowMinWidthMajor">100%</item>
         <item name="android:windowMinWidthMinor">100%</item>
@@ -60,4 +45,13 @@
     <style name="Widget.AppTheme.TextInputLayout.FilledBox.Dense" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
         <item name="colorControlActivated">@color/primary_green</item>
     </style>
+
+    <style name="cursorColor" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="colorControlActivated">@color/primary_green</item>
+    </style>
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:theme">@style/cursorColor</item>
+    </style>
+
 </resources>

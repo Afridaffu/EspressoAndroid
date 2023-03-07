@@ -25,7 +25,7 @@ abstract class BaseActivity : AppCompatActivity() {
     var isBaseBiometric = false
     var isAccess = false
     var isMerchantHide = false
-    private val mLastClickTime = 0L
+    var mLastClickTime = 0L
     var isKeyboardVisible: Boolean = false
     lateinit var decorView: View
     override fun onCreate(savedInstanceState: Bundle?) {
