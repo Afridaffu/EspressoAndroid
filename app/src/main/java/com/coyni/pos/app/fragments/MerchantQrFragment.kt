@@ -60,6 +60,7 @@ class MerchantQrFragment : BaseFragment() {
             myApplication!!.mCurrentUserData.generateQrResponseData?.mposWebsocket.toString()
 //        binding.lottieAnimV.loop(false)
 
+        startWebSocket(webSocketUrl)
 
         Handler().postDelayed({
             rotate = AnimationUtils.loadAnimation(context, R.anim.rotate)
