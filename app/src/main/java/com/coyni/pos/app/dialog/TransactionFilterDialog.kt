@@ -26,6 +26,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
     private lateinit var binding: TransactionFilterDialogBinding
     override fun getLayoutId() = R.layout.transaction_filter_dialog
+    private var dateRangePickerDialog: DateRangePickerDialog? = null
 
     private var mContext: Context? = null
 
@@ -55,7 +56,8 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
     //    private var adapter: TransactionFilterAdapter? = null
     private var adapter: com.coyni.pos.app.adapter.ExpandableListAdapter? = null
-    var transactionTypeData: HashMap<Int, TransactionsTypeData> = HashMap<Int, TransactionsTypeData>()
+    var transactionTypeData: HashMap<Int, TransactionsTypeData> =
+        HashMap<Int, TransactionsTypeData>()
     var transactionSubTypeData: HashMap<Int, List<TransactionsSubTypeData>> =
         HashMap<Int, List<TransactionsSubTypeData>>()
 
@@ -214,7 +216,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
             tempStrSelectedDate = ""
         }
         prepareListData()
-
+        setAdapter()
     }
 
     private fun filterActions() {
@@ -665,7 +667,22 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
     }
 
     private fun showCalendar() {
-        TODO("Not yet implemented")
+
+        // custom dialog
+        dateRangePickerDialog = DateRangePickerDialog(context, rangeDates)
+        dateRangePickerDialog!!.setOnDialogClickListener(object : OnDialogClickListener {
+
+            override fun onDialogClicked(action: String?, value: Any?) {
+                if (action == Utils.datePicker) {
+                    rangeDates = value as RangeDates
+                    strFromDate = rangeDates.updatedFromDate
+                    strToDate = rangeDates.updatedToDate
+                    tempStrSelectedDate = rangeDates.fullDate
+                    binding.datePickET.setText(tempStrSelectedDate)
+                }
+            }
+        })
+        dateRangePickerDialog!!.show()
     }
 
 
@@ -718,24 +735,24 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
         data2.itemId = (Utils.filter_Retail)
         data2.groupItem = Utils.Retail
         saleOrderSubType.add(data2)
+
         transactionSubTypeData[Utils.filter_saleorder] = saleOrderSubType
 
         //Refund Subtypes
         val refunSubType: MutableList<TransactionsSubTypeData> = ArrayList()
         val data3 = TransactionsSubTypeData()
-        data3.isSelected = (transactionSubType.contains(Utils.filter_eCommerce))
-        data3.itemId = (Utils.filter_eCommerce)
-        data3.groupItem = Utils.eCommerce
+        data3.isSelected = (transactionSubType.contains(Utils.filter_full))
+        data3.itemId = (Utils.filter_full)
+        data3.groupItem = Utils.FULL
         refunSubType.add(data3)
 
         val data4 = TransactionsSubTypeData()
-        data4.isSelected = (transactionSubType.contains(Utils.filter_Retail))
+        data4.isSelected = (transactionSubType.contains(Utils.filter_partial))
         data4.itemId = (Utils.filter_Retail)
-        data4.groupItem = Utils.Retail
+        data4.groupItem = Utils.Partial
         refunSubType.add(data4)
-        transactionSubTypeData[Utils.filter_saleorder] = refunSubType
 
-        setAdapter()
+        transactionSubTypeData[Utils.filter_Refund] = refunSubType
     }
 
     private fun processFilter(request: TransactionFilterRequest) {

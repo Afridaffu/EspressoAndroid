@@ -26,7 +26,7 @@ class ExpandableListAdapter() : BaseExpandableListAdapter() {
         this.mContext = context
         this.transactionTypeData = transactionTypeData
         this.transactionSubTypeData = transactionSubTypeData
-        groups = java.util.ArrayList<Int?>(transactionTypeData.keys)
+        groups = ArrayList<Int?>(transactionTypeData.keys)
     }
 
     override fun getGroupCount(): Int {
@@ -89,8 +89,34 @@ class ExpandableListAdapter() : BaseExpandableListAdapter() {
         } else {
             plusImg.visibility = View.GONE
         }
-        checkCB.setOnCheckedChangeListener { compoundButton, check -> group.isSelected = (check) }
-        return view
+        checkCB.setOnCheckedChangeListener { compoundButton, check ->
+            group.isSelected = (check)
+            if (!check) {
+                transactionTypeData.get(groups.get(groupPosition))?.isFromTypes = (true)
+            }
+            if (transactionTypeData.get(groups.get(groupPosition))?.isFromTypes == true) {
+
+                if (transactionTypeData != null && transactionSubTypeData.get(
+                        groups.get(
+                            groupPosition
+                        )
+                    ) != null
+                ) {
+                    var i = 0
+                    while (transactionSubTypeData[groups[groupPosition]]!!.size > i) {
+                        if (check) {
+                            transactionSubTypeData[groups[groupPosition]]!![i].isSelected = (true)
+                        } else {
+                            transactionSubTypeData[groups[groupPosition]]!![i].isSelected = (false)
+                        }
+                        i++
+                    }
+                }
+                notifyDataSetChanged();
+            }
+        }
+        return view;
+
     }
 
     override fun getChildView(
@@ -114,9 +140,26 @@ class ExpandableListAdapter() : BaseExpandableListAdapter() {
         childTv.setText(childItem.groupItem)
         childLL.isEnabled = true
         chechBoxCB.isChecked = childItem.isSelected!!
-        chechBoxCB.setOnCheckedChangeListener { compoundButton, b -> childItem.isSelected = (b) }
-        return view
+        chechBoxCB.setOnCheckedChangeListener { compoundButton, b ->
+            childItem.isSelected = (b)
+            if (transactionSubTypeData != null && transactionSubTypeData.size > 0) {
+                if (b) {
+                    for (type in transactionSubTypeData.keys) {
+                        for (i in 0 until transactionSubTypeData[type]!!.size) {
+                            if (transactionSubTypeData[type]!![i].isSelected == true) {
+                                transactionTypeData[type]?.isSelected = (true)
+                                transactionTypeData[type]?.isFromTypes = (false)
+                            }
+                        }
+                    }
+
+                }
+                notifyDataSetChanged();
+            }
+        }
+        return view;
     }
+
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
         return true

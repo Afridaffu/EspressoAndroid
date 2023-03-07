@@ -11,12 +11,15 @@ import com.coyni.pos.app.adapter.RecentTransactionsListAdapter
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.baseclass.OnItemClickListener
 import com.coyni.pos.app.databinding.ActivityTransactionHistoryBinding
+import com.coyni.pos.app.dialog.OnDialogClickListener
 import com.coyni.pos.app.dialog.TransactionFilterDialog
+import com.coyni.pos.app.model.BatchAmount.BatchAmountRequest
 import com.coyni.pos.app.model.ListItem
 import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
 import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
+import com.coyni.pos.app.viewmodel.BatchAmountViewModel
 import com.coyni.pos.app.viewmodel.TransactionsViewModel
 import java.util.*
 
@@ -34,6 +37,7 @@ class TransactionListActivity : BaseActivity() {
     private lateinit var myApplication: MyApplication
     private var empRole: String? = ""
     private var transactionViewModel: TransactionsViewModel? = null
+    private var batchAmountViewModel: BatchAmountViewModel? = null
     private val txnRefresh: SwipeRefreshLayout? = null
     private var currentPage = 0
     private var total:Int = 0
@@ -57,6 +61,7 @@ class TransactionListActivity : BaseActivity() {
     private fun initView() {
 
         transactionViewModel = ViewModelProvider(this@TransactionListActivity).get(TransactionsViewModel::class.java)
+        batchAmountViewModel = ViewModelProvider(this@TransactionListActivity).get(BatchAmountViewModel::class.java)
 
         txnRefresh?.setColorSchemeColors(resources.getColor(R.color.primary_green, null))
 
@@ -69,12 +74,16 @@ class TransactionListActivity : BaseActivity() {
 
         empRole = myApplication.mCurrentUserData.validateResponseData?.empRole
 
+        empRole = "Manager"
+
         if (empRole.equals(Utils.EMPROLE)) {
             binding.llRecentTxn.visibility = View.VISIBLE
             binding.SearchLL.visibility = View.GONE
         } else {
             binding.llRecentTxn.visibility = View.GONE
             binding.SearchLL.visibility = View.VISIBLE
+
+            batchAPI()
         }
 //        binding.recyclerView.layoutManager = LinearLayoutManager(this)
 //        binding.recyclerView.itemAnimator = DefaultItemAnimator()
@@ -89,10 +98,7 @@ class TransactionListActivity : BaseActivity() {
             object : OnItemClickListener {
 
                 override fun onItemClick(position: Int?, value: Any?) {
-
-                    startActivity(Intent(applicationContext, TransactionDetailsActivity::class.java)
-
-                    )
+                    startActivity(Intent(applicationContext, TransactionDetailsActivity::class.java))
 
                 }
 
@@ -100,6 +106,8 @@ class TransactionListActivity : BaseActivity() {
                     TODO("Not yet implemented")
                 }
             })
+
+        listApi()
     }
 
     private fun filterDialogCalls() {
@@ -112,6 +120,12 @@ class TransactionListActivity : BaseActivity() {
         try {
             val filterDialog = TransactionFilterDialog(this@TransactionListActivity)
             filterDialog.show()
+
+            filterDialog.setOnDialogClickListener(object : OnDialogClickListener {
+                override fun onDialogClicked(action: String?, value: Any?) {
+                }
+            })
+            dialog!!.setOnDismissListener { dialogInterface -> }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -153,14 +167,13 @@ class TransactionListActivity : BaseActivity() {
             binding.ivFilterIcon.setImageDrawable(getDrawable(R.drawable.ic_filter_icon));
 
             var transactionListRequest = TransactionListReq();
-//            transactionListRequest.data?.txnType = Utils.filter_saleorder
-//            transactionListRequest.data?.txnType = Utils.filter_Refund
-//            transactionListRequest.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
+            transactionListRequest.data?.txnType = getDefaultTransactionTypes()
+            transactionListRequest.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
 
         transactionsAPI(transactionListRequest);
     }
 
-    private fun getDefaultTransactionTypes(): ArrayList<Int>? {
+    private fun getDefaultTransactionTypes(): ArrayList<Int> {
         val transactionType = ArrayList<Int>()
         transactionType.add(Utils.filter_saleorder)
         transactionType.add(Utils.filter_Refund)
@@ -182,12 +195,12 @@ class TransactionListActivity : BaseActivity() {
 
     fun initObservers() {
 
-        transactionViewModel?.transactionResponse?.observe(this@TransactionListActivity)
-        { recentTransactionResponse ->
+        transactionViewModel?.transactionResponse?.observe(this@TransactionListActivity) { recentTransactionResponse ->
             try {
                 if (recentTransactionResponse != null) {
                     if (recentTransactionResponse.status == Utils.SUCCESS) {
-
+                        myApplication?.mCurrentUserData?.transactionResponse =
+                            recentTransactionResponse.data
                     } else {
                         Utils.displayAlertNew(
                             recentTransactionResponse.error?.errorDescription.toString(),
@@ -200,5 +213,52 @@ class TransactionListActivity : BaseActivity() {
                 ex.printStackTrace()
             }
         }
+
+        batchAmountViewModel?.batchResponseMutableLiveData?.observe(this@TransactionListActivity){
+            batchResponseMutableLiveData ->
+            try{
+                if(batchResponseMutableLiveData !=null) {
+                    if(batchResponseMutableLiveData.status == Utils.SUCCESS){
+                        myApplication?.mCurrentUserData?.batchResponse =
+                            batchResponseMutableLiveData.data
+
+                        binding.batchMoneyTV.setText((batchResponseMutableLiveData.data?.todayBatchAmount!!
+                        ))
+
+                    }else {
+                        Utils.displayAlertNew(
+                            batchResponseMutableLiveData.error?.errorDescription.toString(),
+                            this,
+                            ""
+                        )
+                    }
+                }
+
+            }
+            catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+
     }
+
+    private fun batchAPI() {
+
+        val req = BatchAmountRequest()
+        req.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
+//        req.todayDate = Utils.exportDate(strFromDate + " 00:00:00.000").split("\\ ")[0] + " 00:00:00"
+        req.todayDate = "2023-01-17 00:00:00"
+        batchAmountViewModel?.getBatchAmount(req)
+    }
+
+    private fun listApi() {
+        val req1 = TransactionListReq()
+        req1.fromAmount = 10
+        req1.toAmount = 50
+        req1.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
+        req1.data?.txnType = getDefaultTransactionTypes()
+
+        transactionViewModel?.allTransactionsList(req1)
+    }
+
 }
