@@ -7,6 +7,7 @@ import com.coyni.pos.app.model.generate_qr.GenerateQrRequest
 import com.coyni.pos.app.model.generate_qr.GenerateQrResponse
 import com.coyni.pos.app.model.login.LoginResponse
 import com.coyni.pos.app.model.login.LoginRequest
+import com.coyni.pos.app.model.logout.LogoutResponse
 import com.coyni.pos.app.model.pin.ValidateRequest
 import com.coyni.pos.app.model.pin.ValidateResponse
 import com.coyni.pos.app.model.refund.RefundProcessRequest
@@ -19,6 +20,9 @@ interface ApiService {
 
     @POST("api/v2/m-pos/login")
     fun login(@Body loginRequest: LoginRequest?): Call<LoginResponse>
+
+    @POST("api/v2/m-pos/logout")
+    fun logout(): Call<LogoutResponse>
 
     @GET("api/v2/app-version/retrieve")
     fun getAppUpdate(@Query("osType") osType: String?): Call<AppUpdateResp?>?

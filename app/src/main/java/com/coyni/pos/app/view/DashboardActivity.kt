@@ -6,14 +6,16 @@ import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.AppBarConfiguration
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityDashboardBinding
 import com.coyni.pos.app.fragments.Dashboard_frag
 import com.coyni.pos.app.utils.MyApplication
+import com.coyni.pos.app.utils.Utils
+import com.coyni.pos.app.viewmodel.LoginLogoutViewModel
 import java.util.*
 
 class DashboardActivity : BaseActivity() {
@@ -21,18 +23,22 @@ class DashboardActivity : BaseActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityDashboardBinding
     private var myApplication: MyApplication? = null;
+    private var logoutViewModel: LoginLogoutViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initFields();
+        initFields()
+        initObserver()
     }
 
     @SuppressLint("SetTextI18n")
     private fun initFields() {
         myApplication = applicationContext as MyApplication?
+        logoutViewModel =
+            ViewModelProvider(this@DashboardActivity)[LoginLogoutViewModel::class.java]
         binding.dbaNameTV.text =
             myApplication?.mCurrentUserData?.loginData?.dbaName
         binding.terminalNameTV.text =
@@ -82,12 +88,7 @@ class DashboardActivity : BaseActivity() {
         }
 
         binding.logoutLL.setOnClickListener {
-            startActivity(
-                Intent(applicationContext, OnboardActivity::class.java)
-                    .setFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    )
-            )
+            logoutViewModel!!.getLogout()
         }
 
     }
@@ -96,5 +97,25 @@ class DashboardActivity : BaseActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, fragment)
         transaction.commit()
+    }
+
+    private fun initObserver() {
+        logoutViewModel?.logoutResponseMutableLiveData?.observe(this@DashboardActivity) { response ->
+            if (response != null && response.status == Utils.SUCCESS) {
+                myApplication?.clearUserData()
+                startActivity(
+                    Intent(applicationContext, OnboardActivity::class.java)
+                        .setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        )
+                )
+            } else {
+                Utils.displayAlertNew(
+                    response?.error?.errorDescription.toString(),
+                    this@DashboardActivity,
+                    ""
+                )
+            }
+        }
     }
 }
