@@ -41,9 +41,9 @@ class RecentTransactionsListAdapter (): BaseRecyclerViewAdapter<RecentTransactio
 
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val objData: TransactionResponseData = recentTxns!!.data!!
+        val objData: TransactionResponseData? = recentTxns?.data
 
-//        holder.binding.descriptionTV.setText(objData.)
+//        holder.binding.descriptionTV.setText()
 
             holder.binding.llClick.setOnClickListener{
             listener?.onItemClick(position, "abc")
@@ -51,7 +51,7 @@ class RecentTransactionsListAdapter (): BaseRecyclerViewAdapter<RecentTransactio
     }
 
     override fun getItemCount(): Int {
-        return 10
+        return 5
     }
 
     class MyViewHolder(val binding: RecentTxnsListBinding) :
