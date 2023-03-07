@@ -1,6 +1,5 @@
 package com.coyni.pos.app.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -110,7 +109,6 @@ class MerchantQrFragment : BaseFragment() {
             try {
                 if (discardSaleResponse != null) {
                     if (discardSaleResponse.status == Utils.SUCCESS) {
-                        myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId = null
                         val intent = Intent(requireContext(), DashboardActivity::class.java)
                         startActivity(intent)
                         requireActivity().finish()

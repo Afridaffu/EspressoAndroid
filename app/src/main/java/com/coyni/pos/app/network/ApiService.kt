@@ -5,8 +5,8 @@ import com.coyni.pos.app.model.discard.DiscardSaleRequest
 import com.coyni.pos.app.model.discard.DiscardSaleResponse
 import com.coyni.pos.app.model.generate_qr.GenerateQrRequest
 import com.coyni.pos.app.model.generate_qr.GenerateQrResponse
-import com.coyni.pos.app.model.login.LoginResponse
 import com.coyni.pos.app.model.login.LoginRequest
+import com.coyni.pos.app.model.login.LoginResponse
 import com.coyni.pos.app.model.pin.ValidateRequest
 import com.coyni.pos.app.model.pin.ValidateResponse
 import com.coyni.pos.app.model.refund.RefundProcessRequest
@@ -37,4 +37,7 @@ interface ApiService {
 
     @POST("api/v2/m-pos/validate-pin")
     fun validateCoyniPin(@Body request: ValidateRequest?): Call<ValidateResponse>?
+
+    @POST("api/v2/m-pos/exit-sale")
+    fun exitSale(@Query("token") token: String?): Call<DiscardSaleResponse?>?
 }
