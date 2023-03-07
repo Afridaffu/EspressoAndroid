@@ -10,11 +10,4 @@ class MyApplication : Application() {
     fun clearUserData() {
         mCurrentUserData = UserData()
     }
-
-
-    override fun onCreate() {
-        super.onCreate()
-
-    }
-
 }

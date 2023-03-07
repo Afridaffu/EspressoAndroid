@@ -1,6 +1,5 @@
 package com.coyni.pos.app.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle

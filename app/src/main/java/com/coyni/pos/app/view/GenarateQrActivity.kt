@@ -2,18 +2,20 @@ package com.coyni.pos.app.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityGenarateQrBinding
 import com.coyni.pos.app.fragments.GenenrateQrFragment
 import com.coyni.pos.app.fragments.MerchantQrFragment
+import com.coyni.pos.app.model.discard.DiscardSaleRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
+import com.coyni.pos.app.viewmodel.GenerateQrViewModel
 
 class GenarateQrActivity : BaseActivity() {
     private lateinit var binding: ActivityGenarateQrBinding
@@ -21,32 +23,28 @@ class GenarateQrActivity : BaseActivity() {
     lateinit var terminalName: String
     lateinit var currentEmployee: String
     lateinit var dbaName: String
+    lateinit var generateQrViewModel: GenerateQrViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGenarateQrBinding.inflate(layoutInflater)
         setContentView(binding.root)
         pushFragment(GenenrateQrFragment(), "", "")
-        inItFields();
+        inItFields()
+        inItObservers()
     }
 
     private fun inItFields() {
         myApplication = applicationContext as MyApplication
+        generateQrViewModel = ViewModelProvider(this).get(GenerateQrViewModel::class.java)
         getLoginResponce()
         generateQr()
 //        merchantQr()
         binding.exitLL.setOnClickListener {
-            val dialog = Utils.showProgressDialog(this)
-            Handler().postDelayed({
-                if (dialog != null) {
-                    val intent = Intent(applicationContext, DashboardActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-            }, 3000)
+            val dialog = Utils.exitSaleModeDialog(this)
+            generateQrViewModel.exitSaleRequest(myApplication.mCurrentUserData.validateResponseData?.token)
         }
-
     }
-
     private fun getLoginResponce() {
         terminalName = myApplication.mCurrentUserData.loginData?.terminalName.toString()
         currentEmployee =
@@ -121,4 +119,25 @@ class GenarateQrActivity : BaseActivity() {
         }
     }
 
+    private fun inItObservers() {
+        generateQrViewModel.exitSaleResponse.observe(this) { discardSaleResponse ->
+            try {
+                if (discardSaleResponse != null) {
+                    if (discardSaleResponse.status == Utils.SUCCESS) {
+                        val intent = Intent(this, DashboardActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        Utils.displayAlertNew(
+                            discardSaleResponse.error?.errorDescription.toString(),
+                            this,
+                            ""
+                        )
+                    }
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+    }
 }

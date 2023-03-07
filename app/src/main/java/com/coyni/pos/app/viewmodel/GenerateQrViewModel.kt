@@ -20,6 +20,7 @@ class GenerateQrViewModel(application: Application) : AndroidViewModel(applicati
 
     val generateQrResponse = MutableLiveData<GenerateQrResponse?>()
     val discardSaleResponse = MutableLiveData<DiscardSaleResponse?>()
+    val exitSaleResponse = MutableLiveData<DiscardSaleResponse?>()
 
     fun generateQrRequest(request: GenerateQrRequest) {
         try {
@@ -94,6 +95,46 @@ class GenerateQrViewModel(application: Application) : AndroidViewModel(applicati
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG)
                         .show()
                     discardSaleResponse.value = null
+                }
+            })
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    fun exitSaleRequest(token: String?) {
+        try {
+            val apiService = AuthApiClient.instance.create(ApiService::class.java)
+            val mCall = apiService.exitSale(token)
+            mCall!!.enqueue(object : Callback<DiscardSaleResponse?> {
+                override fun onResponse(
+                    call: Call<DiscardSaleResponse?>,
+                    response: Response<DiscardSaleResponse?>
+                ) {
+                    try {
+                        if (response.isSuccessful) {
+                            val obj = response.body()
+                            exitSaleResponse.setValue(obj)
+                        } else {
+                            val gson = Gson()
+                            val type = object : TypeToken<DiscardSaleResponse?>() {}.type
+                            var errorResponse: DiscardSaleResponse? = null
+                            try {
+                                errorResponse = gson.fromJson(response.errorBody()!!.string(), type)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                            exitSaleResponse.setValue(errorResponse)
+                        }
+                    } catch (ex: Exception) {
+                        ex.printStackTrace()
+                    }
+                }
+
+                override fun onFailure(call: Call<DiscardSaleResponse?>, t: Throwable) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG)
+                        .show()
+                    exitSaleResponse.value = null
                 }
             })
         } catch (ex: Exception) {
