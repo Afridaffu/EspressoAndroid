@@ -2,7 +2,6 @@ package com.coyni.pos.app.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.View
@@ -43,30 +42,9 @@ class GenarateQrActivity : BaseActivity() {
 //        merchantQr()
         binding.exitLL.setOnClickListener {
             val dialog = Utils.exitSaleModeDialog(this)
-            if (myApplication.mCurrentUserData.generateQrResponseData?.uniqueId == null || myApplication.mCurrentUserData.generateQrResponseData?.uniqueId == "") {
-                Handler().postDelayed({
-                    if (dialog != null) {
-                        val intent = Intent(applicationContext, DashboardActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
-                }, 3000)
-            } else {
-                disCardSale()
-            }
+            generateQrViewModel.exitSaleRequest(myApplication.mCurrentUserData.validateResponseData?.token)
         }
-
     }
-
-    private fun disCardSale() {
-        val discardSaleRequest = DiscardSaleRequest()
-        discardSaleRequest.requestToken =
-            myApplication.mCurrentUserData.validateResponseData?.token
-        discardSaleRequest.uniqueId =
-            myApplication.mCurrentUserData.generateQrResponseData?.uniqueId
-        generateQrViewModel.discardSaleRequest(discardSaleRequest)
-    }
-
     private fun getLoginResponce() {
         terminalName = myApplication.mCurrentUserData.loginData?.terminalName.toString()
         currentEmployee =
@@ -142,11 +120,10 @@ class GenarateQrActivity : BaseActivity() {
     }
 
     private fun inItObservers() {
-        generateQrViewModel.discardSaleResponse.observe(this) { discardSaleResponse ->
+        generateQrViewModel.exitSaleResponse.observe(this) { discardSaleResponse ->
             try {
                 if (discardSaleResponse != null) {
                     if (discardSaleResponse.status == Utils.SUCCESS) {
-                        myApplication.mCurrentUserData.generateQrResponseData?.uniqueId = null
                         val intent = Intent(this, DashboardActivity::class.java)
                         startActivity(intent)
                         finish()
