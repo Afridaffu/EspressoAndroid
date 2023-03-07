@@ -23,11 +23,13 @@ import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.LoginViewModel
+import com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM
 
 class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivityLoginBinding
     private var isId = false
     private var isPassword = false
+    private var isPwdEye = false
     private var isIconEnable = false
     private var terminalId: String = ""
     private var password: String = ""
@@ -61,8 +63,11 @@ class LoginActivity : BaseActivity() {
 
         val myApplication = applicationContext as MyApplication
 
+        binding.passwordTIL.setEndIconMode(END_ICON_CUSTOM)
         binding.tvButton.isEnabled = false
         binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
+
+        binding.passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance())
 
         binding.ivBack.setOnClickListener {
             if (Utils.isKeyboardVisible) Utils.hideKeypad(this@LoginActivity)
@@ -94,6 +99,25 @@ class LoginActivity : BaseActivity() {
         binding.tvButton.setOnClickListener {
             loinViewModel?.getLoginData(LoginRequest(terminalId, password))
         }
+
+        binding.endIconIV.setOnClickListener(View.OnClickListener {
+            try {
+                if (!isPwdEye) {
+                    isPwdEye = true
+                    binding.endIconIV.setImageDrawable(resources.getDrawable(R.drawable.ic_eyeopen))
+                    binding.passwordET.setTransformationMethod(HideReturnsTransformationMethod.getInstance())
+                } else {
+                    isPwdEye = false
+                    binding.endIconIV.setImageDrawable(resources.getDrawable(R.drawable.ic_eyeclose))
+                    binding.passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance())
+                }
+                if (binding.passwordET.getText().toString().length > 0) {
+                    binding.passwordET.setSelection(binding.passwordET.getText().toString().length)
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        })
 
     }
 
@@ -154,6 +178,7 @@ class LoginActivity : BaseActivity() {
                 else
                     binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             } else {
+                binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                 if (binding.passwordET.text.toString().length in 1..7) {
                     binding.passwordErrorTV.text = "Please enter a valid Password"
                     Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.error_red)
@@ -177,7 +202,10 @@ class LoginActivity : BaseActivity() {
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
                 }
             }
+
+
         }
+
     }
 
     private fun textWatchers() {
@@ -243,13 +271,13 @@ class LoginActivity : BaseActivity() {
             Observer { response ->
                 if (response != null && response.status.equals(Utils.SUCCESS)) {
                     Utils.strAuth = response.data?.jwtToken
-                    myApplication.mCurrentUserData?.loginData = response.data!!
+                    myApplication.mCurrentUserData.loginData = response.data!!
                     Utils.hideKeypad(this@LoginActivity)
                     if (response.data?.status.equals("Deactivated")) {
                         showTerminalScreen()
                     } else {
                         startActivity(
-                            Intent(applicationContext, MposDashboardActivity::class.java)
+                            Intent(applicationContext, DashboardActivity::class.java)
                                 .setFlags(
                                     Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 )

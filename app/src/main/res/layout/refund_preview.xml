@@ -127,7 +127,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/recipAddreTV"
+                android:id="@+id/customerAddressTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -273,7 +273,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginTop="@dimen/_11sdp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/messageTxt"
@@ -281,15 +281,18 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_regular"
             android:text="Refund Note"
+            android:layout_weight="1"
             android:textColor="@color/dark_gray"
             android:textSize="@dimen/_11ssp" />
 
         <TextView
             android:id="@+id/messageNoteTV"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_6sdp"
             android:fontFamily="@font/opensans_regular"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:text=""
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />

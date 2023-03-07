@@ -25,14 +25,13 @@ class OnboardActivity : BaseActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initView() {
         binding.ICONClick.setOnClickListener {
-            if (isClick) {
-                isClick = false
-                binding.ICONClick.setImageDrawable(getDrawable(R.drawable.mpos_full))
-            } else {
-                isClick = true
-                binding.ICONClick.setImageDrawable(getDrawable(R.drawable.ic_onboard_mpos))
-            }
-
+//            if (isClick) {
+//                isClick = false
+//                binding.ICONClick.setImageDrawable(getDrawable(R.drawable.mpos_full))
+//            } else {
+//                isClick = true
+//                binding.ICONClick.setImageDrawable(getDrawable(R.drawable.ic_onboard_mpos))
+//            }
         }
 
         binding.tvButton.setOnClickListener {

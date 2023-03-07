@@ -133,6 +133,8 @@ class Utils {
         const val LOAD_TOKEN = "loadtoken"
         const val CHECK_OUT = "checkout"
         const val SWIPE = "swipe"
+        const val GBX_ID = "gbx id"
+        const val SALE_ORDER_AMOUNT = "sale order amount"
         const val transPending = "pending"
         const val transCompleted = "completed"
         const val transSuccessful = "Successful"
@@ -686,7 +688,7 @@ class Utils {
             displayAlertDialog!!.show()
         }
 
-        fun showProgressDialog(context: Context?): Dialog? {
+        fun exitSaleModeDialog(context: Context?): Dialog? {
             val dialog = Dialog(context!!)
             dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
             dialog.setContentView(R.layout.exit_sale_mode_layout)

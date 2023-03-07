@@ -35,12 +35,12 @@
                         android:paddingTop="@dimen/_21sdp">
 
                         <TextView
+                            android:id="@+id/tvTerminalName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_3sdp"
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="center"
-                            android:text="Front Counter 1"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_16ssp" />
 
@@ -51,7 +51,6 @@
                             android:layout_marginTop="@dimen/_3sdp"
                             android:fontFamily="@font/opensans_regular"
                             android:gravity="center"
-                            android:text="TID-12345678"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_11ssp" />
 
