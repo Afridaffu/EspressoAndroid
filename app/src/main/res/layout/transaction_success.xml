@@ -24,14 +24,15 @@
                 android:src="@drawable/ic_cross"
                 android:visibility="visible" />
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_11sdp"
-                android:layout_marginTop="@dimen/_44sdp"
-                android:src="@drawable/ic_success" />
-
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
+                android:layout_width="@dimen/_90sdp"
+                android:layout_height="@dimen/_90sdp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/_20sdp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/success" />
 
             <LinearLayout
                 android:id="@+id/mainLayout"
@@ -51,22 +52,24 @@
                     android:visibility="gone" />
 
                 <TextView
+                    android:id="@+id/refundedTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_3sdp"
                     android:fontFamily="@font/opensans_bold"
                     android:gravity="center"
-                    android:text="Payment Received"
+                    android:text=""
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_16ssp" />
 
                 <TextView
+                    android:id="@+id/customerName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_16sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="center"
-                    android:text="from Jonathon Joestar"
+                    android:text=""
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_12ssp" />
 
@@ -96,45 +99,45 @@
                 </LinearLayout>
 
 
-
-
             </LinearLayout>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-            android:id="@+id/validateCV"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
-            android:layout_marginHorizontal="@dimen/_21sdp"
-            app:cardBackgroundColor="@color/primary_green"
-            app:cardCornerRadius="@dimen/_30sdp">
+                android:id="@+id/validateCV"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_marginHorizontal="@dimen/_21sdp"
+                app:cardBackgroundColor="@color/primary_green"
+                app:cardCornerRadius="@dimen/_30sdp">
+
+                <TextView
+                    android:id="@+id/doneTextTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="Done"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp" />
+            </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/doneTextTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginBottom="@dimen/_31sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:text="Done"
-                android:textColor="@color/white"
+                android:text="View Transaction"
+                android:textColor="@color/primary_green"
                 android:textSize="@dimen/_12ssp" />
-        </androidx.cardview.widget.CardView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginBottom="@dimen/_31sdp"
-            android:fontFamily="@font/opensans_bold"
-            android:text="View Transaction"
-            android:textColor="@color/primary_green"
-            android:textSize="@dimen/_12ssp" />
         </LinearLayout>
 
     </RelativeLayout>
