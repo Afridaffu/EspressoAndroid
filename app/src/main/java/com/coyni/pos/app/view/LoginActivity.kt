@@ -2,6 +2,7 @@ package com.coyni.pos.app.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
@@ -12,7 +13,6 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
@@ -22,7 +22,8 @@ import com.coyni.pos.app.dialog.ErrorDialog
 import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
-import com.coyni.pos.app.viewmodel.LoginViewModel
+
+import com.coyni.pos.app.viewmodel.LoginLogoutViewModel
 import com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM
 
 class LoginActivity : BaseActivity() {
@@ -33,8 +34,9 @@ class LoginActivity : BaseActivity() {
     private var isIconEnable = false
     private var terminalId: String = ""
     private var password: String = ""
-    private var loinViewModel: LoginViewModel? = null
+    private var loinViewModel: LoginLogoutViewModel? = null
     private lateinit var myApplication: MyApplication
+    private var lastClick: Long = 0L
 
     override fun onResume() {
         super.onResume()
@@ -59,7 +61,7 @@ class LoginActivity : BaseActivity() {
 
     private fun initView() {
 
-        loinViewModel = ViewModelProvider(this@LoginActivity).get(LoginViewModel::class.java)
+        loinViewModel = ViewModelProvider(this@LoginActivity).get(LoginLogoutViewModel::class.java)
 
         val myApplication = applicationContext as MyApplication
 
@@ -97,19 +99,24 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.tvButton.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - lastClick < 20000) return@setOnClickListener
+            lastClick = SystemClock.elapsedRealtime()
+            showProgressDialog()
             loinViewModel?.getLoginData(LoginRequest(terminalId, password))
         }
 
-        binding.endIconIV.setOnClickListener(View.OnClickListener {
+        binding.endIconIV.setOnClickListener {
             try {
                 if (!isPwdEye) {
                     isPwdEye = true
                     binding.endIconIV.setImageDrawable(resources.getDrawable(R.drawable.ic_eyeopen))
-                    binding.passwordET.setTransformationMethod(HideReturnsTransformationMethod.getInstance())
+                    binding.passwordET.transformationMethod =
+                        HideReturnsTransformationMethod.getInstance()
                 } else {
                     isPwdEye = false
                     binding.endIconIV.setImageDrawable(resources.getDrawable(R.drawable.ic_eyeclose))
-                    binding.passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance())
+                    binding.passwordET.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
                 }
                 if (binding.passwordET.getText().toString().length > 0) {
                     binding.passwordET.setSelection(binding.passwordET.getText().toString().length)
@@ -117,8 +124,7 @@ class LoginActivity : BaseActivity() {
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
-        })
-
+        }
     }
 
     private fun focusListeners() {
@@ -202,8 +208,6 @@ class LoginActivity : BaseActivity() {
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
                 }
             }
-
-
         }
 
     }
@@ -267,27 +271,28 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun initObserver() {
-        loinViewModel?.loginResponseMutableLiveData?.observe(this@LoginActivity,
-            Observer { response ->
-                if (response != null && response.status.equals(Utils.SUCCESS)) {
-                    Utils.strAuth = response.data?.jwtToken
-                    myApplication.mCurrentUserData.loginData = response.data!!
-                    Utils.hideKeypad(this@LoginActivity)
-                    if (response.data?.status.equals("Deactivated")) {
-                        showTerminalScreen()
-                    } else {
-                        startActivity(
-                            Intent(applicationContext, DashboardActivity::class.java)
-                                .setFlags(
-                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                )
-                        )
-                    }
+        loinViewModel?.loginResponseMutableLiveData?.observe(this@LoginActivity) { response ->
+            dismissDialog()
 
+            if (response != null && response.status.equals(Utils.SUCCESS)) {
+                Utils.strAuth = response.data?.jwtToken
+                myApplication.mCurrentUserData.loginData = response.data!!
+                Utils.hideKeypad(this@LoginActivity)
+                if (response.data?.status?.equals("deactivated", true) == true) {
+                    showTerminalScreen()
                 } else {
-                    showDialog()
+                    startActivity(
+                        Intent(applicationContext, DashboardActivity::class.java)
+                            .setFlags(
+                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            )
+                    )
                 }
-            })
+
+            } else {
+                showDialog()
+            }
+        }
     }
 
     private fun showTerminalScreen() {

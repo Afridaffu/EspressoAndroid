@@ -12,14 +12,12 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.coyni.pos.app.R
 import com.coyni.pos.app.adapter.ExpandableListAdapter
-import com.coyni.pos.app.adapter.TransactionFilterAdapter
 import com.coyni.pos.app.baseclass.BaseDialog
 import com.coyni.pos.app.databinding.TransactionFilterDialogBinding
 import com.coyni.pos.app.model.RangeDates
-import com.coyni.pos.app.model.TransactionFilter.TransactionListRequest
+import com.coyni.pos.app.model.TransactionFilter.TransactionFilterRequest
 import com.coyni.pos.app.model.TransactionFilter.TransactionsSubTypeData
 import com.coyni.pos.app.model.TransactionFilter.TransactionsTypeData
-import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,10 +26,11 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
     private lateinit var binding: TransactionFilterDialogBinding
     override fun getLayoutId() = R.layout.transaction_filter_dialog
+    private var dateRangePickerDialog: DateRangePickerDialog? = null
 
     private var mContext: Context? = null
 
-    private var request: TransactionListRequest? = null
+    private var request: TransactionFilterRequest? = null
     private var isFilters = false
     private var txnStatus = java.util.ArrayList<Int>()
     private var transactionType = java.util.ArrayList<Int>()
@@ -52,14 +51,16 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
     private val displayFormat = "MM-dd-yyyy"
     private var mLastClickTimeFilters = 0L
     var startDateLong = 0L
-    var endDateLong: Long = 0L
-    lateinit var rangeDates: RangeDates
-
+    var endDateLong: Long = 0
     //    private var adapter: TransactionFilterAdapter? = null
     private var adapter: com.coyni.pos.app.adapter.ExpandableListAdapter? = null
-    var transactionTypeData: HashMap<Int, TransactionsTypeData> = HashMap<Int, TransactionsTypeData>()
+    var transactionTypeData: HashMap<Int, TransactionsTypeData> =
+        HashMap<Int, TransactionsTypeData>()
     var transactionSubTypeData: HashMap<Int, List<TransactionsSubTypeData>> =
         HashMap<Int, List<TransactionsSubTypeData>>()
+
+    var rangeDates = RangeDates()
+
 
 //    private val myApplication: MyApplication? = context as MyApplication?
 
@@ -216,7 +217,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
             tempStrSelectedDate = ""
         }
         prepareListData()
-
+        setAdapter()
     }
 
     private fun filterActions() {
@@ -313,7 +314,6 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
             binding.transAmountStartET.setText("")
             binding.transAmountEndET.setText("")
             binding.datePickET.setText("")
-            rangeDates = RangeDates()
             rangeDates.updatedFromDate = ("")
             rangeDates.updatedToDate = ("")
             binding.transAmountStartET.clearFocus()
@@ -557,7 +557,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                 return@OnClickListener
             }
             mLastClickTimeFilters = SystemClock.elapsedRealtime()
-            request = TransactionListRequest()
+            request = TransactionFilterRequest()
             isFilters = false
             binding.transAmountStartET.clearFocus()
             binding.transAmountEndET.clearFocus()
@@ -667,7 +667,23 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
     }
 
     private fun showCalendar() {
-        TODO("Not yet implemented")
+
+        dateRangePickerDialog = DateRangePickerDialog(context, rangeDates)
+        dateRangePickerDialog!!.show()
+
+        dateRangePickerDialog!!.setOnDialogClickListener(object: OnDialogClickListener{
+
+            override fun onDialogClicked(action: String?, value: Any?) {
+                if (action == Utils.datePicker) {
+                    rangeDates = value as RangeDates
+                    strFromDate = rangeDates.updatedFromDate
+                    strToDate = rangeDates.updatedToDate
+                    tempStrSelectedDate = rangeDates.fullDate
+                    binding.datePickET.setText(tempStrSelectedDate)
+                }
+
+            }
+        })
     }
 
 
@@ -720,27 +736,27 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
         data2.itemId = (Utils.filter_Retail)
         data2.groupItem = Utils.Retail
         saleOrderSubType.add(data2)
+
         transactionSubTypeData[Utils.filter_saleorder] = saleOrderSubType
 
         //Refund Subtypes
         val refunSubType: MutableList<TransactionsSubTypeData> = ArrayList()
         val data3 = TransactionsSubTypeData()
-        data3.isSelected = (transactionSubType.contains(Utils.filter_eCommerce))
-        data3.itemId = (Utils.filter_eCommerce)
-        data3.groupItem = Utils.eCommerce
+        data3.isSelected = (transactionSubType.contains(Utils.filter_full))
+        data3.itemId = (Utils.filter_full)
+        data3.groupItem = Utils.FULL
         refunSubType.add(data3)
 
         val data4 = TransactionsSubTypeData()
-        data4.isSelected = (transactionSubType.contains(Utils.filter_Retail))
+        data4.isSelected = (transactionSubType.contains(Utils.filter_partial))
         data4.itemId = (Utils.filter_Retail)
-        data4.groupItem = Utils.Retail
+        data4.groupItem = Utils.Partial
         refunSubType.add(data4)
-        transactionSubTypeData[Utils.filter_saleorder] = refunSubType
 
-        setAdapter()
+        transactionSubTypeData[Utils.filter_Refund] = refunSubType
     }
 
-    private fun processFilter(request: TransactionListRequest) {
+    private fun processFilter(request: TransactionFilterRequest) {
         if (adapter != null) {
             val parent: HashMap<Int, TransactionsTypeData> = adapter!!.groupData
             val groups: List<Int> = ArrayList(parent.keys)

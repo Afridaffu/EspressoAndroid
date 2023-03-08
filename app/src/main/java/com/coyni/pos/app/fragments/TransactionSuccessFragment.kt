@@ -30,7 +30,8 @@ class TransactionSuccessFragment : BaseFragment() {
     }
 
     private fun refundSuccess() {
-
+        binding.refundedTV.text = "Transaction Refunded"
+        binding.customerName.text = "to"
     }
 
     private fun getValues() {
