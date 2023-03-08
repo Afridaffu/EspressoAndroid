@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.coyni.pos.app.baseclass.BaseRecyclerViewAdapter
 import com.coyni.pos.app.baseclass.OnItemClickListener
 import com.coyni.pos.app.databinding.RecentTxnsListBinding
+import com.coyni.pos.app.model.ListItem
 import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
 import com.coyni.pos.app.model.TransactionFilter.TransactionResponseData
 import com.coyni.pos.app.utils.MyApplication
@@ -25,7 +26,7 @@ class RecentTransactionsListAdapter (): BaseRecyclerViewAdapter<RecentTransactio
 
     constructor(
         context: Context,
-        list: TransactionResponse
+        list: TransactionResponse?
         ) : this() {
         this.mContext = context
         this.recentTxns = list
