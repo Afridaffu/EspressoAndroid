@@ -36,7 +36,7 @@ class RefundPreviewDialog(
         )
         processingFee =
             Utils.doubleParsing(myApplication.mCurrentUserData.refundResponseData?.processingFee.toString())
-        refundAmount = Utils.doubleParsing(refundAmpount.toString()).toString()
+        refundAmpount = Utils.doubleParsing(refundAmount.toString())
         total = processingFee + refundAmpount
         dialogBinding.tvTotal.text = Utils.convertTwoDecimal(total.toString())
         dialogBinding.messageNoteTV.text = reason
