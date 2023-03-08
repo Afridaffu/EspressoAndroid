@@ -4,7 +4,10 @@ import android.app.Application
 import com.coyni.pos.app.baseclass.OnClickListener
 
 class MyApplication : Application() {
-    val mCurrentUserData: UserData = UserData()
+    var mCurrentUserData: UserData = UserData()
     var listener: OnClickListener? = null
 
+    fun clearUserData() {
+        mCurrentUserData = UserData()
+    }
 }

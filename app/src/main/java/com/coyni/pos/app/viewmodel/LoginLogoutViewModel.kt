@@ -3,8 +3,9 @@ package com.coyni.pos.app.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.coyni.pos.app.model.login.LoginResponse
 import com.coyni.pos.app.model.login.LoginRequest
+import com.coyni.pos.app.model.login.LoginResponse
+import com.coyni.pos.app.model.logout.LogoutResponse
 import com.coyni.pos.app.network.ApiService
 import com.coyni.pos.app.network.AuthApiClient
 import com.google.gson.Gson
@@ -14,8 +15,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.lang.reflect.Type
 
-class LoginViewModel(application: Application) : AndroidViewModel(application) {
+class LoginLogoutViewModel(application: Application) : AndroidViewModel(application) {
     val loginResponseMutableLiveData = MutableLiveData<LoginResponse?>()
+    val logoutResponseMutableLiveData = MutableLiveData<LogoutResponse?>()
 
     fun getLoginData(request: LoginRequest?) {
         val apiService: ApiService = AuthApiClient.instance.create(ApiService::class.java)
@@ -39,6 +41,34 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
             override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
                 loginResponseMutableLiveData.value = null
+            }
+
+        })
+    }
+
+    fun getLogout() {
+        val apiService: ApiService = AuthApiClient.instance.create(ApiService::class.java)
+        val call: Call<LogoutResponse> = apiService.logout()
+        call.enqueue(object : Callback<LogoutResponse> {
+
+            override fun onResponse(
+                call: Call<LogoutResponse>,
+                response: Response<LogoutResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val listResponse: LogoutResponse? = response.body()
+                    logoutResponseMutableLiveData.value = listResponse
+                } else {
+                    val gson = Gson()
+                    val type: Type = object : TypeToken<LogoutResponse>() {}.type
+                    val errorResponse: LogoutResponse =
+                        gson.fromJson(response.errorBody()?.string(), type)
+                    logoutResponseMutableLiveData.value = errorResponse
+                }
+            }
+
+            override fun onFailure(call: Call<LogoutResponse>, t: Throwable) {
+                logoutResponseMutableLiveData.value = null
             }
 
         })
