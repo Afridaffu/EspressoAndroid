@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.coyni.pos.app.R
@@ -74,9 +75,8 @@ class TransactionListActivity : BaseActivity() {
 
         binding.ivBack.setOnClickListener { onBackPressed(); }
 
+        // Employee role changes
         empRole = myApplication.mCurrentUserData.validateResponseData?.empRole
-
-        empRole = "Manager"
 
         if (empRole.equals(Utils.EMPROLE)) {
             binding.llRecentTxn.visibility = View.VISIBLE
@@ -87,14 +87,14 @@ class TransactionListActivity : BaseActivity() {
 
             batchAPI()
         }
-//        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-//        binding.recyclerView.itemAnimator = DefaultItemAnimator()
-//        adapter = RecentTransactionsListAdapter(applicationContext, recentTxns!!)
-//        binding.recyclerView.adapter = adapter
-//
-//        binding.listRecyclerRV.layoutManager = LinearLayoutManager(this)
-//        binding.listRecyclerRV.itemAnimator = DefaultItemAnimator()
-//        binding.listRecyclerRV.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.itemAnimator = DefaultItemAnimator()
+        adapter = RecentTransactionsListAdapter(applicationContext, recentTxns!!)
+        binding.recyclerView.adapter = adapter
+
+        binding.listRecyclerRV.layoutManager = LinearLayoutManager(this)
+        binding.listRecyclerRV.itemAnimator = DefaultItemAnimator()
+        binding.listRecyclerRV.adapter = adapter
 
         adapter?.setOnItemClickListener(
             object : OnItemClickListener {
