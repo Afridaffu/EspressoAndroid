@@ -7,6 +7,7 @@ import android.transition.TransitionManager
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.ui.AppBarConfiguration
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityGenarateQrBinding
@@ -18,6 +19,7 @@ import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.GenerateQrViewModel
 
 class GenarateQrActivity : BaseActivity() {
+    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityGenarateQrBinding
     lateinit var myApplication: MyApplication
     lateinit var terminalName: String
@@ -29,7 +31,6 @@ class GenarateQrActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGenarateQrBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        pushFragment(GenenrateQrFragment(), "", "")
         inItFields()
         inItObservers()
     }
@@ -38,21 +39,13 @@ class GenarateQrActivity : BaseActivity() {
         myApplication = applicationContext as MyApplication
         generateQrViewModel = ViewModelProvider(this).get(GenerateQrViewModel::class.java)
         getLoginResponce()
+        pushFragment(GenenrateQrFragment(), "", "")
         generateQr()
 //        merchantQr()
         binding.exitLL.setOnClickListener {
             val dialog = Utils.exitSaleModeDialog(this)
             generateQrViewModel.exitSaleRequest(myApplication.mCurrentUserData.validateResponseData?.token)
         }
-    }
-    private fun getLoginResponce() {
-        terminalName = myApplication.mCurrentUserData.loginData?.terminalName.toString()
-        currentEmployee =
-            myApplication.mCurrentUserData.validateResponseData?.employeeName.toString()
-        dbaName = myApplication.mCurrentUserData.validateResponseData?.dbaName.toString()
-        binding.dbaNameTV.setText(dbaName)
-        binding.currentEmployeeTV.setText(currentEmployee)
-        binding.terminalNameTV.setText(terminalName)
     }
 
     fun pushFragment(fragment: Fragment, navigation: String, value: String) {
@@ -94,6 +87,7 @@ class GenarateQrActivity : BaseActivity() {
                 binding.hiddenView.visibility = View.VISIBLE
                 binding.cvProfileSmall.visibility = View.GONE
                 binding.dbaNameTV.visibility = View.GONE
+                binding.baseCardview.radius = 15f
                 binding.arrowButton.setImageResource(R.drawable.ic_feather_x)
             }
         }
@@ -114,6 +108,7 @@ class GenarateQrActivity : BaseActivity() {
                 binding.hiddenView.visibility = View.VISIBLE
                 binding.cvProfileSmall.visibility = View.GONE
                 binding.dbaNameTV.visibility = View.GONE
+                binding.baseCardview.radius = 15f
                 binding.arrowButton.setImageResource(R.drawable.ic_feather_x)
             }
         }
@@ -139,5 +134,14 @@ class GenarateQrActivity : BaseActivity() {
                 ex.printStackTrace()
             }
         }
+    }
+    private fun getLoginResponce() {
+        terminalName = myApplication.mCurrentUserData.loginData?.terminalName.toString()
+        currentEmployee =
+            myApplication.mCurrentUserData.validateResponseData?.employeeName.toString()
+        dbaName = myApplication.mCurrentUserData.validateResponseData?.dbaName.toString()
+        binding.dbaNameTV.setText(dbaName)
+        binding.currentEmployeeTV.setText(currentEmployee)
+        binding.terminalNameTV.setText(terminalName)
     }
 }

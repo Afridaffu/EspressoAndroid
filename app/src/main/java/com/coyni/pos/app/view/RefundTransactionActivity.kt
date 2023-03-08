@@ -157,6 +157,12 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                         myApplication?.mCurrentUserData?.refundResponseData = refundResponse.data
                         if (refundResponse.data?.insufficientMerchantBalance != true && refundResponse.data?.insufficientTokenBalance != true) {
                             refundPreviewDialog()
+                        }else{
+                            Utils.displayAlertNew(
+                                "InSufficient Balance",
+                                this,
+                                ""
+                            )
                         }
                     } else {
                         Utils.displayAlertNew(
