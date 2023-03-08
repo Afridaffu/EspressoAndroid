@@ -5,12 +5,14 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.PorterDuff
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.text.TextUtils
+import android.util.Base64
 import android.util.Log
 import android.util.Patterns
 import android.view.Gravity
@@ -40,9 +42,6 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.temporal.ChronoField
 import java.util.*
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
 
 class Utils {
     companion object {
@@ -140,6 +139,7 @@ class Utils {
         const val transSuccessful = "Successful"
         const val transOpen = "open"
         const val transFailed = "failed"
+        const val datePicker = "DatePicker"
         const val CVV_SUCCESS = "cvv"
         var displayAlertDialog: Dialog? = null
         const val slidePercentage = 0.3f
@@ -165,7 +165,7 @@ class Utils {
         const val filter_Received = 4
         const val filter_Buytoken = 2
         const val filter_Withdraw = 3
-        const val filter_saleorder = 14
+        const val filter_saleorder = 10
         const val filter_TranferToken = 23
         const val filter_Refund = 9
         const val filter_Batch_release = 19
@@ -198,6 +198,7 @@ class Utils {
         const val LEGAL = "LEGAL"
         const val FORGOTPINOTP = "FORGOTPINOTP"
         const val SCREEN = "screen"
+        const val EMPROLE = "Employee"
         const val STATUS = "status"
         const val REFUND = "refund"
         const val START_NEW_SALE = "start new sale"
@@ -357,7 +358,7 @@ class Utils {
                 val format = DecimalFormat.getCurrencyInstance(Locale.US)
                 format.maximumFractionDigits = 2
                 //            strValue = format.format(amt).replaceAll("$", "").replaceAll("USD", "").replace("CYN", "");
-                strValue = format.format(amt).replace("$", "").replace("USD", "").replace("CYN", "")
+                strValue = format.format(amt)
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -491,6 +492,18 @@ class Utils {
                 }
                 Log.e("str", strValue)
             } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+            return strValue
+        }
+
+        fun convertToWithoutDecimal(amount: String): String? {
+            var strValue = ""
+            try {
+                val amt = amount.toInt()
+                val format = NumberFormat.getNumberInstance(Locale.US)
+                strValue = format.format(amt.toLong())
+            } catch (ex: java.lang.Exception) {
                 ex.printStackTrace()
             }
             return strValue
