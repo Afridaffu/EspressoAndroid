@@ -87,14 +87,14 @@ class TransactionListActivity : BaseActivity() {
 
             batchAPI()
         }
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.itemAnimator = DefaultItemAnimator()
-        adapter = RecentTransactionsListAdapter(applicationContext, recentTxns!!)
-        binding.recyclerView.adapter = adapter
-
-        binding.listRecyclerRV.layoutManager = LinearLayoutManager(this)
-        binding.listRecyclerRV.itemAnimator = DefaultItemAnimator()
-        binding.listRecyclerRV.adapter = adapter
+//        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+//        binding.recyclerView.itemAnimator = DefaultItemAnimator()
+//        adapter = RecentTransactionsListAdapter(applicationContext, recentTxns!!)
+//        binding.recyclerView.adapter = adapter
+//
+//        binding.listRecyclerRV.layoutManager = LinearLayoutManager(this)
+//        binding.listRecyclerRV.itemAnimator = DefaultItemAnimator()
+//        binding.listRecyclerRV.adapter = adapter
 
         adapter?.setOnItemClickListener(
             object : OnItemClickListener {
