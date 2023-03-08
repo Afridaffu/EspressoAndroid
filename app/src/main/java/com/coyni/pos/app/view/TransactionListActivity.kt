@@ -40,11 +40,11 @@ class TransactionListActivity : BaseActivity() {
     private var batchAmountViewModel: BatchAmountViewModel? = null
     private val txnRefresh: SwipeRefreshLayout? = null
     private var currentPage = 0
-    private var total:Int = 0
+    private var total: Int = 0
     private var strStartAmount = ""
-    private var strEndAmount:String? = ""
-    private var strFromDate:String? = ""
-    private  var strToDate:String? = ""
+    private var strEndAmount: String? = ""
+    private var strFromDate: String? = ""
+    private var strToDate: String? = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,8 +60,10 @@ class TransactionListActivity : BaseActivity() {
 
     private fun initView() {
 
-        transactionViewModel = ViewModelProvider(this@TransactionListActivity).get(TransactionsViewModel::class.java)
-        batchAmountViewModel = ViewModelProvider(this@TransactionListActivity).get(BatchAmountViewModel::class.java)
+        transactionViewModel =
+            ViewModelProvider(this@TransactionListActivity).get(TransactionsViewModel::class.java)
+        batchAmountViewModel =
+            ViewModelProvider(this@TransactionListActivity).get(BatchAmountViewModel::class.java)
 
         txnRefresh?.setColorSchemeColors(resources.getColor(R.color.primary_green, null))
 
@@ -98,7 +100,12 @@ class TransactionListActivity : BaseActivity() {
             object : OnItemClickListener {
 
                 override fun onItemClick(position: Int?, value: Any?) {
-                    startActivity(Intent(applicationContext, TransactionDetailsActivity::class.java))
+                    startActivity(
+                        Intent(
+                            applicationContext,
+                            TransactionDetailsActivity::class.java
+                        )
+                    )
 
                 }
 
@@ -117,18 +124,16 @@ class TransactionListActivity : BaseActivity() {
     }
 
     private fun filterDialog() {
-        try {
-            val filterDialog = TransactionFilterDialog(this@TransactionListActivity)
-            filterDialog.show()
+        val filterDialog = TransactionFilterDialog(this@TransactionListActivity)
+        filterDialog!!.show()
 
-            filterDialog.setOnDialogClickListener(object : OnDialogClickListener {
-                override fun onDialogClicked(action: String?, value: Any?) {
-                }
-            })
-            dialog!!.setOnDismissListener { dialogInterface -> }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        filterDialog.setOnDialogClickListener(object: OnDialogClickListener{
+            override fun onDialogClicked(action: String?, value: Any?) {
+
+            }
+        })
+
+        filterDialog!!.setOnDismissListener { dialogInterface -> }
     }
 
     private fun onFilterDialogListenerCall(action: String, value: Any) {
@@ -137,11 +142,11 @@ class TransactionListActivity : BaseActivity() {
                 dismissDialog()
                 request = value as TransactionListReq
                 if (request?.data?.txnType == null)
-                if (request != null) {
-                    binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
-                } else {
-                    binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
-                }
+                    if (request != null) {
+                        binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
+                    } else {
+                        binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
+                    }
                 transactionsAPI(request!!)
             }
             Utils.resetFilter -> {
@@ -155,20 +160,21 @@ class TransactionListActivity : BaseActivity() {
     }
 
 
-    private fun loadData(){
-            transactionType.clear();
-            transactionSubType.clear();
-            txnStatus.clear();
-            currentPage = 0;
-            strFromDate = "";
-            strToDate = "";
-            strStartAmount = "";
-            strEndAmount = "";
-            binding.ivFilterIcon.setImageDrawable(getDrawable(R.drawable.ic_filter_icon));
+    private fun loadData() {
+        transactionType.clear();
+        transactionSubType.clear();
+        txnStatus.clear();
+        currentPage = 0;
+        strFromDate = "";
+        strToDate = "";
+        strStartAmount = "";
+        strEndAmount = "";
+        binding.ivFilterIcon.setImageDrawable(getDrawable(R.drawable.ic_filter_icon));
 
-            var transactionListRequest = TransactionListReq();
-            transactionListRequest.data?.txnType = getDefaultTransactionTypes()
-            transactionListRequest.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
+        var transactionListRequest = TransactionListReq();
+        transactionListRequest.data?.txnType = getDefaultTransactionTypes()
+        transactionListRequest.requestToken =
+            myApplication.mCurrentUserData.validateResponseData?.token
 
         transactionsAPI(transactionListRequest);
     }
@@ -184,7 +190,7 @@ class TransactionListActivity : BaseActivity() {
         try {
             adapter = RecentTransactionsListAdapter(
                 this@TransactionListActivity, TransactionResponse()
-               )
+            )
             binding.recyclerView.setAdapter(adapter)
             binding.recyclerView.setLayoutManager(LinearLayoutManager(this@TransactionListActivity))
             transactionViewModel?.allTransactionsList(transactionListRequest)
@@ -214,18 +220,19 @@ class TransactionListActivity : BaseActivity() {
             }
         }
 
-        batchAmountViewModel?.batchResponseMutableLiveData?.observe(this@TransactionListActivity){
-            batchResponseMutableLiveData ->
-            try{
-                if(batchResponseMutableLiveData !=null) {
-                    if(batchResponseMutableLiveData.status == Utils.SUCCESS){
+        batchAmountViewModel?.batchResponseMutableLiveData?.observe(this@TransactionListActivity) { batchResponseMutableLiveData ->
+            try {
+                if (batchResponseMutableLiveData != null) {
+                    if (batchResponseMutableLiveData.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.batchResponse =
                             batchResponseMutableLiveData.data
 
-                        binding.batchMoneyTV.setText((batchResponseMutableLiveData.data?.todayBatchAmount!!
-                        ))
+                        binding.batchMoneyTV.setText(
+                            (batchResponseMutableLiveData.data?.todayBatchAmount!!
+                                    )
+                        )
 
-                    }else {
+                    } else {
                         Utils.displayAlertNew(
                             batchResponseMutableLiveData.error?.errorDescription.toString(),
                             this,
@@ -234,8 +241,7 @@ class TransactionListActivity : BaseActivity() {
                     }
                 }
 
-            }
-            catch (ex: Exception) {
+            } catch (ex: Exception) {
                 ex.printStackTrace()
             }
         }

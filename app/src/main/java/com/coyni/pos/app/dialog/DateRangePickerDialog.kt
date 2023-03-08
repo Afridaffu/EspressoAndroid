@@ -17,31 +17,22 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DateRangePickerDialog(context: Context) : BaseDialog(context) {
+class DateRangePickerDialog(context: Context, rangeDates: RangeDates) : BaseDialog(context) {
     val TAG = javaClass.name
     private var startDateD: Date? = null
     private var endDateD: Date? = null
     private var strFromDate = ""
     private var strToDate: String? = ""
     private var strSelectedDate: String? = ""
-    private var rangeDates: RangeDates? = null
-    private var calendarPicker: CalendarPicker? = null
-    private var closeIV: ImageView? = null
-    private var doneTV: TextView? = null
-    private var rangeDateTV: TextView? = null
+    private lateinit var rangeDates: RangeDates
+    private lateinit var calendarPicker: CalendarPicker
     var displayFormat = "MM-dd-yyyy"
-    private var displayFormatter: SimpleDateFormat? = null
+    private lateinit var displayFormatter: SimpleDateFormat
     private lateinit var mContext:Context
 
 
     private lateinit var dialogBinding: CalendarDialogBinding
     override fun getLayoutId() = R.layout.calendar_dialog
-
-    constructor(context: Context, rangeDates: RangeDates?) : this(context) {
-        this.mContext = context!!
-        this.rangeDates = rangeDates
-    }
-
 
     override fun initViews() {
         dialogBinding = CalendarDialogBinding.bind(findViewById(R.id.root))
@@ -67,7 +58,7 @@ class DateRangePickerDialog(context: Context) : BaseDialog(context) {
                 endDateD = displayFormatter?.parse(strToDate)
                 showSelectedDate()
                 calendarPicker?.setSelectionDate(startDateD!!, endDateD)
-                doneTV?.setTextColor(context.getResources().getColor(R.color.primary_black))
+                dialogBinding.doneTV?.setTextColor(context.getResources().getColor(R.color.primary_black))
             } catch (e: Exception) {
                 LogUtils.e(TAG, "Date Parse exception")
             }
@@ -76,8 +67,9 @@ class DateRangePickerDialog(context: Context) : BaseDialog(context) {
 
     private fun initFields() {
 
-        closeIV?.setOnClickListener(View.OnClickListener { dismiss() })
-        doneTV?.setOnClickListener(View.OnClickListener {
+        dialogBinding.closeIV?.setOnClickListener(View.OnClickListener { dismiss() })
+
+        dialogBinding.doneTV?.setOnClickListener(View.OnClickListener {
             dismiss()
             try {
                 rangeDates = RangeDates()
@@ -90,12 +82,14 @@ class DateRangePickerDialog(context: Context) : BaseDialog(context) {
                 e.printStackTrace()
             }
         })
+
         calendarPicker?.setOnRangeSelectedListener { date, date2, s, s2 ->
             startDateD = date
             endDateD = date2
             showSelectedDate()
             null
         }
+
         calendarPicker?.setOnStartSelectedListener { date: Date?, s: String? ->
             val f = SimpleDateFormat("dd MMM yyyy")
             try {
@@ -114,7 +108,7 @@ class DateRangePickerDialog(context: Context) : BaseDialog(context) {
         val simpleDateFormat = SimpleDateFormat(formatToDisplay)
         strSelectedDate =
             simpleDateFormat.format(startDateD) + " - " + simpleDateFormat.format(endDateD)
-        rangeDateTV?.setText(strSelectedDate)
+        dialogBinding.rangeDateTV?.setText(strSelectedDate)
 //        doneTV.setTextColor(context.getResources().getColor(R.color.primary_black));
     }
 }

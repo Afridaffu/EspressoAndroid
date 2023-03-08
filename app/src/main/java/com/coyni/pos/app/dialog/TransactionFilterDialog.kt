@@ -51,15 +51,16 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
     private val displayFormat = "MM-dd-yyyy"
     private var mLastClickTimeFilters = 0L
     var startDateLong = 0L
-    var endDateLong: Long = 0L
-    lateinit var rangeDates: RangeDates
-
+    var endDateLong: Long = 0
     //    private var adapter: TransactionFilterAdapter? = null
     private var adapter: com.coyni.pos.app.adapter.ExpandableListAdapter? = null
     var transactionTypeData: HashMap<Int, TransactionsTypeData> =
         HashMap<Int, TransactionsTypeData>()
     var transactionSubTypeData: HashMap<Int, List<TransactionsSubTypeData>> =
         HashMap<Int, List<TransactionsSubTypeData>>()
+
+    var rangeDates = RangeDates()
+
 
 //    private val myApplication: MyApplication? = context as MyApplication?
 
@@ -313,7 +314,6 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
             binding.transAmountStartET.setText("")
             binding.transAmountEndET.setText("")
             binding.datePickET.setText("")
-            rangeDates = RangeDates()
             rangeDates.updatedFromDate = ("")
             rangeDates.updatedToDate = ("")
             binding.transAmountStartET.clearFocus()
@@ -668,9 +668,10 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
     private fun showCalendar() {
 
-        // custom dialog
         dateRangePickerDialog = DateRangePickerDialog(context, rangeDates)
-        dateRangePickerDialog!!.setOnDialogClickListener(object : OnDialogClickListener {
+        dateRangePickerDialog!!.show()
+
+        dateRangePickerDialog!!.setOnDialogClickListener(object: OnDialogClickListener{
 
             override fun onDialogClicked(action: String?, value: Any?) {
                 if (action == Utils.datePicker) {
@@ -680,9 +681,9 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                     tempStrSelectedDate = rangeDates.fullDate
                     binding.datePickET.setText(tempStrSelectedDate)
                 }
+
             }
         })
-        dateRangePickerDialog!!.show()
     }
 
 
