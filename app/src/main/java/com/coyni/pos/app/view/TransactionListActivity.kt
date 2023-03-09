@@ -16,6 +16,7 @@ import com.coyni.pos.app.dialog.OnDialogClickListener
 import com.coyni.pos.app.dialog.TransactionFilterDialog
 import com.coyni.pos.app.model.BatchAmount.BatchAmountRequest
 import com.coyni.pos.app.model.ListItem
+import com.coyni.pos.app.model.TransactionData
 import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
 import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
 import com.coyni.pos.app.utils.MyApplication
@@ -29,7 +30,6 @@ class TransactionListActivity : BaseActivity() {
     private lateinit var binding: ActivityTransactionHistoryBinding
     private var adapter: RecentTransactionsListAdapter? = null
     private var request: TransactionListReq? = null
-
     private val globalData: List<ListItem> = ArrayList<ListItem>()
     private val transactionType = ArrayList<Int>()
     private val transactionSubType = ArrayList<Int>()
@@ -127,38 +127,33 @@ class TransactionListActivity : BaseActivity() {
         val filterDialog = TransactionFilterDialog(this@TransactionListActivity)
         filterDialog!!.show()
 
-        filterDialog.setOnDialogClickListener(object: OnDialogClickListener{
+        filterDialog.setOnDialogClickListener(object : OnDialogClickListener {
             override fun onDialogClicked(action: String?, value: Any?) {
+                when (action) {
+                    Utils.applyFilter -> {
+                        dismissDialog()
+                        request = value as TransactionListReq
+                        if (request?.data?.txnType == null)
+                            if (request != null) {
+                                binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
+                            } else {
+                                binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
+                            }
+                        transactionsAPI(request!!)
+                    }
+                    Utils.resetFilter -> {
 
+//                        filterIV.setImageResource(R.drawable.ic_filtericon);
+                        request = null
+                        loadData()
+                        dismissDialog()
+                    }
+                }
             }
         })
 
         filterDialog!!.setOnDismissListener { dialogInterface -> }
     }
-
-    private fun onFilterDialogListenerCall(action: String, value: Any) {
-        when (action) {
-            Utils.applyFilter -> {
-                dismissDialog()
-                request = value as TransactionListReq
-                if (request?.data?.txnType == null)
-                    if (request != null) {
-                        binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
-                    } else {
-                        binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
-                    }
-                transactionsAPI(request!!)
-            }
-            Utils.resetFilter -> {
-
-//                        filterIV.setImageResource(R.drawable.ic_filtericon);
-                request = null
-                loadData()
-                dismissDialog()
-            }
-        }
-    }
-
 
     private fun loadData() {
         transactionType.clear();
@@ -207,6 +202,10 @@ class TransactionListActivity : BaseActivity() {
                     if (recentTransactionResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.transactionResponse =
                             recentTransactionResponse.data
+                        total = recentTransactionResponse.data?.totalPages!!
+                        prepareListData(recentTransactionResponse.data?.items)
+
+
                     } else {
                         Utils.displayAlertNew(
                             recentTransactionResponse.error?.errorDescription.toString(),
@@ -248,6 +247,42 @@ class TransactionListActivity : BaseActivity() {
 
     }
 
+    private fun prepareListData(items: ArrayList<Int>?) {
+        if (items != null && items.size > 0) {
+            Collections.sort(items, Collections.reverseOrder<Any>())
+
+//        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+//        binding.recyclerView.itemAnimator = DefaultItemAnimator()
+//        adapter = RecentTransactionsListAdapter(applicationContext, recentTxns!!)
+//        binding.recyclerView.adapter = adapter
+//
+//        binding.listRecyclerRV.layoutManager = LinearLayoutManager(this)
+//        binding.listRecyclerRV.itemAnimator = DefaultItemAnimator()
+//        binding.listRecyclerRV.adapter = adapter
+
+            adapter?.setOnItemClickListener(
+                object : OnItemClickListener {
+
+                    override fun onItemClick(position: Int?, value: Any?) {
+                        showTransactionDetails(TransactionData())
+                    }
+
+                    override fun onChildClicked(s: String?) {
+                        TODO("Not yet implemented")
+                    }
+                })
+        }
+
+    }
+
+    private fun showTransactionDetails(obj: TransactionData) {
+        val i = Intent(this@TransactionListActivity, TransactionDetailsActivity::class.java)
+        i.putExtra(Utils.gbxTxnId, obj.referenceId)
+        i.putExtra(Utils.txnType, obj.transactionType)
+        i.putExtra(Utils.txnSubType, obj.transactionSubtype)
+        startActivity(i)
+    }
+
     private fun batchAPI() {
 
         val req = BatchAmountRequest()
@@ -263,7 +298,6 @@ class TransactionListActivity : BaseActivity() {
         req1.toAmount = 50
         req1.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
         req1.data?.txnType = getDefaultTransactionTypes()
-
         transactionViewModel?.allTransactionsList(req1)
     }
 

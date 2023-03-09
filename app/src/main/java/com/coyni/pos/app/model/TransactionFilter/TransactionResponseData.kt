@@ -1,9 +1,9 @@
 package com.coyni.pos.app.model.TransactionFilter
 
-data class TransactionResponseData(
-    private val items: ArrayList<Int>? = null,
-    private val currentPageNo: Int? = null,
-    private val pageSize: Int? = null,
-    private val totalItems: Int? = null,
-    private val totalPages: Int? = null
+class TransactionResponseData(
+    var items: ArrayList<Int>? = null,
+    var currentPageNo: Int? = null,
+    var pageSize: Int? = null,
+    var totalItems: Int? = null,
+    var totalPages: Int? = null
 )

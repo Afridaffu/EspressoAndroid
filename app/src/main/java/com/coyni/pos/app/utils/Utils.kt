@@ -134,8 +134,10 @@ class Utils {
         const val CHECK_OUT = "checkout"
         const val SWIPE = "swipe"
         const val GBX_ID = "gbx id"
+        const val gbxTxnId = "gbxTxnId"
         const val SALE_ORDER_AMOUNT = "sale order amount"
         const val transPending = "pending"
+        const val transInprogress = "inprogress"
         const val transCompleted = "completed"
         const val transSuccessful = "Successful"
         const val transOpen = "open"
@@ -158,7 +160,7 @@ class Utils {
         const val failed = 3
         const val paid = 5
         const val partialRefund = 11 // need to ask BE
-        const val refund = 9 // need to ask BE
+        const val refund = 9
         const val payoutInProgress = 4
         const val payoutFailed = 9
         const val REQUEST_ID_MULTIPLE_PERMISSIONS = 102
