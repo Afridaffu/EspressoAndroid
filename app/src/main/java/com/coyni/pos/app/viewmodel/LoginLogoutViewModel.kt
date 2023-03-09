@@ -77,7 +77,7 @@ class LoginLogoutViewModel(application: Application) : AndroidViewModel(applicat
         })
     }
 
-    fun downloadUrl(request: DownloadUrlRequest) {
+    fun downloadUrl(request: ArrayList<DownloadUrlRequest?>) {
         val apiService: ApiService = AuthApiClient.instance.create(ApiService::class.java)
         val call: Call<DownloadUrlResponse> = apiService.downloadUrl(request)
         call.enqueue(object : Callback<DownloadUrlResponse> {

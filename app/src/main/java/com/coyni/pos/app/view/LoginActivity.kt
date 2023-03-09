@@ -24,7 +24,6 @@ import com.coyni.pos.app.model.downloadurl.DownloadUrlRequest
 import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
-
 import com.coyni.pos.app.viewmodel.LoginLogoutViewModel
 import com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM
 
@@ -64,7 +63,7 @@ class LoginActivity : BaseActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initView() {
 
-        loinViewModel = ViewModelProvider(this@LoginActivity)[LoginLogoutViewModel::class.java]
+        loinViewModel = ViewModelProvider(this@LoginActivity).get(LoginLogoutViewModel::class.java)
 
         val myApplication = applicationContext as MyApplication
 
@@ -282,7 +281,9 @@ class LoginActivity : BaseActivity() {
                 Utils.strAuth = response.data?.jwtToken
                 myApplication.mCurrentUserData.loginData = response.data!!
                 val imgUrl: String = response.data!!.image.toString()
-//                loinViewModel!!.downloadUrl(DownloadUrlRequest(imgUrl))
+                val urlList = ArrayList<DownloadUrlRequest>()
+                urlList.add(DownloadUrlRequest(imgUrl))
+                loinViewModel!!.downloadUrl(urlList)
                 Utils.hideKeypad(this@LoginActivity)
                 if (response.data?.status?.equals("deactivated", true) == true) {
                     showTerminalScreen()
@@ -300,7 +301,7 @@ class LoginActivity : BaseActivity() {
             }
         }
         loinViewModel?.downloadUrlResponseMutableLiveData?.observe(this@LoginActivity) { response ->
-            if (response != null && response.status == Utils.SUCCESS ) {
+            if (response != null && response.status.equals(Utils.SUCCESS) ) {
                 myApplication.mCurrentUserData.downloadUrlData = response.data
             }
         }

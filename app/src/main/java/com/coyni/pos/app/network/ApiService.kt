@@ -31,8 +31,8 @@ interface ApiService {
     @POST("api/v2/m-pos/logout")
     fun logout(): Call<LogoutResponse>
 
-    @POST("api/v2/m-pos/profile/download-url")
-    fun downloadUrl(@Body downloadUrlRequest: DownloadUrlRequest?): Call<DownloadUrlResponse>
+    @POST("api/v2/profile/download-url")
+    fun downloadUrl(@Body downloadUrlRequest: List<DownloadUrlRequest?>): Call<DownloadUrlResponse>
 
     @GET("api/v2/app-version/retrieve")
     fun getAppUpdate(@Query("osType") osType: String?): Call<AppUpdateResp?>?
