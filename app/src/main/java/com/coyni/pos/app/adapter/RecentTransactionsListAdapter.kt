@@ -7,15 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.coyni.pos.app.baseclass.BaseRecyclerViewAdapter
 import com.coyni.pos.app.baseclass.OnItemClickListener
 import com.coyni.pos.app.databinding.RecentTxnsListBinding
-import com.coyni.pos.app.model.ListItem
-import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
-import com.coyni.pos.app.model.TransactionFilter.TransactionResponseData
+import com.coyni.pos.app.model.TransactionFilter.TransactionItems
 import com.coyni.pos.app.utils.MyApplication
 
 class RecentTransactionsListAdapter (): BaseRecyclerViewAdapter<RecentTransactionsListAdapter.MyViewHolder>() {
 
     private var listener: OnItemClickListener?= null
-    var recentTxns: TransactionResponse? = null
+    var recentTxns: List<TransactionItems>? = null
     private lateinit var mContext: Context
     private lateinit var objMyApplication : MyApplication
 
@@ -24,10 +22,7 @@ class RecentTransactionsListAdapter (): BaseRecyclerViewAdapter<RecentTransactio
        this.listener = listener
     }
 
-    constructor(
-        context: Context,
-        list: TransactionResponse?
-        ) : this() {
+    constructor(context: Context, list: List<TransactionItems>?) : this() {
         this.mContext = context
         this.recentTxns = list
         this.objMyApplication = context.applicationContext as MyApplication
@@ -42,17 +37,35 @@ class RecentTransactionsListAdapter (): BaseRecyclerViewAdapter<RecentTransactio
 
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val objData: TransactionResponseData? = recentTxns?.data
 
-//        holder.binding.descriptionTV.setText()
+        val itemViewHolder: MyViewHolder = holder
+
+        var objData: TransactionItems = recentTxns!!.get(position)
+
+        setItemViewData(objData, itemViewHolder, position)
 
             holder.binding.llClick.setOnClickListener{
             listener?.onItemClick(position, "abc")
         }
     }
 
+    private fun setItemViewData(objData: TransactionItems, holder: MyViewHolder, position: Int) {
+
+        if(objData!=null){
+//            holder.binding.dateTV.setText(objData?.createdAt)
+
+//            holder.binding.descriptionTV.setText(objData?.txnTypeDn + " - " + objData?.txnSubTypeDn)
+//
+//            holder.binding.amountTV.setText(objData?.amount)
+        }
+
+
+
+    }
+
     override fun getItemCount(): Int {
-        return 5
+
+        return 10
     }
 
     class MyViewHolder(val binding: RecentTxnsListBinding) :

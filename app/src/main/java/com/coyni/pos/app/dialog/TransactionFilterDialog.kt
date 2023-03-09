@@ -32,9 +32,9 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
     private var request: TransactionFilterRequest? = null
     private var isFilters = false
-    private var txnStatus = java.util.ArrayList<Int>()
-    private var transactionType = java.util.ArrayList<Int>()
-    private var transactionSubType = java.util.ArrayList<Int>()
+    private var txnStatus = ArrayList<Int>()
+    private var transactionType: Int? = null
+    var transactionSubType = java.util.ArrayList<Int>()
     var strStartAmount = ""
     var strEndAmount: String? = ""
     var strFromDate: String? = ""
@@ -52,6 +52,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
     private var mLastClickTimeFilters = 0L
     var startDateLong = 0L
     var endDateLong: Long = 0
+
     //    private var adapter: TransactionFilterAdapter? = null
     private var adapter: com.coyni.pos.app.adapter.ExpandableListAdapter? = null
     var transactionTypeData: HashMap<Int, TransactionsTypeData> =
@@ -112,20 +113,18 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
         if (request != null) {
             isFilters = request!!.isFilters
-            if (request!!.transactionType != null) {
-                transactionType.addAll(request!!.transactionType!!)
+            if (request!!.data?.txnType != null) {
+                transactionType = request!!.data?.txnType!!
             }
-            if (transactionType == null) {
-                transactionType = ArrayList<Int>()
-            }
-            if (request!!.transactionSubType != null) {
-                transactionSubType.addAll(request!!.transactionSubType!!)
+
+            if (request!!.data?.txnSubTypes != null) {
+                transactionSubType.addAll(request!!.data?.txnSubTypes!!)
             }
             if (transactionSubType == null) {
                 transactionSubType = ArrayList<Int>()
             }
-            if (request!!.txnStatus != null) {
-                txnStatus.addAll(request!!.txnStatus!!)
+            if (request!!.status != null) {
+//                txnStatus.addAll(request!!.status!!)
             }
             if (txnStatus == null) {
                 txnStatus = ArrayList<Int>()
@@ -141,10 +140,26 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                                 )
                             )
                         }
+                        Utils.partialRefund -> {
+                            binding.transStatusPartialRefund.setChecked(true)
+                            binding.transStatusPartialRefund.setChipStrokeColor(
+                                ColorStateList.valueOf(
+                                    context.resources.getColor(R.color.primary_green)
+                                )
+                            )
+                        }
+                        Utils.refund -> {
+                            binding.transStatusRefunded.setChecked(true)
+                            binding.transStatusRefunded.setChipStrokeColor(
+                                ColorStateList.valueOf(
+                                    context.resources.getColor(R.color.primary_green)
+                                )
+                            )
+                        }
                     }
                 }
             }
-            strStartAmount = request!!.fromAmount!!
+            strStartAmount = request!!.fromAmount.toString()
             if (strStartAmount != null && strStartAmount.trim { it <= ' ' } != "") {
                 val FilterArray = arrayOfNulls<InputFilter>(1)
                 FilterArray[0] =
@@ -154,7 +169,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                 binding.transAmountStartET.setFilters(FilterArray)
                 binding.transAmountStartET.setText(strStartAmount)
             }
-            strEndAmount = request!!.toAmount
+            strEndAmount = request!!.toAmount.toString()
             if (strEndAmount != null && strEndAmount!!.trim { it <= ' ' } != "") {
                 val FilterArray = arrayOfNulls<InputFilter>(1)
                 FilterArray[0] =
@@ -164,15 +179,15 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                 binding.transAmountEndET.setFilters(FilterArray)
                 binding.transAmountEndET.setText(strEndAmount)
             }
-            if (request!!.updatedFromDate != null && !request!!.updatedFromDate.equals("")) {
-                strF = request!!.updatedFromDate
+            if (request!!.fromDate != null && !request!!.fromDate.equals("")) {
+                strF = request!!.fromDate
                 if (strF!!.contains(".")) {
                     strF = strF!!.substring(0, strF!!.lastIndexOf("."))
                 }
 //                strF = myApplication.convertZoneDateTime(strF, "yyyy-MM-dd HH:mm:ss", "MM-dd-yyyy")
             }
-            if (request!!.updatedToDate != null && !request!!.updatedToDate.equals("")) {
-                strT = request!!.updatedToDate
+            if (request!!.toDate != null && !request!!.toDate.equals("")) {
+                strT = request!!.toDate
                 if (strT?.contains(".") == true) {
                     strT = strT?.substring(0, strT?.lastIndexOf(".")!!)
                 }
@@ -202,7 +217,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
             }
         } else {
             if (transactionType != null) {
-                transactionType.clear()
+                transactionType = 0
             }
             if (transactionSubType != null) {
                 transactionSubType.clear()
@@ -222,9 +237,8 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
     private fun filterActions() {
         if (isFilters) {
-            if (transactionType.size > 0) {
-                for (i in transactionType.indices) {
-                }
+            if (transactionType == 0) {
+
             }
             if (transactionSubType.size > 0) {
                 for (i in transactionSubType.indices) {
@@ -279,7 +293,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                 binding.datePickET.setText(strSelectedDate)
             }
         } else {
-            transactionType.clear()
+//            transactionType.clear()
             transactionSubType.clear()
             txnStatus.clear()
             strFromDate = ""
@@ -564,38 +578,35 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
             processFilter(request!!)
 
-            if (transactionType.size > 0 || transactionSubType.size > 0 || txnStatus.size > 0) {
+            if (transactionType!! > 0 || transactionSubType.size > 0 || txnStatus.size > 0) {
                 isFilters = true
-                if (transactionType.size > 0) {
-                    request!!.transactionType = (transactionType)
+                if (transactionType!! > 0) {
+                    request!!.data?.txnType = (transactionType)
                 }
                 if (transactionSubType.size > 0) {
-                    request!!.transactionType = (transactionSubType)
+                    request!!.data?.txnSubTypes = (transactionSubType)
                 }
                 if (txnStatus.size > 0) {
-                    request!!.txnStatus = (txnStatus)
+                    request!!.status = (txnStatus.toString())
                 }
             }
             if (!binding.transAmountStartET.getText().toString().trim().equals("")) {
                 isFilters = true
-                request!!.fromAmount =
-                    binding.transAmountStartET.getText().toString().replace(",", "")
+//                request!!.fromAmount =
+//                    binding.transAmountStartET.getText().toString().replace(",", "")
 
-                request!!.fromAmountOperator = (">=")
             } else {
                 strStartAmount = ""
             }
             if (!binding.transAmountEndET.getText().toString().trim().equals("")) {
                 isFilters = true
-                request!!.toAmount =
-                    (binding.transAmountEndET.getText().toString().replace(",", ""))
-                request!!.toAmountOperator = ("<=")
+//                request!!.toAmount =
+//                    (binding.transAmountEndET.getText().toString().replace(",", ""))
                 if (binding.transAmountStartET.getText().toString().trim()
                         .equals("") || binding.transAmountStartET.getText().toString().trim()
                         .equals("0.00")
                 ) {
-                    request!!.fromAmount = ("0.00")
-                    request!!.fromAmountOperator = (">=")
+                    request!!.fromAmount = 0
                     strStartAmount = "0.00"
                 }
             } else {
@@ -611,7 +622,6 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 ////                        myApplication!!.mCurrentUserData!!.strPreference
 //
 //                    )
-                request!!.updatedFromDateOperator = (">=")
             }
             if (strToDate != "") {
                 isFilters = true
@@ -622,7 +632,6 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 //                        "yyyy-MM-dd HH:mm:ss",
 ////                        myApplication!!.mCurrentUserData!!.strPreference
 //                    )
-                request!!.updatedToDateOperator = ("<=")
             }
             if (!binding.transAmountStartET.getText().toString()
                     .equals("") && !binding.transAmountEndET.getText().toString().equals("")
@@ -671,7 +680,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
         dateRangePickerDialog = DateRangePickerDialog(context, rangeDates)
         dateRangePickerDialog!!.show()
 
-        dateRangePickerDialog!!.setOnDialogClickListener(object: OnDialogClickListener{
+        dateRangePickerDialog!!.setOnDialogClickListener(object : OnDialogClickListener {
 
             override fun onDialogClicked(action: String?, value: Any?) {
                 if (action == Utils.datePicker) {
@@ -713,13 +722,13 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
         val saleOrder = TransactionsTypeData()
         saleOrder.itemId = (Utils.filter_saleorder)
-        saleOrder.isSelected = (transactionType.contains(Utils.filter_saleorder))
+        saleOrder.isSelected = (transactionType?.equals(Utils.filter_saleorder))
         saleOrder.groupItem = Utils.SALE_ORDER
         transactionTypeData!![Utils.filter_saleorder] = saleOrder
 
         val refund = TransactionsTypeData()
         refund.itemId = (Utils.filter_Refund)
-        refund.isSelected = (transactionType.contains(Utils.filter_Refund))
+        refund.isSelected = (transactionType?.equals(Utils.filter_Refund))
         refund.groupItem = Utils.Refund_String
         transactionTypeData!![Utils.filter_Refund] = refund
 
@@ -762,12 +771,12 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
             val groups: List<Int> = ArrayList(parent.keys)
             for (group in groups) {
                 val data = parent[group]
-                if (data!!.isSelected!! && !transactionType.contains(data.itemId)) {
-                    transactionType.add(data.itemId)
-                }
-                if (!data.isSelected!! && transactionType.contains(data.itemId)) {
-                    transactionType.remove(data.itemId as Int?)
-                }
+//                if (data!!.isSelected!! && !transactionType.contains(data.itemId)) {
+//                    transactionType.add(data.itemId)
+//                }
+//                if (!data.isSelected!! && transactionType.contains(data.itemId)) {
+//                    transactionType.remove(data.itemId as Int?)
+//                }
             }
             val data: HashMap<Int, List<TransactionsSubTypeData>> = adapter!!.childData
             val childs: List<Int> = ArrayList(data.keys)
