@@ -2,6 +2,7 @@ package com.coyni.pos.app.fragments
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -10,7 +11,9 @@ import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
+import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.FragmentGenarateQrBinding
 import com.coyni.pos.app.model.generate_qr.GenerateQrRequest
@@ -72,7 +75,9 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
                             generateQrResponse.data
                         mActivity.fragmentNavigation(
                             Utils.MERCHANT_QR,
-                            Utils.convertTwoDecimal(binding.merchantAmountET.text.toString())
+                            Utils.convertTwoDecimal(
+                                binding.merchantAmountET.text.toString()
+                            )
                         )
                     } else {
                         Utils.displayAlertNew(
@@ -107,9 +112,14 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
                     binding.merchantAmountET.hint = ""
                     if (editable.length > 8) {
                         binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33F)
-                    } else if (editable.length > 5) {
-                        binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43F)
-                    } else {
+                    } else if (editable.length == 5 || editable.length == 6) {
+                        binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42f)
+                    } else if (editable.length == 7 || editable.length == 8) {
+                        binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32f)
+                    } else if (editable.length >= 9) {
+                        binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
+                    } else if (editable.length <= 4) {
+                        binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53f)
                         binding.merchantAmountET.textSize =
                             Utils.pixelsToSp(requireContext(), fontSize)
                     }
@@ -141,12 +151,14 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
 
 
     private fun initKeyboard() {
-        val ic: InputConnection = binding.merchantAmountET.onCreateInputConnection(EditorInfo())
+        val ic: InputConnection =
+            binding.merchantAmountET.onCreateInputConnection(EditorInfo())
         binding.bottomKeyPad.setInputConnection(ic)
         binding.bottomKeyPad.setOnKeyboardClickListener(object :
             GenerateQrCustomKeyboard.OnSuccessListener {
             override fun onKeyboardClick(action: String, value: String?) {
                 if (action == Utils.BUTTON_CLICK) {
+                    convertDecimal()
                     if (isPayClickable) {
                         generateQR()
                     }
@@ -155,9 +167,73 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         })
     }
 
+    fun convertDecimal() {
+        try {
+            val FilterArray = arrayOfNulls<InputFilter>(1)
+            FilterArray[0] = InputFilter.LengthFilter(getString(R.string.maxlendecimal).toInt())
+            binding.merchantAmountET.setFilters(FilterArray)
+            USFormat(binding.merchantAmountET)
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    private fun USFormat(etAmount: EditText): String? {
+        var strAmount = ""
+        var strReturn = ""
+        try {
+            strAmount = Utils.convertTwoDecimal(etAmount.text.toString().trim { it <= ' ' }
+                .replace(",", ""))
+            etAmount.removeTextChangedListener(this)
+            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)))
+            etAmount.addTextChangedListener(this)
+            etAmount.setSelection(etAmount.text.toString().length)
+            strReturn = Utils.USNumberFormat(Utils.doubleParsing(strAmount))
+            changeTextSize(strReturn)
+            setDefaultLength()
+            binding.bottomKeyPad.setEnteredText(
+                binding.merchantAmountET.text.toString().trim { it <= ' ' })
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+        return strReturn
+    }
+
+    private fun changeTextSize(editable: String) {
+        try {
+            val FilterArray = arrayOfNulls<InputFilter>(1)
+            if (editable.length > 12) {
+                FilterArray[0] = InputFilter.LengthFilter(getString(R.string.maxlendecimal).toInt())
+                binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28f)
+            } else if (editable.length > 8) {
+                FilterArray[0] = InputFilter.LengthFilter(getString(R.string.maxlendecimal).toInt())
+                binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33f)
+            } else if (editable.length > 5) {
+                FilterArray[0] = InputFilter.LengthFilter(getString(R.string.maxlendecimal).toInt())
+                binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43f)
+
+            } else {
+            }
+            binding.merchantAmountET.setFilters(FilterArray)
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    private fun setDefaultLength() {
+        try {
+            val FilterArray = arrayOfNulls<InputFilter>(1)
+            FilterArray[0] = InputFilter.LengthFilter(getString(R.string.maxlength).toInt())
+            binding.merchantAmountET.setFilters(FilterArray)
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+    }
+
     private fun generateQR() {
         val generateQrRequest = GenerateQrRequest()
-        generateQrRequest.amount = Utils.doubleParsing(binding.merchantAmountET.text.toString())
+        generateQrRequest.amount =
+            Utils.doubleParsing(binding.merchantAmountET.text.toString())
         generateQrRequest.isQrCodeEnable = true
         generateQrRequest.requestToken =
             myApplication?.mCurrentUserData?.validateResponseData?.token

@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.TransactionSuccessBinding
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 
 class TransactionSuccessFragment : BaseFragment() {
     private lateinit var binding: TransactionSuccessBinding
     private lateinit var screen: String
     private lateinit var status: String
+    private lateinit var amount: String
+    private var myApplication: MyApplication? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -23,6 +26,7 @@ class TransactionSuccessFragment : BaseFragment() {
     }
 
     private fun inItFields() {
+        myApplication = requireActivity().application as MyApplication
         getValues()
         when (screen) {
             Utils.REFUND -> refundSuccess()
@@ -31,7 +35,9 @@ class TransactionSuccessFragment : BaseFragment() {
 
     private fun refundSuccess() {
         binding.refundedTV.text = "Transaction Refunded"
-        binding.customerName.text = "to"
+        binding.customerName.text =
+            "to" + myApplication?.mCurrentUserData?.transactionData?.customerName.toString()
+        binding.refundedAMountTV.text = Utils.convertTwoDecimal(amount).replace("$", "")
     }
 
     private fun getValues() {
@@ -43,6 +49,9 @@ class TransactionSuccessFragment : BaseFragment() {
         }
         if (requireArguments()[Utils.STATUS] != null) {
             status = java.lang.String.valueOf(requireArguments()[Utils.STATUS])
+        }
+        if (requireArguments()[Utils.REFUNDED_AMOUNT] != null) {
+            amount = java.lang.String.valueOf(requireArguments()[Utils.REFUNDED_AMOUNT])
         }
     }
 }
