@@ -28,8 +28,8 @@
                     android:id="@+id/qrLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="invisible">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -86,47 +86,48 @@
                             android:padding="@dimen/_3sdp" />
                     </RelativeLayout>
                 </LinearLayout>
-                <RelativeLayout
+
+                <LinearLayout
                     android:id="@+id/animationRL"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="@dimen/_60sdp"
-                    android:visibility="visible">
+                    android:visibility="visible"
+                    android:orientation="vertical">
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/lottieAnimV"
                         android:layout_width="@dimen/_90sdp"
                         android:layout_height="@dimen/_90sdp"
-                        android:layout_marginStart="@dimen/_30sdp"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
-                        app:lottie_rawRes="@raw/green_loading" />
+                        app:lottie_rawRes="@raw/stepper_loader" />
 
                     <TextView
                         android:id="@+id/waitingText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/lottieAnimV"
-                        android:layout_marginBottom="@dimen/_50sdp"
-                        android:fontFamily="@font/opensans_regular"
+                        android:fontFamily="@font/opensans_semibold"
                         android:gravity="clip_horizontal"
                         android:text="Waiting on customer..."
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp"
-                        android:visibility="invisible" />
-                </RelativeLayout>
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/_10sdp"/>
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
         </RelativeLayout>
     </ScrollView>
+
     <LinearLayout
         android:id="@+id/discardSaleLL"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_44sdp"
-       android:layout_marginBottom="@dimen/_43sdp"
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="@dimen/_21sdp"
+        android:layout_marginBottom="@dimen/_43sdp"
         android:background="@drawable/bg_inactive_color_filled_cv"
         android:gravity="center"
         android:orientation="horizontal">
@@ -140,4 +141,5 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
+
 </RelativeLayout>

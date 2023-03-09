@@ -115,11 +115,10 @@ class PinActivity : BaseActivity(), View.OnClickListener {
                 passcode += "9"
                 passNumber(passcode)
             }
-            R.id.backActionIV ->
-                if (passcode != "") {
-                    passcode = passcode.substring(0, passcode.length - 1)
-                    passNumberClear(passcode)
-                }
+            R.id.backActionIV -> if (passcode != "") {
+                passcode = passcode.substring(0, passcode.length - 1)
+                passNumberClear(passcode)
+            }
         }
     }
 
@@ -160,7 +159,6 @@ class PinActivity : BaseActivity(), View.OnClickListener {
     private fun checkAndProceed() {
         val request = ValidateRequest()
         request.pin = passcode
-        request.actionType = action
         pinViewModel.validateCoyniPin(request)
     }
 
@@ -219,12 +217,12 @@ class PinActivity : BaseActivity(), View.OnClickListener {
                         myApplication?.mCurrentUserData?.validateResponseData =
                             validateResponse.data
                         Handler().postDelayed({
-                            val `in` = Intent()
-                            `in`.putExtra(Utils.ACTION_TYPE, action)
-                            `in`.putExtra(
+                            val intent = Intent()
+                            intent.putExtra(Utils.ACTION_TYPE, action)
+                            intent.putExtra(
                                 Utils.TRANSACTION_TOKEN, validateResponse.data?.token
                             )
-                            sendSuccessResult(`in`)
+                            sendSuccessResult(intent)
                         }, 200)
                     } else {
                         setErrorPIN()

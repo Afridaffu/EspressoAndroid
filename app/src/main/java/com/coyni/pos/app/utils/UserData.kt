@@ -7,6 +7,7 @@ import com.coyni.pos.app.model.generate_qr.GenerateQrResponseData
 import com.coyni.pos.app.model.login.LoginData
 import com.coyni.pos.app.model.pin.ValidateResponseData
 import com.coyni.pos.app.model.refund.RefundResponseData
+import org.json.JSONObject
 
 class UserData {
     var strPreference = "PST"
@@ -16,4 +17,5 @@ class UserData {
     var loginData: LoginData? = null
     var transactionResponse: TransactionResponseData? = null
     var batchResponse: BatchResponseData? = null
+    var webSocketObject: JSONObject? = null
 }
