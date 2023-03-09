@@ -1,5 +1,6 @@
 package com.coyni.pos.app.utils
 
+import com.coyni.pos.app.model.downloadurl.DownloadUrlData
 import com.coyni.pos.app.model.BatchAmount.BatchAmountResponse
 import com.coyni.pos.app.model.BatchAmount.BatchResponseData
 import com.coyni.pos.app.model.TransactionData
@@ -15,6 +16,7 @@ class UserData {
     var generateQrResponseData: GenerateQrResponseData? = null
     var refundResponseData: RefundResponseData? = null
     var loginData: LoginData? = null
+    var downloadUrlData: DownloadUrlData? = null
     var transactionResponse: TransactionResponseData? = null
     var batchResponse: BatchResponseData? = null
     var transactionData: TransactionData? = null

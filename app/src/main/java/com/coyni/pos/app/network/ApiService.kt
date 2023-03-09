@@ -9,6 +9,8 @@ import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
 import com.coyni.pos.app.model.appupdate.AppUpdateResp
 import com.coyni.pos.app.model.discard.DiscardSaleRequest
 import com.coyni.pos.app.model.discard.DiscardSaleResponse
+import com.coyni.pos.app.model.downloadurl.DownloadUrlRequest
+import com.coyni.pos.app.model.downloadurl.DownloadUrlResponse
 import com.coyni.pos.app.model.generate_qr.GenerateQrRequest
 import com.coyni.pos.app.model.generate_qr.GenerateQrResponse
 import com.coyni.pos.app.model.login.LoginRequest
@@ -29,6 +31,9 @@ interface ApiService {
 
     @POST("api/v2/m-pos/logout")
     fun logout(): Call<LogoutResponse>
+
+    @POST("api/v2/profile/download-url")
+    fun downloadUrl(@Body downloadUrlRequest: List<DownloadUrlRequest?>): Call<DownloadUrlResponse>
 
     @GET("api/v2/app-version/retrieve")
     fun getAppUpdate(@Query("osType") osType: String?): Call<AppUpdateResp?>?
