@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.coyni.pos.app.R
@@ -18,6 +17,7 @@ import com.coyni.pos.app.model.BatchAmount.BatchAmountRequest
 import com.coyni.pos.app.model.ListItem
 import com.coyni.pos.app.model.TransactionData
 import com.coyni.pos.app.model.TransactionFilter.TransactionItem
+import com.coyni.pos.app.model.TransactionFilter.TransactionItems
 import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
 import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
 import com.coyni.pos.app.utils.MyApplication
@@ -31,11 +31,13 @@ class TransactionListActivity : BaseActivity() {
     private lateinit var binding: ActivityTransactionHistoryBinding
     private var adapter: RecentTransactionsListAdapter? = null
     private var request: TransactionListReq? = null
+
     private val globalData: List<ListItem> = ArrayList<ListItem>()
     private val transactionType = ArrayList<Int>()
     private val transactionSubType = ArrayList<Int>()
     private val txnStatus = ArrayList<Int>()
-    var recentTxns: TransactionResponse? = null
+    private var recentTxns: List<TransactionItems> = ArrayList<TransactionItems>()
+
     private lateinit var myApplication: MyApplication
     private var empRole: String? = ""
     private var transactionViewModel: TransactionsViewModel? = null
@@ -129,7 +131,7 @@ class TransactionListActivity : BaseActivity() {
         val filterDialog = TransactionFilterDialog(this@TransactionListActivity)
         filterDialog!!.show()
 
-        filterDialog.setOnDialogClickListener(object : OnDialogClickListener {
+        filterDialog.setOnDialogClickListener(object: OnDialogClickListener{
             override fun onDialogClicked(action: String?, value: Any?) {
                 when (action) {
                     Utils.applyFilter -> {
@@ -151,6 +153,7 @@ class TransactionListActivity : BaseActivity() {
                         dismissDialog()
                     }
                 }
+
             }
         })
 
@@ -169,10 +172,7 @@ class TransactionListActivity : BaseActivity() {
         binding.ivFilterIcon.setImageDrawable(getDrawable(R.drawable.ic_filter_icon));
 
         var transactionListRequest = TransactionListReq();
-        transactionListRequest.data?.txnType = getDefaultTransactionTypes()
-        transactionListRequest.requestToken =
-            myApplication.mCurrentUserData.validateResponseData?.token
-
+        transactionListRequest.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
         transactionsAPI(transactionListRequest);
     }
 
@@ -185,7 +185,6 @@ class TransactionListActivity : BaseActivity() {
 
     private fun transactionsAPI(transactionListRequest: TransactionListReq) {
         try {
-
             transactionViewModel?.allTransactionsList(transactionListRequest)
         } catch (ex: java.lang.Exception) {
             ex.printStackTrace()
@@ -200,15 +199,11 @@ class TransactionListActivity : BaseActivity() {
                     if (recentTransactionResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.transactionResponse =
                             recentTransactionResponse.data
-                        total = recentTransactionResponse.data?.totalPages!!
+//                        recentTxns = recentTransactionResponse.data?.items!!
                         prepareListData(recentTransactionResponse.data?.items)
-
                     } else {
                         Utils.displayAlertNew(
-                            recentTransactionResponse.error?.errorDescription.toString(),
-                            this,
-                            ""
-                        )
+                            recentTransactionResponse.error?.errorDescription.toString(), this, "")
                     }
                 }
             } catch (ex: Exception) {
@@ -303,7 +298,7 @@ class TransactionListActivity : BaseActivity() {
         req1.fromAmount = 10
         req1.toAmount = 50
         req1.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
-        req1.data?.txnType = getDefaultTransactionTypes()
+
         transactionViewModel?.allTransactionsList(req1)
     }
 
