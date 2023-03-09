@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.coyni.pos.app.model.TransactionData
+import com.coyni.pos.app.model.TransactionDetailsResponse
 import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
 import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
 import com.coyni.pos.app.network.ApiService
@@ -19,7 +20,7 @@ class TransactionsViewModel (application: Application) : AndroidViewModel(applic
 
     val transactionResponse = MutableLiveData<TransactionResponse?>()
 
-    val transactionDetailResponseMutableLiveData = MutableLiveData<TransactionData?>()
+    val transactionDetailResponse = MutableLiveData<TransactionDetailsResponse?>()
 
     fun allTransactionsList(request: TransactionListReq) {
         try {
@@ -65,35 +66,35 @@ class TransactionsViewModel (application: Application) : AndroidViewModel(applic
         try {
             val apiService = AuthApiClient.instance.create(ApiService::class.java)
             val mCall = apiService.transactionDetails(gbxTxnId, txnType, txnSubType)
-            mCall!!.enqueue(object : Callback<TransactionData?> {
+            mCall!!.enqueue(object : Callback<TransactionDetailsResponse?> {
                 override fun onResponse(
-                    call: Call<TransactionData?>,
-                    response: Response<TransactionData?>
+                    call: Call<TransactionDetailsResponse?>,
+                    response: Response<TransactionDetailsResponse?>
                 ) {
                     try {
                         if (response.isSuccessful) {
                             val obj = response.body()
-                            transactionDetailResponseMutableLiveData.setValue(obj)
+                            transactionDetailResponse.setValue(obj)
                         } else {
                             val gson = Gson()
-                            val type = object : TypeToken<TransactionData?>() {}.type
-                            var errorResponse: TransactionData? = null
+                            val type = object : TypeToken<TransactionDetailsResponse?>() {}.type
+                            var errorResponse: TransactionDetailsResponse? = null
                             try {
                                 errorResponse = gson.fromJson(response.errorBody()!!.string(), type)
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
-                            transactionDetailResponseMutableLiveData.setValue(errorResponse)
+                            transactionDetailResponse.setValue(errorResponse)
                         }
                     } catch (ex: Exception) {
                         ex.printStackTrace()
                     }
                 }
 
-                override fun onFailure(call: Call<TransactionData?>, t: Throwable) {
+                override fun onFailure(call: Call<TransactionDetailsResponse?>, t: Throwable) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG)
                         .show()
-                    transactionDetailResponseMutableLiveData.value = null
+                    transactionDetailResponse.value = null
                 }
             })
         } catch (ex: Exception) {

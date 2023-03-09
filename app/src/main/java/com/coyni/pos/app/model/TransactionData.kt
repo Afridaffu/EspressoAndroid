@@ -5,18 +5,18 @@ data class TransactionData(
     var employeeName: String? = null,
     var transactionSubtype: String? = null,
     var employeeId: Int? = null,
-    var terminalId:Int? = null,
-    var referenceId:String? = null,
-    var customerName:String? = null,
-    var purchaseAmount:String? = null,
-    var transactionType:String? = null,
-    var totalAmount:String? = null,
-    var createdDate:String? = null,
-    var customerEmail:String? = null,
-    var tip:String? = null,
-//    var status:String
+    var terminalId: Int? = null,
+    var referenceId: String? = null,
+    var customerName: String? = null,
+    var purchaseAmount: String? = null,
+    var transactionType: String? = null,
+    var totalAmount: String? = null,
+    var createdDate: String? = null,
+    var customerEmail: String? = null,
+    var tip: String? = null,
+    var status: String? = null,
 
-   //Refund fields
+    //Refund fields
     var merchantName: String? = null,
     var customerServiceEmail: String? = null,
     var saleOrderReferenceId: String? = null,
@@ -27,4 +27,4 @@ data class TransactionData(
     var remarks: String? = null,
 
 
-    ):BaseResponse()
+    )
