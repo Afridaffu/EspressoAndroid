@@ -203,6 +203,7 @@ class Utils {
         const val SCREEN = "screen"
         const val EMPROLE = "Employee"
         const val STATUS = "status"
+        const val REFUNDED_AMOUNT = "refunded Amount"
         const val REFUND = "refund"
         const val START_NEW_SALE = "start new sale"
         const val VIEW_BATCH = "view today batch"

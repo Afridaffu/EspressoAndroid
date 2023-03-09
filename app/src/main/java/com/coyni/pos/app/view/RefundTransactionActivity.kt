@@ -63,8 +63,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     private fun inItFields() {
         myApplication = applicationContext as MyApplication
         refundViewModel = ViewModelProvider(this).get(RefundViewModel::class.java)
-//        grossAmount = Utils.doubleParsing(saleOrderAMount)
-        grossAmount = 500.0
+//        grossAmount = Utils.doubleParsing(myApplication!!.mCurrentUserData.transactionData.purchaseAmount.toString())
+//        grossAmount = 500.0
         fontSize = binding.refundAmountET.textSize
         binding.refundAmountET.showSoftInputOnFocus = false
         binding.refundAmountET.textDirection = View.TEXT_DIRECTION_RTL
@@ -72,24 +72,24 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         binding.RefundbackIV.setOnClickListener {
             finish()
         }
-//        if (!transactionData?.grossAmount?.isEmpty()!!) {
-//            grossAmount = Utils.doubleParsing(
-//                Utils.convertTwoDecimal(
-//                    transactionData.grossAmount.replace(
-//                        "CYN",
-//                        ""
-//                    ).trim()
-//                )
-//            )
-//            binding.refundCurrencyTV.setText(
-//                "" + Utils.convertTwoDecimal(
-//                    grossAmount.toString().replace(
-//                        "CYN",
-//                        ""
-//                    ).trim()
-//                )
-//            )
-//        }
+        if (myApplication!!.mCurrentUserData.transactionData?.purchaseAmount?.isEmpty()!!) {
+            grossAmount = Utils.doubleParsing(
+                Utils.convertTwoDecimal(
+                    transactionData?.purchaseAmount.toString().replace(
+                        "CYN",
+                        ""
+                    ).trim()
+                )
+            )
+            binding.refundCurrencyTV.setText(
+                "" + Utils.convertTwoDecimal(
+                    grossAmount.toString().replace(
+                        "CYN",
+                        ""
+                    ).trim()
+                )
+            )
+        }
         binding.refundAmountET.setAccessibilityDelegate(object : View.AccessibilityDelegate() {
             override fun sendAccessibilityEvent(host: View, eventType: Int) {
                 super.sendAccessibilityEvent(host, eventType)
@@ -184,6 +184,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                         val intent = Intent(this, TransactionStatusActivity::class.java)
                         intent.putExtra(Utils.SCREEN, Utils.REFUND)
                         intent.putExtra(Utils.STATUS, Utils.SUCCESS)
+                        intent.putExtra(Utils.REFUNDED_AMOUNT,Utils.convertTwoDecimal(binding.refundAmountET.text.toString()))
                         startActivity(intent)
                     } else {
                         Utils.displayAlertNew(

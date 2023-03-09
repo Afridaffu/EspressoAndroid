@@ -13,6 +13,7 @@ class TransactionStatusActivity : BaseActivity() {
     private lateinit var binding: ActivityTransactionStatusBinding
     private lateinit var screen: String
     private lateinit var status: String
+    private lateinit var amount: String
     lateinit var currentFragment: BaseFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +22,7 @@ class TransactionStatusActivity : BaseActivity() {
         setContentView(binding.root)
         screen = intent.getStringExtra(Utils.SCREEN)!!
         status = intent.getStringExtra(Utils.STATUS)!!
+        amount = intent.getStringExtra(Utils.REFUNDED_AMOUNT)!!
         showStatusFragments(screen, status)
     }
 
@@ -40,6 +42,7 @@ class TransactionStatusActivity : BaseActivity() {
         val refundFailed = TransactionFailedFragment()
         val bundle = Bundle()
         bundle.putString(Utils.SCREEN, Utils.REFUND)
+        bundle.putString(Utils.REFUNDED_AMOUNT, amount)
         refundFailed.setArguments(bundle)
         pushFragment(refundFailed)
     }
@@ -48,6 +51,7 @@ class TransactionStatusActivity : BaseActivity() {
         val refundSuccess = TransactionSuccessFragment()
         val bundle = Bundle()
         bundle.putString(Utils.SCREEN, Utils.REFUND)
+        bundle.putString(Utils.REFUNDED_AMOUNT, amount)
         refundSuccess.setArguments(bundle)
         pushFragment(refundSuccess)
     }

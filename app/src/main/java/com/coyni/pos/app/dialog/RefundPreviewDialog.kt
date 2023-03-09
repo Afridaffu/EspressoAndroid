@@ -43,8 +43,10 @@ class RefundPreviewDialog(
         dialogBinding.infoIV.setOnClickListener {
             dialogBinding.viewFeesTextLL.visibility = VISIBLE
         }
+        dialogBinding.customerNameTV.text =
+            myApplication.mCurrentUserData.transactionData?.customerName.toString()
         dialogBinding.viewFeesTV.setOnClickListener {
-            feeDialog()
+//            feeDialog()
         }
         dialogBinding.slideToConfirmm.setTransitionListener(object :
             MotionLayout.TransitionListener {

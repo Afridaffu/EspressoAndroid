@@ -26,7 +26,6 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
     private lateinit var binding: TransactionFilterDialogBinding
     override fun getLayoutId() = R.layout.transaction_filter_dialog
-    private var dateRangePickerDialog: DateRangePickerDialog? = null
 
     private var mContext: Context? = null
 
@@ -668,12 +667,12 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
     private fun showCalendar() {
 
-        dateRangePickerDialog = DateRangePickerDialog(context, rangeDates)
-        dateRangePickerDialog!!.show()
+       val dateRangePickerDialog = DateRangePickerDialog(context, rangeDates)
+        dateRangePickerDialog.show()
 
-        dateRangePickerDialog!!.setOnDialogClickListener(object: OnDialogClickListener{
-
+        dateRangePickerDialog.setOnDialogClickListener(object: OnDialogClickListener{
             override fun onDialogClicked(action: String?, value: Any?) {
+                println("went wrong")
                 if (action == Utils.datePicker) {
                     rangeDates = value as RangeDates
                     strFromDate = rangeDates.updatedFromDate
@@ -681,7 +680,6 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                     tempStrSelectedDate = rangeDates.fullDate
                     binding.datePickET.setText(tempStrSelectedDate)
                 }
-
             }
         })
     }
