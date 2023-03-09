@@ -58,6 +58,7 @@ class Utils {
         const val ONCLICK_CLICK = "OnClickONKeyboard"
         const val BACK_CLICK = "onBackClickAction"
         var strAuth: String? = null
+        var qrUniqueCode: String? = null
         var strVersionName: String? = null
         var strVersionCode: String? = null
         var isFaceEnabled = true

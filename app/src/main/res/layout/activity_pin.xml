@@ -385,7 +385,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="center"
-            android:text="Invalid PIN Please contact your supervisor for assistance"
+            android:text="Please contact your supervisor for assistance"
             android:textColor="@color/white"
             android:textSize="@dimen/_9ssp"
             android:visibility="gone" />
