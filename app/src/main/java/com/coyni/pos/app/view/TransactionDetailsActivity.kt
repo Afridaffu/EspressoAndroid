@@ -8,6 +8,7 @@ import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityTransactionDetailsBinding
 import com.coyni.pos.app.model.TransactionData
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.TransactionsViewModel
 
@@ -25,6 +26,7 @@ class TransactionDetailsActivity : BaseActivity() {
     private val eCommerce = "eCommerce"
     private val full = "FULL"
     private val partial = "partial"
+    var myApplication: MyApplication? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,12 +42,9 @@ class TransactionDetailsActivity : BaseActivity() {
 
         transactionViewModel =
             ViewModelProvider(this@TransactionDetailsActivity).get(TransactionsViewModel::class.java)
+        myApplication = applicationContext as MyApplication
 
         binding.ivBack.setOnClickListener { onBackPressed() }
-        binding.ivRefund.setOnClickListener {
-            startActivity(Intent(this, RefundTransactionActivity::class.java))
-        }
-
         gbxID = intent.getStringExtra(Utils.gbxTxnId)!!
 
         if (getIntent().getStringExtra(Utils.txnType) != null && !getIntent().getStringExtra(Utils.txnType)
@@ -89,14 +88,15 @@ class TransactionDetailsActivity : BaseActivity() {
 
     fun initObservers() {
 
-        transactionViewModel?.transactionDetailResponseMutableLiveData?.observe(this@TransactionDetailsActivity) { transactionDetailResponseMutableLiveData ->
+        transactionViewModel?.transactionDetailResponse?.observe(this@TransactionDetailsActivity) { transactionDetailsResponse ->
             try {
-                if (transactionDetailResponseMutableLiveData != null) {
-                    if (transactionDetailResponseMutableLiveData.status.equals(Utils.SUCCESS)) {
-                        if (transactionDetailResponseMutableLiveData.transactionType == Utils.SALE_ORDER) {
-                            showSaleOrderData(transactionDetailResponseMutableLiveData)
+                if (transactionDetailsResponse != null) {
+                    if (transactionDetailsResponse.status.equals(Utils.SUCCESS)) {
+                        myApplication?.mCurrentUserData?.transactionData = transactionDetailsResponse.data
+                        if (transactionDetailsResponse.data?.transactionType == Utils.SALE_ORDER) {
+                            showSaleOrderData(transactionDetailsResponse.data)
                         } else {
-                            showRefundData(transactionDetailResponseMutableLiveData)
+                            showRefundData(transactionDetailsResponse.data)
                         }
 
                     }
@@ -109,7 +109,7 @@ class TransactionDetailsActivity : BaseActivity() {
 
     }
 
-    private fun showSaleOrderData(data: TransactionData) {
+    private fun showSaleOrderData(data: TransactionData?) {
         binding.llSaleOrderData.visibility = View.VISIBLE
         binding.tvReason.visibility = View.GONE
         binding.llOriginalInfo.visibility = View.GONE
@@ -188,6 +188,10 @@ class TransactionDetailsActivity : BaseActivity() {
             if (data.employeeId != null) {
                 binding.tvEmpId.setText(data.employeeId!!)
             }
+            binding.ivRefund.setOnClickListener {
+                startActivity(Intent(this, RefundTransactionActivity::class.java))
+            }
+
         }
 
     }
@@ -196,7 +200,7 @@ class TransactionDetailsActivity : BaseActivity() {
         TODO("Not yet implemented")
     }
 
-    private fun showRefundData(data: TransactionData) {
+    private fun showRefundData(data: TransactionData?) {
         binding.tvReason.visibility = View.VISIBLE
         binding.llSaleOrderData.visibility = View.GONE
         binding.llOriginalInfo.visibility = View.VISIBLE
