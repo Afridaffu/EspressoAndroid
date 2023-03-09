@@ -17,6 +17,7 @@ import com.coyni.pos.app.dialog.TransactionFilterDialog
 import com.coyni.pos.app.model.BatchAmount.BatchAmountRequest
 import com.coyni.pos.app.model.ListItem
 import com.coyni.pos.app.model.TransactionData
+import com.coyni.pos.app.model.TransactionFilter.TransactionItem
 import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
 import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
 import com.coyni.pos.app.utils.MyApplication
@@ -54,6 +55,7 @@ class TransactionListActivity : BaseActivity() {
         setContentView(binding.root)
         myApplication = applicationContext as MyApplication
         initView()
+        loadData()
         filterDialogCalls()
         initObservers()
     }
@@ -183,11 +185,7 @@ class TransactionListActivity : BaseActivity() {
 
     private fun transactionsAPI(transactionListRequest: TransactionListReq) {
         try {
-            adapter = RecentTransactionsListAdapter(
-                this@TransactionListActivity, TransactionResponse()
-            )
-            binding.recyclerView.setAdapter(adapter)
-            binding.recyclerView.setLayoutManager(LinearLayoutManager(this@TransactionListActivity))
+
             transactionViewModel?.allTransactionsList(transactionListRequest)
         } catch (ex: java.lang.Exception) {
             ex.printStackTrace()
@@ -204,7 +202,6 @@ class TransactionListActivity : BaseActivity() {
                             recentTransactionResponse.data
                         total = recentTransactionResponse.data?.totalPages!!
                         prepareListData(recentTransactionResponse.data?.items)
-
 
                     } else {
                         Utils.displayAlertNew(
@@ -247,8 +244,17 @@ class TransactionListActivity : BaseActivity() {
 
     }
 
-    private fun prepareListData(items: ArrayList<Int>?) {
-        if (items != null && items.size > 0) {
+    private fun prepareListData(items: List<TransactionItem>?) {
+        if (items != null && items.isNotEmpty()) {
+
+            adapter = RecentTransactionsListAdapter(
+                this@TransactionListActivity, items
+            )
+            binding.recyclerView.layoutManager =
+                LinearLayoutManager(this@TransactionListActivity)
+            binding.recyclerView.adapter = adapter
+
+
             Collections.sort(items, Collections.reverseOrder<Any>())
 
 //        binding.recyclerView.layoutManager = LinearLayoutManager(this)

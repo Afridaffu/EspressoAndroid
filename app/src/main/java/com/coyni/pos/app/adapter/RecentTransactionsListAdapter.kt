@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.coyni.pos.app.baseclass.BaseRecyclerViewAdapter
 import com.coyni.pos.app.baseclass.OnItemClickListener
 import com.coyni.pos.app.databinding.RecentTxnsListBinding
-import com.coyni.pos.app.model.ListItem
+import com.coyni.pos.app.model.TransactionFilter.TransactionItem
 import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
 import com.coyni.pos.app.model.TransactionFilter.TransactionResponseData
 import com.coyni.pos.app.utils.MyApplication
@@ -15,9 +15,9 @@ import com.coyni.pos.app.utils.MyApplication
 class RecentTransactionsListAdapter (): BaseRecyclerViewAdapter<RecentTransactionsListAdapter.MyViewHolder>() {
 
     private var listener: OnItemClickListener?= null
-    var recentTxns: TransactionResponse? = null
     private lateinit var mContext: Context
     private lateinit var objMyApplication : MyApplication
+    private var recentTxns: List<TransactionItem>? = null
 
 
     override fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -26,7 +26,7 @@ class RecentTransactionsListAdapter (): BaseRecyclerViewAdapter<RecentTransactio
 
     constructor(
         context: Context,
-        list: TransactionResponse?
+        list: List<TransactionItem>
         ) : this() {
         this.mContext = context
         this.recentTxns = list
@@ -42,11 +42,14 @@ class RecentTransactionsListAdapter (): BaseRecyclerViewAdapter<RecentTransactio
 
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val objData: TransactionResponseData? = recentTxns?.data
 
-//        holder.binding.descriptionTV.setText()
+        var item: TransactionItem? = recentTxns?.get(position)
 
-            holder.binding.llClick.setOnClickListener{
+        holder.binding.descriptionTV.text = item?.txnDescription
+        holder.binding.amountTV.text = item?.amount
+        holder.binding.dateTV.text = item?.createdAt
+
+        holder.binding.llClick.setOnClickListener{
             listener?.onItemClick(position, "abc")
         }
     }
