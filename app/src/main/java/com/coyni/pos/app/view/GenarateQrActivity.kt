@@ -11,6 +11,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityGenarateQrBinding
+import com.coyni.pos.app.dialog.DiscardSaleDialog
+import com.coyni.pos.app.dialog.OnDialogClickListener
 import com.coyni.pos.app.fragments.GenenrateQrFragment
 import com.coyni.pos.app.fragments.MerchantQrFragment
 import com.coyni.pos.app.model.discard.DiscardSaleRequest
@@ -69,6 +71,31 @@ class GenarateQrActivity : BaseActivity() {
 //                generateQr()
 //            }
         }
+    }
+
+    override fun onBackPressed() {
+        if (myApplication.mCurrentUserData.generateQrResponseData?.uniqueId == null || myApplication.mCurrentUserData.generateQrResponseData!!.uniqueId == "") {
+            generateQrViewModel.exitSaleRequest(myApplication.mCurrentUserData.validateResponseData?.token)
+        } else {
+            val discardSaleDialog = DiscardSaleDialog(this)
+            discardSaleDialog.show()
+            discardSaleDialog.setOnDialogClickListener(object : OnDialogClickListener {
+                override fun onDialogClicked(action: String?, value: Any?) {
+                    if (action == Utils.DISCARD) {
+                        disCardSale()
+                    }
+                }
+            })
+        }
+    }
+
+    private fun disCardSale() {
+        val discardSaleRequest = DiscardSaleRequest()
+        discardSaleRequest.requestToken =
+            myApplication?.mCurrentUserData?.validateResponseData?.token
+        discardSaleRequest.uniqueId =
+            myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId
+        generateQrViewModel.discardSaleRequest(discardSaleRequest)
     }
 
     private fun merchantQr() {
@@ -134,7 +161,29 @@ class GenarateQrActivity : BaseActivity() {
                 ex.printStackTrace()
             }
         }
+        generateQrViewModel.discardSaleResponse.observe(this) { discardSaleResponse ->
+            try {
+                if (discardSaleResponse != null) {
+                    if (discardSaleResponse.status == Utils.SUCCESS) {
+                        myApplication.mCurrentUserData.generateQrResponseData?.uniqueId == null
+                        val intent = Intent(this, DashboardActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        Utils.displayAlertNew(
+                            discardSaleResponse.error?.errorDescription.toString(),
+                            this,
+                            ""
+                        )
+                    }
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+
     }
+
     private fun getLoginResponce() {
         terminalName = myApplication.mCurrentUserData.loginData?.terminalName.toString()
         currentEmployee =
@@ -144,4 +193,5 @@ class GenarateQrActivity : BaseActivity() {
         binding.currentEmployeeTV.setText(currentEmployee)
         binding.terminalNameTV.setText(terminalName)
     }
+
 }

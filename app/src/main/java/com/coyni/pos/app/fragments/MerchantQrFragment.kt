@@ -75,25 +75,28 @@ class MerchantQrFragment : BaseFragment() {
 //            rotate = AnimationUtils.loadAnimation(context, R.anim.rotate)
 //            binding.lottieAnimV.startAnimation(rotate)
 
-            binding.amountTV.text = amount
+            binding.amountTV.text = amount.toString().replace("$", "")
             binding.qrLL.visibility = View.VISIBLE
             binding.animationRL.visibility = View.GONE
             binding.discardSaleLL.setBackgroundResource(R.drawable.bg_greencolor_filled)
             binding.discardSaleLL.isEnabled = true
         }, 1000)
 
-
         binding.discardSaleLL.setOnClickListener {
-            val discardSaleDialog = DiscardSaleDialog(requireContext())
-            discardSaleDialog.show()
-            discardSaleDialog.setOnDialogClickListener(object : OnDialogClickListener {
-                override fun onDialogClicked(action: String?, value: Any?) {
-                    if (action == Utils.DISCARD) {
-                        disCardSale()
-                    }
-                }
-            })
+            disCardSaleDialog()
         }
+    }
+
+    private fun disCardSaleDialog() {
+        val discardSaleDialog = DiscardSaleDialog(requireContext())
+        discardSaleDialog.show()
+        discardSaleDialog.setOnDialogClickListener(object : OnDialogClickListener {
+            override fun onDialogClicked(action: String?, value: Any?) {
+                if (action == Utils.DISCARD) {
+                    disCardSale()
+                }
+            }
+        })
     }
 
     private fun disCardSale() {
@@ -110,6 +113,7 @@ class MerchantQrFragment : BaseFragment() {
             try {
                 if (discardSaleResponse != null) {
                     if (discardSaleResponse.status == Utils.SUCCESS) {
+                        myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId == null
                         val intent = Intent(requireContext(), DashboardActivity::class.java)
                         startActivity(intent)
                         requireActivity().finish()
@@ -126,6 +130,10 @@ class MerchantQrFragment : BaseFragment() {
             }
         }
     }
+
+//    override fun onBackPressed() {
+//        disCardSaleDialog()
+//    }
 
     private fun getValues() {
         if (arguments == null) {
