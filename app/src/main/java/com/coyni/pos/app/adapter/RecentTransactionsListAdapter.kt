@@ -7,13 +7,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.coyni.pos.app.baseclass.BaseRecyclerViewAdapter
 import com.coyni.pos.app.baseclass.OnItemClickListener
 import com.coyni.pos.app.databinding.RecentTxnsListBinding
+import com.coyni.pos.app.model.ListItem
+import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
+import com.coyni.pos.app.model.TransactionFilter.TransactionResponseData
+import com.coyni.pos.app.utils.MyApplication
 
-class RecentTransactionsListAdapter (val context: Context): BaseRecyclerViewAdapter<RecentTransactionsListAdapter.MyViewHolder>() {
+class RecentTransactionsListAdapter (): BaseRecyclerViewAdapter<RecentTransactionsListAdapter.MyViewHolder>() {
 
     private var listener: OnItemClickListener?= null
+    var recentTxns: TransactionResponse? = null
+    private lateinit var mContext: Context
+    private lateinit var objMyApplication : MyApplication
+
 
     override fun setOnItemClickListener(listener: OnItemClickListener) {
        this.listener = listener
+    }
+
+    constructor(
+        context: Context,
+        list: TransactionResponse?
+        ) : this() {
+        this.mContext = context
+        this.recentTxns = list
+        this.objMyApplication = context.applicationContext as MyApplication
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -25,14 +42,17 @@ class RecentTransactionsListAdapter (val context: Context): BaseRecyclerViewAdap
 
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val objData: TransactionResponseData? = recentTxns?.data
 
-        holder.binding.llClick.setOnClickListener{
+//        holder.binding.descriptionTV.setText()
+
+            holder.binding.llClick.setOnClickListener{
             listener?.onItemClick(position, "abc")
         }
     }
 
     override fun getItemCount(): Int {
-        return 10
+        return 5
     }
 
     class MyViewHolder(val binding: RecentTxnsListBinding) :

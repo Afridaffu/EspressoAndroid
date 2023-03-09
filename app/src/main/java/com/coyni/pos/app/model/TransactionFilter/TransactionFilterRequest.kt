@@ -1,6 +1,6 @@
 package com.coyni.pos.app.model.TransactionFilter
 
-data class TransactionListRequest(
+data class TransactionFilterRequest(
     var walletCategory: String? = null,
     var pageSize: String? = null,
     var pageNo: String? = null,

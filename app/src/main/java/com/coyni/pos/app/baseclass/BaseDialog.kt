@@ -25,7 +25,7 @@ abstract class BaseDialog : Dialog {
 
     constructor(context: Context, themeResId: Int) : super(context, themeResId) {}
 
-    open fun setOnDialogClickListener(listener: OnDialogClickListener?) {
+    open fun setOnDialogClickListener(listener: OnDialogClickListener) {
         this.listener = listener
     }
 
