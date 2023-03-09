@@ -1,5 +1,6 @@
 package com.coyni.pos.app.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -19,6 +20,7 @@ import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.baseclass.OnClickListener
 import com.coyni.pos.app.databinding.ActivityLoginBinding
 import com.coyni.pos.app.dialog.ErrorDialog
+import com.coyni.pos.app.model.downloadurl.DownloadUrlRequest
 import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
@@ -59,38 +61,39 @@ class LoginActivity : BaseActivity() {
         initObserver()
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initView() {
 
-        loinViewModel = ViewModelProvider(this@LoginActivity).get(LoginLogoutViewModel::class.java)
+        loinViewModel = ViewModelProvider(this@LoginActivity)[LoginLogoutViewModel::class.java]
 
         val myApplication = applicationContext as MyApplication
 
-        binding.passwordTIL.setEndIconMode(END_ICON_CUSTOM)
+        binding.passwordTIL.endIconMode = END_ICON_CUSTOM
         binding.tvButton.isEnabled = false
         binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
 
-        binding.passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance())
+        binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
 
         binding.ivBack.setOnClickListener {
             if (Utils.isKeyboardVisible) Utils.hideKeypad(this@LoginActivity)
             onBackPressed()
         }
 
-        binding.passwordTIL.setEndIconOnClickListener {
-            if (!isIconEnable) {
-                isIconEnable = true
-                binding.passwordTIL.endIconDrawable =
-                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeopen)
-                binding.passwordET.transformationMethod =
-                    HideReturnsTransformationMethod.getInstance()
-            } else {
-                isIconEnable = false
-                binding.passwordTIL.endIconDrawable =
-                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeclose)
-                binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
-            }
-            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-        }
+//        binding.passwordTIL.setEndIconOnClickListener {
+//            if (!isIconEnable) {
+//                isIconEnable = true
+//                binding.passwordTIL.endIconDrawable =
+//                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeopen)
+//                binding.passwordET.transformationMethod =
+//                    HideReturnsTransformationMethod.getInstance()
+//            } else {
+//                isIconEnable = false
+//                binding.passwordTIL.endIconDrawable =
+//                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeclose)
+//                binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
+//            }
+//            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
+//        }
 
         myApplication.listener = object : OnClickListener {
             override fun onButtonClick(click: Boolean) {
@@ -109,17 +112,17 @@ class LoginActivity : BaseActivity() {
             try {
                 if (!isPwdEye) {
                     isPwdEye = true
-                    binding.endIconIV.setImageDrawable(resources.getDrawable(R.drawable.ic_eyeopen))
+                    binding.endIconIV.setImageResource(R.drawable.ic_eyeopen)
                     binding.passwordET.transformationMethod =
                         HideReturnsTransformationMethod.getInstance()
                 } else {
                     isPwdEye = false
-                    binding.endIconIV.setImageDrawable(resources.getDrawable(R.drawable.ic_eyeclose))
+                    binding.endIconIV.setImageResource(R.drawable.ic_eyeclose)
                     binding.passwordET.transformationMethod =
                         PasswordTransformationMethod.getInstance()
                 }
-                if (binding.passwordET.getText().toString().length > 0) {
-                    binding.passwordET.setSelection(binding.passwordET.getText().toString().length)
+                if (binding.passwordET.text.toString().length > 0) {
+                    binding.passwordET.setSelection(binding.passwordET.text.toString().length)
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -127,6 +130,7 @@ class LoginActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun focusListeners() {
 
         binding.tidET.setOnFocusChangeListener { _, b ->
@@ -179,7 +183,7 @@ class LoginActivity : BaseActivity() {
                 binding.passwordET.hint =
                     "\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605"
 
-                if (binding.passwordET.getText().toString().length > 0)
+                if (binding.passwordET.text.toString().length > 0)
                     binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                 else
                     binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
@@ -277,6 +281,8 @@ class LoginActivity : BaseActivity() {
             if (response != null && response.status.equals(Utils.SUCCESS)) {
                 Utils.strAuth = response.data?.jwtToken
                 myApplication.mCurrentUserData.loginData = response.data!!
+                val imgUrl: String = response.data!!.image.toString()
+//                loinViewModel!!.downloadUrl(DownloadUrlRequest(imgUrl))
                 Utils.hideKeypad(this@LoginActivity)
                 if (response.data?.status?.equals("deactivated", true) == true) {
                     showTerminalScreen()
@@ -291,6 +297,11 @@ class LoginActivity : BaseActivity() {
 
             } else {
                 showDialog()
+            }
+        }
+        loinViewModel?.downloadUrlResponseMutableLiveData?.observe(this@LoginActivity) { response ->
+            if (response != null && response.status == Utils.SUCCESS ) {
+                myApplication.mCurrentUserData.downloadUrlData = response.data
             }
         }
     }
