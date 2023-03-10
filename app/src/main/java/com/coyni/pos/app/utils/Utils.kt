@@ -463,6 +463,15 @@ class Utils {
             return txnType
         }
 
+        fun getCurrentDate(): String? {
+            return try {
+                val spf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                spf.format(Date())
+            } catch (ex: java.lang.Exception) {
+                null
+            }
+        }
+
         fun getFiltersSubType(subType: Int): String {
             var txnSubType = ""
             when (subType) {
