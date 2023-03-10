@@ -41,6 +41,8 @@ class RecentTransactionsListAdapter (): BaseRecyclerViewAdapter<RecentTransactio
         var item: TransactionItem? = recentTxns?.get(position)
         val itemViewHolder: MyViewHolder = holder
 
+        objMyApplication.mCurrentUserData.UserType = item?.userType
+
         holder.binding.descriptionTV.text = item?.txnTypeDn + " - " + item?.txnSubTypeDn
         holder.binding.amountTV.text = item?.amount
         holder.binding.dateTV.text = item?.createdAt

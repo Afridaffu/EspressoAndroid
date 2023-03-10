@@ -136,6 +136,8 @@ class Utils {
         const val LOAD_TOKEN = "loadtoken"
         const val CHECK_OUT = "checkout"
         const val SWIPE = "swipe"
+        const val PERSONAL = "PERSONAL"
+        const val BUSINESS = "BUSINESS"
         const val GBX_ID = "gbx id"
         const val gbxTxnId = "gbxTxnId"
         const val SALE_ORDER_AMOUNT = "sale order amount"

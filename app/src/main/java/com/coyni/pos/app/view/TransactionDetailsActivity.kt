@@ -27,6 +27,7 @@ class TransactionDetailsActivity : BaseActivity() {
     private val full = "FULL"
     private val partial = "partial"
     var myApplication: MyApplication? = null
+    var txnId: Int? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +43,7 @@ class TransactionDetailsActivity : BaseActivity() {
 
         transactionViewModel =
             ViewModelProvider(this).get(TransactionsViewModel::class.java)
+
         myApplication = applicationContext as MyApplication
 
         binding.ivBack.setOnClickListener {
@@ -52,6 +54,9 @@ class TransactionDetailsActivity : BaseActivity() {
             )
         }
 
+        if (intent.getStringExtra("txnId") != null && !intent.getStringExtra("txnId").equals("")) {
+//            txnId = intent.getIntExtra(txnId.toString()
+        }
 
         binding.ivRefund.setOnClickListener {
             startActivity(Intent(this, RefundTransactionActivity::class.java))
@@ -109,9 +114,22 @@ class TransactionDetailsActivity : BaseActivity() {
                             transactionDetailsResponse.data
 
                         when (transactionDetailsResponse.data?.transactionType) {
-                            Utils.SALE_ORDER->  showSaleOrderData(transactionDetailsResponse.data)
-                            Utils.REFUND ->  showRefundData(transactionDetailsResponse.data)
+                            Utils.SALE_ORDER -> showSaleOrderData(transactionDetailsResponse.data)
+                            Utils.REFUND -> showRefundData(transactionDetailsResponse.data)
                         }
+                    }
+                }
+
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+
+        transactionViewModel?.logsResponseMutableLiveData?.observe(this) { logsResponseMutableLiveData ->
+            try {
+                if (logsResponseMutableLiveData != null) {
+                    if (logsResponseMutableLiveData.status.equals(Utils.SUCCESS)) {
+
                     }
                 }
 
@@ -133,8 +151,8 @@ class TransactionDetailsActivity : BaseActivity() {
             if (data.transactionType != null && data.transactionSubtype != null) {
                 binding.typeNsubtype.setText(data.transactionType + " - " + data.transactionSubtype)
             }
-            if(data.purchaseAmount != null){
-                binding.amount.text = data.purchaseAmount!!.replace("CYN","").trim()
+            if (data.purchaseAmount != null) {
+                binding.amount.text = data.purchaseAmount!!.replace("CYN", "").trim()
             }
 //            if (data.purchaseAmount != null) {
 //                binding.amount.text = (
@@ -172,12 +190,13 @@ class TransactionDetailsActivity : BaseActivity() {
                 }
             }
 
-            if(data.purchaseAmount!=null){
+            if (data.purchaseAmount != null) {
                 binding.tvPurchaseAmt.text = (data.purchaseAmount)
             }
 
             if (data.createdDate != null) {
-                binding.tvDate.text = (myApplication?.mCurrentUserData?.convertZoneLatestTxndate(data.createdDate))
+                binding.tvDate.text =
+                    (myApplication?.mCurrentUserData?.convertZoneLatestTxndate(data.createdDate))
             }
 
             if (data.tip != null) {
@@ -209,11 +228,13 @@ class TransactionDetailsActivity : BaseActivity() {
             }
 
             binding.saleRefIDcopyIV.setOnClickListener(View.OnClickListener {
-                Utils.copyText(data.referenceId, this@TransactionDetailsActivity
+                Utils.copyText(
+                    data.referenceId, this@TransactionDetailsActivity
                 )
             })
             binding.orgRefIDcopyIV.setOnClickListener(View.OnClickListener {
-                Utils.copyText(data.saleOrderReferenceId, this@TransactionDetailsActivity
+                Utils.copyText(
+                    data.saleOrderReferenceId, this@TransactionDetailsActivity
                 )
             })
 
@@ -222,7 +243,12 @@ class TransactionDetailsActivity : BaseActivity() {
     }
 
     private fun getActivityLogAPICall() {
+        if (Utils.checkInternet(this@TransactionDetailsActivity)) {
+            if (txnId != null)
+                if (myApplication?.mCurrentUserData?.UserType == Utils.PERSONAL)
+                    transactionViewModel?.activityLogsDetails(txnId!!, "c")
 
+        }
     }
 
     private fun showRefundData(data: TransactionData?) {
@@ -238,13 +264,21 @@ class TransactionDetailsActivity : BaseActivity() {
                 binding.typeNsubtype.setText(data.transactionType + " - " + data.transactionSubtype)
             }
             if (data.transactionAmount != null) {
-                binding.amount.setText(Utils.convertTwoDecimal(data.transactionAmount!!.replace("CYN", "").trim()))
+                binding.amount.setText(
+                    Utils.convertTwoDecimal(
+                        data.transactionAmount!!.replace(
+                            "CYN",
+                            ""
+                        ).trim()
+                    )
+                )
             }
 
             if (data.createdDate != null) {
-                binding.tvDate.text = (myApplication?.mCurrentUserData?.convertZoneLatestTxndate(data.createdDate))
+                binding.tvDate.text =
+                    (myApplication?.mCurrentUserData?.convertZoneLatestTxndate(data.createdDate))
             }
-            
+
             if (data.status != null) {
                 binding.statusTV.setText(data.status)
 
@@ -306,7 +340,8 @@ class TransactionDetailsActivity : BaseActivity() {
                 binding.terminalID.text = (data.terminalId.toString()!!)
             }
             if (data.saleOrderDateAndTime != null) {
-                binding.tvOrgDate.text = (myApplication?.mCurrentUserData?.convertZoneLatestTxndate(data.saleOrderDateAndTime))
+                binding.tvOrgDate.text =
+                    (myApplication?.mCurrentUserData?.convertZoneLatestTxndate(data.saleOrderDateAndTime))
             }
 
             if (data.saleOrderReferenceId != null) {
@@ -328,12 +363,14 @@ class TransactionDetailsActivity : BaseActivity() {
             }
 
             binding.saleRefIDcopyIV.setOnClickListener(View.OnClickListener {
-                Utils.copyText(data.referenceId, this@TransactionDetailsActivity
+                Utils.copyText(
+                    data.referenceId, this@TransactionDetailsActivity
                 )
             })
 
             binding.orgRefIDcopyIV.setOnClickListener(View.OnClickListener {
-                Utils.copyText(data.saleOrderReferenceId, this@TransactionDetailsActivity
+                Utils.copyText(
+                    data.saleOrderReferenceId, this@TransactionDetailsActivity
                 )
             })
 

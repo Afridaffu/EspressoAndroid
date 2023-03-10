@@ -4,6 +4,7 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.coyni.pos.app.model.ActivityLogs.ActivityLogsResponse
 import com.coyni.pos.app.model.TransactionData
 import com.coyni.pos.app.model.TransactionDetailsResponse
 import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
@@ -21,6 +22,8 @@ class TransactionsViewModel (application: Application) : AndroidViewModel(applic
     val transactionResponse = MutableLiveData<TransactionResponse?>()
 
     val transactionDetailResponse = MutableLiveData<TransactionDetailsResponse?>()
+
+    val logsResponseMutableLiveData = MutableLiveData<ActivityLogsResponse?>()
 
     fun allTransactionsList(request: TransactionListReq) {
         try {
@@ -95,6 +98,46 @@ class TransactionsViewModel (application: Application) : AndroidViewModel(applic
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG)
                         .show()
                     transactionDetailResponse.value = null
+                }
+            })
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    fun activityLogsDetails(txnId : Int, userType : String) {
+        try {
+            val apiService = AuthApiClient.instance.create(ApiService::class.java)
+            val mCall = apiService.activityLogs(txnId, userType)
+            mCall!!.enqueue(object : Callback<ActivityLogsResponse?> {
+                override fun onResponse(
+                    call: Call<ActivityLogsResponse?>,
+                    response: Response<ActivityLogsResponse?>
+                ) {
+                    try {
+                        if (response.isSuccessful) {
+                            val obj = response.body()
+                            logsResponseMutableLiveData.setValue(obj)
+                        } else {
+                            val gson = Gson()
+                            val type = object : TypeToken<ActivityLogsResponse?>() {}.type
+                            var errorResponse: ActivityLogsResponse? = null
+                            try {
+                                errorResponse = gson.fromJson(response.errorBody()!!.string(), type)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                            logsResponseMutableLiveData.setValue(errorResponse)
+                        }
+                    } catch (ex: Exception) {
+                        ex.printStackTrace()
+                    }
+                }
+
+                override fun onFailure(call: Call<ActivityLogsResponse?>, t: Throwable) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG)
+                        .show()
+                    logsResponseMutableLiveData.value = null
                 }
             })
         } catch (ex: Exception) {

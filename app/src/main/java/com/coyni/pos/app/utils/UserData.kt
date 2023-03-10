@@ -21,6 +21,7 @@ class UserData {
     var batchResponse: BatchResponseData? = null
     var webSocketObject: JSONObject? = null
     var transactionData: TransactionData? = null
+    var UserType: String? = null
 
     fun convertZoneLatestTxndate(date: String?): String? {
         return Utils.convertZoneLatestTxn(date, strPreference)

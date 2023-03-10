@@ -1,11 +1,11 @@
 package com.coyni.pos.app.network
 
+import com.coyni.pos.app.model.ActivityLogs.ActivityLogsResponse
 import com.coyni.pos.app.model.BatchAmount.BatchAmountRequest
 import com.coyni.pos.app.model.BatchAmount.BatchAmountResponse
-import com.coyni.pos.app.model.TransactionData
 import com.coyni.pos.app.model.TransactionDetailsResponse
-import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
 import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
+import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
 import com.coyni.pos.app.model.appupdate.AppUpdateResp
 import com.coyni.pos.app.model.discard.DiscardSaleRequest
 import com.coyni.pos.app.model.discard.DiscardSaleResponse
@@ -14,8 +14,8 @@ import com.coyni.pos.app.model.downloadurl.DownloadUrlResponse
 import com.coyni.pos.app.model.generate_qr.GenerateQrRequest
 import com.coyni.pos.app.model.generate_qr.GenerateQrResponse
 import com.coyni.pos.app.model.login.LoginRequest
-import com.coyni.pos.app.model.logout.LogoutResponse
 import com.coyni.pos.app.model.login.LoginResponse
+import com.coyni.pos.app.model.logout.LogoutResponse
 import com.coyni.pos.app.model.pin.ValidateRequest
 import com.coyni.pos.app.model.pin.ValidateResponse
 import com.coyni.pos.app.model.refund.RefundProcessRequest
@@ -66,4 +66,8 @@ interface ApiService {
     fun transactionDetails(@Path("gbxTxnId") gbxTxnId: String,
                            @Path("txnType") txnType: Int,
                            @Path("txnSubType") txnSubType: Int) : Call<TransactionDetailsResponse>?
+
+    @POST("/api/v2/m-pos/transaction/logs")
+    fun activityLogs(@Query("txnId") txnId: Int?,
+                     @Query("userType") userType: String?): Call<ActivityLogsResponse>
 }
