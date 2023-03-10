@@ -45,42 +45,45 @@ class TransactionDetailsActivity : BaseActivity() {
         myApplication = applicationContext as MyApplication
 
         binding.ivBack.setOnClickListener { onBackPressed() }
-        gbxID = intent.getStringExtra(Utils.gbxTxnId)!!
+        if (gbxID != null && txnTypeStr != null && txnSubTypeStr != null) {
+            gbxID = intent.getStringExtra(Utils.gbxTxnId)!!
 
-        if (getIntent().getStringExtra(Utils.txnType) != null && !getIntent().getStringExtra(Utils.txnType)
-                .equals("")
-        ) {
-            when (getIntent().getStringExtra(Utils.txnType)!!.toLowerCase()) {
-                sale_order -> {
-                    txnTypeStr = Utils.filter_saleorder
-                }
-                refund -> {
-                    txnTypeStr = Utils.refund
-                }
-            }
-
-            if (getIntent().getStringExtra(Utils.txnSubType) != null && !getIntent().getStringExtra(
-                    Utils.txnSubType
+            if (getIntent().getStringExtra(Utils.txnType) != null && !getIntent().getStringExtra(
+                    Utils.txnType
                 )
                     .equals("")
             ) {
-                when (getIntent().getStringExtra(Utils.txnSubType)!!.toLowerCase()) {
-                    retail_mobile -> {
-                        txnTypeStr = Utils.filter_Retail
+                when (getIntent().getStringExtra(Utils.txnType)!!.toLowerCase()) {
+                    sale_order -> {
+                        txnTypeStr = Utils.filter_saleorder
                     }
-                    eCommerce -> {
-                        txnTypeStr = Utils.filter_eCommerce
-                    }
-                    full -> {
-                        txnTypeStr = Utils.filter_full
-                    }
-                    partial -> {
-                        txnTypeStr = Utils.partialRefund
+                    refund -> {
+                        txnTypeStr = Utils.refund
                     }
                 }
 
-            }
+                if (getIntent().getStringExtra(Utils.txnSubType) != null && !getIntent().getStringExtra(
+                        Utils.txnSubType
+                    )
+                        .equals("")
+                ) {
+                    when (getIntent().getStringExtra(Utils.txnSubType)!!.toLowerCase()) {
+                        retail_mobile -> {
+                            txnTypeStr = Utils.filter_Retail
+                        }
+                        eCommerce -> {
+                            txnTypeStr = Utils.filter_eCommerce
+                        }
+                        full -> {
+                            txnTypeStr = Utils.filter_full
+                        }
+                        partial -> {
+                            txnTypeStr = Utils.partialRefund
+                        }
+                    }
 
+                }
+            }
             transactionViewModel!!.transactionDetails(gbxID!!, txnTypeStr!!, txnSubTypeStr!!)
 
         }
@@ -92,7 +95,8 @@ class TransactionDetailsActivity : BaseActivity() {
             try {
                 if (transactionDetailsResponse != null) {
                     if (transactionDetailsResponse.status.equals(Utils.SUCCESS)) {
-                        myApplication?.mCurrentUserData?.transactionData = transactionDetailsResponse.data
+                        myApplication?.mCurrentUserData?.transactionData =
+                            transactionDetailsResponse.data
                         if (transactionDetailsResponse.data?.transactionType == Utils.SALE_ORDER) {
                             showSaleOrderData(transactionDetailsResponse.data)
                         } else {

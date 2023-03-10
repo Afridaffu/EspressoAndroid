@@ -17,8 +17,8 @@ import com.coyni.pos.app.dialog.TransactionFilterDialog
 import com.coyni.pos.app.model.BatchAmount.BatchAmountRequest
 import com.coyni.pos.app.model.ListItem
 import com.coyni.pos.app.model.TransactionData
+import com.coyni.pos.app.model.TransactionFilter.TransactionItem
 import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
-import com.coyni.pos.app.model.TransactionFilter.TransactionResponse
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.BatchAmountViewModel
@@ -30,11 +30,12 @@ class TransactionListActivity : BaseActivity() {
     private lateinit var binding: ActivityTransactionHistoryBinding
     private var adapter: RecentTransactionsListAdapter? = null
     private var request: TransactionListReq? = null
+
     private val globalData: List<ListItem> = ArrayList<ListItem>()
     private val transactionType = ArrayList<Int>()
     private val transactionSubType = ArrayList<Int>()
     private val txnStatus = ArrayList<Int>()
-    var recentTxns: TransactionResponse? = null
+
     private lateinit var myApplication: MyApplication
     private var empRole: String? = ""
     private var transactionViewModel: TransactionsViewModel? = null
@@ -54,6 +55,7 @@ class TransactionListActivity : BaseActivity() {
         setContentView(binding.root)
         myApplication = applicationContext as MyApplication
         initView()
+        loadData()
         filterDialogCalls()
         initObservers()
     }
@@ -84,37 +86,9 @@ class TransactionListActivity : BaseActivity() {
         } else {
             binding.llRecentTxn.visibility = View.GONE
             binding.SearchLL.visibility = View.VISIBLE
-
             batchAPI()
         }
-//        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-//        binding.recyclerView.itemAnimator = DefaultItemAnimator()
-//        adapter = RecentTransactionsListAdapter(applicationContext, recentTxns!!)
-//        binding.recyclerView.adapter = adapter
-//
-//        binding.listRecyclerRV.layoutManager = LinearLayoutManager(this)
-//        binding.listRecyclerRV.itemAnimator = DefaultItemAnimator()
-//        binding.listRecyclerRV.adapter = adapter
 
-        adapter?.setOnItemClickListener(
-            object : OnItemClickListener {
-
-                override fun onItemClick(position: Int?, value: Any?) {
-                    startActivity(
-                        Intent(
-                            applicationContext,
-                            TransactionDetailsActivity::class.java
-                        )
-                    )
-
-                }
-
-                override fun onChildClicked(s: String?) {
-                    TODO("Not yet implemented")
-                }
-            })
-
-        listApi()
     }
 
     private fun filterDialogCalls() {
@@ -149,6 +123,7 @@ class TransactionListActivity : BaseActivity() {
                         dismissDialog()
                     }
                 }
+
             }
         })
 
@@ -167,10 +142,8 @@ class TransactionListActivity : BaseActivity() {
         binding.ivFilterIcon.setImageDrawable(getDrawable(R.drawable.ic_filter_icon));
 
         var transactionListRequest = TransactionListReq();
-        transactionListRequest.data?.txnType = getDefaultTransactionTypes()
         transactionListRequest.requestToken =
             myApplication.mCurrentUserData.validateResponseData?.token
-
         transactionsAPI(transactionListRequest);
     }
 
@@ -183,11 +156,6 @@ class TransactionListActivity : BaseActivity() {
 
     private fun transactionsAPI(transactionListRequest: TransactionListReq) {
         try {
-            adapter = RecentTransactionsListAdapter(
-                this@TransactionListActivity, TransactionResponse()
-            )
-            binding.recyclerView.setAdapter(adapter)
-            binding.recyclerView.setLayoutManager(LinearLayoutManager(this@TransactionListActivity))
             transactionViewModel?.allTransactionsList(transactionListRequest)
         } catch (ex: java.lang.Exception) {
             ex.printStackTrace()
@@ -202,15 +170,11 @@ class TransactionListActivity : BaseActivity() {
                     if (recentTransactionResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.transactionResponse =
                             recentTransactionResponse.data
-                        total = recentTransactionResponse.data?.totalPages!!
+//                        recentTxns = recentTransactionResponse.data?.items!!
                         prepareListData(recentTransactionResponse.data?.items)
-
-
                     } else {
                         Utils.displayAlertNew(
-                            recentTransactionResponse.error?.errorDescription.toString(),
-                            this,
-                            ""
+                            recentTransactionResponse.error?.errorDescription.toString(), this, ""
                         )
                     }
                 }
@@ -225,11 +189,11 @@ class TransactionListActivity : BaseActivity() {
                     if (batchResponseMutableLiveData.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.batchResponse =
                             batchResponseMutableLiveData.data
-
-                        binding.batchMoneyTV.setText(
-                            (batchResponseMutableLiveData.data?.todayBatchAmount!!
-                                    )
-                        )
+                        if (batchResponseMutableLiveData.data?.todayBatchAmount != null) {
+                            binding.batchMoneyTV.setText((batchResponseMutableLiveData.data?.todayBatchAmount!!).replace("CYN",""))
+                        } else {
+                            binding.batchMoneyTV.setText("0.00")
+                        }
 
                     } else {
                         Utils.displayAlertNew(
@@ -247,30 +211,32 @@ class TransactionListActivity : BaseActivity() {
 
     }
 
-    private fun prepareListData(items: ArrayList<Int>?) {
-        if (items != null && items.size > 0) {
-            Collections.sort(items, Collections.reverseOrder<Any>())
+    private fun prepareListData(items: List<TransactionItem>?) {
+        if (items != null && items.isNotEmpty()) {
+            adapter = RecentTransactionsListAdapter(this@TransactionListActivity, items)
 
-//        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-//        binding.recyclerView.itemAnimator = DefaultItemAnimator()
-//        adapter = RecentTransactionsListAdapter(applicationContext, recentTxns!!)
-//        binding.recyclerView.adapter = adapter
-//
-//        binding.listRecyclerRV.layoutManager = LinearLayoutManager(this)
-//        binding.listRecyclerRV.itemAnimator = DefaultItemAnimator()
-//        binding.listRecyclerRV.adapter = adapter
+            // Recent List View
+            if (empRole.equals(Utils.EMPROLE)) {
+                binding.recyclerView.layoutManager =
+                    LinearLayoutManager(this@TransactionListActivity)
+                binding.recyclerView.adapter = adapter
+            } else {
+                // Manager List View
+                binding.listRecyclerRV.layoutManager = LinearLayoutManager(this@TransactionListActivity)
+                binding.listRecyclerRV.adapter = adapter
 
-            adapter?.setOnItemClickListener(
-                object : OnItemClickListener {
+                adapter?.setOnItemClickListener(
+                    object : OnItemClickListener {
 
-                    override fun onItemClick(position: Int?, value: Any?) {
-                        showTransactionDetails(TransactionData())
-                    }
+                        override fun onItemClick(position: Int?, value: Any?) {
+                            showTransactionDetails(TransactionData())
+                        }
 
-                    override fun onChildClicked(s: String?) {
-                        TODO("Not yet implemented")
-                    }
-                })
+                        override fun onChildClicked(s: String?) {
+
+                        }
+                    })
+            }
         }
 
     }
@@ -284,21 +250,9 @@ class TransactionListActivity : BaseActivity() {
     }
 
     private fun batchAPI() {
-
         val req = BatchAmountRequest()
         req.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
-//        req.todayDate = Utils.exportDate(strFromDate + " 00:00:00.000").split("\\ ")[0] + " 00:00:00"
         req.todayDate = "2023-01-17 00:00:00"
         batchAmountViewModel?.getBatchAmount(req)
     }
-
-    private fun listApi() {
-        val req1 = TransactionListReq()
-        req1.fromAmount = 10
-        req1.toAmount = 50
-        req1.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
-        req1.data?.txnType = getDefaultTransactionTypes()
-        transactionViewModel?.allTransactionsList(req1)
-    }
-
 }

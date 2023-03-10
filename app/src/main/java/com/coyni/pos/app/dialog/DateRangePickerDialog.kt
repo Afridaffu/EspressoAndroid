@@ -13,19 +13,19 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DateRangePickerDialog(context: Context, rangeDates: RangeDates) : BaseDialog(context) {
+class DateRangePickerDialog(context: Context) : BaseDialog(context) {
+
     val TAG = javaClass.name
     private var startDateD: Date? = null
     private var endDateD: Date? = null
-    private var strFromDate = ""
+    private var strFromDate: String? = ""
     private var strToDate: String? = ""
+    private lateinit var mContext: Context
     var strSelectedDate: String? = ""
     var displayFormat = "MM-dd-yyyy"
     lateinit var displayFormatter: SimpleDateFormat
     var rangeDates: RangeDates? = null
     val calendarPicker = CalendarPicker(context)
-
-
     private lateinit var dialogBinding: CalendarDialogBinding
     override fun getLayoutId() = R.layout.calendar_dialog
 
@@ -35,6 +35,12 @@ class DateRangePickerDialog(context: Context, rangeDates: RangeDates) : BaseDial
 
         initFields()
         setSelectedDate()
+    }
+
+    constructor(context: Context, rangeDates: RangeDates?) : this(context) {
+        this.mContext = context!!
+        this.rangeDates = rangeDates
+
     }
 
     private fun setSelectedDate() {
@@ -80,6 +86,7 @@ class DateRangePickerDialog(context: Context, rangeDates: RangeDates) : BaseDial
             } catch (e: Exception) {
             }
         }
+
 
         calendarPicker.setOnRangeSelectedListener { date, date2, s, s2 ->
             startDateD = date
