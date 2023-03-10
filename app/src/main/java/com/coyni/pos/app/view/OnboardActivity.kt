@@ -7,6 +7,7 @@ import android.os.SystemClock
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityOnboardBinding
+import com.coyni.pos.app.utils.Utils
 
 class OnboardActivity : BaseActivity() {
 
@@ -35,7 +36,7 @@ class OnboardActivity : BaseActivity() {
         }
 
         binding.tvButton.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - lastClickTime < 2000)
+            if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
                 return@setOnClickListener
             lastClickTime = SystemClock.elapsedRealtime()
             val intent = Intent(this, LoginActivity::class.java)

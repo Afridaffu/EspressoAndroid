@@ -19,10 +19,10 @@ import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.baseclass.OnClickListener
 import com.coyni.pos.app.databinding.ActivityLoginBinding
 import com.coyni.pos.app.dialog.ErrorDialog
+import com.coyni.pos.app.model.downloadurl.DownloadUrlRequest
 import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
-
 import com.coyni.pos.app.viewmodel.LoginLogoutViewModel
 import com.google.android.material.textfield.TextInputLayout.END_ICON_CUSTOM
 
@@ -40,7 +40,11 @@ class LoginActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        binding.tidET.setText("")
+        binding.passwordET.setText("")
         binding.tidET.requestFocus()
+        if (!isKeyboardVisible)
+            Utils.shwForcedKeypad(this, binding.tidET)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,41 +69,35 @@ class LoginActivity : BaseActivity() {
 
         val myApplication = applicationContext as MyApplication
 
-        binding.passwordTIL.setEndIconMode(END_ICON_CUSTOM)
+        binding.passwordTIL.endIconMode = END_ICON_CUSTOM
         binding.tvButton.isEnabled = false
         binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
 
-        binding.passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance())
+        binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
 
         binding.ivBack.setOnClickListener {
             if (Utils.isKeyboardVisible) Utils.hideKeypad(this@LoginActivity)
             onBackPressed()
         }
 
-        binding.passwordTIL.setEndIconOnClickListener {
-            if (!isIconEnable) {
-                isIconEnable = true
-                binding.passwordTIL.endIconDrawable =
-                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeopen)
-                binding.passwordET.transformationMethod =
-                    HideReturnsTransformationMethod.getInstance()
-            } else {
-                isIconEnable = false
-                binding.passwordTIL.endIconDrawable =
-                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeclose)
-                binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
-            }
-            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-        }
-
-        myApplication.listener = object : OnClickListener {
-            override fun onButtonClick(click: Boolean) {
-                finish()
-            }
-        }
+//        binding.passwordTIL.setEndIconOnClickListener {
+//            if (!isIconEnable) {
+//                isIconEnable = true
+//                binding.passwordTIL.endIconDrawable =
+//                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeopen)
+//                binding.passwordET.transformationMethod =
+//                    HideReturnsTransformationMethod.getInstance()
+//            } else {
+//                isIconEnable = false
+//                binding.passwordTIL.endIconDrawable =
+//                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeclose)
+//                binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
+//            }
+//            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
+//        }
 
         binding.tvButton.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - lastClick < 20000) return@setOnClickListener
+            if (SystemClock.elapsedRealtime() - lastClick < Utils.lastClickDelay) return@setOnClickListener
             lastClick = SystemClock.elapsedRealtime()
             showProgressDialog()
             loinViewModel?.getLoginData(LoginRequest(terminalId, password))
@@ -109,17 +107,17 @@ class LoginActivity : BaseActivity() {
             try {
                 if (!isPwdEye) {
                     isPwdEye = true
-                    binding.endIconIV.setImageDrawable(resources.getDrawable(R.drawable.ic_eyeopen))
+                    binding.endIconIV.setImageResource(R.drawable.ic_eyeopen)
                     binding.passwordET.transformationMethod =
                         HideReturnsTransformationMethod.getInstance()
                 } else {
                     isPwdEye = false
-                    binding.endIconIV.setImageDrawable(resources.getDrawable(R.drawable.ic_eyeclose))
+                    binding.endIconIV.setImageResource(R.drawable.ic_eyeclose)
                     binding.passwordET.transformationMethod =
                         PasswordTransformationMethod.getInstance()
                 }
-                if (binding.passwordET.getText().toString().length > 0) {
-                    binding.passwordET.setSelection(binding.passwordET.getText().toString().length)
+                if (binding.passwordET.text.toString().length > 0) {
+                    binding.passwordET.setSelection(binding.passwordET.text.toString().length)
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -131,8 +129,9 @@ class LoginActivity : BaseActivity() {
 
         binding.tidET.setOnFocusChangeListener { _, b ->
             if (b) {
-                if (binding.tidET.text.toString().isNotEmpty())
-                    binding.tidET.setSelection(binding.tidET.text.toString().length)
+                if (binding.tidET.text.toString()
+                        .isNotEmpty()
+                ) binding.tidET.setSelection(binding.tidET.text.toString().length)
                 binding.tidET.hint = ""
                 binding.tvUpperHint.visibility = View.VISIBLE
                 binding.tvUpperHint.setTextColor(getColor(R.color.primary_green))
@@ -163,8 +162,9 @@ class LoginActivity : BaseActivity() {
 
         binding.passwordET.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                if (binding.passwordET.text.toString().isNotEmpty())
-                    binding.passwordET.setSelection(binding.passwordET.text.toString().length)
+                if (binding.passwordET.text.toString()
+                        .isNotEmpty()
+                ) binding.passwordET.setSelection(binding.passwordET.text.toString().length)
                 Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_green)
                 Log.e("getKeyboardVisible", getKeyboardVisible().toString())
                 if (!getKeyboardVisible()!!) {
@@ -179,7 +179,7 @@ class LoginActivity : BaseActivity() {
                 binding.passwordET.hint =
                     "\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605"
 
-                if (binding.passwordET.getText().toString().length > 0)
+                if (binding.passwordET.text.toString().length > 0)
                     binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                 else
                     binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
@@ -191,18 +191,12 @@ class LoginActivity : BaseActivity() {
                     binding.passwordErrorLL.visibility = View.VISIBLE
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(this))
                 } else {
-                    if (binding.passwordET.text.toString().length > 7)
-                        Utils.upperHintColor(
-                            binding.passwordTIL,
-                            this@LoginActivity,
-                            R.color.primary_black
-                        )
-                    else
-                        Utils.upperHintColor(
-                            binding.passwordTIL,
-                            this@LoginActivity,
-                            R.color.light_gray
-                        )
+                    if (binding.passwordET.text.toString().length > 7) Utils.upperHintColor(
+                        binding.passwordTIL, this@LoginActivity, R.color.primary_black
+                    )
+                    else Utils.upperHintColor(
+                        binding.passwordTIL, this@LoginActivity, R.color.light_gray
+                    )
                     binding.passwordET.hint = ""
                     binding.passwordErrorLL.visibility = View.GONE
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
@@ -278,33 +272,36 @@ class LoginActivity : BaseActivity() {
                 Utils.strAuth = response.data?.jwtToken
                 myApplication.mCurrentUserData.loginData = response.data!!
                 Utils.hideKeypad(this@LoginActivity)
-                if (response.data?.status?.equals("deactivated", true) == true) {
+                if (response.data?.status.equals(Utils.DEACTIVATED, true)) {
                     showTerminalScreen()
                 } else {
-                    startActivity(
-                        Intent(applicationContext, DashboardActivity::class.java)
-                            .setFlags(
-                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            )
-                    )
+                    val imgUrl: String = response.data!!.image.toString()
+                    val urlList = ArrayList<DownloadUrlRequest>()
+                    urlList.add(DownloadUrlRequest(imgUrl))
+                    loinViewModel!!.downloadUrl(urlList)
                 }
 
             } else {
                 showDialog()
             }
         }
+        loinViewModel?.downloadUrlResponseMutableLiveData?.observe(this@LoginActivity) { response ->
+            if (response != null && response.status.equals(Utils.SUCCESS)) {
+                myApplication.mCurrentUserData.downloadUrlData = response.data
+                startActivity(
+                    Intent(applicationContext, DashboardActivity::class.java).setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    )
+                )
+            }
+        }
     }
 
     private fun showTerminalScreen() {
-
         startActivity(
             Intent(
                 this@LoginActivity, StatusFailedActivity::class.java
-            ).putExtra(Utils.SCREEN, Utils.LOGIN)
-                .putExtra(Utils.HEADER, getString(R.string.terminal_deactivated)).putExtra(
-                    Utils.DESCRIPTION,
-                    getString(R.string.this_terminal_has_been_deactivated_and_is_no_longer_accessible)
-                )
+            ).putExtra(Utils.STATUS, Utils.DEACTIVATED)
         )
     }
 

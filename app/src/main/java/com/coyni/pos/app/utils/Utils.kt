@@ -256,6 +256,10 @@ class Utils {
         const val GENERATE_QR = "generate qr"
         const val DISCARD = "discard"
         const val DONE = "done"
+        const val DEACTIVATED = "DeActivated"
+        const val CANCELED = "Canceled"
+        const val COMPLETED = "Completed"
+        const val lastClickDelay = 2000
 
         lateinit var errorState: Array<IntArray>
         lateinit var state: Array<IntArray>

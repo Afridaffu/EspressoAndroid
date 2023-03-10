@@ -1,36 +1,41 @@
 package com.coyni.pos.app.view
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import com.airbnb.lottie.LottieAnimationView
 import com.coyni.pos.app.R
 import com.coyni.pos.app.databinding.ActivityPaymentSuccessFlowBinding
+import com.coyni.pos.app.utils.MyApplication
+import com.coyni.pos.app.utils.Utils
 
 class SucessFlowActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPaymentSuccessFlowBinding
     var animSlideUp: Animation? = null
-
+    lateinit var myApplication: MyApplication
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentSuccessFlowBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        initfields();
+        initfields()
     }
 
     private fun initfields() {
-
+        myApplication = applicationContext as MyApplication
         binding.animationView.loop(false)
-
         Handler().postDelayed({
             animSlideUp = AnimationUtils.loadAnimation(applicationContext, R.anim.slide_up)
             binding.animationView.startAnimation(animSlideUp)
@@ -39,10 +44,36 @@ class SucessFlowActivity : AppCompatActivity() {
             binding.mainLayout.visibility = View.VISIBLE
         }, 3000)
 
-//        binding.validateCV.setOnClickListener {
-//            startActivity(Intent(applicationContext, MposDashboardActivity::class.java).
-//            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra("screen", "qr"))
-//        }
+        binding.backIV.setOnClickListener {
+            startActivity(
+                Intent(applicationContext, DashboardActivity::class.java).setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                )
+            )
+        }
+        binding.amountTV.text = Utils.doubleParsing(
+            myApplication.mCurrentUserData.webSocketObject!!.getString("txnAmount").toString()
+        ).toString()
+
+        setCustomerName("star")
+    }
+
+    fun setCustomerName(customerName: String) {
+
+        val ss = SpannableString("From " + customerName)
+        ss.setSpan(
+            StyleSpan(Typeface.BOLD), 5,
+            ss.toString().length,
+            Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+        )
+        ss.setSpan(
+            ForegroundColorSpan(getColor(R.color.black)), 5,
+            ss.toString().length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        binding.receivedFromTV.setText(ss)
+        binding.receivedFromTV.setMovementMethod(LinkMovementMethod.getInstance())
+        binding.receivedFromTV.setHighlightColor(Color.TRANSPARENT)
     }
 
 }

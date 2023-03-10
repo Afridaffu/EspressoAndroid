@@ -1,7 +1,7 @@
 package com.coyni.pos.app.fragments
 
+import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,9 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import androidmads.library.qrgenearator.QRGEncoder
+import androidx.core.os.postDelayed
 import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseFragment
@@ -22,7 +20,10 @@ import com.coyni.pos.app.model.discard.DiscardSaleRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.view.DashboardActivity
+import com.coyni.pos.app.view.StatusFailedActivity
+import com.coyni.pos.app.view.SucessFlowActivity
 import com.coyni.pos.app.viewmodel.GenerateQrViewModel
+import com.microsoft.appcenter.utils.HandlerUtils.runOnUiThread
 import okhttp3.*
 import okio.ByteString
 import org.json.JSONException
@@ -31,23 +32,17 @@ import java.util.concurrent.TimeUnit
 
 class MerchantQrFragment : BaseFragment() {
     lateinit var binding: MerchantQrBinding
-    var fontSize: Float = 0.0f;
-    private var isPayClickable: Boolean = false
     private lateinit var screen: String
     private lateinit var amount: String
     private lateinit var strWallet: String
-    private lateinit var webSocketUrl: String
-    lateinit var bitmap: Bitmap
-    lateinit var qrgEncoder: QRGEncoder
-    var rotate: Animation? = null
+    private var webSocketUrl: String = ""
     var myApplication: MyApplication? = null
     lateinit var generateQrViewModel: GenerateQrViewModel
+    var webSocketGlobal: WebSocket? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        // inflate the layout and bind to the _binding
         binding = MerchantQrBinding.inflate(layoutInflater, container, false)
         inItFields()
         inItObservers()
@@ -66,16 +61,9 @@ class MerchantQrFragment : BaseFragment() {
         webSocketUrl =
             myApplication!!.mCurrentUserData.generateQrResponseData?.mposWebsocket.toString()
         Utils.qrUniqueCode = myApplication!!.mCurrentUserData.generateQrResponseData?.uniqueId
-//        binding.lottieAnimV.loop(false)
-
-        startWebSocket(webSocketUrl)
-//        startWebSocket("ws://DEV23-API-GATEWAY-511281183.us-east-1.elb.amazonaws.com:58080/pos")
 
         Handler().postDelayed({
-//            rotate = AnimationUtils.loadAnimation(context, R.anim.rotate)
-//            binding.lottieAnimV.startAnimation(rotate)
-
-            binding.amountTV.text = amount.toString().replace("$", "")
+            binding.amountTV.text = amount
             binding.qrLL.visibility = View.VISIBLE
             binding.animationRL.visibility = View.GONE
             binding.discardSaleLL.setBackgroundResource(R.drawable.bg_greencolor_filled)
@@ -147,12 +135,13 @@ class MerchantQrFragment : BaseFragment() {
         }
     }
 
-    private class EchoWebSocketListener : WebSocketListener() {
+    inner class EchoWebSocketListener : WebSocketListener() {
         private val interval = 2000
         private val handler = Handler(Looper.getMainLooper())
         private var runnable: Runnable? = null
         private var CLOSE_STATUS = 1000
         override fun onOpen(webSocket: WebSocket, response: Response) {
+            webSocketGlobal = webSocket
             Log.e("onOpen", "onOpen")
             try {
                 Log.e("authorization: ", Utils.strAuth.toString())
@@ -170,6 +159,7 @@ class MerchantQrFragment : BaseFragment() {
         override fun onMessage(webSocket: WebSocket, message: String) {
             Log.d("Receive Message: ", message)
             try {
+                webSocketGlobal = webSocket
                 val obj = JSONObject(message)
                 if (obj.getString("eventType") == "SERVER_CONNECTION") {
                     runnable = Runnable {
@@ -186,13 +176,45 @@ class MerchantQrFragment : BaseFragment() {
                         }
                     }
                     handler.postDelayed(runnable!!, 0)
-                } else if (obj.getString("eventType") == "POS_TXN_STATUS"
-                ) {
-                    if (obj.getString("txnStatus").equals("Failed", true)) {
+                } else if (obj.getString("eventType") == "POS_TXN_STATUS") {
 
-                    } else if (obj.getString("txnStatus").equals("Success", true)) {
+                    runOnUiThread(Runnable {
+                        binding.qrLL.visibility = View.GONE
+                        binding.animationRL.visibility = View.VISIBLE
+                        binding.waitingText.visibility = View.VISIBLE
+                        binding.discardSaleLL.setBackgroundResource(R.drawable.bg_inactive_color_filled_cv)
+                        binding.discardSaleLL.isEnabled = false
+                    })
+
+                    myApplication!!.mCurrentUserData.webSocketObject = obj
+
+                    runnable = Runnable {
+                        if (obj.getString("txnStatus").equals(Utils.FAILED, true)
+                            || obj.getString("txnStatus").equals(Utils.CANCELED, true)
+                        ) {
+                            startActivity(
+                                Intent(
+                                    requireContext(), SucessFlowActivity::class.java
+                                ).putExtra(Utils.STATUS, obj.getString("txnStatus"))
+                            )
+                        } else if (obj.getString("txnStatus").equals(Utils.COMPLETED, true)) {
+                            startActivity(Intent(requireContext(), SucessFlowActivity::class.java))
+                        }
+
+                        handler.postDelayed(Runnable {
+                            runOnUiThread(Runnable {
+                                binding.qrLL.visibility = View.VISIBLE
+                                binding.animationRL.visibility = View.GONE
+                                binding.waitingText.visibility = View.GONE
+                                binding.discardSaleLL.setBackgroundResource(R.drawable.bg_greencolor_filled)
+                                binding.discardSaleLL.isEnabled = true
+                            })
+                        }, 1500)
+
 
                     }
+                    handler.postDelayed(runnable!!, 500)
+
                     webSocket.close(CLOSE_STATUS, null)
                 } else if (obj.getString("eventType") == "SESSION_EXPIRY") {
                     handler.removeCallbacks(runnable!!)
@@ -204,10 +226,12 @@ class MerchantQrFragment : BaseFragment() {
         }
 
         override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
+            webSocketGlobal = webSocket
             Log.d("Receive Bytes : ", bytes.hex())
         }
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+            webSocketGlobal = webSocket
             webSocket.close(CLOSE_STATUS, null)
             handler.removeCallbacks(runnable!!)
             Log.d("Closing Socket : ", "$code / $reason")
@@ -215,10 +239,9 @@ class MerchantQrFragment : BaseFragment() {
 
         override fun onFailure(webSocket: WebSocket, throwable: Throwable, response: Response?) {
             try {
-                //webSocket.close(CLOSE_STATUS, null);
+                webSocketGlobal = webSocket
                 if (throwable.message != null) Log.d(
-                    "Error : ",
-                    throwable.message!!
+                    "Error : ", throwable.message!!
                 ) else Log.d("Error : ", throwable.toString())
                 handler.removeCallbacks(runnable!!)
             } catch (ex: java.lang.Exception) {
@@ -242,4 +265,13 @@ class MerchantQrFragment : BaseFragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        webSocketGlobal!!.close(1000, null)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (webSocketUrl != "") startWebSocket(webSocketUrl)
+    }
 }
