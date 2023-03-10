@@ -1,6 +1,5 @@
 package com.coyni.pos.app.view
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -64,7 +63,6 @@ class LoginActivity : BaseActivity() {
         initObserver()
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initView() {
 
         loinViewModel = ViewModelProvider(this@LoginActivity).get(LoginLogoutViewModel::class.java)
@@ -127,7 +125,6 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun focusListeners() {
 
         binding.tidET.setOnFocusChangeListener { _, b ->
@@ -274,19 +271,14 @@ class LoginActivity : BaseActivity() {
             if (response != null && response.status.equals(Utils.SUCCESS)) {
                 Utils.strAuth = response.data?.jwtToken
                 myApplication.mCurrentUserData.loginData = response.data!!
-                val imgUrl: String = response.data!!.image.toString()
-                val urlList = ArrayList<DownloadUrlRequest>()
-                urlList.add(DownloadUrlRequest(imgUrl))
-                loinViewModel!!.downloadUrl(urlList)
                 Utils.hideKeypad(this@LoginActivity)
-                if (response.data?.status?.equals("deactivated", true) == true) {
+                if (response.data?.status.equals(Utils.DEACTIVATED, true)) {
                     showTerminalScreen()
                 } else {
-                    startActivity(
-                        Intent(applicationContext, DashboardActivity::class.java).setFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        )
-                    )
+                    val imgUrl: String = response.data!!.image.toString()
+                    val urlList = ArrayList<DownloadUrlRequest>()
+                    urlList.add(DownloadUrlRequest(imgUrl))
+                    loinViewModel!!.downloadUrl(urlList)
                 }
 
             } else {
@@ -294,8 +286,13 @@ class LoginActivity : BaseActivity() {
             }
         }
         loinViewModel?.downloadUrlResponseMutableLiveData?.observe(this@LoginActivity) { response ->
-            if (response != null && response.status.equals(Utils.SUCCESS) ) {
+            if (response != null && response.status.equals(Utils.SUCCESS)) {
                 myApplication.mCurrentUserData.downloadUrlData = response.data
+                startActivity(
+                    Intent(applicationContext, DashboardActivity::class.java).setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    )
+                )
             }
         }
     }

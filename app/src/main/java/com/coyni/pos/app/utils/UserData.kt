@@ -17,7 +17,7 @@ class UserData {
     var generateQrResponseData: GenerateQrResponseData? = null
     var refundResponseData: RefundResponseData? = null
     var loginData: LoginData? = null
-    var downloadUrlData: DownloadUrlData? = null
+    var downloadUrlData: ArrayList<DownloadUrlData>? = null
     var transactionResponse: TransactionResponseData? = null
     var batchResponse: BatchResponseData? = null
     var webSocketObject: JSONObject? = null

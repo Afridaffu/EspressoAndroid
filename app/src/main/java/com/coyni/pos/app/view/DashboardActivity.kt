@@ -55,7 +55,7 @@ class DashboardActivity : BaseActivity() {
             binding.ivUserProfile.visibility = View.VISIBLE
             binding.tvUserName.visibility = View.GONE
             Glide.with(this)
-                .load(myApplication!!.mCurrentUserData.downloadUrlData?.downloadUrl)
+                .load(myApplication!!.mCurrentUserData.downloadUrlData?.get(0)!!.downloadUrl)
                 .into(binding.ivUserProfile)
 
         } else {
