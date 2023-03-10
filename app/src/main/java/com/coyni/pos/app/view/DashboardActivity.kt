@@ -3,6 +3,7 @@ package com.coyni.pos.app.view
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.View
@@ -25,6 +26,7 @@ class DashboardActivity : BaseActivity() {
     private lateinit var binding: ActivityDashboardBinding
     private var myApplication: MyApplication? = null;
     private var logoutViewModel: LoginLogoutViewModel? = null
+    private var lastClick: Long = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +95,8 @@ class DashboardActivity : BaseActivity() {
         }
 
         binding.logoutLL.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - lastClick < Utils.lastClickDelay) return@setOnClickListener
+            lastClick = SystemClock.elapsedRealtime()
             logoutViewModel!!.getLogout()
         }
 
