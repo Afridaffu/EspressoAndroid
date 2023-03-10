@@ -9,6 +9,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.AppBarConfiguration
+import com.bumptech.glide.Glide
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityDashboardBinding
@@ -53,6 +54,10 @@ class DashboardActivity : BaseActivity() {
         if (myApplication?.mCurrentUserData?.loginData?.image != null) {
             binding.ivUserProfile.visibility = View.VISIBLE
             binding.tvUserName.visibility = View.GONE
+            Glide.with(this)
+                .load(myApplication!!.mCurrentUserData.downloadUrlData?.get(0)!!.downloadUrl)
+                .into(binding.ivUserProfile)
+
         } else {
             binding.ivUserProfile.visibility = View.GONE
             binding.tvUserName.visibility = View.VISIBLE

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.StatusFailedActivity"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/ivBack"
@@ -13,14 +14,19 @@
         android:src="@drawable/ic_x"
         android:layout_marginTop="@dimen/_40sdp"
         android:layout_marginStart="@dimen/_16sdp"
-        android:padding="@dimen/_5sdp"/>
+        android:padding="@dimen/_5sdp"
+        android:layout_alignParentTop="true"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_marginHorizontal="@dimen/_32sdp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_above="@+id/tvButton"
+        android:layout_below="@+id/ivBack"
+        android:layout_weight="1"
+        android:gravity="center">
 
         <ImageView
             android:layout_width="match_parent"
@@ -64,4 +70,4 @@
         android:textColor="@color/white"
         android:textSize="@dimen/_12ssp" />
 
-</RelativeLayout>
+</LinearLayout>
