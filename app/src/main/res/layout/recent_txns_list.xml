@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="Sale Order - Retail / Mobile"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp" />
 

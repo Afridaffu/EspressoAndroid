@@ -51,8 +51,8 @@ class RecentTransactionsListAdapter (): BaseRecyclerViewAdapter<RecentTransactio
     }
 
     override fun getItemCount(): Int {
-
-        return 10
+        return if (recentTxns!!.size > 10) 10
+               else recentTxns!!.size
     }
 
     class MyViewHolder(val binding: RecentTxnsListBinding) :

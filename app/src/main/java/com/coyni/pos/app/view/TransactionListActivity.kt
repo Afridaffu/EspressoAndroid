@@ -89,7 +89,6 @@ class TransactionListActivity : BaseActivity() {
             batchAPI()
         }
 
-        listApi()
     }
 
     private fun filterDialogCalls() {
@@ -191,7 +190,7 @@ class TransactionListActivity : BaseActivity() {
                         myApplication?.mCurrentUserData?.batchResponse =
                             batchResponseMutableLiveData.data
                         if (batchResponseMutableLiveData.data?.todayBatchAmount != null) {
-                            binding.batchMoneyTV.setText((batchResponseMutableLiveData.data?.todayBatchAmount!!))
+                            binding.batchMoneyTV.setText((batchResponseMutableLiveData.data?.todayBatchAmount!!).replace("CYN",""))
                         } else {
                             binding.batchMoneyTV.setText("0.00")
                         }
@@ -251,21 +250,9 @@ class TransactionListActivity : BaseActivity() {
     }
 
     private fun batchAPI() {
-
         val req = BatchAmountRequest()
         req.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
-//        req.todayDate = Utils.exportDate(strFromDate + " 00:00:00.000").split("\\ ")[0] + " 00:00:00"
         req.todayDate = "2023-01-17 00:00:00"
         batchAmountViewModel?.getBatchAmount(req)
     }
-
-    private fun listApi() {
-        val req1 = TransactionListReq()
-        req1.fromAmount = 10
-        req1.toAmount = 50
-        req1.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
-
-        transactionViewModel?.allTransactionsList(req1)
-    }
-
 }
