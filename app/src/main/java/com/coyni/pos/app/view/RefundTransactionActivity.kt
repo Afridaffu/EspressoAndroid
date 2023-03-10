@@ -165,7 +165,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                             )
                         }
                     } else {
-                        Utils.displayAlertNew(
+                        Utils.displayAlert(
                             refundResponse.error?.errorDescription.toString(),
                             this,
                             ""
@@ -187,7 +187,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                         intent.putExtra(Utils.REFUNDED_AMOUNT,Utils.convertTwoDecimal(binding.refundAmountET.text.toString()))
                         startActivity(intent)
                     } else {
-                        Utils.displayAlertNew(
+                        Utils.displayAlert(
                             refundResponse.error?.errorDescription.toString(),
                             this,
                             ""

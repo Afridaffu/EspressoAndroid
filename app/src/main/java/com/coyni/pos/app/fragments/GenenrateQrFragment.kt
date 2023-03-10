@@ -80,7 +80,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
                             )
                         )
                     } else {
-                        Utils.displayAlertNew(
+                        Utils.displayAlert(
                             generateQrResponse.error?.errorDescription.toString(),
                             requireContext(),
                             ""
