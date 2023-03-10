@@ -150,7 +150,7 @@ class GenarateQrActivity : BaseActivity() {
                         startActivity(intent)
                         finish()
                     } else {
-                        Utils.displayAlertNew(
+                        Utils.displayAlert(
                             discardSaleResponse.error?.errorDescription.toString(),
                             this,
                             ""

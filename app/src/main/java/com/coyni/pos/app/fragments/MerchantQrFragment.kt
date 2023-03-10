@@ -118,7 +118,7 @@ class MerchantQrFragment : BaseFragment() {
                         startActivity(intent)
                         requireActivity().finish()
                     } else {
-                        Utils.displayAlertNew(
+                        Utils.displayAlert(
                             discardSaleResponse.error?.errorDescription.toString(),
                             requireContext(),
                             ""
