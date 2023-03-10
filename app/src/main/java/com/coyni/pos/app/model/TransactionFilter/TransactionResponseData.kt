@@ -1,7 +1,7 @@
 package com.coyni.pos.app.model.TransactionFilter
 
-class TransactionResponseData(
-    var items: ArrayList<Int>? = null,
+data class TransactionResponseData(
+    var items: List<TransactionItem>? = null,
     var currentPageNo: Int? = null,
     var pageSize: Int? = null,
     var totalItems: Int? = null,

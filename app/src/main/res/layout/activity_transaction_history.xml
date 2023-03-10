@@ -120,12 +120,18 @@
                         android:layout_marginTop="@dimen/_16sdp"
                         android:background="@color/light_blue" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerView"
+                    <ScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false"
-                        android:scrollbars="none" />
+                        android:scrollbars="none">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            android:scrollbars="none" />
+                    </ScrollView>
 
                 </LinearLayout>
 
@@ -182,7 +188,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_5sdp"
+                                    android:layout_marginStart="@dimen/_4sdp"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:text="CYN"
                                     android:textColor="@color/primary_black"
@@ -274,14 +280,19 @@
                                 android:layout_marginBottom="@dimen/_10sdp"
                                 android:background="@color/blue_light" />
 
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/listRecyclerRV"
+                            <ScrollView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/_10sdp">
+                                android:scrollbars="none">
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/listRecyclerRV"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/_10sdp" />
+                            </ScrollView>
 
 
-                            </androidx.recyclerview.widget.RecyclerView>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
