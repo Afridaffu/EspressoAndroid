@@ -1,6 +1,5 @@
 package com.coyni.pos.app.view
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -41,7 +40,11 @@ class LoginActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        binding.tidET.setText("")
+        binding.passwordET.setText("")
         binding.tidET.requestFocus()
+        if (!isKeyboardVisible)
+            Utils.shwForcedKeypad(this, binding.tidET)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +63,6 @@ class LoginActivity : BaseActivity() {
         initObserver()
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initView() {
 
         loinViewModel = ViewModelProvider(this@LoginActivity).get(LoginLogoutViewModel::class.java)
@@ -94,14 +96,8 @@ class LoginActivity : BaseActivity() {
 //            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
 //        }
 
-        myApplication.listener = object : OnClickListener {
-            override fun onButtonClick(click: Boolean) {
-                finish()
-            }
-        }
-
         binding.tvButton.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - lastClick < 20000) return@setOnClickListener
+            if (SystemClock.elapsedRealtime() - lastClick < Utils.lastClickDelay) return@setOnClickListener
             lastClick = SystemClock.elapsedRealtime()
             showProgressDialog()
             loinViewModel?.getLoginData(LoginRequest(terminalId, password))
@@ -129,13 +125,13 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     private fun focusListeners() {
 
         binding.tidET.setOnFocusChangeListener { _, b ->
             if (b) {
-                if (binding.tidET.text.toString().isNotEmpty())
-                    binding.tidET.setSelection(binding.tidET.text.toString().length)
+                if (binding.tidET.text.toString()
+                        .isNotEmpty()
+                ) binding.tidET.setSelection(binding.tidET.text.toString().length)
                 binding.tidET.hint = ""
                 binding.tvUpperHint.visibility = View.VISIBLE
                 binding.tvUpperHint.setTextColor(getColor(R.color.primary_green))
@@ -166,8 +162,9 @@ class LoginActivity : BaseActivity() {
 
         binding.passwordET.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                if (binding.passwordET.text.toString().isNotEmpty())
-                    binding.passwordET.setSelection(binding.passwordET.text.toString().length)
+                if (binding.passwordET.text.toString()
+                        .isNotEmpty()
+                ) binding.passwordET.setSelection(binding.passwordET.text.toString().length)
                 Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_green)
                 Log.e("getKeyboardVisible", getKeyboardVisible().toString())
                 if (!getKeyboardVisible()!!) {
@@ -194,18 +191,12 @@ class LoginActivity : BaseActivity() {
                     binding.passwordErrorLL.visibility = View.VISIBLE
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(this))
                 } else {
-                    if (binding.passwordET.text.toString().length > 7)
-                        Utils.upperHintColor(
-                            binding.passwordTIL,
-                            this@LoginActivity,
-                            R.color.primary_black
-                        )
-                    else
-                        Utils.upperHintColor(
-                            binding.passwordTIL,
-                            this@LoginActivity,
-                            R.color.light_gray
-                        )
+                    if (binding.passwordET.text.toString().length > 7) Utils.upperHintColor(
+                        binding.passwordTIL, this@LoginActivity, R.color.primary_black
+                    )
+                    else Utils.upperHintColor(
+                        binding.passwordTIL, this@LoginActivity, R.color.light_gray
+                    )
                     binding.passwordET.hint = ""
                     binding.passwordErrorLL.visibility = View.GONE
                     binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
@@ -280,20 +271,14 @@ class LoginActivity : BaseActivity() {
             if (response != null && response.status.equals(Utils.SUCCESS)) {
                 Utils.strAuth = response.data?.jwtToken
                 myApplication.mCurrentUserData.loginData = response.data!!
-                val imgUrl: String = response.data!!.image.toString()
-                val urlList = ArrayList<DownloadUrlRequest>()
-                urlList.add(DownloadUrlRequest(imgUrl))
-                loinViewModel!!.downloadUrl(urlList)
                 Utils.hideKeypad(this@LoginActivity)
-                if (response.data?.status?.equals("deactivated", true) == true) {
+                if (response.data?.status.equals(Utils.DEACTIVATED, true)) {
                     showTerminalScreen()
                 } else {
-                    startActivity(
-                        Intent(applicationContext, DashboardActivity::class.java)
-                            .setFlags(
-                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            )
-                    )
+                    val imgUrl: String = response.data!!.image.toString()
+                    val urlList = ArrayList<DownloadUrlRequest>()
+                    urlList.add(DownloadUrlRequest(imgUrl))
+                    loinViewModel!!.downloadUrl(urlList)
                 }
 
             } else {
@@ -301,22 +286,22 @@ class LoginActivity : BaseActivity() {
             }
         }
         loinViewModel?.downloadUrlResponseMutableLiveData?.observe(this@LoginActivity) { response ->
-            if (response != null && response.status.equals(Utils.SUCCESS) ) {
+            if (response != null && response.status.equals(Utils.SUCCESS)) {
                 myApplication.mCurrentUserData.downloadUrlData = response.data
+                startActivity(
+                    Intent(applicationContext, DashboardActivity::class.java).setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    )
+                )
             }
         }
     }
 
     private fun showTerminalScreen() {
-
         startActivity(
             Intent(
                 this@LoginActivity, StatusFailedActivity::class.java
-            ).putExtra(Utils.SCREEN, Utils.LOGIN)
-                .putExtra(Utils.HEADER, getString(R.string.terminal_deactivated)).putExtra(
-                    Utils.DESCRIPTION,
-                    getString(R.string.this_terminal_has_been_deactivated_and_is_no_longer_accessible)
-                )
+            ).putExtra(Utils.STATUS, Utils.DEACTIVATED)
         )
     }
 

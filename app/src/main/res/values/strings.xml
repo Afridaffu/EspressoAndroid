@@ -19,6 +19,13 @@
     <string name="transaction_details">Transaction Details</string>
     <string name="terminal_deactivated">Terminal Deactivated</string>
     <string name="this_terminal_has_been_deactivated_and_is_no_longer_accessible">This terminal has been deactivated and is no longer accessible.</string>
+
+    <string name="payment_canceled">Payment Canceled</string>
+    <string name="customer_canceled_description">The customer has canceled this transaction.</string>
+
+    <string name="payment_failed">Payment Failed</string>
+    <string name="payment_failed_description">An error occurred. We were unable to complete this transaction. Please try again.</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="maxlength">8</string>

@@ -294,7 +294,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
         }
 
         binding.resetFiltersTV.setOnClickListener { view ->
-            if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < Utils.lastClickDelay) {
                 return@setOnClickListener
             }
             mLastClickTimeFilters = SystemClock.elapsedRealtime()
@@ -552,7 +552,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
         binding.applyFilterBtnCV.setOnClickListener(View.OnClickListener {
 
-            if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < Utils.lastClickDelay) {
                 return@OnClickListener
             }
             mLastClickTimeFilters = SystemClock.elapsedRealtime()
@@ -649,7 +649,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
         })
 
         binding.dateRangePickerLL.setOnClickListener(View.OnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < Utils.lastClickDelay) {
                 return@OnClickListener
             }
             mLastClickTimeFilters = SystemClock.elapsedRealtime()
@@ -657,7 +657,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
         })
 
         binding.datePickET.setOnClickListener(View.OnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < Utils.lastClickDelay) {
                 return@OnClickListener
             }
             mLastClickTimeFilters = SystemClock.elapsedRealtime()
