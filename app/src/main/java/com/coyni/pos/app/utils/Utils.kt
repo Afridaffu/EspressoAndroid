@@ -2,6 +2,8 @@ package com.coyni.pos.app.utils
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -23,6 +25,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ExpandableListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -101,7 +104,7 @@ class Utils {
         const val txnType = "txnType"
         const val txnSubType = "txnSubType"
         const val PAID_ORDER = "paid order"
-        const val SALE_ORDER = "sale order"
+        const val SALE_ORDER = "Sale Order"
         const val Refund_String = "refund"
         const val eCommerce = "eCommerce"
         const val FULL = "full"
@@ -710,6 +713,37 @@ class Utils {
             displayAlertDialog!!.show()
         }
 
+        fun convertZoneLatestTxn(date: String?, zoneId: String?): String? {
+            var date = date
+            var strDate = ""
+            if (date != null && date.contains(".")) {
+                date = date.split("\\.").toTypedArray()[0]
+            }
+            try {
+                if (Build.VERSION.SDK_INT >= 26) {
+                    val dtf = DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
+                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                        .toFormatter()
+                        .withZone(ZoneOffset.UTC)
+                    var zonedTime = ZonedDateTime.parse(date, dtf)
+                    val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss")
+                    zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(zoneId, ZoneId.SHORT_IDS))
+                    strDate = zonedTime.format(DATE_TIME_FORMATTER)
+                } else {
+                    var spf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                    spf.timeZone = TimeZone.getTimeZone("UTC")
+                    val newDate = spf.parse(date)
+                    spf = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+                    spf.timeZone = TimeZone.getTimeZone(zoneId)
+                    strDate = spf.format(newDate)
+                }
+            } catch (ex: java.lang.Exception) {
+                ex.printStackTrace()
+            }
+            return strDate
+        }
+
+
         fun displayAlertNew(msg: String, context: Context, headerText: String) {
             // custom dialog
             displayAlertDialog = Dialog(context)
@@ -802,6 +836,19 @@ class Utils {
 //                e.printStackTrace()
 //            }
 //        }
+
+        fun copyText(strText: String?, context: Context) {
+            try {
+                val clipboard =
+                    context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("Wallet Address", strText)
+                clipboard.setPrimaryClip(clip)
+                Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show()
+            } catch (ex: java.lang.Exception) {
+                ex.printStackTrace()
+            }
+        }
+
         fun convertBase64ToBitmap(base64String: String): Bitmap {
             val decodedString: ByteArray = Base64.decode(base64String, Base64.DEFAULT)
             return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)

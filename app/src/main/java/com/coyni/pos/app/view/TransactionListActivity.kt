@@ -189,10 +189,7 @@ class TransactionListActivity : BaseActivity() {
                             batchResponseMutableLiveData.data
                         if (batchResponseMutableLiveData.data?.todayBatchAmount != null) {
                             binding.batchMoneyTV.setText(
-                                (batchResponseMutableLiveData.data?.todayBatchAmount!!).replace(
-                                    "CYN",
-                                    ""
-                                )
+                                (batchResponseMutableLiveData.data?.todayBatchAmount!!).replace("CYN", "").trim()
                             )
                         } else {
                             binding.batchMoneyTV.setText("0.00")
