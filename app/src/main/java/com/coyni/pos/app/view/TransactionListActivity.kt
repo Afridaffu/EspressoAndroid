@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.coyni.pos.app.R
@@ -16,7 +15,6 @@ import com.coyni.pos.app.dialog.OnDialogClickListener
 import com.coyni.pos.app.dialog.TransactionFilterDialog
 import com.coyni.pos.app.model.BatchAmount.BatchAmountRequest
 import com.coyni.pos.app.model.ListItem
-import com.coyni.pos.app.model.TransactionData
 import com.coyni.pos.app.model.TransactionFilter.TransactionItem
 import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
 import com.coyni.pos.app.utils.MyApplication
@@ -190,7 +188,12 @@ class TransactionListActivity : BaseActivity() {
                         myApplication?.mCurrentUserData?.batchResponse =
                             batchResponseMutableLiveData.data
                         if (batchResponseMutableLiveData.data?.todayBatchAmount != null) {
-                            binding.batchMoneyTV.setText((batchResponseMutableLiveData.data?.todayBatchAmount!!).replace("CYN",""))
+                            binding.batchMoneyTV.setText(
+                                (batchResponseMutableLiveData.data?.todayBatchAmount!!).replace(
+                                    "CYN",
+                                    ""
+                                )
+                            )
                         } else {
                             binding.batchMoneyTV.setText("0.00")
                         }
@@ -222,14 +225,18 @@ class TransactionListActivity : BaseActivity() {
                 binding.recyclerView.adapter = adapter
             } else {
                 // Manager List View
-                binding.listRecyclerRV.layoutManager = LinearLayoutManager(this@TransactionListActivity)
+                binding.listRecyclerRV.layoutManager =
+                    LinearLayoutManager(this@TransactionListActivity)
                 binding.listRecyclerRV.adapter = adapter
 
                 adapter?.setOnItemClickListener(
                     object : OnItemClickListener {
 
                         override fun onItemClick(position: Int?, value: Any?) {
-                            showTransactionDetails(TransactionData())
+                            for (item in items) {
+                                showTransactionDetails(item)
+                            }
+//                            showTransactionDetails(TransactionData())
                         }
 
                         override fun onChildClicked(s: String?) {
@@ -241,11 +248,11 @@ class TransactionListActivity : BaseActivity() {
 
     }
 
-    private fun showTransactionDetails(obj: TransactionData) {
+    private fun showTransactionDetails(obj: TransactionItem) {
         val i = Intent(this@TransactionListActivity, TransactionDetailsActivity::class.java)
-        i.putExtra(Utils.gbxTxnId, obj.referenceId)
-        i.putExtra(Utils.txnType, obj.transactionType)
-        i.putExtra(Utils.txnSubType, obj.transactionSubtype)
+        i.putExtra(Utils.gbxTxnId, obj.gbxTransactionId)
+        i.putExtra(Utils.txnType, obj.txnTypeDn)
+        i.putExtra(Utils.txnSubType, obj.txnSubTypeDn)
         startActivity(i)
     }
 

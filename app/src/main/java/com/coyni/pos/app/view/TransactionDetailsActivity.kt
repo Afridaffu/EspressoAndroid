@@ -41,13 +41,16 @@ class TransactionDetailsActivity : BaseActivity() {
     private fun initField() {
 
         transactionViewModel =
-            ViewModelProvider(this@TransactionDetailsActivity).get(TransactionsViewModel::class.java)
+            ViewModelProvider(this).get(TransactionsViewModel::class.java)
         myApplication = applicationContext as MyApplication
 
         binding.ivBack.setOnClickListener { onBackPressed() }
-        if (gbxID != null && txnTypeStr != null && txnSubTypeStr != null) {
+        binding.ivRefund.setOnClickListener {
+            startActivity(Intent(this, RefundTransactionActivity::class.java))
+        }
+        if (intent.getStringExtra(Utils.gbxTxnId) != null) {
             gbxID = intent.getStringExtra(Utils.gbxTxnId)!!
-
+        }
             if (getIntent().getStringExtra(Utils.txnType) != null && !getIntent().getStringExtra(
                     Utils.txnType
                 )
@@ -67,18 +70,18 @@ class TransactionDetailsActivity : BaseActivity() {
                     )
                         .equals("")
                 ) {
-                    when (getIntent().getStringExtra(Utils.txnSubType)!!.toLowerCase()) {
+                    when (getIntent().getStringExtra(Utils.txnSubType)!!) {
                         retail_mobile -> {
-                            txnTypeStr = Utils.filter_Retail
+                            txnSubTypeStr = Utils.filter_Retail
                         }
                         eCommerce -> {
-                            txnTypeStr = Utils.filter_eCommerce
+                            txnSubTypeStr = Utils.filter_eCommerce
                         }
                         full -> {
-                            txnTypeStr = Utils.filter_full
+                            txnSubTypeStr = Utils.filter_full
                         }
                         partial -> {
-                            txnTypeStr = Utils.partialRefund
+                            txnSubTypeStr = Utils.partialRefund
                         }
                     }
 
@@ -86,12 +89,11 @@ class TransactionDetailsActivity : BaseActivity() {
             }
             transactionViewModel!!.transactionDetails(gbxID!!, txnTypeStr!!, txnSubTypeStr!!)
 
-        }
     }
 
     fun initObservers() {
 
-        transactionViewModel?.transactionDetailResponse?.observe(this@TransactionDetailsActivity) { transactionDetailsResponse ->
+        transactionViewModel?.transactionDetailResponse?.observe(this) { transactionDetailsResponse ->
             try {
                 if (transactionDetailsResponse != null) {
                     if (transactionDetailsResponse.status.equals(Utils.SUCCESS)) {
@@ -192,16 +194,13 @@ class TransactionDetailsActivity : BaseActivity() {
             if (data.employeeId != null) {
                 binding.tvEmpId.setText(data.employeeId!!)
             }
-            binding.ivRefund.setOnClickListener {
-                startActivity(Intent(this, RefundTransactionActivity::class.java))
-            }
 
         }
 
     }
 
     private fun getActivityLogAPICall() {
-        TODO("Not yet implemented")
+
     }
 
     private fun showRefundData(data: TransactionData?) {

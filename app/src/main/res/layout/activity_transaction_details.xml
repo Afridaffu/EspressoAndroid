@@ -266,10 +266,11 @@
 
                     <ImageView
                         android:id="@+id/ivRefund"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:layout_marginBottom="@dimen/_4sdp"
+                        android:layout_gravity="center"
                         android:contentDescription="@string/refund"
                         android:src="@drawable/refund" />
 

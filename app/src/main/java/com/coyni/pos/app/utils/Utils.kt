@@ -671,6 +671,45 @@ class Utils {
             listView.requestLayout()
         }
 
+        fun displayAlert(msg: String, context: Context, headerText: String) {
+            // custom dialog
+            displayAlertDialog = Dialog(context)
+            displayAlertDialog!!.getWindow()!!.requestFeature(Window.FEATURE_NO_TITLE)
+            displayAlertDialog!!.setContentView(R.layout.bottom_sheet_alert_dialog)
+            displayAlertDialog!!.getWindow()!!
+                .setBackgroundDrawableResource(android.R.color.transparent)
+            val mertics = context.resources.displayMetrics
+            val width = mertics.widthPixels
+            val header: TextView = displayAlertDialog!!.findViewById<TextView>(R.id.tvHead)
+            val message: TextView = displayAlertDialog!!.findViewById<TextView>(R.id.tvMessage)
+            val actionCV: CardView = displayAlertDialog!!.findViewById<CardView>(R.id.cvAction)
+            val actionText: TextView = displayAlertDialog!!.findViewById<TextView>(R.id.tvAction)
+            if (headerText != "") {
+                header.visibility = View.VISIBLE
+                header.text = headerText
+            }
+            actionCV.setOnClickListener {
+                displayAlertDialog!!.dismiss()
+            }
+
+            if (msg == "") {
+                message.text = context.getString(R.string.please_try_after)
+            } else message.text = msg
+            val window: Window = displayAlertDialog!!.getWindow()!!
+            window.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+            val wlp = window.attributes
+            wlp.gravity = Gravity.BOTTOM
+            wlp.flags = wlp.flags and WindowManager.LayoutParams.FLAG_DIM_BEHIND
+            window.attributes = wlp
+            displayAlertDialog!!.getWindow()!!.getAttributes().windowAnimations =
+                R.style.DialogAnimation
+            displayAlertDialog!!.setCanceledOnTouchOutside(true)
+            displayAlertDialog!!.show()
+        }
+
         fun displayAlertNew(msg: String, context: Context, headerText: String) {
             // custom dialog
             displayAlertDialog = Dialog(context)

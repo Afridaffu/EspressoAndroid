@@ -80,21 +80,21 @@ class LoginActivity : BaseActivity() {
             onBackPressed()
         }
 
-//        binding.passwordTIL.setEndIconOnClickListener {
-//            if (!isIconEnable) {
-//                isIconEnable = true
-//                binding.passwordTIL.endIconDrawable =
-//                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeopen)
-//                binding.passwordET.transformationMethod =
-//                    HideReturnsTransformationMethod.getInstance()
-//            } else {
-//                isIconEnable = false
-//                binding.passwordTIL.endIconDrawable =
-//                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeclose)
-//                binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
-//            }
-//            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-//        }
+        binding.passwordTIL.setEndIconOnClickListener {
+            if (!isIconEnable) {
+                isIconEnable = true
+                binding.passwordTIL.endIconDrawable =
+                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeopen)
+                binding.passwordET.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
+            } else {
+                isIconEnable = false
+                binding.passwordTIL.endIconDrawable =
+                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeclose)
+                binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
+            }
+            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
+        }
 
         binding.tvButton.setOnClickListener {
             if (SystemClock.elapsedRealtime() - lastClick < Utils.lastClickDelay) return@setOnClickListener
@@ -266,19 +266,28 @@ class LoginActivity : BaseActivity() {
 
     private fun initObserver() {
         loinViewModel?.loginResponseMutableLiveData?.observe(this@LoginActivity) { response ->
-            dismissDialog()
 
             if (response != null && response.status.equals(Utils.SUCCESS)) {
                 Utils.strAuth = response.data?.jwtToken
                 myApplication.mCurrentUserData.loginData = response.data!!
                 Utils.hideKeypad(this@LoginActivity)
                 if (response.data?.status.equals(Utils.DEACTIVATED, true)) {
+                    dismissDialog()
                     showTerminalScreen()
                 } else {
-                    val imgUrl: String = response.data!!.image.toString()
-                    val urlList = ArrayList<DownloadUrlRequest>()
-                    urlList.add(DownloadUrlRequest(imgUrl))
-                    loinViewModel!!.downloadUrl(urlList)
+                    if (response.data!!.image == null) {
+                        dismissDialog()
+                        startActivity(
+                            Intent(applicationContext, DashboardActivity::class.java).setFlags(
+                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            )
+                        )
+                    } else {
+                        val imgUrl: String = response.data!!.image.toString()
+                        val urlList = ArrayList<DownloadUrlRequest>()
+                        urlList.add(DownloadUrlRequest(imgUrl))
+                        loinViewModel!!.downloadUrl(urlList)
+                    }
                 }
 
             } else {
@@ -286,14 +295,15 @@ class LoginActivity : BaseActivity() {
             }
         }
         loinViewModel?.downloadUrlResponseMutableLiveData?.observe(this@LoginActivity) { response ->
+            dismissDialog()
             if (response != null && response.status.equals(Utils.SUCCESS)) {
                 myApplication.mCurrentUserData.downloadUrlData = response.data
-                startActivity(
-                    Intent(applicationContext, DashboardActivity::class.java).setFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    )
-                )
             }
+            startActivity(
+                Intent(applicationContext, DashboardActivity::class.java).setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                )
+            )
         }
     }
 
