@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_40sdp"
             android:contentDescription="@string/back"
+            android:layout_marginStart="@dimen/_14sdp"
             android:padding="@dimen/_3sdp"
             android:src="@drawable/ic_back"
             app:tint="@color/primary_black" />
@@ -79,7 +80,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_bold"
-                        android:text="100.00"
+                        android:text=""
                         android:textColor="@color/primary_green"
                         android:textSize="@dimen/_24ssp" />
 
@@ -100,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="@string/refund"
+                    android:text=""
                     android:textAlignment="center"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_9ssp" />
