@@ -1,5 +1,6 @@
 package com.coyni.pos.app.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.TransactionSuccessBinding
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
+import com.coyni.pos.app.view.TransactionDetailsActivity
 
 class TransactionSuccessFragment : BaseFragment() {
     private lateinit var binding: TransactionSuccessBinding
@@ -38,6 +40,25 @@ class TransactionSuccessFragment : BaseFragment() {
         binding.customerName.text =
             "to" + myApplication?.mCurrentUserData?.transactionData?.customerName.toString()
         binding.refundedAMountTV.text = Utils.convertTwoDecimal(amount).replace("$", "")
+
+        binding.doneCV.setOnClickListener {
+            try {
+                val intent = Intent(requireContext(), TransactionDetailsActivity::class.java)
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        binding.viewTxnTV.setOnClickListener {
+            val intent = Intent(requireContext(), TransactionDetailsActivity::class.java)
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            intent.putExtra(
+                Utils.gbxTxnId,
+                myApplication?.mCurrentUserData?.refundResponseData?.referenceId
+            )
+            intent.putExtra(Utils.txnType, Utils.REFUND)
+            intent.putExtra(Utils.txnSubType, Utils.filter_Sent)
+        }
     }
 
     private fun getValues() {

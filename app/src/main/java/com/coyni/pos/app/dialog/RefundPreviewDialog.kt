@@ -24,21 +24,20 @@ class RefundPreviewDialog(
     override fun getLayoutId() = R.layout.refund_preview
 
     override fun initViews() {
-        myApplication = context as MyApplication
         dialogBinding = RefundPreviewBinding.bind(findViewById(R.id.root))
-
+        myApplication = context.applicationContext as MyApplication
         dialogBinding.tvProcessingFee.text =
-            Utils.convertTwoDecimal(myApplication.mCurrentUserData.refundResponseData?.processingFee.toString())
+            Utils.convertTwoDecimal(myApplication.mCurrentUserData.refundResponseData?.processingFee.toString()).replace("$","")
         dialogBinding.customerAddressTV.text =
-            myApplication.mCurrentUserData.refundResponseData!!.referenceId
+            myApplication.mCurrentUserData.refundResponseData!!.referenceId.toString()
         dialogBinding.amountPayTV.text = Utils.convertTwoDecimal(
             refundAmount.toString()
-        )
+        ).replace("$","")
         processingFee =
             Utils.doubleParsing(myApplication.mCurrentUserData.refundResponseData?.processingFee.toString())
         refundAmpount = Utils.doubleParsing(refundAmount.toString())
         total = processingFee + refundAmpount
-        dialogBinding.tvTotal.text = Utils.convertTwoDecimal(total.toString())
+        dialogBinding.tvTotal.text = Utils.convertTwoDecimal(total.toString()).replace("$","")
         dialogBinding.messageNoteTV.text = reason
         dialogBinding.infoIV.setOnClickListener {
             dialogBinding.viewFeesTextLL.visibility = VISIBLE
@@ -89,7 +88,6 @@ class RefundPreviewDialog(
             }
         })
     }
-
 
     private fun feeDialog() {
         val feeDialog = ViewFeeDialog(context)
