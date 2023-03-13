@@ -55,7 +55,9 @@ class SucessFlowActivity : AppCompatActivity() {
             myApplication.mCurrentUserData.webSocketObject!!.getString("txnAmount").toString()
         ).toString()
 
-        setCustomerName("star")
+        setCustomerName(
+            myApplication.mCurrentUserData.webSocketObject!!.getString("senderName").toString()
+        )
     }
 
     fun setCustomerName(customerName: String) {

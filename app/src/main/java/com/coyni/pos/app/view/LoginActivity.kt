@@ -45,6 +45,10 @@ class LoginActivity : BaseActivity() {
         binding.tidET.requestFocus()
         if (!isKeyboardVisible)
             Utils.shwForcedKeypad(this, binding.tidET)
+
+        //Static data remove later
+        setLoginData()
+        //Static data remove later
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,8 +70,6 @@ class LoginActivity : BaseActivity() {
     private fun initView() {
 
         loinViewModel = ViewModelProvider(this@LoginActivity).get(LoginLogoutViewModel::class.java)
-
-        val myApplication = applicationContext as MyApplication
 
         binding.passwordTIL.endIconMode = END_ICON_CUSTOM
         binding.tvButton.isEnabled = false
@@ -291,6 +293,7 @@ class LoginActivity : BaseActivity() {
                 }
 
             } else {
+                dismissDialog()
                 showDialog()
             }
         }
@@ -319,4 +322,13 @@ class LoginActivity : BaseActivity() {
         val errorDialog = ErrorDialog(this@LoginActivity)
         errorDialog.show()
     }
+    //Static data remove later
+    private fun setLoginData() {
+        isId = true
+        isPassword = true
+        binding.tidET.setText("1007160318")
+        binding.passwordET.setText("Admin@123")
+        enableButton()
+    }
+    //Static data remove later
 }
