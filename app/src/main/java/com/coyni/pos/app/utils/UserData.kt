@@ -27,5 +27,8 @@ class UserData {
         return Utils.convertZoneLatestTxn(date, strPreference)
     }
 
+    fun convertZoneDateTime(date: String?, format: String?, requiredFormat: String?): String? {
+        return Utils.convertZoneDateTime(date, format, requiredFormat, strPreference)
+    }
 
 }

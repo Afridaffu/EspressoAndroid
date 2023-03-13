@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginRight="@dimen/_11sdp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="@dimen/_4sdp"
+            android:layout_height="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:background="@drawable/bg_greencolor_filled" />
+
+        <TextView
+            android:id="@+id/statusTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_6sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="sucess"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_11ssp" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_7sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:gravity="right"
+            android:text="sdfg"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_10ssp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/message_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginRight="@dimen/_11sdp"
+        android:fontFamily="@font/opensans_regular"
+        android:text=""
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_10ssp" />
+
+</LinearLayout>

@@ -4,7 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.coyni.pos.app.R
+import com.coyni.pos.app.adapter.ActivityLogAdapter
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityTransactionDetailsBinding
 import com.coyni.pos.app.model.TransactionData
@@ -15,7 +18,6 @@ import com.coyni.pos.app.viewmodel.TransactionsViewModel
 class TransactionDetailsActivity : BaseActivity() {
 
     private lateinit var binding: ActivityTransactionDetailsBinding
-    private var txnType = " "
     private var transactionViewModel: TransactionsViewModel? = null
     var gbxID: String? = null
     var txnTypeStr: Int? = null
@@ -54,8 +56,8 @@ class TransactionDetailsActivity : BaseActivity() {
             )
         }
 
-        if (intent.getStringExtra("txnId") != null && !intent.getStringExtra("txnId").equals("")) {
-//            txnId = intent.getIntExtra(txnId.toString()
+        if (intent != null) {
+            txnId = intent.getIntExtra(Utils.txnId, 0)
         }
 
         binding.ivRefund.setOnClickListener {
@@ -133,7 +135,17 @@ class TransactionDetailsActivity : BaseActivity() {
             try {
                 if (logsResponseMutableLiveData != null) {
                     if (logsResponseMutableLiveData.status.equals(Utils.SUCCESS)) {
+                        if (logsResponseMutableLiveData.data?.size!! > 0) {
 
+                            val activityListAdater =
+                                ActivityLogAdapter(this@TransactionDetailsActivity)
+                            val mLayoutManager =
+                                LinearLayoutManager(this@TransactionDetailsActivity)
+                            binding.recyclerView.layoutManager = mLayoutManager
+                            binding.recyclerView.itemAnimator = DefaultItemAnimator()
+                            binding.recyclerView.adapter = activityListAdater
+                            binding.llActivityLog.setVisibility(View.VISIBLE)
+                        }
                     }
                 }
 
@@ -265,7 +277,7 @@ class TransactionDetailsActivity : BaseActivity() {
         if (Utils.checkInternet(this@TransactionDetailsActivity)) {
             if (txnId != null)
                 if (myApplication?.mCurrentUserData?.UserType == Utils.PERSONAL)
-                    transactionViewModel?.activityLogsDetails(txnId!!, "c")
+                    transactionViewModel?.activityLogsDetails(txnId!!, "customer")
 
         }
     }
