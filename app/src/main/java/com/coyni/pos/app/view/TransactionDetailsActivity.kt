@@ -90,6 +90,10 @@ class TransactionDetailsActivity : BaseActivity() {
                     eCommerce -> {
                         txnSubTypeStr = Utils.filter_eCommerce
                     }
+                    Utils.SENT -> {
+                        txnSubTypeStr = Utils.sent
+                    }
+
                     full -> {
                         txnSubTypeStr = Utils.filter_full
                     }

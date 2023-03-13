@@ -73,6 +73,7 @@ class CustomKeyboard : LinearLayout, View.OnClickListener {
         binding.keyNineTV.setOnClickListener(this)
         binding.keyZeroTV.setOnClickListener(this)
         binding.keyDotTV.setOnClickListener(this)
+
         binding.keyActionLL.setOnClickListener(OnClickListener {
             if (listener != null) {
                 listener.onKeyboardClick(Utils.BUTTON_CLICK, "")

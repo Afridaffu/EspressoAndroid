@@ -9,6 +9,7 @@ import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.TransactionSuccessBinding
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
+import com.coyni.pos.app.view.DashboardActivity
 import com.coyni.pos.app.view.TransactionDetailsActivity
 
 class TransactionSuccessFragment : BaseFragment() {
@@ -44,7 +45,23 @@ class TransactionSuccessFragment : BaseFragment() {
         binding.doneCV.setOnClickListener {
             try {
                 val intent = Intent(requireContext(), TransactionDetailsActivity::class.java)
+                intent.putExtra(
+                    Utils.gbxTxnId,
+                    myApplication?.mCurrentUserData?.transactionData?.referenceId
+                )
+                intent.putExtra(Utils.txnType, myApplication?.mCurrentUserData?.transactionData?.transactionType)
+                intent.putExtra(Utils.txnSubType, myApplication?.mCurrentUserData?.transactionData?.transactionSubtype)
+                startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        binding.backIV.setOnClickListener {
+//            onBackPressed()
+            try {
+                val intent = Intent(requireContext(), DashboardActivity::class.java)
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -57,8 +74,13 @@ class TransactionSuccessFragment : BaseFragment() {
                 myApplication?.mCurrentUserData?.refundResponseData?.referenceId
             )
             intent.putExtra(Utils.txnType, Utils.REFUND)
-            intent.putExtra(Utils.txnSubType, Utils.filter_Sent)
+            intent.putExtra(Utils.txnSubType, Utils.SENT)
+            startActivity(intent)
         }
+    }
+
+      override fun onBackPressed() {
+//        super.onBackPressed()
     }
 
     private fun getValues() {

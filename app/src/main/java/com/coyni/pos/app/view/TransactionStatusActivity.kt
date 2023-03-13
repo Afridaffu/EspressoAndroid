@@ -63,4 +63,7 @@ class TransactionStatusActivity : BaseActivity() {
             .replace(R.id.container, fragment, "")
             .commit()
     }
+    override fun onBackPressed() {
+//        super.onBackPressed()
+    }
 }
