@@ -186,9 +186,9 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             }
         }
         refundViewModel.refundProcessResponse.observe(this) { refundResponse ->
-            dismissDialog()
             try {
                 if (refundResponse != null) {
+                    dismissDialog()
                     if (refundResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.refundResponseData = refundResponse.data
                         val intent = Intent(this, TransactionStatusActivity::class.java)
@@ -258,7 +258,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         var strReturn = ""
         try {
             strAmount =
-                Utils.convertTwoDecimal(etAmount.text.toString()).replace("$", "").trim { it <= ' ' }
+                Utils.convertTwoDecimal(etAmount.text.toString()).replace("$", "")
+                    .trim { it <= ' ' }
                     .replace(",", "")
             etAmount.removeTextChangedListener(this)
             etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)))
