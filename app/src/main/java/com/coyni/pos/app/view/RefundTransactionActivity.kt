@@ -155,6 +155,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         refundViewModel.refundVerifyResponse.observe(this) { refundResponse ->
             try {
                 if (refundResponse != null) {
+                    dismissDialog()
                     if (refundResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.refundResponseData = refundResponse.data
                         if (refundResponse.data?.insufficientMerchantBalance != true || refundResponse.data?.insufficientTokenBalance != true) {
@@ -185,6 +186,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             }
         }
         refundViewModel.refundProcessResponse.observe(this) { refundResponse ->
+            dismissDialog()
             try {
                 if (refundResponse != null) {
                     if (refundResponse.status == Utils.SUCCESS) {
@@ -313,6 +315,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             Utils.doubleParsing(binding.refundAmountET.text.toString())
         refundVerifyRequest.gbxTransactionId = gbxId
         refundVerifyRequest.refundReason = reason
+        showProgressDialog()
         refundViewModel.refundVerifyRequest(refundVerifyRequest)
     }
 
@@ -357,6 +360,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
 //            myApplication?.mCurrentUserData?.validateResponseData?.token
         refundProcessRequest.gbxTransactionId = gbxId
         refundProcessRequest.walletType = Utils.CUSTOMER
+        showProgressDialog()
         refundViewModel.refundProcessRequest(refundProcessRequest)
     }
 
