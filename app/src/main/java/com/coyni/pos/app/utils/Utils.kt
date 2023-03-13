@@ -102,6 +102,7 @@ class Utils {
         const val WALLET_FEE_LIMITS = "wallet fee and limits"
         const val refundActionType = "REFUND"
         const val txnType = "txnType"
+        const val txnId = "txnId"
         const val txnSubType = "txnSubType"
         const val PAID_ORDER = "paid order"
         const val SALE_ORDER = "Sale Order"
@@ -370,8 +371,7 @@ class Utils {
                 val amt = doubleParsing(amount.replace(",".toRegex(), ""))
                 val format = DecimalFormat.getCurrencyInstance(Locale.US)
                 format.maximumFractionDigits = 2
-                //            strValue = format.format(amt).replaceAll("$", "").replaceAll("USD", "").replace("CYN", "");
-                strValue = format.format(amt)
+                strValue = format.format(amt).replace("$", "")
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -744,7 +744,6 @@ class Utils {
             }
             return strDate
         }
-
 
         fun displayAlertNew(msg: String, context: Context, headerText: String) {
             // custom dialog

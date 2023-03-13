@@ -189,7 +189,7 @@ class TransactionListActivity : BaseActivity() {
                             batchResponseMutableLiveData.data
                         if (batchResponseMutableLiveData.data?.todayBatchAmount != null) {
                             binding.batchMoneyTV.setText(
-                                (batchResponseMutableLiveData.data?.todayBatchAmount!!).replace("CYN", "").trim()
+                                Utils.convertBigDecimalUSDC(batchResponseMutableLiveData.data?.todayBatchAmount!!).replace("CYN", "").trim()
                             )
                         } else {
                             binding.batchMoneyTV.setText("0.00")
@@ -250,6 +250,7 @@ class TransactionListActivity : BaseActivity() {
         i.putExtra(Utils.gbxTxnId, obj.gbxTransactionId)
         i.putExtra(Utils.txnType, obj.txnTypeDn)
         i.putExtra(Utils.txnSubType, obj.txnSubTypeDn)
+        i.putExtra(Utils.txnId, obj.transactionId)
         startActivity(i)
     }
 
