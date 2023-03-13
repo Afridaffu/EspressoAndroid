@@ -27,6 +27,7 @@ class TransactionDetailsActivity : BaseActivity() {
     private val full = "FULL"
     private val partial = "partial"
     var myApplication: MyApplication? = null
+    var txnId: Int? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,52 +43,64 @@ class TransactionDetailsActivity : BaseActivity() {
 
         transactionViewModel =
             ViewModelProvider(this).get(TransactionsViewModel::class.java)
+
         myApplication = applicationContext as MyApplication
 
-        binding.ivBack.setOnClickListener { onBackPressed() }
+        binding.ivBack.setOnClickListener {
+            startActivity(
+                Intent(applicationContext, TransactionListActivity::class.java).setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                )
+            )
+        }
+
+        if (intent.getStringExtra("txnId") != null && !intent.getStringExtra("txnId").equals("")) {
+//            txnId = intent.getIntExtra(txnId.toString()
+        }
+
         binding.ivRefund.setOnClickListener {
             startActivity(Intent(this, RefundTransactionActivity::class.java))
         }
         if (intent.getStringExtra(Utils.gbxTxnId) != null) {
             gbxID = intent.getStringExtra(Utils.gbxTxnId)!!
         }
-            if (getIntent().getStringExtra(Utils.txnType) != null && !getIntent().getStringExtra(
-                    Utils.txnType
+        if (getIntent().getStringExtra(Utils.txnType) != null && !getIntent().getStringExtra(
+                Utils.txnType
+            )
+                .equals("")
+        ) {
+            when (getIntent().getStringExtra(Utils.txnType)!!.toLowerCase()) {
+                sale_order -> {
+                    txnTypeStr = Utils.filter_saleorder
+                }
+                refund -> {
+                    txnTypeStr = Utils.refund
+                }
+            }
+
+            if (getIntent().getStringExtra(Utils.txnSubType) != null && !getIntent().getStringExtra(
+                    Utils.txnSubType
                 )
                     .equals("")
             ) {
-                when (getIntent().getStringExtra(Utils.txnType)!!.toLowerCase()) {
-                    sale_order -> {
-                        txnTypeStr = Utils.filter_saleorder
+                when (getIntent().getStringExtra(Utils.txnSubType)!!) {
+                    retail_mobile -> {
+                        txnSubTypeStr = Utils.filter_Retail
                     }
-                    refund -> {
-                        txnTypeStr = Utils.refund
+                    eCommerce -> {
+                        txnSubTypeStr = Utils.filter_eCommerce
+                    }
+                    full -> {
+                        txnSubTypeStr = Utils.filter_full
+                    }
+                    partial -> {
+                        txnSubTypeStr = Utils.partialRefund
                     }
                 }
 
-                if (getIntent().getStringExtra(Utils.txnSubType) != null && !getIntent().getStringExtra(
-                        Utils.txnSubType
-                    )
-                        .equals("")
-                ) {
-                    when (getIntent().getStringExtra(Utils.txnSubType)!!) {
-                        retail_mobile -> {
-                            txnSubTypeStr = Utils.filter_Retail
-                        }
-                        eCommerce -> {
-                            txnSubTypeStr = Utils.filter_eCommerce
-                        }
-                        full -> {
-                            txnSubTypeStr = Utils.filter_full
-                        }
-                        partial -> {
-                            txnSubTypeStr = Utils.partialRefund
-                        }
-                    }
-
-                }
             }
-            transactionViewModel!!.transactionDetails(gbxID!!, txnTypeStr!!, txnSubTypeStr!!)
+        }
+        transactionViewModel!!.transactionDetails(gbxID!!, txnTypeStr!!, txnSubTypeStr!!)
 
     }
 
@@ -99,11 +112,23 @@ class TransactionDetailsActivity : BaseActivity() {
                     if (transactionDetailsResponse.status.equals(Utils.SUCCESS)) {
                         myApplication?.mCurrentUserData?.transactionData =
                             transactionDetailsResponse.data
-                        if (transactionDetailsResponse.data?.transactionType == Utils.SALE_ORDER) {
-                            showSaleOrderData(transactionDetailsResponse.data)
-                        } else {
-                            showRefundData(transactionDetailsResponse.data)
+
+                        when (transactionDetailsResponse.data?.transactionType) {
+                            Utils.SALE_ORDER -> showSaleOrderData(transactionDetailsResponse.data)
+                            Utils.REFUND -> showRefundData(transactionDetailsResponse.data)
                         }
+                    }
+                }
+
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+
+        transactionViewModel?.logsResponseMutableLiveData?.observe(this) { logsResponseMutableLiveData ->
+            try {
+                if (logsResponseMutableLiveData != null) {
+                    if (logsResponseMutableLiveData.status.equals(Utils.SUCCESS)) {
 
                     }
                 }
@@ -127,17 +152,20 @@ class TransactionDetailsActivity : BaseActivity() {
                 binding.typeNsubtype.setText(data.transactionType + " - " + data.transactionSubtype)
             }
             if (data.purchaseAmount != null) {
-                binding.amount.setText(
-                    Utils.convertTwoDecimal(
-                        data.purchaseAmount!!.replace(
-                            "CYN",
-                            ""
-                        ).trim()
-                    )
-                )
+                binding.amount.text = data.purchaseAmount!!.replace("CYN", "").trim()
             }
+//            if (data.purchaseAmount != null) {
+//                binding.amount.text = (
+//                        Utils.convertTwoDecimal(
+//                            data.purchaseAmount!!.replace(
+//                                "CYN",
+//                                ""
+//                            ).trim()
+//                        )
+//                        )
+//            }
             if (data.status != null) {
-                binding.statusTV.setText(data.status)
+                binding.statusTV.text = (data.status)
 
                 // Activity Logs
                 getActivityLogAPICall()
@@ -162,45 +190,65 @@ class TransactionDetailsActivity : BaseActivity() {
                 }
             }
 
-            if (data.createdDate != null) {
-                binding.tvDate.setText(data.createdDate)
+            if (data.purchaseAmount != null) {
+                binding.tvPurchaseAmt.text = (data.purchaseAmount)
             }
 
-            if (data.purchaseAmount != null) {
-                binding.tvPurchaseAmt.setText(data.purchaseAmount)
+            if (data.createdDate != null) {
+                binding.tvDate.text =
+                    (myApplication?.mCurrentUserData?.convertZoneLatestTxndate(data.createdDate))
             }
 
             if (data.tip != null) {
-                binding.tvTipAmt.setText(data.tip)
+                binding.tvTipAmt.text = (data.tip)
             }
             if (data.totalAmount != null) {
-                binding.tvTotalAmt.setText(data.totalAmount)
+                binding.tvTotalAmt.text = (data.totalAmount)
             }
             if (data.referenceId != null) {
-                binding.refID.setText(data.referenceId)
+                if (data.referenceId!!.length > 10)
+                    binding.refID.text = (data.referenceId)?.substring(0, 10)
+                else
+                    binding.refID.text = (data.referenceId)
             }
             if (data.customerName != null) {
-                binding.custName.setText(data.customerName)
+                binding.custName.text = (data.customerName)
             }
             if (data.customerEmail != null) {
-                binding.tvCustomerEmail.setText(data.customerEmail)
-            }
-            if (data.terminalId != null) {
-                binding.terminalID.setText(data.terminalId!!)
+                binding.tvCustomerEmail.text = (data.customerEmail)
             }
             if (data.employeeName != null) {
-                binding.tvEmpName.setText(data.employeeName)
+                binding.tvEmpName.text = (data.employeeName)
             }
             if (data.employeeId != null) {
-                binding.tvEmpId.setText(data.employeeId!!)
+                binding.tvEmpId.text = (data.employeeId.toString()!!)
             }
+            if (data.terminalId != null) {
+                binding.terminalID.text = data.terminalId.toString()
+            }
+
+            binding.saleRefIDcopyIV.setOnClickListener(View.OnClickListener {
+                Utils.copyText(
+                    data.referenceId, this@TransactionDetailsActivity
+                )
+            })
+            binding.orgRefIDcopyIV.setOnClickListener(View.OnClickListener {
+                Utils.copyText(
+                    data.saleOrderReferenceId, this@TransactionDetailsActivity
+                )
+            })
 
         }
 
     }
 
     private fun getActivityLogAPICall() {
+        if (Utils.checkInternet(this@TransactionDetailsActivity)) {
+            if (txnId != null)
+                if (myApplication?.mCurrentUserData?.UserType == Utils.PERSONAL)
+                    transactionViewModel?.activityLogsDetails(txnId!!, "c")
 
+        }
     }
 
     private fun showRefundData(data: TransactionData?) {
@@ -225,6 +273,12 @@ class TransactionDetailsActivity : BaseActivity() {
                     )
                 )
             }
+
+            if (data.createdDate != null) {
+                binding.tvDate.text =
+                    (myApplication?.mCurrentUserData?.convertZoneLatestTxndate(data.createdDate))
+            }
+
             if (data.status != null) {
                 binding.statusTV.setText(data.status)
 
@@ -251,51 +305,74 @@ class TransactionDetailsActivity : BaseActivity() {
                 }
             }
             if (data.referenceId != null) {
-                binding.refID.setText(data.referenceId)
+                if (data.referenceId!!.length > 10)
+                    binding.refID.text = (data.referenceId)?.substring(0, 10)
+                else
+                    binding.refID.text = (data.referenceId)
             }
 
             if (data.merchantName != null) {
-                binding.nameTV.setText("Merchant Name")
-                binding.custName.setText(data.merchantName)
+                binding.nameTV.text = "Merchant Name"
+                binding.custName.text = (data.merchantName)
             }
 
             if (data.customerServiceEmail != null) {
-                binding.emailTV.setText("Customer Service Email")
-                binding.tvCustomerEmail.setText(data.customerServiceEmail)
+                binding.emailTV.text = "Customer Service Email"
+                binding.tvCustomerEmail.text = (data.customerServiceEmail)
             }
 
             if (data.customerServicePhone != null) {
-                binding.tvCustomerServicePhone.setText(data.customerServicePhone)
+                var phone_number = "(" + data.customerServicePhone!!.substring(0, 3)
+                    .toString() + ")" + " " + data.customerServicePhone!!
+                    .substring(3, 6).toString() + "-" + data.customerServicePhone!!
+                    .substring(6, 10)
+
+                binding.tvCustomerServicePhone.text = phone_number
             }
 
-            if (data.terminalId != null) {
-                binding.terminalID.setText(data.terminalId!!)
-            }
             if (data.employeeName != null) {
-                binding.tvEmpName.setText(data.employeeName)
+                binding.tvEmpName.text = (data.employeeName)
             }
             if (data.employeeId != null) {
-                binding.tvEmpId.setText(data.employeeId!!)
+                binding.tvEmpId.text = (data.employeeId.toString()!!)
             }
-
+            if (data.terminalId != null) {
+                binding.terminalID.text = (data.terminalId.toString()!!)
+            }
             if (data.saleOrderDateAndTime != null) {
-                binding.tvOrgDate.setText(data.saleOrderDateAndTime)
+                binding.tvOrgDate.text =
+                    (myApplication?.mCurrentUserData?.convertZoneLatestTxndate(data.saleOrderDateAndTime))
             }
 
             if (data.saleOrderReferenceId != null) {
-                binding.orgRefId.setText(data.referenceId)
+                if (data.saleOrderReferenceId!!.length > 10)
+                    binding.orgRefId.text = (data.referenceId)?.substring(0, 10)
+                else
+                    binding.orgRefId.text = (data.referenceId)
             }
             if (data.transactionAmount != null) {
-                binding.tvOrgTxnAmt.setText(data.transactionAmount)
+                binding.tvOrgTxnAmt.text = (data.transactionAmount)
             }
 
             if (data.tip != null) {
-                binding.tvOrgTip.setText(data.tip)
+                binding.tvOrgTip.text = (data.tip)
             }
 
             if (data.totalAmount != null) {
-                binding.tvOrgTotal.setText(data.totalAmount)
+                binding.tvOrgTotal.text = (data.totalAmount)
             }
+
+            binding.saleRefIDcopyIV.setOnClickListener(View.OnClickListener {
+                Utils.copyText(
+                    data.referenceId, this@TransactionDetailsActivity
+                )
+            })
+
+            binding.orgRefIDcopyIV.setOnClickListener(View.OnClickListener {
+                Utils.copyText(
+                    data.saleOrderReferenceId, this@TransactionDetailsActivity
+                )
+            })
 
         }
 

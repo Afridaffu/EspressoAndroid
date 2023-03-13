@@ -53,11 +53,11 @@ class DateRangePickerDialog(context: Context) : BaseDialog(context) {
         calendarPicker.scrollToDate(endDate.time)
         if (rangeDates != null) {
             strToDate = rangeDates!!.updatedToDate
-            strFromDate = rangeDates!!.updatedFromDate!!
+            strFromDate = rangeDates!!.updatedFromDate
             strSelectedDate = rangeDates!!.fullDate
             try {
                 startDateD = displayFormatter.parse(strFromDate)
-                endDateD = displayFormatter.parse(strToDate!!)
+                endDateD = displayFormatter.parse(strToDate)
                 showSelectedDate()
                 calendarPicker.setSelectionDate(startDateD!!, endDateD)
                 dialogBinding.doneTV.setTextColor(

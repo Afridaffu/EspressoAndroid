@@ -577,11 +577,11 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
             processFilter(request!!)
 
-            if (transactionType!! > 0 || transactionSubType.size > 0 || txnStatus.size > 0) {
+            if (transactionType != null || transactionSubType.size > 0 || txnStatus.size > 0) {
                 isFilters = true
-                if (transactionType!! > 0) {
-                    request!!.data?.txnType = (transactionType)
-                }
+
+                request!!.data?.txnType = (transactionType)
+
                 if (transactionSubType.size > 0) {
                     request!!.data?.txnSubTypes = (transactionSubType)
                 }

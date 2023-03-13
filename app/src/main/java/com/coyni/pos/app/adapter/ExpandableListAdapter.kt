@@ -83,14 +83,14 @@ class ExpandableListAdapter() : BaseExpandableListAdapter() {
         val viewV = view.findViewById<View>(R.id.viewV)
         parentTextTV.setText(group?.groupItem)
         parentLL.isEnabled = true
-        checkCB.isChecked = group?.isSelected!!
+        group?.isSelected?.let { checkCB.setChecked(it) }
         if (transactionSubTypeData.containsKey(groupId) && transactionSubTypeData[groupId]!!.size > 0) {
             plusImg.visibility = View.VISIBLE
         } else {
             plusImg.visibility = View.GONE
         }
         checkCB.setOnCheckedChangeListener { compoundButton, check ->
-            group.isSelected = (check)
+            group?.isSelected = (check)
             if (!check) {
                 transactionTypeData.get(groups.get(groupPosition))?.isFromTypes = (true)
             }

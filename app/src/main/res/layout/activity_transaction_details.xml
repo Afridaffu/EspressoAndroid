@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_40sdp"
             android:contentDescription="@string/back"
+            android:layout_marginStart="@dimen/_14sdp"
             android:padding="@dimen/_3sdp"
             android:src="@drawable/ic_back"
             app:tint="@color/primary_black" />
@@ -79,7 +80,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_bold"
-                        android:text="100.00"
+                        android:text=""
                         android:textColor="@color/primary_green"
                         android:textSize="@dimen/_24ssp" />
 
@@ -100,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="@string/refund"
+                    android:text=""
                     android:textAlignment="center"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_9ssp" />
@@ -109,6 +110,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_1sdp"
                     android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
                     android:background="@color/light_blue" />
 
                 <LinearLayout
@@ -160,7 +162,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="07/27/2020 10:36:14"
+                        android:text=""
                         android:textAlignment="textEnd"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp" />
@@ -171,7 +173,8 @@
                     android:id="@+id/llSaleOrderData"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -194,7 +197,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="100.00 CYN"
+                            android:text=""
                             android:textAlignment="textEnd"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
@@ -222,7 +225,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="1.00 CYN"
+                            android:text=""
                             android:textAlignment="textEnd"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
@@ -250,7 +253,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="100.00 CYN"
+                            android:text=""
                             android:textAlignment="textEnd"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
@@ -309,11 +312,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="srm1d3hsM734h98"
+                    android:text=""
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
 
                 <ImageView
+                    android:id="@+id/saleRefIDcopyIV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_6sdp"
@@ -330,6 +334,7 @@
                 android:layout_marginTop="@dimen/_16sdp"
                 android:layout_marginBottom="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_bold"
+                android:layout_marginStart="@dimen/_11sdp"
                 android:text="@string/customer_information"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
@@ -363,7 +368,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Jennifer Lopez"
+                        android:text=""
                         android:textAlignment="textEnd"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp" />
@@ -392,7 +397,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Jlopez@gmail.com"
+                        android:text=""
                         android:textAlignment="textEnd"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp" />
@@ -421,7 +426,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="100.00 CYN"
+                        android:text=""
                         android:textAlignment="textEnd"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp" />
@@ -437,6 +442,7 @@
                 android:layout_marginBottom="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="@string/ledger_information"
+                android:layout_marginStart="@dimen/_11sdp"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
@@ -470,7 +476,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="12345678"
+                        android:text=""
                         android:textAlignment="textEnd"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp" />
@@ -498,7 +504,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="[Name Here]"
+                        android:text=""
                         android:textAlignment="textEnd"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp" />
@@ -526,7 +532,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="[Name Here]"
+                        android:text=""
                         android:textAlignment="textEnd"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp" />
@@ -547,6 +553,7 @@
                     android:layout_marginTop="@dimen/_16sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_bold"
+                    android:layout_marginStart="@dimen/_11sdp"
                     android:text="@string/original_transaction_details"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_12ssp" />
@@ -579,7 +586,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="07/27/2020 10:36:14"
+                            android:text=""
                             android:textAlignment="textEnd"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
@@ -607,11 +614,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="srm1d3hsM734h98"
+                            android:text=""
                             android:textColor="@color/primary_green"
                             android:textSize="@dimen/_11ssp" />
 
                         <ImageView
+                            android:id="@+id/orgRefIDcopyIV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_6sdp"
@@ -642,7 +650,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="100.00 CYN"
+                            android:text=""
                             android:textAlignment="textEnd"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
@@ -670,7 +678,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="1.00 CYN"
+                            android:text=""
                             android:textAlignment="textEnd"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
@@ -698,7 +706,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="100.00 CYN"
+                            android:text=""
                             android:textAlignment="textEnd"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
@@ -721,6 +729,7 @@
                     android:layout_marginBottom="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_bold"
                     android:text="@string/activity_log"
+                    android:layout_marginStart="@dimen/_11sdp"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_12ssp" />
 
