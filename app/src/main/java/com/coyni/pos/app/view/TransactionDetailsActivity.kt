@@ -28,7 +28,7 @@ class TransactionDetailsActivity : BaseActivity() {
     private val partial = "partial"
     var myApplication: MyApplication? = null
     var txnId: Int? = null
-
+    lateinit var saleOrderAmount: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,7 +152,15 @@ class TransactionDetailsActivity : BaseActivity() {
                 binding.typeNsubtype.setText(data.transactionType + " - " + data.transactionSubtype)
             }
             if (data.purchaseAmount != null) {
-                binding.amount.text = data.purchaseAmount!!.replace("CYN", "").trim()
+                saleOrderAmount = Utils.convertTwoDecimal(
+                    data.purchaseAmount.toString().replace(
+                        "CYN",
+                        "")
+                    ).replace(
+                    "$",
+                    "".trim()
+                )
+                binding.amount.text = saleOrderAmount
             }
 //            if (data.purchaseAmount != null) {
 //                binding.amount.text = (
@@ -238,6 +246,13 @@ class TransactionDetailsActivity : BaseActivity() {
                 )
             })
 
+        }
+        binding.ivRefund.setOnClickListener {
+            startActivity(
+                Intent(this, RefundTransactionActivity::class.java)
+                    .putExtra(Utils.SALE_ORDER_AMOUNT, saleOrderAmount)
+                    .putExtra(Utils.GBX_ID, gbxID)
+            )
         }
 
     }

@@ -1,5 +1,6 @@
 package com.coyni.pos.app.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.TransactionFailedBinding
 import com.coyni.pos.app.utils.Utils
+import com.coyni.pos.app.view.RefundTransactionActivity
 
 
 class TransactionFailedFragment : BaseFragment() {
@@ -32,6 +34,11 @@ class TransactionFailedFragment : BaseFragment() {
     }
 
     private fun refundFailed() {
-
+        binding.cvTryAgain.setOnClickListener {
+            startActivity(
+                Intent(requireContext(), RefundTransactionActivity::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            )
+        }
     }
 }
