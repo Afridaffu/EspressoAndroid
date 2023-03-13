@@ -146,12 +146,12 @@ class CustomKeyboard : LinearLayout, View.OnClickListener {
     }
 
     fun enableButton() {
-        binding.keyActionLL.setBackgroundColor(resources.getColor(R.color.primary_green))
+        binding.keyActionLL.setBackgroundResource(R.drawable.custom_keyboard_action_btn_enable_bg)
         binding.keyActionLL.setEnabled(true)
     }
 
     fun disableButton() {
-        binding.keyActionLL.setBackgroundColor(resources.getColor(R.color.inactive_green))
+        binding.keyActionLL.setBackgroundResource(R.drawable.custom_keyboard_action_btn_disable_bg)
         binding.keyActionLL.setEnabled(false)
     }
 
