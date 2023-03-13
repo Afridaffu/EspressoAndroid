@@ -73,6 +73,7 @@ class CustomKeyboard : LinearLayout, View.OnClickListener {
         binding.keyNineTV.setOnClickListener(this)
         binding.keyZeroTV.setOnClickListener(this)
         binding.keyDotTV.setOnClickListener(this)
+
         binding.keyActionLL.setOnClickListener(OnClickListener {
             if (listener != null) {
                 listener.onKeyboardClick(Utils.BUTTON_CLICK, "")
@@ -146,12 +147,12 @@ class CustomKeyboard : LinearLayout, View.OnClickListener {
     }
 
     fun enableButton() {
-        binding.keyActionLL.setBackgroundColor(resources.getColor(R.color.primary_green))
+        binding.keyActionLL.setBackgroundResource(R.drawable.custom_keyboard_action_btn_enable_bg)
         binding.keyActionLL.setEnabled(true)
     }
 
     fun disableButton() {
-        binding.keyActionLL.setBackgroundColor(resources.getColor(R.color.inactive_green))
+        binding.keyActionLL.setBackgroundResource(R.drawable.custom_keyboard_action_btn_disable_bg)
         binding.keyActionLL.setEnabled(false)
     }
 

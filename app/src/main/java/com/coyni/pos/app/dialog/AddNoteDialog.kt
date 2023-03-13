@@ -17,11 +17,12 @@ class AddNoteDialog(context: Context, private val reason: String) : BaseDialog(c
         dialogBinding = AddNoteBinding.bind(findViewById(R.id.root))
 
         if (!Utils.isKeyboardVisible) {
-//            dialogBinding.addNoteET.requestFocus()
+            dialogBinding.addNoteET.requestFocus()
             Utils.shwForcedKeypad(context, dialogBinding.addNoteET)
         }
         if (reason != null) {
             dialogBinding.addNoteET.setText(reason)
+            dialogBinding.addNoteTIL.setCounterEnabled(true)
         }
         dialogBinding.cancelBtn.setOnClickListener {
             dismiss()
