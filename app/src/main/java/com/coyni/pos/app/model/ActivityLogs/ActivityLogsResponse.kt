@@ -4,6 +4,6 @@ import com.coyni.pos.app.model.BaseResponse
 
 data class ActivityLogsResponse(
 
-    var data : ActivityLogsResponseData? = null
+    var data : List<ActivityLogsResponseData>? = null
 
 ): BaseResponse()
