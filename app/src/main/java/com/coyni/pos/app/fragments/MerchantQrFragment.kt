@@ -63,7 +63,7 @@ class MerchantQrFragment : BaseFragment() {
         Utils.qrUniqueCode = myApplication!!.mCurrentUserData.generateQrResponseData?.uniqueId
 
         Handler().postDelayed({
-            binding.amountTV.text = amount
+            binding.amountTV.text = amount.toString().replace("$", "")
             binding.qrLL.visibility = View.VISIBLE
             binding.animationRL.visibility = View.GONE
             binding.discardSaleLL.setBackgroundResource(R.drawable.bg_greencolor_filled)
