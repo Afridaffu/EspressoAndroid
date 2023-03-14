@@ -3,7 +3,6 @@ package com.coyni.pos.app.dialog
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseDialog
 import com.coyni.pos.app.databinding.AddNoteBinding
@@ -18,11 +17,16 @@ class AddNoteDialog(context: Context, private val reason: String) : BaseDialog(c
 
         if (!Utils.isKeyboardVisible) {
             dialogBinding.addNoteET.requestFocus()
-            Utils.shwForcedKeypad(context, dialogBinding.addNoteET)
+            Utils.shwForcedKeypad(context.applicationContext, dialogBinding.addNoteET)
         }
-        if (reason != null) {
+        if (reason != null || reason != "") {
             dialogBinding.addNoteET.setText(reason)
-            dialogBinding.addNoteTIL.setCounterEnabled(true)
+            if (reason.length > 0) {
+                dialogBinding.addNoteTIL.setCounterEnabled(true)
+                dialogBinding.addNoteET.setSelection(dialogBinding.addNoteET.text!!.length)
+            } else {
+                dialogBinding.addNoteTIL.setCounterEnabled(false)
+            }
         }
         dialogBinding.cancelBtn.setOnClickListener {
             dismiss()
@@ -35,15 +39,19 @@ class AddNoteDialog(context: Context, private val reason: String) : BaseDialog(c
             dismiss()
         }
 
-        dialogBinding.addNoteTIL.isCounterEnabled = false
-
         dialogBinding.addNoteET.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                if (charSequence.length == 0) {
+                if (charSequence.length == 0 || charSequence.toString() == "") {
                     dialogBinding.addNoteTIL.setCounterEnabled(false)
                 } else {
                     dialogBinding.addNoteTIL.setCounterEnabled(true)
+                }
+                if (dialogBinding.addNoteET.text.toString().contains("  ")) {
+                    dialogBinding.addNoteET.setText(
+                        dialogBinding.addNoteET.text.toString().replace("  ", " ")
+                    )
+                    dialogBinding.addNoteET.setSelection(dialogBinding.addNoteET.text!!.length)
                 }
             }
 

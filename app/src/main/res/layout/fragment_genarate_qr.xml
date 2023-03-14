@@ -30,8 +30,12 @@
                 android:hint="0.00"
                 android:inputType="numberDecimal"
                 android:maxLength="@string/maxlength"
+                android:textIsSelectable="false"
+                android:clickable="false"
+                android:longClickable="false"
+                android:autofillHints="creditCardSecurityCode"
                 android:textColor="@color/white"
-                android:cursorVisible="true"
+                android:cursorVisible="false"
                 android:textColorHint="@color/white"
                 android:textCursorDrawable="@drawable/cursor_color_white"
                 android:textSize="@dimen/_53ssp" />
