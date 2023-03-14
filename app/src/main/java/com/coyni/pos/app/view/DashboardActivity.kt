@@ -58,13 +58,14 @@ class DashboardActivity : BaseActivity() {
         binding.businessNameTV.text =
             myApplication?.mCurrentUserData?.loginData?.companyName
 
-
-        val utility: DisplayImageUtility? = DisplayImageUtility.getInstance(applicationContext)
-        utility?.addImage(
-            myApplication?.mCurrentUserData?.loginData?.image as String,
-            binding.ivUserProfile, R.drawable.dba_img
-        )
-
+        if(myApplication?.mCurrentUserData?.loginData?.image != null) {
+            val utility: DisplayImageUtility? = DisplayImageUtility.getInstance(applicationContext)
+            utility?.addImage(
+                myApplication?.mCurrentUserData?.loginData?.image as String,
+                binding.ivUserProfile,
+                R.drawable.dba_img
+            )
+        }
         if (myApplication?.mCurrentUserData?.loginData?.image != null) {
             binding.ivUserProfile.visibility = View.VISIBLE
             binding.tvUserName.visibility = View.GONE
