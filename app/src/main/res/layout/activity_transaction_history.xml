@@ -47,7 +47,7 @@
                     android:id="@+id/terminalID"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:text="TID: 12345678"
                     android:textAlignment="center"
