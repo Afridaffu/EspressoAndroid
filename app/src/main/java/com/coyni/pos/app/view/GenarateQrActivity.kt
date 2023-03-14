@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.View
+import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.AppBarConfiguration
@@ -75,17 +76,35 @@ class GenarateQrActivity : BaseActivity() {
 
     override fun onBackPressed() {
         if (myApplication.mCurrentUserData.generateQrResponseData?.uniqueId == null || myApplication.mCurrentUserData.generateQrResponseData!!.uniqueId == "") {
-            generateQrViewModel.exitSaleRequest(myApplication.mCurrentUserData.validateResponseData?.token)
+            if (binding.hiddenView.visibility == VISIBLE) {
+                TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
+                binding.consLL.setBackgroundResource(R.color.hidden_view_color)
+                binding.hiddenView.visibility = View.GONE
+                binding.cvProfileSmall.visibility = View.VISIBLE
+                binding.dbaNameTV.visibility = View.VISIBLE
+                binding.arrowButton.setImageResource(R.drawable.ic_feather_menu)
+            } else {
+                generateQrViewModel.exitSaleRequest(myApplication.mCurrentUserData.validateResponseData?.token)
+            }
         } else {
-            val discardSaleDialog = DiscardSaleDialog(this)
-            discardSaleDialog.show()
-            discardSaleDialog.setOnDialogClickListener(object : OnDialogClickListener {
-                override fun onDialogClicked(action: String?, value: Any?) {
-                    if (action == Utils.DISCARD) {
-                        disCardSale()
+            if (binding.hiddenView.visibility == VISIBLE) {
+                TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
+                binding.consLL.setBackgroundResource(R.drawable.dash_bottom_radius)
+                binding.hiddenView.visibility = View.GONE
+                binding.cvProfileSmall.visibility = View.VISIBLE
+                binding.dbaNameTV.visibility = View.VISIBLE
+                binding.arrowButton.setImageResource(R.drawable.ic_feather_menu)
+            } else {
+                val discardSaleDialog = DiscardSaleDialog(this)
+                discardSaleDialog.show()
+                discardSaleDialog.setOnDialogClickListener(object : OnDialogClickListener {
+                    override fun onDialogClicked(action: String?, value: Any?) {
+                        if (action == Utils.DISCARD) {
+                            disCardSale()
+                        }
                     }
-                }
-            })
+                })
+            }
         }
     }
 

@@ -45,6 +45,9 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         generateQrViewModel = ViewModelProvider(this).get(GenerateQrViewModel::class.java)
         myApplication = requireActivity().application as MyApplication
         fontSize = binding.merchantAmountET.textSize
+        binding.merchantAmountET.requestFocus()
+        binding.merchantAmountET.setShowSoftInputOnFocus(false)
+        binding.merchantAmountET.setSelected(false)
         initKeyboard()
         binding.merchantAmountET.showSoftInputOnFocus = false
         binding.merchantAmountET.textDirection = View.TEXT_DIRECTION_RTL
