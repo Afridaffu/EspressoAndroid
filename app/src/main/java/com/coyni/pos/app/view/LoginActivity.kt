@@ -268,45 +268,24 @@ class LoginActivity : BaseActivity() {
 
     private fun initObserver() {
         loinViewModel?.loginResponseMutableLiveData?.observe(this@LoginActivity) { response ->
-
+            dismissDialog()
             if (response != null && response.status.equals(Utils.SUCCESS)) {
                 Utils.strAuth = response.data?.jwtToken
                 myApplication.mCurrentUserData.loginData = response.data!!
                 Utils.hideKeypad(this@LoginActivity)
                 if (response.data?.status.equals(Utils.DEACTIVATED, true)) {
-                    dismissDialog()
                     showTerminalScreen()
                 } else {
-                    if (response.data!!.image == null) {
-                        dismissDialog()
-                        startActivity(
-                            Intent(applicationContext, DashboardActivity::class.java).setFlags(
-                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            )
+                    startActivity(
+                        Intent(applicationContext, DashboardActivity::class.java).setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         )
-                    } else {
-                        val imgUrl: String = response.data!!.image.toString()
-                        val urlList = ArrayList<DownloadUrlRequest>()
-                        urlList.add(DownloadUrlRequest(imgUrl))
-                        loinViewModel!!.downloadUrl(urlList)
-                    }
+                    )
                 }
 
             } else {
-                dismissDialog()
                 showDialog()
             }
-        }
-        loinViewModel?.downloadUrlResponseMutableLiveData?.observe(this@LoginActivity) { response ->
-            dismissDialog()
-            if (response != null && response.status.equals(Utils.SUCCESS)) {
-                myApplication.mCurrentUserData.downloadUrlData = response.data
-            }
-            startActivity(
-                Intent(applicationContext, DashboardActivity::class.java).setFlags(
-                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                )
-            )
         }
     }
 
