@@ -92,25 +92,26 @@
 
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/userProfileCV"
-                                android:layout_width="@dimen/_36sdp"
-                                android:layout_height="@dimen/_36sdp"
+                                android:layout_width="@dimen/_41sdp"
+                                android:layout_height="@dimen/_41sdp"
                                 android:layout_alignParentEnd="true"
                                 android:layout_gravity="center"
                                 app:cardBackgroundColor="@color/zxing_transparent"
-                                app:cardCornerRadius="@dimen/_18sdp"
+                                app:cardCornerRadius="@dimen/_21sdp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent">
 
 
-                                <ImageView
+                                <com.google.android.material.imageview.ShapeableImageView
                                     android:id="@+id/ivUserProfile"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="fitXY"
                                     android:src="@drawable/dba_img"
-                                    android:visibility="visible" />
+                                    android:visibility="visible"
+                                    app:shapeAppearanceOverlay="@style/ImageViewRounded" />
 
                                 <TextView
                                     android:id="@+id/tvUserName"
@@ -123,12 +124,7 @@
                                     android:textSize="@dimen/_14sdp"
                                     android:visibility="gone" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:scaleType="fitXY"
-                                    android:src="@drawable/dashboardimg" />
+
                             </androidx.cardview.widget.CardView>
 
 
@@ -157,10 +153,10 @@
                         android:id="@+id/hidden_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone"
                         android:layout_marginTop="@dimen/_110sdp"
                         android:background="@color/primary_dark_green"
+                        android:orientation="vertical"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

@@ -46,9 +46,9 @@ class LoginActivity : BaseActivity() {
         if (!isKeyboardVisible)
             Utils.shwForcedKeypad(this, binding.tidET)
 
-//        //Static data remove later
-//        setLoginData()
-//        //Static data remove later
+        //Static data remove later
+        setLoginData()
+        //Static data remove later
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -322,13 +322,13 @@ class LoginActivity : BaseActivity() {
         val errorDialog = ErrorDialog(this@LoginActivity)
         errorDialog.show()
     }
-//    //Static data remove later
-//    private fun setLoginData() {
-//        isId = true
-//        isPassword = true
-//        binding.tidET.setText("1007160318")
-//        binding.passwordET.setText("Admin@123")
-//        enableButton()
-//    }
-//    //Static data remove later
+    //Static data remove later
+    private fun setLoginData() {
+        isId = true
+        isPassword = true
+        binding.tidET.setText("1024771193")
+        binding.passwordET.setText("Admin@123")
+        enableButton()
+    }
+    //Static data remove later
 }
