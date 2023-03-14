@@ -103,6 +103,9 @@ class MerchantQrFragment : BaseFragment() {
                     if (discardSaleResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId == null
                         val intent = Intent(requireContext(), DashboardActivity::class.java)
+                        intent.setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        )
                         startActivity(intent)
                         requireActivity().finish()
                     } else {
@@ -147,7 +150,6 @@ class MerchantQrFragment : BaseFragment() {
                 Log.e("authorization: ", Utils.strAuth.toString())
                 val jsonObject = JSONObject()
                 jsonObject.put("authorization", Utils.strAuth.toString())
-//                jsonObject.put("code", Utils.qrUniqueCode)
                 jsonObject.put("checkoutCode", Utils.qrUniqueCode)
                 Log.e("jsonObject", jsonObject.toString())
                 webSocket.send(jsonObject.toString())
@@ -194,7 +196,7 @@ class MerchantQrFragment : BaseFragment() {
                         ) {
                             startActivity(
                                 Intent(
-                                    requireContext(), SucessFlowActivity::class.java
+                                    requireContext(), StatusFailedActivity::class.java
                                 ).putExtra(Utils.STATUS, obj.getString("txnStatus"))
                             )
                         } else if (obj.getString("txnStatus").equals(Utils.COMPLETED, true)) {
