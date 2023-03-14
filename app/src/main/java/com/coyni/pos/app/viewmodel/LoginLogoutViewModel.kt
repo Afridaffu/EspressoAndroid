@@ -20,7 +20,6 @@ import java.lang.reflect.Type
 class LoginLogoutViewModel(application: Application) : AndroidViewModel(application) {
     val loginResponseMutableLiveData = MutableLiveData<LoginResponse?>()
     val logoutResponseMutableLiveData = MutableLiveData<LogoutResponse?>()
-    val downloadUrlResponseMutableLiveData = MutableLiveData<DownloadUrlResponse?>()
 
     fun getLoginData(request: LoginRequest?) {
         val apiService: ApiService = AuthApiClient.instance.create(ApiService::class.java)
@@ -72,34 +71,6 @@ class LoginLogoutViewModel(application: Application) : AndroidViewModel(applicat
 
             override fun onFailure(call: Call<LogoutResponse>, t: Throwable) {
                 logoutResponseMutableLiveData.value = null
-            }
-
-        })
-    }
-
-    fun downloadUrl(request: ArrayList<DownloadUrlRequest>) {
-        val apiService: ApiService = AuthApiClient.instance.create(ApiService::class.java)
-        val call: Call<DownloadUrlResponse> = apiService.downloadUrl(request)
-        call.enqueue(object : Callback<DownloadUrlResponse> {
-
-            override fun onResponse(
-                call: Call<DownloadUrlResponse>,
-                response: Response<DownloadUrlResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val listResponse: DownloadUrlResponse? = response.body()
-                    downloadUrlResponseMutableLiveData.value = listResponse
-                } else {
-                    val gson = Gson()
-                    val type: Type = object : TypeToken<DownloadUrlResponse>() {}.type
-                    val errorResponse: DownloadUrlResponse =
-                        gson.fromJson(response.errorBody()?.string(), type)
-                    downloadUrlResponseMutableLiveData.value = errorResponse
-                }
-            }
-
-            override fun onFailure(call: Call<DownloadUrlResponse>, t: Throwable) {
-                downloadUrlResponseMutableLiveData.value = null
             }
 
         })
