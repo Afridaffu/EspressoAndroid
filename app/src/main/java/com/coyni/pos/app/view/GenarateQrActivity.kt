@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.View
+import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.AppBarConfiguration
+import com.bumptech.glide.Glide
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityGenarateQrBinding
@@ -19,6 +21,7 @@ import com.coyni.pos.app.model.discard.DiscardSaleRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.GenerateQrViewModel
+import java.util.*
 
 class GenarateQrActivity : BaseActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -45,8 +48,11 @@ class GenarateQrActivity : BaseActivity() {
         generateQr()
 //        merchantQr()
         binding.exitLL.setOnClickListener {
-            val dialog = Utils.exitSaleModeDialog(this)
-            generateQrViewModel.exitSaleRequest(myApplication.mCurrentUserData.validateResponseData?.token)
+            try {
+                val dialog = Utils.exitSaleModeDialog(this)
+                generateQrViewModel.exitSaleRequest(myApplication.mCurrentUserData.validateResponseData?.token)
+            } catch (e: Exception) {
+            }
         }
     }
 
@@ -74,28 +80,52 @@ class GenarateQrActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (myApplication.mCurrentUserData.generateQrResponseData?.uniqueId == null || myApplication.mCurrentUserData.generateQrResponseData!!.uniqueId == "") {
-            generateQrViewModel.exitSaleRequest(myApplication.mCurrentUserData.validateResponseData?.token)
-        } else {
-            val discardSaleDialog = DiscardSaleDialog(this)
-            discardSaleDialog.show()
-            discardSaleDialog.setOnDialogClickListener(object : OnDialogClickListener {
-                override fun onDialogClicked(action: String?, value: Any?) {
-                    if (action == Utils.DISCARD) {
-                        disCardSale()
-                    }
+        try {
+            if (myApplication.mCurrentUserData.generateQrResponseData?.uniqueId == null || myApplication.mCurrentUserData.generateQrResponseData!!.uniqueId == "") {
+                if (binding.hiddenView.visibility == VISIBLE) {
+                    TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
+                    binding.consLL.setBackgroundResource(R.color.hidden_view_color)
+                    binding.hiddenView.visibility = View.GONE
+                    binding.cvProfileSmall.visibility = View.VISIBLE
+                    binding.dbaNameTV.visibility = View.VISIBLE
+                    binding.arrowButton.setImageResource(R.drawable.ic_feather_menu)
+                } else {
+                    generateQrViewModel.exitSaleRequest(myApplication.mCurrentUserData.validateResponseData?.token)
                 }
-            })
+            } else {
+                if (binding.hiddenView.visibility == VISIBLE) {
+                    TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
+                    binding.consLL.setBackgroundResource(R.drawable.dash_bottom_radius)
+                    binding.hiddenView.visibility = View.GONE
+                    binding.cvProfileSmall.visibility = View.VISIBLE
+                    binding.dbaNameTV.visibility = View.VISIBLE
+                    binding.arrowButton.setImageResource(R.drawable.ic_feather_menu)
+                } else {
+                    val discardSaleDialog = DiscardSaleDialog(this)
+                    discardSaleDialog.show()
+                    discardSaleDialog.setOnDialogClickListener(object : OnDialogClickListener {
+                        override fun onDialogClicked(action: String?, value: Any?) {
+                            if (action == Utils.DISCARD) {
+                                disCardSale()
+                            }
+                        }
+                    })
+                }
+            }
+        } catch (e: Exception) {
         }
     }
 
     private fun disCardSale() {
-        val discardSaleRequest = DiscardSaleRequest()
-        discardSaleRequest.requestToken =
-            myApplication?.mCurrentUserData?.validateResponseData?.token
-        discardSaleRequest.uniqueId =
-            myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId
-        generateQrViewModel.discardSaleRequest(discardSaleRequest)
+        try {
+            val discardSaleRequest = DiscardSaleRequest()
+            discardSaleRequest.requestToken =
+                myApplication?.mCurrentUserData?.validateResponseData?.token
+            discardSaleRequest.uniqueId =
+                myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId
+            generateQrViewModel.discardSaleRequest(discardSaleRequest)
+        } catch (e: Exception) {
+        }
     }
 
     private fun merchantQr() {
@@ -192,6 +222,15 @@ class GenarateQrActivity : BaseActivity() {
         binding.dbaNameTV.setText(dbaName)
         binding.currentEmployeeTV.setText(currentEmployee)
         binding.terminalNameTV.setText(terminalName)
-    }
 
+        if (myApplication.mCurrentUserData.loginData?.image != null) {
+            binding.ivUserProfile.visibility = View.VISIBLE
+            Glide.with(this)
+                .load(myApplication!!.mCurrentUserData.downloadUrlData?.get(0)!!.downloadUrl)
+                .into(binding.ivUserProfile)
+        } else {
+            binding.ivUserProfile.visibility = View.VISIBLE
+            binding.ivUserProfile.setImageResource(R.drawable.dba_img)
+        }
+    }
 }

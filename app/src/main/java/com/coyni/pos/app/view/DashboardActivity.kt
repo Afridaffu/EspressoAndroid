@@ -15,9 +15,13 @@ import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityDashboardBinding
 import com.coyni.pos.app.fragments.Dashboard_frag
+import com.coyni.pos.app.utils.DisplayImageUtility
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.LoginLogoutViewModel
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.CornerSize
+import com.google.android.material.shape.ShapeAppearanceModel
 import java.util.*
 
 class DashboardActivity : BaseActivity() {
@@ -39,6 +43,7 @@ class DashboardActivity : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun initFields() {
+
         myApplication = applicationContext as MyApplication?
         logoutViewModel =
             ViewModelProvider(this@DashboardActivity)[LoginLogoutViewModel::class.java]
@@ -53,12 +58,16 @@ class DashboardActivity : BaseActivity() {
         binding.businessNameTV.text =
             myApplication?.mCurrentUserData?.loginData?.companyName
 
+
+        val utility: DisplayImageUtility? = DisplayImageUtility.getInstance(applicationContext)
+        utility?.addImage(
+            myApplication?.mCurrentUserData?.loginData?.image as String,
+            binding.ivUserProfile, R.drawable.dba_img
+        )
+
         if (myApplication?.mCurrentUserData?.loginData?.image != null) {
             binding.ivUserProfile.visibility = View.VISIBLE
             binding.tvUserName.visibility = View.GONE
-            Glide.with(this)
-                .load(myApplication!!.mCurrentUserData.downloadUrlData?.get(0)!!.downloadUrl)
-                .into(binding.ivUserProfile)
 
         } else {
             binding.ivUserProfile.visibility = View.GONE

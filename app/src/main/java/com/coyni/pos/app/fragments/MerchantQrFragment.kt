@@ -269,11 +269,17 @@ class MerchantQrFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        webSocketGlobal!!.close(1000, null)
+        try {
+            webSocketGlobal!!.close(1000, null)
+        } catch (e: Exception) {
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        if (webSocketUrl != "") startWebSocket(webSocketUrl)
+        try {
+            if (webSocketUrl != "") startWebSocket(webSocketUrl)
+        } catch (e: Exception) {
+        }
     }
 }
