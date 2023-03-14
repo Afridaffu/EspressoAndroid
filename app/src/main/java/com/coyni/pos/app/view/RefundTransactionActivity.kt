@@ -69,6 +69,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
 //        grossAmount = 500.0
         fontSize = binding.refundAmountET.textSize
         binding.refundAmountET.showSoftInputOnFocus = false
+        binding.refundAmountET.isCursorVisible = true
+        binding.refundAmountET.isSelected = false
         binding.refundAmountET.textDirection = View.TEXT_DIRECTION_RTL
         binding.refundAmountET.addTextChangedListener(this)
         binding.RefundbackIV.setOnClickListener {

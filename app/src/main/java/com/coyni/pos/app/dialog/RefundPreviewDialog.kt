@@ -27,20 +27,40 @@ class RefundPreviewDialog(
         dialogBinding = RefundPreviewBinding.bind(findViewById(R.id.root))
         myApplication = context.applicationContext as MyApplication
         dialogBinding.tvProcessingFee.text =
-            Utils.convertTwoDecimal(myApplication.mCurrentUserData.refundResponseData?.processingFee.toString()).replace("$","")
+            Utils.convertTwoDecimal(myApplication.mCurrentUserData.refundResponseData?.processingFee.toString())
+                .replace("$", "") + " CYN"
+        if (myApplication.mCurrentUserData.refundResponseData!!.referenceId != null) {
+            if (myApplication.mCurrentUserData.refundResponseData!!.referenceId?.length!! > 10) {
+                dialogBinding.customerAddressTV.text =
+                    myApplication.mCurrentUserData.refundResponseData!!.referenceId!!.substring(
+                        0,
+                        10
+                    ) + "..."
+            } else {
+                dialogBinding.customerAddressTV.text =
+                    myApplication.mCurrentUserData.refundResponseData!!.referenceId.toString()
+            }
+        }
+        dialogBinding.copyCustomerAddressLL.setOnClickListener {
+            Utils.copyText(
+                myApplication.mCurrentUserData.refundResponseData!!.referenceId,
+                context.applicationContext
+            )
+        }
         dialogBinding.customerAddressTV.text =
             myApplication.mCurrentUserData.refundResponseData!!.referenceId.toString()
         dialogBinding.amountPayTV.text = Utils.convertTwoDecimal(
             refundAmount.toString()
-        ).replace("$","")
+        ).replace("$", "")
         processingFee =
             Utils.doubleParsing(myApplication.mCurrentUserData.refundResponseData?.processingFee.toString())
         refundAmpount = Utils.doubleParsing(refundAmount.toString())
         total = processingFee + refundAmpount
-        dialogBinding.tvTotal.text = Utils.convertTwoDecimal(total.toString()).replace("$","")
+        dialogBinding.tvTotal.text =
+            Utils.convertTwoDecimal(total.toString()).replace("$", "") + " CYN"
         dialogBinding.messageNoteTV.text = reason
         dialogBinding.infoIV.setOnClickListener {
-            dialogBinding.viewFeesTextLL.visibility = VISIBLE
+//            dialogBinding.viewFeesTextLL.visibility = VISIBLE
         }
         dialogBinding.customerNameTV.text =
             myApplication.mCurrentUserData.transactionData?.customerName.toString()

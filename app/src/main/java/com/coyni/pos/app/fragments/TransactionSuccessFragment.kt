@@ -45,6 +45,7 @@ class TransactionSuccessFragment : BaseFragment() {
         binding.doneCV.setOnClickListener {
             try {
                 val intent = Intent(requireContext(), TransactionDetailsActivity::class.java)
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.putExtra(
                     Utils.gbxTxnId,
                     myApplication?.mCurrentUserData?.transactionData?.referenceId

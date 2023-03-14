@@ -46,8 +46,8 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         myApplication = requireActivity().application as MyApplication
         fontSize = binding.merchantAmountET.textSize
         binding.merchantAmountET.requestFocus()
-        binding.merchantAmountET.setShowSoftInputOnFocus(false)
-        binding.merchantAmountET.setSelected(false)
+        binding.merchantAmountET.isSelected = false
+//        binding.merchantAmountET.isCursorVisible = true
         initKeyboard()
         binding.merchantAmountET.showSoftInputOnFocus = false
         binding.merchantAmountET.textDirection = View.TEXT_DIRECTION_RTL
@@ -66,6 +66,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
             binding.merchantAmountET.hint = "0.00"
             binding.merchantAmountET.setText("")
             disableButtons(true)
+//            binding.merchantAmountET.isCursorVisible = true
         }
     }
 

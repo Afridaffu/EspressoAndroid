@@ -186,7 +186,7 @@
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/opensans_regular"
                                         android:text=" CYN"
-                                        android:textColor="@color/balance_text_color"
+                                        android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_11ssp"
                                         android:visibility="visible" />
 
@@ -208,7 +208,7 @@
                                         android:layout_marginHorizontal="@dimen/_4sdp"
                                         android:layout_weight="1"
                                         android:background="@drawable/button_bg_lightgray_core"
-                                        android:fontFamily="@font/opensans_bold"
+                                        android:fontFamily="@font/opensans_semibold"
                                         android:paddingTop="@dimen/_8sdp"
                                         android:paddingBottom="@dimen/_8sdp"
                                         android:text="@string/full_amount"
@@ -223,7 +223,7 @@
                                         android:layout_marginHorizontal="@dimen/_4sdp"
                                         android:layout_weight="1"
                                         android:background="@drawable/button_bg_lightgray_core"
-                                        android:fontFamily="@font/opensans_bold"
+                                        android:fontFamily="@font/opensans_semibold"
                                         android:paddingTop="@dimen/_8sdp"
                                         android:paddingBottom="@dimen/_8sdp"
                                         android:text="1/2 Amount"
