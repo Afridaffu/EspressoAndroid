@@ -69,6 +69,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
 //        grossAmount = 500.0
         fontSize = binding.refundAmountET.textSize
         binding.refundAmountET.showSoftInputOnFocus = false
+        binding.refundAmountET.isCursorVisible = true
+        binding.refundAmountET.isSelected = false
         binding.refundAmountET.textDirection = View.TEXT_DIRECTION_RTL
         binding.refundAmountET.addTextChangedListener(this)
         binding.RefundbackIV.setOnClickListener {
@@ -190,16 +192,25 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                 if (refundResponse != null) {
                     dismissDialog()
                     if (refundResponse.status == Utils.SUCCESS) {
-                        myApplication?.mCurrentUserData?.refundResponseData = refundResponse.data
-                        val intent = Intent(this, TransactionStatusActivity::class.java)
-                        intent.putExtra(Utils.SCREEN, Utils.REFUND)
-                        intent.putExtra(Utils.STATUS, Utils.SUCCESS)
-                        intent.putExtra(
-                            Utils.REFUNDED_AMOUNT,
-                            Utils.convertTwoDecimal(binding.refundAmountET.text.toString())
-                                .replace("$", "")
-                        )
-                        startActivity(intent)
+                        if (refundResponse.data?.referenceId != null || refundResponse.data?.referenceId != "") {
+                            myApplication?.mCurrentUserData?.refundResponseData =
+                                refundResponse.data
+                            val intent = Intent(this, TransactionStatusActivity::class.java)
+                            intent.putExtra(Utils.SCREEN, Utils.REFUND)
+                            intent.putExtra(Utils.STATUS, Utils.SUCCESS)
+                            intent.putExtra(
+                                Utils.REFUNDED_AMOUNT,
+                                Utils.convertTwoDecimal(binding.refundAmountET.text.toString())
+                                    .replace("$", "")
+                            )
+                            startActivity(intent)
+                        } else {
+                            Utils.displayAlert(
+                                refundResponse.error?.errorDescription.toString(),
+                                this,
+                                ""
+                            )
+                        }
                     } else {
                         Utils.displayAlert(
                             refundResponse.error?.errorDescription.toString(),

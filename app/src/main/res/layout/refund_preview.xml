@@ -120,7 +120,7 @@
             android:textSize="@dimen/_11ssp" />
 
         <LinearLayout
-            android:id="@+id/copyRecipientLL"
+            android:id="@+id/copyCustomerAddressLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.2"
@@ -164,7 +164,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_regular"
                 android:text="Processing Fee"
                 android:textColor="@color/dark_gray"
@@ -236,7 +235,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_21sdp"
-        android:layout_marginTop="@dimen/_17sdp"
+        android:layout_marginTop="@dimen/_12sdp"
         android:orientation="horizontal">
 
         <TextView
@@ -256,7 +255,7 @@
             android:fontFamily="@font/opensans_bold"
             android:gravity="right"
             android:text=""
-            android:textColor="@color/primary_black"
+            android:textColor="@color/primary_green"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
@@ -288,13 +287,12 @@
 
         <TextView
             android:id="@+id/messageNoteTV"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_regular"
             android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text=""
+            android:gravity="end"
+            android:text="guyggjghjghgh"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
     </LinearLayout>
