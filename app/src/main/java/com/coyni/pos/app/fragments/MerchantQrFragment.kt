@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +38,7 @@ class MerchantQrFragment : BaseFragment() {
     private lateinit var strWallet: String
     private var webSocketUrl: String = ""
     var myApplication: MyApplication? = null
+    var lastClickTime = 0L
     lateinit var generateQrViewModel: GenerateQrViewModel
     var webSocketGlobal: WebSocket? = null
 
