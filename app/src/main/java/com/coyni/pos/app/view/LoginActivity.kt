@@ -305,7 +305,7 @@ class LoginActivity : BaseActivity() {
     private fun setLoginData() {
         isId = true
         isPassword = true
-        binding.tidET.setText("1024771193")
+        binding.tidET.setText("1093916074")
         binding.passwordET.setText("Admin@123")
         enableButton()
     }

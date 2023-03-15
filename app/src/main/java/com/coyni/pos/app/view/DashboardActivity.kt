@@ -58,21 +58,22 @@ class DashboardActivity : BaseActivity() {
 
 
         val utility: DisplayImageUtility? = DisplayImageUtility.getInstance(applicationContext)
-        utility?.addImage(
-            myApplication?.mCurrentUserData?.loginData?.image as String,
-            binding.ivUserProfile, R.drawable.dba_img
-        )
-
         if (myApplication?.mCurrentUserData?.loginData?.image != null) {
             binding.ivUserProfile.visibility = View.VISIBLE
             binding.tvUserName.visibility = View.GONE
 
-        } else {
-            binding.ivUserProfile.visibility = View.GONE
-            binding.tvUserName.visibility = View.VISIBLE
-            val dbaName = myApplication!!.mCurrentUserData.loginData?.dbaName?.get(0)
-            binding.tvUserName.text = dbaName.toString().capitalize(Locale.ROOT)
+            utility?.addImage(
+                myApplication?.mCurrentUserData?.loginData?.image as String,
+                binding.ivUserProfile, R.drawable.dba_img
+            )
+
         }
+//        else {
+//            binding.ivUserProfile.visibility = View.GONE
+//            binding.tvUserName.visibility = View.VISIBLE
+//            val dbaName = myApplication!!.mCurrentUserData.loginData?.dbaName?.get(0)
+//            binding.tvUserName.text = dbaName.toString().capitalize(Locale.ROOT)
+//        }
 
         val screen = intent.getStringExtra("screen")
         if (screen == "qr") {
