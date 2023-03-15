@@ -108,6 +108,7 @@ class GenerateQrCustomKeyboard : LinearLayout, View.OnClickListener {
             val value: String = keyValues.get(v!!.id)
             if ((enteredText == "" || enteredText.contains(".")) && value == ".") {
             } else {
+                println(enteredText)
                 enteredText = enteredText + value
                 inputConnection.commitText(value, 1)
             }

@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvHead"
-            android:layout_marginHorizontal="@dimen/_11sdp"
+            android:layout_marginHorizontal="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_21sdp"
             android:fontFamily="@font/opensans_regular"
             android:gravity="center"
@@ -63,19 +63,6 @@
             android:gravity="center"
             android:lineHeight="@dimen/_21ssp"
             android:text="@string/e1234_verification_failed"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp" />
-
-        <TextView
-            android:id="@+id/tvTryAgain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvErrMessage"
-            android:layout_marginHorizontal="@dimen/_11sdp"
-            android:layout_marginTop="@dimen/_32sdp"
-            android:fontFamily="@font/opensans_regular"
-            android:gravity="center"
-            android:text="@string/please_try__again"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
 

@@ -101,7 +101,7 @@ class MerchantQrFragment : BaseFragment() {
             try {
                 if (discardSaleResponse != null) {
                     if (discardSaleResponse.status == Utils.SUCCESS) {
-                        myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId == null
+                        myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId = null
                         val intent = Intent(requireContext(), DashboardActivity::class.java)
                         intent.setFlags(
                             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

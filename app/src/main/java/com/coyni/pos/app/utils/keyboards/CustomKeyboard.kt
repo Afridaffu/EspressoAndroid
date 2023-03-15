@@ -72,7 +72,7 @@ class CustomKeyboard : LinearLayout, View.OnClickListener {
         binding.keyEightTV.setOnClickListener(this)
         binding.keyNineTV.setOnClickListener(this)
         binding.keyZeroTV.setOnClickListener(this)
-        binding.keyDotTV.setOnClickListener(this)
+        binding.dotTV.setOnClickListener(this)
 
         binding.keyActionLL.setOnClickListener(OnClickListener {
             if (listener != null) {
@@ -107,7 +107,7 @@ class CustomKeyboard : LinearLayout, View.OnClickListener {
         keyValues.put(R.id.keySevenTV, "7")
         keyValues.put(R.id.keyEightTV, "8")
         keyValues.put(R.id.keyNineTV, "9")
-        keyValues.put(R.id.keyDotTV, ".")
+        keyValues.put(R.id.dotTV, ".")
         keyValues.put(R.id.keyActionCV, "")
     }
 
@@ -124,6 +124,7 @@ class CustomKeyboard : LinearLayout, View.OnClickListener {
             val value: String = keyValues.get(v!!.id)
             if ((enteredText == "" || enteredText.contains(".")) && value == ".") {
             } else {
+                println(enteredText)
                 enteredText = enteredText + value
                 inputConnection.commitText(value, 1)
                 if (keybaackListner != null) {
@@ -143,7 +144,7 @@ class CustomKeyboard : LinearLayout, View.OnClickListener {
 
 
     fun setScreenName(screenName: String) {
-        screen = screenName
+//        screen = screenName
     }
 
     fun enableButton() {

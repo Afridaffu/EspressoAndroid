@@ -10,6 +10,7 @@ import android.text.InputFilter.LengthFilter
 import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.View
+import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
@@ -38,6 +39,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     private var grossAmount: Double = 0.00
     private var enteredAmount: Double = 0.00
     private var halfAmount: Double = 0.00
+    private var fullAmount: Double = 0.00
     private lateinit var saleOrderAMount: String
     private lateinit var gbxId: String
     private lateinit var action_type: String
@@ -53,11 +55,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_refund_transaction)
         binding = ActivityRefundTransactionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        saleOrderAMount = intent.getStringExtra(Utils.SALE_ORDER_AMOUNT).toString().replace("$", "")
-        gbxId = intent.getStringExtra(Utils.GBX_ID).toString()
         inItFields()
         inItObservers()
     }
@@ -65,8 +64,6 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
     private fun inItFields() {
         myApplication = applicationContext as MyApplication
         refundViewModel = ViewModelProvider(this).get(RefundViewModel::class.java)
-//        grossAmount = Utils.doubleParsing(myApplication!!.mCurrentUserData.transactionData.purchaseAmount.toString())
-//        grossAmount = 500.0
         fontSize = binding.refundAmountET.textSize
         binding.refundAmountET.showSoftInputOnFocus = false
         binding.refundAmountET.isCursorVisible = true
@@ -76,18 +73,18 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         binding.RefundbackIV.setOnClickListener {
             finish()
         }
-        if (saleOrderAMount != null) {
+        if (myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != null || myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != "") {
             grossAmount = Utils.doubleParsing(
-                saleOrderAMount
+                Utils.convertTwoDecimal(
+                    myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString()
+                        .replace("CYN", "").trim()
+                )
             )
-
             binding.refundCurrencyTV.setText(
                 "" + Utils.convertTwoDecimal(
-                    grossAmount.toString()
-                ).replace(
-                    "$",
-                    ""
-                ).trim()
+                    myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString()
+                        .replace("CYN", "").trim()
+                )
             )
         }
         binding.refundAmountET.setAccessibilityDelegate(object : View.AccessibilityDelegate() {
@@ -99,9 +96,16 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             }
         })
         binding.fullAmountTV.setOnClickListener {
-            if (grossAmount != null) {
+            if (myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != null || myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != "") {
+                fullAmount = Utils.doubleParsing(
+                    myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString()
+                        .replace("CYN", "").trim()
+                )
                 binding.refundAmountET.setText(
-                    Utils.convertTwoDecimal(grossAmount.toString()).replace("$", "")
+                    "" + Utils.convertTwoDecimal(
+                        myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString()
+                            .replace("CYN", "")
+                    )
                 )
                 binding.refundAmountET.setSelection(binding.refundAmountET.text.length)
                 binding.fullAmountTV.setBackgroundResource(R.drawable.button_bg_light_green_core)
@@ -111,18 +115,17 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                 isfullamount = true
                 ishalfamount = false
                 binding.refundCKB.setEnteredText(
-                    binding.refundAmountET.text.toString().trim { it <= ' ' })
+                    binding.refundAmountET.text.toString().trim()
+                )
             } else {
                 ishalfamount = false
                 isfullamount = false
             }
         }
         binding.halfAmountTV.setOnClickListener {
-            if (grossAmount != null) {
+            if (myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != null || myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != "") {
                 halfAmount = grossAmount / 2;
-                binding.refundAmountET.setText(
-                    Utils.convertTwoDecimal(halfAmount.toString()).replace("$", "")
-                )
+                binding.refundAmountET.setText("" + Utils.convertTwoDecimal(halfAmount.toString()))
                 binding.refundAmountET.setSelection(binding.refundAmountET.text.length)
                 binding.halfAmountTV.setBackgroundResource(R.drawable.button_bg_light_green_core)
                 binding.halfAmountTV.setTextColor(getColor(R.color.primary_green))
@@ -137,11 +140,11 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                 isfullamount = false
             }
         }
-
         inItKeyboard()
         binding.remarksLL.setOnClickListener {
             val addNoteDialog = AddNoteDialog(this, reason)
             addNoteDialog.show()
+            addNoteDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
             addNoteDialog.setOnDialogClickListener(object : OnDialogClickListener {
                 override fun onDialogClicked(action: String?, value: Any?) {
                     reason = value.toString()
@@ -205,11 +208,12 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                             )
                             startActivity(intent)
                         } else {
-                            Utils.displayAlert(
-                                refundResponse.error?.errorDescription.toString(),
-                                this,
-                                ""
-                            )
+                            myApplication?.mCurrentUserData?.refundResponse =
+                                refundResponse
+                            val intent = Intent(this, TransactionStatusActivity::class.java)
+                            intent.putExtra(Utils.SCREEN, Utils.REFUND)
+                            intent.putExtra(Utils.STATUS, Utils.FAILED)
+                            startActivity(intent)
                         }
                     } else {
                         Utils.displayAlert(
@@ -269,7 +273,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         var strReturn = ""
         try {
             strAmount =
-                Utils.convertTwoDecimal(etAmount.text.toString()).replace("$", "")
+                Utils.convertTwoDecimal(etAmount.text.toString().replace(",", ""))
                     .trim { it <= ' ' }
                     .replace(",", "")
             etAmount.removeTextChangedListener(this)
@@ -325,7 +329,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         val refundVerifyRequest = RefundVerifyRequest()
         refundVerifyRequest.refundAmount =
             Utils.doubleParsing(binding.refundAmountET.text.toString())
-        refundVerifyRequest.gbxTransactionId = gbxId
+        refundVerifyRequest.gbxTransactionId =
+            myApplication?.mCurrentUserData?.transactionData?.referenceId
         refundVerifyRequest.refundReason = reason
         showProgressDialog()
         refundViewModel.refundVerifyRequest(refundVerifyRequest)
@@ -368,10 +373,10 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             Utils.doubleParsing(binding.refundAmountET.text.toString())
         refundProcessRequest.refundReason = reason
         refundProcessRequest.requestToken = token
-//        refundProcessRequest.requestToken =
-//            myApplication?.mCurrentUserData?.validateResponseData?.token
-        refundProcessRequest.gbxTransactionId = gbxId
-        refundProcessRequest.walletType = Utils.CUSTOMER
+        refundProcessRequest.gbxTransactionId =
+            myApplication?.mCurrentUserData?.transactionData?.referenceId
+        refundProcessRequest.walletType =
+            myApplication?.mCurrentUserData?.refundResponseData?.walletType
         showProgressDialog()
         refundViewModel.refundProcessRequest(refundProcessRequest)
     }
@@ -394,7 +399,6 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                     && editable.toString() != ".00"
                 ) {
                     binding.refundAmountET.setHint("")
-//                    convertUSDValue()
                     if (editable.length == 5 || editable.length == 6) {
                         binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42f)
                         binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
@@ -434,47 +438,14 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             } catch (ex: java.lang.Exception) {
                 ex.printStackTrace()
             }
-//            try {
-//                if (editable.length > 0 && editable.toString() != "." && editable.toString() != ".00") {
-//                    binding.refundAmountET.hint = ""
-//                    if (editable.length > 8) {
-//                        binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33F)
-//                        binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-//                    } else if (editable.length > 5) {
-//                        binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43F)
-//                    } else {
-//                        binding.refundAmountET.textSize =
-//                            Utils.pixelsToSp(applicationContext, fontSize)
-//                    }
-//                    binding.refundAmountET.setSelection(binding.refundAmountET.text.length)
-//                    binding.refundAmountET.textDirection = View.TEXT_DIRECTION_LTR
-//                } else if (editable.toString() == ".") {
-//                    binding.refundAmountET.setText("")
-//                } else if (editable.length == 0) {
-//                    binding.refundAmountET.hint = "0.00"
-//                    binding.refundAmountET.textDirection = View.TEXT_DIRECTION_RTL
-//                    binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65f)
-//                    binding.tvCYN.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-//                    binding.refundCKB.disableButton()
-//                    binding.refundCKB.clearData()
-//                } else {
-//                    binding.refundAmountET.setText("")
-//                    binding.refundAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65f)
-//                    binding.refundCKB.disableButton()
-//                    binding.refundCKB.clearData()
-//                }
-//                enableRefund()
-//            } catch (_: Exception) {
-//            }
         }
     }
 
     private fun enableRefund() {
         try {
             enteredAmount =
-                Utils.doubleParsing(
-                    Utils.convertTwoDecimal(binding.refundAmountET.text.toString()).replace("$", "")
-                )
+                Utils.doubleParsing(Utils.convertTwoDecimal(binding.refundAmountET.text.toString()))
+            println(enteredAmount)
             if (enteredAmount >= 0.006 && enteredAmount <= grossAmount) {
                 binding.refundCKB.enableButton()
                 isrefundClickable = true
