@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
+import android.os.SystemClock
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
@@ -25,6 +26,7 @@ import com.coyni.pos.app.utils.Utils
 class SucessFlowActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPaymentSuccessFlowBinding
     var animSlideUp: Animation? = null
+    var lastClickTime = 0L
     lateinit var myApplication: MyApplication
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +47,22 @@ class SucessFlowActivity : AppCompatActivity() {
         }, 3000)
 
         binding.backIV.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
+                return@setOnClickListener
+            lastClickTime = SystemClock.elapsedRealtime()
             startActivity(
                 Intent(applicationContext, DashboardActivity::class.java).setFlags(
                     Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 )
+            )
+        }
+        binding.validateCV.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
+                return@setOnClickListener
+            lastClickTime = SystemClock.elapsedRealtime()
+            startActivity(
+                Intent(applicationContext, PinActivity::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             )
         }
         binding.amountTV.text = Utils.doubleParsing(

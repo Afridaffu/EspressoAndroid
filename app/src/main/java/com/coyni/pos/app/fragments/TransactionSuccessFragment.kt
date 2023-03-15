@@ -2,6 +2,7 @@ package com.coyni.pos.app.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ class TransactionSuccessFragment : BaseFragment() {
     private lateinit var screen: String
     private lateinit var status: String
     private lateinit var amount: String
+    var lastClickTime = 0L
     private var myApplication: MyApplication? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +45,9 @@ class TransactionSuccessFragment : BaseFragment() {
         binding.refundedAMountTV.text = Utils.convertTwoDecimal(amount).replace("$", "")
 
         binding.doneCV.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
+                return@setOnClickListener
+            lastClickTime = SystemClock.elapsedRealtime()
             try {
                 val intent = Intent(requireContext(), TransactionDetailsActivity::class.java)
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -58,6 +63,9 @@ class TransactionSuccessFragment : BaseFragment() {
             }
         }
         binding.backIV.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
+                return@setOnClickListener
+            lastClickTime = SystemClock.elapsedRealtime()
 //            onBackPressed()
             try {
                 val intent = Intent(requireContext(), DashboardActivity::class.java)
@@ -68,6 +76,9 @@ class TransactionSuccessFragment : BaseFragment() {
             }
         }
         binding.viewTxnTV.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
+                return@setOnClickListener
+            lastClickTime = SystemClock.elapsedRealtime()
             val intent = Intent(requireContext(), TransactionDetailsActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             intent.putExtra(
