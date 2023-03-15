@@ -20,14 +20,14 @@ class TransactionDetailsActivity : BaseActivity() {
     private lateinit var binding: ActivityTransactionDetailsBinding
     private var transactionViewModel: TransactionsViewModel? = null
     var gbxID: String? = null
-    var txnTypeStr: Int? = null
-    var txnSubTypeStr: Int? = null
-    private val sale_order = "sale order"
-    private val refund = "refund"
+    var txnType: Int? = null
+    var txnSubType: Int? = null
     private val retail_mobile = "Retail / Mobile"
     private val eCommerce = "eCommerce"
     private val full = "FULL"
-    private val partial = "partial"
+    private val partial = "Partial"
+    private val Sent = "Sent"
+    private val Received = "Received"
     var myApplication: MyApplication? = null
     var txnId: Int? = null
     lateinit var saleOrderAmount: String
@@ -42,72 +42,57 @@ class TransactionDetailsActivity : BaseActivity() {
     }
 
     private fun initField() {
+        try {
+            transactionViewModel =
+                ViewModelProvider(this).get(TransactionsViewModel::class.java)
 
-        transactionViewModel =
-            ViewModelProvider(this).get(TransactionsViewModel::class.java)
+            myApplication = applicationContext as MyApplication
 
-        myApplication = applicationContext as MyApplication
-
-        binding.ivBack.setOnClickListener {
-            startActivity(
-                Intent(applicationContext, TransactionListActivity::class.java).setFlags(
-                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            binding.ivBack.setOnClickListener {
+                startActivity(
+                    Intent(applicationContext, TransactionListActivity::class.java).setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    )
                 )
-            )
-        }
-
-        if (intent != null) {
-            txnId = intent.getIntExtra(Utils.txnId, 0)
-        }
-
-        binding.ivRefund.setOnClickListener {
-            startActivity(Intent(this, RefundTransactionActivity::class.java))
-        }
-        if (intent.getStringExtra(Utils.gbxTxnId) != null) {
-            gbxID = intent.getStringExtra(Utils.gbxTxnId)!!
-        }
-        if (getIntent().getStringExtra(Utils.txnType) != null && !getIntent().getStringExtra(
-                Utils.txnType
-            )
-                .equals("")
-        ) {
-            when (getIntent().getStringExtra(Utils.txnType)!!.toLowerCase()) {
-                sale_order -> {
-                    txnTypeStr = Utils.filter_saleorder
-                }
-                refund -> {
-                    txnTypeStr = Utils.refund
-                }
+            }
+            if (intent != null) {
+                txnId = intent.getIntExtra(Utils.txnId, 0)
             }
 
-            if (getIntent().getStringExtra(Utils.txnSubType) != null && !getIntent().getStringExtra(
-                    Utils.txnSubType
-                )
+            binding.ivRefund.setOnClickListener {
+                startActivity(Intent(this, RefundTransactionActivity::class.java))
+            }
+
+            if (intent.getStringExtra(Utils.gbxTxnId) != null) {
+                gbxID = intent.getStringExtra(Utils.gbxTxnId)!!
+            }
+
+            if (intent.getStringExtra(Utils.txnType) != null && !intent.getStringExtra(Utils.txnType)
                     .equals("")
             ) {
-                when (getIntent().getStringExtra(Utils.txnSubType)!!) {
-                    retail_mobile -> {
-                        txnSubTypeStr = Utils.filter_Retail
-                    }
-                    eCommerce -> {
-                        txnSubTypeStr = Utils.filter_eCommerce
-                    }
-                    Utils.SENT -> {
-                        txnSubTypeStr = Utils.sent
-                    }
-
-                    full -> {
-                        txnSubTypeStr = Utils.filter_full
-                    }
-                    partial -> {
-                        txnSubTypeStr = Utils.partialRefund
-                    }
+                when (intent.getStringExtra(Utils.txnType)!!) {
+                    Utils.SALE_ORDER -> txnType = Utils.saleorderType.toInt()
+                    Utils.Refund -> txnType = Utils.refundType.toInt()
+                    else -> txnType = null
                 }
-
             }
-        }
-        transactionViewModel!!.transactionDetails(gbxID!!, txnTypeStr!!, txnSubTypeStr!!)
 
+            if (intent.getStringExtra(Utils.txnSubType) != null && !intent.getStringExtra(Utils.txnSubType)
+                    .equals("")
+            ) {
+                when (intent.getStringExtra(Utils.txnSubType)!!) {
+                    retail_mobile -> txnSubType = Utils.retailMobileSubType.toInt()
+                    eCommerce -> txnSubType = Utils.eCommerceSubType.toInt()
+                    Sent -> txnSubType = Utils.sentType.toInt()
+                    Received -> txnSubType = Utils.receivedType.toInt()
+                    else -> txnSubType = null
+                }
+            }
+
+            transactionViewModel!!.transactionDetails(gbxID!!, txnType!!, txnSubType!!)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
     }
 
     fun initObservers() {
@@ -171,8 +156,9 @@ class TransactionDetailsActivity : BaseActivity() {
                 saleOrderAmount = Utils.convertTwoDecimal(
                     data.purchaseAmount.toString().replace(
                         "CYN",
-                        "")
-                    ).replace(
+                        ""
+                    )
+                ).replace(
                     "$",
                     "".trim()
                 )
@@ -276,8 +262,8 @@ class TransactionDetailsActivity : BaseActivity() {
     private fun getActivityLogAPICall() {
         if (Utils.checkInternet(this@TransactionDetailsActivity)) {
             if (txnId != null)
-                if (myApplication?.mCurrentUserData?.UserType == Utils.PERSONAL)
-                    transactionViewModel?.activityLogsDetails(txnId!!, "customer")
+                if (myApplication?.mCurrentUserData?.UserType == Utils.BUSINESS)
+                    transactionViewModel?.activityLogsDetails(txnId!!, "merchant")
 
         }
     }
