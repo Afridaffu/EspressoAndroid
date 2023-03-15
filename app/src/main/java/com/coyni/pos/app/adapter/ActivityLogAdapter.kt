@@ -73,15 +73,21 @@ class ActivityLogAdapter(val context: Context) :
             }
         }
 
-
-        if (respList?.data?.get(position)?.createdAt != null) {
-            holder.binding.date.setText(
-                myApplication?.mCurrentUserData?.convertZoneDateTime(
-                    respList?.data?.get(position)!!.createdAt, dateAndTime, requiredFormat
+        if (respList?.data?.get(position)?.createdAt .equals("")) {
+            val date: String = respList?.data?.get(position)?.createdAt!!
+            if (date.contains(".")) {
+                val resDate = date.substring(0, date.lastIndexOf("."))
+                holder.binding.date.setText(
+                    myApplication?.mCurrentUserData?.convertZoneDateTime(
+                        resDate,
+                        dateAndTime,
+                        requiredFormat
+                    )?.toLowerCase()
                 )
-                    ?.toLowerCase()
-            )
+            } else {
+            }
         }
+
         if (respList?.data?.get(position)!!.message != null) {
             holder.binding.messageTv.setText(respList?.data?.get(position)!!.message)
         }
