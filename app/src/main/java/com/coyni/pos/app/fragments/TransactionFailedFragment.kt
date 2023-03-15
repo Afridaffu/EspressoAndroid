@@ -2,6 +2,7 @@ package com.coyni.pos.app.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ class TransactionFailedFragment : BaseFragment() {
     private lateinit var binding: TransactionFailedBinding
     private var myApplication: MyApplication? = null
     lateinit var screen: String
+    var lastClickTime = 0L
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,12 +45,18 @@ class TransactionFailedFragment : BaseFragment() {
             "[" + myApplication?.mCurrentUserData?.refundResponse?.error?.errorCode.toString() + "-" + myApplication?.mCurrentUserData?.refundResponse?.error?.errorDescription.toString() + "]"
 
         binding.cvTryAgain.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
+                return@setOnClickListener
+            lastClickTime = SystemClock.elapsedRealtime()
             startActivity(
                 Intent(requireContext(), RefundTransactionActivity::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             )
         }
         binding.ivBack.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
+                return@setOnClickListener
+            lastClickTime = SystemClock.elapsedRealtime()
             startActivity(
                 Intent(requireContext(), TransactionListActivity::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

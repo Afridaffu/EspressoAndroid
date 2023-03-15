@@ -1,5 +1,6 @@
 package com.coyni.pos.app.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
@@ -25,6 +26,7 @@ import com.coyni.pos.app.viewmodel.GenerateQrViewModel
 class GenenrateQrFragment : BaseFragment(), TextWatcher {
     lateinit var binding: FragmentGenarateQrBinding
     var fontSize: Float = 0.0f;
+    var lastClickTime = 0L
     private var isPayClickable: Boolean = false
     lateinit var generateQrViewModel: GenerateQrViewModel
     var myApplication: MyApplication? = null
@@ -35,7 +37,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
     ): View {
         // inflate the layout and bind to the _binding
         binding = FragmentGenarateQrBinding.inflate(layoutInflater, container, false)
-
+//        binding.merchantAmountET.isCursorVisible = true
         inItFields()
         inItObservers()
         return binding.root
@@ -70,6 +72,16 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         }
     }
 
+//    override fun onAttach(context: Context) {
+//        super.onAttach(requireActivity().application)
+//        println("onATTACH")
+//        binding.merchantAmountET.isCursorVisible = true
+//    }
+
+//    override fun onResume() {
+//        super.onResume()
+//        binding.merchantAmountET.isCursorVisible = true
+//    }
     private fun inItObservers() {
         generateQrViewModel.generateQrResponse.observe(requireActivity()) { generateQrResponse ->
             try {
