@@ -7,12 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.TransactionFailedBinding
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.view.RefundTransactionActivity
+import com.coyni.pos.app.view.TransactionListActivity
 
 
 class TransactionFailedFragment : BaseFragment() {
     private lateinit var binding: TransactionFailedBinding
+    private var myApplication: MyApplication? = null
     lateinit var screen: String
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,6 +28,8 @@ class TransactionFailedFragment : BaseFragment() {
     }
 
     private fun inItFields() {
+        myApplication = requireActivity().application as MyApplication
+
         if (requireArguments()[Utils.SCREEN] != null) {
             screen = java.lang.String.valueOf(requireArguments()[Utils.SCREEN])
         }
@@ -34,9 +39,18 @@ class TransactionFailedFragment : BaseFragment() {
     }
 
     private fun refundFailed() {
+        binding.tvErrMessage.text =
+            "[" + myApplication?.mCurrentUserData?.refundResponse?.error?.errorCode.toString() + "-" + myApplication?.mCurrentUserData?.refundResponse?.error?.errorDescription.toString() + "]"
+
         binding.cvTryAgain.setOnClickListener {
             startActivity(
                 Intent(requireContext(), RefundTransactionActivity::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            )
+        }
+        binding.ivBack.setOnClickListener {
+            startActivity(
+                Intent(requireContext(), TransactionListActivity::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             )
         }

@@ -176,7 +176,9 @@ class GenarateQrActivity : BaseActivity() {
             try {
                 if (discardSaleResponse != null) {
                     if (discardSaleResponse.status == Utils.SUCCESS) {
+                        myApplication.mCurrentUserData.generateQrResponseData?.uniqueId = null
                         val intent = Intent(this, DashboardActivity::class.java)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()
                     } else {
@@ -195,8 +197,9 @@ class GenarateQrActivity : BaseActivity() {
             try {
                 if (discardSaleResponse != null) {
                     if (discardSaleResponse.status == Utils.SUCCESS) {
-                        myApplication.mCurrentUserData.generateQrResponseData?.uniqueId == null
+                        myApplication.mCurrentUserData.generateQrResponseData?.uniqueId = null
                         val intent = Intent(this, DashboardActivity::class.java)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         finish()
                     } else {

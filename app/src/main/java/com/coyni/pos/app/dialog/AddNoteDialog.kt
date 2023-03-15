@@ -3,6 +3,8 @@ package com.coyni.pos.app.dialog
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseDialog
 import com.coyni.pos.app.databinding.AddNoteBinding
@@ -14,11 +16,11 @@ class AddNoteDialog(context: Context, private val reason: String) : BaseDialog(c
 
     override fun initViews() {
         dialogBinding = AddNoteBinding.bind(findViewById(R.id.root))
-
-        if (!Utils.isKeyboardVisible) {
-            dialogBinding.addNoteET.requestFocus()
-            Utils.shwForcedKeypad(context.applicationContext, dialogBinding.addNoteET)
-        }
+        dialogBinding.addNoteET.requestFocus()
+//        if (!Utils.isKeyboardVisible) {
+//            dialogBinding.addNoteET.requestFocus()
+//            Utils.shwForcedKeypad(context.applicationContext, dialogBinding.addNoteET)
+//        }
         if (reason != null || reason != "") {
             dialogBinding.addNoteET.setText(reason)
             if (reason.length > 0) {
