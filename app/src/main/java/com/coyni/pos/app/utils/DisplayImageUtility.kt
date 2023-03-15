@@ -7,6 +7,7 @@ import android.os.AsyncTask
 import android.util.LruCache
 import android.util.Patterns
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.coyni.pos.app.model.downloadurl.DownloadUrlData
 import com.coyni.pos.app.model.downloadurl.DownloadUrlRequest
 import com.coyni.pos.app.model.downloadurl.DownloadUrlResponse
@@ -15,6 +16,7 @@ import com.coyni.pos.app.network.AuthApiClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -39,11 +41,19 @@ class DisplayImageUtility private constructor(private val context: Context) {
         }
     }
 
+    private fun bitmapToByte(bitmap: Bitmap?): ByteArray? {
+        val stream = ByteArrayOutputStream()
+        bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        return stream.toByteArray()
+    }
+
     fun addImage(key: String, imageView: ImageView, resId: Int?) {
         if (!Patterns.WEB_URL.matcher(key).matches()) {
             if (imageCache!![key] != null) {
                 LogUtils.v(TAG, "Glide from cache")
-                imageView.setImageBitmap(imageCache[key])
+//                imageView.setImageBitmap(imageCache[key])
+                Glide.with(imageView.context).load(bitmapToByte(imageCache[key])).override(300, 300).fitCenter().into(imageView);
+
                 return
             }
             imageView.setImageResource(resId!!)

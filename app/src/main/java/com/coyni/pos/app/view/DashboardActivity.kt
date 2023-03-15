@@ -9,7 +9,6 @@ import android.transition.TransitionManager
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.ui.AppBarConfiguration
 import com.bumptech.glide.Glide
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
@@ -26,9 +25,8 @@ import java.util.*
 
 class DashboardActivity : BaseActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityDashboardBinding
-    private var myApplication: MyApplication? = null;
+    private var myApplication: MyApplication? = null
     private var logoutViewModel: LoginLogoutViewModel? = null
     private var lastClick: Long = 0L
 
