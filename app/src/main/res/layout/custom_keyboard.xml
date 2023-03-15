@@ -206,7 +206,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/keyDotTV"
+                            android:id="@+id/dotTV"
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
                             android:layout_margin="5dp"

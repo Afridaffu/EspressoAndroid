@@ -216,6 +216,7 @@ class Utils {
         const val STATUS = "status"
         const val REFUNDED_AMOUNT = "refunded Amount"
         const val REFUND = "refund"
+        const val REFUND_ERROR_CODE = "refund error code"
         const val START_NEW_SALE = "start new sale"
         const val VIEW_BATCH = "view today batch"
         const val VALUE = "value"
@@ -354,10 +355,16 @@ class Utils {
             return dtExpiry
         }
 
-        fun doubleParsing(value: String): Double {
+                fun doubleParsing(value: String): Double {
             return value.replace(",".toRegex(), "").replace("$".toRegex(), "")
                 .replace("USD".toRegex(), "").toDouble()
         }
+//        open fun doubleParsing(value: String): Double? {
+//            return java.lang.Double.parseDouble(
+//                value.replace(",".toRegex(), "").replace("$".toRegex(), "")
+//                    .replace("USD".toRegex(), "")
+//            )
+//        }
 
         fun USNumberFormat(number: Double): String {
             var strFormat = ""
