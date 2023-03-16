@@ -36,7 +36,7 @@
                 android:autofillHints="creditCardSecurityCode"
                 android:textColor="@color/white"
                 android:cursorVisible="true"
-                android:textColorHint="#FFFFFFD9"
+                android:textColorHint="#99FFFFFF"
                 android:textCursorDrawable="@drawable/cursor_color_white"
                 android:textSize="@dimen/_53ssp" />
 

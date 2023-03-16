@@ -127,7 +127,8 @@ class CustomKeyboard : LinearLayout, View.OnClickListener {
                 println(enteredText)
                 enteredText = enteredText + value
                 inputConnection.commitText(value, 1)
-                if (keybaackListner != null) {
+
+                if (keybaackListner != null && v.id == R.id.keyActionCV) {
                     keybaackListner.onKeybackClick(Utils.REFUND, "")
                 }
             }
