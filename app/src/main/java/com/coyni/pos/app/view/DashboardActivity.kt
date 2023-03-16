@@ -9,7 +9,6 @@ import android.transition.TransitionManager
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.ui.AppBarConfiguration
 import com.bumptech.glide.Glide
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
@@ -26,9 +25,8 @@ import java.util.*
 
 class DashboardActivity : BaseActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityDashboardBinding
-    private var myApplication: MyApplication? = null;
+    private var myApplication: MyApplication? = null
     private var logoutViewModel: LoginLogoutViewModel? = null
     private var lastClick: Long = 0L
 
@@ -58,24 +56,24 @@ class DashboardActivity : BaseActivity() {
         binding.businessNameTV.text =
             myApplication?.mCurrentUserData?.loginData?.companyName
 
-        if(myApplication?.mCurrentUserData?.loginData?.image != null) {
-            val utility: DisplayImageUtility? = DisplayImageUtility.getInstance(applicationContext)
-            utility?.addImage(
-                myApplication?.mCurrentUserData?.loginData?.image as String,
-                binding.ivUserProfile,
-                R.drawable.dba_img
-            )
-        }
+
+        val utility: DisplayImageUtility? = DisplayImageUtility.getInstance(applicationContext)
         if (myApplication?.mCurrentUserData?.loginData?.image != null) {
             binding.ivUserProfile.visibility = View.VISIBLE
             binding.tvUserName.visibility = View.GONE
 
-        } else {
-            binding.ivUserProfile.visibility = View.GONE
-            binding.tvUserName.visibility = View.VISIBLE
-            val dbaName = myApplication!!.mCurrentUserData.loginData?.dbaName?.get(0)
-            binding.tvUserName.text = dbaName.toString().capitalize(Locale.ROOT)
+            utility?.addImage(
+                myApplication?.mCurrentUserData?.loginData?.image as String,
+                binding.ivUserProfile, R.drawable.dba_img
+            )
+
         }
+//        else {
+//            binding.ivUserProfile.visibility = View.GONE
+//            binding.tvUserName.visibility = View.VISIBLE
+//            val dbaName = myApplication!!.mCurrentUserData.loginData?.dbaName?.get(0)
+//            binding.tvUserName.text = dbaName.toString().capitalize(Locale.ROOT)
+//        }
 
         val screen = intent.getStringExtra("screen")
         if (screen == "qr") {
