@@ -18,6 +18,7 @@ import com.coyni.pos.app.dialog.OnDialogClickListener
 import com.coyni.pos.app.fragments.GenenrateQrFragment
 import com.coyni.pos.app.fragments.MerchantQrFragment
 import com.coyni.pos.app.model.discard.DiscardSaleRequest
+import com.coyni.pos.app.utils.DisplayImageUtility
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.GenerateQrViewModel
@@ -227,13 +228,19 @@ class GenarateQrActivity : BaseActivity() {
         binding.terminalNameTV.setText(terminalName)
 
         if (myApplication.mCurrentUserData.loginData?.image != null) {
+            val utility: DisplayImageUtility? = DisplayImageUtility.getInstance(applicationContext)
             binding.ivUserProfile.visibility = View.VISIBLE
-            Glide.with(this)
-                .load(myApplication!!.mCurrentUserData.downloadUrlData?.get(0)!!.downloadUrl)
-                .into(binding.ivUserProfile)
-        } else {
-            binding.ivUserProfile.visibility = View.VISIBLE
-            binding.ivUserProfile.setImageResource(R.drawable.dba_img)
+            utility?.addImage(
+                myApplication?.mCurrentUserData?.loginData?.image as String,
+                binding.ivUserProfile, R.drawable.dba_img
+            )
+//            Glide.with(this)
+//                .load(myApplication!!.mCurrentUserData.downloadUrlData?.get(0)!!.downloadUrl)
+//                .into(binding.ivUserProfile)
         }
+//        else {
+//            binding.ivUserProfile.visibility = View.VISIBLE
+//            binding.ivUserProfile.setImageResource(R.drawable.dba_img)
+//        }
     }
 }
