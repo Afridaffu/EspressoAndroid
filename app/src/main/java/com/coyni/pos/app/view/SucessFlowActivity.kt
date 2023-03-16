@@ -51,7 +51,7 @@ class SucessFlowActivity : AppCompatActivity() {
                 return@setOnClickListener
             lastClickTime = SystemClock.elapsedRealtime()
             startActivity(
-                Intent(applicationContext, DashboardActivity::class.java).setFlags(
+                Intent(this, DashboardActivity::class.java).setFlags(
                     Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 )
             )
@@ -61,7 +61,7 @@ class SucessFlowActivity : AppCompatActivity() {
                 return@setOnClickListener
             lastClickTime = SystemClock.elapsedRealtime()
             startActivity(
-                Intent(applicationContext, PinActivity::class.java)
+                Intent(this, PinActivity::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             )
         }
@@ -92,4 +92,7 @@ class SucessFlowActivity : AppCompatActivity() {
         binding.receivedFromTV.setHighlightColor(Color.TRANSPARENT)
     }
 
+    override fun onBackPressed() {
+//        super.onBackPressed()
+    }
 }

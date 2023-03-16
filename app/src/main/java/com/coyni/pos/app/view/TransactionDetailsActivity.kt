@@ -49,11 +49,7 @@ class TransactionDetailsActivity : BaseActivity() {
             myApplication = applicationContext as MyApplication
 
             binding.ivBack.setOnClickListener {
-                startActivity(
-                    Intent(applicationContext, TransactionListActivity::class.java).setFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    )
-                )
+                onBackPressed()
             }
             if (intent != null) {
                 txnId = intent.getIntExtra(Utils.txnId, 0)
@@ -100,15 +96,27 @@ class TransactionDetailsActivity : BaseActivity() {
         transactionViewModel?.transactionDetailResponse?.observe(this) { transactionDetailsResponse ->
             try {
                 if (transactionDetailsResponse != null) {
-                    if (transactionDetailsResponse.status.equals(Utils.SUCCESS)) {
+                    if (transactionDetailsResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.transactionData =
                             transactionDetailsResponse.data
 
                         when (transactionDetailsResponse.data?.transactionType) {
                             Utils.SALE_ORDER -> showSaleOrderData(transactionDetailsResponse.data)
-                            Utils.REFUND -> showRefundData(transactionDetailsResponse.data)
+                            Utils.REFUND -> showRefundData(transactionDetailsResponse.data!!)
                         }
+                    } else {
+                        Utils.displayAlert(
+                            transactionDetailsResponse.error?.errorDescription!!,
+                            this,
+                            ""
+                        )
                     }
+                } else {
+                    Utils.displayAlert(
+                        transactionDetailsResponse?.error?.errorDescription!!,
+                        this,
+                        ""
+                    )
                 }
 
             } catch (ex: Exception) {
@@ -119,7 +127,7 @@ class TransactionDetailsActivity : BaseActivity() {
         transactionViewModel?.logsResponseMutableLiveData?.observe(this) { logsResponseMutableLiveData ->
             try {
                 if (logsResponseMutableLiveData != null) {
-                    if (logsResponseMutableLiveData.status.equals(Utils.SUCCESS)) {
+                    if (logsResponseMutableLiveData.status == Utils.SUCCESS) {
                         if (logsResponseMutableLiveData.data?.size!! > 0) {
 
                             val activityListAdater =
@@ -268,7 +276,7 @@ class TransactionDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun showRefundData(data: TransactionData?) {
+    private fun showRefundData(data: TransactionData) {
         binding.tvReason.visibility = View.VISIBLE
         binding.llSaleOrderData.visibility = View.GONE
         binding.llOriginalInfo.visibility = View.VISIBLE
@@ -393,6 +401,14 @@ class TransactionDetailsActivity : BaseActivity() {
 
         }
 
+    }
+
+    override fun onBackPressed() {
+        startActivity(
+            Intent(this, TransactionListActivity::class.java).setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            )
+        )
     }
 
 }

@@ -189,7 +189,8 @@ class TransactionListActivity : BaseActivity() {
                             batchResponseMutableLiveData.data
                         if (batchResponseMutableLiveData.data?.todayBatchAmount != null) {
                             binding.batchMoneyTV.setText(
-                                Utils.convertBigDecimalUSDC(batchResponseMutableLiveData.data?.todayBatchAmount!!).replace("CYN", "").trim()
+                                Utils.convertBigDecimalUSDC(batchResponseMutableLiveData.data?.todayBatchAmount!!)
+                                    .replace("CYN", "").trim()
                             )
                         } else {
                             binding.batchMoneyTV.setText("0.00")
@@ -228,11 +229,14 @@ class TransactionListActivity : BaseActivity() {
 
                 adapter?.setOnItemClickListener(
                     object : OnItemClickListener {
-
                         override fun onItemClick(position: Int?, value: Any?) {
-                            for (item in items) {
-                                showTransactionDetails(item)
-                            }
+                                showTransactionDetails(
+                                    items.get(position!!).gbxTransactionId,
+                                    items.get(position).txnTypeDn,
+                                    items.get(position).txnSubTypeDn,
+                                    items.get(position).transactionId
+                                )
+
 //                            showTransactionDetails(TransactionData())
                         }
 
@@ -245,12 +249,17 @@ class TransactionListActivity : BaseActivity() {
 
     }
 
-    private fun showTransactionDetails(obj: TransactionItem) {
+    private fun showTransactionDetails(
+        gbxid: String?,
+        txnTypeDn: String?,
+        txnSubTypeDn: String?,
+        transactionId: Int?
+    ) {
         val i = Intent(this@TransactionListActivity, TransactionDetailsActivity::class.java)
-        i.putExtra(Utils.gbxTxnId, obj.gbxTransactionId)
-        i.putExtra(Utils.txnType, obj.txnTypeDn)
-        i.putExtra(Utils.txnSubType, obj.txnSubTypeDn)
-        i.putExtra(Utils.txnId, obj.transactionId)
+        i.putExtra(Utils.gbxTxnId, gbxid)
+        i.putExtra(Utils.txnType, txnTypeDn)
+        i.putExtra(Utils.txnSubType, txnSubTypeDn)
+        i.putExtra(Utils.txnId, transactionId)
         startActivity(i)
     }
 
