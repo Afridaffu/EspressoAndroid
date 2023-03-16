@@ -73,7 +73,10 @@ class TransactionListActivity : BaseActivity() {
             binding.terminalID.setText((myApplication.mCurrentUserData.loginData!!.terminalId))
         }
 
-        binding.ivBack.setOnClickListener { onBackPressed(); }
+        binding.ivBack.setOnClickListener {
+//            onBackPressed()
+            finish()
+        }
 
         // Employee role changes
         empRole = myApplication.mCurrentUserData.validateResponseData?.empRole
@@ -171,7 +174,7 @@ class TransactionListActivity : BaseActivity() {
 //                        recentTxns = recentTransactionResponse.data?.items!!
                         prepareListData(recentTransactionResponse.data?.items)
                     } else {
-                        Utils.displayAlertNew(
+                        Utils.displayAlert(
                             recentTransactionResponse.error?.errorDescription.toString(), this, ""
                         )
                     }
@@ -189,14 +192,15 @@ class TransactionListActivity : BaseActivity() {
                             batchResponseMutableLiveData.data
                         if (batchResponseMutableLiveData.data?.todayBatchAmount != null) {
                             binding.batchMoneyTV.setText(
-                                Utils.convertBigDecimalUSDC(batchResponseMutableLiveData.data?.todayBatchAmount!!).replace("CYN", "").trim()
+                                Utils.convertBigDecimalUSDC(batchResponseMutableLiveData.data?.todayBatchAmount!!)
+                                    .replace("CYN", "").trim()
                             )
                         } else {
                             binding.batchMoneyTV.setText("0.00")
                         }
 
                     } else {
-                        Utils.displayAlertNew(
+                        Utils.displayAlert(
                             batchResponseMutableLiveData.error?.errorDescription.toString(),
                             this,
                             ""
@@ -228,12 +232,8 @@ class TransactionListActivity : BaseActivity() {
 
                 adapter?.setOnItemClickListener(
                     object : OnItemClickListener {
-
                         override fun onItemClick(position: Int?, value: Any?) {
-                            for (item in items) {
-                                showTransactionDetails(item)
-                            }
-//                            showTransactionDetails(TransactionData())
+                            showTransactionDetails(items.get(position!!))
                         }
 
                         override fun onChildClicked(s: String?) {
@@ -260,4 +260,8 @@ class TransactionListActivity : BaseActivity() {
         req.todayDate = "2023-01-17 00:00:00"
         batchAmountViewModel?.getBatchAmount(req)
     }
+
+//    override fun onBackPressed() {
+//        finish()
+//    }
 }

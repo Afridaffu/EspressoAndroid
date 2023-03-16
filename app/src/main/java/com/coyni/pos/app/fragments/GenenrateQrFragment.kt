@@ -2,6 +2,7 @@ package com.coyni.pos.app.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
@@ -174,8 +175,12 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
             GenerateQrCustomKeyboard.OnSuccessListener {
             override fun onKeyboardClick(action: String, value: String?) {
                 if (action == Utils.BUTTON_CLICK) {
+                    if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
+                        return
+                    lastClickTime = SystemClock.elapsedRealtime()
                     convertDecimal()
                     if (isPayClickable) {
+
                         generateQR()
                     }
                 }

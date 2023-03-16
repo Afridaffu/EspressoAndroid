@@ -102,7 +102,7 @@ class Utils {
         const val WALLET_FEE_LIMITS = "wallet fee and limits"
         const val refundActionType = "REFUND"
         const val txnType = "txnType"
-        const val SENT = "sent"
+        const val SENT = "Sent"
         const val txnId = "txnId"
         const val txnSubType = "txnSubType"
         const val PAID_ORDER = "paid order"

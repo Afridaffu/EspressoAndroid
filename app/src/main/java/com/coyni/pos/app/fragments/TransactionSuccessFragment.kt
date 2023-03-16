@@ -85,7 +85,7 @@ class TransactionSuccessFragment : BaseFragment() {
                 Utils.gbxTxnId,
                 myApplication?.mCurrentUserData?.refundResponseData?.referenceId
             )
-            intent.putExtra(Utils.txnType, Utils.REFUND)
+            intent.putExtra(Utils.txnType, Utils.Refund)
             intent.putExtra(Utils.txnSubType, Utils.SENT)
             startActivity(intent)
         }

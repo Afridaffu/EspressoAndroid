@@ -25,6 +25,7 @@ data class TransactionData(
     var saleOrderSubType: Int? = null,
     var transactionAmount: String? = null,
     var remarks: String? = null,
+    var total: String? = null,
 
 
     )
