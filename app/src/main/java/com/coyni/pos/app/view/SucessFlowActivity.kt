@@ -62,7 +62,9 @@ class SucessFlowActivity : AppCompatActivity() {
             lastClickTime = SystemClock.elapsedRealtime()
             startActivity(
                 Intent(this, PinActivity::class.java)
-                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    )
             )
         }
         binding.amountTV.text = Utils.doubleParsing(

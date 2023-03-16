@@ -164,15 +164,9 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                     if (refundResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.refundResponseData = refundResponse.data
                         if (refundResponse.data?.insufficientMerchantBalance != true || refundResponse.data?.insufficientTokenBalance != true) {
-                            if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
-                                return@observe
-                            lastClickTime = SystemClock.elapsedRealtime()
                             refundPreviewDialog()
                         } else {
-                            if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
-                                return@observe
-                            lastClickTime = SystemClock.elapsedRealtime()
-                            Utils.displayAlertNew(
+                            Utils.displayAlert(
                                 "InSufficient Balance",
                                 this,
                                 ""
@@ -248,6 +242,9 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             CustomKeyboard.OnSuccessListener {
             override fun onKeyboardClick(action: String, value: String?) {
                 if (action == Utils.BUTTON_CLICK) {
+                    if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
+                        return
+                    lastClickTime = SystemClock.elapsedRealtime()
                     convertDecimal()
                     if (isrefundClickable) {
                         refundVerify()

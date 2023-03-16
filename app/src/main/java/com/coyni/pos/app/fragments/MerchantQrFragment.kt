@@ -73,6 +73,9 @@ class MerchantQrFragment : BaseFragment() {
         }, 1000)
 
         binding.discardSaleLL.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
+                return@setOnClickListener
+            lastClickTime = SystemClock.elapsedRealtime()
             disCardSaleDialog()
         }
     }

@@ -471,7 +471,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                                 .trim()
                         )
                         if (endAmount < startAmount) {
-                            Utils.displayAlertNew(
+                            Utils.displayAlert(
                                 "'From Amount' should not be greater than 'To Amount'",
                                 context, "coyni"
                             )
@@ -516,7 +516,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                                 .trim()
                         )
                         if (endAmount < startAmount) {
-                            Utils.displayAlertNew(
+                            Utils.displayAlert(
                                 "'From Amount' should not be greater than 'To Amount'",
                                 context, "coyni"
                             )
@@ -642,7 +642,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                     binding.transAmountEndET.getText().toString().replace(",", "").trim()
                 )
                 if (endAmount < startAmount) {
-                    Utils.displayAlertNew(
+                    Utils.displayAlert(
                         "'From Amount' should not be greater than 'To Amount'",
                         context, ""
                     )

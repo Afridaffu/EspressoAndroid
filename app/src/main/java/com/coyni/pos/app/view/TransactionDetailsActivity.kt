@@ -1,8 +1,10 @@
 package com.coyni.pos.app.view
 
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
+import android.view.View.VISIBLE
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,7 +51,8 @@ class TransactionDetailsActivity : BaseActivity() {
             myApplication = applicationContext as MyApplication
 
             binding.ivBack.setOnClickListener {
-                onBackPressed()
+//                onBackPressed()
+                finish()
             }
             if (intent != null) {
                 txnId = intent.getIntExtra(Utils.txnId, 0)
@@ -84,7 +87,7 @@ class TransactionDetailsActivity : BaseActivity() {
                     else -> txnSubType = null
                 }
             }
-
+            showProgressDialog()
             transactionViewModel!!.transactionDetails(gbxID!!, txnType!!, txnSubType!!)
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -92,17 +95,20 @@ class TransactionDetailsActivity : BaseActivity() {
     }
 
     fun initObservers() {
-
         transactionViewModel?.transactionDetailResponse?.observe(this) { transactionDetailsResponse ->
             try {
                 if (transactionDetailsResponse != null) {
+                    dismissDialog()
                     if (transactionDetailsResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.transactionData =
                             transactionDetailsResponse.data
-
                         when (transactionDetailsResponse.data?.transactionType) {
-                            Utils.SALE_ORDER -> showSaleOrderData(transactionDetailsResponse.data)
-                            Utils.REFUND -> showRefundData(transactionDetailsResponse.data!!)
+                            Utils.SALE_ORDER -> {
+                                showSaleOrderData(transactionDetailsResponse.data)
+                            }
+                            Utils.Refund -> {
+                                showRefundData(transactionDetailsResponse.data!!)
+                            }
                         }
                     } else {
                         Utils.displayAlert(
@@ -150,6 +156,7 @@ class TransactionDetailsActivity : BaseActivity() {
     }
 
     private fun showSaleOrderData(data: TransactionData?) {
+        binding.transactionDetailsLL.visibility = VISIBLE
         binding.llSaleOrderData.visibility = View.VISIBLE
         binding.tvReason.visibility = View.GONE
         binding.llOriginalInfo.visibility = View.GONE
@@ -277,12 +284,16 @@ class TransactionDetailsActivity : BaseActivity() {
     }
 
     private fun showRefundData(data: TransactionData) {
+        binding.transactionDetailsLL.visibility = VISIBLE
         binding.tvReason.visibility = View.VISIBLE
         binding.llSaleOrderData.visibility = View.GONE
         binding.llOriginalInfo.visibility = View.VISIBLE
         binding.llActivityLog.visibility = View.GONE
         binding.llServicePhone.visibility = View.VISIBLE
         binding.tvCustomerInfoHeading.text = "Merchant Information"
+        binding.nameTV.text = "Merchant Name"
+        binding.emailTV.text = "Customer Service Email"
+
 
         if (data != null) {
             if (data.transactionType != null && data.transactionSubtype != null) {
@@ -331,18 +342,16 @@ class TransactionDetailsActivity : BaseActivity() {
             }
             if (data.referenceId != null) {
                 if (data.referenceId!!.length > 10)
-                    binding.refID.text = (data.referenceId)?.substring(0, 10)
+                    binding.refID.text = (data.referenceId)?.substring(0, 10) + "..."
                 else
                     binding.refID.text = (data.referenceId)
             }
 
             if (data.merchantName != null) {
-                binding.nameTV.text = "Merchant Name"
                 binding.custName.text = (data.merchantName)
             }
 
             if (data.customerServiceEmail != null) {
-                binding.emailTV.text = "Customer Service Email"
                 binding.tvCustomerEmail.text = (data.customerServiceEmail)
             }
 
@@ -370,8 +379,9 @@ class TransactionDetailsActivity : BaseActivity() {
             }
 
             if (data.saleOrderReferenceId != null) {
+                binding.orgRefId.paintFlags = binding.orgRefId.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                 if (data.saleOrderReferenceId!!.length > 10)
-                    binding.orgRefId.text = (data.referenceId)?.substring(0, 10)
+                    binding.orgRefId.text = (data.referenceId)?.substring(0, 10) + "..."
                 else
                     binding.orgRefId.text = (data.referenceId)
             }
@@ -383,8 +393,8 @@ class TransactionDetailsActivity : BaseActivity() {
                 binding.tvOrgTip.text = (data.tip)
             }
 
-            if (data.totalAmount != null) {
-                binding.tvOrgTotal.text = (data.totalAmount)
+            if (data.total != null) {
+                binding.tvOrgTotal.text = (data.total)
             }
 
             binding.saleRefIDcopyIV.setOnClickListener(View.OnClickListener {
@@ -403,12 +413,8 @@ class TransactionDetailsActivity : BaseActivity() {
 
     }
 
-    override fun onBackPressed() {
-        startActivity(
-            Intent(this, TransactionListActivity::class.java).setFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            )
-        )
-    }
+//    override fun onBackPressed() {
+//       finish()
+//    }
 
 }

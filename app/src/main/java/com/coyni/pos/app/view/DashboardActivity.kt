@@ -127,7 +127,7 @@ class DashboardActivity : BaseActivity() {
                         )
                 )
             } else {
-                Utils.displayAlertNew(
+                Utils.displayAlert(
                     response?.error?.errorDescription.toString(),
                     this@DashboardActivity,
                     ""
