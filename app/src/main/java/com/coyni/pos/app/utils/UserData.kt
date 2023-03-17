@@ -1,5 +1,6 @@
 package com.coyni.pos.app.utils
 
+import com.coyni.pos.app.model.ActivityLogs.ActivityLogsResponseData
 import com.coyni.pos.app.model.BatchAmount.BatchResponseData
 import com.coyni.pos.app.model.TransactionData
 import com.coyni.pos.app.model.TransactionFilter.TransactionResponseData
@@ -24,6 +25,7 @@ class UserData {
     var webSocketObject: JSONObject? = null
     var transactionData: TransactionData? = null
     var UserType: String? = null
+    var activityLogsResponseData : List<ActivityLogsResponseData>? = null
 
     fun convertZoneLatestTxndate(date: String?): String? {
         return Utils.convertZoneLatestTxn(date, strPreference)

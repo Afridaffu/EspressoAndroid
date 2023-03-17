@@ -8,13 +8,12 @@ import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseRecyclerViewAdapter
 import com.coyni.pos.app.baseclass.OnItemClickListener
 import com.coyni.pos.app.databinding.ActivityLogItemsBinding
-import com.coyni.pos.app.model.ActivityLogs.ActivityLogsResponse
+import com.coyni.pos.app.model.ActivityLogs.ActivityLogsResponseData
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 
-class ActivityLogAdapter(val context: Context) :
+class ActivityLogAdapter(val context: Context, var respList: List<ActivityLogsResponseData>) :
     BaseRecyclerViewAdapter<ActivityLogAdapter.MyViewHolder>() {
-    var respList: ActivityLogsResponse? = null
     var myApplication: MyApplication? = null
     private var listener: OnItemClickListener? = null
     private val dateAndTime = "yyyy-MM-dd HH:mm:ss"
@@ -37,14 +36,15 @@ class ActivityLogAdapter(val context: Context) :
         holder: MyViewHolder,
         position: Int
     ) {
-        myApplication = context?.applicationContext as MyApplication?
+        myApplication = context.applicationContext as MyApplication?
+//        respList = myApplication?.mCurrentUserData?.activityLogsResponseData!!
 
-        if (respList?.data?.get(position)?.propetyData?.status != null) {
+        if (respList.get(position)?.customProperties?.status != null) {
 
             holder.binding.statusTV.setText(
-                respList?.data?.get(position)?.propetyData?.status
+                respList?.get(position)?.customProperties?.status
             )
-            when (respList?.data?.get(position)?.propetyData?.status!!
+            when (respList?.get(position)?.customProperties?.status!!
                 .toLowerCase()) {
                 Utils.transCompleted, Utils.transSuccessful -> {
                     holder.binding.statusTV.setTextColor(
@@ -58,6 +58,8 @@ class ActivityLogAdapter(val context: Context) :
                     )
                     holder.binding.statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg)
                 }
+                Utils.refunded,
+                Utils.PARTIAL_REFUND,
                 Utils.transPending -> {
                     holder.binding.statusTV.setTextColor(
                         context.getResources().getColor(R.color.pending_status)
@@ -73,30 +75,29 @@ class ActivityLogAdapter(val context: Context) :
             }
         }
 
-        if (respList?.data?.get(position)?.createdAt .equals("")) {
-            val date: String = respList?.data?.get(position)?.createdAt!!
+        if (respList?.get(position)?.createdAt.equals("")) {
+            val date: String = respList?.get(position)?.createdAt!!
             if (date.contains(".")) {
                 val resDate = date.substring(0, date.lastIndexOf("."))
-                holder.binding.date.setText(
+                holder.binding.date.text =
                     myApplication?.mCurrentUserData?.convertZoneDateTime(
                         resDate,
                         dateAndTime,
                         requiredFormat
                     )?.toLowerCase()
-                )
             } else {
             }
         }
 
-        if (respList?.data?.get(position)!!.message != null) {
-            holder.binding.messageTv.setText(respList?.data?.get(position)!!.message)
+        if (respList?.get(position)!!.message != null) {
+            holder.binding.messageTv.setText(respList?.get(position)!!.message)
         }
     }
 
     override fun getItemCount(): Int {
-        return if (respList == null || respList?.data?.size == null) {
+        return if (respList == null || respList?.size == null) {
             0
-        } else respList?.data?.size!!
+        } else respList?.size!!
     }
 
 
