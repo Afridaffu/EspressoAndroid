@@ -160,6 +160,9 @@ class GenarateQrActivity : BaseActivity() {
                 binding.cvProfileSmall.visibility = View.VISIBLE
                 binding.dbaNameTV.visibility = View.VISIBLE
                 binding.arrowButton.setImageResource(R.drawable.ic_feather_menu)
+
+                val amount = GenenrateQrFragment.binding.merchantAmountET.text.toString()
+                pushFragment(GenenrateQrFragment(), "", amount)
             } else {
                 TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
                 binding.consLL.setBackgroundResource(R.color.hidden_view_color)

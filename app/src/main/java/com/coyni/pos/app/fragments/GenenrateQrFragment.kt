@@ -25,7 +25,6 @@ import com.coyni.pos.app.utils.keyboards.GenerateQrCustomKeyboard
 import com.coyni.pos.app.viewmodel.GenerateQrViewModel
 
 class GenenrateQrFragment : BaseFragment(), TextWatcher {
-    lateinit var binding: FragmentGenarateQrBinding
     var fontSize: Float = 0.0f;
     var lastClickTime = 0L
     private var isPayClickable: Boolean = false
@@ -71,6 +70,13 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
             disableButtons(true)
 //            binding.merchantAmountET.isCursorVisible = true
         }
+
+        if (requireArguments().getString(Utils.VALUE) != "") {
+            binding.merchantAmountET.setText(requireArguments().getString(Utils.VALUE))
+            binding.merchantAmountET.setSelection(requireArguments().getString(Utils.VALUE)!!.length)
+            binding.bottomKeyPad.enteredText = requireArguments().getString(Utils.VALUE)!!
+        }
+
     }
 
 //    override fun onAttach(context: Context) {
@@ -274,5 +280,9 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
             }
         } catch (_: Exception) {
         }
+    }
+
+    companion object{
+        lateinit var binding: FragmentGenarateQrBinding
     }
 }
