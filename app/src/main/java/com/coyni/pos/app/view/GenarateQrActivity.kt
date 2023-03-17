@@ -90,6 +90,8 @@ class GenarateQrActivity : BaseActivity() {
                     binding.cvProfileSmall.visibility = View.VISIBLE
                     binding.dbaNameTV.visibility = View.VISIBLE
                     binding.arrowButton.setImageResource(R.drawable.ic_feather_menu)
+                    val amount = GenenrateQrFragment.binding.merchantAmountET.text.toString()
+                    pushFragment(GenenrateQrFragment(), "", amount)
                 } else {
                     generateQrViewModel.exitSaleRequest(myApplication.mCurrentUserData.validateResponseData?.token)
                 }
