@@ -54,7 +54,7 @@ class TransactionDetailsActivity : BaseActivity() {
 //                onBackPressed()
                 finish()
             }
-            if (intent != null) {
+            if (intent.getIntExtra(Utils.txnId,0) != 0) {
                 txnId = intent.getIntExtra(Utils.txnId, 0)
             }
 
@@ -89,6 +89,7 @@ class TransactionDetailsActivity : BaseActivity() {
             }
             showProgressDialog()
             transactionViewModel!!.transactionDetails(gbxID!!, txnType!!, txnSubType!!)
+            getActivityLogAPICall()
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
@@ -130,14 +131,16 @@ class TransactionDetailsActivity : BaseActivity() {
             }
         }
 
-        transactionViewModel?.logsResponseMutableLiveData?.observe(this) { logsResponseMutableLiveData ->
+        transactionViewModel?.logsResponseMutableLiveData?.observe(this) { activityLogsResponse ->
             try {
-                if (logsResponseMutableLiveData != null) {
-                    if (logsResponseMutableLiveData.status == Utils.SUCCESS) {
-                        if (logsResponseMutableLiveData.data?.size!! > 0) {
-
+                if (activityLogsResponse != null) {
+                    if (activityLogsResponse.status == Utils.SUCCESS) {
+                        if (activityLogsResponse.data?.size!! > 0) {
+//                            myApplication?.mCurrentUserData?.activityLogsResponseData = activityLogsResponse.data
                             val activityListAdater =
-                                ActivityLogAdapter(this@TransactionDetailsActivity)
+                                ActivityLogAdapter(this@TransactionDetailsActivity,
+                                    activityLogsResponse.data!!
+                                )
                             val mLayoutManager =
                                 LinearLayoutManager(this@TransactionDetailsActivity)
                             binding.recyclerView.layoutManager = mLayoutManager
@@ -191,9 +194,6 @@ class TransactionDetailsActivity : BaseActivity() {
 //            }
             if (data.status != null) {
                 binding.statusTV.text = (data.status)
-
-                // Activity Logs
-                getActivityLogAPICall()
 
                 when (data.status!!.toLowerCase()) {
                     Utils.transCompleted -> {
@@ -284,8 +284,8 @@ class TransactionDetailsActivity : BaseActivity() {
 
     private fun getActivityLogAPICall() {
         if (Utils.checkInternet(this@TransactionDetailsActivity)) {
-            if (txnId != null)
-                if (myApplication?.mCurrentUserData?.UserType == Utils.BUSINESS)
+            if (txnId != 0)
+//                if (myApplication?.mCurrentUserData?.UserType == Utils.BUSINESS)
                     transactionViewModel?.activityLogsDetails(txnId!!, "merchant")
 
         }

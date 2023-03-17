@@ -11,5 +11,5 @@ data class ActivityLogsResponseData(
     var txnType : Int? = null,
     var txnSubType : Int? = null,
     var linkText : String? = null,
-    var propetyData : PropertiesData? = null
+    var customProperties : PropertiesData? = null
 )
