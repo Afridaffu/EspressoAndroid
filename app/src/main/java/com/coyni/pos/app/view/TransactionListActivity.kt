@@ -200,11 +200,11 @@ class TransactionListActivity : BaseActivity() {
                         }
 
                     } else {
-                        Utils.displayAlert(
-                            batchResponseMutableLiveData.error?.errorDescription.toString(),
-                            this,
-                            ""
-                        )
+//                        Utils.displayAlert(
+//                            batchResponseMutableLiveData.error?.errorDescription.toString(),
+//                            this,
+//                            ""
+//                        )
                     }
                 }
 

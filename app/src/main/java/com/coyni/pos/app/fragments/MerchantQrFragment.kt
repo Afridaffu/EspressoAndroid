@@ -73,9 +73,6 @@ class MerchantQrFragment : BaseFragment() {
         }, 1000)
 
         binding.discardSaleLL.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
-                return@setOnClickListener
-            lastClickTime = SystemClock.elapsedRealtime()
             disCardSaleDialog()
         }
     }
@@ -86,6 +83,9 @@ class MerchantQrFragment : BaseFragment() {
         discardSaleDialog.setOnDialogClickListener(object : OnDialogClickListener {
             override fun onDialogClicked(action: String?, value: Any?) {
                 if (action == Utils.DISCARD) {
+                    if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
+                        return
+                    lastClickTime = SystemClock.elapsedRealtime()
                     disCardSale()
                 }
             }

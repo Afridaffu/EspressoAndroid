@@ -204,6 +204,14 @@ class TransactionDetailsActivity : BaseActivity() {
                         binding.statusTV.setTextColor(resources.getColor(R.color.inprogress_status))
                         binding.statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg)
                     }
+                    Utils.refunded -> {
+                        binding.statusTV.setTextColor(resources.getColor(R.color.pending_status))
+                        binding.statusTV.setBackgroundResource(R.drawable.txn_pending_bg)
+                        binding.ivRefund.isEnabled = false
+                        binding.ivRefund.setImageResource(R.drawable.refund_disable_icon)
+                        binding.RefundTV.setTextColor(getColor(R.color.light_gray))
+                    }
+                    Utils.partialrefund,
                     Utils.transPending -> {
                         binding.statusTV.setTextColor(resources.getColor(R.color.pending_status))
                         binding.statusTV.setBackgroundResource(R.drawable.txn_pending_bg)
@@ -232,7 +240,7 @@ class TransactionDetailsActivity : BaseActivity() {
             }
             if (data.referenceId != null) {
                 if (data.referenceId!!.length > 10)
-                    binding.refID.text = (data.referenceId)?.substring(0, 10)
+                    binding.refID.text = (data.referenceId)?.substring(0, 10) + "..."
                 else
                     binding.refID.text = (data.referenceId)
             }
@@ -252,12 +260,12 @@ class TransactionDetailsActivity : BaseActivity() {
                 binding.terminalID.text = data.terminalId.toString()
             }
 
-            binding.saleRefIDcopyIV.setOnClickListener(View.OnClickListener {
+            binding.saleRefIDcopyLL.setOnClickListener(View.OnClickListener {
                 Utils.copyText(
                     data.referenceId, this@TransactionDetailsActivity
                 )
             })
-            binding.orgRefIDcopyIV.setOnClickListener(View.OnClickListener {
+            binding.orgRefIDcopyLL.setOnClickListener(View.OnClickListener {
                 Utils.copyText(
                     data.saleOrderReferenceId, this@TransactionDetailsActivity
                 )
@@ -379,7 +387,8 @@ class TransactionDetailsActivity : BaseActivity() {
             }
 
             if (data.saleOrderReferenceId != null) {
-                binding.orgRefId.paintFlags = binding.orgRefId.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+                binding.orgRefId.paintFlags =
+                    binding.orgRefId.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                 if (data.saleOrderReferenceId!!.length > 10)
                     binding.orgRefId.text = (data.referenceId)?.substring(0, 10) + "..."
                 else
@@ -397,13 +406,13 @@ class TransactionDetailsActivity : BaseActivity() {
                 binding.tvOrgTotal.text = (data.total)
             }
 
-            binding.saleRefIDcopyIV.setOnClickListener(View.OnClickListener {
+            binding.saleRefIDcopyLL.setOnClickListener(View.OnClickListener {
                 Utils.copyText(
                     data.referenceId, this@TransactionDetailsActivity
                 )
             })
 
-            binding.orgRefIDcopyIV.setOnClickListener(View.OnClickListener {
+            binding.orgRefIDcopyLL.setOnClickListener(View.OnClickListener {
                 Utils.copyText(
                     data.saleOrderReferenceId, this@TransactionDetailsActivity
                 )
