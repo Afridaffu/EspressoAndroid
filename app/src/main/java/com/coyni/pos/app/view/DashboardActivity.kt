@@ -135,4 +135,17 @@ class DashboardActivity : BaseActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        if (binding.hiddenView.visibility == View.VISIBLE) {
+            TransitionManager.beginDelayedTransition(binding.baseCardview, AutoTransition())
+            binding.consLL.setBackgroundResource(R.drawable.dash_bottom_radius)
+            binding.hiddenView.visibility = View.GONE
+            binding.cvProfileSmall.visibility = View.VISIBLE
+            binding.dbaNameTV.visibility = View.VISIBLE
+            binding.arrowButton.setImageResource(R.drawable.ic_feather_menu)
+        } else {
+          finish()
+        }
+    }
 }
