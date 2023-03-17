@@ -147,6 +147,8 @@ class Utils {
         const val gbxTxnId = "gbxTxnId"
         const val SALE_ORDER_AMOUNT = "sale order amount"
         const val transPending = "pending"
+        const val partialrefund = "partial refund"
+        const val refunded = "refunded"
         const val transInprogress = "inprogress"
         const val transCompleted = "completed"
         const val transSuccessful = "Successful"
