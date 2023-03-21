@@ -7,5 +7,6 @@ data class TransactionListReq(
     var status: String? = null,
     var toAmount: Int? = null,
     var toDate: String? = null,
-    var data: TxnTypes? = null
+    var data: TxnTypes? = null,
+    var params: PageParams = PageParams()
 )

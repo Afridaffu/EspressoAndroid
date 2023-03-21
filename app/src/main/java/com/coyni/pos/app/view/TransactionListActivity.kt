@@ -257,7 +257,7 @@ class TransactionListActivity : BaseActivity() {
     private fun batchAPI() {
         val req = BatchAmountRequest()
         req.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
-        req.todayDate = "2023-01-17 00:00:00"
+        req.todayDate = Utils.getCurrentDate()
         batchAmountViewModel?.getBatchAmount(req)
     }
 
