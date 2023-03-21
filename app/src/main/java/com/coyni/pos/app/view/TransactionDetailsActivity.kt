@@ -54,8 +54,9 @@ class TransactionDetailsActivity : BaseActivity() {
 //                onBackPressed()
                 finish()
             }
-            if (intent.getIntExtra(Utils.txnId,0) != 0) {
+            if (intent.getIntExtra(Utils.txnId, 0) != 0) {
                 txnId = intent.getIntExtra(Utils.txnId, 0)
+                myApplication!!.mCurrentUserData.transactionId = txnId
             }
 
             binding.ivRefund.setOnClickListener {
@@ -138,7 +139,8 @@ class TransactionDetailsActivity : BaseActivity() {
                         if (activityLogsResponse.data?.size!! > 0) {
 //                            myApplication?.mCurrentUserData?.activityLogsResponseData = activityLogsResponse.data
                             val activityListAdater =
-                                ActivityLogAdapter(this@TransactionDetailsActivity,
+                                ActivityLogAdapter(
+                                    this@TransactionDetailsActivity,
                                     activityLogsResponse.data!!
                                 )
                             val mLayoutManager =
@@ -279,14 +281,13 @@ class TransactionDetailsActivity : BaseActivity() {
                     .putExtra(Utils.GBX_ID, gbxID)
             )
         }
-
     }
 
     private fun getActivityLogAPICall() {
         if (Utils.checkInternet(this@TransactionDetailsActivity)) {
             if (txnId != 0)
 //                if (myApplication?.mCurrentUserData?.UserType == Utils.BUSINESS)
-                    transactionViewModel?.activityLogsDetails(txnId!!, "merchant")
+                transactionViewModel?.activityLogsDetails(txnId!!, "merchant")
 
         }
     }
@@ -327,7 +328,7 @@ class TransactionDetailsActivity : BaseActivity() {
                 binding.statusTV.setText(data.status)
 
                 // Activity Logs API
-                getActivityLogAPICall()
+//                getActivityLogAPICall()
 
                 when (data.status!!.toLowerCase()) {
                     Utils.transCompleted -> {

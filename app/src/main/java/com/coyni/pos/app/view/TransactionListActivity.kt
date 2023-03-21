@@ -2,7 +2,9 @@ package com.coyni.pos.app.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -66,7 +68,7 @@ class TransactionListActivity : BaseActivity() {
         batchAmountViewModel =
             ViewModelProvider(this@TransactionListActivity).get(BatchAmountViewModel::class.java)
 
-        txnRefresh?.setColorSchemeColors(resources.getColor(R.color.primary_green, null))
+//        txnRefresh?.setColorSchemeColors(resources.getColor(R.color.primary_green, null))
 
         if (myApplication.mCurrentUserData.loginData!!.terminalName != null || myApplication.mCurrentUserData.loginData!!.terminalId != null) {
             binding.terminalNameTV.setText(myApplication.mCurrentUserData.loginData!!.terminalName)
@@ -89,6 +91,37 @@ class TransactionListActivity : BaseActivity() {
             binding.SearchLL.visibility = View.VISIBLE
             batchAPI()
         }
+        binding.transactionsNSV.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (scrollY == v.getChildAt(0).measuredHeight - v.measuredHeight) {
+                Log.e(
+                    "scrollY",
+                    scrollY.toString() + "  " + v.getChildAt(0).measuredHeight + " " + v.measuredHeight
+                )
+                try {
+                    Log.e("total abcd", total.toString() + "")
+                    Log.e("currentPage acbd", currentPage.toString() + "")
+                    if (total - 1 > currentPage) {
+                        binding.progressBarLoadMore.setVisibility(View.VISIBLE)
+                        binding.loadMoreTV.setVisibility(View.VISIBLE)
+                        currentPage = currentPage + 1
+                        Log.e("CurrentPage", currentPage.toString() + "")
+                        val transactionListRequest = TransactionListReq()
+//                        transactionListRequest.data?.txnType = getDefaultTransactionTypes()
+//                        transactionListRequest.pag(currentPage.toString())
+//                        transactionListRequest.setWalletCategory(Utils.walletCategory)
+//                        transactionListRequest.setPageSize(java.lang.String.valueOf(Utils.pageSize))
+
+                        transactionsAPI(transactionListRequest)
+                        binding.noMoreTransactions.setVisibility(View.GONE)
+                    } else {
+                    }
+
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+            }
+        })
+
 
     }
 

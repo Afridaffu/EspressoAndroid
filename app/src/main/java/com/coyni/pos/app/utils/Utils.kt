@@ -152,6 +152,7 @@ class Utils {
         const val PARTIAL_REFUND = "Partial Refund"
         const val transInprogress = "inprogress"
         const val transCompleted = "completed"
+        const val COMPLEETED = "Completed"
         const val transSuccessful = "Successful"
         const val transOpen = "open"
         const val transFailed = "failed"

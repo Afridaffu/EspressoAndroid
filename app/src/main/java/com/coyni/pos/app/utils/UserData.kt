@@ -26,6 +26,7 @@ class UserData {
     var transactionData: TransactionData? = null
     var UserType: String? = null
     var activityLogsResponseData : List<ActivityLogsResponseData>? = null
+    var transactionId: Int? = null
 
     fun convertZoneLatestTxndate(date: String?): String? {
         return Utils.convertZoneLatestTxn(date, strPreference)
