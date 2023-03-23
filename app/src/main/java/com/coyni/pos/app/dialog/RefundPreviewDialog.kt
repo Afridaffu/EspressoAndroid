@@ -29,26 +29,26 @@ class RefundPreviewDialog(
         dialogBinding.tvProcessingFee.text =
             Utils.convertTwoDecimal(myApplication.mCurrentUserData.refundResponseData?.processingFee.toString())
                 .replace("$", "") + " CYN"
-        if (myApplication.mCurrentUserData.refundResponseData!!.referenceId != null) {
-            if (myApplication.mCurrentUserData.refundResponseData!!.referenceId?.length!! > 10) {
+        if (myApplication.mCurrentUserData.transactionData!!.referenceId != null) {
+            if (myApplication.mCurrentUserData.transactionData!!.referenceId?.length!! > 10) {
                 dialogBinding.customerAddressTV.text =
-                    myApplication.mCurrentUserData.refundResponseData!!.referenceId!!.substring(
+                    myApplication.mCurrentUserData.transactionData!!.referenceId!!.substring(
                         0,
                         10
                     ) + "..."
             } else {
                 dialogBinding.customerAddressTV.text =
-                    myApplication.mCurrentUserData.refundResponseData!!.referenceId.toString()
+                    myApplication.mCurrentUserData.transactionData!!.referenceId.toString()
             }
         }
         dialogBinding.copyCustomerAddressLL.setOnClickListener {
             Utils.copyText(
-                myApplication.mCurrentUserData.refundResponseData!!.referenceId,
+                myApplication.mCurrentUserData.transactionData!!.referenceId,
                 context.applicationContext
             )
         }
-        dialogBinding.customerAddressTV.text =
-            myApplication.mCurrentUserData.refundResponseData!!.referenceId.toString()
+//        dialogBinding.customerAddressTV.text =
+//            myApplication.mCurrentUserData.refundResponseData!!.referenceId.toString()
         dialogBinding.amountPayTV.text = Utils.convertTwoDecimal(
             refundAmount.toString()
         ).replace("$", "")

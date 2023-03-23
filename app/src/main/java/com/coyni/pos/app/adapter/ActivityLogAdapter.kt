@@ -44,9 +44,8 @@ class ActivityLogAdapter(val context: Context, var respList: List<ActivityLogsRe
             holder.binding.statusTV.setText(
                 respList?.get(position)?.customProperties?.status
             )
-            when (respList?.get(position)?.customProperties?.status!!
-                .toLowerCase()) {
-                Utils.transCompleted, Utils.transSuccessful -> {
+            when (respList?.get(position)?.customProperties?.status!!) {
+                Utils.Completed, Utils.transSuccessful -> {
                     holder.binding.statusTV.setTextColor(
                         context.getResources().getColor(R.color.true_green)
                     )
@@ -75,18 +74,18 @@ class ActivityLogAdapter(val context: Context, var respList: List<ActivityLogsRe
             }
         }
 
-        if (respList?.get(position)?.createdAt.equals("")) {
+        if (respList?.get(position)?.createdAt != "") {
             val date: String = respList?.get(position)?.createdAt!!
-            if (date.contains(".")) {
-                val resDate = date.substring(0, date.lastIndexOf("."))
+//            if (date.contains(".")) {
+//                val resDate = date.substring(0, date.lastIndexOf("."))
                 holder.binding.date.text =
                     myApplication?.mCurrentUserData?.convertZoneDateTime(
-                        resDate,
+                        date,
                         dateAndTime,
                         requiredFormat
                     )?.toLowerCase()
-            } else {
-            }
+//            } else {
+//            }
         }
 
         if (respList?.get(position)!!.message != null) {

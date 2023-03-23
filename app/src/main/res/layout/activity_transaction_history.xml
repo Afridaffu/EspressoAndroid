@@ -58,11 +58,11 @@
 
     </RelativeLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/latestTxnRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recentTokenTextLL">
+<!--    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
+<!--        android:id="@+id/latestTxnRefresh"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/recentTokenTextLL">-->
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/transactionsNSV"
@@ -296,17 +296,51 @@
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
-                    <ProgressBar
-                        android:id="@+id/pbLoadMore"
+                    <TextView
+                        android:id="@+id/noTransactions"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/opensans_regular"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/_21sdp"
+                        android:text="You have no transactions"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_10ssp"
                         android:visibility="gone" />
 
+                    <ProgressBar
+                        android:id="@+id/progressBarLoadMore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/loadMoreTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:gravity="center"
+                        android:text="Load More"
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_10ssp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/noMoreTransactions"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:gravity="center"
+                        android:text="You have no more transactions"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="@dimen/_10ssp"
+                        android:visibility="gone" />
                 </LinearLayout>
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+<!--    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 
 </LinearLayout>

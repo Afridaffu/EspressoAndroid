@@ -2,7 +2,11 @@ package com.coyni.pos.app.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -34,6 +38,7 @@ class TransactionListActivity : BaseActivity() {
     private val transactionSubType = ArrayList<Int>()
     private val txnStatus = ArrayList<Int>()
 
+
     private lateinit var myApplication: MyApplication
     private var empRole: String? = ""
     private var transactionViewModel: TransactionsViewModel? = null
@@ -45,6 +50,7 @@ class TransactionListActivity : BaseActivity() {
     private var strEndAmount: String? = ""
     private var strFromDate: String? = ""
     private var strToDate: String? = ""
+    var transactions: MutableList<TransactionItem> = ArrayList<TransactionItem>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +72,7 @@ class TransactionListActivity : BaseActivity() {
         batchAmountViewModel =
             ViewModelProvider(this@TransactionListActivity).get(BatchAmountViewModel::class.java)
 
-        txnRefresh?.setColorSchemeColors(resources.getColor(R.color.primary_green, null))
+//        txnRefresh?.setColorSchemeColors(resources.getColor(R.color.primary_green, null))
 
         if (myApplication.mCurrentUserData.loginData!!.terminalName != null || myApplication.mCurrentUserData.loginData!!.terminalId != null) {
             binding.terminalNameTV.setText(myApplication.mCurrentUserData.loginData!!.terminalName)
@@ -89,6 +95,39 @@ class TransactionListActivity : BaseActivity() {
             binding.SearchLL.visibility = View.VISIBLE
             batchAPI()
         }
+        binding.transactionsNSV.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (scrollY == v.getChildAt(0).measuredHeight - v.measuredHeight) {
+                Log.e(
+                    "scrollY",
+                    scrollY.toString() + "  " + v.getChildAt(0).measuredHeight + " " + v.measuredHeight
+                )
+                try {
+                    Log.e("total abcd", total.toString() + "")
+                    Log.e("currentPage acbd", currentPage.toString() + "")
+                    if (total - 1 > currentPage) {
+                        println("message")
+                        binding.progressBarLoadMore.setVisibility(View.VISIBLE)
+                        binding.loadMoreTV.setVisibility(View.VISIBLE)
+                        currentPage = currentPage + 1
+                        Log.e("CurrentPage", currentPage.toString() + "")
+                        val transactionListRequest = TransactionListReq()
+                        transactionListRequest.params.pageNo = currentPage.toString()
+                        transactionListRequest.params.pageSize =
+                            java.lang.String.valueOf(Utils.pageSize)
+                        transactionListRequest.requestToken =
+                            myApplication.mCurrentUserData.validateResponseData?.token
+                        transactionsAPI(transactionListRequest)
+                        binding.noMoreTransactions.setVisibility(View.GONE)
+                    } else {
+                        println("value")
+                    }
+
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+            }
+        })
+
 
     }
 
@@ -169,10 +208,27 @@ class TransactionListActivity : BaseActivity() {
             try {
                 if (recentTransactionResponse != null) {
                     if (recentTransactionResponse.status == Utils.SUCCESS) {
+                        binding.progressBarLoadMore.setVisibility(View.GONE)
+                        binding.loadMoreTV.setVisibility(View.GONE)
                         myApplication?.mCurrentUserData?.transactionResponse =
                             recentTransactionResponse.data
-//                        recentTxns = recentTransactionResponse.data?.items!!
-                        prepareListData(recentTransactionResponse.data?.items)
+                        total = recentTransactionResponse.data?.totalPages!!
+                        transactions.addAll(recentTransactionResponse.data!!.items!!)
+                        if (transactions.size > 0) {
+                            binding.noTransactions.visibility = GONE
+                            if (currentPage > 0) {
+                                val myPos: Int =
+                                    transactions.size - recentTransactionResponse.data!!.items!!.size
+                                binding.recyclerView.scrollToPosition(myPos)
+                                binding.noMoreTransactions.setVisibility(View.VISIBLE)
+                            } else {
+                                binding.recyclerView.scrollToPosition(0)
+                                binding.noMoreTransactions.setVisibility(View.VISIBLE)
+                            }
+                            prepareListData(transactions)
+                        } else {
+                            binding.noTransactions.visibility = VISIBLE
+                        }
                     } else {
                         Utils.displayAlert(
                             recentTransactionResponse.error?.errorDescription.toString(), this, ""
