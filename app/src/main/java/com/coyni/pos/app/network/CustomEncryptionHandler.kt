@@ -1,5 +1,6 @@
 package com.coyni.pos.app.network
 
+import android.util.Log
 import com.coyni.pos.app.BuildConfig
 import com.coyni.pos.app.model.AbstractResponse
 import com.coyni.pos.app.network.AESEncryptionHelper.encrypt
@@ -146,7 +147,7 @@ class CustomEncryptionHandler : Interceptor {
             strOldBody = "{}"
         }
         var strNewBody: String? = null
-        //Log.e("API REQUEST", strOldBody);
+        Log.e("API REQUEST", strOldBody);
         val base64Str = Base64.getEncoder().encodeToString(strOldBody.toByteArray())
         val finalStr = appendDateTime(base64Str) + "." + randomRequestId
         try {
