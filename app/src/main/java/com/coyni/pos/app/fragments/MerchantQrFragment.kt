@@ -102,29 +102,29 @@ class MerchantQrFragment : BaseFragment() {
     }
 
     private fun inItObservers() {
-        generateQrViewModel.discardSaleResponse.observe(requireActivity()) { discardSaleResponse ->
-            try {
-                if (discardSaleResponse != null) {
-                    if (discardSaleResponse.status == Utils.SUCCESS) {
-                        myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId = null
-                        val intent = Intent(requireContext(), DashboardActivity::class.java)
-                        intent.setFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        )
-                        startActivity(intent)
-                        requireActivity().finish()
-                    } else {
-                        Utils.displayAlert(
-                            discardSaleResponse.error?.errorDescription.toString(),
-                            requireContext(),
-                            ""
-                        )
-                    }
-                }
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-        }
+//        generateQrViewModel.discardSaleResponse.observe(requireActivity()) { discardSaleResponse ->
+//            try {
+//                if (discardSaleResponse != null) {
+//                    if (discardSaleResponse.status == Utils.SUCCESS) {
+//                        myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId = null
+//                        val intent = Intent(requireContext(), DashboardActivity::class.java)
+//                        intent.setFlags(
+//                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                        )
+//                        startActivity(intent)
+//                        requireActivity().finish()
+//                    } else {
+//                        Utils.displayAlert(
+//                            discardSaleResponse.error?.errorDescription.toString(),
+//                            requireContext(),
+//                            ""
+//                        )
+//                    }
+//                }
+//            } catch (ex: Exception) {
+//                ex.printStackTrace()
+//            }
+//        }
     }
 
 //    override fun onBackPressed() {

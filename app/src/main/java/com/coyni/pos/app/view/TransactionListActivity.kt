@@ -28,6 +28,7 @@ import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.BatchAmountViewModel
 import com.coyni.pos.app.viewmodel.TransactionsViewModel
 import java.util.*
+import kotlin.collections.ArrayList
 
 class TransactionListActivity : BaseActivity(), TextWatcher {
 
@@ -121,39 +122,42 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                         transactionListRequest.requestToken =
                             myApplication.mCurrentUserData.validateResponseData?.token
 
-//                        if (request != null && request.isFilters()) {
-//                            if (request.data?.txnType!! > 0) {
-//                                transactionListRequest.data!!.txnType = request.data?.txnType
-//                            }
-//                            if (request!!.status!! > 0) {
-//                                transactionListRequest.status = request!!.status
-//                            }
-//                            if (request!!.fromAmount.toString().trim { it <= ' ' } != "") {
-//                                transactionListRequest.fromAmount = (
-//                                        request!!.fromAmount.toString().replace(
-//                                        ",",
-//                                        ""
-//                                    )
-//                                )
-//                            }
-//                            if (request.to.!!.trim { it <= ' ' } != "") {
-//                                transactionListRequest.setToAmount(strEndAmount!!.replace(",", ""))
-//                            }
-//                            if (strFromDate != "") {
-//                                transactionListRequest.setFromDate(
-//                                    objMyApplication.exportDate(
-//                                        strFromDate
-//                                    )
-//                                )
-//                            }
-//                            if (strToDate != "") {
-//                                transactionListRequest.setToDate(
-//                                    myApplication.mCurrentUserData.exportDate(
-//                                        strToDate
-//                                    )
-//                                )
-//                            }
-//                        }
+                        if (request != null && request!!.isFilters) {
+                            if (request!!.txnTypes != null) {
+                                transactionListRequest.txnTypes = request!!.txnTypes
+                            }
+                            if (request!!.status != null) {
+                                transactionListRequest.status = request!!.status
+                            }
+                            if (request!!.fromAmount.toString().trim { it <= ' ' } != "") {
+                                transactionListRequest.fromAmount = (
+                                        request!!.fromAmount.toString().replace(
+                                            ",",
+                                            ""
+                                        )
+                                        )
+                            }
+                            if (request!!.toAmount.toString().trim { it <= ' ' } != "") {
+                                transactionListRequest.toAmount = (
+                                        request!!.toAmount.toString().replace(
+                                            ",",
+                                            ""
+                                        )
+                                        )
+                            }
+
+                            if (request!!.fromDate != "") {
+                                transactionListRequest.fromDate =
+                                    Utils.exportDate(request!!.fromDate.toString(),"")
+
+                            }
+                            if (request!!.toDate != "") {
+                                transactionListRequest.toDate =
+                                    Utils.exportDate(
+                                        request!!.toDate.toString(),""
+                                    )
+                            }
+                    }
 
                         transactionsAPI(transactionListRequest)
                         myApplication.mCurrentUserData.initializeTransactionSearch()
@@ -194,7 +198,8 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                             } else {
                                 binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
                             }
-                        request!!.requestToken = myApplication.mCurrentUserData.validateResponseData!!.token
+                        request!!.requestToken =
+                            myApplication.mCurrentUserData.validateResponseData!!.token
                         transactionsAPI(request!!)
                     }
                     Utils.resetFilter -> {
@@ -369,15 +374,34 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
 
     override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
         if (charSequence!!.length > 30) {
-            transactions.clear()
+            transactions = ArrayList()
             val transactionListRequest = TransactionListReq()
-//            transactionListRequest.searchKey = charSequence.toString()
-            transactionsAPI(transactionListRequest)
+            if (request != null && request!!.isFilters) {
+                request!!.requestToken =
+                    myApplication.mCurrentUserData.validateResponseData?.token
+                request!!.searchKey = charSequence.toString()
+                transactionsAPI(request!!)
+            } else {
+                transactionListRequest.searchKey = charSequence.toString()
+                transactionListRequest.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
+                transactionsAPI(transactionListRequest)
+            }
         } else if (charSequence.length > 0 && charSequence.length < 30) {
+            binding.recyclerView.visibility = GONE
             binding.noTransactions.visibility = VISIBLE
         } else if (charSequence.toString().trim { it <= ' ' }.length == 0) {
-            myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
-            transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
+            transactions.clear()
+            if (request != null && request!!.isFilters) {
+                request!!.requestToken =
+                    myApplication.mCurrentUserData.validateResponseData?.token
+                request!!.searchKey = charSequence.toString()
+                transactionsAPI(request!!)
+            } else {
+                myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
+                myApplication.mCurrentUserData.transactionListReq!!.requestToken =
+                    myApplication.mCurrentUserData.validateResponseData?.token
+                transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
+            }
         }
     }
 
