@@ -2,6 +2,8 @@ package com.coyni.pos.app.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
@@ -27,7 +29,7 @@ import com.coyni.pos.app.viewmodel.BatchAmountViewModel
 import com.coyni.pos.app.viewmodel.TransactionsViewModel
 import java.util.*
 
-class TransactionListActivity : BaseActivity() {
+class TransactionListActivity : BaseActivity(), TextWatcher {
 
     private lateinit var binding: ActivityTransactionHistoryBinding
     private var adapter: RecentTransactionsListAdapter? = null
@@ -83,6 +85,8 @@ class TransactionListActivity : BaseActivity() {
 //            onBackPressed()
             finish()
         }
+        binding.searchET.addTextChangedListener(this)
+
 
         // Employee role changes
         empRole = myApplication.mCurrentUserData.validateResponseData?.empRole
@@ -116,7 +120,44 @@ class TransactionListActivity : BaseActivity() {
                             java.lang.String.valueOf(Utils.pageSize)
                         transactionListRequest.requestToken =
                             myApplication.mCurrentUserData.validateResponseData?.token
+
+//                        if (request != null && request.isFilters()) {
+//                            if (request.data?.txnType!! > 0) {
+//                                transactionListRequest.data!!.txnType = request.data?.txnType
+//                            }
+//                            if (request!!.status!! > 0) {
+//                                transactionListRequest.status = request!!.status
+//                            }
+//                            if (request!!.fromAmount.toString().trim { it <= ' ' } != "") {
+//                                transactionListRequest.fromAmount = (
+//                                        request!!.fromAmount.toString().replace(
+//                                        ",",
+//                                        ""
+//                                    )
+//                                )
+//                            }
+//                            if (request.to.!!.trim { it <= ' ' } != "") {
+//                                transactionListRequest.setToAmount(strEndAmount!!.replace(",", ""))
+//                            }
+//                            if (strFromDate != "") {
+//                                transactionListRequest.setFromDate(
+//                                    objMyApplication.exportDate(
+//                                        strFromDate
+//                                    )
+//                                )
+//                            }
+//                            if (strToDate != "") {
+//                                transactionListRequest.setToDate(
+//                                    myApplication.mCurrentUserData.exportDate(
+//                                        strToDate
+//                                    )
+//                                )
+//                            }
+//                        }
+
                         transactionsAPI(transactionListRequest)
+                        myApplication.mCurrentUserData.initializeTransactionSearch()
+                        myApplication.mCurrentUserData.transactionListReq = transactionListRequest
                         binding.noMoreTransactions.setVisibility(View.GONE)
                     } else {
                         println("value")
@@ -184,7 +225,12 @@ class TransactionListActivity : BaseActivity() {
         var transactionListRequest = TransactionListReq();
         transactionListRequest.requestToken =
             myApplication.mCurrentUserData.validateResponseData?.token
+        transactionListRequest.params.pageNo = currentPage.toString()
+        transactionListRequest.params.pageSize =
+            java.lang.String.valueOf(Utils.pageSize)
         transactionsAPI(transactionListRequest);
+        myApplication.mCurrentUserData.initializeTransactionSearch()
+        myApplication.mCurrentUserData.transactionListReq = transactionListRequest
     }
 
     private fun getDefaultTransactionTypes(): ArrayList<Int> {
@@ -315,6 +361,26 @@ class TransactionListActivity : BaseActivity() {
         req.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
         req.todayDate = Utils.getCurrentDate()
         batchAmountViewModel?.getBatchAmount(req)
+    }
+
+    override fun beforeTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    }
+
+    override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        if (charSequence!!.length > 30) {
+            transactions.clear()
+            val transactionListRequest = TransactionListReq()
+//            transactionListRequest.searchKey = charSequence.toString()
+            transactionsAPI(transactionListRequest)
+        } else if (charSequence.length > 0 && charSequence.length < 30) {
+            binding.noTransactions.visibility = VISIBLE
+        } else if (charSequence.toString().trim { it <= ' ' }.length == 0) {
+            myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
+            transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
+        }
+    }
+
+    override fun afterTextChanged(charSequence: Editable?) {
     }
 
 //    override fun onBackPressed() {
