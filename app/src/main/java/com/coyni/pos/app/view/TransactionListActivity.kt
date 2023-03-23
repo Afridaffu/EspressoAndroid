@@ -147,12 +147,13 @@ class TransactionListActivity : BaseActivity() {
                     Utils.applyFilter -> {
                         dismissDialog()
                         request = value as TransactionListReq
-                        if (request?.data?.txnType == null)
+                        if (request?.txnTypes?.txnType == null)
                             if (request != null) {
                                 binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
                             } else {
                                 binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
                             }
+                        request!!.requestToken = myApplication.mCurrentUserData.validateResponseData!!.token
                         transactionsAPI(request!!)
                     }
                     Utils.resetFilter -> {
