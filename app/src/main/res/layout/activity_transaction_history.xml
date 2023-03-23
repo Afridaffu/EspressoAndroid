@@ -302,6 +302,7 @@
                         android:layout_height="match_parent"
                         android:fontFamily="@font/opensans_regular"
                         android:gravity="center"
+                        android:layout_marginTop="@dimen/_21sdp"
                         android:text="You have no transactions"
                         android:textColor="@color/dark_gray"
                         android:textSize="@dimen/_10ssp"
