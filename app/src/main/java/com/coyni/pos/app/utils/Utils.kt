@@ -82,7 +82,7 @@ class Utils {
         const val PARTIAL_REFUND = "Partial Refund"
         const val transInprogress = "inprogress"
         const val transCompleted = "completed"
-        const val COMPLEETED = "Completed"
+        const val COMPLETED = "Completed"
         const val transSuccessful = "Successful"
         const val transFailed = "failed"
         const val datePicker = "DatePicker"
@@ -195,7 +195,7 @@ class Utils {
         const val DONE = "done"
         const val DEACTIVATED = "DeActivated"
         const val CANCELED = "Canceled"
-        const val COMPLETED = "Completed"
+        const val Completed = "Completed"
         const val lastClickDelay = 2000
 
         lateinit var errorState: Array<IntArray>

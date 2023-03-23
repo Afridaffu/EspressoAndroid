@@ -45,7 +45,7 @@ class ActivityLogAdapter(val context: Context, var respList: List<ActivityLogsRe
                 respList?.get(position)?.customProperties?.status
             )
             when (respList?.get(position)?.customProperties?.status!!) {
-                Utils.COMPLEETED, Utils.transSuccessful -> {
+                Utils.Completed, Utils.transSuccessful -> {
                     holder.binding.statusTV.setTextColor(
                         context.getResources().getColor(R.color.true_green)
                     )
