@@ -30,6 +30,7 @@ import androidx.annotation.ColorRes
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import com.coyni.pos.app.R
+import com.coyni.pos.app.view.LoginActivity
 import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONArray
 import org.json.JSONException
@@ -197,6 +198,7 @@ class Utils {
         const val CANCELED = "Canceled"
         const val Completed = "Completed"
         const val lastClickDelay = 2000
+        const val TOKEN_EXPIRED = "Something went wrong. Please try again"
 
         lateinit var errorState: Array<IntArray>
         lateinit var state: Array<IntArray>
@@ -204,6 +206,7 @@ class Utils {
         lateinit var color: IntArray
         lateinit var errorColorState: ColorStateList
         lateinit var colorState: ColorStateList
+        const val centuryTimeInMillis = 3155760000000L
 
 
         fun isValidEmail(target: String?): Boolean {
@@ -280,7 +283,7 @@ class Utils {
             return dtExpiry
         }
 
-                fun doubleParsing(value: String): Double {
+        fun doubleParsing(value: String): Double {
             return value.replace(",".toRegex(), "").replace("$".toRegex(), "")
                 .replace("USD".toRegex(), "").toDouble()
         }
@@ -631,6 +634,13 @@ class Utils {
                 header.text = headerText
             }
             actionCV.setOnClickListener {
+                if (msg.equals(TOKEN_EXPIRED, true)) {
+                    context.startActivity(
+                        Intent(context, LoginActivity::class.java).setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        )
+                    )
+                }
                 displayAlertDialog!!.dismiss()
             }
 
