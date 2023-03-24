@@ -18,7 +18,6 @@ import com.coyni.pos.app.model.RangeDates
 import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
 import com.coyni.pos.app.model.TransactionFilter.TransactionsSubTypeData
 import com.coyni.pos.app.model.TransactionFilter.TransactionsTypeData
-import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,9 +26,6 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
     private lateinit var binding: TransactionFilterDialogBinding
     override fun getLayoutId() = R.layout.transaction_filter_dialog
-
-    private var mContext: Context? = null
-
     private var request: TransactionListReq? = null
     private var isFilters = false
     private var txnStatus = ArrayList<Int>()
@@ -54,21 +50,17 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
     var endDateLong: Long = 0
 
     //    private var adapter: TransactionFilterAdapter? = null
-    private var adapter: com.coyni.pos.app.adapter.ExpandableListAdapter? = null
+    private var adapter: ExpandableListAdapter? = null
     var transactionTypeData: HashMap<Int, TransactionsTypeData> =
         HashMap<Int, TransactionsTypeData>()
     var transactionSubTypeData: HashMap<Int, List<TransactionsSubTypeData>> =
         HashMap<Int, List<TransactionsSubTypeData>>()
-
     var rangeDates = RangeDates()
-
-
 
     override fun initViews() {
         binding = TransactionFilterDialogBinding.bind(findViewById(R.id.filterLL))
         initFields()
         filterActions()
-
     }
 
     private fun setAdapter() {
@@ -81,15 +73,10 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
         adapter = ExpandableListAdapter(context, transactionTypeData, transactionSubTypeData)
         binding.custRecyclerView.setAdapter(adapter)
-        Handler().postDelayed(
-            { Utils.setInitialListViewHeight(binding.custRecyclerView) },
-            100
-        )
+        Handler().postDelayed({ Utils.setInitialListViewHeight(binding.custRecyclerView) }, 100)
     }
 
     private fun initFields() {
-        /* Class Initializing */
-
         binding.custRecyclerView.setOnGroupClickListener(ExpandableListView.OnGroupClickListener { parent, v, groupPosition, id ->
             parent.expandGroup(groupPosition)
             val checkBox = v.findViewById<CheckBox>(R.id.checkBoxCB)
@@ -158,7 +145,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                 }
             }
             strStartAmount = request!!.fromAmount.toString()
-            if (strStartAmount != null && strStartAmount.trim { it <= ' ' } != "") {
+            if (strStartAmount.trim { it <= ' ' } != "") {
                 val FilterArray = arrayOfNulls<InputFilter>(1)
                 FilterArray[0] =
                     InputFilter.LengthFilter(
@@ -168,7 +155,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                 binding.transAmountStartET.setText(strStartAmount)
             }
             strEndAmount = request!!.toAmount.toString()
-            if (strEndAmount != null && strEndAmount!!.trim { it <= ' ' } != "") {
+            if (strEndAmount!!.trim { it <= ' ' } != "") {
                 val FilterArray = arrayOfNulls<InputFilter>(1)
                 FilterArray[0] =
                     InputFilter.LengthFilter(
@@ -455,7 +442,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                         )
                     )
                 )
-//                USFormat(binding.transAmountStartET, "START")
+                USFormat(binding.transAmountStartET, "START")
                 try {
                     if (!binding.transAmountStartET.getText().toString()
                             .equals("") && !binding.transAmountStartET.getText().toString()
@@ -500,7 +487,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
             }
             if (!hasFocus) {
                 binding.transAmountEndET.setFilters(arrayOf<InputFilter>(InputFilter.LengthFilter(13)))
-//                USFormat(binding.transAmountEndET, "END")
+                USFormat(binding.transAmountEndET, "END")
                 try {
                     if (!binding.transAmountEndET.getText().toString()
                             .equals("") && !binding.transAmountEndET.getText().toString()
@@ -545,7 +532,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                         )
                     )
                 )
-//                USFormat(binding.transAmountStartET, "START")
+                USFormat(binding.transAmountStartET, "START")
                 binding.transAmountStartET.clearFocus()
             }
             false
@@ -554,7 +541,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
         binding.transAmountEndET.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.transAmountEndET.setFilters(arrayOf<InputFilter>(InputFilter.LengthFilter(13)))
-//                USFormat(binding.transAmountEndET, "END")
+                USFormat(binding.transAmountEndET, "END")
                 binding.transAmountEndET.clearFocus()
                 if (binding.transAmountStartET.getText().toString().equals("")) {
                     binding.transAmountStartET.setText("0.00")
@@ -791,4 +778,22 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
             }
         }
     }
+
+    private fun USFormat(etAmount: EditText, mode: String) {
+        try {
+            var strAmount = ""
+            strAmount = Utils.convertBigDecimalUSDC(etAmount.text.toString().trim { it <= ' ' }
+                .replace(",", ""))
+            etAmount.setText(Utils.USNumberFormat(Utils.doubleParsing(strAmount)))
+            etAmount.setSelection(etAmount.text.length)
+            if (mode == "START") {
+                strStartAmount = Utils.USNumberFormat(Utils.doubleParsing(strAmount))
+            } else {
+                strEndAmount = Utils.USNumberFormat(Utils.doubleParsing(strAmount))
+            }
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+    }
+
 }

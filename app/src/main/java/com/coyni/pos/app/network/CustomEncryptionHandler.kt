@@ -126,7 +126,7 @@ class CustomEncryptionHandler : Interceptor {
                 jObj.put("data", null)
                 val jErrorObject = JSONObject()
                 jErrorObject.put("errorCode", 400)
-                jErrorObject.put("errorDescription", "Something went wrong. Please try again")
+                jErrorObject.put("errorDescription", Utils.TOKEN_EXPIRED)
                 jErrorObject.put("fieldErrors", null)
                 jObj.put("error", jErrorObject)
             } catch (je: JSONException) {

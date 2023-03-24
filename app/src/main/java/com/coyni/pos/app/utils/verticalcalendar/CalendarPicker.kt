@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.coyni.pos.app.R
+import com.coyni.pos.app.utils.Utils
 import java.util.*
 import java.util.Calendar.*
 
@@ -50,7 +51,15 @@ class CalendarPicker : RecyclerView {
         startCalendar.set(MILLISECOND, 0)
 
         endCalendar.time = startCalendar.time
-        endCalendar.add(YEAR, 1)
+//        endCalendar.add(YEAR, 1)
+
+        val startDate = getInstance(TimeZone.getDefault(), Locale.getDefault())
+        val backwardDate = Date(startDate.time.time - Utils.centuryTimeInMillis)
+        val endDate = getInstance(TimeZone.getDefault(), Locale.getDefault())
+        setRangeDate(backwardDate, endDate.time)
+        showDayOfWeekTitle(true)
+        setMode(SelectionMode.RANGE)
+        scrollToDate(endDate.time)
 
         setBackgroundColor(ContextCompat.getColor(context, R.color.calendar_picker_bg))
         initAdapter()
@@ -72,7 +81,7 @@ class CalendarPicker : RecyclerView {
         val index =
             mCalendarData.indexOfFirst { it is CalendarEntity.Day && it.date.isTheSameDay(date) }
         require(index > -1) { "Date to scroll must be included in your Calendar Range Date" }
-        smoothScrollToPosition(index)
+        scrollToPosition(index)
     }
 
     fun showDayOfWeekTitle(show: Boolean) {
