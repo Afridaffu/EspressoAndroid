@@ -66,7 +66,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         refundViewModel = ViewModelProvider(this).get(RefundViewModel::class.java)
         fontSize = binding.refundAmountET.textSize
         binding.refundAmountET.showSoftInputOnFocus = false
-        binding.refundAmountET.isCursorVisible = true
+        binding.refundAmountET.requestFocus()
+//        binding.refundAmountET.isCursorVisible = true
         binding.refundAmountET.isSelected = false
         binding.refundAmountET.textDirection = View.TEXT_DIRECTION_RTL
         binding.refundAmountET.addTextChangedListener(this)
