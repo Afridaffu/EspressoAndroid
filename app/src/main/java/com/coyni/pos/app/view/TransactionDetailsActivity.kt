@@ -149,8 +149,14 @@ class TransactionDetailsActivity : BaseActivity() {
                             binding.recyclerView.itemAnimator = DefaultItemAnimator()
                             binding.recyclerView.adapter = activityListAdater
                             binding.llActivityLog.setVisibility(View.VISIBLE)
+                        } else {
+                            binding.llActivityLog.setVisibility(View.GONE)
                         }
+                    } else {
+                        binding.llActivityLog.setVisibility(View.GONE)
                     }
+                } else {
+                    binding.llActivityLog.setVisibility(View.GONE)
                 }
 
             } catch (ex: Exception) {
@@ -165,7 +171,7 @@ class TransactionDetailsActivity : BaseActivity() {
         binding.llSaleOrderData.visibility = View.VISIBLE
         binding.tvReason.visibility = View.GONE
         binding.llOriginalInfo.visibility = View.GONE
-        binding.llActivityLog.visibility = View.VISIBLE
+        binding.llActivityLog.visibility = View.GONE
         binding.llServicePhone.visibility = View.GONE
 
         if (data != null) {
@@ -178,9 +184,6 @@ class TransactionDetailsActivity : BaseActivity() {
                         "CYN",
                         ""
                     )
-                ).replace(
-                    "$",
-                    "".trim()
                 )
                 binding.amount.text = saleOrderAmount
             }

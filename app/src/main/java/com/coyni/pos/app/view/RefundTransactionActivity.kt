@@ -99,13 +99,9 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             if (myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != null || myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != "") {
                 fullAmount = Utils.doubleParsing(
                     myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString()
-                        .replace("CYN", "").trim()
+                        .replace("CYN", "").trim { it <= ' ' }
                 )
-                binding.refundAmountET.setText(
-                    "" + Utils.convertTwoDecimal(
-                        myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString()
-                            .replace("CYN", "")
-                    )
+                binding.refundAmountET.setText("" + Utils.convertTwoDecimal(myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString().replace("CYN", "").trim { it <= ' ' })
                 )
                 binding.refundAmountET.setSelection(binding.refundAmountET.text.length)
                 binding.fullAmountTV.setBackgroundResource(R.drawable.button_bg_light_green_core)
@@ -115,7 +111,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                 isfullamount = true
                 ishalfamount = false
                 binding.refundCKB.setEnteredText(
-                    binding.refundAmountET.text.toString().trim()
+                    binding.refundAmountET.text.toString().trim { it <= ' ' }
                 )
             } else {
                 ishalfamount = false
