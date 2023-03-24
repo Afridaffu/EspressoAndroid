@@ -66,7 +66,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         refundViewModel = ViewModelProvider(this).get(RefundViewModel::class.java)
         fontSize = binding.refundAmountET.textSize
         binding.refundAmountET.showSoftInputOnFocus = false
-        binding.refundAmountET.isCursorVisible = true
+        binding.refundAmountET.requestFocus()
+//        binding.refundAmountET.isCursorVisible = true
         binding.refundAmountET.isSelected = false
         binding.refundAmountET.textDirection = View.TEXT_DIRECTION_RTL
         binding.refundAmountET.addTextChangedListener(this)
@@ -99,13 +100,9 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             if (myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != null || myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != "") {
                 fullAmount = Utils.doubleParsing(
                     myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString()
-                        .replace("CYN", "").trim()
+                        .replace("CYN", "").trim { it <= ' ' }
                 )
-                binding.refundAmountET.setText(
-                    "" + Utils.convertTwoDecimal(
-                        myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString()
-                            .replace("CYN", "")
-                    )
+                binding.refundAmountET.setText("" + Utils.convertTwoDecimal(myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString().replace("CYN", "").trim { it <= ' ' })
                 )
                 binding.refundAmountET.setSelection(binding.refundAmountET.text.length)
                 binding.fullAmountTV.setBackgroundResource(R.drawable.button_bg_light_green_core)
@@ -115,7 +112,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
                 isfullamount = true
                 ishalfamount = false
                 binding.refundCKB.setEnteredText(
-                    binding.refundAmountET.text.toString().trim()
+                    binding.refundAmountET.text.toString().trim { it <= ' ' }
                 )
             } else {
                 ishalfamount = false

@@ -57,6 +57,7 @@ class StatusFailedActivity : BaseActivity() {
 //            }
         }
         binding.ivBack.setOnClickListener {
+            myApplication.mCurrentUserData.generateQrResponseData?.uniqueId = null
             startActivity(
                 Intent(applicationContext, DashboardActivity::class.java).setFlags(
                     Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
