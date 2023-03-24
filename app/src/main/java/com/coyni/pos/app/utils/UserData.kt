@@ -3,6 +3,7 @@ package com.coyni.pos.app.utils
 import com.coyni.pos.app.model.ActivityLogs.ActivityLogsResponseData
 import com.coyni.pos.app.model.BatchAmount.BatchResponseData
 import com.coyni.pos.app.model.TransactionData
+import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
 import com.coyni.pos.app.model.TransactionFilter.TransactionResponseData
 import com.coyni.pos.app.model.downloadurl.DownloadUrlData
 import com.coyni.pos.app.model.generate_qr.GenerateQrResponseData
@@ -27,6 +28,8 @@ class UserData {
     var UserType: String? = null
     var activityLogsResponseData : List<ActivityLogsResponseData>? = null
     var transactionId: Int? = null
+    var transactionListReq: TransactionListReq? = null
+
 
     fun convertZoneLatestTxndate(date: String?): String? {
         return Utils.convertZoneLatestTxn(date, strPreference)
@@ -35,5 +38,7 @@ class UserData {
     fun convertZoneDateTime(date: String?, format: String?, requiredFormat: String?): String? {
         return Utils.convertZoneDateTime(date, format, requiredFormat, strPreference)
     }
-
+    fun initializeTransactionSearch() {
+        transactionListReq = TransactionListReq()
+    }
 }

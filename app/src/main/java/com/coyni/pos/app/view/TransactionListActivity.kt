@@ -2,6 +2,8 @@ package com.coyni.pos.app.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
@@ -26,8 +28,9 @@ import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.BatchAmountViewModel
 import com.coyni.pos.app.viewmodel.TransactionsViewModel
 import java.util.*
+import kotlin.collections.ArrayList
 
-class TransactionListActivity : BaseActivity() {
+class TransactionListActivity : BaseActivity(), TextWatcher {
 
     private lateinit var binding: ActivityTransactionHistoryBinding
     private var adapter: RecentTransactionsListAdapter? = null
@@ -83,6 +86,8 @@ class TransactionListActivity : BaseActivity() {
 //            onBackPressed()
             finish()
         }
+        binding.searchET.addTextChangedListener(this)
+
 
         // Employee role changes
         empRole = myApplication.mCurrentUserData.validateResponseData?.empRole
@@ -116,7 +121,47 @@ class TransactionListActivity : BaseActivity() {
                             java.lang.String.valueOf(Utils.pageSize)
                         transactionListRequest.requestToken =
                             myApplication.mCurrentUserData.validateResponseData?.token
+
+                        if (request != null && request!!.isFilters) {
+                            if (request!!.txnTypes != null) {
+                                transactionListRequest.txnTypes = request!!.txnTypes
+                            }
+                            if (request!!.status != null) {
+                                transactionListRequest.status = request!!.status
+                            }
+                            if (request!!.fromAmount.toString().trim { it <= ' ' } != "") {
+                                transactionListRequest.fromAmount = (
+                                        request!!.fromAmount.toString().replace(
+                                            ",",
+                                            ""
+                                        )
+                                        )
+                            }
+                            if (request!!.toAmount.toString().trim { it <= ' ' } != "") {
+                                transactionListRequest.toAmount = (
+                                        request!!.toAmount.toString().replace(
+                                            ",",
+                                            ""
+                                        )
+                                        )
+                            }
+
+                            if (request!!.fromDate != "") {
+                                transactionListRequest.fromDate =
+                                    Utils.exportDate(request!!.fromDate.toString(),"")
+
+                            }
+                            if (request!!.toDate != "") {
+                                transactionListRequest.toDate =
+                                    Utils.exportDate(
+                                        request!!.toDate.toString(),""
+                                    )
+                            }
+                    }
+
                         transactionsAPI(transactionListRequest)
+                        myApplication.mCurrentUserData.initializeTransactionSearch()
+                        myApplication.mCurrentUserData.transactionListReq = transactionListRequest
                         binding.noMoreTransactions.setVisibility(View.GONE)
                     } else {
                         println("value")
@@ -186,7 +231,12 @@ class TransactionListActivity : BaseActivity() {
         var transactionListRequest = TransactionListReq();
         transactionListRequest.requestToken =
             myApplication.mCurrentUserData.validateResponseData?.token
+        transactionListRequest.params.pageNo = currentPage.toString()
+        transactionListRequest.params.pageSize =
+            java.lang.String.valueOf(Utils.pageSize)
         transactionsAPI(transactionListRequest);
+        myApplication.mCurrentUserData.initializeTransactionSearch()
+        myApplication.mCurrentUserData.transactionListReq = transactionListRequest
     }
 
     private fun getDefaultTransactionTypes(): ArrayList<Int> {
@@ -317,6 +367,45 @@ class TransactionListActivity : BaseActivity() {
         req.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
         req.todayDate = Utils.getCurrentDate()
         batchAmountViewModel?.getBatchAmount(req)
+    }
+
+    override fun beforeTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    }
+
+    override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        if (charSequence!!.length > 30) {
+            transactions = ArrayList()
+            val transactionListRequest = TransactionListReq()
+            if (request != null && request!!.isFilters) {
+                request!!.requestToken =
+                    myApplication.mCurrentUserData.validateResponseData?.token
+                request!!.searchKey = charSequence.toString()
+                transactionsAPI(request!!)
+            } else {
+                transactionListRequest.searchKey = charSequence.toString()
+                transactionListRequest.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
+                transactionsAPI(transactionListRequest)
+            }
+        } else if (charSequence.length > 0 && charSequence.length < 30) {
+            binding.recyclerView.visibility = GONE
+            binding.noTransactions.visibility = VISIBLE
+        } else if (charSequence.toString().trim { it <= ' ' }.length == 0) {
+            transactions.clear()
+            if (request != null && request!!.isFilters) {
+                request!!.requestToken =
+                    myApplication.mCurrentUserData.validateResponseData?.token
+                request!!.searchKey = charSequence.toString()
+                transactionsAPI(request!!)
+            } else {
+                myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
+                myApplication.mCurrentUserData.transactionListReq!!.requestToken =
+                    myApplication.mCurrentUserData.validateResponseData?.token
+                transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
+            }
+        }
+    }
+
+    override fun afterTextChanged(charSequence: Editable?) {
     }
 
 //    override fun onBackPressed() {
