@@ -183,8 +183,7 @@ class MerchantQrFragment : BaseFragment() {
                         }
                     }
                     handler.postDelayed(runnable!!, 0)
-                } else if (obj.getString("eventType") == "POS_TXN_STATUS") {
-
+                }else if (obj.getString("eventType") == "SCAN_QR_CODE"){
                     runOnUiThread(Runnable {
                         binding.qrLL.visibility = View.GONE
                         binding.animationRL.visibility = View.VISIBLE
@@ -192,6 +191,7 @@ class MerchantQrFragment : BaseFragment() {
                         binding.discardSaleLL.setBackgroundResource(R.drawable.bg_inactive_color_filled_cv)
                         binding.discardSaleLL.isEnabled = false
                     })
+                } else if (obj.getString("eventType") == "POS_TXN_STATUS") {
 
                     myApplication!!.mCurrentUserData.webSocketObject = obj
 

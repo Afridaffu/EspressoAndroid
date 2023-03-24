@@ -139,7 +139,7 @@ class TransactionListActivity : BaseActivity() {
 
     private fun filterDialog() {
         val filterDialog = TransactionFilterDialog(this@TransactionListActivity)
-        filterDialog!!.show()
+        filterDialog.show()
 
         filterDialog.setOnDialogClickListener(object : OnDialogClickListener {
             override fun onDialogClicked(action: String?, value: Any?) {
@@ -154,6 +154,7 @@ class TransactionListActivity : BaseActivity() {
                                 binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
                             }
                         request!!.requestToken = myApplication.mCurrentUserData.validateResponseData!!.token
+                        transactions.clear()
                         transactionsAPI(request!!)
                     }
                     Utils.resetFilter -> {
@@ -168,7 +169,7 @@ class TransactionListActivity : BaseActivity() {
             }
         })
 
-        filterDialog!!.setOnDismissListener { dialogInterface -> }
+        filterDialog.setOnDismissListener { dialogInterface -> }
     }
 
     private fun loadData() {
