@@ -126,6 +126,7 @@ class GenarateQrActivity : BaseActivity() {
                 myApplication?.mCurrentUserData?.validateResponseData?.token
             discardSaleRequest.uniqueId =
                 myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId
+            showProgressDialog()
             generateQrViewModel.discardSaleRequest(discardSaleRequest)
         } catch (e: Exception) {
         }
@@ -202,6 +203,7 @@ class GenarateQrActivity : BaseActivity() {
         generateQrViewModel.discardSaleResponse.observe(this) { discardSaleResponse ->
             try {
                 if (discardSaleResponse != null) {
+                    dismissDialog()
                     if (discardSaleResponse.status == Utils.SUCCESS) {
                         myApplication.mCurrentUserData.generateQrResponseData?.uniqueId = null
                         val intent = Intent(this, DashboardActivity::class.java)

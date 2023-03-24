@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.core.os.postDelayed
 import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
+import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.MerchantQrBinding
 import com.coyni.pos.app.dialog.DiscardSaleDialog
@@ -41,6 +42,7 @@ class MerchantQrFragment : BaseFragment() {
     var lastClickTime = 0L
     lateinit var generateQrViewModel: GenerateQrViewModel
     var webSocketGlobal: WebSocket? = null
+    var activity: BaseActivity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -55,6 +57,7 @@ class MerchantQrFragment : BaseFragment() {
     private fun inItFields() {
         binding.discardSaleLL.isEnabled = false
         myApplication = requireActivity().application as MyApplication
+        activity = requireActivity() as BaseActivity
         generateQrViewModel =
             ViewModelProvider(requireActivity()).get(GenerateQrViewModel::class.java)
         getValues()
@@ -98,6 +101,7 @@ class MerchantQrFragment : BaseFragment() {
             myApplication?.mCurrentUserData?.validateResponseData?.token
         discardSaleRequest.uniqueId =
             myApplication?.mCurrentUserData?.generateQrResponseData?.uniqueId
+        activity?.showProgressDialog()
         generateQrViewModel.discardSaleRequest(discardSaleRequest)
     }
 
