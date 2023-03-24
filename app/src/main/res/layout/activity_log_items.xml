@@ -36,6 +36,7 @@
             android:layout_marginLeft="@dimen/_7sdp"
             android:fontFamily="@font/opensans_regular"
             android:gravity="right"
+            android:layout_gravity="center"
             android:text="sdfg"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_10ssp" />
