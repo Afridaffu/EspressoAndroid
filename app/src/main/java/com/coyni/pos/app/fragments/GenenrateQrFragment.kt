@@ -16,6 +16,7 @@ import android.view.inputmethod.InputConnection
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
+import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.baseclass.BaseFragment
 import com.coyni.pos.app.databinding.FragmentGenarateQrBinding
 import com.coyni.pos.app.model.generate_qr.GenerateQrRequest
@@ -30,6 +31,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
     private var isPayClickable: Boolean = false
     lateinit var generateQrViewModel: GenerateQrViewModel
     var myApplication: MyApplication? = null
+    var activity: BaseActivity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +48,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
     private fun inItFields() {
         generateQrViewModel = ViewModelProvider(this).get(GenerateQrViewModel::class.java)
         myApplication = requireActivity().application as MyApplication
+        activity = requireActivity() as BaseActivity
         fontSize = binding.merchantAmountET.textSize
         binding.merchantAmountET.requestFocus()
         binding.merchantAmountET.isSelected = false
@@ -85,7 +88,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
 //        binding.merchantAmountET.isCursorVisible = true
 //    }
 
-//    override fun onResume() {
+    //    override fun onResume() {
 //        super.onResume()
 //        binding.merchantAmountET.isCursorVisible = true
 //    }
@@ -93,6 +96,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         generateQrViewModel.generateQrResponse.observe(requireActivity()) { generateQrResponse ->
             try {
                 if (generateQrResponse != null) {
+                    activity?.dismissDialog()
                     if (generateQrResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.generateQrResponseData =
                             generateQrResponse.data
@@ -186,7 +190,6 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
                     lastClickTime = SystemClock.elapsedRealtime()
                     convertDecimal()
                     if (isPayClickable) {
-
                         generateQR()
                     }
                 }
@@ -264,6 +267,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         generateQrRequest.isQrCodeEnable = true
         generateQrRequest.requestToken =
             myApplication?.mCurrentUserData?.validateResponseData?.token
+        activity?.showProgressDialog()
         generateQrViewModel.generateQrRequest(generateQrRequest)
     }
 
@@ -282,7 +286,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         }
     }
 
-    companion object{
+    companion object {
         lateinit var binding: FragmentGenarateQrBinding
     }
 }

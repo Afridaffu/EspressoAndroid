@@ -105,6 +105,7 @@ class DashboardActivity : BaseActivity() {
         binding.logoutLL.setOnClickListener {
             if (SystemClock.elapsedRealtime() - lastClick < Utils.lastClickDelay) return@setOnClickListener
             lastClick = SystemClock.elapsedRealtime()
+            showProgressDialog()
             logoutViewModel!!.getLogout()
         }
 
@@ -118,6 +119,7 @@ class DashboardActivity : BaseActivity() {
 
     private fun initObserver() {
         logoutViewModel?.logoutResponseMutableLiveData?.observe(this@DashboardActivity) { response ->
+            dismissDialog()
             if (response != null && response.status == Utils.SUCCESS) {
                 myApplication?.clearUserData()
                 startActivity(
