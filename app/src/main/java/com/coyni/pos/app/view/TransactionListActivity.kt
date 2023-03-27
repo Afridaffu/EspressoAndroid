@@ -88,33 +88,27 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
         }
         binding.searchET.addTextChangedListener(this)
 
-
         // Employee role changes
         empRole = myApplication.mCurrentUserData.validateResponseData?.empRole
 
         if (empRole.equals(Utils.EMPROLE)) {
-            binding.llRecentTxn.visibility = View.VISIBLE
-            binding.SearchLL.visibility = View.GONE
+            binding.batchCV.visibility = GONE
+            binding.searchCV.visibility = GONE
+            binding.recentTxnLL.visibility = VISIBLE
+            binding.transactionsNSV.isEnabled = false
         } else {
-            binding.llRecentTxn.visibility = View.GONE
-            binding.SearchLL.visibility = View.VISIBLE
-            batchAPI()
+            binding.batchCV.visibility = VISIBLE
+            binding.searchCV.visibility = VISIBLE
+            binding.recentTxnLL.visibility = GONE
+            binding.transactionsNSV.isEnabled = true
         }
         binding.transactionsNSV.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             if (scrollY == v.getChildAt(0).measuredHeight - v.measuredHeight) {
-                Log.e(
-                    "scrollY",
-                    scrollY.toString() + "  " + v.getChildAt(0).measuredHeight + " " + v.measuredHeight
-                )
                 try {
-                    Log.e("total abcd", total.toString() + "")
-                    Log.e("currentPage acbd", currentPage.toString() + "")
                     if (total - 1 > currentPage) {
-                        println("message")
-                        binding.progressBarLoadMore.setVisibility(View.VISIBLE)
-                        binding.loadMoreTV.setVisibility(View.VISIBLE)
+                        binding.loadLL.visibility = VISIBLE
+                        binding.noMoreTransactions.visibility = GONE
                         currentPage = currentPage + 1
-                        Log.e("CurrentPage", currentPage.toString() + "")
                         val transactionListRequest = TransactionListReq()
                         transactionListRequest.params.pageNo = currentPage.toString()
                         transactionListRequest.params.pageSize =
@@ -148,23 +142,23 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
 
                             if (request!!.fromDate != "") {
                                 transactionListRequest.fromDate =
-                                    Utils.exportDate(request!!.fromDate.toString(),"")
+                                    Utils.exportDate(request!!.fromDate.toString(), "")
 
                             }
                             if (request!!.toDate != "") {
                                 transactionListRequest.toDate =
                                     Utils.exportDate(
-                                        request!!.toDate.toString(),""
+                                        request!!.toDate.toString(), ""
                                     )
                             }
-                    }
+                        }
 
                         transactionsAPI(transactionListRequest)
                         myApplication.mCurrentUserData.initializeTransactionSearch()
                         myApplication.mCurrentUserData.transactionListReq = transactionListRequest
                         binding.noMoreTransactions.setVisibility(View.GONE)
                     } else {
-                        println("value")
+                        binding.noMoreTransactions.visibility = VISIBLE
                     }
 
                 } catch (e: java.lang.Exception) {
@@ -173,6 +167,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
             }
         })
 
+        batchAPI()
 
     }
 
@@ -198,9 +193,11 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                             } else {
                                 binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
                             }
-                        request!!.requestToken = myApplication.mCurrentUserData.validateResponseData!!.token
+                        request!!.requestToken =
+                            myApplication.mCurrentUserData.validateResponseData!!.token
                         transactions.clear()
                         transactionsAPI(request!!)
+//                        transactionViewModel!!.filterTransactionsList(request!!)
                     }
                     Utils.resetFilter -> {
 
@@ -260,26 +257,33 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
             try {
                 if (recentTransactionResponse != null) {
                     if (recentTransactionResponse.status == Utils.SUCCESS) {
-                        binding.progressBarLoadMore.setVisibility(View.GONE)
-                        binding.loadMoreTV.setVisibility(View.GONE)
-                        myApplication?.mCurrentUserData?.transactionResponse =
+                        binding.loadLL.visibility = GONE
+                        myApplication.mCurrentUserData.transactionResponse =
                             recentTransactionResponse.data
                         total = recentTransactionResponse.data?.totalPages!!
                         transactions.addAll(recentTransactionResponse.data!!.items!!)
                         if (transactions.size > 0) {
+                            binding.txnListRV.visibility = VISIBLE
                             binding.noTransactions.visibility = GONE
                             if (currentPage > 0) {
                                 val myPos: Int =
                                     transactions.size - recentTransactionResponse.data!!.items!!.size
-                                binding.recyclerView.scrollToPosition(myPos)
-                                binding.noMoreTransactions.setVisibility(View.VISIBLE)
+                                binding.txnListRV.scrollToPosition(myPos)
+                                binding.noMoreTransactions.setVisibility(GONE)
                             } else {
-                                binding.recyclerView.scrollToPosition(0)
-                                binding.noMoreTransactions.setVisibility(View.VISIBLE)
+                                binding.txnListRV.scrollToPosition(0)
+                                if (empRole.equals(Utils.EMPROLE))
+                                    binding.noMoreTransactions.setVisibility(GONE)
+                                else
+                                    binding.noMoreTransactions.setVisibility(VISIBLE)
+
+
                             }
                             prepareListData(transactions)
                         } else {
+                            binding.txnListRV.visibility = GONE
                             binding.noTransactions.visibility = VISIBLE
+                            binding.noMoreTransactions.visibility = GONE
                         }
                     } else {
                         Utils.displayAlert(
@@ -296,7 +300,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
             try {
                 if (batchResponseMutableLiveData != null) {
                     if (batchResponseMutableLiveData.status == Utils.SUCCESS) {
-                        myApplication?.mCurrentUserData?.batchResponse =
+                        myApplication.mCurrentUserData.batchResponse =
                             batchResponseMutableLiveData.data
                         if (batchResponseMutableLiveData.data?.todayBatchAmount != null) {
                             binding.batchMoneyTV.setText(
@@ -327,17 +331,10 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
         if (items != null && items.isNotEmpty()) {
             adapter = RecentTransactionsListAdapter(this@TransactionListActivity, items)
 
-            // Recent List View
-            if (empRole.equals(Utils.EMPROLE)) {
-                binding.recyclerView.layoutManager =
-                    LinearLayoutManager(this@TransactionListActivity)
-                binding.recyclerView.adapter = adapter
-            } else {
-                // Manager List View
-                binding.listRecyclerRV.layoutManager =
-                    LinearLayoutManager(this@TransactionListActivity)
-                binding.listRecyclerRV.adapter = adapter
-
+            binding.txnListRV.layoutManager =
+                LinearLayoutManager(this@TransactionListActivity)
+            binding.txnListRV.adapter = adapter
+            if (!empRole.equals(Utils.EMPROLE)) {
                 adapter?.setOnItemClickListener(
                     object : OnItemClickListener {
                         override fun onItemClick(position: Int?, value: Any?) {
@@ -345,7 +342,6 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                         }
 
                         override fun onChildClicked(s: String?) {
-
                         }
                     })
             }
@@ -383,25 +379,26 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                 transactionsAPI(request!!)
             } else {
                 transactionListRequest.searchKey = charSequence.toString()
-                transactionListRequest.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
+                transactionListRequest.requestToken =
+                    myApplication.mCurrentUserData.validateResponseData?.token
                 transactionsAPI(transactionListRequest)
             }
         } else if (charSequence.length > 0 && charSequence.length < 30) {
-            binding.recyclerView.visibility = GONE
+            binding.txnListRV.visibility = GONE
             binding.noTransactions.visibility = VISIBLE
         } else if (charSequence.toString().trim { it <= ' ' }.length == 0) {
             transactions.clear()
-            if (request != null && request!!.isFilters) {
-                request!!.requestToken =
-                    myApplication.mCurrentUserData.validateResponseData?.token
-                request!!.searchKey = charSequence.toString()
-                transactionsAPI(request!!)
-            } else {
-                myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
-                myApplication.mCurrentUserData.transactionListReq!!.requestToken =
-                    myApplication.mCurrentUserData.validateResponseData?.token
-                transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
-            }
+//            if (request != null && request!!.isFilters) {
+//                request!!.requestToken =
+//                    myApplication.mCurrentUserData.validateResponseData?.token
+//                request!!.searchKey = charSequence.toString()
+//                transactionsAPI(request!!)
+//            } else {
+            myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
+            myApplication.mCurrentUserData.transactionListReq!!.requestToken =
+                myApplication.mCurrentUserData.validateResponseData?.token
+            transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
+//            }
         }
     }
 
