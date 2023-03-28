@@ -1,10 +1,18 @@
 package com.coyni.pos.app.adapter
 
 import android.content.Context
+import android.graphics.Color
+import android.os.SystemClock
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseRecyclerViewAdapter
 import com.coyni.pos.app.baseclass.OnItemClickListener
 import com.coyni.pos.app.databinding.ActivityLogItemsBinding
@@ -18,6 +26,7 @@ class ActivityLogAdapter(val context: Context, var respList: List<ActivityLogsRe
     private var listener: OnItemClickListener? = null
     private val dateAndTime = "yyyy-MM-dd HH:mm:ss"
     private val requiredFormat = "MM/dd/yyyy h:mma"
+    var lastClickTime = 0L
 
     override fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.listener = onItemClickListener
@@ -40,36 +49,35 @@ class ActivityLogAdapter(val context: Context, var respList: List<ActivityLogsRe
 //        respList = myApplication?.mCurrentUserData?.activityLogsResponseData!!
 
         if (respList.get(position)?.customProperties?.status != null) {
-
             holder.binding.statusTV.setText(
-                respList?.get(position)?.customProperties?.status
+                respList?.get(position)?.customProperties?.status + ":"
             )
             when (respList?.get(position)?.customProperties?.status!!) {
                 Utils.Completed, Utils.transSuccessful -> {
-                    holder.binding.statusTV.setTextColor(
-                        context.getResources().getColor(R.color.true_green)
-                    )
-                    holder.binding.statusTV.setBackgroundResource(R.drawable.txn_completed_bg)
+//                    holder.binding.statusTV.setTextColor(
+//                        context.getResources().getColor(R.color.true_green)
+//                    )
+//                    holder.binding.statusTV.setBackgroundResource(R.drawable.txn_completed_bg)
                 }
                 Utils.transInprogress -> {
-                    holder.binding.statusTV.setTextColor(
-                        context.getResources().getColor(R.color.inprogress_status)
-                    )
-                    holder.binding.statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg)
+//                    holder.binding.statusTV.setTextColor(
+//                        context.getResources().getColor(R.color.inprogress_status)
+//                    )
+//                    holder.binding.statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg)
                 }
                 Utils.refunded,
                 Utils.PARTIAL_REFUND,
                 Utils.transPending -> {
-                    holder.binding.statusTV.setTextColor(
-                        context.getResources().getColor(R.color.pending_status)
-                    )
-                    holder.binding.statusTV.setBackgroundResource(R.drawable.txn_pending_bg)
+//                    holder.binding.statusTV.setTextColor(
+//                        context.getResources().getColor(R.color.pending_status)
+//                    )
+//                    holder.binding.statusTV.setBackgroundResource(R.drawable.txn_pending_bg)
                 }
                 Utils.transFailed -> {
-                    holder.binding.statusTV.setTextColor(
-                        context.getResources().getColor(R.color.failed_status)
-                    )
-                    holder.binding.statusTV.setBackgroundResource(R.drawable.txn_failed_bg)
+//                    holder.binding.statusTV.setTextColor(
+//                        context.getResources().getColor(R.color.failed_status)
+//                    )
+//                    holder.binding.statusTV.setBackgroundResource(R.drawable.txn_failed_bg)
                 }
             }
         }
@@ -78,19 +86,60 @@ class ActivityLogAdapter(val context: Context, var respList: List<ActivityLogsRe
             val date: String = respList?.get(position)?.createdAt!!
 //            if (date.contains(".")) {
 //                val resDate = date.substring(0, date.lastIndexOf("."))
-                holder.binding.date.text =
-                    myApplication?.mCurrentUserData?.convertZoneDateTime(
-                        date,
-                        dateAndTime,
-                        requiredFormat
-                    )?.toLowerCase()
+            holder.binding.date.text =
+                myApplication?.mCurrentUserData?.convertZoneDateTime(
+                    date,
+                    dateAndTime,
+                    requiredFormat
+                )?.toLowerCase()
 //            } else {
 //            }
         }
 
         if (respList?.get(position)!!.message != null) {
-            holder.binding.messageTv.setText(respList?.get(position)!!.message)
+            val ss =
+                SpannableString(respList?.get(position)!!.message + " View Refund Transaction")
+
+            val clickableSpan: ClickableSpan = object : ClickableSpan() {
+                override fun onClick(view: View) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - lastClickTime < 2000) {
+                            return
+                        }
+                        lastClickTime = SystemClock.elapsedRealtime()
+                        listener?.onItemClick(position, "")
+                    } catch (ex: Exception) {
+                        ex.printStackTrace()
+                    }
+                }
+                override fun updateDrawState(ss: TextPaint) {
+                    super.updateDrawState(ss)
+                    ss.isUnderlineText = false
+                }
+            }
+            ss.setSpan(
+                ForegroundColorSpan(Color.parseColor("#00A6A2")),
+                ss.indexOf("View Refund Transaction"),
+                ss.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            ss.setSpan("",
+                ss.indexOf("View Refund Transaction"),
+                ss.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            ss.setSpan(clickableSpan, ss.length - 25, ss.length, 0)
+
+            holder.binding.messageTv.setText(ss)
+            holder.binding.messageTv.setMovementMethod(LinkMovementMethod.getInstance())
+
+//            holder.binding.messageTv.setMovementMethod(LinkMovementMethod.getInstance())
+//            holder.binding.messageTv.setHighlightColor(Color.TRANSPARENT)
         }
+
+//        holder.binding.messageTv.setOnClickListener {
+//            listener?.onItemClick(position, "")
+//        }
     }
 
     override fun getItemCount(): Int {
@@ -103,3 +152,6 @@ class ActivityLogAdapter(val context: Context, var respList: List<ActivityLogsRe
     class MyViewHolder(val binding: ActivityLogItemsBinding) :
         RecyclerView.ViewHolder(binding.root)
 }
+
+
+

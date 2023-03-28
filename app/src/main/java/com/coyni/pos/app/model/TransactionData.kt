@@ -6,6 +6,7 @@ data class TransactionData(
     var transactionSubtype: String? = null,
     var employeeId: Int? = null,
     var terminalId: Int? = null,
+    var id: Int? = null,
     var referenceId: String? = null,
     var customerName: String? = null,
     var purchaseAmount: String? = null,

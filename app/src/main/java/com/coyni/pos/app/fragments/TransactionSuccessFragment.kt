@@ -70,7 +70,9 @@ class TransactionSuccessFragment : BaseFragment() {
                 )
                 intent.putExtra(Utils.txnType, myApplication?.mCurrentUserData?.transactionData?.transactionType)
                 intent.putExtra(Utils.txnSubType, myApplication?.mCurrentUserData?.transactionData?.transactionSubtype)
-//                intent.putExtra(Utils.txnId, myApplication?.mCurrentUserData?.transactionData.)
+                intent.putExtra(Utils.txnId,
+                    myApplication?.mCurrentUserData?.transactionData?.id
+                )
                 startActivity(intent)
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -5,12 +5,14 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import android.view.View.VISIBLE
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.coyni.pos.app.R
 import com.coyni.pos.app.adapter.ActivityLogAdapter
 import com.coyni.pos.app.baseclass.BaseActivity
+import com.coyni.pos.app.baseclass.OnItemClickListener
 import com.coyni.pos.app.databinding.ActivityTransactionDetailsBinding
 import com.coyni.pos.app.model.TransactionData
 import com.coyni.pos.app.utils.MyApplication
@@ -56,7 +58,7 @@ class TransactionDetailsActivity : BaseActivity() {
             }
             if (intent.getIntExtra(Utils.txnId, 0) != 0) {
                 txnId = intent.getIntExtra(Utils.txnId, 0)
-                myApplication!!.mCurrentUserData.transactionId = txnId
+//                myApplication!!.mCurrentUserData.transactionId = txnId
             }
 
             binding.ivRefund.setOnClickListener {
@@ -90,7 +92,7 @@ class TransactionDetailsActivity : BaseActivity() {
             }
             showProgressDialog()
             transactionViewModel!!.transactionDetails(gbxID!!, txnType!!, txnSubType!!)
-            getActivityLogAPICall()
+//            getActivityLogAPICall()
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
@@ -107,6 +109,7 @@ class TransactionDetailsActivity : BaseActivity() {
                         when (transactionDetailsResponse.data?.transactionType) {
                             Utils.SALE_ORDER -> {
                                 showSaleOrderData(transactionDetailsResponse.data)
+                                getActivityLogAPICall()
                             }
                             Utils.Refund -> {
                                 showRefundData(transactionDetailsResponse.data!!)
@@ -137,7 +140,8 @@ class TransactionDetailsActivity : BaseActivity() {
                 if (activityLogsResponse != null) {
                     if (activityLogsResponse.status == Utils.SUCCESS) {
                         if (activityLogsResponse.data?.size!! > 0) {
-//                            myApplication?.mCurrentUserData?.activityLogsResponseData = activityLogsResponse.data
+                            myApplication?.mCurrentUserData?.activityLogsResponseData =
+                                activityLogsResponse.data
                             val activityListAdater =
                                 ActivityLogAdapter(
                                     this@TransactionDetailsActivity,
@@ -149,6 +153,47 @@ class TransactionDetailsActivity : BaseActivity() {
                             binding.recyclerView.itemAnimator = DefaultItemAnimator()
                             binding.recyclerView.adapter = activityListAdater
                             binding.llActivityLog.setVisibility(View.VISIBLE)
+
+                            activityListAdater?.setOnItemClickListener(
+                                object : OnItemClickListener {
+                                    override fun onItemClick(position: Int?, value: Any?) {
+                                        val intent = Intent(
+                                            applicationContext,
+                                            TransactionDetailsActivity::class.java
+                                        )
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                        intent.putExtra(
+                                            Utils.gbxTxnId,
+                                            myApplication?.mCurrentUserData?.activityLogsResponseData?.get(
+                                                position!!
+                                            )?.linkText
+                                        )
+                                        if (myApplication?.mCurrentUserData?.activityLogsResponseData?.get(
+                                                position!!
+                                            )?.txnType == 9
+                                        ) {
+                                            intent.putExtra(
+                                                Utils.txnType,
+                                                Utils.Refund
+                                            )
+                                        }
+                                        if (myApplication?.mCurrentUserData?.activityLogsResponseData?.get(
+                                                position!!
+                                            )?.txnSubType == 8
+                                        ) {
+                                            intent.putExtra(
+                                                Utils.txnSubType,
+                                                Sent
+                                            )
+                                        }
+
+                                        startActivity(intent)
+                                    }
+
+                                    override fun onChildClicked(s: String?) {
+
+                                    }
+                                })
                         } else {
                             binding.llActivityLog.setVisibility(View.GONE)
                         }
