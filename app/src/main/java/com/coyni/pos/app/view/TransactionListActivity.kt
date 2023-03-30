@@ -4,14 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.coyni.pos.app.R
 import com.coyni.pos.app.adapter.RecentTransactionsListAdapter
 import com.coyni.pos.app.baseclass.BaseActivity
@@ -28,7 +27,6 @@ import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.BatchAmountViewModel
 import com.coyni.pos.app.viewmodel.TransactionsViewModel
 import java.util.*
-import kotlin.collections.ArrayList
 
 class TransactionListActivity : BaseActivity(), TextWatcher {
 
@@ -46,7 +44,6 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
     private var empRole: String? = ""
     private var transactionViewModel: TransactionsViewModel? = null
     private var batchAmountViewModel: BatchAmountViewModel? = null
-    private val txnRefresh: SwipeRefreshLayout? = null
     private var currentPage = 0
     private var total: Int = 0
     private var strStartAmount = ""
@@ -75,7 +72,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
         batchAmountViewModel =
             ViewModelProvider(this@TransactionListActivity).get(BatchAmountViewModel::class.java)
 
-//        txnRefresh?.setColorSchemeColors(resources.getColor(R.color.primary_green, null))
+        binding.txnRefresh.setColorSchemeColors(resources.getColor(R.color.primary_green, null))
 
         if (myApplication.mCurrentUserData.loginData!!.terminalName != null || myApplication.mCurrentUserData.loginData!!.terminalId != null) {
             binding.terminalNameTV.setText(myApplication.mCurrentUserData.loginData!!.terminalName)
@@ -169,6 +166,15 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
 
         batchAPI()
 
+        binding.txnRefresh.setOnRefreshListener(OnRefreshListener {
+            try {
+                val req = TransactionListReq()
+                req.requestToken = myApplication.mCurrentUserData.validateResponseData!!.token
+                transactionsAPI(req)
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        })
     }
 
     private fun filterDialogCalls() {
@@ -187,12 +193,12 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                     Utils.applyFilter -> {
                         dismissDialog()
                         request = value as TransactionListReq
-                        if (request?.txnTypes?.txnType == null)
-                            if (request != null) {
-                                binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
-                            } else {
-                                binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
-                            }
+//                        if (request?.txnTypes?.txnType == null)
+                        if (request != null && request!!.isFilters == true) {
+                            binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_enabled)
+                        } else {
+                            binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
+                        }
                         request!!.requestToken =
                             myApplication.mCurrentUserData.validateResponseData!!.token
                         transactions.clear()
@@ -252,11 +258,11 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
     }
 
     fun initObservers() {
-
         transactionViewModel?.transactionResponse?.observe(this@TransactionListActivity) { recentTransactionResponse ->
             try {
                 if (recentTransactionResponse != null) {
                     if (recentTransactionResponse.status == Utils.SUCCESS) {
+                        binding.txnRefresh.setRefreshing(false)
                         binding.loadLL.visibility = GONE
                         myApplication.mCurrentUserData.transactionResponse =
                             recentTransactionResponse.data
@@ -295,7 +301,6 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                 ex.printStackTrace()
             }
         }
-
         batchAmountViewModel?.batchResponseMutableLiveData?.observe(this@TransactionListActivity) { batchResponseMutableLiveData ->
             try {
                 if (batchResponseMutableLiveData != null) {
@@ -324,7 +329,6 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                 ex.printStackTrace()
             }
         }
-
     }
 
     private fun prepareListData(items: List<TransactionItem>?) {
@@ -370,35 +374,22 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
 
     override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
         if (charSequence!!.length > 30) {
-            transactions = ArrayList()
+            transactions.clear()
             val transactionListRequest = TransactionListReq()
-            if (request != null && request!!.isFilters) {
-                request!!.requestToken =
-                    myApplication.mCurrentUserData.validateResponseData?.token
-                request!!.searchKey = charSequence.toString()
-                transactionsAPI(request!!)
-            } else {
-                transactionListRequest.searchKey = charSequence.toString()
-                transactionListRequest.requestToken =
-                    myApplication.mCurrentUserData.validateResponseData?.token
-                transactionsAPI(transactionListRequest)
-            }
+            transactionListRequest.searchKey = charSequence.toString()
+            transactionListRequest.requestToken =
+                myApplication.mCurrentUserData.validateResponseData?.token
+            transactionsAPI(transactionListRequest)
         } else if (charSequence.length > 0 && charSequence.length < 30) {
             binding.txnListRV.visibility = GONE
             binding.noTransactions.visibility = VISIBLE
+            binding.noMoreTransactions.visibility = GONE
         } else if (charSequence.toString().trim { it <= ' ' }.length == 0) {
             transactions.clear()
-//            if (request != null && request!!.isFilters) {
-//                request!!.requestToken =
-//                    myApplication.mCurrentUserData.validateResponseData?.token
-//                request!!.searchKey = charSequence.toString()
-//                transactionsAPI(request!!)
-//            } else {
             myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
             myApplication.mCurrentUserData.transactionListReq!!.requestToken =
                 myApplication.mCurrentUserData.validateResponseData?.token
             transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
-//            }
         }
     }
 

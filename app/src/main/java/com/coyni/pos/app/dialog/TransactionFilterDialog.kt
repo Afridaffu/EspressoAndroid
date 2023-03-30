@@ -7,6 +7,7 @@ import android.os.SystemClock
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
@@ -14,19 +15,25 @@ import com.coyni.pos.app.R
 import com.coyni.pos.app.adapter.ExpandableListAdapter
 import com.coyni.pos.app.baseclass.BaseDialog
 import com.coyni.pos.app.databinding.TransactionFilterDialogBinding
+import com.coyni.pos.app.interfaces.TxnTypesListener
 import com.coyni.pos.app.model.RangeDates
 import com.coyni.pos.app.model.TransactionFilter.TransactionListReq
 import com.coyni.pos.app.model.TransactionFilter.TransactionsSubTypeData
 import com.coyni.pos.app.model.TransactionFilter.TransactionsTypeData
+import com.coyni.pos.app.model.TransactionFilter.TxnTypes
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
-class TransactionFilterDialog(context: Context) : BaseDialog(context) {
+class TransactionFilterDialog(context: Context) : BaseDialog(context), TxnTypesListener {
 
     private lateinit var binding: TransactionFilterDialogBinding
     override fun getLayoutId() = R.layout.transaction_filter_dialog
     private var request: TransactionListReq? = null
+    var selectedTxnTypes = ArrayList<TxnTypes>()
     private var isFilters = false
     private var txnStatus = ArrayList<Int>()
     private var transactionType: Int? = null
@@ -56,9 +63,11 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
     var transactionSubTypeData: HashMap<Int, List<TransactionsSubTypeData>> =
         HashMap<Int, List<TransactionsSubTypeData>>()
     var rangeDates = RangeDates()
+    lateinit var myApplication: MyApplication
 
     override fun initViews() {
         binding = TransactionFilterDialogBinding.bind(findViewById(R.id.filterLL))
+        myApplication = context as MyApplication
         initFields()
         filterActions()
     }
@@ -72,6 +81,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 //        )
 
         adapter = ExpandableListAdapter(context, transactionTypeData, transactionSubTypeData)
+        adapter!!.setTypeClickListener(this)
         binding.custRecyclerView.setAdapter(adapter)
         Handler().postDelayed({ Utils.setInitialListViewHeight(binding.custRecyclerView) }, 100)
     }
@@ -98,13 +108,13 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
         if (request != null) {
             isFilters = request!!.isFilters
-            if (request!!.txnTypes?.txnType != null) {
-                transactionType = request!!.txnTypes?.txnType!!
-            }
+//            if (request!!.txnTypes?.txnType != null) {
+//                transactionType = request!!.txnTypes?.txnType!!
+//            }
 
-            if (request!!.txnTypes?.txnSubTypes != null) {
-                transactionSubType.addAll(request!!.txnTypes?.txnSubTypes!!)
-            }
+//            if (request!!.txnTypes?.txnSubTypes != null) {
+//                transactionSubType.addAll(request!!.txnTypes?.txnSubTypes!!)
+//            }
             if (transactionSubType == null) {
                 transactionSubType = ArrayList<Int>()
             }
@@ -563,33 +573,32 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
             processFilter(request!!)
 
-            if (transactionType != null || transactionSubType.size > 0 || txnStatus.size > 0) {
+            if (selectedTxnTypes.size > 0 || txnStatus.size > 0) {
                 isFilters = true
 
-                request!!.txnTypes?.txnType = (transactionType)
-
-                if (transactionSubType.size > 0) {
-                    request!!.txnTypes?.txnSubTypes = (transactionSubType)
+                if (selectedTxnTypes.size > 0) {
+                    request!!.txnTypes = selectedTxnTypes
                 }
+
                 if (txnStatus.size > 0) {
-                    request!!.status = (txnStatus.toString())
+                    request!!.status = txnStatus
                 }
             }
+
             if (!binding.transAmountStartET.getText().toString().trim().equals("")) {
                 isFilters = true
                 request!!.fromAmount =
                     binding.transAmountStartET.getText().toString().replace(",", "")
-
             } else {
                 strStartAmount = ""
             }
+
             if (!binding.transAmountEndET.getText().toString().trim().equals("")) {
                 isFilters = true
                 request!!.toAmount =
                     (binding.transAmountEndET.getText().toString().replace(",", ""))
-                if (binding.transAmountStartET.getText().toString().trim()
-                        .equals("") || binding.transAmountStartET.getText().toString().trim()
-                        .equals("0.00")
+                if (binding.transAmountStartET.getText().toString().trim().equals("")
+                    || binding.transAmountStartET.getText().toString().trim().equals("0.00")
                 ) {
                     request!!.fromAmount = "0"
                     strStartAmount = "0.00"
@@ -597,6 +606,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
             } else {
                 strEndAmount = ""
             }
+
             if (strFromDate != "") {
                 isFilters = true
                 request!!.fromDate =
@@ -604,8 +614,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                         "$strFromDate 00:00:00",
                         "MM-dd-yyyy HH:mm:ss",
                         "yyyy-MM-dd HH:mm:ss",
-                        "PST"
-//                        myApplication!!.mCurrentUserData!!.strPreference
+                        myApplication.mCurrentUserData.strPreference
 
                     )
             }
@@ -616,8 +625,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
                         "$strToDate 23:59:59",
                         "MM-dd-yyyy HH:mm:ss",
                         "yyyy-MM-dd HH:mm:ss",
-                        "PST"
-//                        myApplication!!.mCurrentUserData!!.strPreference
+                        myApplication.mCurrentUserData.strPreference
                     )
             }
             if (!binding.transAmountStartET.getText().toString()
@@ -743,7 +751,7 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
 
         val data4 = TransactionsSubTypeData()
         data4.isSelected = (transactionSubType.contains(Utils.filter_partial))
-        data4.itemId = (Utils.filter_Retail)
+        data4.itemId = (Utils.filter_partial)
         data4.groupItem = Utils.Partial
         refunSubType.add(data4)
 
@@ -794,6 +802,36 @@ class TransactionFilterDialog(context: Context) : BaseDialog(context) {
         } catch (ex: java.lang.Exception) {
             ex.printStackTrace()
         }
+    }
+
+    override fun onCheckBoxClick(
+        transactionsSubTypeData: HashMap<Int, List<TransactionsSubTypeData>>
+    ) {
+//        Log.e("txnType", transactionsTypeData.toString())
+//        Log.e("txnSubType", transactionsSubTypeData.toString())
+        processTxnTypesData(transactionSubTypeData)
+    }
+
+    fun processTxnTypesData(
+        transactionsSubTypeData: HashMap<Int, List<TransactionsSubTypeData>>
+    ) {
+
+        selectedTxnTypes = ArrayList<TxnTypes>()
+        for (entry in transactionsSubTypeData.entries.iterator()) {
+            Log.e("transactionsSubTypeData", "${entry.key} : ${entry.value}")
+            val txnTypeObject = TxnTypes()
+            for (subTypeObj in entry.value) {
+                if (subTypeObj.isSelected!!) {
+                    txnTypeObject.txnType = entry.key
+                    if (!txnTypeObject.txnSubTypes.contains(subTypeObj.itemId))
+                        txnTypeObject.txnSubTypes.add(subTypeObj.itemId)
+                }
+            }
+            if (txnTypeObject.txnType != null)
+                selectedTxnTypes.add(txnTypeObject)
+        }
+
+        Log.e("processed items", selectedTxnTypes.toString())
     }
 
 }
