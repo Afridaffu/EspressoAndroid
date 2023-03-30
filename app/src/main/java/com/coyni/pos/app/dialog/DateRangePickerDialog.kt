@@ -56,7 +56,7 @@ class DateRangePickerDialog : BaseDialog {
 
     private fun setSelectedDate() {
         calendarPicker!!.showDayOfWeekTitle(true)
-        calendarPicker!!.setMode(CalendarPicker.SelectionMode.RANGE)
+        calendarPicker!!.setMode(CalendarPicker.SelectionMode.SINGLE)
 //        val startDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
 //        val backwardDate = Date(startDate.getTime().getTime() - 31556952000L);
         val endDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault())

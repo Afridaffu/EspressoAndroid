@@ -17,7 +17,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TransactionsViewModel (application: Application) : AndroidViewModel(application){
+class TransactionsViewModel(application: Application) : AndroidViewModel(application) {
 
     val transactionResponse = MutableLiveData<TransactionResponse?>()
 
@@ -65,7 +65,7 @@ class TransactionsViewModel (application: Application) : AndroidViewModel(applic
         }
     }
 
-    fun transactionDetails(gbxTxnId : String, txnType : Int, txnSubType: Int) {
+    fun transactionDetails(gbxTxnId: String, txnType: Int, txnSubType: Int) {
         try {
             val apiService = AuthApiClient.instance.create(ApiService::class.java)
             val mCall = apiService.transactionDetails(gbxTxnId, txnType, txnSubType)
@@ -105,7 +105,7 @@ class TransactionsViewModel (application: Application) : AndroidViewModel(applic
         }
     }
 
-    fun activityLogsDetails(txnId : Int, userType : String) {
+    fun activityLogsDetails(txnId: Int, userType: String) {
         try {
             val apiService = AuthApiClient.instance.create(ApiService::class.java)
             val mCall = apiService.activityLogs(txnId, userType)
@@ -144,4 +144,6 @@ class TransactionsViewModel (application: Application) : AndroidViewModel(applic
             ex.printStackTrace()
         }
     }
+
+
 }

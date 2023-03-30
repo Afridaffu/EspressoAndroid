@@ -61,4 +61,5 @@
 
     <color name="failed_status">#FFDD2C00</color>
     <color name="txn_failed_trans">#22DD2C00</color>
+    <color name="search_core_color">#efefef</color>
 </resources>

@@ -1,18 +1,21 @@
 package com.coyni.pos.app.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.coyni.pos.app.R
+import com.coyni.pos.app.baseclass.OnItemClickListener
+import com.coyni.pos.app.interfaces.TxnTypesListener
 import com.coyni.pos.app.model.TransactionFilter.TransactionsSubTypeData
 import com.coyni.pos.app.model.TransactionFilter.TransactionsTypeData
 import java.util.*
 
 class ExpandableListAdapter() : BaseExpandableListAdapter() {
 
-    private var listener: OnItemClickListener? = null
+    private var listener: TxnTypesListener? = null
     private lateinit var transactionTypeData: java.util.HashMap<Int, TransactionsTypeData>
     private lateinit var transactionSubTypeData: java.util.HashMap<Int, List<TransactionsSubTypeData>>
     private var groups: ArrayList<Int?> = ArrayList()
@@ -29,6 +32,9 @@ class ExpandableListAdapter() : BaseExpandableListAdapter() {
         groups = ArrayList<Int?>(transactionTypeData.keys)
     }
 
+    fun setTypeClickListener(listener: TxnTypesListener) {
+        this.listener = listener
+    }
     override fun getGroupCount(): Int {
         return groups.size
     }
@@ -87,33 +93,36 @@ class ExpandableListAdapter() : BaseExpandableListAdapter() {
         if (transactionSubTypeData.containsKey(groupId) && transactionSubTypeData[groupId]!!.size > 0) {
             plusImg.visibility = View.VISIBLE
         } else {
-            plusImg.visibility = View.GONE
+                plusImg.visibility = View.GONE
         }
         checkCB.setOnCheckedChangeListener { compoundButton, check ->
             group?.isSelected = (check)
             if (!check) {
-                transactionTypeData.get(groups.get(groupPosition))?.isFromTypes = (true)
+                transactionTypeData.get(groups.get(groupPosition))?.isFromTypes = true
             }
-            if (transactionTypeData.get(groups.get(groupPosition))?.isFromTypes == true) {
+            if (transactionTypeData.get(groups.get(groupPosition))?.isFromTypes!!) {
 
-                if (transactionTypeData != null && transactionSubTypeData.get(
-                        groups.get(
-                            groupPosition
-                        )
-                    ) != null
-                ) {
-                    var i = 0
-                    while (transactionSubTypeData[groups[groupPosition]]!!.size > i) {
-                        if (check) {
-                            transactionSubTypeData[groups[groupPosition]]!![i].isSelected = (true)
-                        } else {
-                            transactionSubTypeData[groups[groupPosition]]!![i].isSelected = (false)
+                try {
+                    if (transactionSubTypeData[groups[groupPosition]] != null) {
+                        var i = 0
+                        while (transactionSubTypeData[groups[groupPosition]]!!.size > i) {
+                            if (check) {
+                                transactionSubTypeData[groups[groupPosition]]!![i].isSelected = true
+                            } else {
+                                transactionSubTypeData[groups[groupPosition]]!![i].isSelected = false
+                            }
+                            i++
                         }
-                        i++
                     }
+                    notifyDataSetChanged()
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-                notifyDataSetChanged();
+
+
             }
+//            listener!!.onCheckBoxClick(transactionTypeData, transactionSubTypeData)
+//            Log.e("transactionTypeData", transactionTypeData.toString())
         }
         return view;
 
@@ -156,6 +165,8 @@ class ExpandableListAdapter() : BaseExpandableListAdapter() {
                 }
                 notifyDataSetChanged();
             }
+            listener!!.onCheckBoxClick(transactionSubTypeData)
+//            Log.e("transactionSubTypeData", transactionSubTypeData.toString())
         }
         return view;
     }

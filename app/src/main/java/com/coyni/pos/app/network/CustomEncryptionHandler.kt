@@ -39,6 +39,9 @@ class CustomEncryptionHandler : Interceptor {
     private val KEY_SKIP_DECRYPTION = "SkipDecryption"
     private val KEY_CONTENT_TYPE = "Content-Type"
     private val KEY_PLATFORM_TYPE = "platform-type"
+    private val KEY_REQUESTED_PORTAL = "Requested-portal"
+    private val PORTAL = "mpos"
+    private val LANGUAGE = "en-US"
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -52,12 +55,11 @@ class CustomEncryptionHandler : Interceptor {
         requestBuild.header(KEY_REFERER, BuildConfig.Referer)
         requestBuild.header(KEY_ACCEPT, APPLICATION_JSON)
         requestBuild.header(KEY_USER_AGENT, USER_AGENT)
-        //        requestBuild.header(KEY_APP_VERSION, "Android : " + Utils.getStrVersionName() + "(" + Utils.getStrVersionCode() + ")");
-        requestBuild.header(KEY_ACCEPT_LANGUAGE, "en-US")
+        requestBuild.header(KEY_APP_VERSION, "Android : " + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")")
+        requestBuild.header(KEY_ACCEPT_LANGUAGE, LANGUAGE)
         requestBuild.header(KEY_REQUEST_ID, randomReqId)
         requestBuild.header(KEY_PLATFORM_TYPE, PLATFORM_TYPE)
-        // TODO Check this tag is required or not
-        requestBuild.header("Requested-portal", "customer")
+        requestBuild.header(KEY_REQUESTED_PORTAL, PORTAL)
         if (BuildConfig.SKIP_ENCRYPTION) {
             requestBuild.header(KEY_SKIP_DECRYPTION, "true")
             requestBuild.header(KEY_CONTENT_TYPE, APPLICATION_JSON)

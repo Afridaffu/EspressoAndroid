@@ -335,7 +335,7 @@ class TransactionDetailsActivity : BaseActivity() {
         if (Utils.checkInternet(this@TransactionDetailsActivity)) {
             if (txnId != 0)
 //                if (myApplication?.mCurrentUserData?.UserType == Utils.BUSINESS)
-                transactionViewModel?.activityLogsDetails(txnId!!, "merchant")
+                transactionViewModel?.activityLogsDetails(txnId!!, Utils.MERCHANT)
 
         }
     }

@@ -191,11 +191,12 @@ class Utils {
         const val paySignetEnable = "token account.payment methods.signet account"
         const val allControlsEnable = "token account.all controls"
         const val MERCHANT_QR = "merchant qr"
+        const val MERCHANT = "merchant"
         const val GENERATE_QR = "generate qr"
         const val DISCARD = "discard"
         const val DONE = "done"
         const val DEACTIVATED = "DeActivated"
-        const val CANCELED = "Canceled"
+        const val CANCELED = "CANCELLED"
         const val Completed = "Completed"
         const val lastClickDelay = 2000
         const val TOKEN_EXPIRED = "Something went wrong. Please try again"

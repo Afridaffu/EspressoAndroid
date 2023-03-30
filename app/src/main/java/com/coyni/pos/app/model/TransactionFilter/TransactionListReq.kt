@@ -6,9 +6,9 @@ data class TransactionListReq(
     var params: PageParams = PageParams(),
     var requestToken: String? = null,
     var searchKey: String? = null,
-    var status: String? = null,
+    var status: ArrayList<Int>? = null,
     var toAmount: String? = null,
     var toDate: String? = null,
-    var txnTypes: TxnTypes? = null,
+    var txnTypes: ArrayList<TxnTypes>? = null,
     var isFilters: Boolean = false,
 )
