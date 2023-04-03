@@ -26,6 +26,7 @@ import com.coyni.pos.app.utils.Utils
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.LinkedHashMap
 
 class TransactionFilterDialog(
     context: Context,
@@ -62,8 +63,8 @@ class TransactionFilterDialog(
 
     //    private var adapter: TransactionFilterAdapter? = null
     private var adapter: ExpandableListAdapter? = null
-    var transactionTypeData: HashMap<Int, TransactionsTypeData> =
-        HashMap<Int, TransactionsTypeData>()
+    var transactionTypeData: LinkedHashMap<Int, TransactionsTypeData> =
+        LinkedHashMap<Int, TransactionsTypeData>()
     var transactionSubTypeData: HashMap<Int, List<TransactionsSubTypeData>> =
         HashMap<Int, List<TransactionsSubTypeData>>()
     var rangeDates = RangeDates()
@@ -709,7 +710,7 @@ class TransactionFilterDialog(
 
     private fun resetListData() {
         if (adapter != null) {
-            transactionTypeData = adapter!!.groupData
+            transactionTypeData = adapter!!.groupData as LinkedHashMap<Int, TransactionsTypeData>
             val groups: List<Int?> = ArrayList<Int?>(transactionTypeData.keys)
             for (group in groups) {
                 val data = transactionTypeData[group]
@@ -729,7 +730,7 @@ class TransactionFilterDialog(
 
     private fun prepareListData() {
         //Types
-        transactionTypeData = HashMap()
+        transactionTypeData = LinkedHashMap()
 
         val saleOrder = TransactionsTypeData()
         saleOrder.itemId = (Utils.filter_saleorder)
