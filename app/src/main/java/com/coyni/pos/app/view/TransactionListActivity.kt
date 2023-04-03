@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -51,7 +52,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
     private var strFromDate: String? = ""
     private var strToDate: String? = ""
     var transactions: MutableList<TransactionItem> = ArrayList<TransactionItem>()
-
+    var isSwiped = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +64,6 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
         filterDialogCalls()
         initObservers()
     }
-
 
     private fun initView() {
 
@@ -92,13 +92,17 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
             binding.batchCV.visibility = GONE
             binding.searchCV.visibility = GONE
             binding.recentTxnLL.visibility = VISIBLE
+            binding.txnRefresh.isEnabled = false
             binding.transactionsNSV.isEnabled = false
         } else {
             binding.batchCV.visibility = VISIBLE
             binding.searchCV.visibility = VISIBLE
             binding.recentTxnLL.visibility = GONE
+            binding.txnRefresh.isEnabled = true
             binding.transactionsNSV.isEnabled = true
+            batchAPI()
         }
+
         binding.transactionsNSV.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             if (scrollY == v.getChildAt(0).measuredHeight - v.measuredHeight) {
                 try {
@@ -164,13 +168,10 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
             }
         })
 
-        batchAPI()
-
         binding.txnRefresh.setOnRefreshListener(OnRefreshListener {
             try {
-                val req = TransactionListReq()
-                req.requestToken = myApplication.mCurrentUserData.validateResponseData!!.token
-                transactionsAPI(req)
+                isSwiped = true
+                loadData()
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -184,43 +185,48 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
     }
 
     private fun filterDialog() {
-        val filterDialog = TransactionFilterDialog(this@TransactionListActivity)
-        filterDialog.show()
+        try {
+            val filterDialog =
+                TransactionFilterDialog(this@TransactionListActivity, request, myApplication)
+            filterDialog.show()
 
-        filterDialog.setOnDialogClickListener(object : OnDialogClickListener {
-            override fun onDialogClicked(action: String?, value: Any?) {
-                when (action) {
-                    Utils.applyFilter -> {
-                        dismissDialog()
-                        request = value as TransactionListReq
-//                        if (request?.txnTypes?.txnType == null)
-                        if (request != null && request!!.isFilters == true) {
-                            binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_enabled)
-                        } else {
-                            binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
+            filterDialog.setOnDialogClickListener(object : OnDialogClickListener {
+                override fun onDialogClicked(action: String?, value: Any?) {
+                    when (action) {
+                        Utils.applyFilter -> {
+                            dismissDialog()
+                            request = value as TransactionListReq
+                            //                        if (request?.txnTypes?.txnType == null)
+                            if (request != null && request!!.isFilters == true) {
+                                binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_enabled)
+                            } else {
+                                binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
+                            }
+                            request!!.requestToken =
+                                myApplication.mCurrentUserData.validateResponseData!!.token
+                            transactions.clear()
+                            transactionsAPI(request!!)
+                            //                        transactionViewModel!!.filterTransactionsList(request!!)
                         }
-                        request!!.requestToken =
-                            myApplication.mCurrentUserData.validateResponseData!!.token
-                        transactions.clear()
-                        transactionsAPI(request!!)
-//                        transactionViewModel!!.filterTransactionsList(request!!)
-                    }
-                    Utils.resetFilter -> {
+                        Utils.resetFilter -> {
 
-//                        filterIV.setImageResource(R.drawable.ic_filtericon);
-                        request = null
-                        loadData()
-                        dismissDialog()
+                            //                        filterIV.setImageResource(R.drawable.ic_filtericon);
+                            request = null
+                            loadData()
+                            dismissDialog()
+                        }
                     }
+
                 }
+            })
 
-            }
-        })
-
-        filterDialog.setOnDismissListener { dialogInterface -> }
+            filterDialog.setOnDismissListener { dialogInterface -> }
+        } catch (e: Exception) {
+        }
     }
 
     private fun loadData() {
+        request = null
         transactionType.clear();
         transactionSubType.clear();
         txnStatus.clear();
@@ -231,7 +237,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
         strEndAmount = "";
         binding.ivFilterIcon.setImageDrawable(getDrawable(R.drawable.ic_filter_icon));
 
-        var transactionListRequest = TransactionListReq();
+        val transactionListRequest = TransactionListReq();
         transactionListRequest.requestToken =
             myApplication.mCurrentUserData.validateResponseData?.token
         transactionListRequest.params.pageNo = currentPage.toString()
@@ -267,7 +273,13 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                         myApplication.mCurrentUserData.transactionResponse =
                             recentTransactionResponse.data
                         total = recentTransactionResponse.data?.totalPages!!
-                        transactions.addAll(recentTransactionResponse.data!!.items!!)
+                        if (isSwiped) {
+                            transactions =
+                                (recentTransactionResponse.data!!.items as MutableList<TransactionItem>?)!!
+                            isSwiped = false
+                        } else
+                            transactions.addAll(recentTransactionResponse.data!!.items!!)
+
                         if (transactions.size > 0) {
                             binding.txnListRV.visibility = VISIBLE
                             binding.noTransactions.visibility = GONE
@@ -282,11 +294,19 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                                     binding.noMoreTransactions.setVisibility(GONE)
                                 else
                                     binding.noMoreTransactions.setVisibility(VISIBLE)
-
-
                             }
                             prepareListData(transactions)
                         } else {
+//                            if (!empRole.equals(Utils.EMPROLE)) {
+//                                if (!isFirstAPICalled) {
+//                                    isFirstAPICalled = true
+//                                    binding.searchListCV.visibility = GONE
+//                                    binding.txnRefresh.isEnabled = false
+//                                } else {
+//                                    binding.searchListCV.visibility = VISIBLE
+//                                }
+//                            }
+
                             binding.txnListRV.visibility = GONE
                             binding.noTransactions.visibility = VISIBLE
                             binding.noMoreTransactions.visibility = GONE
@@ -375,21 +395,35 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
     override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
         if (charSequence!!.length > 30) {
             transactions.clear()
-            val transactionListRequest = TransactionListReq()
-            transactionListRequest.searchKey = charSequence.toString()
-            transactionListRequest.requestToken =
-                myApplication.mCurrentUserData.validateResponseData?.token
-            transactionsAPI(transactionListRequest)
+            if (request != null && request!!.isFilters) {
+                request!!.requestToken =
+                    myApplication.mCurrentUserData.validateResponseData?.token
+                request!!.searchKey = charSequence.toString()
+                transactionsAPI(request!!)
+            } else {
+                val transactionListRequest = TransactionListReq()
+                transactionListRequest.searchKey = charSequence.toString()
+                transactionListRequest.requestToken =
+                    myApplication.mCurrentUserData.validateResponseData?.token
+                transactionsAPI(transactionListRequest)
+            }
         } else if (charSequence.length > 0 && charSequence.length < 30) {
             binding.txnListRV.visibility = GONE
             binding.noTransactions.visibility = VISIBLE
             binding.noMoreTransactions.visibility = GONE
         } else if (charSequence.toString().trim { it <= ' ' }.length == 0) {
             transactions.clear()
-            myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
-            myApplication.mCurrentUserData.transactionListReq!!.requestToken =
-                myApplication.mCurrentUserData.validateResponseData?.token
-            transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
+            if (request != null && request!!.isFilters) {
+                request!!.requestToken =
+                    myApplication.mCurrentUserData.validateResponseData?.token
+                request!!.searchKey = charSequence.toString()
+                transactionsAPI(request!!)
+            } else {
+                myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
+                myApplication.mCurrentUserData.transactionListReq!!.requestToken =
+                    myApplication.mCurrentUserData.validateResponseData?.token
+                transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
+            }
         }
     }
 

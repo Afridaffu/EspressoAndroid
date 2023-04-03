@@ -144,13 +144,14 @@
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
+                            android:id="@+id/searchListCV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_2sdp"
-                            app:cardCornerRadius="@dimen/_10sdp">
+                            app:cardCornerRadius="@dimen/_10sdp"
+                            android:visibility="visible">
 
                             <LinearLayout
-                                android:id="@+id/searchCV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/_11sdp"
@@ -168,6 +169,7 @@
                                 <!--                            app:cardElevation="8dp">-->
 
                                 <LinearLayout
+                                    android:id="@+id/searchCV"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/_38sdp"
                                     android:layout_marginTop="@dimen/_21sdp"
@@ -255,12 +257,6 @@
                                         android:textSize="@dimen/_12ssp" />
 
                                 </LinearLayout>
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_1sdp"
-                                    android:layout_marginBottom="@dimen/_10sdp"
-                                    android:background="@color/blue_light" />
 
                                 <ScrollView
                                     android:layout_width="match_parent"

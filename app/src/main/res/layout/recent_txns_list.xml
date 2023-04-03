@@ -5,11 +5,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@color/light_blue" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_10sdp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -52,9 +57,18 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/bottomEmptyView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
         android:layout_marginTop="@dimen/_10sdp"
-        android:background="@color/light_blue" />
+        android:visibility="visible"/>
+
+    <View
+        android:id="@+id/bottomLineView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/light_blue"
+        android:visibility="gone"/>
 
 </LinearLayout>

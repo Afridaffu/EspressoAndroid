@@ -35,6 +35,7 @@ class ExpandableListAdapter() : BaseExpandableListAdapter() {
     fun setTypeClickListener(listener: TxnTypesListener) {
         this.listener = listener
     }
+
     override fun getGroupCount(): Int {
         return groups.size
     }
@@ -93,7 +94,7 @@ class ExpandableListAdapter() : BaseExpandableListAdapter() {
         if (transactionSubTypeData.containsKey(groupId) && transactionSubTypeData[groupId]!!.size > 0) {
             plusImg.visibility = View.VISIBLE
         } else {
-                plusImg.visibility = View.GONE
+            plusImg.visibility = View.GONE
         }
         checkCB.setOnCheckedChangeListener { compoundButton, check ->
             group?.isSelected = (check)
@@ -109,7 +110,8 @@ class ExpandableListAdapter() : BaseExpandableListAdapter() {
                             if (check) {
                                 transactionSubTypeData[groups[groupPosition]]!![i].isSelected = true
                             } else {
-                                transactionSubTypeData[groups[groupPosition]]!![i].isSelected = false
+                                transactionSubTypeData[groups[groupPosition]]!![i].isSelected =
+                                    false
                             }
                             i++
                         }
@@ -119,9 +121,8 @@ class ExpandableListAdapter() : BaseExpandableListAdapter() {
                     e.printStackTrace()
                 }
 
-
             }
-//            listener!!.onCheckBoxClick(transactionTypeData, transactionSubTypeData)
+            listener!!.onCheckBoxClick(transactionSubTypeData)
 //            Log.e("transactionTypeData", transactionTypeData.toString())
         }
         return view;

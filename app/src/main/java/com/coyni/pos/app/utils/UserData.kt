@@ -1,5 +1,6 @@
 package com.coyni.pos.app.utils
 
+import android.util.Log
 import com.coyni.pos.app.model.ActivityLogs.ActivityLogsResponseData
 import com.coyni.pos.app.model.BatchAmount.BatchResponseData
 import com.coyni.pos.app.model.TransactionData

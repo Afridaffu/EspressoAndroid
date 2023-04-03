@@ -272,6 +272,12 @@ class LoginActivity : BaseActivity() {
             if (response != null && response.status.equals(Utils.SUCCESS)) {
                 Utils.strAuth = response.data?.jwtToken
                 myApplication.mCurrentUserData.loginData = response.data!!
+                Log.e("strPreference", response.data!!.timeZone.toString())
+                if (response.data!!.timeZone != null) {
+                    myApplication.mCurrentUserData.strPreference =
+                        Utils.getTimeZone(response.data!!.timeZone!!)
+                    Log.e("strPreference", myApplication.mCurrentUserData.strPreference)
+                }
                 Utils.hideKeypad(this@LoginActivity)
                 if (response.data?.status.equals(Utils.DEACTIVATED, true)) {
                     showTerminalScreen()
@@ -301,11 +307,12 @@ class LoginActivity : BaseActivity() {
         val errorDialog = ErrorDialog(this@LoginActivity)
         errorDialog.show()
     }
+
     //Static data remove later
     private fun setLoginData() {
         isId = true
         isPassword = true
-        binding.tidET.setText("1067029008")
+        binding.tidET.setText("1015031786")
         binding.passwordET.setText("Admin@123")
         enableButton()
     }
