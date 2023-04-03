@@ -216,6 +216,7 @@ class PinActivity : BaseActivity(), View.OnClickListener {
                     if (validateResponse.status == Utils.SUCCESS) {
                         myApplication?.mCurrentUserData?.validateResponseData =
                             validateResponse.data
+                        Utils.employeeRole = validateResponse.data!!.empRole!!
                         Handler().postDelayed({
                             val intent = Intent()
                             intent.putExtra(Utils.ACTION_TYPE, action)

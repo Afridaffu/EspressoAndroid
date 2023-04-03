@@ -34,7 +34,7 @@ import com.coyni.pos.app.utils.keyboards.CustomKeyboard
 import com.coyni.pos.app.viewmodel.RefundViewModel
 
 class RefundTransactionActivity : BaseActivity(), TextWatcher {
-    private lateinit var binding: ActivityRefundTransactionBinding
+    public lateinit var binding: ActivityRefundTransactionBinding
     val transactionData: TransactionData? = null
     private var grossAmount: Double = 0.00
     private var enteredAmount: Double = 0.00
@@ -458,9 +458,8 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             binding.fullAmountTV.setTextColor(getColor(R.color.dark_gray))
             binding.halfAmountTV.setBackgroundResource(R.drawable.button_bg_lightgray_core)
             binding.halfAmountTV.setTextColor(getColor(R.color.dark_gray))
-            binding.refundCKB.clearData()
             binding.refundAmountET.addTextChangedListener(this)
-            isfullamount = true
+            isfullamount = false
             ishalfamount = false
         } catch (e: Resources.NotFoundException) {
             e.printStackTrace()

@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.inputmethod.InputConnection
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
@@ -14,7 +15,6 @@ import com.coyni.pos.app.R
 import com.coyni.pos.app.databinding.CustomKeyboardBinding
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.view.RefundTransactionActivity
-import java.lang.Exception
 
 class CustomKeyboard : LinearLayout, View.OnClickListener {
 
@@ -25,6 +25,7 @@ class CustomKeyboard : LinearLayout, View.OnClickListener {
     lateinit var binding: CustomKeyboardBinding
     private lateinit var inputConnection: InputConnection
     lateinit var screen: String
+    lateinit var mContext: Context
 
     @RequiresApi(Build.VERSION_CODES.M)
     constructor(context: Context) : super(context) {
@@ -119,17 +120,29 @@ class CustomKeyboard : LinearLayout, View.OnClickListener {
             } else {
                 inputConnection.commitText("", 1)
             }
-        }
-        if (enteredText.length < 8) {
-            val value: String = keyValues.get(v!!.id)
-            if ((enteredText == "" || enteredText.contains(".")) && value == ".") {
-            } else {
-                println(enteredText)
-                enteredText = enteredText + value
-                inputConnection.commitText(value, 1)
+        } else {
 
-                if (keybaackListner != null && v.id == R.id.keyActionCV) {
-                    keybaackListner.onKeybackClick(Utils.REFUND, "")
+            val value: String = keyValues.get(v!!.id)
+            if (screen.equals(Utils.REFUND,true)) {
+                val refundTransactionActivity = mContext as RefundTransactionActivity
+                if ((refundTransactionActivity.isfullamount || refundTransactionActivity.ishalfamount) && value != ".") {
+                    refundTransactionActivity.isfullamount = false
+                    refundTransactionActivity.ishalfamount = false
+                    refundTransactionActivity.binding.refundAmountET.setText("")
+                    enteredText = ""
+                    refundTransactionActivity.clearAmountCards()
+                }
+            }
+            if (enteredText.length < 8) {
+                if ((enteredText == "" || enteredText.contains(".")) && value == ".") {
+                } else {
+                    println(enteredText)
+                    enteredText = enteredText + value
+                    inputConnection.commitText(value, 1)
+
+                    if (keybaackListner != null && v.id == R.id.keyActionCV) {
+                        keybaackListner.onKeybackClick(Utils.REFUND, "")
+                    }
                 }
             }
         }
@@ -139,13 +152,14 @@ class CustomKeyboard : LinearLayout, View.OnClickListener {
         inputConnection = ic
     }
 
-    fun setKeyAction(actionName: String?, context: Context?) {
+    fun setKeyAction(actionName: String?, context: Context) {
         binding.keyActionTV.text = actionName;
+        mContext = context
     }
 
 
     fun setScreenName(screenName: String) {
-//        screen = screenName
+        screen = screenName
     }
 
     fun enableButton() {

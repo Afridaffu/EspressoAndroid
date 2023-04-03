@@ -2,13 +2,16 @@ package com.coyni.pos.app.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.SystemClock
+import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -128,7 +131,14 @@ class ActivityLogAdapter(val context: Context, var respList: List<ActivityLogsRe
                 ss.length,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
-            ss.setSpan(clickableSpan, ss.length - 25, ss.length, 0)
+            ss.setSpan(
+                StyleSpan(Typeface.BOLD),
+                ss.indexOf("View Refund Transaction"),
+                ss.length,
+                Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+            )
+            ss.setSpan(clickableSpan, ss.indexOf("View Refund Transaction"),
+                ss.length, 0)
 
             holder.binding.messageTv.setText(ss)
             holder.binding.messageTv.setMovementMethod(LinkMovementMethod.getInstance())

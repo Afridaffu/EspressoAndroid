@@ -2,6 +2,7 @@ package com.coyni.pos.app.model.login
 
 data class LoginData(
     var terminalKey: Int? = null,
+    var timeZone: Int? = null,
     var terminalName: String? = null,
     var terminalId: String? = null,
     var merchantId: Int? = null,

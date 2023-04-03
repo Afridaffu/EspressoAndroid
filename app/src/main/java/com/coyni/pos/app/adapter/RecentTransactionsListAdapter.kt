@@ -2,6 +2,7 @@ package com.coyni.pos.app.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.coyni.pos.app.R
@@ -20,8 +21,8 @@ class RecentTransactionsListAdapter() :
     private lateinit var objMyApplication: MyApplication
     private var recentTxns: List<TransactionItem>? = null
 
-    override fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.listener = listener
+    override fun setOnItemClickListener(listenerr: OnItemClickListener) {
+        this.listener = listenerr
     }
 
     constructor(context: Context, list: List<TransactionItem>?) : this() {
@@ -40,38 +41,45 @@ class RecentTransactionsListAdapter() :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        var item: TransactionItem? = recentTxns?.get(position)
+        val item: TransactionItem? = recentTxns?.get(position)
         val itemViewHolder: MyViewHolder = holder
 
         objMyApplication.mCurrentUserData.UserType = item?.userType
 
-        if (item != null) {
-            holder.binding.descriptionTV.text = item?.txnTypeDn + " - " + item?.txnSubTypeDn
+        if (position == recentTxns!!.size - 1) {
+            holder.binding.bottomLineView.visibility = View.VISIBLE
+            holder.binding.bottomEmptyView.visibility = View.GONE
+        } else {
+            holder.binding.bottomLineView.visibility = View.GONE
+            holder.binding.bottomEmptyView.visibility = View.VISIBLE
+        }
 
-            if (item?.txnTypeDn.equals(Utils.Refund, ignoreCase = true)) {
+        if (item != null) {
+            holder.binding.descriptionTV.text = item.txnTypeDn + " - " + item.txnSubTypeDn
+
+            if (item.txnTypeDn.equals(Utils.Refund, ignoreCase = true)) {
                 holder.binding.amountTV.text =
-                    "-" + Utils.convertTwoDecimal(item?.amount!!).split(" ")[0]
+                    "-" + Utils.convertTwoDecimal(item.amount!!).split(" ")[0]
                 holder.binding.amountTV.setTextColor(mContext.resources.getColor(R.color.black))
-            } else if (item?.txnTypeDn.equals(Utils.SALE_ORDER, ignoreCase = true)) {
+            } else if (item.txnTypeDn.equals(Utils.SALE_ORDER, ignoreCase = true)) {
                 holder.binding.amountTV.text =
-                    "+" + Utils.convertTwoDecimal(item?.amount!!).split(" ")[0]
+                    "+" + Utils.convertTwoDecimal(item.amount!!).split(" ")[0]
                 holder.binding.amountTV.setTextColor(mContext.resources.getColor(R.color.true_green))
             }
 //                holder.binding.amountTV.text = item?.amount
 
-            if (item?.createdAt != null && !item?.createdAt.equals("")) {
-                val date: String = item?.createdAt!!
+            if (item.createdAt != null && !item.createdAt.equals("")) {
+                var date: String = item.createdAt!!
                 if (date.contains(".")) {
-                    val resDate = date.substring(0, date.lastIndexOf("."))
-                    holder.binding.dateTV.setText(
-                        objMyApplication?.mCurrentUserData?.convertZoneDateTime(
-                            resDate,
-                            "yyyy-MM-dd HH:mm:ss",
-                            "MM/dd/yyyy hh:mma"
-                        )?.toLowerCase()
-                    )
-                } else {
+                    date = date.substring(0, date.lastIndexOf("."))
                 }
+                holder.binding.dateTV.setText(
+                    objMyApplication.mCurrentUserData.convertZoneDateTime(
+                        date,
+                        "yyyy-MM-dd HH:mm:ss",
+                        "MM/dd/yyyy hh:mma"
+                    )?.toLowerCase()
+                )
             }
 
             holder.binding.llClick.setOnClickListener {
@@ -85,7 +93,7 @@ class RecentTransactionsListAdapter() :
             return if (recentTxns!!.size > 10) 10
             else recentTxns!!.size
         } else {
-           return recentTxns!!.size
+            return recentTxns!!.size
         }
     }
 

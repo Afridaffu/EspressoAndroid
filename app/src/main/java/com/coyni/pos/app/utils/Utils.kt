@@ -209,6 +209,7 @@ class Utils {
         lateinit var colorState: ColorStateList
         const val centuryTimeInMillis = 3155760000000L
 
+        var employeeRole: String = ""
 
         fun isValidEmail(target: String?): Boolean {
             return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
@@ -366,6 +367,7 @@ class Utils {
 
 
         fun exportDate(date: String, zoneId: String?): String {
+            Log.e("zoneId", zoneId!!)
             var date = date
             if (date.length == 22) {
                 date = date + "0"
@@ -413,6 +415,24 @@ class Utils {
             return try {
                 val spf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                 spf.format(Date())
+            } catch (ex: java.lang.Exception) {
+                null
+            }
+        }
+
+        fun getCurrentFromDate(): String? {
+            return try {
+                val spf = SimpleDateFormat("yyyy-MM-dd")
+                spf.format(Date()) + " 00:00:00"
+            } catch (ex: java.lang.Exception) {
+                null
+            }
+        }
+
+        fun getCurrentToDate(): String? {
+            return try {
+                val spf = SimpleDateFormat("yyyy-MM-dd")
+                spf.format(Date()) + " 23:59:59"
             } catch (ex: java.lang.Exception) {
                 null
             }
@@ -802,6 +822,48 @@ class Utils {
             val decodedString: ByteArray = Base64.decode(base64String, Base64.DEFAULT)
             return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
         }
+
+        fun getTimeZone(zone: Int): String {
+
+            return when (zone) {
+                0 -> {
+                    STRING_PREFERENCE.PST.strPreference
+                }
+                1 -> {
+                    STRING_PREFERENCE.MST.strPreference
+                }
+                2 -> {
+                    STRING_PREFERENCE.CST.strPreference
+                }
+                3 -> {
+                    STRING_PREFERENCE.EST.strPreference
+                }
+                4 -> {
+                    STRING_PREFERENCE.HST.strPreference
+                }
+                5 -> {
+                    STRING_PREFERENCE.AST.strPreference
+                }
+                6 -> {
+                    STRING_PREFERENCE.SST.strPreference
+                }
+                else -> {
+                    STRING_PREFERENCE.PST.strPreference
+                }
+            }
+
+        }
+
+        enum class STRING_PREFERENCE(var zoneID: Int, var strPreference: String) {
+            PST(0, "PST"),
+            MST(1, "America/Denver"),
+            CST(2, "CST"),
+            EST(3, "America/New_York"),
+            HST(4, "HST"),
+            AST(5, "AST"),
+            SST(6, "US/Samoa");
+        }
+
     }
 
 }

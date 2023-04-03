@@ -228,7 +228,7 @@ class TransactionDetailsActivity : BaseActivity() {
                     data.purchaseAmount.toString().replace(
                         "CYN",
                         ""
-                    )
+                    ).trim()
                 )
                 binding.amount.text = saleOrderAmount
             }
