@@ -366,7 +366,9 @@ class TransactionDetailsActivity : BaseActivity() {
                     )
                 )
             }
-
+            if (data.remarks != null) {
+               binding.tvReason.text = data.remarks.toString()
+            }
             if (data.createdDate != null) {
                 binding.tvDate.text =
                     (myApplication?.mCurrentUserData?.convertZoneLatestTxndate(data.createdDate))
@@ -439,9 +441,9 @@ class TransactionDetailsActivity : BaseActivity() {
                 binding.orgRefId.paintFlags =
                     binding.orgRefId.paintFlags or Paint.UNDERLINE_TEXT_FLAG
                 if (data.saleOrderReferenceId!!.length > 10)
-                    binding.orgRefId.text = (data.referenceId)?.substring(0, 10) + "..."
+                    binding.orgRefId.text = (data.saleOrderReferenceId)?.substring(0, 10) + "..."
                 else
-                    binding.orgRefId.text = (data.referenceId)
+                    binding.orgRefId.text = (data.saleOrderReferenceId)
             }
             if (data.transactionAmount != null) {
                 binding.tvOrgTxnAmt.text = (data.transactionAmount)
