@@ -152,7 +152,6 @@ dependencies {
 
     //Websocket
     implementation 'com.squareup.okhttp3:okhttp:4.8.0'
-    implementation 'com.squareup.okhttp3:mockwebserver:3.12.1'
     //End
     implementation 'com.google.android.material:material:1.2.0-alpha03'
     implementation 'androidx.appcompat:appcompat:1.0.0-alpha1'
@@ -167,7 +166,5 @@ dependencies {
 
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
     implementation 'com.google.zxing:core:3.4.1'
-    implementation 'com.squareup.okhttp3:okhttp:4.8.0'
-    implementation 'com.squareup.okhttp3:mockwebserver:3.12.1'
 
 }

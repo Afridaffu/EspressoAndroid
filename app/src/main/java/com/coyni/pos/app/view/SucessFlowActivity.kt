@@ -14,6 +14,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -33,6 +34,7 @@ class SucessFlowActivity : AppCompatActivity() {
     lateinit var myApplication: MyApplication
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.e("onCreate","onCreate")
         binding = ActivityPaymentSuccessFlowBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initfields()
