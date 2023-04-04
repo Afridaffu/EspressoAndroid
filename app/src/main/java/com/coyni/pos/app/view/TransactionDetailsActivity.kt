@@ -367,7 +367,7 @@ class TransactionDetailsActivity : BaseActivity() {
                 )
             }
             if (data.remarks != null) {
-               binding.tvReason.text = data.remarks.toString()
+                binding.tvReason.text = data.remarks.toString()
             }
             if (data.createdDate != null) {
                 binding.tvDate.text =
@@ -463,10 +463,35 @@ class TransactionDetailsActivity : BaseActivity() {
                 )
             })
 
-            binding.orgRefIDcopyLL.setOnClickListener(View.OnClickListener {
+            binding.orgRefIDcopyIV.setOnClickListener(View.OnClickListener {
                 Utils.copyText(
                     data.saleOrderReferenceId, this@TransactionDetailsActivity
                 )
+            })
+
+            binding.orgRefId.setOnClickListener(View.OnClickListener {
+                val intent = Intent(
+                    applicationContext,
+                    TransactionDetailsActivity::class.java
+                )
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.putExtra(
+                    Utils.gbxTxnId, data.saleOrderReferenceId
+                )
+                if (data.saleOrderType == 10) {
+                    intent.putExtra(
+                        Utils.txnType,
+                        Utils.SALE_ORDER
+                    )
+                }
+                if (data.saleOrderSubType == 13) {
+                    intent.putExtra(
+                        Utils.txnSubType,
+                        retail_mobile
+                    )
+                }
+                intent.putExtra(Utils.txnId, data.saleOrderTransactionId)
+                startActivity(intent)
             })
 
         }

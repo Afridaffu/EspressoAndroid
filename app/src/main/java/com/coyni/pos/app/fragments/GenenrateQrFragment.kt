@@ -39,7 +39,6 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
     ): View {
         // inflate the layout and bind to the _binding
         binding = FragmentGenarateQrBinding.inflate(layoutInflater, container, false)
-//        binding.merchantAmountET.isCursorVisible = true
         inItFields()
         inItObservers()
         return binding.root
@@ -52,7 +51,6 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         fontSize = binding.merchantAmountET.textSize
         binding.merchantAmountET.requestFocus()
         binding.merchantAmountET.isSelected = false
-//        binding.merchantAmountET.isCursorVisible = true
         initKeyboard()
         binding.merchantAmountET.showSoftInputOnFocus = false
         binding.merchantAmountET.textDirection = View.TEXT_DIRECTION_RTL
@@ -70,8 +68,7 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         binding.closeIV.setOnClickListener {
             binding.merchantAmountET.hint = "0.00"
             binding.merchantAmountET.setText("")
-            disableButtons(true)
-//            binding.merchantAmountET.isCursorVisible = true
+            disableButtons()
         }
 
         if (requireArguments().getString(Utils.VALUE) != "") {
@@ -82,16 +79,6 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
 
     }
 
-//    override fun onAttach(context: Context) {
-//        super.onAttach(requireActivity().application)
-//        println("onATTACH")
-//        binding.merchantAmountET.isCursorVisible = true
-//    }
-
-    //    override fun onResume() {
-//        super.onResume()
-//        binding.merchantAmountET.isCursorVisible = true
-//    }
     private fun inItObservers() {
         generateQrViewModel.generateQrResponse.observe(requireActivity()) { generateQrResponse ->
             try {
@@ -150,27 +137,24 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
                         binding.merchantAmountET.textSize =
                             Utils.pixelsToSp(requireContext(), fontSize)
                     }
-                    if (Utils.doubleParsing(editable.toString().replace(",", "")) > 0) {
-                        disableButtons(false)
-                    } else {
-                        disableButtons(true)
-                    }
                     binding.merchantAmountET.setSelection(binding.merchantAmountET.text.length)
                     binding.merchantAmountET.textDirection = View.TEXT_DIRECTION_LTR
                 } else if (editable.toString() == ".") {
                     binding.merchantAmountET.setText("")
-                    disableButtons(true)
                 } else if (editable.length == 0) {
                     binding.merchantAmountET.hint = "0.00"
+                    binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65f)
                     binding.merchantAmountET.textDirection = View.TEXT_DIRECTION_RTL
-                    disableButtons(true)
+                    binding.bottomKeyPad.disableButton()
                     binding.bottomKeyPad.clearData()
                     binding.closeIV.visibility = View.GONE
                 } else {
                     binding.merchantAmountET.setText("")
-                    disableButtons(true)
+                    binding.merchantAmountET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65f)
+                    binding.bottomKeyPad.disableButton()
                     binding.bottomKeyPad.clearData()
                 }
+                disableButtons()
             } catch (_: Exception) {
             }
         }
@@ -271,16 +255,19 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
         generateQrViewModel.generateQrRequest(generateQrRequest)
     }
 
-    private fun disableButtons(value: Boolean) {
+    private fun disableButtons() {
         try {
-            if (value) {
-                binding.bottomKeyPad.disableButton()
-                isPayClickable = false
-                binding.closeIV.visibility = View.GONE
+            if (Utils.doubleParsing(binding.merchantAmountET.text.toString()) > 0) {
+                binding.closeIV.visibility = View.VISIBLE
             } else {
+                binding.closeIV.visibility = View.GONE
+            }
+            if (Utils.doubleParsing(binding.merchantAmountET.text.toString()) >= 0.006) {
                 binding.bottomKeyPad.enableButton()
                 isPayClickable = true
-                binding.closeIV.visibility = View.VISIBLE
+            } else {
+                binding.bottomKeyPad.disableButton()
+                isPayClickable = false
             }
         } catch (_: Exception) {
         }
