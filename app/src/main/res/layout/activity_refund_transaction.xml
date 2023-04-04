@@ -260,7 +260,7 @@
                                         android:hint="Refund Note (Optional)"
                                         android:padding="@dimen/_6sdp"
                                         android:textColor="@color/primary_black"
-                                        android:textColorHint="@color/light_gray"
+                                        android:textColorHint="@color/dark_gray"
                                         android:textSize="@dimen/_10ssp" />
                                 </LinearLayout>
 

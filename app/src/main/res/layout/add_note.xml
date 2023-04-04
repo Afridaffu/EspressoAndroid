@@ -59,7 +59,7 @@
                 android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                 android:text=""
                 android:textColor="@color/primary_black"
-                android:textColorHint="@color/text_grey_msg"
+                android:textColorHint="@color/dark_gray"
                 android:textCursorDrawable="@drawable/cursor_color"
                 android:textIsSelectable="false"
                 android:textSize="@dimen/_11ssp" />

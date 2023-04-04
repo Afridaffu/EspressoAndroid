@@ -279,7 +279,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/detailsLL"
                                     android:layout_alignParentBottom="true"
-                                    android:layout_marginHorizontal="@dimen/_11sdp"
+                                    android:layout_marginHorizontal="@dimen/_20sdp"
                                     android:layout_marginTop="@dimen/_60sdp"
                                     android:gravity="center"
                                     android:orientation="vertical">
