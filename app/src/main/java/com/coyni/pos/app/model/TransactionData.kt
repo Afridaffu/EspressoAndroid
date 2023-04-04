@@ -24,6 +24,8 @@ data class TransactionData(
     var customerServicePhone: String? = null,
     var saleOrderDateAndTime: String? = null,
     var saleOrderSubType: Int? = null,
+    var saleOrderType: Int? = null,
+    var saleOrderTransactionId: Int? = null,
     var transactionAmount: String? = null,
     var remarks: String? = null,
     var total: String? = null,
