@@ -34,10 +34,7 @@ class AddNoteDialog(context: Context, private val reason: String) : BaseDialog(c
             dismiss()
         }
         dialogBinding.doneBtn.setOnClickListener {
-            getOnDialogClickListener()?.onDialogClicked(
-                Utils.DONE,
-                dialogBinding.addNoteET.text.toString()
-            )
+            getOnDialogClickListener()?.onDialogClicked(Utils.DONE, dialogBinding.addNoteET.text.toString())
             dismiss()
         }
 
