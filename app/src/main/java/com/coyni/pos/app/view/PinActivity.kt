@@ -223,7 +223,11 @@ class PinActivity : BaseActivity(), View.OnClickListener {
                             intent.putExtra(
                                 Utils.TRANSACTION_TOKEN, validateResponse.data?.token
                             )
-                            sendSuccessResult(intent)
+                            if (action == Utils.REFUND && validateResponse.data!!.empRole == Utils.EMPROLE) {
+                                setErrorPIN()
+                            } else {
+                                sendSuccessResult(intent)
+                            }
                         }, 200)
                     } else {
                         setErrorPIN()
