@@ -82,21 +82,21 @@ class LoginActivity : BaseActivity() {
             onBackPressed()
         }
 
-        binding.passwordTIL.setEndIconOnClickListener {
-            if (!isIconEnable) {
-                isIconEnable = true
-                binding.passwordTIL.endIconDrawable =
-                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeopen)
-                binding.passwordET.transformationMethod =
-                    HideReturnsTransformationMethod.getInstance()
-            } else {
-                isIconEnable = false
-                binding.passwordTIL.endIconDrawable =
-                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeclose)
-                binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
-            }
-            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-        }
+//        binding.passwordTIL.setEndIconOnClickListener {
+//            if (!isIconEnable) {
+//                isIconEnable = true
+//                binding.passwordTIL.endIconDrawable =
+//                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeopen)
+//                binding.passwordET.transformationMethod =
+//                    HideReturnsTransformationMethod.getInstance()
+//            } else {
+//                isIconEnable = false
+//                binding.passwordTIL.endIconDrawable =
+//                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeclose)
+//                binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
+//            }
+//            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
+//        }
 
         binding.tvButton.setOnClickListener {
             if (SystemClock.elapsedRealtime() - lastClick < Utils.lastClickDelay) return@setOnClickListener
@@ -106,24 +106,37 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.endIconIV.setOnClickListener {
-            try {
-                if (!isPwdEye) {
-                    isPwdEye = true
-                    binding.endIconIV.setImageResource(R.drawable.ic_eyeopen)
-                    binding.passwordET.transformationMethod =
-                        HideReturnsTransformationMethod.getInstance()
-                } else {
-                    isPwdEye = false
-                    binding.endIconIV.setImageResource(R.drawable.ic_eyeclose)
-                    binding.passwordET.transformationMethod =
-                        PasswordTransformationMethod.getInstance()
-                }
-                if (binding.passwordET.text.toString().length > 0) {
-                    binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-                }
-            } catch (ex: Exception) {
-                ex.printStackTrace()
+//            try {
+//                if (!isPwdEye) {
+//                    isPwdEye = true
+//                    binding.endIconIV.setImageResource(R.drawable.ic_eyeopen)
+//                    binding.passwordET.transformationMethod =
+//                        HideReturnsTransformationMethod.getInstance()
+//                } else {
+//                    isPwdEye = false
+//                    binding.endIconIV.setImageResource(R.drawable.ic_eyeclose)
+//                    binding.passwordET.transformationMethod =
+//                        PasswordTransformationMethod.getInstance()
+//                }
+//                if (binding.passwordET.text.toString().length > 0) {
+//                    binding.passwordET.setSelection(binding.passwordET.text.toString().length)
+//                }
+//            } catch (ex: Exception) {
+//                ex.printStackTrace()
+//            }
+
+            if (!isIconEnable) {
+                isIconEnable = true
+                binding.endIconIV.setImageResource(R.drawable.ic_eyeopen)
+                binding.passwordET.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
+            } else {
+                isIconEnable = false
+                binding.endIconIV.setImageResource(R.drawable.ic_eyeclose)
+                binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
             }
+            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
+
         }
     }
 
