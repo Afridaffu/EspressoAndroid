@@ -368,6 +368,13 @@ class MerchantQrFragment : BaseFragment() {
                             requireContext(), StatusFailedActivity::class.java
                         ).putExtra(Utils.STATUS, obj.getString("txnStatus"))
                     )
+                    runOnUiThread(Runnable {
+                        binding.qrLL.visibility = View.VISIBLE
+                        binding.animationRL.visibility = View.GONE
+                        binding.waitingText.visibility = View.GONE
+                        binding.discardSaleLL.setBackgroundResource(R.drawable.bg_greencolor_filled)
+                        binding.discardSaleLL.isEnabled = true
+                    })
                 } else if (obj.getString("eventType") == "POS_TXN_STATUS") {
 
                     myApplication!!.mCurrentUserData.webSocketObject = obj

@@ -33,7 +33,7 @@ class TransactionFilterDialog(
     val transactionListReq: TransactionListReq?,
     val myApplication: MyApplication
 ) :
-    BaseDialog(context), TxnTypesListener {
+    BaseDialog(context,70.0), TxnTypesListener {
 
     private lateinit var binding: TransactionFilterDialogBinding
     override fun getLayoutId() = R.layout.transaction_filter_dialog
@@ -130,7 +130,7 @@ class TransactionFilterDialog(
                                 )
                             )
                         }
-                        Utils.partialRefund -> {
+                        Utils.partialRefunded -> {
                             binding.transStatusPartialRefund.setChecked(true)
                             binding.transStatusPartialRefund.setChipStrokeColor(
                                 ColorStateList.valueOf(
@@ -138,7 +138,7 @@ class TransactionFilterDialog(
                                 )
                             )
                         }
-                        Utils.refund -> {
+                        Utils.Refunded -> {
                             binding.transStatusRefunded.setChecked(true)
                             binding.transStatusRefunded.setChipStrokeColor(
                                 ColorStateList.valueOf(
@@ -397,7 +397,7 @@ class TransactionFilterDialog(
 
         binding.transStatusRefunded.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
             if (b) {
-                txnStatus.add(Utils.refund)
+                txnStatus.add(Utils.Refunded)
                 binding.transStatusRefunded.setChipStrokeColor(
                     ColorStateList.valueOf(
                         context.resources.getColor(
@@ -406,8 +406,8 @@ class TransactionFilterDialog(
                     )
                 )
             } else {
-                if (txnStatus.contains(Utils.refund)) {
-                    txnStatus.remove(Utils.refund)
+                if (txnStatus.contains(Utils.Refunded)) {
+                    txnStatus.remove(Utils.Refunded)
                     binding.transStatusRefunded.setChipStrokeColor(
                         ColorStateList.valueOf(
                             context.resources.getColor(
@@ -421,7 +421,7 @@ class TransactionFilterDialog(
 
         binding.transStatusPartialRefund.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
             if (b) {
-                txnStatus.add(Utils.partialRefund)
+                txnStatus.add(Utils.partialRefunded)
                 binding.transStatusPartialRefund.setChipStrokeColor(
                     ColorStateList.valueOf(
                         context.resources.getColor(
@@ -430,8 +430,8 @@ class TransactionFilterDialog(
                     )
                 )
             } else {
-                if (txnStatus.contains(Utils.partialRefund)) {
-                    txnStatus.remove(Utils.partialRefund)
+                if (txnStatus.contains(Utils.partialRefunded)) {
+                    txnStatus.remove(Utils.partialRefunded)
                     binding.transStatusPartialRefund.setChipStrokeColor(
                         ColorStateList.valueOf(
                             context.resources.getColor(
@@ -673,13 +673,13 @@ class TransactionFilterDialog(
             dismiss()
         })
 
-        binding.dateRangePickerLL.setOnClickListener(View.OnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < Utils.lastClickDelay) {
-                return@OnClickListener
-            }
-            mLastClickTimeFilters = SystemClock.elapsedRealtime()
-            showCalendar()
-        })
+//        binding.dateRangePickerLL.setOnClickListener(View.OnClickListener {
+//            if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < Utils.lastClickDelay) {
+//                return@OnClickListener
+//            }
+//            mLastClickTimeFilters = SystemClock.elapsedRealtime()
+//            showCalendar()
+//        })
 
         binding.datePickET.setOnClickListener(View.OnClickListener {
             if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < Utils.lastClickDelay) {
@@ -763,16 +763,16 @@ class TransactionFilterDialog(
         //Refund Subtypes
         val refunSubType: MutableList<TransactionsSubTypeData> = ArrayList()
         val data3 = TransactionsSubTypeData()
-        data3.isSelected = (transactionSubType.contains(Utils.filter_full))
-        data3.itemId = (Utils.filter_full)
-        data3.groupItem = Utils.FULL
+        data3.isSelected = (transactionSubType.contains(Utils.sent))
+        data3.itemId = (Utils.sent)
+        data3.groupItem = Utils.SENT
         refunSubType.add(data3)
 
-        val data4 = TransactionsSubTypeData()
-        data4.isSelected = (transactionSubType.contains(Utils.filter_partial))
-        data4.itemId = (Utils.filter_partial)
-        data4.groupItem = Utils.Partial
-        refunSubType.add(data4)
+//        val data4 = TransactionsSubTypeData()
+//        data4.isSelected = (transactionSubType.contains(Utils.sent))
+//        data4.itemId = (Utils.sent)
+//        data4.groupItem = Utils.Partial
+//        refunSubType.add(data4)
 
         transactionSubTypeData[Utils.filter_Refund] = refunSubType
     }

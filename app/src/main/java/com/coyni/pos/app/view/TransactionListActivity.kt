@@ -76,7 +76,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
 
         if (myApplication.mCurrentUserData.loginData!!.terminalName != null || myApplication.mCurrentUserData.loginData!!.terminalId != null) {
             binding.terminalNameTV.setText(myApplication.mCurrentUserData.loginData!!.terminalName)
-            binding.terminalID.setText((myApplication.mCurrentUserData.loginData!!.terminalId))
+            binding.terminalID.setText(("TID: " + myApplication.mCurrentUserData.loginData!!.terminalId))
         }
 
         binding.ivBack.setOnClickListener {
@@ -194,6 +194,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                 override fun onDialogClicked(action: String?, value: Any?) {
                     when (action) {
                         Utils.applyFilter -> {
+                            binding.searchET.setText("")
                             dismissDialog()
                             request = value as TransactionListReq
                             //                        if (request?.txnTypes?.txnType == null)
