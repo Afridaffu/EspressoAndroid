@@ -153,17 +153,17 @@ class LoginActivity : BaseActivity() {
                 binding.llTIDError.visibility = View.GONE
                 binding.llBoxStroke.background = getDrawable(R.drawable.outline_box_focused)
             } else {
-                if (binding.tidET.text.toString().length in 5..8) {
+                if (binding.tidET.text.toString().length == 10) {
                     binding.tvUpperHint.visibility = View.VISIBLE
                     binding.tvUpperHint.setTextColor(getColor(R.color.primary_black))
                     binding.llTIDError.visibility = View.GONE
                     binding.llBoxStroke.background = getDrawable(R.drawable.outline_box_unfocused)
 
-                } else if (binding.tidET.text.toString().length in 1..4) {
+                } else if (binding.tidET.text.toString().length  < 10) {
                     binding.tvUpperHint.visibility = View.VISIBLE
                     binding.tvUpperHint.setTextColor(getColor(R.color.error_red))
                     binding.llTIDError.visibility = View.VISIBLE
-                    binding.tvTIDError.text = "Minimum 5 Characters"
+                    binding.tvTIDError.text = "Minimum 10 Characters"
                     binding.llBoxStroke.background = getDrawable(R.drawable.outline_box_error)
 
                 } else {
@@ -230,7 +230,7 @@ class LoginActivity : BaseActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                isId = binding.tidET.text.toString().length >= 5
+                isId = binding.tidET.text.toString().length == 10
                 terminalId = binding.tidET.text.toString()
                 enableButton()
             }

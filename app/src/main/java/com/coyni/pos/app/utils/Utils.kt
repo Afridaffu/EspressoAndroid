@@ -96,6 +96,8 @@ class Utils {
         const val paid = 5
         const val partialRefund = 11 // need to ask BE
         const val refund = 9
+        const val Refunded = 7
+        const val partialRefunded = 8
         const val payoutInProgress = 4
         const val payoutFailed = 9
         const val filter_Sent = 8
@@ -199,6 +201,7 @@ class Utils {
         const val Completed = "Completed"
         const val lastClickDelay = 2000
         const val TOKEN_EXPIRED = "Something went wrong. Please try again"
+        const val USER_NOT_ALLOWED = "User not allow to do this operation"
 
         lateinit var errorState: Array<IntArray>
         lateinit var state: Array<IntArray>
@@ -654,7 +657,7 @@ class Utils {
                 header.text = headerText
             }
             actionCV.setOnClickListener {
-                if (msg.equals(TOKEN_EXPIRED, true)) {
+                if (msg.equals(TOKEN_EXPIRED, true) || msg.equals(USER_NOT_ALLOWED,true)) {
                     context.startActivity(
                         Intent(context, LoginActivity::class.java).setFlags(
                             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

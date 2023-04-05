@@ -340,7 +340,7 @@
                             android:background="@color/primary_green"
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center"
-                            android:text="Apply Filter"
+                            android:text="Apply"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_12ssp" />
                     </androidx.cardview.widget.CardView>

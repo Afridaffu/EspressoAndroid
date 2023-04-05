@@ -77,7 +77,7 @@ class RecentTransactionsListAdapter() :
                     objMyApplication.mCurrentUserData.convertZoneDateTime(
                         date,
                         "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd/yyyy hh:mma"
+                        "MM/dd/yyyy h:mma"
                     )?.toLowerCase()
                 )
             }
