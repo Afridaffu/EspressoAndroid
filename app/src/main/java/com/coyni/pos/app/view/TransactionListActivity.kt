@@ -53,6 +53,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
     private var strToDate: String? = ""
     var transactions: MutableList<TransactionItem> = ArrayList<TransactionItem>()
     var isSwiped = false
+    var isSearch = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -194,23 +195,24 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                 override fun onDialogClicked(action: String?, value: Any?) {
                     when (action) {
                         Utils.applyFilter -> {
-                            binding.searchET.setText("")
                             dismissDialog()
                             request = value as TransactionListReq
                             //                        if (request?.txnTypes?.txnType == null)
                             if (request != null && request!!.isFilters == true) {
                                 binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_enabled)
+                                isSearch = true
                             } else {
                                 binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
+                                isSearch = false
                             }
                             request!!.requestToken =
                                 myApplication.mCurrentUserData.validateResponseData!!.token
                             transactions.clear()
                             transactionsAPI(request!!)
+                            binding.searchET.setText("")
                             //                        transactionViewModel!!.filterTransactionsList(request!!)
                         }
                         Utils.resetFilter -> {
-
                             //                        filterIV.setImageResource(R.drawable.ic_filtericon);
                             request = null
                             loadData()
@@ -420,10 +422,12 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                 request!!.searchKey = charSequence.toString()
                 transactionsAPI(request!!)
             } else {
-                myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
-                myApplication.mCurrentUserData.transactionListReq!!.requestToken =
-                    myApplication.mCurrentUserData.validateResponseData?.token
-                transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
+                if (!isSearch) {
+                    myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
+                    myApplication.mCurrentUserData.transactionListReq!!.requestToken =
+                        myApplication.mCurrentUserData.validateResponseData?.token
+                    transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
+                }
             }
         }
     }
