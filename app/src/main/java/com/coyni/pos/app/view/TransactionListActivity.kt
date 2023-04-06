@@ -194,7 +194,6 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                 override fun onDialogClicked(action: String?, value: Any?) {
                     when (action) {
                         Utils.applyFilter -> {
-                            binding.searchET.setText("")
                             dismissDialog()
                             request = value as TransactionListReq
                             //                        if (request?.txnTypes?.txnType == null)
@@ -207,10 +206,10 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                                 myApplication.mCurrentUserData.validateResponseData!!.token
                             transactions.clear()
                             transactionsAPI(request!!)
+                            binding.searchET.setText("")
                             //                        transactionViewModel!!.filterTransactionsList(request!!)
                         }
                         Utils.resetFilter -> {
-
                             //                        filterIV.setImageResource(R.drawable.ic_filtericon);
                             request = null
                             loadData()
@@ -420,10 +419,12 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                 request!!.searchKey = charSequence.toString()
                 transactionsAPI(request!!)
             } else {
-                myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
-                myApplication.mCurrentUserData.transactionListReq!!.requestToken =
-                    myApplication.mCurrentUserData.validateResponseData?.token
-                transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
+                if (request?.isFilters != true) {
+                    myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
+                    myApplication.mCurrentUserData.transactionListReq!!.requestToken =
+                        myApplication.mCurrentUserData.validateResponseData?.token
+                    transactionsAPI(myApplication.mCurrentUserData.transactionListReq!!)
+                }
             }
         }
     }
