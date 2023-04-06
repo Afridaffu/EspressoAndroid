@@ -143,13 +143,13 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
 
                             if (request!!.fromDate != "") {
                                 transactionListRequest.fromDate =
-                                    Utils.exportDate(request!!.fromDate.toString(), "")
+                                    Utils.exportDate(request!!.fromDate.toString(), myApplication.mCurrentUserData.strPreference)
 
                             }
                             if (request!!.toDate != "") {
                                 transactionListRequest.toDate =
                                     Utils.exportDate(
-                                        request!!.toDate.toString(), ""
+                                        request!!.toDate.toString(), myApplication.mCurrentUserData.strPreference
                                     )
                             }
                         }
@@ -194,7 +194,6 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                 override fun onDialogClicked(action: String?, value: Any?) {
                     when (action) {
                         Utils.applyFilter -> {
-                            binding.searchET.setText("")
                             dismissDialog()
                             request = value as TransactionListReq
                             //                        if (request?.txnTypes?.txnType == null)
@@ -207,6 +206,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                                 myApplication.mCurrentUserData.validateResponseData!!.token
                             transactions.clear()
                             transactionsAPI(request!!)
+                            binding.searchET.setText("")
                             //                        transactionViewModel!!.filterTransactionsList(request!!)
                         }
                         Utils.resetFilter -> {
@@ -413,11 +413,10 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
             binding.noTransactions.visibility = VISIBLE
             binding.noMoreTransactions.visibility = GONE
         } else if (charSequence.toString().trim { it <= ' ' }.length == 0) {
-            transactions.clear()
             if (request != null && request!!.isFilters) {
                 request!!.requestToken =
                     myApplication.mCurrentUserData.validateResponseData?.token
-                request!!.searchKey = charSequence.toString()
+//                request!!.searchKey = charSequence.toString()
                 transactionsAPI(request!!)
             } else {
                 myApplication.mCurrentUserData.transactionListReq!!.params.pageNo = "0"
