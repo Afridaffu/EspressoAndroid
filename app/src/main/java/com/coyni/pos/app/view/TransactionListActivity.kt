@@ -53,7 +53,6 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
     private var strToDate: String? = ""
     var transactions: MutableList<TransactionItem> = ArrayList<TransactionItem>()
     var isSwiped = false
-//    var isSearch = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -200,10 +199,8 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                             //                        if (request?.txnTypes?.txnType == null)
                             if (request != null && request!!.isFilters == true) {
                                 binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_enabled)
-//                                isSearch = true
                             } else {
                                 binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
-//                                isSearch = false
                             }
                             request!!.requestToken =
                                 myApplication.mCurrentUserData.validateResponseData!!.token
