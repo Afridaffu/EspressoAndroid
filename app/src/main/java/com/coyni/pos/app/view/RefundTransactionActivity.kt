@@ -74,16 +74,16 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
         binding.RefundbackIV.setOnClickListener {
             finish()
         }
-        if (myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != null || myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != "") {
+        if (myApplication!!.mCurrentUserData.transactionData?.totalAmount != null || myApplication!!.mCurrentUserData.transactionData?.totalAmount != "") {
             grossAmount = Utils.doubleParsing(
                 Utils.convertTwoDecimal(
-                    myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString()
+                    myApplication!!.mCurrentUserData.transactionData?.totalAmount.toString()
                         .replace("CYN", "").trim()
                 )
             )
             binding.refundCurrencyTV.setText(
                 "" + Utils.convertTwoDecimal(
-                    myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString()
+                    myApplication!!.mCurrentUserData.transactionData?.totalAmount.toString()
                         .replace("CYN", "").trim()
                 )
             )
@@ -97,12 +97,12 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             }
         })
         binding.fullAmountTV.setOnClickListener {
-            if (myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != null || myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != "") {
+            if (myApplication!!.mCurrentUserData.transactionData?.totalAmount != null || myApplication!!.mCurrentUserData.transactionData?.totalAmount != "") {
                 fullAmount = Utils.doubleParsing(
-                    myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString()
+                    myApplication!!.mCurrentUserData.transactionData?.totalAmount.toString()
                         .replace("CYN", "").trim { it <= ' ' }
                 )
-                binding.refundAmountET.setText("" + Utils.convertTwoDecimal(myApplication!!.mCurrentUserData.transactionData?.purchaseAmount.toString().replace("CYN", "").trim { it <= ' ' })
+                binding.refundAmountET.setText("" + Utils.convertTwoDecimal(myApplication!!.mCurrentUserData.transactionData?.totalAmount.toString().replace("CYN", "").trim { it <= ' ' })
                 )
                 binding.refundAmountET.setSelection(binding.refundAmountET.text.length)
                 binding.fullAmountTV.setBackgroundResource(R.drawable.button_bg_light_green_core)
@@ -120,7 +120,7 @@ class RefundTransactionActivity : BaseActivity(), TextWatcher {
             }
         }
         binding.halfAmountTV.setOnClickListener {
-            if (myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != null || myApplication!!.mCurrentUserData.transactionData?.purchaseAmount != "") {
+            if (myApplication!!.mCurrentUserData.transactionData?.totalAmount != null || myApplication!!.mCurrentUserData.transactionData?.totalAmount != "") {
                 halfAmount = grossAmount / 2;
                 binding.refundAmountET.setText("" + Utils.convertTwoDecimal(halfAmount.toString()))
                 binding.refundAmountET.setSelection(binding.refundAmountET.text.length)
