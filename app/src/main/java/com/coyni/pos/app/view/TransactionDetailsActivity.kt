@@ -367,7 +367,7 @@ class TransactionDetailsActivity : BaseActivity() {
                 )
             }
             if (data.remarks != null) {
-                binding.tvReason.text = data.remarks.toString()
+                binding.tvReason.text = "\""+data.remarks.toString()+"\"";
             }
             if (data.createdDate != null) {
                 binding.tvDate.text =
