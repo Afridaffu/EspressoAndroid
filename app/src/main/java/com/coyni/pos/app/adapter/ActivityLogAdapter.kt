@@ -52,9 +52,11 @@ class ActivityLogAdapter(val context: Context, var respList: List<ActivityLogsRe
 //        respList = myApplication?.mCurrentUserData?.activityLogsResponseData!!
 
         if (respList.get(position)?.customProperties?.status != null) {
-            holder.binding.statusTV.setText(
-                respList?.get(position)?.customProperties?.status + ":"
-            )
+            if(respList.get(position)?.customProperties?.status.equals("Refunded")) {
+                holder.binding.statusTV.setText("Refund Successful :")
+            }else{
+                holder.binding.statusTV.setText(respList.get(position)?.customProperties?.status  + ":")
+            }
             when (respList?.get(position)?.customProperties?.status!!) {
                 Utils.Completed, Utils.transSuccessful -> {
 //                    holder.binding.statusTV.setTextColor(

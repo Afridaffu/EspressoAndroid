@@ -171,6 +171,9 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
         binding.txnRefresh.setOnRefreshListener(OnRefreshListener {
             try {
                 isSwiped = true
+                binding.searchET.setText("")
+                binding.searchET.clearFocus()
+                if (Utils.isKeyboardVisible) Utils.hideKeypad(this@TransactionListActivity)
                 loadData()
             } catch (ex: Exception) {
                 ex.printStackTrace()

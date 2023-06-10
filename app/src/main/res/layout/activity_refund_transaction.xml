@@ -122,7 +122,7 @@
                                             android:singleLine="true"
                                             android:textColor="@color/primary_black"
                                             android:textColorHint="@color/light_gray"
-                                            android:textCursorDrawable="@drawable/cursor_color"
+                                            android:textCursorDrawable="@drawable/cursorcolor"
                                             android:textIsSelectable="false"
                                             android:textSize="@dimen/_53ssp" />
 
