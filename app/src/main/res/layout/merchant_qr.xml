@@ -54,33 +54,33 @@
                             android:fontFamily="@font/opensans_bold"
                             android:text="hqqwjqkdwkd"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_28ssp" />
+                            android:textSize="@dimen/_30ssp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_3sdp"
-                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_7sdp"
                             android:fontFamily="@font/opensans_bold"
                             android:text="CYN"
                             android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
 
                     <RelativeLayout
                         android:id="@+id/qrViewRL"
-                        android:layout_width="@dimen/_160sdp"
-                        android:layout_height="@dimen/_160sdp"
+                        android:layout_width="@dimen/_178sdp"
+                        android:layout_height="@dimen/_178sdp"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/_16sdp"
-                        android:layout_marginHorizontal="@dimen/_39sdp"
+                        android:layout_marginHorizontal="@dimen/_32sdp"
                         android:layout_marginBottom="@dimen/_34sdp"
                         android:background="@drawable/qr_image_outline">
 
                         <ImageView
                             android:id="@+id/idIVQrcode"
-                            android:layout_width="@dimen/_149sdp"
-                            android:layout_height="@dimen/_149sdp"
+                            android:layout_width="@dimen/_170sdp"
+                            android:layout_height="@dimen/_170sdp"
                             android:layout_centerInParent="true"
                             android:padding="@dimen/_3sdp" />
                     </RelativeLayout>
@@ -97,11 +97,11 @@
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/lottieAnimV"
-                        android:layout_width="@dimen/_90sdp"
-                        android:layout_height="@dimen/_90sdp"
+                        android:layout_width="@dimen/_190sdp"
+                        android:layout_height="@dimen/_190sdp"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
-                        app:lottie_rawRes="@raw/stepper_loader" />
+                        app:lottie_rawRes="@raw/teal_loading_circle" />
 
                     <TextView
                         android:id="@+id/waitingText"

@@ -223,9 +223,9 @@ class TransactionDetailsActivity : BaseActivity() {
             if (data.transactionType != null && data.transactionSubtype != null) {
                 binding.typeNsubtype.setText(data.transactionType + " - " + data.transactionSubtype)
             }
-            if (data.purchaseAmount != null) {
+            if (data.totalAmount != null) {
                 saleOrderAmount = Utils.convertTwoDecimal(
-                    data.purchaseAmount.toString().replace(
+                    data.totalAmount.toString().replace(
                         "CYN",
                         ""
                     ).trim()
