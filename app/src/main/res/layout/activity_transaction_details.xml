@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/et_bg_gray"
     android:orientation="vertical"
-    android:visibility="gone">
+    android:visibility="">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -211,6 +211,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingTop="@dimen/_7sdp"
+                        android:visibility="gone"
                         android:paddingBottom="@dimen/_10sdp">
 
                         <TextView
@@ -681,7 +682,8 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingTop="@dimen/_7sdp"
-                        android:paddingBottom="@dimen/_10sdp">
+                        android:paddingBottom="@dimen/_10sdp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
