@@ -22,11 +22,12 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.coyni.pos.app.R
+import com.coyni.pos.app.baseclass.BaseActivity
 import com.coyni.pos.app.databinding.ActivityPaymentSuccessFlowBinding
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 
-class SucessFlowActivity : AppCompatActivity() {
+class SucessFlowActivity : BaseActivity() {
     private lateinit var binding: ActivityPaymentSuccessFlowBinding
     var animSlideUp: Animation? = null
     var lastClickTime = 0L
