@@ -108,7 +108,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                 try {
                     if (total - 1 > currentPage) {
                         binding.loadLL.visibility = VISIBLE
-                        binding.noMoreTransactions.visibility = GONE
+//                        binding.noMoreTransactions.visibility = GONE
                         currentPage = currentPage + 1
                         val transactionListRequest = TransactionListReq()
                         transactionListRequest.params.pageNo = currentPage.toString()
@@ -157,9 +157,9 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                         transactionsAPI(transactionListRequest)
                         myApplication.mCurrentUserData.initializeTransactionSearch()
                         myApplication.mCurrentUserData.transactionListReq = transactionListRequest
-                        binding.noMoreTransactions.setVisibility(View.GONE)
+//                        binding.noMoreTransactions.setVisibility(View.GONE)
                     } else {
-                        binding.noMoreTransactions.visibility = VISIBLE
+//                        binding.noMoreTransactions.visibility = VISIBLE
                     }
 
                 } catch (e: java.lang.Exception) {
@@ -290,13 +290,16 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                                 val myPos: Int =
                                     transactions.size - recentTransactionResponse.data!!.items!!.size
                                 binding.txnListRV.scrollToPosition(myPos)
-                                binding.noMoreTransactions.setVisibility(GONE)
-                            } else {
-                                binding.txnListRV.scrollToPosition(0)
                                 if (empRole.equals(Utils.EMPROLE))
                                     binding.noMoreTransactions.setVisibility(GONE)
                                 else
                                     binding.noMoreTransactions.setVisibility(VISIBLE)
+                            } else {
+                                binding.txnListRV.scrollToPosition(0)
+//                                if (empRole.equals(Utils.EMPROLE))
+                                    binding.noMoreTransactions.setVisibility(GONE)
+//                                else
+//                                    binding.noMoreTransactions.setVisibility(VISIBLE)
                             }
                             prepareListData(transactions)
                         } else {
