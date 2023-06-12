@@ -68,6 +68,7 @@
                         android:layout_marginHorizontal="@dimen/_32sdp"
                         android:layout_marginTop="@dimen/_40sdp"
                         android:layout_marginBottom="@dimen/_40sdp"
+                        android:contentDescription="startSaleLL"
                         android:background="@drawable/corecircle2"
                         android:gravity="center"
                         android:orientation="vertical">
@@ -100,6 +101,7 @@
                 android:id="@+id/todayBatchCV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:contentDescription="todayBatchCV"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_11sdp"
                 android:layout_marginBottom="@dimen/_1sdp"
