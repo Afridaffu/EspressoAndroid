@@ -1,8 +1,7 @@
 package com.coyni.pos.app.dialog
 
 import android.content.Context
-import android.view.View.VISIBLE
-import androidx.constraintlayout.motion.widget.MotionLayout
+import android.view.View
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseDialog
 import com.coyni.pos.app.databinding.RefundPreviewBinding
@@ -21,6 +20,7 @@ class RefundPreviewDialog(
     var processingFee: Double = 0.0
     var refundAmpount: Double = 0.0
     var total: Double = 0.0
+    private var isClicked = false;
     override fun getLayoutId() = R.layout.refund_preview
 
     override fun initViews() {
@@ -59,55 +59,78 @@ class RefundPreviewDialog(
         dialogBinding.tvTotal.text =
             Utils.convertTwoDecimal(total.toString()).replace("$", "") + " CYN"
         dialogBinding.messageNoteTV.text = reason
-        dialogBinding.infoIV.setOnClickListener {
-//            dialogBinding.viewFeesTextLL.visibility = VISIBLE
-        }
+
+        dialogBinding.infoImgage.setOnClickListener(View.OnClickListener {
+            if (!isClicked) {
+                isClicked = true
+                dialogBinding.triangleImageIV.setVisibility(View.VISIBLE)
+                dialogBinding.viewFeesTextLL.setVisibility(View.VISIBLE)
+            } else {
+                isClicked = false
+                dialogBinding.triangleImageIV.setVisibility(View.GONE)
+                dialogBinding.viewFeesTextLL.setVisibility(View.GONE)
+            }
+            dialogBinding.getRoot().invalidate()
+        })
+
         dialogBinding.customerNameTV.text =
             myApplication.mCurrentUserData.transactionData?.customerName.toString()
-        dialogBinding.viewFeesTV.setOnClickListener {
+//        dialogBinding.viewFeesTV.setOnClickListener {
 //            feeDialog()
-        }
-        dialogBinding.slideToConfirmm.setTransitionListener(object :
-            MotionLayout.TransitionListener {
-            override fun onTransitionStarted(
-                motionLayout: MotionLayout,
-                startId: Int,
-                endId: Int
-            ) {
-            }
+//        }
 
-            override fun onTransitionChange(
-                motionLayout: MotionLayout,
-                startId: Int,
-                endId: Int,
-                progress: Float
-            ) {
-                if (progress > Utils.slidePercentage) {
-                    dialogBinding.imLock.alpha = 1.0f
-                    motionLayout.setTransition(R.id.middle, R.id.end)
-                    motionLayout.transitionToState(motionLayout.endState)
-                    dialogBinding.slideToConfirmm.isInteractionEnabled = false
-                    if (!isCheckoutCalled) {
-                        isCheckoutCalled = true
-                        dismiss()
-                        dialogBinding.tvLable.text = "Verifying"
-                        if (getOnDialogClickListener() != null) {
-                            getOnDialogClickListener()!!.onDialogClicked(Utils.SWIPE, "")
-                        }
-                    }
+        dialogBinding.cvConfirm.setOnClickListener {
+            try {
+                dismiss()
+                if (getOnDialogClickListener() != null) {
+                    getOnDialogClickListener()!!.onDialogClicked(Utils.SWIPE, "")
                 }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
             }
-
-            override fun onTransitionCompleted(motionLayout: MotionLayout, currentId: Int) {}
-            override fun onTransitionTrigger(
-                motionLayout: MotionLayout,
-                triggerId: Int,
-                positive: Boolean,
-                progress: Float
-            ) {
-            }
-        })
+        }
     }
+
+//        dialogBinding.cvConfirm.setet(object :
+//            MotionLayout.TransitionListener {
+//            override fun onTransitionStarted(
+//                motionLayout: MotionLayout,
+//                startId: Int,
+//                endId: Int
+//            ) {
+//            }
+//
+//            override fun onTransitionChange(
+//                motionLayout: MotionLayout,
+//                startId: Int,
+//                endId: Int,
+//                progress: Float
+//            ) {
+//                if (progress > Utils.slidePercentage) {
+//                    dialogBinding.imLock.alpha = 1.0f
+//                    motionLayout.setTransition(R.id.middle, R.id.end)
+//                    motionLayout.transitionToState(motionLayout.endState)
+//                    dialogBinding.slideToConfirmm.isInteractionEnabled = false
+//                    if (!isCheckoutCalled) {
+//                        isCheckoutCalled = true
+//                        dismiss()
+//                        dialogBinding.tvLable.text = "Verifying"
+//                        if (getOnDialogClickListener() != null) {
+//                            getOnDialogClickListener()!!.onDialogClicked(Utils.SWIPE, "")
+//                        }
+//                    }
+//                }
+//            }
+//
+//            override fun onTransitionCompleted(motionLayout: MotionLayout, currentId: Int) {}
+//            override fun onTransitionTrigger(
+//                motionLayout: MotionLayout,
+//                triggerId: Int,
+//                positive: Boolean,
+//                progress: Float
+//            ) {
+//            }
+//        })
 
     private fun feeDialog() {
         val feeDialog = ViewFeeDialog(context)
