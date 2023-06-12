@@ -79,22 +79,6 @@ class LoginActivity : BaseActivity() {
             onBackPressed()
         }
 
-//        binding.passwordTIL.setEndIconOnClickListener {
-//            if (!isIconEnable) {
-//                isIconEnable = true
-//                binding.passwordTIL.endIconDrawable =
-//                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeopen)
-//                binding.passwordET.transformationMethod =
-//                    HideReturnsTransformationMethod.getInstance()
-//            } else {
-//                isIconEnable = false
-//                binding.passwordTIL.endIconDrawable =
-//                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeclose)
-//                binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
-//            }
-//            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-//        }
-
         binding.tvButton.setOnClickListener {
             if (SystemClock.elapsedRealtime() - lastClick < Utils.lastClickDelay) return@setOnClickListener
             lastClick = SystemClock.elapsedRealtime()
@@ -103,25 +87,6 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.endIconIV.setOnClickListener {
-//            try {
-//                if (!isPwdEye) {
-//                    isPwdEye = true
-//                    binding.endIconIV.setImageResource(R.drawable.ic_eyeopen)
-//                    binding.passwordET.transformationMethod =
-//                        HideReturnsTransformationMethod.getInstance()
-//                } else {
-//                    isPwdEye = false
-//                    binding.endIconIV.setImageResource(R.drawable.ic_eyeclose)
-//                    binding.passwordET.transformationMethod =
-//                        PasswordTransformationMethod.getInstance()
-//                }
-//                if (binding.passwordET.text.toString().length > 0) {
-//                    binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-//                }
-//            } catch (ex: Exception) {
-//                ex.printStackTrace()
-//            }
-
             if (!isIconEnable) {
                 isIconEnable = true
                 binding.endIconIV.setImageResource(R.drawable.ic_eyeopen)
@@ -174,50 +139,6 @@ class LoginActivity : BaseActivity() {
                 }
             }
         }
-
-//        binding.passwordET.setOnFocusChangeListener { _, hasFocus ->
-//            if (hasFocus) {
-//                if (binding.passwordET.text.toString()
-//                        .isNotEmpty()
-//                ) binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-//                Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_green)
-//                Log.e("getKeyboardVisible", getKeyboardVisible().toString())
-//                if (!getKeyboardVisible()!!) {
-//                    Utils.shwForcedKeypad(this, binding.passwordET)
-//                }
-//                if (binding.passwordET.text.toString()
-//                        .isNotEmpty()
-//                ) binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-//                Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_green)
-//                binding.passwordErrorLL.visibility = View.GONE
-//                binding.passwordTIL.setBoxStrokeColorStateList(Utils.getFocusedColorState(this))
-//                binding.passwordET.hint =
-//                    "\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605"
-////
-//                if (binding.passwordET.text.toString().length > 0)
-//                    binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-//                else
-//                    binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-//            } else {
-//                binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-//                if (binding.passwordET.text.toString().length in 1..7) {
-//                    binding.passwordErrorTV.text = "Please enter a valid Password"
-//                    Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.error_red)
-//                    binding.passwordErrorLL.visibility = View.VISIBLE
-//                    binding.passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(this))
-//                } else {
-//                    if (binding.passwordET.text.toString().length > 7) Utils.upperHintColor(
-//                        binding.passwordTIL, this@LoginActivity, R.color.primary_black
-//                    )
-//                    else Utils.upperHintColor(
-//                        binding.passwordTIL, this@LoginActivity, R.color.light_gray
-//                    )
-//                    binding.passwordET.hint = ""
-//                    binding.passwordErrorLL.visibility = View.GONE
-//                    binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
-//                }
-//            }
-//        }
         binding.passwordET.setOnFocusChangeListener { view, b ->
             if (!b) {
                 if (binding.passwordET.text.toString()
@@ -311,21 +232,9 @@ class LoginActivity : BaseActivity() {
                     isPassword = false
                     enableButton()
                 }
-//                isPassword = binding.passwordET.text?.length!! >= 8
-//                password = binding.passwordET.text.toString()
-//                enableButton()
-//                if (p0!!.length == 0) {
-//                    // No entered text so will show hint
-//                    if (binding.passwordET.hasFocus()) binding.passwordET.setTextSize(
-//                        TypedValue.COMPLEX_UNIT_SP, 12f
-//                    ) else binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-//                } else {
-//                    binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-//                }
             }
 
             override fun afterTextChanged(p0: Editable?) {
-//                TODO("Not yet implemented")
             }
 
         })
@@ -385,13 +294,16 @@ class LoginActivity : BaseActivity() {
         errorDialog.show()
     }
 
-    //Static data remove later
-//    private fun setLoginData() {
-//        isId = true
-//        isPassword = true
-//        binding.tidET.setText("1093916074")
-//        binding.passwordET.setText("Admin@123")
-//        enableButton()
-//    }
-    //Static data remove later
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (Utils.onBoard) {
+            startActivity(
+                Intent(applicationContext, OnboardActivity::class.java).setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                )
+            )
+        } else {
+//                onBackPressed()
+        }
+    }
 }
