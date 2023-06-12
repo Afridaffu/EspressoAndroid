@@ -46,6 +46,7 @@
                     android:layout_marginTop="@dimen/_4sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="right"
+                    android:contentDescription="resetFiltersTV"
                     android:text="Reset all filters"
                     android:textColor="#00a6a2"
                     android:textSize="@dimen/_11ssp" />
@@ -88,6 +89,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_5sdp"
                                 android:divider="@null"
+                                android:contentDescription="custRecyclerView"
                                 android:groupIndicator="@null"
                                 android:scrollbars="none" />
 
@@ -121,6 +123,7 @@
                                 style="@style/Widget.MaterialComponents.Chip.Choice"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="transStatusCompleted"
                                 android:layout_marginRight="@dimen/_8sdp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
@@ -139,6 +142,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:contentDescription="transStatusRefunded"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:text="Refunded"
                                 android:textAlignment="center"
@@ -168,6 +172,7 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:text="Partial Refund"
                                 android:textAlignment="center"
+                                android:contentDescription="transStatusPartialRefund"
                                 android:textColor="@color/filter_chip_text_color"
                                 android:textSize="@dimen/_11ssp"
                                 app:chipBackgroundColor="@color/filter_chip_background_color"
@@ -227,6 +232,7 @@
                                 android:background="@android:color/transparent"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:hint="(CYN)"
+                                android:contentDescription="transAmountStartET"
                                 android:imeOptions="actionDone"
                                 android:inputType="numberDecimal"
                                 android:maxLength="8"
@@ -266,6 +272,7 @@
                                 android:background="@android:color/transparent"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:hint="(CYN)"
+                                android:contentDescription="transAmountEndET"
                                 android:imeOptions="actionDone"
                                 android:inputType="numberDecimal"
                                 android:maxLength="8"
@@ -306,6 +313,7 @@
                             android:clickable="true"
                             android:editable="false"
                             android:focusable="false"
+                            android:contentDescription="datePickET"
                             android:fontFamily="@font/opensans_semibold"
                             android:hint="Date Range"
                             android:textColor="@color/primary_black"
@@ -330,6 +338,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginBottom="@dimen/_35sdp"
                         android:gravity="center"
+                        android:contentDescription="applyFilterBtnCV"
                         app:cardBackgroundColor="#00a6a2"
                         app:cardCornerRadius="@dimen/_20sdp">
 

@@ -71,6 +71,7 @@
                             android:background="@color/primary_dark_green"
                             android:foregroundGravity="center_horizontal"
                             android:padding="@dimen/_4sdp"
+                            android:contentDescription="arrowButton"
                             android:src="@drawable/ic_feather_menu"
                             app:layout_constraintBottom_toBottomOf="@+id/fixed_layout"
                             app:layout_constraintEnd_toEndOf="@+id/fixed_layout"
@@ -255,6 +256,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="@dimen/_44sdp"
                                             android:layout_marginTop="@dimen/_1sdp"
+                                            android:contentDescription="exitLL"
                                             android:background="@drawable/white_stroke"
                                             android:gravity="center"
                                             android:orientation="horizontal">

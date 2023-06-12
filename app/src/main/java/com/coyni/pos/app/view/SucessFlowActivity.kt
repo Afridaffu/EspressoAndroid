@@ -82,7 +82,7 @@ class SucessFlowActivity : BaseActivity() {
 
     fun setCustomerName(customerName: String) {
 
-        val ss = SpannableString("From " + customerName)
+        val ss = SpannableString("from " + customerName)
         ss.setSpan(
             StyleSpan(Typeface.BOLD), 5,
             ss.toString().length,

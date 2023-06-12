@@ -126,6 +126,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginBottom="@dimen/_43sdp"
+        android:contentDescription="discardSaleLL"
         android:background="@drawable/bg_inactive_color_filled_cv"
         android:gravity="center"
         android:orientation="horizontal">

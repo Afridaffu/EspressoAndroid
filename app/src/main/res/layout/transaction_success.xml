@@ -20,6 +20,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_45sdp"
+                android:contentDescription="@string/back"
                 android:padding="@dimen/_5sdp"
                 android:src="@drawable/ic_cross"
                 android:visibility="visible" />
@@ -114,6 +115,7 @@
                 android:id="@+id/doneCV"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_42sdp"
+                android:contentDescription="doneCV"
                 android:layout_marginHorizontal="@dimen/_21sdp"
                 app:cardBackgroundColor="@color/primary_green"
                 app:cardCornerRadius="@dimen/_30sdp">
@@ -136,6 +138,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginBottom="@dimen/_31sdp"
+                android:contentDescription="viewTxnTV"
                 android:fontFamily="@font/opensans_bold"
                 android:text="View Transaction"
                 android:textColor="@color/primary_green"

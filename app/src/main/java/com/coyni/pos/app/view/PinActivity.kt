@@ -44,10 +44,6 @@ class PinActivity : BaseActivity(), View.OnClickListener {
         pinViewModel = ViewModelProvider(this).get(PinViewModel::class.java)
         myApplication = applicationContext as MyApplication
 
-        binding.qrNavigationTV.setOnClickListener {
-            startActivity(Intent(this, GenarateQrActivity::class.java))
-        }
-
         binding.imgBackk.setOnClickListener {
             onBackPressed()
         }
