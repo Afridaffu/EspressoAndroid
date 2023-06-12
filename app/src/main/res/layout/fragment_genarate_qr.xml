@@ -28,6 +28,7 @@
                 android:background="#008581"
                 android:fontFamily="@font/opensans_bold"
                 android:hint="0.00"
+                android:contentDescription="merchantAmountET"
                 android:inputType="numberDecimal"
                 android:maxLength="@string/maxlength"
                 android:textIsSelectable="false"
@@ -46,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_27sdp"
                 android:layout_marginStart="@dimen/_3sdp"
+                android:contentDescription="closeIV"
                 android:visibility="gone"
                 android:src="@drawable/clear_icon_ic"/>
 

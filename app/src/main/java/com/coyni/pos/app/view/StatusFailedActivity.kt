@@ -30,6 +30,8 @@ class StatusFailedActivity : BaseActivity() {
         if (status.equals(Utils.DEACTIVATED, true)) {
             binding.ivBack.visibility = View.GONE
             binding.tvButton.text = getString(R.string.okay)
+            binding.tvButton.contentDescription = getString(R.string.okay)
+
 
             binding.tvHeader.text = getString(R.string.terminal_deactivated)
             binding.tvDescription.text =
@@ -38,6 +40,8 @@ class StatusFailedActivity : BaseActivity() {
         } else if (status.equals(Utils.FAILED, true) || status.equals(Utils.CANCELED, true)) {
             binding.ivBack.visibility = View.VISIBLE
             binding.tvButton.text = getString(R.string.try_again)
+            binding.tvButton.contentDescription = getString(R.string.try_again)
+
 
             if (status.equals(Utils.FAILED, true)) {
                 binding.tvHeader.text = getString(R.string.payment_failed)

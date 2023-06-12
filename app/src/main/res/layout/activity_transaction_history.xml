@@ -197,6 +197,7 @@
                                             android:layout_marginStart="@dimen/_8sdp"
                                             android:layout_marginEnd="@dimen/_5sdp"
                                             android:layout_weight="1"
+                                            android:contentDescription="searchET"
                                             android:background="@android:color/transparent"
                                             android:cursorVisible="true"
                                             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -224,6 +225,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:paddingEnd="@dimen/_14sdp"
+                                            android:contentDescription="ivFilterIcon"
                                             android:src="@drawable/ic_filter_icon" />
                                     </LinearLayout>
                                 </LinearLayout>
