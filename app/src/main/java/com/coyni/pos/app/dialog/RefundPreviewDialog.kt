@@ -32,7 +32,7 @@ class RefundPreviewDialog(
     override fun initViews() {
         dialogBinding = RefundPreviewBinding.bind(findViewById(R.id.root))
         myApplication = context.applicationContext as MyApplication
-        dialogBinding.tvProcessingFee.text =
+        dialogBinding.tvProcessFee.text =
             Utils.convertTwoDecimal(myApplication.mCurrentUserData.refundResponseData?.processingFee.toString())
                 .replace("$", "") + " CYN"
         if (myApplication.mCurrentUserData.transactionData!!.referenceId != null) {
@@ -99,7 +99,7 @@ class RefundPreviewDialog(
                 ex.printStackTrace()
             }
         }
-
+        fees = "0.00%"
         var spnnableText = ""
         spnnableText = if (fees != null && fees != "") {
             fees + " processing fee for this transaction."
@@ -108,7 +108,6 @@ class RefundPreviewDialog(
         }
 
         val spannableString = SpannableString(spnnableText)
-//        val font = Typeface.createFromAsset(context.assets, "font/opensans_semibold.ttf")
         spannableString.setSpan(
             StyleSpan(Typeface.BOLD),
             0,
