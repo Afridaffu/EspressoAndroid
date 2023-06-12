@@ -1,6 +1,7 @@
 package com.coyni.pos.app.dialog
 
 import android.content.Context
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.coyni.pos.app.R
@@ -58,7 +59,12 @@ class RefundPreviewDialog(
         total = processingFee + refundAmpount
         dialogBinding.tvTotal.text =
             Utils.convertTwoDecimal(total.toString()).replace("$", "") + " CYN"
-        dialogBinding.messageNoteTV.text = reason
+        if (reason == "") {
+            dialogBinding.lyMessage.visibility = GONE
+        } else {
+            dialogBinding.lyMessage.visibility = VISIBLE
+            dialogBinding.messageNoteTV.text = "\"" + reason + "\""
+        }
         dialogBinding.infoIV.setOnClickListener {
 //            dialogBinding.viewFeesTextLL.visibility = VISIBLE
         }
