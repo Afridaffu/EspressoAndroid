@@ -1,59 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.StatusFailedActivity"
     android:background="@color/white"
-    android:orientation="vertical">
+    tools:context=".view.StatusFailedActivity">
 
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_x"
-        android:layout_marginTop="@dimen/_40sdp"
         android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_40sdp"
         android:padding="@dimen/_5sdp"
-        android:layout_alignParentTop="true"/>
+        android:src="@drawable/ic_x" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
         android:layout_marginHorizontal="@dimen/_32sdp"
-        android:orientation="vertical"
-        android:layout_above="@+id/tvButton"
-        android:layout_below="@+id/ivBack"
-        android:layout_weight="1"
-        android:gravity="center">
+        android:layout_marginBottom="@dimen/_91sdp"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_failed"/>
+            android:src="@drawable/ic_failed" />
 
         <TextView
             android:id="@+id/tvHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_29sdp"
-            android:text="@string/terminal_deactivated"
-            android:textColor="@color/black"
-            android:textAlignment="center"
             android:fontFamily="@font/opensans_bold"
-            android:textSize="@dimen/_16ssp"/>
+            android:text="@string/terminal_deactivated"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16ssp" />
 
         <TextView
             android:id="@+id/tvDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
-            android:text="@string/this_terminal_has_been_deactivated_and_is_no_longer_accessible"
-            android:textColor="@color/black"
-            android:textAlignment="center"
             android:fontFamily="@font/opensans_regular"
-            android:textSize="@dimen/_12ssp"/>
+            android:text="@string/this_terminal_has_been_deactivated_and_is_no_longer_accessible"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
     <TextView
@@ -70,4 +65,4 @@
         android:textColor="@color/white"
         android:textSize="@dimen/_12ssp" />
 
-</LinearLayout>
+</RelativeLayout>

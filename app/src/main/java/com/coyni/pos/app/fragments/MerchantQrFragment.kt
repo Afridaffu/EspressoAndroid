@@ -187,7 +187,7 @@ class MerchantQrFragment : BaseFragment() {
                     handler.postDelayed(runnable!!, 0)
                 } else if (obj.getString("eventType") == "SCAN_QR_CODE") {
                     runOnUiThread(Runnable {
-                        binding.qrLL.visibility = View.GONE
+                        binding.qrLL.visibility = View.INVISIBLE
                         binding.animationRL.visibility = View.VISIBLE
                         binding.waitingText.visibility = View.VISIBLE
                         binding.discardSaleLL.setBackgroundResource(R.drawable.bg_inactive_color_filled_cv)
@@ -356,7 +356,7 @@ class MerchantQrFragment : BaseFragment() {
 //                    handler.postDelayed(runnable!!, 0)
                 } else if (obj.getString("eventType") == "SCAN_QR_CODE") {
                     runOnUiThread(Runnable {
-                        binding.qrLL.visibility = View.GONE
+                        binding.qrLL.visibility = View.INVISIBLE
                         binding.animationRL.visibility = View.VISIBLE
                         binding.waitingText.visibility = View.VISIBLE
                         binding.discardSaleLL.setBackgroundResource(R.drawable.bg_inactive_color_filled_cv)
