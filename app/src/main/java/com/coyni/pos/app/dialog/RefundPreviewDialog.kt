@@ -1,13 +1,18 @@
 package com.coyni.pos.app.dialog
 
 import android.content.Context
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseDialog
 import com.coyni.pos.app.databinding.RefundPreviewBinding
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
-
 
 class RefundPreviewDialog(
     context: Context,
@@ -20,6 +25,7 @@ class RefundPreviewDialog(
     var processingFee: Double = 0.0
     var refundAmpount: Double = 0.0
     var total: Double = 0.0
+    lateinit var fees: String
     private var isClicked = false;
     override fun getLayoutId() = R.layout.refund_preview
 
@@ -73,11 +79,15 @@ class RefundPreviewDialog(
             dialogBinding.getRoot().invalidate()
         })
 
+        if (reason == "") {
+            dialogBinding.lyMessage.visibility = GONE
+        } else {
+            dialogBinding.lyMessage.visibility = VISIBLE
+            dialogBinding.messageNoteTV.text = "\"" + reason + "\""
+        }
+
         dialogBinding.customerNameTV.text =
             myApplication.mCurrentUserData.transactionData?.customerName.toString()
-//        dialogBinding.viewFeesTV.setOnClickListener {
-//            feeDialog()
-//        }
 
         dialogBinding.cvConfirm.setOnClickListener {
             try {
@@ -89,6 +99,24 @@ class RefundPreviewDialog(
                 ex.printStackTrace()
             }
         }
+
+        var spnnableText = ""
+        spnnableText = if (fees != null && fees != "") {
+            fees + " processing fee for this transaction."
+        } else {
+            "$0.00 processing fee for this transaction."
+        }
+
+        val spannableString = SpannableString(spnnableText)
+//        val font = Typeface.createFromAsset(context.assets, "font/opensans_semibold.ttf")
+        spannableString.setSpan(
+            StyleSpan(Typeface.BOLD),
+            0,
+            fees.length,
+            Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+        )
+        dialogBinding.feePercentageTV.setText(spannableString)
+
     }
 
 //        dialogBinding.cvConfirm.setet(object :
@@ -131,9 +159,9 @@ class RefundPreviewDialog(
 //            ) {
 //            }
 //        })
-
-    private fun feeDialog() {
-        val feeDialog = ViewFeeDialog(context)
-        feeDialog.show()
-    }
+//
+//    private fun feeDialog() {
+//        val feeDialog = ViewFeeDialog(context)
+//        feeDialog.show()
+//    }
 }

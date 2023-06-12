@@ -201,7 +201,8 @@ class Utils {
         const val Completed = "Completed"
         const val lastClickDelay = 2000
         const val TOKEN_EXPIRED = "Something went wrong. Please try again"
-        const val USER_NOT_ALLOWED = "User not allow to do this operation"
+        const val USER_NOT_ALLOWED = "User not allowed to do this operation"
+        var onBoard: Boolean = false;
 
         lateinit var errorState: Array<IntArray>
         lateinit var state: Array<IntArray>
@@ -657,14 +658,16 @@ class Utils {
                 header.text = headerText
             }
             actionCV.setOnClickListener {
-                if (msg.equals(TOKEN_EXPIRED, true) || msg.equals(USER_NOT_ALLOWED,true)) {
+                if (msg.contains("wrong") || msg.contains("operation")) {
+                    onBoard = true
                     context.startActivity(
                         Intent(context, LoginActivity::class.java).setFlags(
                             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         )
                     )
+                } else {
+                    displayAlertDialog!!.dismiss()
                 }
-                displayAlertDialog!!.dismiss()
             }
 
             if (msg == "") {

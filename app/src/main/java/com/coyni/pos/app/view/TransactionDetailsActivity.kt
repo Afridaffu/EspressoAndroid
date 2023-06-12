@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
@@ -61,9 +62,9 @@ class TransactionDetailsActivity : BaseActivity() {
 //                myApplication!!.mCurrentUserData.transactionId = txnId
             }
 
-            binding.ivRefund.setOnClickListener {
-                startActivity(Intent(this, RefundTransactionActivity::class.java))
-            }
+//            binding.ivRefund.setOnClickListener {
+//                startActivity(Intent(this, RefundTransactionActivity::class.java))
+//            }
 
             if (intent.getStringExtra(Utils.gbxTxnId) != null) {
                 gbxID = intent.getStringExtra(Utils.gbxTxnId)!!
@@ -257,7 +258,7 @@ class TransactionDetailsActivity : BaseActivity() {
                     Utils.refunded -> {
                         binding.statusTV.setTextColor(resources.getColor(R.color.pending_status))
                         binding.statusTV.setBackgroundResource(R.drawable.txn_pending_bg)
-                        binding.ivRefund.isEnabled = false
+                        binding.refundll.isEnabled = false
                         binding.ivRefund.setImageResource(R.drawable.refund_disable_icon)
                         binding.RefundTV.setTextColor(getColor(R.color.light_gray))
                     }
@@ -322,7 +323,8 @@ class TransactionDetailsActivity : BaseActivity() {
             })
 
         }
-        binding.ivRefund.setOnClickListener {
+        binding.refundll.setOnClickListener {
+            overridePendingTransition(0, R.anim.left_to_right_slide)
             startActivity(
                 Intent(this, RefundTransactionActivity::class.java)
                     .putExtra(Utils.SALE_ORDER_AMOUNT, saleOrderAmount)
@@ -366,8 +368,11 @@ class TransactionDetailsActivity : BaseActivity() {
                     )
                 )
             }
-            if (data.remarks != null) {
-                binding.tvReason.text = "\""+data.remarks.toString()+"\"";
+            if (data.remarks == null || data.remarks == "") {
+                binding.tvReason.visibility = GONE
+            } else {
+                binding.tvReason.visibility = VISIBLE
+                binding.tvReason.text = "\"" + data.remarks.toString() + "\"";
             }
             if (data.createdDate != null) {
                 binding.tvDate.text =
