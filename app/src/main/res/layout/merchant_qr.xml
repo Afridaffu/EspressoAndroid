@@ -109,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
                         android:gravity="clip_horizontal"
-                        android:text="Waiting on customer..."
+                        android:text="Waiting on Customer..."
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp"
                         android:visibility="invisible" />

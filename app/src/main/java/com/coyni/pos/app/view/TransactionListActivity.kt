@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.widget.NestedScrollView
@@ -27,7 +25,6 @@ import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.viewmodel.BatchAmountViewModel
 import com.coyni.pos.app.viewmodel.TransactionsViewModel
-import java.util.*
 
 class TransactionListActivity : BaseActivity(), TextWatcher {
 
@@ -35,7 +32,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
     private var adapter: RecentTransactionsListAdapter? = null
     private var request: TransactionListReq? = null
 
-    private val globalData: List<ListItem> = ArrayList<ListItem>()
+    //    private var globalData: List<ListItem> = ArrayList<ListItem>()
     private val transactionType = ArrayList<Int>()
     private val transactionSubType = ArrayList<Int>()
     private val txnStatus = ArrayList<Int>()
@@ -170,11 +167,15 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
 
         binding.txnRefresh.setOnRefreshListener(OnRefreshListener {
             try {
-                isSwiped = true
-                binding.searchET.setText("")
-                binding.searchET.clearFocus()
-                if (Utils.isKeyboardVisible) Utils.hideKeypad(this@TransactionListActivity)
+                request = null
                 loadData()
+                dismissDialog()
+                if (Utils.isKeyboardVisible) {
+                    Utils.hideKeypad(this@TransactionListActivity)
+                    binding.searchET.clearFocus()
+                    binding.searchET.setText("")
+                    transactions.clear()
+                }
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -198,6 +199,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                     when (action) {
                         Utils.applyFilter -> {
                             dismissDialog()
+                            transactions.clear()
                             request = value as TransactionListReq
                             //                        if (request?.txnTypes?.txnType == null)
                             if (request != null && request!!.isFilters == true) {
@@ -205,15 +207,14 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                             } else {
                                 binding.ivFilterIcon.setImageResource(R.drawable.ic_filter_icon)
                             }
-                            request!!.requestToken =
-                                myApplication.mCurrentUserData.validateResponseData!!.token
-                            transactions.clear()
+//                            request!!.requestToken =
+//                                myApplication.mCurrentUserData.validateResponseData!!.token
+//                            transactions.clear()
+                            showProgressDialog()
                             transactionsAPI(request!!)
                             binding.searchET.setText("")
-                            //                        transactionViewModel!!.filterTransactionsList(request!!)
                         }
                         Utils.resetFilter -> {
-                            //                        filterIV.setImageResource(R.drawable.ic_filtericon);
                             request = null
                             loadData()
                             dismissDialog()
@@ -229,7 +230,9 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
     }
 
     private fun loadData() {
-        request = null
+        showProgressDialog()
+        transactions.clear()
+//        request = null
         transactionType.clear();
         transactionSubType.clear();
         txnStatus.clear();
@@ -271,6 +274,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
             try {
                 if (recentTransactionResponse != null) {
                     if (recentTransactionResponse.status == Utils.SUCCESS) {
+                        dismissDialog()
                         binding.txnRefresh.setRefreshing(false)
                         binding.loadLL.visibility = GONE
                         myApplication.mCurrentUserData.transactionResponse =
@@ -297,7 +301,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                             } else {
                                 binding.txnListRV.scrollToPosition(0)
 //                                if (empRole.equals(Utils.EMPROLE))
-                                    binding.noMoreTransactions.setVisibility(GONE)
+                                binding.noMoreTransactions.setVisibility(GONE)
 //                                else
 //                                    binding.noMoreTransactions.setVisibility(VISIBLE)
                             }
@@ -331,6 +335,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
             try {
                 if (batchResponseMutableLiveData != null) {
                     if (batchResponseMutableLiveData.status == Utils.SUCCESS) {
+                        dismissDialog()
                         myApplication.mCurrentUserData.batchResponse =
                             batchResponseMutableLiveData.data
                         if (batchResponseMutableLiveData.data?.todayBatchAmount != null) {
