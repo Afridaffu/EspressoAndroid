@@ -170,12 +170,6 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                 request = null
                 loadData()
                 dismissDialog()
-                if (Utils.isKeyboardVisible) {
-                    Utils.hideKeypad(this@TransactionListActivity)
-                    binding.searchET.clearFocus()
-                    binding.searchET.setText("")
-                    transactions.clear()
-                }
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -232,7 +226,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
     private fun loadData() {
         showProgressDialog()
         transactions.clear()
-//        request = null
+        request = null
         transactionType.clear();
         transactionSubType.clear();
         txnStatus.clear();
@@ -242,6 +236,13 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
         strStartAmount = "";
         strEndAmount = "";
         binding.ivFilterIcon.setImageDrawable(getDrawable(R.drawable.ic_filter_icon));
+
+        if (Utils.isKeyboardVisible) {
+            Utils.hideKeypad(this@TransactionListActivity)
+            binding.searchET.clearFocus()
+            binding.searchET.setText("")
+//            transactions.clear()
+        }
 
         val transactionListRequest = TransactionListReq();
         transactionListRequest.requestToken =
@@ -322,9 +323,8 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
                             binding.noMoreTransactions.visibility = GONE
                         }
                     } else {
-                        Utils.displayAlert(
-                            recentTransactionResponse.error?.errorDescription.toString(), this, ""
-                        )
+//                        Utils.displayAlert(
+//                            recentTransactionResponse.error?.errorDescription.toString(), this, ""
                     }
                 }
             } catch (ex: Exception) {
@@ -396,6 +396,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
     private fun batchAPI() {
         val req = BatchAmountRequest()
         req.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
+//        req.todayDate = "2023-06-15 00:00:00"
         req.todayDate = Utils.getCurrentDate()
         batchAmountViewModel?.getBatchAmount(req)
     }
