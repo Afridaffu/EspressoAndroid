@@ -88,6 +88,7 @@ class LoginActivity : BaseActivity() {
         binding.tvButton.setOnClickListener {
             if (SystemClock.elapsedRealtime() - lastClick < Utils.lastClickDelay) return@setOnClickListener
             lastClick = SystemClock.elapsedRealtime()
+            Utils.onBoard = false
             showProgressDialog()
             loinViewModel?.getLoginData(LoginRequest(terminalId, password))
         }
