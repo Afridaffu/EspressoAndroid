@@ -2,6 +2,7 @@ package com.coyni.pos.app.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
@@ -31,18 +32,23 @@ class LoginActivity : BaseActivity() {
     private var isIconEnable = false
     private var terminalId: String = ""
     private var password: String = ""
+    private var status: String = ""
     private var loinViewModel: LoginLogoutViewModel? = null
     private lateinit var myApplication: MyApplication
     private var lastClick: Long = 0L
 
     override fun onResume() {
         super.onResume()
+        binding.tidET.requestFocus()
         binding.tidET.setText("")
         binding.passwordET.setText("")
-        binding.tidET.requestFocus()
-        if (!isKeyboardVisible)
-            Utils.shwForcedKeypad(this, binding.tidET)
-
+        binding.passwordET.hint = ""
+        Utils.upperHintColor(
+            binding.passwordTIL, this, R.color.light_gray
+        )
+        if (!getKeyboardVisible()!!) {
+            Utils.shwForcedKeypad(this@LoginActivity, binding.tidET)
+        }
         //Static data remove later
 //        setLoginData()
         //Static data remove later
@@ -265,8 +271,9 @@ class LoginActivity : BaseActivity() {
                     Log.e("strPreference", myApplication.mCurrentUserData.strPreference)
                 }
                 Utils.hideKeypad(this@LoginActivity)
-                if (response.data?.status.equals(Utils.DEACTIVATED, true)) {
-                    showTerminalScreen()
+                status = response.data!!.status.toString()
+                if (status == Utils.DEACTIVATED || status == Utils.INACTIVE) {
+                    showTerminalScreen(status)
                 } else {
                     startActivity(
                         Intent(applicationContext, DashboardActivity::class.java).setFlags(
@@ -281,11 +288,11 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    private fun showTerminalScreen() {
+    private fun showTerminalScreen(status: String) {
         startActivity(
             Intent(
                 this@LoginActivity, StatusFailedActivity::class.java
-            ).putExtra(Utils.STATUS, Utils.DEACTIVATED)
+            ).putExtra(Utils.STATUS, status)
         )
     }
 
@@ -306,4 +313,17 @@ class LoginActivity : BaseActivity() {
 //                onBackPressed()
         }
     }
+
+    override fun onPause() {
+        super.onPause();
+        hideAndClearFocus();
+    }
+
+    fun hideAndClearFocus() {
+        Handler().postDelayed({
+            binding.tidET.clearFocus()
+            binding.passwordET.clearFocus()
+        }, 500)
+    }
+
 }

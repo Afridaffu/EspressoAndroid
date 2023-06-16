@@ -197,6 +197,7 @@ class Utils {
         const val DISCARD = "discard"
         const val DONE = "done"
         const val DEACTIVATED = "DeActivated"
+        const val INACTIVE = "Inactive"
         const val CANCELED = "CANCELLED"
         const val Completed = "Completed"
         const val lastClickDelay = 2000
