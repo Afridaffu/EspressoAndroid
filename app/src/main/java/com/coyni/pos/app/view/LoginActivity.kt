@@ -284,7 +284,19 @@ class LoginActivity : BaseActivity() {
                 }
 
             } else {
-                showDialog()
+                if (response!!.data != null) {
+                    if (response.data?.message != "" && response.data
+                            ?.passwordFailedAttempts!! > 0
+                    ) {
+                        showDialog()
+                    }
+                } else {
+                    Utils.displayAlert(
+                        response.error?.errorDescription!!,
+                        this@LoginActivity,
+                        "",
+                    )
+                }
             }
         }
     }
