@@ -1,11 +1,15 @@
 package com.coyni.pos.app.network
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import com.coyni.pos.app.BuildConfig
 import com.coyni.pos.app.model.AbstractResponse
 import com.coyni.pos.app.network.AESEncryptionHelper.encrypt
+import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
 import com.coyni.pos.app.utils.Utils.Companion.isValidJson
+import com.coyni.pos.app.view.LoginActivity
 import com.google.android.gms.common.util.ArrayUtils
 import com.google.gson.Gson
 import okhttp3.*
@@ -55,7 +59,10 @@ class CustomEncryptionHandler : Interceptor {
         requestBuild.header(KEY_REFERER, BuildConfig.Referer)
         requestBuild.header(KEY_ACCEPT, APPLICATION_JSON)
         requestBuild.header(KEY_USER_AGENT, USER_AGENT)
-        requestBuild.header(KEY_APP_VERSION, "Android : " + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")")
+        requestBuild.header(
+            KEY_APP_VERSION,
+            "Android : " + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")"
+        )
         requestBuild.header(KEY_ACCEPT_LANGUAGE, LANGUAGE)
         requestBuild.header(KEY_REQUEST_ID, randomReqId)
         requestBuild.header(KEY_PLATFORM_TYPE, PLATFORM_TYPE)
@@ -99,7 +106,7 @@ class CustomEncryptionHandler : Interceptor {
                         ))
                     ) {
                         response = response.newBuilder()
-                            .body(ResponseBody.create(mediaType,"" ))
+                            .body(ResponseBody.create(mediaType, ""))
                             .build()
                         //launchOnboarding(MyApplication.getContext());
                     } else if (resp != null && resp.error != null && resp.error!!.errorDescription.equals(
@@ -107,9 +114,9 @@ class CustomEncryptionHandler : Interceptor {
                         )
                     ) {
                         response = response.newBuilder()
-                            .body(ResponseBody.create( mediaType,""))
+                            .body(ResponseBody.create(mediaType, ""))
                             .build()
-                        //launchLogin(MyApplication.getContext());
+                        launchLogin(MyApplication.context);
                     }
                 }
             }
@@ -117,6 +124,14 @@ class CustomEncryptionHandler : Interceptor {
             ex.printStackTrace()
         }
         return response!!
+    }
+
+    private fun launchLogin(context: Context?) {
+        Utils.onBoard = true
+        val i = Intent(context, LoginActivity::class.java)
+        i.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        context!!.startActivity(i)
     }
 
     private val customError: String
@@ -158,7 +173,7 @@ class CustomEncryptionHandler : Interceptor {
             e.printStackTrace()
         }
         val mediaType: MediaType = TEXT_PLAIN.toMediaTypeOrNull()!!
-        return RequestBody.create( mediaType, strNewBody!!)
+        return RequestBody.create(mediaType, strNewBody!!)
     }
 
     private fun appendDateTime(requestData: String): String {
