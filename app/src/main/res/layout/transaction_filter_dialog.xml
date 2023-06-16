@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout
         android:id="@+id/filterLL"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/filter_top_corners"
         android:orientation="vertical"
-        android:paddingStart="@dimen/_20sdp"
         android:paddingTop="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_20sdp"
-        android:paddingBottom="@dimen/_20sdp"
         android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
-        <View
-            android:layout_width="@dimen/_43sdp"
-            android:layout_height="@dimen/_2sdp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/_28sdp"
-            android:background="@color/primary_green"
-            android:gravity="center" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_80sdp"
+            android:layout_marginHorizontal="@dimen/_21sdp">
+
+            <View
+                android:layout_width="@dimen/_43sdp"
+                android:layout_height="@dimen/_2sdp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_28sdp"
+                android:background="@color/primary_green"
+                android:gravity="center" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -44,321 +45,335 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/_4sdp"
+                    android:contentDescription="resetFiltersTV"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="right"
-                    android:contentDescription="resetFiltersTV"
                     android:text="Reset all filters"
                     android:textColor="#00a6a2"
                     android:textSize="@dimen/_11ssp" />
 
             </RelativeLayout>
 
-            <androidx.core.widget.NestedScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="none">
+                android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:orientation="vertical">
+                    android:scrollbars="none">
 
-                    <androidx.core.widget.NestedScrollView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:orientation="vertical">
+
+                        <androidx.core.widget.NestedScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_16sdp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/_12sdp"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="Transaction Type"
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/_11ssp" />
+
+                                <ExpandableListView
+                                    android:id="@+id/custRecyclerView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/_5sdp"
+                                    android:contentDescription="custRecyclerView"
+                                    android:divider="@null"
+                                    android:groupIndicator="@null"
+                                    android:scrollbars="none" />
+
+                            </LinearLayout>
+
+                        </androidx.core.widget.NestedScrollView>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_15sdp"
+                            android:layout_marginBottom="@dimen/_12sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Transaction Status"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_8sdp"
+                                android:orientation="horizontal">
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/transStatusCompleted"
+                                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/_8sdp"
+                                    android:layout_weight="1"
+                                    android:contentDescription="transStatusCompleted"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="Completed"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/filter_chip_text_color"
+                                    android:textSize="@dimen/_11ssp"
+                                    app:chipBackgroundColor="@color/filter_chip_background_color"
+                                    app:chipMinHeight="@dimen/_32sdp"
+                                    app:chipStrokeColor="@color/viewcolor"
+                                    app:chipStrokeWidth="@dimen/_1sdp" />
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/transStatusRefunded"
+                                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:contentDescription="transStatusRefunded"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="Refunded"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/filter_chip_text_color"
+                                    android:textSize="@dimen/_11ssp"
+                                    app:chipBackgroundColor="@color/filter_chip_background_color"
+                                    app:chipMinHeight="@dimen/_32sdp"
+                                    app:chipStrokeColor="@color/viewcolor"
+                                    app:chipStrokeWidth="@dimen/_1sdp" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_8sdp"
+                                android:orientation="horizontal">
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/transStatusPartialRefund"
+                                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/_8sdp"
+                                    android:layout_weight="1"
+                                    android:contentDescription="transStatusPartialRefund"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="Partial Refund"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/filter_chip_text_color"
+                                    android:textSize="@dimen/_11ssp"
+                                    app:chipBackgroundColor="@color/filter_chip_background_color"
+                                    app:chipMinHeight="@dimen/_32sdp"
+                                    app:chipStrokeColor="@color/viewcolor"
+                                    app:chipStrokeWidth="@dimen/_1sdp" />
+
+                                <com.google.android.material.chip.Chip
+                                    android:id="@+id/transStatusFailed"
+                                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/_8sdp"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/filter_chip_text_color"
+                                    android:textSize="@dimen/_11ssp"
+                                    android:visibility="invisible"
+                                    app:chipBackgroundColor="@color/filter_chip_background_color"
+                                    app:chipMinHeight="@dimen/_32sdp"
+                                    app:chipStrokeColor="@color/viewcolor"
+                                    app:chipStrokeWidth="@dimen/_1sdp" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_15sdp"
+                            android:layout_marginTop="@dimen/_17sdp"
+                            android:layout_marginBottom="@dimen/_12sdp"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="Transaction Amount"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            android:orientation="vertical">
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_small_corners">
+
+                                <EditText
+                                    android:id="@+id/transAmountStartET"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_35sdp"
+                                    android:layout_marginStart="@dimen/_10sdp"
+                                    android:layout_weight="1"
+                                    android:autofillHints="AUTOFILL_HINT_SMS_OTP"
+                                    android:background="@android:color/transparent"
+                                    android:contentDescription="transAmountStartET"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:hint="(CYN)"
+                                    android:imeOptions="actionDone"
+                                    android:inputType="numberDecimal"
+                                    android:maxLength="8"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:textColor="@color/primary_black"
+                                    android:textColorHint="@color/light_gray"
+                                    android:textCursorDrawable="@drawable/cursor_color"
+                                    android:textIsSelectable="false"
+                                    android:textSize="@dimen/_11ssp" />
+
+                            </LinearLayout>
+
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/_12sdp"
+                                android:layout_marginLeft="@dimen/_11sdp"
+                                android:layout_marginRight="@dimen/_11sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="Transaction Type"
+                                android:text="To"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
-                            <ExpandableListView
-                                android:id="@+id/custRecyclerView"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/_5sdp"
-                                android:divider="@null"
-                                android:contentDescription="custRecyclerView"
-                                android:groupIndicator="@null"
-                                android:scrollbars="none" />
-
-                        </LinearLayout>
-
-                    </androidx.core.widget.NestedScrollView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_15sdp"
-                        android:layout_marginBottom="@dimen/_12sdp"
-                        android:fontFamily="@font/opensans_semibold"
-                        android:text="Transaction Status"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_8sdp"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/transStatusCompleted"
-                                style="@style/Widget.MaterialComponents.Chip.Choice"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:contentDescription="transStatusCompleted"
-                                android:layout_marginRight="@dimen/_8sdp"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Completed"
-                                android:textAlignment="center"
-                                android:textColor="@color/filter_chip_text_color"
-                                android:textSize="@dimen/_11ssp"
-                                app:chipBackgroundColor="@color/filter_chip_background_color"
-                                app:chipMinHeight="@dimen/_32sdp"
-                                app:chipStrokeColor="@color/viewcolor"
-                                app:chipStrokeWidth="@dimen/_1sdp" />
-
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/transStatusRefunded"
-                                style="@style/Widget.MaterialComponents.Chip.Choice"
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:contentDescription="transStatusRefunded"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Refunded"
-                                android:textAlignment="center"
-                                android:textColor="@color/filter_chip_text_color"
-                                android:textSize="@dimen/_11ssp"
-                                app:chipBackgroundColor="@color/filter_chip_background_color"
-                                app:chipMinHeight="@dimen/_32sdp"
-                                app:chipStrokeColor="@color/viewcolor"
-                                app:chipStrokeWidth="@dimen/_1sdp" />
+                                android:background="@drawable/bg_small_corners">
+
+                                <EditText
+                                    android:id="@+id/transAmountEndET"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_35sdp"
+                                    android:layout_marginStart="@dimen/_10sdp"
+                                    android:autofillHints="AUTOFILL_HINT_SMS_OTP"
+                                    android:background="@android:color/transparent"
+                                    android:contentDescription="transAmountEndET"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:hint="(CYN)"
+                                    android:imeOptions="actionDone"
+                                    android:inputType="numberDecimal"
+                                    android:maxLength="8"
+                                    android:textColor="@color/primary_black"
+                                    android:textColorHint="@color/light_gray"
+                                    android:textCursorDrawable="@drawable/cursor_color"
+                                    android:textSize="@dimen/_11ssp" />
+                            </LinearLayout>
 
 
                         </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_8sdp"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/transStatusPartialRefund"
-                                style="@style/Widget.MaterialComponents.Chip.Choice"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/_8sdp"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Partial Refund"
-                                android:textAlignment="center"
-                                android:contentDescription="transStatusPartialRefund"
-                                android:textColor="@color/filter_chip_text_color"
-                                android:textSize="@dimen/_11ssp"
-                                app:chipBackgroundColor="@color/filter_chip_background_color"
-                                app:chipMinHeight="@dimen/_32sdp"
-                                app:chipStrokeColor="@color/viewcolor"
-                                app:chipStrokeWidth="@dimen/_1sdp" />
-
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/transStatusFailed"
-                                style="@style/Widget.MaterialComponents.Chip.Choice"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/_8sdp"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:textAlignment="center"
-                                android:textColor="@color/filter_chip_text_color"
-                                android:textSize="@dimen/_11ssp"
-                                android:visibility="invisible"
-                                app:chipBackgroundColor="@color/filter_chip_background_color"
-                                app:chipMinHeight="@dimen/_32sdp"
-                                app:chipStrokeColor="@color/viewcolor"
-                                app:chipStrokeWidth="@dimen/_1sdp" />
-
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_15sdp"
-                        android:layout_marginTop="@dimen/_17sdp"
-                        android:layout_marginBottom="@dimen/_12sdp"
-                        android:fontFamily="@font/opensans_semibold"
-                        android:text="Transaction Amount"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_small_corners">
-
-                            <EditText
-                                android:id="@+id/transAmountStartET"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_35sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
-                                android:layout_weight="1"
-                                android:autofillHints="AUTOFILL_HINT_SMS_OTP"
-                                android:background="@android:color/transparent"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:hint="(CYN)"
-                                android:contentDescription="transAmountStartET"
-                                android:imeOptions="actionDone"
-                                android:inputType="numberDecimal"
-                                android:maxLength="8"
-                                android:maxLines="1"
-                                android:singleLine="true"
-                                android:textColor="@color/primary_black"
-                                android:textColorHint="@color/light_gray"
-                                android:textCursorDrawable="@drawable/cursor_color"
-                                android:textIsSelectable="false"
-                                android:textSize="@dimen/_11ssp" />
-
-                        </LinearLayout>
-
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            android:layout_marginRight="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_17sdp"
+                            android:layout_marginBottom="@dimen/_7sdp"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="To"
+                            android:text="Date"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
 
                         <LinearLayout
+                            android:id="@+id/dateRangePickerLL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_small_corners">
-
-                            <EditText
-                                android:id="@+id/transAmountEndET"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_35sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
-                                android:autofillHints="AUTOFILL_HINT_SMS_OTP"
-                                android:background="@android:color/transparent"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:hint="(CYN)"
-                                android:contentDescription="transAmountEndET"
-                                android:imeOptions="actionDone"
-                                android:inputType="numberDecimal"
-                                android:maxLength="8"
-                                android:textColor="@color/primary_black"
-                                android:textColorHint="@color/light_gray"
-                                android:textCursorDrawable="@drawable/cursor_color"
-                                android:textSize="@dimen/_11ssp" />
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_17sdp"
-                        android:layout_marginBottom="@dimen/_7sdp"
-                        android:fontFamily="@font/opensans_semibold"
-                        android:text="Date"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp" />
-
-                    <LinearLayout
-                        android:id="@+id/dateRangePickerLL"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_small_corners"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <EditText
-                            android:id="@+id/datePickET"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_35sdp"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_square_withoutcolor_corners"
-                            android:clickable="true"
-                            android:editable="false"
-                            android:focusable="false"
-                            android:contentDescription="datePickET"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:hint="Date Range"
-                            android:textColor="@color/primary_black"
-                            android:textColorHint="@color/light_gray"
-                            android:textCursorDrawable="@drawable/cursor_color_text"
-                            android:textSize="@dimen/_11ssp" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:layout_marginEnd="@dimen/_10sdp"
-                            android:src="@drawable/ic_calendar_icon"
-                            />
-                    </LinearLayout>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/applyFilterBtnCV"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_42sdp"
-                        android:layout_marginTop="@dimen/_40sdp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="@dimen/_35sdp"
-                        android:gravity="center"
-                        android:contentDescription="applyFilterBtnCV"
-                        app:cardBackgroundColor="#00a6a2"
-                        app:cardCornerRadius="@dimen/_20sdp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@color/primary_green"
-                            android:fontFamily="@font/opensans_bold"
+                            android:background="@drawable/bg_small_corners"
                             android:gravity="center"
-                            android:text="Apply"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_12ssp" />
-                    </androidx.cardview.widget.CardView>
+                            android:orientation="horizontal">
 
-                </LinearLayout>
+                            <EditText
+                                android:id="@+id/datePickET"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_35sdp"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bg_square_withoutcolor_corners"
+                                android:clickable="true"
+                                android:contentDescription="datePickET"
+                                android:editable="false"
+                                android:focusable="false"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:hint="Date Range"
+                                android:textColor="@color/primary_black"
+                                android:textColorHint="@color/light_gray"
+                                android:textCursorDrawable="@drawable/cursor_color_text"
+                                android:textSize="@dimen/_11ssp" />
 
-            </androidx.core.widget.NestedScrollView>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:src="@drawable/ic_calendar_icon" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </androidx.core.widget.NestedScrollView>
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_20sdp"
+            android:layout_marginHorizontal="@dimen/_21sdp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/applyFilterBtnCV"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_42sdp"
+            android:paddingTop="@dimen/_10sdp"
+            android:contentDescription="applyFilterBtnCV"
+            android:gravity="center"
+            app:cardBackgroundColor="#00a6a2"
+            app:cardCornerRadius="@dimen/_20sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/primary_green"
+                android:fontFamily="@font/opensans_bold"
+                android:gravity="center"
+                android:text="Apply"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+        </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+    </RelativeLayout>
+
 </layout>
