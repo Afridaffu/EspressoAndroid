@@ -397,7 +397,7 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
         val req = BatchAmountRequest()
         req.requestToken = myApplication.mCurrentUserData.validateResponseData?.token
 //        req.todayDate = "2023-06-15 00:00:00"
-        req.todayDate = Utils.getCurrentDate()
+        req.todayDate = Utils.getCurrentFromDate()
         batchAmountViewModel?.getBatchAmount(req)
     }
 
