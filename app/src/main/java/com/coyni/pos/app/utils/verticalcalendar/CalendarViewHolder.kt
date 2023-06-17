@@ -1,12 +1,14 @@
 package com.coyni.pos.app.utils.verticalcalendar
 
+import com.coyni.pos.app.R
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.coyni.pos.app.R
+import com.coyni.pos.app.utils.MyApplication
+import java.util.*
 
 internal abstract class CalendarViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     abstract fun onBind(item: CalendarEntity, actionListener: (CalendarEntity, Int) -> Unit)
@@ -46,7 +48,7 @@ internal class DayViewHolder(view: View) : CalendarViewHolder(view) {
         if (item is CalendarEntity.Day) {
             name.setText(item.label)
             name.setTextColor(getFontColor(item))
-            Log.e("DayViewHolder", item.label)
+            Log.e("DayViewHolder", item.label + " " + item.date.day)
             when (item.selection) {
                 SelectionType.START -> {
 //                    Log.e("Start", item.label)
@@ -55,36 +57,50 @@ internal class DayViewHolder(view: View) : CalendarViewHolder(view) {
                     if (item.isRange) halfRightBg.highlight()
                     else halfRightBg.dehighlight()
 
-//                    halfLeftBg.background = ContextCompat.getDrawable(TransactionListActivity.transactionListActivity,R.drawable.calendar_range_selected_bg)
-//                    if (item.isRange) halfRightBg.background = ContextCompat.getDrawable(TransactionListActivity.transactionListActivity,R.drawable.calendar_range_deselected_bg)
-//                    else halfRightBg.background = ContextCompat.getDrawable(TransactionListActivity.transactionListActivity,R.drawable.calendar_range_selected_bg)
+                    if (item.date.day == 6 ) {
+                        halfRightBg.background = ContextCompat.getDrawable(MyApplication.context, R.drawable.calendar_range_deselected_bg)
+                    }
+////                    halfLeftBg.background = ContextCompat.getDrawable(MyApplication.getContext(),R.drawable.calendar_range_selected_bg)
+//                    if (item.isRange) halfRightBg.background = ContextCompat.getDrawable(MyApplication.getContext(),R.drawable.calendar_range_selected_bg)
+//                    else halfRightBg.background = ContextCompat.getDrawable(MyApplication.getContext(),R.drawable.calendar_range_selected_bg)
 
 
                 }
                 SelectionType.END -> {
 //                    Log.e("End", item.label)
                     name.select()
-//                    halfLeftBg.background = ContextCompat.getDrawable(TransactionListActivity.transactionListActivity,R.drawable.calendar_range_selected_bg)
-//                    halfRightBg.background = ContextCompat.getDrawable(TransactionListActivity.transactionListActivity,R.drawable.calendar_range_deselected_bg)
+//                    halfLeftBg.background = ContextCompat.getDrawable(
+//                        MyApplication.getContext(),
+//                        R.drawable.calendar_range_selected_bg
+//                    )
+//                    halfRightBg.background = ContextCompat.getDrawable(
+//                        MyApplication.getContext(),
+//                        R.drawable.calendar_range_deselected_bg
+//                    )
 
                     halfLeftBg.highlight()
                     halfRightBg.dehighlight()
+                    if (item.date.day == 0 ) {
+                        halfLeftBg.background = ContextCompat.getDrawable(MyApplication.context, R.drawable.calendar_range_deselected_bg)
+                    }
                 }
                 SelectionType.BETWEEN -> {
 //                    Log.e("Between", item.label)
                     name.deselect()
                     halfRightBg.highlight()
                     halfLeftBg.highlight()
-//                    halfRightBg.background = ContextCompat.getDrawable(TransactionListActivity.transactionListActivity,R.drawable.calendar_range_selected_bg)
-//                    halfLeftBg.background = ContextCompat.getDrawable(TransactionListActivity.transactionListActivity,R.drawable.calendar_range_selected_bg)
+                    if (item.date.day == 0 || item.label == "1") {
+                        halfLeftBg.background = ContextCompat.getDrawable(MyApplication.context, R.drawable.calendar_range_left_selected_bg)
+                    }
+                    if (item.date.day == 6 || isLastDayOfMonth(item.date)) {
+                        halfRightBg.background = ContextCompat.getDrawable(MyApplication.context, R.drawable.calendar_range_right_selected_bg)
+                    }
                 }
+
                 SelectionType.NONE -> {
 //                    Log.e("None", item.label)
                     halfLeftBg.dehighlight()
                     halfRightBg.dehighlight()
-//                    halfRightBg.background = ContextCompat.getDrawable(TransactionListActivity.transactionListActivity,R.drawable.calendar_range_deselected_bg)
-//                    halfLeftBg.background = ContextCompat.getDrawable(TransactionListActivity.transactionListActivity,R.drawable.calendar_range_deselected_bg)
-
                     name.deselect()
                 }
             }
@@ -106,12 +122,12 @@ internal class DayViewHolder(view: View) : CalendarViewHolder(view) {
 
     private fun getFontColor(item: CalendarEntity.Day): Int {
         return if (item.selection == SelectionType.START || item.selection == SelectionType.END) {
-            ContextCompat.getColor(itemView.context, R.color.calendar_day_selected_font)
+            ContextCompat.getColor(itemView.context, R.color.white)
         } else {
             val color = when (item.state) {
                 DateState.DISABLED -> R.color.light_gray
-                DateState.WEEKEND -> R.color.calendar_day_weekend_font
-                else -> R.color.calendar_day_normal_font
+                DateState.WEEKEND -> R.color.primary_green
+                else -> R.color.calendar_week_font
             }
             ContextCompat.getColor(itemView.context, color)
         }
@@ -134,6 +150,17 @@ internal class DayViewHolder(view: View) : CalendarViewHolder(view) {
     private fun View.highlight() {
         val color = ContextCompat.getColor(context, R.color.calendar_day_range_selected_bg)
         setBackgroundColor(color)
+    }
+
+    fun isLastDayOfMonth(date: Date): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+
+        val currentMonth = calendar.get(Calendar.MONTH)
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+        val nextMonth = calendar.get(Calendar.MONTH)
+
+        return currentMonth != nextMonth
     }
 }
 
