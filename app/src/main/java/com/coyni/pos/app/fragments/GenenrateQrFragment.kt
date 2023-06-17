@@ -172,8 +172,8 @@ class GenenrateQrFragment : BaseFragment(), TextWatcher {
                     if (SystemClock.elapsedRealtime() - lastClickTime < Utils.lastClickDelay)
                         return
                     lastClickTime = SystemClock.elapsedRealtime()
-                    convertDecimal()
                     if (isPayClickable) {
+                        convertDecimal()
                         generateQR()
                     }
                 }

@@ -2,13 +2,13 @@ package com.coyni.pos.app.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -16,10 +16,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
 import com.coyni.pos.app.R
 import com.coyni.pos.app.baseclass.BaseActivity
-import com.coyni.pos.app.baseclass.OnClickListener
 import com.coyni.pos.app.databinding.ActivityLoginBinding
 import com.coyni.pos.app.dialog.ErrorDialog
-import com.coyni.pos.app.model.downloadurl.DownloadUrlRequest
 import com.coyni.pos.app.model.login.LoginRequest
 import com.coyni.pos.app.utils.MyApplication
 import com.coyni.pos.app.utils.Utils
@@ -34,20 +32,25 @@ class LoginActivity : BaseActivity() {
     private var isIconEnable = false
     private var terminalId: String = ""
     private var password: String = ""
+    private var status: String = ""
     private var loinViewModel: LoginLogoutViewModel? = null
     private lateinit var myApplication: MyApplication
     private var lastClick: Long = 0L
 
     override fun onResume() {
         super.onResume()
+        binding.tidET.requestFocus()
         binding.tidET.setText("")
         binding.passwordET.setText("")
-        binding.tidET.requestFocus()
-        if (!isKeyboardVisible)
-            Utils.shwForcedKeypad(this, binding.tidET)
-
+        binding.passwordET.hint = ""
+        Utils.upperHintColor(
+            binding.passwordTIL, this, R.color.light_gray
+        )
+        if (!getKeyboardVisible()!!) {
+            Utils.shwForcedKeypad(this@LoginActivity, binding.tidET)
+        }
         //Static data remove later
-        setLoginData()
+//        setLoginData()
         //Static data remove later
     }
 
@@ -82,49 +85,15 @@ class LoginActivity : BaseActivity() {
             onBackPressed()
         }
 
-//        binding.passwordTIL.setEndIconOnClickListener {
-//            if (!isIconEnable) {
-//                isIconEnable = true
-//                binding.passwordTIL.endIconDrawable =
-//                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeopen)
-//                binding.passwordET.transformationMethod =
-//                    HideReturnsTransformationMethod.getInstance()
-//            } else {
-//                isIconEnable = false
-//                binding.passwordTIL.endIconDrawable =
-//                    AppCompatResources.getDrawable(this, R.drawable.ic_eyeclose)
-//                binding.passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
-//            }
-//            binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-//        }
-
         binding.tvButton.setOnClickListener {
             if (SystemClock.elapsedRealtime() - lastClick < Utils.lastClickDelay) return@setOnClickListener
             lastClick = SystemClock.elapsedRealtime()
+            Utils.onBoard = false
             showProgressDialog()
             loinViewModel?.getLoginData(LoginRequest(terminalId, password))
         }
 
         binding.endIconIV.setOnClickListener {
-//            try {
-//                if (!isPwdEye) {
-//                    isPwdEye = true
-//                    binding.endIconIV.setImageResource(R.drawable.ic_eyeopen)
-//                    binding.passwordET.transformationMethod =
-//                        HideReturnsTransformationMethod.getInstance()
-//                } else {
-//                    isPwdEye = false
-//                    binding.endIconIV.setImageResource(R.drawable.ic_eyeclose)
-//                    binding.passwordET.transformationMethod =
-//                        PasswordTransformationMethod.getInstance()
-//                }
-//                if (binding.passwordET.text.toString().length > 0) {
-//                    binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-//                }
-//            } catch (ex: Exception) {
-//                ex.printStackTrace()
-//            }
-
             if (!isIconEnable) {
                 isIconEnable = true
                 binding.endIconIV.setImageResource(R.drawable.ic_eyeopen)
@@ -141,7 +110,6 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun focusListeners() {
-
         binding.tidET.setOnFocusChangeListener { _, b ->
             if (b) {
                 if (binding.tidET.text.toString()
@@ -153,19 +121,23 @@ class LoginActivity : BaseActivity() {
                 binding.llTIDError.visibility = View.GONE
                 binding.llBoxStroke.background = getDrawable(R.drawable.outline_box_focused)
             } else {
-                if (binding.tidET.text.toString().length == 10) {
+                if (binding.tidET.text.toString().length == 0) {
                     binding.tvUpperHint.visibility = View.VISIBLE
-                    binding.tvUpperHint.setTextColor(getColor(R.color.primary_black))
-                    binding.llTIDError.visibility = View.GONE
-                    binding.llBoxStroke.background = getDrawable(R.drawable.outline_box_unfocused)
-
-                } else if (binding.tidET.text.toString().length  < 10) {
+                    binding.tvUpperHint.setTextColor(getColor(R.color.error_red))
+                    binding.llTIDError.visibility = View.VISIBLE
+                    binding.tvTIDError.text = "Field Required"
+                    binding.llBoxStroke.background = getDrawable(R.drawable.outline_box_error)
+                } else if (binding.tidET.text.toString().length < 10) {
                     binding.tvUpperHint.visibility = View.VISIBLE
                     binding.tvUpperHint.setTextColor(getColor(R.color.error_red))
                     binding.llTIDError.visibility = View.VISIBLE
                     binding.tvTIDError.text = "Minimum 10 Characters"
                     binding.llBoxStroke.background = getDrawable(R.drawable.outline_box_error)
-
+                } else if (binding.tidET.text.toString().length == 10) {
+                    binding.tvUpperHint.visibility = View.VISIBLE
+                    binding.tvUpperHint.setTextColor(getColor(R.color.primary_black))
+                    binding.llTIDError.visibility = View.GONE
+                    binding.llBoxStroke.background = getDrawable(R.drawable.outline_box_unfocused)
                 } else {
                     binding.tidET.hint = "Terminal ID"
                     binding.tvUpperHint.visibility = View.GONE
@@ -174,51 +146,53 @@ class LoginActivity : BaseActivity() {
                 }
             }
         }
-
-        binding.passwordET.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
+        binding.passwordET.setOnFocusChangeListener { view, b ->
+            if (!b) {
                 if (binding.passwordET.text.toString()
-                        .isNotEmpty()
-                ) binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-                Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_green)
-                Log.e("getKeyboardVisible", getKeyboardVisible().toString())
-                if (!getKeyboardVisible()!!) {
-                    Utils.shwForcedKeypad(this, binding.passwordET)
-                }
-                if (binding.passwordET.text.toString()
-                        .isNotEmpty()
-                ) binding.passwordET.setSelection(binding.passwordET.text.toString().length)
-                Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.primary_green)
-                binding.passwordErrorLL.visibility = View.GONE
-                binding.passwordTIL.setBoxStrokeColorStateList(Utils.getFocusedColorState(this))
-                binding.passwordET.hint =
-                    "\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605"
-
-                if (binding.passwordET.text.toString().length > 0)
-                    binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-                else
-                    binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-            } else {
-                binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-                if (binding.passwordET.text.toString().length in 1..7) {
-                    binding.passwordErrorTV.text = "Please enter a valid Password"
-                    Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.error_red)
-                    binding.passwordErrorLL.visibility = View.VISIBLE
-                    binding.passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(this))
-                } else {
-                    if (binding.passwordET.text.toString().length > 7) Utils.upperHintColor(
-                        binding.passwordTIL, this@LoginActivity, R.color.primary_black
+                        .trim().length in 1..7
+                ) {
+                    binding.passwordTIL.setBoxStrokeColorStateList(
+                        Utils.getErrorColorState(
+                            this@LoginActivity
+                        )
                     )
-                    else Utils.upperHintColor(
-                        binding.passwordTIL, this@LoginActivity, R.color.light_gray
+                    Utils.upperHintColor(binding.passwordTIL, this@LoginActivity, R.color.error_red)
+                    binding.passwordErrorLL.setVisibility(View.VISIBLE)
+                    binding.passwordErrorTV.text = "Please enter a valid Password"
+                } else if (binding.passwordET.text.toString().trim().length == 0) {
+                    binding.passwordTIL.setBoxStrokeColorStateList(
+                        Utils.getErrorColorState(
+                            this@LoginActivity
+                        )
+                    )
+                    Utils.upperHintColor(
+                        binding.passwordTIL, this, R.color.light_gray
                     )
                     binding.passwordET.hint = ""
-                    binding.passwordErrorLL.visibility = View.GONE
-                    binding.passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(this))
+                    binding.passwordErrorLL.setVisibility(View.VISIBLE)
+                    binding.passwordErrorTV.text = "Field Required"
+                } else if (binding.passwordET.text.toString().trim().length >= 8) {
+                    binding.passwordTIL.setBoxStrokeColorStateList(
+                        Utils.getNormalColorState(
+                            this@LoginActivity
+                        )
+                    )
+                    Utils.upperHintColor(
+                        binding.passwordTIL, this, R.color.primary_black
+                    )
+                    binding.passwordErrorLL.setVisibility(View.GONE)
                 }
+            } else {
+                binding.passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green))
+                Utils.upperHintColor(
+                    binding.passwordTIL, this, R.color.primary_green
+                )
+                binding.passwordErrorLL.setVisibility(View.GONE)
+                binding.passwordET.hint =
+                    "\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605"
+                if (!getKeyboardVisible()!!) Utils.shwForcedKeypad(this, binding.passwordET)
             }
         }
-
     }
 
     private fun textWatchers() {
@@ -230,9 +204,14 @@ class LoginActivity : BaseActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                isId = binding.tidET.text.toString().length == 10
-                terminalId = binding.tidET.text.toString()
-                enableButton()
+                if (binding.tidET.text.toString().length == 10) {
+                    isId = true
+                    terminalId = binding.tidET.text.toString()
+                    enableButton()
+                } else {
+                    isId = false
+                    enableButton()
+                }
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -245,23 +224,24 @@ class LoginActivity : BaseActivity() {
 //                TODO("Not yet implemented")
             }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                isPassword = binding.passwordET.text?.length!! >= 8
-                password = binding.passwordET.text.toString()
-                enableButton()
-
-                if (p0!!.length == 0) {
-                    // No entered text so will show hint
-                    if (binding.passwordET.hasFocus()) binding.passwordET.setTextSize(
-                        TypedValue.COMPLEX_UNIT_SP, 12f
-                    ) else binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (s!!.length > 0 && s.toString().trim { it <= ' ' }.length == 0) {
+                    binding.passwordET.setText("")
+                } else if (s.length > 0 && s.toString().contains(" ")) {
+                    binding.passwordET.setText(s.toString().trim { it <= ' ' })
+                    binding.passwordET.setSelection(s.toString().trim { it <= ' ' }.length)
+                }
+                if (binding.passwordET.text.toString().length >= 8) {
+                    isPassword = true
+                    password = binding.passwordET.text.toString()
+                    enableButton()
                 } else {
-                    binding.passwordET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+                    isPassword = false
+                    enableButton()
                 }
             }
 
             override fun afterTextChanged(p0: Editable?) {
-//                TODO("Not yet implemented")
             }
 
         })
@@ -292,8 +272,9 @@ class LoginActivity : BaseActivity() {
                     Log.e("strPreference", myApplication.mCurrentUserData.strPreference)
                 }
                 Utils.hideKeypad(this@LoginActivity)
-                if (response.data?.status.equals(Utils.DEACTIVATED, true)) {
-                    showTerminalScreen()
+                status = response.data!!.status.toString()
+                if (status == Utils.DEACTIVATED || status == Utils.INACTIVE) {
+                    showTerminalScreen(status)
                 } else {
                     startActivity(
                         Intent(applicationContext, DashboardActivity::class.java).setFlags(
@@ -303,16 +284,28 @@ class LoginActivity : BaseActivity() {
                 }
 
             } else {
-                showDialog()
+                if (response!!.data != null) {
+                    if (response.data?.message != "" && response.data
+                            ?.passwordFailedAttempts!! > 0
+                    ) {
+                        showDialog()
+                    }
+                } else {
+                    Utils.displayAlert(
+                        response.error?.errorDescription!!,
+                        this@LoginActivity,
+                        "",
+                    )
+                }
             }
         }
     }
 
-    private fun showTerminalScreen() {
+    private fun showTerminalScreen(status: String) {
         startActivity(
             Intent(
                 this@LoginActivity, StatusFailedActivity::class.java
-            ).putExtra(Utils.STATUS, Utils.DEACTIVATED)
+            ).putExtra(Utils.STATUS, status)
         )
     }
 
@@ -321,13 +314,29 @@ class LoginActivity : BaseActivity() {
         errorDialog.show()
     }
 
-    //Static data remove later
-    private fun setLoginData() {
-        isId = true
-        isPassword = true
-        binding.tidET.setText("1067029008")
-        binding.passwordET.setText("Admin@123")
-        enableButton()
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (Utils.onBoard) {
+            startActivity(
+                Intent(applicationContext, OnboardActivity::class.java).setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                )
+            )
+        } else {
+//                onBackPressed()
+        }
     }
-    //Static data remove later
+
+    override fun onPause() {
+        super.onPause();
+        hideAndClearFocus();
+    }
+
+    fun hideAndClearFocus() {
+        Handler().postDelayed({
+            binding.tidET.clearFocus()
+            binding.passwordET.clearFocus()
+        }, 500)
+    }
+
 }

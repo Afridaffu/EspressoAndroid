@@ -3,7 +3,7 @@
 
     <string name="android_text">Android</string>
     <string name="log_in">Log In</string>
-    <string name="tid">TID-</string>
+    <string name="tid">TID -</string>
     <string name="terminal_id">Terminal ID</string>
     <string name="error">error</string>
     <string name="password">Password</string>

@@ -54,33 +54,33 @@
                             android:fontFamily="@font/opensans_bold"
                             android:text="hqqwjqkdwkd"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_28ssp" />
+                            android:textSize="@dimen/_30ssp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_3sdp"
-                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_7sdp"
                             android:fontFamily="@font/opensans_bold"
                             android:text="CYN"
                             android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
 
                     <RelativeLayout
                         android:id="@+id/qrViewRL"
-                        android:layout_width="@dimen/_160sdp"
-                        android:layout_height="@dimen/_160sdp"
+                        android:layout_width="@dimen/_178sdp"
+                        android:layout_height="@dimen/_178sdp"
                         android:layout_gravity="center"
+                        android:layout_marginHorizontal="@dimen/_32sdp"
                         android:layout_marginTop="@dimen/_16sdp"
-                        android:layout_marginHorizontal="@dimen/_39sdp"
                         android:layout_marginBottom="@dimen/_34sdp"
                         android:background="@drawable/qr_image_outline">
 
                         <ImageView
                             android:id="@+id/idIVQrcode"
-                            android:layout_width="@dimen/_149sdp"
-                            android:layout_height="@dimen/_149sdp"
+                            android:layout_width="@dimen/_170sdp"
+                            android:layout_height="@dimen/_170sdp"
                             android:layout_centerInParent="true"
                             android:padding="@dimen/_3sdp" />
                     </RelativeLayout>
@@ -91,17 +91,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="@dimen/_60sdp"
-                    android:visibility="visible"
-                    android:orientation="vertical">
+                    android:visibility="visible">
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/lottieAnimV"
-                        android:layout_width="@dimen/_90sdp"
+                        android:layout_width="@dimen/_190sdp"
                         android:layout_height="@dimen/_90sdp"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
-                        app:lottie_rawRes="@raw/stepper_loader" />
+                        app:lottie_rawRes="@raw/teal_loading_circle" />
 
                     <TextView
                         android:id="@+id/waitingText"
@@ -109,11 +109,10 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
                         android:gravity="clip_horizontal"
-                        android:text="Waiting on customer..."
+                        android:text="Waiting on Customer..."
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp"
-                        android:visibility="gone"
-                        android:layout_marginTop="@dimen/_10sdp"/>
+                        android:visibility="invisible" />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -127,6 +126,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginBottom="@dimen/_43sdp"
+        android:contentDescription="discardSaleLL"
         android:background="@drawable/bg_inactive_color_filled_cv"
         android:gravity="center"
         android:orientation="horizontal">

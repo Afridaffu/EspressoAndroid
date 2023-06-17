@@ -25,6 +25,7 @@
             android:layout_height="@dimen/_43sdp"
             android:layout_marginHorizontal="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_27sdp"
+            android:contentDescription="tvButton"
             android:background="@drawable/button_bg_white"
             android:fontFamily="@font/opensans_bold"
             android:gravity="center"

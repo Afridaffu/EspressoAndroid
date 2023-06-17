@@ -16,7 +16,8 @@
         android:layout_height="@dimen/_44sdp"
         android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginTop="@dimen/_50sdp"
-        android:layout_marginBottom="@dimen/_21sdp"
+        android:layout_marginBottom="@dimen/_11sdp"
+        android:contentDescription="discardSaleLL"
         android:background="@drawable/discard_sale_bg"
         android:gravity="center"
         android:orientation="horizontal">
@@ -37,6 +38,7 @@
         android:layout_height="@dimen/_44sdp"
         android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginBottom="@dimen/_21sdp"
+        android:contentDescription="continueLL"
         android:background="@drawable/continue_bg"
         android:gravity="center"
         android:orientation="horizontal">

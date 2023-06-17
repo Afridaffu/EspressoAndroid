@@ -23,7 +23,7 @@
             android:layout_height="@dimen/_14sdp"
             android:layout_marginLeft="@dimen/_6sdp"
             android:fontFamily="@font/opensans_bold"
-            android:text="sucess"
+            android:text=""
             android:gravity="center"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11sdp" />
@@ -36,7 +36,7 @@
             android:fontFamily="@font/opensans_regular"
             android:gravity="right"
             android:layout_gravity="center"
-            android:text="sdfg"
+            android:text=""
             android:textColor="@color/dark_gray"
             android:textSize="@dimen/_9ssp" />
     </LinearLayout>
@@ -48,6 +48,8 @@
         android:layout_gravity="right"
         android:layout_marginLeft="@dimen/_11sdp"
         android:layout_marginRight="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:contentDescription="messageTv"
         android:fontFamily="@font/opensans_regular"
         android:text=""
         android:textColor="@color/dark_gray"

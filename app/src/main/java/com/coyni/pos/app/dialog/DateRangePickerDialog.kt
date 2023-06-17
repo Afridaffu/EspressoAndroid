@@ -71,7 +71,7 @@ class DateRangePickerDialog : BaseDialog {
                 endDateD = displayFormatter!!.parse(strToDate)
                 showSelectedDate()
                 calendarPicker!!.setSelectionDate(startDateD!!, endDateD)
-                doneTV!!.setTextColor(context.resources.getColor(R.color.primary_black))
+                doneTV!!.setTextColor(context.resources.getColor(R.color.primary_green))
             } catch (e: Exception) {
                 Log.e(TAG, "Date Parse exception")
             }
@@ -120,7 +120,7 @@ class DateRangePickerDialog : BaseDialog {
         strSelectedDate =
             simpleDateFormat.format(startDateD) + " - " + simpleDateFormat.format(endDateD)
         rangeDateTV!!.text = strSelectedDate
-        //        doneTV.setTextColor(context.getResources().getColor(R.color.primary_black));
+        doneTV!!.setTextColor(context.resources.getColor(R.color.primary_green))
     }
 
     override fun getLayoutId(): Int {

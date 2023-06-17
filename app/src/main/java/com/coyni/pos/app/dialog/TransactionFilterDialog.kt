@@ -33,7 +33,7 @@ class TransactionFilterDialog(
     val transactionListReq: TransactionListReq?,
     val myApplication: MyApplication
 ) :
-    BaseDialog(context,70.0), TxnTypesListener {
+    BaseDialog(context,0.50), TxnTypesListener {
 
     private lateinit var binding: TransactionFilterDialogBinding
     override fun getLayoutId() = R.layout.transaction_filter_dialog

@@ -15,14 +15,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_96sdp"
             android:background="@drawable/txn_mask_group">
 
             <ImageView
                 android:id="@+id/ivBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_43sdp"
                 android:contentDescription="@string/back"
                 android:src="@drawable/ic_back" />
@@ -53,7 +53,7 @@
                     android:text="TID: 12345678"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_9ssp" />
+                    android:textSize="@dimen/_10ssp" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -84,7 +84,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_11sdp"
+                        android:layout_margin="@dimen/_12sdp"
                         android:orientation="vertical"
                         android:visibility="visible">
 
@@ -114,8 +114,8 @@
                                 <View
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/_1sdp"
-                                    android:layout_marginBottom="@dimen/_10sdp"
-                                    android:background="@color/viewcolor" />
+                                    android:layout_marginBottom="@dimen/_8sdp"
+                                    android:background="@color/light_blue" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -138,7 +138,7 @@
                                         android:fontFamily="@font/opensans_semibold"
                                         android:text="CYN"
                                         android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_12ssp" />
+                                        android:textSize="@dimen/_10ssp" />
                                 </LinearLayout>
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
@@ -197,6 +197,7 @@
                                             android:layout_marginStart="@dimen/_8sdp"
                                             android:layout_marginEnd="@dimen/_5sdp"
                                             android:layout_weight="1"
+                                            android:contentDescription="searchET"
                                             android:background="@android:color/transparent"
                                             android:cursorVisible="true"
                                             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -209,7 +210,7 @@
                                             android:textColor="@color/primary_black"
                                             android:textColorHint="@color/dark_gray"
                                             android:textCursorDrawable="@drawable/cursor_color"
-                                            android:textSize="@dimen/_10ssp" />
+                                            android:textSize="@dimen/_11ssp" />
 
                                         <View
                                             android:layout_width="@dimen/_1sdp"
@@ -224,6 +225,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:paddingEnd="@dimen/_14sdp"
+                                            android:contentDescription="ivFilterIcon"
                                             android:src="@drawable/ic_filter_icon" />
                                     </LinearLayout>
                                 </LinearLayout>
@@ -267,7 +269,7 @@
                                         android:id="@+id/txnListRV"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/_10sdp" />
+                                        android:layout_marginBottom="@dimen/_14sdp" />
                                 </ScrollView>
 
 
@@ -284,7 +286,8 @@
 
                             <ProgressBar
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_marginTop="@dimen/_11sdp"
+                                android:layout_height="@dimen/_35sdp" />
 
                             <TextView
                                 android:layout_width="match_parent"
