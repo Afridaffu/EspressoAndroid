@@ -209,7 +209,7 @@ class TransactionFilterDialog(
                 strended = simpleDateFormat.format(endDateD!!)
             }
             if (strupdated != null && strupdated != "" && strended != null && strended != "") {
-                strSelectedDate = strended + " - " + strended
+                strSelectedDate = strupdated + " - " + strended
             }
             if (strSelectedDate != null && strSelectedDate != "") {
                 binding.datePickET.setText(strSelectedDate)
@@ -843,7 +843,7 @@ class TransactionFilterDialog(
                 if (subTypeObj.isSelected!!) {
                     txnTypeObject.txnType = entry.key
                     if (!txnTypeObject.txnSubTypes.contains(subTypeObj.itemId)
-                        && (!subTypeObj.itemId.equals(Utils.filter_partial) || !subTypeObj.itemId.equals(Utils.filter_full)))
+                        && (!subTypeObj.itemId.equals(Utils.sent)))
                         txnTypeObject.txnSubTypes.add(subTypeObj.itemId)
                 }
             }

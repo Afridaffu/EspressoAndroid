@@ -379,12 +379,12 @@ class Utils {
             var strDate = ""
             try {
                 if (Build.VERSION.SDK_INT >= 26) {
-                    val dtf = DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.SSS")
+                    val dtf = DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
                         .parseDefaulting(ChronoField.OFFSET_SECONDS, 0).toFormatter()
                         .withZone(ZoneId.of(zoneId, ZoneId.SHORT_IDS))
                     Log.e("getStrPreference", zoneId!!)
                     var zonedTime = ZonedDateTime.parse(date, dtf)
-                    val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+                    val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                     zonedTime = zonedTime.withZoneSameInstant(ZoneOffset.UTC)
                     strDate = zonedTime.format(DATE_TIME_FORMATTER)
                 } else {

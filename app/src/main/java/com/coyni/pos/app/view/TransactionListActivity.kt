@@ -140,13 +140,13 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
 
                             if (request!!.fromDate != "") {
                                 transactionListRequest.fromDate =
-                                    Utils.exportDate(request!!.fromDate.toString(), "")
+                                    Utils.exportDate(request!!.fromDate.toString(), myApplication.mCurrentUserData.strPreference)
 
                             }
                             if (request!!.toDate != "") {
                                 transactionListRequest.toDate =
                                     Utils.exportDate(
-                                        request!!.toDate.toString(), ""
+                                        request!!.toDate.toString(), myApplication.mCurrentUserData.strPreference
                                     )
                             }
                         }
@@ -424,11 +424,10 @@ class TransactionListActivity : BaseActivity(), TextWatcher {
             binding.noTransactions.visibility = VISIBLE
             binding.noMoreTransactions.visibility = GONE
         } else if (charSequence.toString().trim { it <= ' ' }.length == 0) {
-            transactions.clear()
             if (request != null && request!!.isFilters) {
                 request!!.requestToken =
                     myApplication.mCurrentUserData.validateResponseData?.token
-                request!!.searchKey = charSequence.toString()
+//                request!!.searchKey = charSequence.toString()
                 transactionsAPI(request!!)
             } else {
                 if (request?.isFilters != true) {
