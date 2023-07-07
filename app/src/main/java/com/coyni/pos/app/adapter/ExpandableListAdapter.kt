@@ -108,10 +108,9 @@ class ExpandableListAdapter() : BaseExpandableListAdapter() {
                         var i = 0
                         while (transactionSubTypeData[groups[groupPosition]]!!.size > i) {
                             if (check) {
-                                transactionSubTypeData[groups[groupPosition]]!![i].isSelected = true
+                                transactionSubTypeData[groups[groupPosition]]!![i].isSelected = check
                             } else {
-                                transactionSubTypeData[groups[groupPosition]]!![i].isSelected =
-                                    false
+                                transactionSubTypeData[groups[groupPosition]]!![i].isSelected = check
                             }
                             i++
                         }

@@ -171,7 +171,7 @@
                                 <LinearLayout
                                     android:id="@+id/searchCV"
                                     android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_38sdp"
+                                    android:layout_height="21dp"
                                     android:layout_marginTop="@dimen/_21sdp"
                                     android:layout_marginBottom="@dimen/_21sdp"
                                     android:background="@drawable/search_corners"
@@ -197,8 +197,8 @@
                                             android:layout_marginStart="@dimen/_8sdp"
                                             android:layout_marginEnd="@dimen/_5sdp"
                                             android:layout_weight="1"
-                                            android:contentDescription="searchET"
                                             android:background="@android:color/transparent"
+                                            android:contentDescription="searchET"
                                             android:cursorVisible="true"
                                             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
                                             android:fontFamily="@font/opensans_regular"
@@ -223,9 +223,9 @@
                                         <ImageView
                                             android:id="@+id/ivFilterIcon"
                                             android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:paddingEnd="@dimen/_14sdp"
+                                            android:layout_height="match_parent"
                                             android:contentDescription="ivFilterIcon"
+                                            android:paddingEnd="@dimen/_14sdp"
                                             android:src="@drawable/ic_filter_icon" />
                                     </LinearLayout>
                                 </LinearLayout>

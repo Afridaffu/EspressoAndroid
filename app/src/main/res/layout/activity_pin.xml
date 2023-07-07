@@ -17,6 +17,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/firstLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_3sdp"
@@ -71,6 +72,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/secondLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_3sdp"
