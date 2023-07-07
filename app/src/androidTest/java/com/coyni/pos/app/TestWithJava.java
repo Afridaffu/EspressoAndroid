@@ -89,4 +89,47 @@ public class TestWithJava {
 
         activityScenario.close();
     }
+
+    @Test
+    public void testTransactionListNew() {
+        activityScenario = ActivityScenario.launch(OnboardActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.tvButton)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.tidET)).perform(ViewActions.typeText(loginText));
+        Espresso.onView(ViewMatchers.withId(R.id.passwordET)).perform(ViewActions.typeText(loginPass));
+        Espresso.onView(ViewMatchers.withId(R.id.tvButton)).perform(ViewActions.click());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Espresso.onView(ViewMatchers.withId(R.id.todayBatchCV))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+                .perform(ViewActions.click());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        for (char number : pinEnter.toCharArray()) {
+            int layoutId = digitLayout(number);
+            Espresso.onView(ViewMatchers.withId(layoutId)).perform(ViewActions.click());
+        }
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Espresso.onView(ViewMatchers.withId(R.id.searchET)).perform(ViewActions.typeText(refundId));
+        Espresso.onView(ViewMatchers.withId(R.id.searchET)).perform(ViewActions.clearText());
+        Espresso.onView(ViewMatchers.withId(R.id.searchET)).perform(ViewActions.typeText(saleOrderId));
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Espresso.onView(ViewMatchers.withId(R.id.txnListRV)).perform(ViewActions.click());
+
+        activityScenario.close();
+    }
 }
